@@ -1,0 +1,9 @@
+Embedding:
+
+\mu (topological space defined from neighborhoods defined by some kind of distance function)
+ -> vector space R^D
+
+mapping of raw data to
+
+
+Why cosine distance instead of euclidean distance ??

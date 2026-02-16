@@ -1,0 +1,136 @@
+# Information Retrieval: Introduction
+
+## Contexte
+
+### Production de données numériques
+
+La quantité de données produites chaque année atteint des ordres de grandeur phénoménaux. On parle de zettaoctets, où
+
+$$ 1 \text{ zettaoctet} = 2^{70} \text{ octets} = 10^{21} \text{ octets} \approx 1 \text{ milliard de téraoctets}. $$
+
+Cette explosion numérique concerne tous les domaines : photos, vidéos, messages, transactions, etc.
+
+### Un monde numérique
+
+Le volume de photos prises chaque année illustre cette croissance exponentielle. Des millions, puis des milliards de clichés sont capturés quotidiennement, alimentant des bases de données massives.
+
+### Un monde en évolution
+
+Entre 2012 et 2024, les plateformes comme YouTube ont vu leur volume de contenu uploadé multiplié par 15 (passant de 30 heures à 500 heures par minute). Cette tendance souligne le besoin criant de méthodes efficaces pour organiser, rechercher et exploiter ces masses d'informations.
+
+---
+
+## Comprendre les besoins utilisateur
+
+- La prise de décision éclairée repose sur des choix informés.
+- L'avalanche d'informations impose des processus avancés de gestion de l'information.
+- L'accès à de grands réservoirs d'information permet l'émergence de la science des données (*Data Science*).
+
+Il est donc nécessaire d'apporter de la structure aux données brutes via :
+
+- Une représentation appropriée des documents.
+- Des mesures de similarité adéquates.
+- Des processus d'analyse : fouille de données (*mining*), apprentissage automatique (*learning*), visualisation.
+
+---
+
+## La distance comme élément clé
+
+La notion de distance (ou similarité) est fondamentale pour comparer des documents ou des objets.
+
+```{mermaid}
+graph LR
+    A[Document] --> B[Extraction de caractéristiques]
+    B --> C[Vecteur de caractéristiques]
+    D[Requête] --> E[Extraction de caractéristiques]
+    E --> F[Vecteur de caractéristiques]
+    C --> G[Calcul de distance]
+    F --> G
+    G --> H[Résultats : documents les plus proches]
+```
+
+### Usages de la distance
+
+- **Fouille de données** : analyse non supervisée (clustering, détection d'anomalies, imputation…).
+- **Apprentissage** : modèles supervisés (classification, régression…).
+- **Visualisation** : réduction de dimension pour projeter des données dans un espace compréhensible.
+
+Les caractéristiques (*features*) permettent de résumer un document, la distance permet de comparer deux documents (similarité, motifs) et aussi de caractériser un modèle de document (visualisation).
+
+---
+
+## Définition de la recherche d'information
+
+La recherche d'information (*Information Retrieval*, IR) a pour objectif principal de répondre à un besoin d'information exprimé par une requête. Il s'agit de faire émerger automatiquement l'information pertinente depuis une grande collection de documents en utilisant un formalisme de requête souvent flexible et peu contraint.
+
+---
+
+## Histoire de la recherche d'information
+
+- **1950** : Calvin N. Moors invente le terme "Information Retrieval".
+- **1959** : Hans Peter Luhn décrit la recherche statistique (indexation automatique basée sur les fréquences de mots).
+- **1960** : Maron et Kuhns définissent un modèle probabiliste de RI.
+- **1966** : Le projet Cranfield établit les mesures d'évaluation (rappel, précision).
+- **1968** : Gerard Salton publie le premier livre sur le système SMART.
+- **1972** : Lockheed introduit DIALOG, service commercial en ligne.
+- **Fin des années 1980** : Premiers systèmes sur PC intégrant de la recherche.
+- **Début des années 1990** : Disques bon marché → révolution du stockage.
+- **1992** : Westlaw utilise un modèle probabiliste à grande échelle.
+- **Milieu des années 1990** : Bases de données multimédia.
+- **1994** : Explosion d'Internet et du Web.
+- **1995** : Techniques de RI omniprésentes (bouton de recherche).
+- **Aujourd'hui** : Utilisation de *plongements* (*embeddings*) issus de l'apprentissage automatique pour la recherche.
+
+---
+
+## Objectifs du cours
+
+- Comprendre les modèles de base de la recherche d'information.
+- Comprendre la recommandation sociale.
+- Maîtriser les mesures de qualité (évaluation).
+- Connaître les spécificités des différents médias.
+- Aperçu des techniques d'indexation.
+- Aperçu de la visualisation de données.
+
+Ce cours s'inscrit dans la continuité des enseignements de science des données (*Data Science*) et d'apprentissage automatique (*Machine Learning*).
+
+---
+
+## Contenu du cours
+
+### Plongements (*Embeddings*) : représentation vectorielle des données
+
+- Plongements creux (*sparse embeddings*)
+  - TF‑IDF
+  - Recherche vectorielle
+  - Indexation sémantique latente (*LSI*)
+- Modèles probabilistes
+- Plongements denses (*dense embeddings*)
+  - Plongements neuronaux
+- Apprentissage du classement (*Learning to Rank*)
+
+### Indexation : accélération de la recherche
+
+- Structures d'index
+- Algorithmes de recherche rapide
+
+### Évaluation de la recherche d'information
+
+- Mesures de précision, rappel, F‑mesure
+- Protocoles expérimentaux
+
+### Recherche d'information sociale et recommandation
+
+- Systèmes de recommandation
+- Analyse de réseaux sociaux
+
+### Spécificités des médias
+
+- Propriétés du texte
+- Recherche d'information visuelle (images, vidéos)
+- Recherche d'information audio
+
+### Visualisation de l'information
+
+- Apprentissage de variétés (*manifold learning*)
+- Réduction de dimension
