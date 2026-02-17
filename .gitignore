@@ -1,6 +1,6 @@
 *files
 **/*.quarto_ipynb
-*site*
+*_site*
 *gitignore
 *.quarto
 *.pdf
