@@ -27,7 +27,7 @@ $$\mathbb{P}(W_C | W_T) = \text{softmax}(v_C'^T v_T)$$
 
 ```{.cetz}
 // CBoW vs Skip-gram compact
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   content((1.5, 3.2), [*CBoW*], anchor: "center")

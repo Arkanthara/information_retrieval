@@ -65,7 +65,7 @@ La distance est utilisée partout en RI :
 
 ```{.cetz}
 // Diagramme : Rôle central de la distance en RI
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Titre
@@ -106,7 +106,7 @@ cetz.canvas({
 
 ```{.cetz}
 // Diagramme : Processus fondamental de la RI
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Collection de documents
@@ -165,7 +165,7 @@ cetz.canvas({
 
 ```{.cetz}
 // Diagramme : Structure du cours
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Titre principal

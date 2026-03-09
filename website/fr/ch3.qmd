@@ -22,7 +22,7 @@ $\Rightarrow$ Les termes co-occurrents dans le même contexte (ex. synonymes) re
 
 ```{.cetz}
 // Diagramme : Contenu vs Contexte
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Contenu
@@ -37,7 +37,7 @@ cetz.canvas({
 
   // Embedding
   rect((3, 0.5), (rel: (4, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
-  content((5, 1.1), [Embedding $v_w \in \mathbb{R}^N$], anchor: "center")
+  content((5, 1.1), [Embedding $v_w in RR^N$], anchor: "center")
 
   // Différences
   content((2, 2.2), [Fréquence / Linéaire], anchor: "center")
@@ -78,7 +78,7 @@ Utiliser le **contexte** pour caractériser un terme. Deux modèles :
 
 ```{.cetz}
 // Diagramme : Fenêtre de contexte CBoW
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Les mots de la phrase
@@ -138,7 +138,7 @@ L'optimiseur est un **réseau de neurones** et les paramètres $\theta$ sont les
 
 ```{.cetz}
 // Diagramme : Architecture CBoW
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Input layer
@@ -169,10 +169,10 @@ cetz.canvas({
 
   // Weights
   line("input", "hidden", mark: (end: ">", fill: black))
-  content((3.75, 3.5), [$W_{V \times N}$], anchor: "center")
+  content((3.75, 3.5), [$W_(V times N)$], anchor: "center")
 
   line("hidden", "output", mark: (end: ">", fill: black))
-  content((8.25, 3.5), [$W'_{N \times V}$], anchor: "center")
+  content((8.25, 3.5), [$W'_(N times V)$], anchor: "center")
 })
 ```
 
@@ -201,7 +201,7 @@ Le modèle est **inversé** par rapport à CBoW :
 
 ```{.cetz}
 // Diagramme : CBoW vs Skip-gram
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // CBoW
@@ -283,7 +283,7 @@ $$\psi(x) = \begin{cases} (x / x_{\max})^\alpha & \text{si } x < x_{\max} \\ 1 &
 
 ```{.cetz}
 // Diagramme : Flux d'entraînement GloVe
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Corpus
@@ -296,7 +296,7 @@ cetz.canvas({
 
   // Optimisation
   rect((9, 2), (rel: (3, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "opt", radius: 0.15)
-  content((10.5, 2.6), [Min. de $\mathcal{L}$ \ (moindres carrés)], anchor: "center")
+  content((10.5, 2.6), [Min. de $cal(L)$ \ (moindres carrés)], anchor: "center")
 
   // Embeddings
   rect((14, 2), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)

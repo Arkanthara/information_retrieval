@@ -34,7 +34,7 @@ $$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}} \qquad \text{idf}_i = \log\frac{
 
 ```{.cetz}
 // Pipeline TF·IDF compact
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   rect((0, 0), (rel: (1.8, 0.8)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "tf", radius: 0.1)
@@ -47,7 +47,7 @@ cetz.canvas({
   content((5.5, 0.4), [×], anchor: "center")
 
   rect((6.8, 0), (rel: (2, 0.8)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "w", radius: 0.1)
-  content((7.8, 0.4), [$w_{ij}$], anchor: "center")
+  content((7.8, 0.4), [$w_(i j)$], anchor: "center")
 
   line("tf", "x", mark: (end: ">", fill: black))
   line("idf", "x", mark: (end: ">", fill: black))

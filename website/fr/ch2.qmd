@@ -11,7 +11,7 @@ Les documents se présentent sous forme de listes de mots (termes). Il faut :
 
 ```{.cetz}
 // Diagramme : Pipeline d'un système de RI
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Documents bruts
@@ -143,16 +143,16 @@ Le terme $i$ est aussi un embedding (ligne de $W$) : $t_i = (W_{i\cdot})^T = [w_
 
 ```{.cetz}
 // Diagramme : Construction de l'embedding TF·IDF
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Terme
   rect((0, 3), (rel: (2.5, 1)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "tf", radius: 0.15)
-  content((1.25, 3.5), [TF ($\text{tf}_{ij}$)], anchor: "center")
+  content((1.25, 3.5), [TF ($"tf"_(i j)$)], anchor: "center")
 
   // IDF
   rect((0, 1), (rel: (2.5, 1)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "idf", radius: 0.15)
-  content((1.25, 1.5), [IDF ($\text{idf}_i$)], anchor: "center")
+  content((1.25, 1.5), [IDF ($"idf"_i$)], anchor: "center")
 
   // Multiplication
   circle((5, 2.5), radius: 0.5, fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "mul")
@@ -160,11 +160,11 @@ cetz.canvas({
 
   // Poids
   rect((7.5, 2), (rel: (2.5, 1)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "w", radius: 0.15)
-  content((8.75, 2.5), [$w_{ij}$], anchor: "center")
+  content((8.75, 2.5), [$w_(i j)$], anchor: "center")
 
   // Matrice
   rect((11.5, 1.5), (rel: (3, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "W", radius: 0.15)
-  content((13, 2.5), [Matrice $W$ \ ($M \times N$)], anchor: "center")
+  content((13, 2.5), [Matrice $W$ \ ($M times N$)], anchor: "center")
 
   line("tf", "mul", mark: (end: ">", fill: black))
   line("idf", "mul", mark: (end: ">", fill: black))
@@ -216,7 +216,7 @@ $$\boxed{\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) = \frac{d_j^T q}{\|d_j\| \|q\
 
 ```{.cetz}
 // Diagramme : Similarité cosinus dans l'espace vectoriel
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // Axes
@@ -235,7 +235,7 @@ cetz.canvas({
 
   // Angle theta
   arc((0, 0), start: 32deg, stop: 60deg, radius: 1.2, stroke: rgb("#a6e3a1") + 1.5pt)
-  content((1.2, 1.5), [$\theta$], anchor: "center")
+  content((1.2, 1.5), [$theta$], anchor: "center")
 })
 ```
 
@@ -313,7 +313,7 @@ Le modèle BIR de base a évolué vers le modèle **RSJ** (Robertson-Spark-Jones
 
 ```{.cetz}
 // Diagramme : Hiérarchie des modèles probabilistes
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   rect((3, 4.5), (rel: (4, 1)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "prp", radius: 0.15)
@@ -363,26 +363,26 @@ $$W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rang}(A)=K} \|W - A\|_F^2$$
 
 ```{.cetz}
 // Diagramme : Décomposition SVD tronquée
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   // W
   rect((0, 1), (rel: (2, 3)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "W", radius: 0.1)
-  content((1, 2.5), [$W$ \ $M \times N$], anchor: "center")
+  content((1, 2.5), [$W$ \ $M times N$], anchor: "center")
 
   content((2.8, 2.5), [=], anchor: "center")
 
   // U_K
   rect((3.5, 1), (rel: (1.2, 3)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "U", radius: 0.1)
-  content((4.1, 2.5), [$U_K$ \ $M \times K$], anchor: "center")
+  content((4.1, 2.5), [$U_K$ \ $M times K$], anchor: "center")
 
   // Sigma_K
   rect((5.2, 1.8), (rel: (1.5, 1.5)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "S", radius: 0.1)
-  content((5.95, 2.55), [$\Sigma_K$ \ $K \times K$], anchor: "center")
+  content((5.95, 2.55), [$Sigma_K$ \ $K times K$], anchor: "center")
 
   // V_K^T
   rect((7.2, 2), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "V", radius: 0.1)
-  content((8.45, 2.6), [$V_K^T$ \ $K \times N$], anchor: "center")
+  content((8.45, 2.6), [$V_K^T$ \ $K times N$], anchor: "center")
 })
 ```
 

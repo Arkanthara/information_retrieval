@@ -26,7 +26,7 @@ title: "Synthèse — Chapitre 1 : Introduction"
 
 ```{.cetz}
 // Rôle de la distance
-cetz.canvas({
+#cetz.canvas({
   import cetz.draw: *
 
   circle((3, 2.5), radius: 0.9, fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "d")
