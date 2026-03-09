@@ -1,0 +1,97 @@
+---
+title: "Synthèse — Chapitre 6 : Évaluation"
+---
+
+## Objectif
+
+Évaluer objectivement un système de RI :
+
+- qualité des résultats,
+- robustesse sur plusieurs requêtes,
+- comparabilité entre systèmes.
+
+## Base : matrice de confusion
+
+- **TP** : pertinent récupéré
+- **FP** : non pertinent récupéré
+- **FN** : pertinent non récupéré
+- **TN** : non pertinent non récupéré
+
+## Mesures essentielles
+
+$$Precision = \frac{TP}{TP+FP} \qquad Recall = \frac{TP}{TP+FN}$$
+
+- Precision : « propreté » de la liste retournée
+- Recall : « couverture » des pertinents
+
+```{.cetz}
+// P-R : compromis
+#cetz.canvas({
+  import cetz.draw: *
+
+  line((0, 0), (5.5, 0), mark: (end: ">", fill: black))
+  line((0, 0), (0, 4.5), mark: (end: ">", fill: black))
+  content((5.9, -0.1), [Recall], anchor: "center")
+  content((-0.3, 4.7), [Precision], anchor: "center")
+
+  line((0.3, 4.0), (1.2, 3.8), (2.2, 3.2), (3.3, 2.5), (4.4, 1.8), (5.2, 1.2), stroke: rgb("#f38ba8") + 1.6pt)
+  content((3.8, 2.9), [Courbe P-R], anchor: "center")
+})
+```
+
+## Courbe P-R
+
+- Tracer Precision en fonction de Recall
+- Utiliser l’interpolation aux rappels standards
+- Moyenner sur plusieurs requêtes
+
+## Agrégations
+
+| Méthode | Principe | Effet |
+|---------|----------|-------|
+| Micro | Fusion globale TP/FN/FP/TN | favorise classes fréquentes |
+| Macro | Moyenne des scores par catégorie | équilibre entre catégories |
+
+## Mesures importantes à connaître
+
+- **mAP** : moyenne des précisions interpolées (aire sous P-R)
+- **R-Precision** : précision à la position R
+- **Fallout** : $FP/(TN+FP)$
+- **F1** : $2PR/(P+R)$
+- **BEP** : $TP_{2Q}/Q$ (MPEG-7)
+
+## ROC
+
+- axe x : **FPR** ($1-\text{specificity}$)
+- axe y : **TPR** (= recall)
+- utile pour analyser l’effet du seuil de décision
+
+```{.cetz}
+// ROC minimal
+#cetz.canvas({
+  import cetz.draw: *
+
+  line((0, 0), (5.2, 0), mark: (end: ">", fill: black))
+  line((0, 0), (0, 4.2), mark: (end: ">", fill: black))
+  content((5.5, -0.1), [FPR], anchor: "center")
+  content((-0.3, 4.4), [TPR], anchor: "center")
+
+  line((0, 0), (4.8, 3.8), stroke: rgb("#6c7086"))
+  line((0, 0), (0.3, 1.8), (0.8, 3.0), (1.6, 3.6), (3.0, 3.9), (4.8, 4.0), stroke: rgb("#a6e3a1") + 1.6pt)
+})
+```
+
+## Benchmarks
+
+Composants d’un benchmark RI :
+
+1. Dataset ouvert
+2. Requêtes + jugements
+3. Mesures standard
+4. Baseline
+
+Exemples : TREC, CLEF, INEX, ISMIR, LeToR.
+
+:::{.callout-important}
+Aucune mesure unique n’est suffisante : il faut combiner plusieurs métriques selon la tâche.
+:::

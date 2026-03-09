@@ -14,6 +14,7 @@ Ce site regroupe les notes de cours du module **Recherche d'Information** (*Info
 | 1 | Introduction à la Recherche d'Information | [Détails](ch1.qmd) · [Synthèse](ch1r.qmd) |
 | 2 | Embeddings (TF·IDF, Modèles probabilistes, LSI) | [Détails](ch2.qmd) · [Synthèse](ch2r.qmd) |
 | 3 | Embeddings Neuronaux (Word2Vec, GloVe) | [Détails](ch3.qmd) · [Synthèse](ch3r.qmd) |
+| 6 | Évaluation en Recherche d'Information | [Détails](ch6.qmd) · [Synthèse](ch6r.qmd) |
 
 ## Objectifs
 

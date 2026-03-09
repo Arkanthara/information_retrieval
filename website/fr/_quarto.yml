@@ -44,6 +44,12 @@ website:
                 href: ch3.qmd
               - text: "Synthèse"
                 href: ch3r.qmd
+          - section: "Chapitre 6 — Évaluation"
+            contents:
+              - text: "Détails"
+                href: ch6.qmd
+              - text: "Synthèse"
+                href: ch6r.qmd
       - section: "Examen"
         contents:
           - section: "chapitre 1"

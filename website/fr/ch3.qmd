@@ -48,6 +48,84 @@ $\Rightarrow$ Les termes co-occurrents dans le même contexte (ex. synonymes) re
 })
 ```
 
+```{.cetz}
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Catppuccin Mocha palette
+  let base    = rgb("#1e1e2e")
+  let mantle  = rgb("#181825")
+  let crust   = rgb("#11111b")
+  let textc   = rgb("#cdd6f4")
+  let blue    = rgb("#89b4fa")
+  let green   = rgb("#a6e3a1")
+  let mauve   = rgb("#cba6f7")
+  let peach   = rgb("#fab387")
+  let red     = rgb("#f38ba8")
+  let surface = rgb("#45475a")
+
+  // Background panel (optional, for clear catppuccin look)
+  rect((-0.9, 0.2), (rel: (13.8, 7.2)), fill: base, stroke: crust, radius: 0.12)
+
+  // Left context vectors: w_c1, w_c2, ..., w_cm
+  rect((0.0, 5.1), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wc1", radius: 0.06)
+  rect((0.0, 3.0), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wc2", radius: 0.06)
+  rect((0.0, 0.9), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wcm", radius: 0.06)
+
+  content((-0.35, 6.0), text(textc)[$w_(c_1)$], anchor: "east")
+  content((-0.35, 3.9), text(textc)[$w_(c_2)$], anchor: "east")
+  content((-0.35, 1.8), text(textc)[$w_(c_m)$], anchor: "east")
+  content((0.24, 2.45), text(textc)[$\vdots$], anchor: "center")
+
+  // Merge points
+  circle((2.25, 4.9), radius: 0.04, fill: peach, stroke: peach, name: "n1")
+  circle((2.25, 2.5), radius: 0.04, fill: peach, stroke: peach, name: "n2")
+
+  // Crossed connections from contexts
+  line((0.55, 6.0), "n1", stroke: blue)
+  line((0.55, 3.9), "n1", stroke: blue)
+  line((0.55, 1.8), "n1", stroke: blue)
+
+  line((0.55, 6.0), "n2", stroke: blue)
+  line((0.55, 3.9), "n2", stroke: blue)
+  line((0.55, 1.8), "n2", stroke: blue)
+
+  // W block
+  rect((2.7, 2.1), (rel: (2.8, 2.9)), stroke: textc, fill: surface, name: "W", radius: 0.08)
+  content((4.1, 3.55), text(textc)[$W$], anchor: "center")
+  line("n1", (2.7, 4.75), stroke: green)
+  line("n2", (2.7, 2.35), stroke: green)
+
+  // Central thin bars (h and c)
+  rect((5.95, 2.0), (rel: (0.45, 3.2)), stroke: textc, fill: mauve, name: "hbar", radius: 0.05)
+  rect((6.65, 2.0), (rel: (0.45, 3.2)), stroke: textc, fill: mauve, name: "cbar", radius: 0.05)
+
+  content((6.17, 5.45), text(textc)[$h$], anchor: "center")
+  content((6.87, 3.55), text(textc)[$c$], anchor: "center")
+
+  line((5.5, 4.75), (5.95, 5.0), stroke: green)
+  line((5.5, 2.35), (5.95, 2.2), stroke: green)
+  line((5.5, 4.75), (6.65, 2.2), stroke: red)
+  line((5.5, 2.35), (6.65, 5.0), stroke: red)
+
+  // W' block
+  rect((7.8, 2.1), (rel: (2.8, 2.9)), stroke: textc, fill: surface, name: "Wp", radius: 0.08)
+  content((9.2, 3.55), text(textc)[$W'$], anchor: "center")
+
+  line((7.1, 5.0), (7.8, 4.1), stroke: blue)
+  line((7.1, 2.2), (7.8, 3.0), stroke: blue)
+
+  // Output column
+  rect((11.35, 1.0), (rel: (0.62, 5.8)), stroke: textc, fill: mantle, name: "out", radius: 0.06)
+  line((10.6, 4.1), (11.35, 6.3), stroke: peach)
+  line((10.6, 3.0), (11.35, 1.5), stroke: peach)
+
+  content((12.05, 6.95), text(peach)[*softmax*], anchor: "west")
+  content((12.05, 4.0), text(textc)[$N$], anchor: "west")
+  content((12.05, 1.1), text(textc)[$w_T$], anchor: "west")
+})
+```
+
 ## 2. Word2Vec
 
 ### 2.1 Principe général
@@ -117,6 +195,68 @@ Utiliser le **contexte** pour caractériser un terme. Deux modèles :
 
   rect((5 * 1.8, -1.2), (rel: (0.5, 0.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), radius: 0.05)
   content((5 * 1.8 + 0.7, -0.95), [= Cible], anchor: "west")
+})
+```
+
+```{.cetz}
+// CBoW - reproduction "intelligente" du schéma manuscrit
+// Theme: Catppuccin Latte
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Palette Catppuccin Latte
+  let base = rgb("#eff1f5")
+  let crust = rgb("#dce0e8")
+  let textc = rgb("#4c4f69")
+  let blue = rgb("#1e66f5")
+  let green = rgb("#40a02b")
+  let yellow = rgb("#df8e1d")
+  let mauve = rgb("#8839ef")
+  let surface0 = rgb("#ccd0da")
+  let surface1 = rgb("#bcc0cc")
+
+  // Fond
+  rect((-0.8, -1.8), (rel: (16.2, 9.2)), fill: base, stroke: crust, radius: 0.08)
+
+  // 1) Encodage de wc (one-hot)
+  rect((0.0, 0.6), (rel: (0.75, 5.8)), fill: surface1, stroke: textc, radius: 0.06, name: "x")
+  content((0.38, 3.5), text(base)[$1$], anchor: "center")
+  content((-0.25, 3.5), text(yellow)[$N$], anchor: "east")
+  content((0.35, -0.1), text(textc)[Encodage de $w_C$], anchor: "north")
+
+  // 2) Matrice W avec ligne active vc
+  rect((2.0, 1.8), (rel: (2.8, 3.4)), fill: surface0, stroke: textc, radius: 0.08, name: "W")
+  content((3.4, 3.45), text(yellow)[$W$], anchor: "center")
+  rect((2.08, 4.15), (rel: (2.64, 0.24)), fill: green, stroke: green, radius: 0.03)
+  content((3.5, 4.9), text(green)[$v_c$], anchor: "south")
+  line((0.75, 6.0), (2.0, 4.55), stroke: textc)
+  line((0.75, 0.6), (2.0, 1.8), stroke: textc)
+
+  // 3) Couche cachee (dimension C)
+  rect((6.0, 1.7), (rel: (0.8, 3.6)), fill: mauve, stroke: textc, radius: 0.06, name: "h")
+  content((6.4, 3.5), text(base)[h], anchor: "center")
+  content((5.55, 3.5), text(yellow)[$C$], anchor: "east")
+  content((6.4, 0.8), text(yellow)[hidden layer], anchor: "north")
+  line((4.8, 3.5), (6.0, 3.5), stroke: textc)
+
+  // 4) Matrice W' avec colonne active v'_t
+  rect((8.8, 1.8), (rel: (2.8, 3.4)), fill: surface0, stroke: textc, radius: 0.08, name: "Wp")
+  content((10.2, 3.45), text(yellow)[$W'$], anchor: "center")
+  rect((10.45, 1.88), (rel: (0.22, 3.24)), fill: green, stroke: green, radius: 0.03)
+  content((10.55, 5.0), text(green)[$v'_t$], anchor: "south")
+  line((6.8, 5.2), (8.8, 4.3), stroke: textc)
+  line((6.8, 1.7), (8.8, 2.6), stroke: textc)
+
+  // 5) Sortie + softmax (one-hot)
+  rect((12.8, 0.6), (rel: (0.75, 5.8)), fill: surface1, stroke: textc, radius: 0.06, name: "y")
+  content((13.17, 4.2), text(base)[$1$], anchor: "center")
+  content((14.05, 4.2), text(yellow)[$N$], anchor: "west")
+  content((12.45, 6.55), text(yellow)[softmax], anchor: "west")
+  content((13.15, -0.1), text(textc)[Encodage de $w_T$], anchor: "north")
+  content((12.55, 1.0), text(textc)[$q$], anchor: "east")
+
+  line((11.6, 4.3), (12.8, 6.0), stroke: textc)
+  line((11.6, 2.6), (12.8, 0.6), stroke: textc)
 })
 ```
 
@@ -198,6 +338,90 @@ Le modèle est **inversé** par rapport à CBoW :
 - **Entrée** : le mot cible
 - **Sortie** : les mots du contexte
 - On estime $\mathbb{P}(W_C | W_T)$
+
+```{.cetz}
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Palette proche de l'image
+  let bg = rgb("#efefef")
+  let boxfill = rgb("#f7f7f7")
+  let stroke = rgb("#888888")
+  let ink = rgb("#222222")
+
+  // Fond
+  rect((0, 0), (rel: (20, 10)), fill: bg, stroke: none)
+
+  // =========================
+  // Gauche : CBOW
+  // =========================
+  content((2.0, 9.2), text(ink)[INPUT], anchor: "center")
+  content((5.0, 9.2), text(ink)[PROJECTION], anchor: "center")
+  content((7.9, 9.2), text(ink)[OUTPUT], anchor: "center")
+
+  // Inputs contextuels
+  rect((1.2, 6.9), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in1")
+  rect((1.2, 5.1), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in2")
+  rect((1.2, 2.4), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in3")
+  rect((1.2, 0.7), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in4")
+
+  content((0.9, 7.45), text(ink)[w(t-2)], anchor: "east")
+  content((0.9, 5.65), text(ink)[w(t-1)], anchor: "east")
+  content((0.9, 2.95), text(ink)[w(t+1)], anchor: "east")
+  content((0.9, 1.25), text(ink)[w(t+2)], anchor: "east")
+
+  // Projection (sum)
+  rect((4.4, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "l_sum")
+  content((4.85, 4.8), text(ink)[SUM], anchor: "center")
+
+  // Output central
+  rect((7.5, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "l_out")
+  content((8.55, 3.85), text(ink)[w(t)], anchor: "west")
+
+  // Flèches CBOW
+  line((2.1, 7.45), (4.4, 3.95), stroke: ink, mark: (end: ">"))
+  line((2.1, 5.65), (4.4, 3.75), stroke: ink, mark: (end: ">"))
+  line((2.1, 2.95), (4.4, 3.45), stroke: ink, mark: (end: ">"))
+  line((2.1, 1.25), (4.4, 3.25), stroke: ink, mark: (end: ">"))
+  line((5.3, 3.85), (7.5, 3.85), stroke: ink, mark: (end: ">"))
+
+  content((5.0, 0.15), text(ink, 1.1em)[*CBOW*], anchor: "center")
+
+  // =========================
+  // Droite : Skip-gram
+  // =========================
+  content((12.0, 9.2), text(ink)[INPUT], anchor: "center")
+  content((15.0, 9.2), text(ink)[PROJECTION], anchor: "center")
+  content((17.9, 9.2), text(ink)[OUTPUT], anchor: "center")
+
+  // Input centre
+  rect((11.3, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "r_in")
+  content((10.9, 3.85), text(ink)[w(t)], anchor: "east")
+
+  // Projection centre
+  rect((14.0, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "r_proj")
+
+  // Outputs contextuels
+  rect((16.8, 6.9), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out1")
+  rect((16.8, 5.1), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out2")
+  rect((16.8, 2.4), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out3")
+  rect((16.8, 0.7), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out4")
+
+  content((17.8, 7.45), text(ink)[w(t-2)], anchor: "west")
+  content((17.8, 5.65), text(ink)[w(t-1)], anchor: "west")
+  content((17.8, 2.95), text(ink)[w(t+1)], anchor: "west")
+  content((17.8, 1.25), text(ink)[w(t+2)], anchor: "west")
+
+  // Flèches Skip-gram
+  line((12.2, 3.85), (14.0, 3.85), stroke: ink, mark: (end: ">"))
+  line((14.9, 3.85), (16.8, 7.45), stroke: ink, mark: (end: ">"))
+  line((14.9, 3.85), (16.8, 5.65), stroke: ink, mark: (end: ">"))
+  line((14.9, 3.85), (16.8, 2.95), stroke: ink, mark: (end: ">"))
+  line((14.9, 3.85), (16.8, 1.25), stroke: ink, mark: (end: ">"))
+
+  content((15.0, 0.15), text(ink, 1.1em)[*Skip-gram*], anchor: "center")
+})
+```
 
 ```{.cetz}
 // Diagramme : CBoW vs Skip-gram
