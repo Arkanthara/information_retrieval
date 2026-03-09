@@ -1,0 +1,394 @@
+---
+title: "Chapitre 3 — Embeddings Neuronaux"
+---
+
+## 1. Motivation
+
+### Embeddings basés sur le contenu (rappel)
+
+- **TF·IDF** : basé sur la fréquence des termes
+- **Recherche probabiliste** : estimation de la probabilité de pertinence par terme
+- **LSI** : estimation linéaire de concepts latents
+
+$\Rightarrow$ L'embedding est une estimation **linéaire** à partir des propriétés de chaque terme.
+
+### Embeddings basés sur le contexte
+
+- La caractérisation (embedding) d'un terme est dérivée du **contexte** (phrase) dans lequel il apparaît
+- L'embedding aide à **prédire** le terme dans son contexte
+- Utilisation du **Machine Learning** pour la prédiction
+
+$\Rightarrow$ Les termes co-occurrents dans le même contexte (ex. synonymes) reçoivent un embedding similaire.
+
+```{.cetz}
+// Diagramme : Contenu vs Contexte
+cetz.canvas({
+  import cetz.draw: *
+
+  // Contenu
+  rect((0, 3), (rel: (4, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "cont", radius: 0.15)
+  content((2, 4.2), [*Basé sur le contenu*], anchor: "center")
+  content((2, 3.5), [TF·IDF, BIR, LSI], anchor: "center")
+
+  // Contexte
+  rect((6, 3), (rel: (4, 1.5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "ctx", radius: 0.15)
+  content((8, 4.2), [*Basé sur le contexte*], anchor: "center")
+  content((8, 3.5), [Word2Vec, GloVe], anchor: "center")
+
+  // Embedding
+  rect((3, 0.5), (rel: (4, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
+  content((5, 1.1), [Embedding $v_w \in \mathbb{R}^N$], anchor: "center")
+
+  // Différences
+  content((2, 2.2), [Fréquence / Linéaire], anchor: "center")
+  content((8, 2.2), [Prédiction / Non-linéaire], anchor: "center")
+
+  line("cont", "emb", mark: (end: ">", fill: black))
+  line("ctx", "emb", mark: (end: ">", fill: black))
+})
+```
+
+## 2. Word2Vec
+
+### 2.1 Principe général
+
+Utiliser le **contexte** pour caractériser un terme. Deux modèles :
+
+| Modèle | Direction | Estimation |
+|--------|-----------|------------|
+| **CBoW** (Continuous Bag of Words) | Contexte → Terme | $\mathbb{P}(W_T \| W_C)$ |
+| **Skip-gram** | Terme → Contexte | $\mathbb{P}(W_C \| W_T)$ |
+
+### 2.2 Configuration formelle
+
+- Soit un vocabulaire avec $W_T$ et $W_C$ les variables aléatoires modélisant le terme cible et son contexte
+- L'embedding vise à estimer $\mathbb{P}(W_T | W_C)$ pour tous les termes du vocabulaire
+
+### 2.3 Continuous Bag of Words (CBoW)
+
+#### Idée principale
+
+**Prédire un terme à partir de son contexte.** On crée des paires (contexte, cible) à partir des co-occurrences.
+
+**Exemple** : « All work and no play makes Jack a dull boy » avec fenêtre = 2
+
+- $W_T$ = « play »
+- Contexte $W_C$ : {and, no, makes, Jack}
+- Paires : (play, and), (play, no), (play, makes), (play, Jack)
+
+```{.cetz}
+// Diagramme : Fenêtre de contexte CBoW
+cetz.canvas({
+  import cetz.draw: *
+
+  // Les mots de la phrase
+  let words = ("All", "work", "and", "no", "play", "makes", "Jack", "a", "dull", "boy")
+  let x-start = 0
+  let spacing = 1.8
+
+  // Dessiner chaque mot
+  rect((0 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((0 * 1.8 + 0.75, 0.4), text(white)[All], anchor: "center")
+
+  rect((1 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((1 * 1.8 + 0.75, 0.4), text(white)[work], anchor: "center")
+
+  rect((2 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((2 * 1.8 + 0.75, 0.4), text(white)[and], anchor: "center")
+
+  rect((3 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((3 * 1.8 + 0.75, 0.4), text(white)[no], anchor: "center")
+
+  rect((4 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((4 * 1.8 + 0.75, 0.4), text(white)[*play*], anchor: "center")
+
+  rect((5 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((5 * 1.8 + 0.75, 0.4), text(white)[makes], anchor: "center")
+
+  rect((6 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((6 * 1.8 + 0.75, 0.4), text(white)[Jack], anchor: "center")
+
+  rect((7 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
+  content((7 * 1.8 + 0.75, 0.4), text(white)[a], anchor: "center")
+
+  // Légende
+  rect((2 * 1.8, -1.2), (rel: (0.5, 0.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.05)
+  content((2 * 1.8 + 0.7, -0.95), [= Contexte], anchor: "west")
+
+  rect((5 * 1.8, -1.2), (rel: (0.5, 0.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), radius: 0.05)
+  content((5 * 1.8 + 0.7, -0.95), [= Cible], anchor: "west")
+})
+```
+
+#### Formalisation
+
+**Fonction de perte** pour un terme cible $W_T$ :
+
+$$\mathcal{L}(W_T; \theta) = -\sum_{W_C \in \text{context}(W_T)} \log \mathbb{P}(W_T | W_C)$$
+
+**Fonction de perte globale** (sur le dataset $X$) :
+
+$$\mathcal{L}(X; \theta) = \frac{1}{N} \sum_{W_T \in X} \mathcal{L}(W_T; \theta)$$
+
+$$\theta^* = \arg\min_\theta \mathcal{L}(X; \theta)$$
+
+L'optimiseur est un **réseau de neurones** et les paramètres $\theta$ sont les poids $[W, W']$.
+
+#### Architecture du réseau
+
+```{.cetz}
+// Diagramme : Architecture CBoW
+cetz.canvas({
+  import cetz.draw: *
+
+  // Input layer
+  rect((0, 0), (rel: (2.5, 5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "input", radius: 0.15)
+  content((1.25, 5.4), [*Couche d'entrée*], anchor: "center")
+  content((1.25, 4.2), [$x_1$], anchor: "center")
+  content((1.25, 3.0), [$x_2$], anchor: "center")
+  content((1.25, 1.5), [$...$], anchor: "center")
+  content((1.25, 0.5), [$x_V$], anchor: "center")
+  content((1.25, -0.5), [($V$ dim)], anchor: "center")
+
+  // Hidden layer
+  rect((5, 1), (rel: (2.5, 3)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "hidden", radius: 0.15)
+  content((6.25, 4.4), [*Couche cachée*], anchor: "center")
+  content((6.25, 3.2), [$h_1$], anchor: "center")
+  content((6.25, 2.5), [$...$], anchor: "center")
+  content((6.25, 1.6), [$h_N$], anchor: "center")
+  content((6.25, 0.5), [($N$ dim)], anchor: "center")
+
+  // Output layer
+  rect((10, 0), (rel: (2.5, 5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "output", radius: 0.15)
+  content((11.25, 5.4), [*Couche de sortie*], anchor: "center")
+  content((11.25, 4.2), [$y_1$], anchor: "center")
+  content((11.25, 3.0), [$y_2$], anchor: "center")
+  content((11.25, 1.5), [$...$], anchor: "center")
+  content((11.25, 0.5), [$y_V$], anchor: "center")
+  content((11.25, -0.5), [($V$ dim)], anchor: "center")
+
+  // Weights
+  line("input", "hidden", mark: (end: ">", fill: black))
+  content((3.75, 3.5), [$W_{V \times N}$], anchor: "center")
+
+  line("hidden", "output", mark: (end: ">", fill: black))
+  content((8.25, 3.5), [$W'_{N \times V}$], anchor: "center")
+})
+```
+
+#### Softmax
+
+$$\mathbb{P}(W_T | W_C) = \frac{\exp(v_T'^T \bar{v}_C)}{\sum_{v_i} \exp(v_i'^T \bar{v}_C)}$$
+
+- **Numérateur** : booste exponentiellement les grandes valeurs
+- **Dénominateur** : normalise pour obtenir une distribution catégorielle
+
+$\Rightarrow$ Extension catégorielle de la fonction logistique binaire.
+
+#### Softmax hiérarchique
+
+Le normaliseur du softmax est **coûteux** à calculer ($O(V)$). Puisque les termes ont une dépendance hiérarchique (cf. WordNet), on les organise dans un **arbre** :
+
+$\Rightarrow$ Complexité réduite à $O(\log V)$ pour accéder à $\mathbb{P}(W_T | W_C)$.
+
+### 2.4 Skip-gram
+
+Le modèle est **inversé** par rapport à CBoW :
+
+- **Entrée** : le mot cible
+- **Sortie** : les mots du contexte
+- On estime $\mathbb{P}(W_C | W_T)$
+
+```{.cetz}
+// Diagramme : CBoW vs Skip-gram
+cetz.canvas({
+  import cetz.draw: *
+
+  // CBoW
+  content((3, 5.5), [*CBoW*], anchor: "center")
+  rect((0, 3.5), (rel: (2, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "cb-ctx", radius: 0.15)
+  content((1, 4.25), [Contexte \ $W_C$], anchor: "center")
+
+  rect((4, 3.5), (rel: (2, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "cb-tgt", radius: 0.15)
+  content((5, 4.25), [Cible \ $W_T$], anchor: "center")
+
+  line("cb-ctx", "cb-tgt", mark: (end: ">", fill: black))
+
+  // Skip-gram
+  content((3, 2.5), [*Skip-gram*], anchor: "center")
+  rect((0, 0.5), (rel: (2, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "sg-tgt", radius: 0.15)
+  content((1, 1.25), [Cible \ $W_T$], anchor: "center")
+
+  rect((4, 0.5), (rel: (2, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "sg-ctx", radius: 0.15)
+  content((5, 1.25), [Contexte \ $W_C$], anchor: "center")
+
+  line("sg-tgt", "sg-ctx", mark: (end: ">", fill: black))
+})
+```
+
+### 2.5 Utilisation des embeddings Word2Vec
+
+- Bibliothèques logicielles pour entraîner son propre modèle
+- Modèles **pré-entraînés** → vecteurs d'embedding directement utilisables
+- Embedding de document : par exemple **vecteur moyen** des termes qu'il contient
+- Similarité dérivée de la **distance euclidienne**
+
+## 3. GloVe (Global Vectors)
+
+### 3.1 Motivation
+
+- Les modèles de contexte se basent sur les co-occurrences terme→cible
+- Word2Vec apprend la prédiction **indépendamment de la densité** des co-occurrences
+- **GloVe** part de l'idée que les co-occurrences **fréquentes** pilotent l'embedding
+
+### 3.2 Intuition
+
+On définit la probabilité de co-occurrence :
+
+$$\mathbb{P}_{\text{cooc}}(w_k | w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
+
+**Exemple** : $w_1$ = « Fish », $w_2$ = « Cow »
+
+| $w_3$ | $\mathbb{P}_{\text{cooc}}(w_3 \| w_1)$ | $\mathbb{P}_{\text{cooc}}(w_3 \| w_2)$ | Ratio |
+|-------|------|------|-------|
+| swim | élevée | faible | **élevé** |
+| feed | élevée | élevée | ≈ 1 |
+| fly | faible | faible | ≈ 1 |
+
+$\Rightarrow$ Le ratio des co-occurrences est **discriminant** pour caractériser les relations entre termes.
+
+### 3.3 Modèle GloVe
+
+On définit :
+
+$$\phi_\theta(w_i, w_k) = \exp(v_i^T v_k) = \mathbb{P}_{\text{cooc}}(w_k | w_i)$$
+
+Donc :
+
+$$v_i^T v_k = \log \text{card}\{(w_k, w_i)\} - \log \text{card}\{(w_i)\}$$
+
+Le terme $\log \text{card}\{(w_i)\}$ ne dépend pas de $w_k$ → c'est un **biais** $b_i$.
+
+**Mesure de « $w_i - w_j$ »** :
+
+$$\phi_\theta(w_i - w_j, w_k) = \frac{\exp(v_i^T v_k)}{\exp(v_j^T v_k)} = \frac{\mathbb{P}_{\text{cooc}}(w_k | w_i)}{\mathbb{P}_{\text{cooc}}(w_k | w_j)}$$
+
+### 3.4 Fonction de perte
+
+$$\mathcal{L}(X; \theta) = \sum_{w_i, w_k \in X} \psi(\text{card}\{(w_k, w_i)\}) \left(v_i^T v_k + b_i + b_k - \log \text{card}\{(w_k, w_i)\}\right)^2$$
+
+avec la fonction de pondération $\psi$ :
+
+$$\psi(x) = \begin{cases} (x / x_{\max})^\alpha & \text{si } x < x_{\max} \\ 1 & \text{sinon} \end{cases} \quad \text{et } \psi(0) = 0$$
+
+```{.cetz}
+// Diagramme : Flux d'entraînement GloVe
+cetz.canvas({
+  import cetz.draw: *
+
+  // Corpus
+  rect((0, 2), (rel: (2.5, 1.2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "corpus", radius: 0.15)
+  content((1.25, 2.6), [Corpus], anchor: "center")
+
+  // Matrice co-occ
+  rect((4, 2), (rel: (3, 1.2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "cooc", radius: 0.15)
+  content((5.5, 2.6), [Matrice de \ co-occurrences], anchor: "center")
+
+  // Optimisation
+  rect((9, 2), (rel: (3, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "opt", radius: 0.15)
+  content((10.5, 2.6), [Min. de $\mathcal{L}$ \ (moindres carrés)], anchor: "center")
+
+  // Embeddings
+  rect((14, 2), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
+  content((15.25, 2.6), [Vecteurs \ $v_i$], anchor: "center")
+
+  line("corpus", "cooc", mark: (end: ">", fill: black))
+  line("cooc", "opt", mark: (end: ">", fill: black))
+  line("opt", "emb", mark: (end: ">", fill: black))
+})
+```
+
+## 4. Résumé comparatif
+
+| Embedding | Type | Entité | Commentaire | Similarité |
+|-----------|------|--------|-------------|------------|
+| Booléen | Contenu | Terme | Mapping binaire | Opérateurs logiques |
+| TF·IDF | Contenu | Document | Base pour LSI | Cosinus |
+| BIR | Contenu | Terme | Voir BM25/Okapi | Produit (i.i.d.) |
+| LSI | Contenu | Document | Décorrélation des termes | Cosinus |
+| **Word2Vec** | Contexte | Terme | Prédiction de terme en phrase | **Euclidien** |
+| **GloVe** | Contexte | Terme | Co-occurrence | **Euclidien** |
+
+:::{.callout-tip}
+## Points clés
+- Word2Vec et GloVe capturent des relations **non linéaires** entre termes (grâce aux réseaux neuronaux)
+- Les modèles pré-entraînés encodent les **biais sociétaux** présents dans le texte d'entraînement
+- Extensions notables : **FastText**, **BERT**
+- La **similarité** utilisée doit être cohérente avec la construction de l'embedding
+:::
+
+## 5. Matériel supplémentaire
+
+:::{.callout-note collapse="true"}
+## Détails techniques — Word2Vec Parameter Learning Explained (Rong, 2016)
+
+### Modèle CBoW — Un mot de contexte
+
+Le réseau a une couche d'entrée ($V$ unités, one-hot), une couche cachée ($N$ unités) et une couche de sortie ($V$ unités) :
+
+- **Input → Hidden** : $h = W^T x = v_{w_I}^T$ (copie de la ligne $k$ de $W$)
+- **Hidden → Output** : $u_j = v_{w_j}'^T h$, puis softmax : $p(w_j | w_I) = \frac{\exp(u_j)}{\sum_{j'=1}^{V} \exp(u_{j'})}$
+
+**Mise à jour des poids sortie** :
+
+$$v_{w_j}'^{(\text{new})} = v_{w_j}'^{(\text{old})} - \eta \cdot e_j \cdot h \quad \text{avec } e_j = y_j - t_j$$
+
+**Mise à jour des poids entrée** :
+
+$$v_{w_I}^{(\text{new})} = v_{w_I}^{(\text{old})} - \eta \cdot EH^T \quad \text{avec } EH_i = \sum_{j=1}^{V} e_j \cdot w'_{ij}$$
+
+### Modèle CBoW — Multi-mots
+
+Couche cachée = **moyenne** des vecteurs d'entrée :
+
+$$h = \frac{1}{C} W^T (x_1 + x_2 + \cdots + x_C) = \frac{1}{C}(v_{w_1} + \cdots + v_{w_C})^T$$
+
+Mise à jour entrée : $v_{w_{I,c}}^{(\text{new})} = v_{w_{I,c}}^{(\text{old})} - \frac{1}{C} \eta \cdot EH^T$
+
+### Skip-gram
+
+Entrée = mot cible, sortie = $C$ panneaux de contexte (même matrice $W'$) :
+
+$$p(w_{c,j} = w_{O,c} | w_I) = \frac{\exp(u_j)}{\sum_{j'=1}^{V} \exp(u_{j'})}$$
+
+Perte : $E = -\sum_{c=1}^{C} u_{j_c^*} + C \cdot \log \sum_{j'=1}^{V} \exp(u_{j'})$
+
+### Softmax hiérarchique
+
+Utilise un **arbre binaire de Huffman**. Chaque unité interne a un vecteur de sortie $v'_{n(w,j)}$ :
+
+$$p(w = w_O) = \prod_{j=1}^{L(w)-1} \sigma\left([\![n(w,j+1) = \text{ch}(n(w,j))]\!] \cdot v_{n(w,j)}'^T h\right)$$
+
+Complexité réduite de $O(V)$ à $O(\log V)$.
+
+### Negative Sampling
+
+Au lieu de mettre à jour tous les $V$ vecteurs de sortie, on n'en met à jour qu'un échantillon :
+
+$$E = -\log \sigma(v_{w_O}'^T h) - \sum_{w_j \in W_{\text{neg}}} \log \sigma(-v_{w_j}'^T h)$$
+
+Mise à jour :
+$$v_{w_j}'^{(\text{new})} = v_{w_j}'^{(\text{old})} - \eta \cdot (\sigma(v_{w_j}'^T h) - t_j) \cdot h$$
+
+avec $t_j = 1$ si $w_j = w_O$ (échantillon positif), $t_j = 0$ sinon.
+
+Distribution de bruit : $P_n(w) \propto U(w)^{3/4}$ (distribution unigram élevée à la puissance $3/4$).
+:::
+
+## 6. Questions types
+
+- Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non linéaires entre termes ?
+- Quelles sont les différences fondamentales dans la construction de ces modèles ?
+- Comment utilise-t-on l'embedding de termes résultant ?
+- Quelle est la dimensionnalité impliquée ?
+- Quel est le risque d'enregistrer des relations inappropriées entre termes ?

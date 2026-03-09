@@ -1,0 +1,69 @@
+---
+title: "Synthèse — Chapitre 1 : Introduction"
+---
+
+## Contexte
+
+- Production de données ≈ **zettaoctets/an** ($2^{70}$ octets)
+- Monde numérique, connecté, en évolution rapide
+
+## Besoin fondamental
+
+:::{.callout-important}
+## Objectif de la RI
+**Faire émerger automatiquement l'information pertinente** d'une grande collection de documents via une requête souple.
+:::
+
+## Structurer les données brutes
+
+| Élément | Rôle |
+|---------|------|
+| **Représentation** | Embedding des documents dans $\mathbb{R}^D$ |
+| **Distance** | Mesure de similarité entre documents |
+| **Analyse** | Mining, Learning, Visualisation |
+
+## Distance : concept central
+
+```{.cetz}
+// Rôle de la distance
+cetz.canvas({
+  import cetz.draw: *
+
+  circle((3, 2.5), radius: 0.9, fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "d")
+  content((3, 2.5), [*Distance*], anchor: "center")
+
+  rect((-0.5, 0), (rel: (2, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "m", radius: 0.1)
+  content((0.5, 0.4), [Mining], anchor: "center")
+
+  rect((2, 0), (rel: (2, 0.8)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "l", radius: 0.1)
+  content((3, 0.4), [Learning], anchor: "center")
+
+  rect((4.5, 0), (rel: (2, 0.8)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "v", radius: 0.1)
+  content((5.5, 0.4), [Visualisation], anchor: "center")
+
+  line("d", "m", mark: (end: ">", fill: black))
+  line("d", "l", mark: (end: ">", fill: black))
+  line("d", "v", mark: (end: ">", fill: black))
+})
+```
+
+## Médias concernés
+
+Texte · Images · Audio/Vidéo · Web · Tout objet avec un **embedding**
+
+## Contenu du cours (vue d'ensemble)
+
+1. **Embeddings** : TF·IDF, probabiliste, LSI, neuronaux
+2. **Indexation** : recherche rapide
+3. **Évaluation** de la RI
+4. **RI Sociale** & Recommandation
+5. **Spécificité des médias** : texte, image, audio
+6. **Visualisation** : réduction de dimension
+
+## Dates clés
+
+- **1950** : terme « Information Retrieval » (Moors)
+- **1966** : mesures d'évaluation (Cranfield)
+- **1968** : système SMART (Salton)
+- **1994** : explosion du Web
+- **Aujourd'hui** : embeddings par ML

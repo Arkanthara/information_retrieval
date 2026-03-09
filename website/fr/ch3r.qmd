@@ -1,0 +1,88 @@
+---
+title: "Synthèse — Chapitre 3 : Embeddings Neuronaux"
+---
+
+## Contenu vs Contexte
+
+| | Contenu | Contexte |
+|--|---------|----------|
+| **Méthode** | Fréquence, statistiques | Prédiction par réseau neuronal |
+| **Relation** | Linéaire | **Non linéaire** |
+| **Exemples** | TF·IDF, BIR, LSI | Word2Vec, GloVe |
+
+---
+
+## Word2Vec — Deux modèles
+
+### CBoW : Contexte → Cible
+
+$$\mathbb{P}(W_T | W_C) = \text{softmax}(v_T'^T \bar{v}_C)$$
+
+- Paires (contexte, cible) via fenêtre glissante
+- Perte : $\mathcal{L} = -\sum \log \mathbb{P}(W_T | W_C)$
+
+### Skip-gram : Cible → Contexte
+
+$$\mathbb{P}(W_C | W_T) = \text{softmax}(v_C'^T v_T)$$
+
+```{.cetz}
+// CBoW vs Skip-gram compact
+cetz.canvas({
+  import cetz.draw: *
+
+  content((1.5, 3.2), [*CBoW*], anchor: "center")
+  rect((0, 2), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "c1", radius: 0.1)
+  content((0.75, 2.4), [Ctx], anchor: "center")
+  rect((2.5, 2), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "t1", radius: 0.1)
+  content((3.25, 2.4), [Cible], anchor: "center")
+  line("c1", "t1", mark: (end: ">", fill: black))
+
+  content((1.5, 1.2), [*Skip-gram*], anchor: "center")
+  rect((0, 0), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "t2", radius: 0.1)
+  content((0.75, 0.4), [Cible], anchor: "center")
+  rect((2.5, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "c2", radius: 0.1)
+  content((3.25, 0.4), [Ctx], anchor: "center")
+  line("t2", "c2", mark: (end: ">", fill: black))
+})
+```
+
+### Optimisations
+
+| Technique | Complexité | Principe |
+|-----------|-----------|----------|
+| Softmax standard | $O(V)$ | Normalisation sur tout le vocabulaire |
+| Softmax hiérarchique | $O(\log V)$ | Arbre binaire (Huffman) |
+| Negative Sampling | $O(K)$ | $K$ échantillons négatifs |
+
+---
+
+## GloVe — Co-occurrences globales
+
+### Idée clé
+
+$$v_i^T v_k + b_i + b_k \approx \log \text{card}\{(w_k, w_i)\}$$
+
+Le **ratio** $\frac{\mathbb{P}_{\text{cooc}}(w_k | w_i)}{\mathbb{P}_{\text{cooc}}(w_k | w_j)}$ discrimine les relations.
+
+### Perte
+
+Moindres carrés pondérés par $\psi(\text{card})$ (supprime les co-occurrences nulles, plafonne les fréquentes).
+
+---
+
+## Tableau récapitulatif global
+
+| Embedding | Type | Similarité | Force | Limite |
+|-----------|------|------------|-------|--------|
+| TF·IDF | Contenu | Cosinus | Simple, interprétable | Synonymie/Polysémie |
+| LSI | Contenu | Cosinus | Décorrèle | Linéaire seulement |
+| **Word2Vec** | Contexte | Euclidien | Non-linéaire | Ignore densité co-occ. |
+| **GloVe** | Contexte | Euclidien | Exploite densité | Biais sociétaux |
+
+:::{.callout-important}
+## À retenir
+- Embeddings neuronaux = **vecteurs denses** appris par prédiction contextuelle
+- Modèles pré-entraînés disponibles → **lookup table** directe
+- Embedding de document = **moyenne** des vecteurs de termes
+- **Attention aux biais** : les embeddings reflètent les biais du corpus d'entraînement
+:::

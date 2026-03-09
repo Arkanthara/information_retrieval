@@ -25,14 +25,36 @@ website:
     
     contents:
       - section: "Cours"
-        contents: "ch*.qmd"
+        contents:
+          - section: "Chapitre 1 — Introduction"
+            contents:
+              - text: "Détails"
+                href: ch1.qmd
+              - text: "Synthèse"
+                href: ch1r.qmd
+          - section: "Chapitre 2 — Embeddings"
+            contents:
+              - text: "Détails"
+                href: ch2.qmd
+              - text: "Synthèse"
+                href: ch2r.qmd
+          - section: "Chapitre 3 — Embeddings Neuronaux"
+            contents:
+              - text: "Détails"
+                href: ch3.qmd
+              - text: "Synthèse"
+                href: ch3r.qmd
+      - section: "Examen"
+        contents:
+          - section: "chapitre 1"
+            contents:
 
 
 format:
   html:
     theme:
-      light: flatly
-      dark: darkly
+      dark: ../macchiato.scss
+      light: ../latte.scss
     toc: true
     embed-resources: true
   # pdf:
@@ -40,5 +62,5 @@ format:
   # docx:
   #   toc: true
 
-# filters:
-#   - diagram
+filters:
+  - diagram

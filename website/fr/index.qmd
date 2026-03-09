@@ -1,0 +1,24 @@
+---
+title: "Recherche d'Information"
+subtitle: "Notes de cours"
+---
+
+## Bienvenue
+
+Ce site regroupe les notes de cours du module **Recherche d'Information** (*Information Retrieval*) du Master en Sciences Informatiques.
+
+## Contenu du cours
+
+| Chapitre | Sujet | Pages |
+|----------|-------|-------|
+| 1 | Introduction à la Recherche d'Information | [Détails](ch1.qmd) · [Synthèse](ch1r.qmd) |
+| 2 | Embeddings (TF·IDF, Modèles probabilistes, LSI) | [Détails](ch2.qmd) · [Synthèse](ch2r.qmd) |
+| 3 | Embeddings Neuronaux (Word2Vec, GloVe) | [Détails](ch3.qmd) · [Synthèse](ch3r.qmd) |
+
+## Objectifs
+
+- Comprendre les modèles de base en RI
+- Comprendre les embeddings de documents et de termes
+- Comprendre les modèles de recommandation sociale
+- Comprendre les mesures de qualité
+- Avoir un aperçu de l'indexation et de la visualisation de données

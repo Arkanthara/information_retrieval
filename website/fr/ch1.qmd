@@ -1,136 +1,229 @@
-# Information Retrieval: Introduction
-
-## Contexte
-
-### Production de données numériques
-
-La quantité de données produites chaque année atteint des ordres de grandeur phénoménaux. On parle de zettaoctets, où
-
-$$ 1 \text{ zettaoctet} = 2^{70} \text{ octets} = 10^{21} \text{ octets} \approx 1 \text{ milliard de téraoctets}. $$
-
-Cette explosion numérique concerne tous les domaines : photos, vidéos, messages, transactions, etc.
-
-### Un monde numérique
-
-Le volume de photos prises chaque année illustre cette croissance exponentielle. Des millions, puis des milliards de clichés sont capturés quotidiennement, alimentant des bases de données massives.
-
-### Un monde en évolution
-
-Entre 2012 et 2024, les plateformes comme YouTube ont vu leur volume de contenu uploadé multiplié par 15 (passant de 30 heures à 500 heures par minute). Cette tendance souligne le besoin criant de méthodes efficaces pour organiser, rechercher et exploiter ces masses d'informations.
-
+---
+title: "Chapitre 1 — Introduction à la Recherche d'Information"
 ---
 
-## Comprendre les besoins utilisateur
+## 1. Contexte
 
-- La prise de décision éclairée repose sur des choix informés.
-- L'avalanche d'informations impose des processus avancés de gestion de l'information.
-- L'accès à de grands réservoirs d'information permet l'émergence de la science des données (*Data Science*).
+La production de données numériques ne cesse de croître de manière exponentielle. On parle aujourd'hui de **zettaoctets** ($1\text{ ZB} = 2^{70}$ octets = 1 milliard de téraoctets) de données générées chaque année.
 
-Il est donc nécessaire d'apporter de la structure aux données brutes via :
+Nous vivons dans un monde :
 
-- Une représentation appropriée des documents.
-- Des mesures de similarité adéquates.
-- Des processus d'analyse : fouille de données (*mining*), apprentissage automatique (*learning*), visualisation.
+- **Numérique** : explosion de la quantité de données produites
+- **Connecté** : les données circulent à travers les réseaux mondiaux
+- **En constante évolution** : par exemple, YouTube est passé de 30h à 500h de vidéo téléversées par minute en 10 ans (×15)
 
----
+## 2. Motivation : Besoins de l'utilisateur
 
-## La distance comme élément clé
+### 2.1 Comprendre les besoins
 
-La notion de distance (ou similarité) est fondamentale pour comparer des documents ou des objets.
+La prise de décision nécessite des **choix éclairés**. L'avalanche d'information impose des processus avancés de **gestion de l'information**. Accéder à de vastes répertoires d'information rend possible la **science des données**.
 
-```{mermaid}
-graph LR
-    A[Document] --> B[Extraction de caractéristiques]
-    B --> C[Vecteur de caractéristiques]
-    D[Requête] --> E[Extraction de caractéristiques]
-    E --> F[Vecteur de caractéristiques]
-    C --> G[Calcul de distance]
-    F --> G
-    G --> H[Résultats : documents les plus proches]
+Il est nécessaire de structurer les données brutes :
+
+- **Représentation adéquate** des données (documents)
+- **Mesures de similarité** appropriées
+- **Processus d'analyse** : fouille (*mining*), apprentissage (*learning*), visualisation
+
+### 2.2 Gestion de l'information
+
+La gestion de l'information s'applique à tous types de médias :
+
+| Type | Exemples |
+|------|----------|
+| Texte | Documents, pages web, emails |
+| Images | Photos, graphiques, scans |
+| Audio/Vidéo | Fichiers multimédias |
+| Objets complexes | Services, états de processus, personnes, communautés |
+| Web | Web 1.0 (pages), 2.0 (social), 3.0 (IoT), 4.0 (métavers) |
+
+> **Point clé** : Tout objet auquel on peut attacher des caractéristiques (un *embedding*) peut faire l'objet de recherche d'information.
+
+## 3. La distance en RI
+
+### 3.1 La distance est fondamentale
+
+La notion de **distance** (ou mesure de proximité/similarité) est au cœur de la RI :
+
+- Comment **mesurer** la similarité entre documents ?
+- Comment **tolérer** les variations (style, langue, …) ?
+
+### 3.2 L'ubiquité de la distance
+
+La distance est utilisée partout en RI :
+
+| Domaine | Utilisation |
+|---------|-------------|
+| **Fouille** (*Mining*) | Analyse non supervisée : clustering, détection d'anomalies, imputation |
+| **Apprentissage** (*Learning*) | Modèles supervisés : classification, régression |
+| **Visualisation** | Réduction de dimension |
+
+**Rôles complémentaires** :
+
+- Les **features** caractérisent un document (résumé)
+- La **distance** compare 2 documents (similarité, motifs)
+- La **distance** caractérise un modèle de documents (visualisation)
+
+```{.cetz}
+// Diagramme : Rôle central de la distance en RI
+cetz.canvas({
+  import cetz.draw: *
+
+  // Titre
+  content((4, 5.5), [*Distance en RI*], anchor: "center")
+
+  // Noeud central
+  circle((4, 3.5), radius: 1.0, fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "dist")
+  content((4, 3.5), [Distance / \ Similarité], anchor: "center")
+
+  // Mining
+  rect((0, 0.5), (rel: (2.5, 1.2)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "mine", radius: 0.15)
+  content((1.25, 1.1), [Fouille], anchor: "center")
+
+  // Learning
+  rect((3, -0.3), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "learn", radius: 0.15)
+  content((4.25, 0.3), [Apprentissage], anchor: "center")
+
+  // Visualization
+  rect((6, 0.5), (rel: (2.5, 1.2)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "visu", radius: 0.15)
+  content((7.25, 1.1), [Visualisation], anchor: "center")
+
+  // Arrows
+  line("dist", "mine", mark: (end: ">", fill: black))
+  line("dist", "learn", mark: (end: ">", fill: black))
+  line("dist", "visu", mark: (end: ">", fill: black))
+})
 ```
 
-### Usages de la distance
+## 4. Définition de la Recherche d'Information
 
-- **Fouille de données** : analyse non supervisée (clustering, détection d'anomalies, imputation…).
-- **Apprentissage** : modèles supervisés (classification, régression…).
-- **Visualisation** : réduction de dimension pour projeter des données dans un espace compréhensible.
+### Motivation principale
 
-Les caractéristiques (*features*) permettent de résumer un document, la distance permet de comparer deux documents (similarité, motifs) et aussi de caractériser un modèle de document (visualisation).
+> **Répondre à un besoin d'information → Répondre à une requête**
 
----
+### Configuration
 
-## Définition de la recherche d'information
+> Faire émerger automatiquement l'information pertinente d'une **grande collection de documents** en utilisant un **formalisme de requête souple**.
 
-La recherche d'information (*Information Retrieval*, IR) a pour objectif principal de répondre à un besoin d'information exprimé par une requête. Il s'agit de faire émerger automatiquement l'information pertinente depuis une grande collection de documents en utilisant un formalisme de requête souvent flexible et peu contraint.
+```{.cetz}
+// Diagramme : Processus fondamental de la RI
+cetz.canvas({
+  import cetz.draw: *
 
----
+  // Collection de documents
+  rect((0, 0), (rel: (3, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "col", radius: 0.15)
+  content((1.5, 1.0), [Collection de \ documents], anchor: "center")
 
-## Histoire de la recherche d'information
+  // Requête
+  rect((0, 3.5), (rel: (3, 1.2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "query", radius: 0.15)
+  content((1.5, 4.1), [Requête], anchor: "center")
 
-- **1950** : Calvin N. Moors invente le terme "Information Retrieval".
-- **1959** : Hans Peter Luhn décrit la recherche statistique (indexation automatique basée sur les fréquences de mots).
-- **1960** : Maron et Kuhns définissent un modèle probabiliste de RI.
-- **1966** : Le projet Cranfield établit les mesures d'évaluation (rappel, précision).
-- **1968** : Gerard Salton publie le premier livre sur le système SMART.
-- **1972** : Lockheed introduit DIALOG, service commercial en ligne.
-- **Fin des années 1980** : Premiers systèmes sur PC intégrant de la recherche.
-- **Début des années 1990** : Disques bon marché → révolution du stockage.
-- **1992** : Westlaw utilise un modèle probabiliste à grande échelle.
-- **Milieu des années 1990** : Bases de données multimédia.
-- **1994** : Explosion d'Internet et du Web.
-- **1995** : Techniques de RI omniprésentes (bouton de recherche).
-- **Aujourd'hui** : Utilisation de *plongements* (*embeddings*) issus de l'apprentissage automatique pour la recherche.
+  // Système RI
+  rect((5, 1.0), (rel: (3, 2.5)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "ri", radius: 0.15)
+  content((6.5, 2.25), [Système de \ Recherche \ d'Information], anchor: "center")
 
----
+  // Résultats
+  rect((10, 1.0), (rel: (3, 2.5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "res", radius: 0.15)
+  content((11.5, 2.25), [Résultats \ (classés par \ pertinence)], anchor: "center")
 
-## Objectifs du cours
+  // Flèches
+  line("col", "ri", mark: (end: ">", fill: black))
+  line("query", "ri", mark: (end: ">", fill: black))
+  line("ri", "res", mark: (end: ">", fill: black))
+})
+```
 
-- Comprendre les modèles de base de la recherche d'information.
-- Comprendre la recommandation sociale.
-- Maîtriser les mesures de qualité (évaluation).
-- Connaître les spécificités des différents médias.
-- Aperçu des techniques d'indexation.
-- Aperçu de la visualisation de données.
+## 5. Bref historique
 
-Ce cours s'inscrit dans la continuité des enseignements de science des données (*Data Science*) et d'apprentissage automatique (*Machine Learning*).
+| Année | Événement |
+|-------|-----------|
+| 1950 | Calvin N. Moors invente le terme « *Information Retrieval* » |
+| 1959 | Luhn décrit la recherche statistique |
+| 1960 | Maron et Kuhns définissent un modèle probabiliste de RI |
+| 1966 | Le projet Cranfield définit les mesures d'évaluation |
+| 1968 | Premier livre de Gerard Salton sur le système SMART |
+| 1972 | Lockheed introduit DIALOG comme service en ligne commercial |
+| Fin 1980 | Les premiers systèmes PC intègrent la recherche |
+| Début 1990 | Disques bon marché → révolution du stockage |
+| 1992 | Westlaw utilise un système probabiliste à grande échelle |
+| Milieu 1990 | Bases de données multimédia |
+| 1994 | Explosion d'Internet et du Web |
+| 1995 | Techniques de RI omniprésentes (bouton « rechercher ») |
+| Aujourd'hui | Embeddings par Machine Learning pour la recherche |
 
----
+## 6. Contenu et objectifs du cours
 
-## Contenu du cours
+### Objectifs
 
-### Plongements (*Embeddings*) : représentation vectorielle des données
+- Comprendre les modèles de base en RI
+- Comprendre la recommandation sociale
+- Comprendre les mesures de qualité
+- Comprendre les propriétés spécifiques des médias
+- Avoir un aperçu de l'indexation
+- Avoir un aperçu de la visualisation des données
 
-- Plongements creux (*sparse embeddings*)
-  - TF‑IDF
-  - Recherche vectorielle
-  - Indexation sémantique latente (*LSI*)
-- Modèles probabilistes
-- Plongements denses (*dense embeddings*)
-  - Plongements neuronaux
-- Apprentissage du classement (*Learning to Rank*)
+### Contenu détaillé
 
-### Indexation : accélération de la recherche
+```{.cetz}
+// Diagramme : Structure du cours
+cetz.canvas({
+  import cetz.draw: *
 
-- Structures d'index
-- Algorithmes de recherche rapide
+  // Titre principal
+  rect((2, 8), (rel: (8, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "title", radius: 0.15)
+  content((6, 8.6), [*Recherche d'Information*], anchor: "center")
 
-### Évaluation de la recherche d'information
+  // Embeddings
+  rect((0, 5.5), (rel: (5.5, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
+  content((2.75, 7.0), [*Embeddings*], anchor: "center")
+  content((2.75, 6.1), [TF·IDF / Prob. / LSI / Neuronaux], anchor: "center")
 
-- Mesures de précision, rappel, F‑mesure
-- Protocoles expérimentaux
+  // Indexation
+  rect((6.5, 5.5), (rel: (3.5, 2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "idx", radius: 0.15)
+  content((8.25, 6.5), [*Indexation*], anchor: "center")
 
-### Recherche d'information sociale et recommandation
+  // Évaluation
+  rect((0, 3), (rel: (4, 1.5)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "eval", radius: 0.15)
+  content((2, 3.75), [*Évaluation RI*], anchor: "center")
 
-- Systèmes de recommandation
-- Analyse de réseaux sociaux
+  // Social
+  rect((5, 3), (rel: (5, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "soc", radius: 0.15)
+  content((7.5, 3.75), [*RI Sociale & Recommandation*], anchor: "center")
 
-### Spécificités des médias
+  // Médias
+  rect((0, 0.5), (rel: (5, 1.5)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "med", radius: 0.15)
+  content((2.5, 1.25), [*Spécificité des médias*], anchor: "center")
 
-- Propriétés du texte
-- Recherche d'information visuelle (images, vidéos)
-- Recherche d'information audio
+  // Visualisation
+  rect((6, 0.5), (rel: (4, 1.5)), fill: rgb("#94e2d5"), stroke: rgb("#1e1e2e"), name: "vis", radius: 0.15)
+  content((8, 1.25), [*Visualisation*], anchor: "center")
 
-### Visualisation de l'information
+  // Liens
+  line("title", "emb", mark: (end: ">", fill: black))
+  line("title", "idx", mark: (end: ">", fill: black))
+  line("emb", "eval", mark: (end: ">", fill: black))
+  line("emb", "soc", mark: (end: ">", fill: black))
+  line("eval", "med", mark: (end: ">", fill: black))
+  line("soc", "vis", mark: (end: ">", fill: black))
+})
+```
 
-- Apprentissage de variétés (*manifold learning*)
-- Réduction de dimension
+**Embeddings** : Projeter les données dans un espace vectoriel $\mathbb{R}^D$
+
+- Embeddings creux : TF·IDF, recherche par espace vectoriel, LSI
+- Recherche probabiliste
+- Embeddings denses : Embeddings neuronaux
+- *Learning to Rank*
+
+**Autres thèmes** : Indexation, Évaluation RI, RI Sociale et Recommandation, Spécificité des médias (texte, image, audio), Visualisation de l'information.
+
+## 7. Références générales
+
+1. Aggarwal, C. C. *Recommender Systems: The Textbook*. Springer, 2016.
+2. Baeza-Yates, R. & Ribeiro-Neto, B. *Modern Information Retrieval*. Addison-Wesley, 2011.
+3. Berry, M. W. & Kogan, J. *Text Mining: Applications and Theory*. Wiley, 2010.
+4. Büttcher, S. et al. *Information Retrieval: Implementing and Evaluating Search Engines*. MIT Press, 2010.
+5. Ceri, S. et al. *Web Information Retrieval*. Springer, 2013.
+6. Croft, B. & Larty, J. *Language Models for Information Retrieval*. Kluwer, 2002.
+7. Croft, W. B. et al. *Search Engines: Information Retrieval in Practice*. Pearson, 2015.
+8. Dominich, S. *The Modern Algebra of Information Retrieval*. Springer, 2008.
+9. Jurafsky, D. & Martin, J. H. *Speech and Language Processing*. 3ᵉ éd., 2026.
