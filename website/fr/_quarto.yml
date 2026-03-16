@@ -26,25 +26,31 @@ website:
     contents:
       - section: "Cours"
         contents:
-          - section: "Chapitre 1 — Introduction"
+          - section: "Introduction"
             contents:
               - text: "Détails"
                 href: ch1.qmd
               - text: "Synthèse"
                 href: ch1r.qmd
-          - section: "Chapitre 2 — Embeddings"
+          - section: "Embeddings"
             contents:
               - text: "Détails"
                 href: ch2.qmd
               - text: "Synthèse"
                 href: ch2r.qmd
-          - section: "Chapitre 3 — Embeddings Neuronaux"
+          - section: "Embeddings Neuronaux"
             contents:
               - text: "Détails"
                 href: ch3.qmd
               - text: "Synthèse"
                 href: ch3r.qmd
-          - section: "Chapitre 6 — Évaluation"
+          - section: "Indexation"
+            contents:
+              - text: "Détails"
+                href: ch5.qmd
+              - text: "Synthèse"
+                href: ch5r.qmd
+          - section: "Évaluation"
             contents:
               - text: "Détails"
                 href: ch6.qmd
