@@ -51,6 +51,14 @@ website:
                 href: ch3r.qmd
               - text: "Quiz"
                 href: ch3q.qmd
+          - section: "Évaluation"
+            contents:
+              - text: "Détails"
+                href: ch4.qmd
+              - text: "Synthèse"
+                href: ch4r.qmd
+              - text: "Quiz"
+                href: ch4q.qmd
           - section: "Indexation"
             contents:
               - text: "Détails"
@@ -59,7 +67,7 @@ website:
                 href: ch5r.qmd
               - text: "Quiz"
                 href: ch5q.qmd
-          - section: "Évaluation"
+          - section: "Information Textuelle"
             contents:
               - text: "Détails"
                 href: ch6.qmd

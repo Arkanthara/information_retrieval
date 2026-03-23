@@ -1,177 +1,144 @@
 ---
-title: "Évaluation en Recherche d'Information — Révision"
+title: "Recherche d'Information Textuelle — Révision"
 ---
 
-# Table de Contingence (Confusion Matrix)
+# Modèle Sac de Mots (Bag of Words)
 
-|  | Récupéré | Non récupéré |
-|---|---|---|
-| **Pertinent** | TP (Vrai Positif) | FN (Faux Négatif) |
-| **Non Pertinent** | FP (Faux Positif) | TN (Vrai Négatif) |
+**Principe** : termes = entités indépendantes, non ordonnées, avec multiplicités
 
-- **TP** → pertinent ET récupéré ✅
-- **FN** → pertinent mais raté ❌
-- **FP** → non pertinent récupéré ❌
-- **TN** → non pertinent exclu ✅
-
----
-
-# Formules Essentielles
-
-## Précision & Rappel (Precision & Recall)
-
-$$P = \frac{TP}{TP + FP} \qquad R = \frac{TP}{TP + FN}$$
-
-- **Précision** → qualité (ne retourner QUE des pertinents)
-- **Rappel** → complétude (retourner TOUS les pertinents)
-
-## F-Mesure / F₁ (F-Measure)
-
-$$F_1 = \frac{2PR}{P + R} \qquad E = \frac{(1+\beta^2)PR}{\beta^2 P + R}$$
-
-- $\beta = 1$ → P et R équivalents
-- $\beta > 1$ → précision prioritaire
-- $\beta < 1$ → rappel prioritaire
-
-## Fallout & Généralité (Fallout & Generality)
-
-$$\text{Fallout} = \frac{FP}{TN + FP} \qquad G = \frac{TP + FN}{N}$$
-
-$$P = \frac{R \cdot G}{R \cdot G + \text{Fallout} \cdot (1-G)}$$
-
-## R-Précision (R-Precision)
-
-$$R\text{-Precision} = \frac{TP_{N_{\text{Rel}}}}{N_{\text{Rel}}}$$
-
-Précision à la position $R$ (= nombre total de pertinents).
-
-## Bull's Eye Percentage (BEP)
-
-$$BEP = \frac{TP_{2Q}}{Q}$$
-
-Pertinents dans les **2Q premiers** résultats (Q = nb pertinents).
-
-## ROC — Sensibilité & Spécificité
-
-$$\text{Sensitivity} = TPR = \frac{TP}{TP+FN} = \text{Recall}$$
-
-$$\text{Specificity} = TNR = \frac{TN}{TN+FP} \qquad FPR = 1 - TNR = \text{Fallout}$$
-
----
-
-# Tableau Récapitulatif des Mesures
-
-| Mesure | Formule | Objectif |
-|---|---|---|
-| Précision | $TP/(TP+FP)$ | Qualité résultats |
-| Rappel | $TP/(TP+FN)$ | Complétude |
-| F₁ | $2PR/(P+R)$ | Compromis équilibré |
-| mAP | Moyenne P aux 11 niveaux | Aire sous courbe P–R |
-| R-Précision | $TP_R / R$ | Précision à position R |
-| Fallout | $FP/(TN+FP)$ | Pollution non-pertinents |
-| Silence | $1 - R$ | Pertinents manqués |
-| Bruit (Noise) | $FP/(TP+FP)$ | $= 1 - P$ |
-| Overlap | $TP/(FN+TP+FP)$ | Jaccard pertinents/récupérés |
-| Exactitude | $(TP+TN)/N$ | Taux global correct |
-
----
-
-# Courbe P–R (Precision–Recall Curve)
-
-## Construction
-
-1. Parcourir la liste ordonnée position par position
-2. Calculer $P@k$ et $R@k$ à chaque position $k$
-3. Tracer les points $(R@k,\ P@k)$
-
-## Interpolation (Standard Recall Levels)
-
-$$\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$$
-
-Niveaux standard : $0,\ 0.1,\ 0.2,\ \ldots,\ 1.0$
-
-## mAP = aire sous la courbe P–R interpolée
-
-## Interprétation
-
-| Position courbe | Qualité |
+| Avantage | Inconvénient |
 |---|---|
-| Proche coin supérieur droit | Système idéal |
-| Courbe haute et plate | Bon système |
-| Chute rapide de P | Système médiocre |
+| Simple, générique (texte, images…) | Perte de structure grammaticale |
+| Pas besoin de TAL complet | Synonymie / polysémie non gérées |
+| Légère, calculable | Ordre des mots ignoré |
+
+⚠️ **Terme** = entité générique (mot, pattern visuel, motif acoustique…)
 
 ---
 
-# Micro vs Macro Moyennage
+# Pipeline de Traitement du Texte
 
-| | Micro-averaging | Macro-averaging |
+```{mermaid}
+flowchart LR
+    A[Document brut] --> B[Tokenisation]
+    B --> C[Suppression stopwords]
+    C --> D[Stemming / Lemmatisation]
+    D --> E[Index / Thésaurus]
+```
+
+| Étape | Rôle | Exemple |
 |---|---|---|
-| Méthode | Fusion de toutes les tables → 1 calcul global | 1 calcul par catégorie → moyenne |
-| Importance | Égale par **document** | Égale par **catégorie** |
-| Biais | Favorise les grandes classes | Équilibre toutes les classes |
-| Usage | Performance corpus global | Comparaison inter-catégories |
+| **Tokenisation** | Bytes → tokens | séparateurs : espaces, ponctuation |
+| **Stopwords** | Supprimer termes non-discriminants | *"the"*, *"a"*, *"of"* |
+| **Stemming** | Racine du mot (tronqué) | *committed* → *commit* |
+| **Lemmatisation** | Forme de base linguistique | *"are"*, *"is"* → *"be"* |
+| **SOUNDEX** | Clé phonétique 4 caractères | *Herman* → **H655** |
+
+⚠️ **Stemming vs Lemmatisation** : stemming = plus rapide mais moins précis ; lemmatisation = linguistiquement correct
 
 ---
 
-# Courbe ROC (ROC Curve)
+# Loi de Zipf (Zipf's Law)
 
-- Axe X : FPR = Fallout = $1 - \text{Spécificité}$
-- Axe Y : TPR = Sensibilité = Rappel
-- Varier le seuil $T$ → tracer $(FPR,\ TPR)$
+**Définition du rang** $r(i)$ : position dans la liste triée par fréquence décroissante
 
-| Courbe | Signification |
+$$\boxed{f(i) \cdot r(i) = K \approx \text{cst}} \quad \Longleftrightarrow \quad f(i) = \frac{KL}{r(i)}, \quad K \approx 0.1$$
+
+**Loi de puissance** (power law) avec $c = -1$ → **droite en log-log**
+
+$$\log f(i) = \log(KL) - \log(r(i))$$
+
+## Prédiction du nombre de termes
+
+$$s_n = r_n - r_{n+1} = \frac{KL}{n(n+1)} \qquad \frac{s_n}{M} = \frac{1}{n(n+1)}$$
+
+| n (occurrences) | Fraction prédite | Fraction réelle (TREC) |
+|---|---|---|
+| 1 (hapax) | **0.500** | 0.402 |
+| 2 | 0.167 | 0.132 |
+| 5 | 0.033 | 0.032 |
+
+⚠️ **Moitié des termes distincts n'apparaissent qu'une seule fois** (hapax legomena)
+
+## Correction de Mandelbrot
+
+$$f(i) = P(r(i) + \rho)^{-B}, \quad P=10^{5.4},\ \rho=100,\ B=1.15$$
+
+Améliore l'ajustement aux rangs extrêmes
+
+## Conséquences pratiques
+
+- ✅ Suppression stopwords → réduit fortement le stockage
+- ❌ Termes rares → statistiques peu fiables
+
+---
+
+# Loi de Heap (Heap's Law)
+
+$$\boxed{M = k \cdot L^{\beta}}, \quad k \approx 10\text{–}100,\quad \beta \approx 0.4\text{–}0.6$$
+
+- $M$ = taille du vocabulaire, $L$ = longueur du corpus (tokens)
+- $\beta \approx 0.5$ → $M \propto \sqrt{L}$ (croissance **sous-linéaire**)
+- Dérivable depuis la loi de Zipf
+
+⚠️ Vocabulaire non borné (entités nommées, fautes…)
+
+---
+
+# Vocabulaire d'Index selon Luhn
+
+- **Seuil supérieur** (Upper Cut-Off) → élimine les stopwords (trop fréquents)
+- **Seuil inférieur** (Lower Cut-Off) → élimine les hapax (trop rares)
+- **Termes significatifs** = zone intermédiaire à haute valeur discriminante
+
+---
+
+# Théorie de l'Information
+
+## Entropie
+
+$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i \quad \text{(max si équiprobable)}$$
+
+| Vocabulaire M | Entropie réelle | Entropie max |
+|---|---|---|
+| 100 000 | 9.5 bits | 13.3 bits |
+| 500 000 | 10.9 bits | 15.6 bits |
+| 1 000 000 | 11.4 bits | 16.6 bits |
+
+## Information Mutuelle (Mutual Information)
+
+$$I(W_1;W_2) = \sum_{w_1,w_2} \mathbb{P}(w_1,w_2)\log\frac{\mathbb{P}(w_1,w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$
+
+| Valeur | Interprétation |
 |---|---|
-| Coin supérieur gauche | Système excellent |
-| Au-dessus diagonale | Bon système |
-| Sur la diagonale $y=x$ | Aléatoire (non informatif) |
-| Sous la diagonale | Pire que le hasard |
+| Grande | Co-occurrence **significative** |
+| Proche de 0 | Co-occurrence **spurieuse** (termes fréquents) |
 
-**AUC** (Area Under Curve) : 1 = parfait, 0.5 = aléatoire
-
----
-
-# Benchmarks Clés
-
-| Nom | Domaine |
-|---|---|
-| **TREC** (depuis 1992) | RI textuelle — référence mondiale |
-| **CLEF** | RI multilingue |
-| **INEX** | RI structurée XML |
-| **ISMIR** | RI musicale |
-| **LeToR** | Learning to Rank |
-
-**Composants d'un benchmark** : jeu de données + requêtes + jugements + mesures + baseline
-
-**Pooling** : fusionner les top-N résultats de plusieurs systèmes → juger uniquement ce pool (approximation).
-
----
-
-# ⚠️ Pièges & Points Critiques
-
-- **Tout récupérer** → Rappel = 1, Précision ≈ G (densité) → trivial
-- **Ne rien récupérer** → Précision indéfinie, Rappel = 0 → trivial
-- **Rappel difficile à mesurer** en pratique → seule la précision est fiable
-- **Micro-averaging** favorise les classes dominantes
-- **mAP** suppose tous les niveaux de rappel également importants
-- **BEP > R-Précision** toujours (fenêtre 2× plus large)
-- **Sensitivity = Recall = TPR** (même chose, vocabulaires différents)
-- **Fallout = FPR = 1 − Spécificité** (même chose)
-- La **généralité G** affecte la précision même si R et Fallout sont constants
+⚠️ Pièges : termes très fréquents (*"a"*, *"is"*, *"with"*) → IM artificiellement élevée → stopwords à supprimer
 
 ---
 
 # Relations entre Concepts
+
 ```{mermaid}
-graph TD
-    TP_FN_FP_TN --> P[Précision]
-    TP_FN_FP_TN --> R[Rappel = Sensibilité = TPR]
-    TP_FN_FP_TN --> Fallout[Fallout = FPR]
-    P --> F1[F1-Mesure]
-    R --> F1
-    R --> PR[Courbe P–R]
-    P --> PR
-    PR --> mAP[mAP]
-    R --> ROC[Courbe ROC]
-    Fallout --> ROC
-    G[Généralité G] --> P
+flowchart TD
+    Z[Loi de Zipf] --> H[Loi de Heap]
+    Z --> L[Cutoffs de Luhn]
+    Z --> M[Correction Mandelbrot]
+    M --> IT[Porteur d'info idéal\nThéorie de l'info]
+    L --> S[Suppression stopwords]
+    L --> R[Suppression hapax]
 ```
+
+---
+
+# Formules à Retenir
+
+| Formule | Nom | Variables |
+|---|---|---|
+| $f(i) \cdot r(i) = K$ | Zipf | $f$ = fréquence, $r$ = rang |
+| $f(i) = KL/r(i)$, $K\approx0.1$ | Zipf développée | $L$ = longueur corpus |
+| $s_n/M = 1/n(n+1)$ | Fraction hapax | $s_n$ = termes à $n$ occurrences |
+| $M = k \cdot L^\beta$ | Heap | $M$ = vocab, $\beta \in [0.4, 0.6]$ |
+| $I_H = -\sum p_i \log p_i$ | Entropie Shannon | $p_i$ = proba du terme $i$ |
+| $f(i) = P(r+\rho)^{-B}$ | Mandelbrot | $P, \rho, B$ = constantes empiriques |

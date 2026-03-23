@@ -1,459 +1,389 @@
 ---
-title: "Évaluation en Recherche d'Information — Quiz"
+
+---
+title: "Recherche d'Information Textuelle — Quiz"
 filters:
   - quizdown
 ---
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Quelle est la définition correcte de la **précision** (Precision) en RI ?
-
-- [ ] Le rapport entre les documents pertinents récupérés et le total des documents pertinents
-- [x] Le rapport entre les documents pertinents récupérés et le total des documents récupérés
-- [ ] Le rapport entre les vrais négatifs et les non-pertinents récupérés
-- [ ] La moyenne harmonique du rappel et du taux de dégradation
-
+### Qu'est-ce que le modèle Sac de Mots (Bag of Words) ?
+- [ ] Un modèle qui conserve l'ordre des mots dans un document
+- [x] Un modèle qui représente un document comme un ensemble non ordonné de termes avec leurs fréquences
+- [ ] Un modèle qui analyse la grammaire et la syntaxe d'un texte
+- [ ] Un modèle basé sur des réseaux de neurones
 > Explication :
-> $P = TP / (TP + FP)$ — La précision mesure la **qualité** des résultats retournés : quelle proportion des documents récupérés est réellement pertinente.
-
+> Dans le modèle BoW, les termes sont des entités indépendantes et non ordonnées, apparaissant avec des multiplicités (fréquences). La structure grammaticale et l'ordre des mots sont perdus.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Quelle est la définition correcte du **rappel** (Recall) en RI ?
-
-- [ ] Le rapport entre les documents pertinents récupérés et le total des documents récupérés
-- [x] Le rapport entre les documents pertinents récupérés et le total des documents pertinents
-- [ ] Le rapport entre les vrais positifs et les vrais négatifs
-- [ ] La proportion de faux positifs dans la collection
-
+### Lequel de ces termes est typiquement considéré comme un mot vide (stopword) en anglais ?
+- [ ] retrieval
+- [ ] information
+- [x] the
+- [ ] algorithm
 > Explication :
-> $R = TP / (TP + FN)$ — Le rappel mesure la **complétude** de la récupération : quelle proportion des documents pertinents a été effectivement retrouvée.
-
+> "the" est un mot non discriminant : il apparaît dans presque tous les documents et n'aide pas à distinguer leur contenu. Son IDF (Inverse Document Frequency) est très élevé.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Un système récupère **tous** les documents de la collection. Quel est l'effet sur précision et rappel ?
-
-- [ ] Précision = 1, Rappel = 1
-- [ ] Précision = 1, Rappel faible
-- [x] Rappel = 1, Précision ≈ densité de pertinents dans la collection
-- [ ] Rappel = 0, Précision = 0
-
+### Que fait la racinisation (Stemming) ?
+- [ ] Traduit un mot vers sa forme conjuguée correcte
+- [ ] Identifie les entités nommées dans un texte
+- [x] Tronque un mot pour le ramener à sa racine approximative
+- [ ] Convertit un mot en code phonétique
 > Explication :
-> Récupérer tout garantit de ne rater aucun pertinent (Rappel = 1), mais la précision sera très faible car on récupère aussi tous les non-pertinents. Ce comportement trivial montre pourquoi on ne peut pas utiliser le rappel seul.
-
+> Le stemming supprime les suffixes pour ramener les mots à une forme tronquée commune. Exemple : committed → commit. L'algorithme de Porter est le plus célèbre (5 étapes).
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
+---
+### Quelle est la différence principale entre stemming et lemmatisation (lemmatization) ?
+- [ ] Le stemming est plus lent que la lemmatisation
+- [ ] La lemmatisation tronque les mots, le stemming les corrige grammaticalement
+- [x] La lemmatisation produit une forme linguistiquement correcte ; le stemming produit une racine tronquée potentiellement incorrecte
+- [ ] Il n'y a aucune différence pratique
+> Explication :
+> La lemmatisation ramène à la forme de base (lemme) : "are", "is" → "be". Le stemming est plus rapide mais peut produire des formes non-mots. Exemple d'erreur de stemming : paste ↔ past.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Quel est le rôle de SOUNDEX dans le traitement du texte ?
+- [ ] Trier les termes par fréquence décroissante
+- [ ] Supprimer les mots vides d'un document
+- [x] Convertir un token en une clé phonétique de 4 caractères pour regrouper les variantes orthographiques
+- [ ] Calculer la similarité cosinus entre deux documents
+> Explication :
+> SOUNDEX encode chaque token en une forme lettre + 3 chiffres (ex. : Herman → H655). Cela permet de regrouper des variantes comme Tchebichef et Chebysheff.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Selon la loi de Zipf, quelle relation existe entre la fréquence f(i) d'un terme et son rang r(i) ?
+- [ ] f(i) est proportionnel à r(i)
+- [x] f(i) est inversement proportionnel à r(i)
+- [ ] f(i) est proportionnel au carré de r(i)
+- [ ] f(i) ne dépend pas de r(i)
+> Explication :
+> La loi de Zipf stipule que f(i) · r(i) = K (constante), soit f(i) ∝ 1/r(i). Le terme de rang 1 est deux fois plus fréquent que celui de rang 2, trois fois plus que celui de rang 3, etc.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Qu'est-ce qu'un hapax legomenon dans un corpus textuel ?
+- [ ] Un terme apparaissant dans tous les documents
+- [ ] Un terme de très haute fréquence
+- [x] Un terme n'apparaissant qu'une seule fois dans le corpus
+- [ ] Un terme composé de deux mots
+> Explication :
+> Les hapax legomena sont des termes d'occurrence unique. D'après la loi de Zipf, ils représentent environ la moitié de tous les termes distincts d'un corpus : s₁/M = 1/(1×2) = 0.5.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### La loi de Heap (Heap's Law) décrit...
+- [ ] La relation entre fréquence et rang des termes
+- [x] La croissance du vocabulaire en fonction de la taille du corpus
+- [ ] La distribution des longueurs de documents
+- [ ] La probabilité de co-occurrence de deux termes
+> Explication :
+> La loi de Heap est M = k · L^β avec β ≈ 0.4–0.6. Elle prédit une croissance sous-linéaire du vocabulaire : si le corpus quadruple, le vocabulaire ne double qu'environ.
+```
+
 ---
 
-### Vrai ou Faux : La **sensibilité** (Sensitivity) en analyse ROC est une mesure différente du rappel (Recall).
+## 🟡 Niveau 2 — Compréhension
 
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Un système de RI utilise la loi de Zipf pour décider quels termes indexer. Quelle stratégie applique-t-il selon Luhn ?
+- [ ] Indexer uniquement les termes les plus fréquents
+- [ ] Indexer uniquement les hapax
+- [x] Définir un seuil supérieur (supprime les trop fréquents) et un seuil inférieur (supprime les trop rares) pour ne garder que les termes significatifs
+- [ ] Indexer tous les termes sans exception
+> Explication :
+> Luhn propose deux coupures de rang : les termes très fréquents (stopwords) et très rares (hapax) sont écartés. Les termes significatifs se situent dans la zone intermédiaire à haute valeur discriminante.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Sur un graphique log-log (log fréquence vs log rang), comment apparaît la loi de Zipf ?
+- [ ] Comme une courbe exponentielle croissante
+- [ ] Comme une parabole
+- [x] Comme une droite de pente négative
+- [ ] Comme une courbe sinusoïdale
+> Explication :
+> log f(i) = log(KL) - log(r(i)) est l'équation d'une droite de pente -1. C'est la signature visuelle d'une loi de puissance en représentation log-log.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Quelle est la fraction théorique de termes apparaissant exactement 2 fois dans un corpus, selon Zipf ?
+- [ ] 1/2
+- [x] 1/6
+- [ ] 1/4
+- [ ] 1/12
+> Explication :
+> La formule est sₙ/M = 1/n(n+1). Pour n=2 : 1/(2×3) = 1/6 ≈ 0.167. Cela correspond bien aux observations empiriques sur le corpus TREC (~0.132).
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Pourquoi la correction de Mandelbrot améliore-t-elle la loi de Zipf ?
+- [ ] Elle simplifie le calcul de la fréquence
+- [x] Elle corrige les déviations aux rangs extrêmes (très fréquents et très rares) en ajoutant les paramètres ρ et B
+- [ ] Elle s'applique uniquement aux langues non latines
+- [ ] Elle remplace entièrement la loi de Zipf
+> Explication :
+> La loi de Zipf pure dévie aux extrêmes. Mandelbrot propose f(i) = P(r(i)+ρ)^(-B) avec ρ=100, B=1.15, ce qui améliore l'ajustement notamment pour les hauts rangs (termes peu fréquents).
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Quelle propriété fondamentale de la distribution des termes justifie qu'on parle de distribution "à queue lourde" (heavy-tailed) ?
+- [ ] La majorité de la fréquence totale est concentrée dans les termes rares
+- [x] La grande majorité des termes distincts est rare, et la masse probabiliste totale se trouve dans la queue (termes peu fréquents)
+- [ ] Tous les termes ont approximativement la même fréquence
+- [ ] Les termes les plus fréquents représentent la moitié du vocabulaire
+> Explication :
+> La distribution est asymétrique : quelques termes très fréquents dominent les occurrences, mais le nombre de termes distincts est massivement constitué de termes rares. C'est la définition d'une queue lourde.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Dans le contexte de l'information mutuelle (Mutual Information), pourquoi les associations avec des mots comme "a", "is", "with" sont-elles considérées comme spurieuses ?
+- [ ] Parce que ces mots ont une faible fréquence dans le corpus
+- [ ] Parce qu'ils n'apparaissent jamais avec d'autres termes
+- [x] Parce que leur très haute fréquence les fait co-occurrencer avec tous les termes, gonflant artificiellement le comptage de co-occurrences sans révéler d'association sémantique
+- [ ] Parce que l'information mutuelle ne peut pas les mesurer
+> Explication :
+> L'information mutuelle I(W₁;W₂) ≈ 0 si P(W₁,W₂) ≈ P(W₁)P(W₂). Les stopwords co-occurrent massivement par chance, ce qui explique leur faible valeur d'IM malgré des comptages élevés.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Un corpus passe de 1 million à 4 millions de tokens. Avec β = 0.5 dans la loi de Heap, comment évolue approximativement le vocabulaire ?
+- [ ] Il quadruple
+- [x] Il double
+- [ ] Il reste stable
+- [ ] Il triple
+> Explication :
+> M ∝ L^0.5 = √L. Si L est multiplié par 4, M est multiplié par √4 = 2. C'est précisément le sens de la croissance sous-linéaire prédite par Heap.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Quelle est l'interprétation du "Principe du Moindre Effort" (Principle of Least Effort) de Zipf ?
+- [ ] Les auteurs écrivent des textes aussi courts que possible
+- [x] La loi de Zipf émerge d'un équilibre entre le locuteur (qui veut un petit vocabulaire) et l'auditeur (qui veut un grand vocabulaire)
+- [ ] Les lecteurs ne lisent que les mots les plus fréquents
+- [ ] Les systèmes de RI doivent minimiser le nombre d'opérations
+> Explication :
+> Zipf spécule que la distribution résulte d'un compromis : l'émetteur veut simplifier (petit vocabulaire), le récepteur veut de la précision (grand vocabulaire). Li (1992) a montré qu'une frappe aléatoire suffit à reproduire cette distribution.
+```
+
+---
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Cas pratique : vous construisez un moteur de recherche sur un corpus de 10 millions de tokens. Vous observez 80 000 termes distincts. En utilisant la loi de Heap avec k=10, estimez β.
+- [ ] β ≈ 0.3
+- [x] β ≈ 0.9 (≈ log(8000)/log(10 000 000))
+- [ ] β ≈ 0.5
+- [ ] β ≈ 1.2
+> Explication :
+> M = k · L^β → 80000 = 10 · (10⁷)^β → 8000 = (10⁷)^β → β = log(8000)/log(10⁷) ≈ 3.9/7 ≈ 0.56. La valeur empirique est cohérente avec β ∈ [0.4, 0.6].
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Un ingénieur applique le stemmer de Porter au mot "European" et n'obtient pas "Europe". Quel comportement est illustré ?
+- [ ] Un bug dans l'algorithme
+- [ ] Un comportement agressif (eager stemming)
+- [x] Un comportement conservateur (cautious stemming) qui évite les confusions sémantiques
+- [ ] Une erreur de lemmatisation
+> Explication :
+> Le stemmer de Porter peut être conservateur : il préfère ne pas réduire European → Europe pour éviter de perdre une distinction sémantique. À l'inverse, un stemming agressif peut confondre paste et past.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Vrai ou Faux : La loi de Heap peut être mathématiquement dérivée de la loi de Zipf.
+- [x] Vrai
+- [ ] Faux
+> Explication :
+> Vrai. En supposant que les documents sont générés en échantillonnant des termes selon une distribution zipfienne, on peut dériver que le vocabulaire croît comme une loi de puissance de la taille du corpus, ce qui est exactement la loi de Heap.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Vrai ou Faux : L'entropie de Shannon d'un vocabulaire textuel réel est égale à l'entropie maximale possible pour ce vocabulaire.
 - [ ] Vrai
 - [x] Faux
-
-> Faux :
-> La sensibilité (Sensitivity = TPR = True Positive Rate) est **identique** au rappel : $TP / (TP + FN)$. Ce sont les mêmes formules, issues de vocabulaires différents (médical vs. RI).
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Dans la table de contingence, un document pertinent qui n'est **pas récupéré** correspond à :
-
-- [ ] Un vrai positif (TP)
-- [ ] Un faux positif (FP)
-- [x] Un faux négatif (FN)
-- [ ] Un vrai négatif (TN)
-
 > Explication :
-> FN (Faux Négatif) : le système a raté un document pertinent. C'est ce que le rappel cherche à minimiser. Un FN élevé signifie un rappel faible.
-
+> Faux. L'entropie maximale est atteinte si tous les termes sont équiprobables. Or la distribution des termes suit Zipf (très inégale), donc l'entropie réelle est bien inférieure à l'entropie maximale. Exemple : pour M=100 000, entropie réelle ≈ 9.5 bits vs 13.3 bits max.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Quelle formule correspond à la **F₁-mesure** ?
-
-- [ ] $F_1 = (P + R) / 2$
-- [x] $F_1 = 2PR / (P + R)$
-- [ ] $F_1 = TP / (TP + FP + FN)$
-- [ ] $F_1 = P \times R$
-
+### Vous analysez des co-occurrences et trouvez I(x,y) = 11.3 pour la paire (Honorary, Doctor) avec f(x,y)=12, f(x)=111, f(y)=621. Que conclure ?
+- [ ] Cette association est spurieuse car la fréquence de co-occurrence est trop faible
+- [x] Cette association est significative : malgré une faible fréquence absolue, les deux termes co-occurrent bien plus que prévu par le hasard
+- [ ] L'information mutuelle est trop élevée, signe d'une erreur de calcul
+- [ ] Cette paire doit être supprimée de l'index
 > Explication :
-> La F₁ est la **moyenne harmonique** de P et R. Elle est différente de la moyenne arithmétique : elle pénalise fortement les cas où l'une des deux mesures est très faible.
-
+> Une haute valeur d'IM signifie que P(x,y) ≫ P(x)P(y) : la co-occurrence est non-aléatoire. Honorary et Doctor forment une association sémantique réelle (Honorary Doctor = docteur honoris causa), même si leurs fréquences individuelles sont modestes.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Dans la F-mesure généralisée $E$, si $\beta > 1$, quelle mesure est favorisée ?
-
-- [x] La précision (Precision)
-- [ ] Le rappel (Recall)
-- [ ] Le fallout
-- [ ] La généralité
-
+### Quel est le fondement théorique qui justifie la distribution de Zipf-Mandelbrot comme distribution "optimale" du langage ?
+- [ ] Elle minimise la taille de l'index
+- [ ] Elle maximise le nombre de termes distincts
+- [x] Elle minimise le nombre moyen de lettres par terme pour une entropie fixée (porteur d'information idéal)
+- [ ] Elle maximise la précision des requêtes de recherche
 > Explication :
-> Quand $\beta > 1$, le dénominateur $\beta^2 P + R$ donne plus de poids à P. Un $\beta < 1$ favorise le rappel. À $\beta = 1$, P et R sont équivalents ($F_1$).
-
+> Mandelbrot a montré que p*_r = P(r+ρ)^(-B) est la solution au problème d'optimisation : minimiser Σ p_r l_r (longueur moyenne des termes) sous contrainte d'entropie fixée I_H(T) = h. Le langage humain serait donc une solution optimale à ce problème de communication.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Vrai ou Faux : Sur une courbe P–R, un système idéal maintient une précision de 1 pour tous les niveaux de rappel.
-
-- [x] Vrai
-- [ ] Faux
-
-> Réponse :
-> Un système parfait retourne en tête de liste **uniquement** des documents pertinents, quel que soit le nombre récupéré. Sa courbe P–R longe les bords supérieur et droit du graphique.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Quelle est la formule du **taux de dégradation** (Fallout) ?
-
-- [ ] $FP / (TP + FP)$
-- [ ] $FN / (TP + FN)$
-- [x] $FP / (TN + FP)$
-- [ ] $TN / (TN + TP)$
-
+### Vrai ou Faux : La tokenisation est identique pour toutes les langues naturelles, puisqu'il suffit de séparer les mots par des espaces.
+- [ ] Vrai
+- [x] Faux
 > Explication :
-> Le Fallout mesure la proportion de documents **non pertinents** qui ont été récupérés parmi tous les non-pertinents de la collection. C'est aussi le FPR (False Positive Rate) utilisé dans la courbe ROC, et il est égal à $1 - \text{Spécificité}$.
-
+> Faux. Les espaces fonctionnent pour le français et l'anglais, mais l'allemand nécessite une décomposition des mots composés (Suchprogramm), et les langues asiatiques (chinois, japonais) n'utilisent pas d'espaces entre les mots et ont des directions de lecture différentes.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### La **précision interpolée** $\hat{P}(R_j)$ à un niveau de rappel $R_j$ est définie comme :
-
-- [ ] La précision exacte observée au niveau $R_j$
-- [ ] La moyenne des précisions entre $R_j$ et $R_{j+1}$
-- [x] Le maximum des précisions observées pour tout rappel entre $R_j$ et $R_{j+1}$
-- [ ] La précision minimale dans l'intervalle $[R_j, R_{j+1}]$
-
+### Un corpus contient K=0.1 et L=1 000 000 tokens. Combien y a-t-il approximativement de termes distincts (M) selon Zipf ?
+- [ ] 1 000
+- [ ] 10 000
+- [x] 100 000
+- [ ] 1 000 000
 > Explication :
-> $\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$. Cette définition assure une courbe monotone non-croissante et permet de comparer des courbes mesurées à des points différents.
-
+> D'après Zipf : M = r₁ = KL = 0.1 × 1 000 000 = 100 000. La taille du vocabulaire est donc approximativement KL, ce qui lie directement la loi de Zipf à l'estimation du nombre de termes distincts.
 ```
 
 ```{quizdown}
-
 ---
-primaryColor: steelblue
+primaryColor: "#3b82f6"
 shuffleQuestions: false
 shuffleAnswers: true
-locale: fr
 ---
-
-### Quelle est la différence principale entre **micro-moyennage** et **macro-moyennage** ?
-
-- [ ] Le micro-moyennage traite chaque catégorie également ; le macro-moyennage traite chaque document également
-- [x] Le micro-moyennage traite chaque document également ; le macro-moyennage traite chaque catégorie également
-- [ ] Le micro-moyennage est plus précis pour les petites collections
-- [ ] Il n'y a pas de différence si les catégories sont équilibrées en taille
-
+### Cas pratique : un système de RI calcule I(W1,W2) entre le terme "doctors" et le terme "a" et obtient I=0.95. Quelle action doit-il prendre ?
+- [ ] Indexer la paire (doctors, a) comme terme composé prioritaire
+- [ ] Augmenter le poids de "a" dans les requêtes contenant "doctors"
+- [x] Ignorer cette association : "a" est probablement un stopword dont la haute fréquence crée une co-occurrence fortuite avec tous les termes
+- [ ] Considérer "a" comme synonyme de "doctors"
 > Explication :
-> En **micro-averaging**, on fusionne toutes les tables → les grandes catégories dominent. En **macro-averaging**, on calcule une performance par catégorie puis on moyenne → toutes les catégories ont le même poids, indépendamment de leur taille.
+> Malgré une valeur d'IM positive, "a" est un stopword extrêmement fréquent (f=284 690 dans l'exemple du cours) qui co-occurrent mécaniquement avec tout. Cette association est donc spurieuse et doit être filtrée via la suppression des mots vides.
+```
 
 ```
 
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
 ---
 
-### Un système de RI est évalué sur une collection avec **très peu de documents pertinents** (collection déséquilibrée). Quelle courbe est la plus appropriée ?
-
-- [ ] La courbe ROC (Receiver Operating Characteristic)
-- [x] La courbe P–R (Precision–Recall)
-- [ ] Les deux sont équivalentes dans ce cas
-- [ ] La courbe de généralité
-
-> Explication :
-> Sur des collections déséquilibrées (peu de pertinents), la courbe ROC peut paraître optimiste car le grand nombre de TN fait paraître le FPR très faible. La courbe P–R est plus sensible aux performances réelles sur la classe minoritaire (pertinents).
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Quelle est la définition de la **R-Précision** (R-Precision) ?
-
-- [ ] La précision calculée au niveau de rappel $R = 1.0$
-- [ ] La moyenne des précisions aux 11 niveaux de rappel standard
-- [x] La précision à la position $R$ dans la liste, où $R$ est le nombre total de documents pertinents
-- [ ] Le rappel à la position égale au nombre de documents récupérés
-
-> Explication :
-> $R\text{-Precision} = TP_{N_{Rel}} / N_{Rel}$. On regarde les $N_{Rel}$ premiers résultats (autant qu'il y a de pertinents) et on calcule la précision. Un système parfait obtient R-Précision = 1.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Cas pratique : Une requête a **7 documents pertinents** dans la collection. Le système retourne une liste de 10 documents. Parmi les 7 premiers résultats, 4 sont pertinents. Quelle est la **R-Précision** ?
-
-- [ ] $4/10 = 0.40$
-- [x] $4/7 \approx 0.57$
-- [ ] $7/10 = 0.70$
-- [ ] $4/4 = 1.00$
-
-> Explication :
-> La R-Précision s'évalue aux **$N_{Rel}$ premières positions** (ici 7). On compte les TP dans ces 7 premières positions : $TP_7 = 4$. Donc $R\text{-Precision} = 4/7 \approx 0.57$.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Vrai ou Faux : Le **Bull's Eye Percentage** (BEP) est toujours supérieur ou égal à la R-Précision pour la même requête.
-
-- [x] Vrai
-- [ ] Faux
-
-> Réponse :
-> Le BEP évalue les $2Q$ premiers résultats (fenêtre deux fois plus large que Q). En élargissant la fenêtre, on donne plus de chances de capturer des pertinents. Le BEP est donc plus **optimiste** que la R-Précision (First-Tier).
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Sur une courbe ROC, une courbe qui **longe la diagonale** $y = x$ indique :
-
-- [ ] Un excellent système
-- [ ] Un système qui favorise trop la précision
-- [ ] Un système avec un rappel parfait
-- [x] Un système non informatif, équivalent à une classification aléatoire
-
-> Explication :
-> La diagonale $y = x$ correspond à un système qui classe aléatoirement (AUC = 0.5). Un bon système doit être **au-dessus** de cette diagonale. Plus la courbe est proche du coin supérieur gauche, meilleur est le système.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Cas pratique : Un système A a une courbe P–R **toujours au-dessus** de celle du système B. Que peut-on conclure ?
-
-- [ ] Le système A a nécessairement un meilleur rappel que B
-- [ ] Les deux systèmes sont équivalents
-- [x] Le système A est globalement meilleur que B (mAP_A > mAP_B)
-- [ ] Le système B est meilleur à bas rappel
-
-> Explication :
-> Si la courbe P–R de A domine celle de B à tous les niveaux de rappel, alors l'aire sous la courbe de A (mAP_A) est supérieure à celle de B. Le système A est donc globalement supérieur.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Quelle est la **généralité** (Generality) d'une collection et quel est son impact sur la précision ?
-
-- [ ] La généralité mesure la taille de la collection ; elle n'impacte pas la précision
-- [ ] La généralité est le ratio de faux positifs ; une généralité élevée diminue le rappel
-- [x] La généralité est la densité de pertinents dans la collection ; une faible généralité rend la précision élevée plus difficile à maintenir
-- [ ] La généralité est le nombre de requêtes ; elle impacte le macro-moyennage
-
-> Explication :
-> $G = (TP + FN) / N$. La formule $P = (R \cdot G) / (R \cdot G + \text{Fallout} \cdot (1-G))$ montre que même avec un bon rappel et un Fallout faible, si $G$ est très petit (peu de pertinents), la précision reste faible.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Cas pratique : Vous devez choisir entre **micro-averaging** et **macro-averaging** pour évaluer un système de classification de documents en 10 catégories, dont 2 très fréquentes représentent 80% du corpus. Quelle stratégie choisissez-vous pour une évaluation **équitable entre catégories** ?
-
-- [ ] Micro-averaging, car il tient compte de tous les documents
-- [x] Macro-averaging, car il donne le même poids à chaque catégorie
-- [ ] Les deux donnent le même résultat dans ce cas
-- [ ] Ni l'un ni l'autre — il faut utiliser la F-mesure uniquement
-
-> Explication :
-> Le **micro-averaging** favoriserait les 2 catégories dominantes (80% des docs). Le **macro-averaging** calcule une performance par catégorie puis fait la moyenne, donnant le même poids aux 10 catégories — c'est le choix adapté quand on veut une évaluation équitable.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Pourquoi mesurer le **rappel** est-il difficile en pratique dans un vrai système de RI ?
-
-- [ ] Parce que la formule du rappel est trop complexe à calculer
-- [ ] Parce que les utilisateurs ne fournissent jamais de requêtes réalistes
-- [x] Parce qu'on ne connaît jamais exhaustivement l'ensemble de tous les documents pertinents d'une collection
-- [ ] Parce que le rappel dépend du seuil de similarité choisi
-
-> Explication :
-> Pour calculer le rappel exactement, il faudrait connaître **tous** les documents pertinents ($TP + FN$). Or, dans une grande collection, juger tous les documents est impossible. On utilise le **pooling** (jugement d'un sous-ensemble) → le rappel reste une estimation.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Qu'est-ce que le **pooling** utilisé dans les benchmarks comme TREC ?
-
-- [ ] Un algorithme de fusion de requêtes
-- [ ] Une technique de compression des index
-- [x] La fusion des top-N résultats de plusieurs systèmes pour créer un sous-ensemble à juger par des humains
-- [ ] Une méthode de pondération des termes
-
-> Explication :
-> Le pooling consiste à collecter les top-N résultats de chaque système participant, à les fusionner, puis à faire juger uniquement ce pool par des assesseurs humains. C'est une **approximation** : les documents hors du pool sont supposés non pertinents, ce qui peut sous-estimer les performances.
-
-```
-
-```{quizdown}
-
----
-primaryColor: steelblue
-shuffleQuestions: false
-shuffleAnswers: true
-locale: fr
----
-
-### Vrai ou Faux : La **mAP** (Mean Average Precision) est équivalente à l'aire sous la courbe P–R interpolée aux 11 niveaux standard.
-
-- [x] Vrai
-- [ ] Faux
-
-> Réponse :
-> La mAP est définie comme la moyenne des précisions interpolées aux 11 niveaux $\{0, 0.1, 0.2, \ldots, 1.0\}$, ce qui correspond à une approximation de l'aire sous la courbe P–R. C'est la mesure de synthèse la plus utilisée en RI.
-
-```
+*Quiz généré à partir du cours sur la Recherche d'Information Textuelle.*
+*Couvre : modèle BoW, pipeline de traitement, loi de Zipf, loi de Heap, théorie de l'information, information mutuelle.*

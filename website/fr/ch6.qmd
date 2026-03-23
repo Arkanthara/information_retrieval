@@ -1,809 +1,662 @@
 ---
-title: "Évaluation en Recherche d'Information"
+title: "Recherche d'Information Textuelle"
 ---
 
-# Rappels fondamentaux sur la Recherche d'Information
+# Motivation et Objectifs
 
-## La motivation principale de la RI
+## Pourquoi étudier la structure du texte ?
 
-La **Recherche d'Information** (Information Retrieval — IR) a pour objectif premier de **satisfaire un besoin d'information** (Information Need).
+La recherche d'information textuelle (Text Information Retrieval) occupe une place centrale dans le domaine de la RI. Comprendre le texte, c'est comprendre le support originel sur lequel tous les modèles d'indexation et de recherche ont été construits.
 
-Il s'agit de permettre à un utilisateur de trouver les documents pertinents parmi une large collection, à partir d'une requête exprimée de manière informelle.
+Les objectifs fondamentaux de cette étude sont :
 
-Cependant, ce n'est pas toujours l'unique but. La RI couvre également :
+- Comprendre la **structure de l'information textuelle** pour mieux l'exploiter
+- Utiliser la **modélisation du texte** pour optimiser l'indexation et la recherche
+- Comprendre les **mécanismes de génération du texte** et du langage
+- Déterminer si les mêmes hypothèses statistiques peuvent s'appliquer à toute information basée sur des termes
 
-- La **gestion de données** (Data Management) : organiser, structurer, maintenir des collections
-- Le **filtrage de données** (Data Filtering) : éliminer les informations non pertinentes selon un profil utilisateur
-
-💡 La notion de *besoin d'information* est centrale : elle est subjective, contextuelle, et souvent difficile à formaliser.
-
-## Le défi principal de la RI
-
-La Recherche d'Information vise à :
-
-> *Faire émerger automatiquement l'information **pertinente** d'une **large collection** de documents à l'aide d'un formalisme de requête **peu contraignant** (initialement fondé sur le texte seul).*
-
-Ce défi se distingue des approches classiques de gestion de données :
-
-### Différences avec la recherche en base de données (Database Search)
-
-| Aspect | Base de données | Recherche d'Information |
-|---|---|---|
-| Formalisme de requête | Strict (ex. SQL) | Souple (langage naturel) |
-| Structure | Construction manuelle | Automatique |
-| Navigation | Parcours de répertoires | Requête libre |
-| Classification | Manuelle | Automatique |
-
-⚠️ La RI ne remplace pas les bases de données — elle les **complète** pour des usages où la structure formelle est impossible ou insuffisante.
-
-## Les grandes tâches de la RI
-
-La RI englobe quatre grandes familles de tâches :
-
-### Récupération de données (Data Retrieval)
-
-C'est la tâche classique : l'utilisateur soumet une requête et le système retourne une liste ordonnée de documents pertinents.
-
-💡 C'est sur cette tâche que les mesures d'évaluation classiques (précision, rappel) sont principalement développées.
-
-### Réponse aux questions (Question Answering)
-
-Le système doit comprendre une question en langage naturel et y apporter une réponse précise, pas seulement un document.
-
-Exemple : *"Qui a inventé le Web ?"* → réponse attendue : *"Tim Berners-Lee"*, pas une liste de pages web.
-
-### Interaction fondée sur le contenu (Content-based Interaction)
-
-Systèmes qui permettent à l'utilisateur d'interagir avec une collection via son contenu (images, sons, vidéos) plutôt que des mots-clés.
-
-Exemple : recherche d'images par similarité visuelle.
-
-### Gestion de données (Data Management)
-
-Organisation et maintenance intelligente d'une collection de documents : classification automatique, détection de doublons, structuration de corpus.
+💡 L'idée centrale est que le texte n'est pas aléatoire : il obéit à des lois statistiques précises, exploitables pour construire des systèmes de RI efficaces.
 
 ---
 
-# Modèles de Pertinence
+# Modélisation du Texte
 
-## La notion centrale de pertinence (Relevance)
+## Les avantages du texte pour la RI
 
-La pertinence est la notion fondamentale autour de laquelle s'articule toute l'évaluation en RI.
+Le texte présente plusieurs propriétés particulièrement favorables à la RI, comparé à d'autres types de médias.
 
-Un document est pertinent s'il **répond au besoin d'information** exprimé par la requête de l'utilisateur.
+### Avantages d'interprétation
 
-⚠️ La pertinence est **subjective** : deux utilisateurs peuvent juger différemment la pertinence d'un même document pour une même requête.
+- **Matériel bien compris** : le texte est un medium maîtrisé depuis des siècles
+- **Caractéristiques lisibles** : les descripteurs (racines, termes) sont directement interprétables par un humain
+- **Comparabilité** : il est relativement aisé de comparer un document textuel avec lui-même ou avec un autre
 
-Elle dépend aussi du contexte et de l'interaction de l'utilisateur avec le système.
+### Avantages computationnels
 
-## Pertinence et similarité
+- **Données de petite taille** : le texte est compact comparé aux images ou vidéos
+- **Mécanismes d'analyse efficaces** : l'analyse syntaxique (parsing) est bien développée
+- **Techniques de structuration éprouvées** : JSON, XML, et autres formats permettent d'organiser le texte avec précision
 
-Les modèles de RI cherchent à estimer la pertinence à travers différentes approches :
+### Le texte comme modèle de référence
 
-### Pertinence comme similarité (Similarity)
+⚠️ Malgré ses avantages, le texte n'échappe pas aux défis classiques de la RI : similarité, indexation, passage à l'échelle.
 
-La pertinence est modélisée comme une **distance** ou une **similarité** entre la représentation de la requête et celle du document :
-
-$$\Delta(\text{Rep}(q), \text{Rep}(d))$$
-
-- Le modèle **espace vectoriel** (Vector Space Model — Salton et al., 1975) en est l'exemple le plus célèbre.
-- La **mesure cosinus** est fréquemment utilisée.
-- La similarité est une valeur **continue** → nécessite un seuil pour décider de la pertinence.
-
-### Pertinence comme probabilité (Probability of Relevance)
-
-$$P(R \mid q, d) \in \{0, 1\}$$
-
-- Modèle **classique probabiliste** (Robertson & Sparck Jones, 1976)
-- Modèles **génératifs** (approche par modèles de langage — Ponte & Croft, 1998 ; Lafferty & Zhai, 2001)
-- Modèle de **distribution probabiliste** (Wong & Yao, 1989)
-
-### Pertinence comme inférence (Probabilistic Inference)
-
-$$P(d \to q) \text{ ou } P(q \to d)$$
-
-- Modèle de **réseau d'inférence** (Turtle & Croft, 1991)
-- Modèle de **concept probabiliste** (Wong & Yao, 1995)
-
-## Pertinence binaire vs continue
-
-| Type | Description | Exemple |
-|---|---|---|
-| Continue | Score réel dans [0, 1] | Mesure cosinus |
-| Binaire | Pertinent / Non pertinent | Jugement humain |
-
-💡 En pratique, les systèmes calculent des scores continus, mais l'évaluation repose sur des jugements **binaires** (pertinent / non-pertinent), avec parfois une classe neutre utilisée dans le **retour de pertinence** (Relevance Feedback).
-
-La conversion d'un score continu en décision binaire nécessite un **seuil** (Threshold) — le choix de ce seuil est un problème central.
+Le texte a été le **premier medium indexé**, ce qui a généré une littérature scientifique très riche. Il est souvent utilisé comme **preuve de concept** pour tous les systèmes pouvant être décomposés en « mots », y compris les Sacs de Mots Visuels (Bags of Visual Words).
 
 ---
 
-# Évaluation en Recherche d'Information
+## Le Modèle Sac de Mots (Bag of Words)
 
-## Pourquoi évaluer ?
+### Pourquoi ne pas utiliser le TAL complet ?
 
-L'évaluation est indispensable pour plusieurs raisons fondamentales.
+Le Traitement Automatique du Langage (TAL / Natural Language Processing) offre des approches rigoureuses grâce aux avancées en linguistique. Cependant :
 
-### Comparer les systèmes
+- Il est **coûteux** en temps de calcul et en ressources
+- Il est **complexe** à mettre en œuvre
+- Il **n'est pas toujours nécessaire** : en RI, on travaille avec des approximations
+- Il **n'est pas toujours souhaitable** : on veut un formalisme souple qui tolère l'ambiguïté
 
-Il existe de nombreux systèmes de RI différents. L'évaluation permet de :
+💡 On cherche une représentation qui capture l'essentiel du contenu thématique sans avoir besoin de reconstruire ou générer du texte.
 
-- Identifier le **meilleur système** pour une tâche donnée
-- **Évaluer des composants** individuellement (indexation, modèle de pondération, mécanisme de requête...)
-- **Comprendre les problèmes** et faire progresser la recherche
+### Définition du modèle Sac de Mots
 
-### Relever les défis
+Le **modèle Sac de Mots** (Bag of Words, BoW) repose sur les principes suivants :
 
-Les enjeux de l'évaluation sont multiples :
+- Les **termes** sont les unités constitutives du document formant le vocabulaire (par exemple, les mots séparés par des espaces)
+- Les termes sont considérés comme des **entités indépendantes et non ordonnées**
+- Les termes apparaissent avec des **multiplicités** (fréquences) : c'est un **sac** (bag) plutôt qu'un ensemble (set)
 
-- Définir des tâches **pertinentes** et **réalistes**
-- Choisir les mesures les plus **représentatives** du comportement réel du système
+🧠 À retenir : dans ce modèle, la **structure est perdue** (paragraphes, titres, ordre des mots...).
 
-💡 Une bonne évaluation est celle qui permet de prédire les performances réelles d'un système dans des conditions d'utilisation authentiques.
+### Généralisation du modèle BoW
 
-## Que faut-il évaluer ?
+Le modèle BoW n'est pas limité au texte. Puisqu'il s'applique à plusieurs médias (texte, images, audio...), les termes doivent être vus comme des **entités génériques** : mots, motifs visuels, patterns acoustiques...
 
-L'évaluation dépend fortement de la **tâche** que le système est censé accomplir.
+### Limites du modèle BoW
 
-### Validité du modèle
-
-Est-ce que le modèle sous-jacent capture correctement la pertinence ?
-
-### Utilité pour l'utilisateur
-
-Le système rend-il effectivement service à l'utilisateur dans sa tâche ?
-
-### Évaluation selon la tâche
-
-#### Réponse aux questions (Question Answering)
-
-> Ma question est-elle **comprise** et **répondue correctement** ?
-
-Cette évaluation nécessite des compétences en ingénierie des connaissances, linguistique et intelligence artificielle.
-
-#### Gestion de données (Data Management)
-
-> Mon système est-il **utile** pour maintenir mes données organisées ?
-
-Relève plutôt de l'IHM (Interaction Homme-Machine) et du génie logiciel.
-
-#### Interaction fondée sur le contenu (CB Interaction)
-
-> Mon système est-il **utilisable** par l'utilisateur ?
-
-#### Récupération de données (Data Retrieval) ← tâche centrale
-
-> **Toutes** les données pertinentes (et **seulement** celles-ci) sont-elles récupérées ?
-
-🧠 À retenir : C'est pour la tâche de **récupération de données** que les mesures quantitatives classiques (précision, rappel, F-mesure, etc.) ont été développées et sont le plus largement utilisées.
+- **Perte d'information grammaticale et structurelle** : l'ordre des mots est ignoré
+- **Synonymie** : deux mots différents peuvent exprimer le même concept
+- **Polysémie** : un même mot peut avoir plusieurs sens selon le contexte
 
 ---
 
-# Outils d'évaluation
+# Traitement du Texte
 
-## La vérité terrain (Ground Truth)
+## Vue d'ensemble du pipeline
 
-Pour évaluer un système, il faut disposer d'une **vérité terrain**, c'est-à-dire un ensemble de données de référence.
+Le traitement du texte suit un **pipeline structuré** allant du document brut aux termes d'index.
 
-La construction de la vérité terrain suit ces étapes :
-
-1. Définir un **ensemble de requêtes** représentatives
-2. Pour chaque requête, collecter des **jugements de pertinence** (relevance judgments) : un ensemble de documents étiquetés comme pertinents ou non
-3. Ces jugements sont fournis par **plusieurs utilisateurs** pour réduire la subjectivité
-
-⚠️ La qualité des jugements de pertinence est critique : des jugements erronés ou inconsistants faussent toute l'évaluation.
-
-## Le système à évaluer (System Under Test)
-
-Une fois la vérité terrain établie, le système est évalué comme suit :
-
-1. **Exécuter les requêtes** de la vérité terrain sur le système
-2. **Récupérer les résultats** sous forme de listes ordonnées (ranked lists)
-3. **Marquer** les documents pertinents et non pertinents dans ces listes
-
-On obtient ainsi :
-
-- Les **rangs des documents pertinents** dans la liste de résultats
-- Les **rangs des documents non pertinents**
-
-## Définir la frontière récupéré / non récupéré
-
-Il faut aussi décider d'une **limite** qui sépare les documents récupérés de ceux qui ne le sont pas. Plusieurs stratégies existent :
-
-- Fixer un **nombre de documents inspectés** (ex. top-10, top-100)
-- Fixer un **seuil de similarité** en dessous duquel un document n'est pas retourné
-- Utiliser une **décision interne** au système (ex. classifieur binaire)
-
-Alternativement, on peut **évaluer sur toutes les positions** possibles et tracer une courbe de performance complète.
-
----
-
-# Les Mesures de Base : Précision et Rappel
-
-## La table de contingence
-
-Avant de définir précision et rappel, il faut introduire la **table de contingence** (Confusion Matrix) qui organise les 4 situations possibles pour chaque document :
-
-|  | Récupéré | Non récupéré |
-|---|---|---|
-| **Pertinent** | Vrai Positif (TP) | Faux Négatif (FN) |
-| **Non Pertinent** | Faux Positif (FP) | Vrai Négatif (TN) |
-
-- **TP (True Positive)** : document pertinent ET récupéré → ✅ bonne récupération
-- **FN (False Negative)** : document pertinent mais NON récupéré → ❌ raté
-- **FP (False Positive)** : document non pertinent mais récupéré → ❌ pollution
-- **TN (True Negative)** : document non pertinent ET non récupéré → ✅ bonne exclusion
-
-💡 On visualise cela comme deux ensembles qui se chevauchent partiellement : l'ensemble des documents pertinents et l'ensemble des documents récupérés.
-
-## Le Rappel (Recall)
-
-### Définition
-
-$$R = \text{Recall} = \frac{\text{nombre de documents pertinents récupérés}}{\text{nombre total de documents pertinents}} = \frac{TP}{TP + FN}$$
-
-### Interprétation
-
-Le rappel mesure la **capacité du système à ne pas manquer de documents pertinents**.
-
-Un rappel de 1 (100%) signifie que tous les documents pertinents ont été récupérés (FN = 0).
-
-💡 Imaginons une collection avec 100 documents pertinents. Si le système en retrouve 80, le rappel est de 0,80.
-
-⚠️ Un rappel élevé peut être trivialement obtenu en récupérant **tous** les documents de la collection — mais alors la précision est catastrophique.
-
-## La Précision (Precision)
-
-### Définition
-
-$$P = \text{Precision} = \frac{\text{nombre de documents pertinents récupérés}}{\text{nombre total de documents récupérés}} = \frac{TP}{TP + FP}$$
-
-### Interprétation
-
-La précision mesure la **capacité du système à ne retourner que des documents pertinents**.
-
-Une précision de 1 (100%) signifie que tous les documents récupérés sont pertinents (FP = 0).
-
-💡 Si le système retourne 50 documents dont 40 sont pertinents, la précision est de 0,80.
-
-⚠️ Une précision élevée peut être trivialement obtenue en ne récupérant **aucun** document — mais alors le rappel est nul.
-
-## Le compromis fondamental Précision–Rappel
-
-🧠 À retenir : **Précision et rappel sont en tension**.
-
-Il est facile d'atteindre l'un ou l'autre en sacrifiant l'autre :
-
-- **Tout récupérer** → rappel = 1, précision ≈ densité de pertinents dans la collection
-- **Ne rien récupérer** → précision indéfinie, rappel = 0
-- **Ne récupérer que 1 document très sûr** → précision peut être = 1, rappel très faible
-
-Un bon système doit **équilibrer** les deux.
-
-## Les quatre configurations de P et R
-
-### Configuration 1 : Basse précision, bas rappel
-
-L'ensemble des documents récupérés est petit et ne contient aucun document pertinent. Le système est inefficace.
-
-### Configuration 2 : Haute précision, bas rappel
-
-L'ensemble des documents récupérés est petit mais contient uniquement des pertinents. Le système est trop restrictif.
-
-### Configuration 3 : Bas précision, haut rappel
-
-L'ensemble des documents récupérés est grand et englobe presque tous les pertinents, mais aussi beaucoup de non-pertinents.
-
-### Configuration 4 : Haute précision, haut rappel
-
-L'ensemble des documents récupérés est bien calibré : il contient la quasi-totalité des documents pertinents avec peu de bruit. C'est l'**idéal**.
-
----
-
-# La Courbe Précision–Rappel
-
-## Pourquoi une courbe ?
-
-Une seule valeur de précision ou de rappel ne suffit pas pour caractériser un système.
-
-La **courbe P–R** (Precision–Recall curve) représente l'évolution de la précision en fonction du rappel, en faisant varier le seuil de décision (ou le nombre de documents retournés).
-
-Elle permet de visualiser le **comportement global** du système pour toutes les valeurs de seuil possibles.
-
-💡 Un système idéal aurait une courbe P–R qui longe le coin supérieur gauche puis le bord supérieur du graphique (Précision = 1 pour tout niveau de Rappel).
-
-## Construction d'une courbe P–R
-
-### Données nécessaires
-
-- Une liste ordonnée de résultats produite par le système
-- Les jugements de pertinence pour chaque document
-
-### Procédure
-
-Pour chaque position $k$ dans la liste (en parcourant les documents du plus pertinent au moins pertinent) :
-
-1. Calculer la précision $P@k = \frac{\text{TP jusqu'à k}}{k}$
-2. Calculer le rappel $R@k = \frac{\text{TP jusqu'à k}}{\text{total de pertinents}}$
-3. Porter le point $(R@k, P@k)$ sur le graphique
-
-### Exemple numérique
-
-Supposons une collection avec 4 documents pertinents (Doc 1, 4, 5, 6). Le système retourne la liste ordonnée suivante :
-
-| Position | Doc | Pertinent ? | Précision | Rappel |
-|---|---|---|---|---|
-| 1 | D4 | ✅ R | 1/1 = 1,00 | 1/4 = 0,25 |
-| 2 | D1 | ✅ R | 2/2 = 1,00 | 2/4 = 0,50 |
-| 3 | D3 | ❌ NR | 2/3 = 0,67 | 2/4 = 0,50 |
-| 4 | D6 | ✅ R | 3/4 = 0,75 | 3/4 = 0,75 |
-| 5 | D2 | ❌ NR | 3/5 = 0,60 | 3/4 = 0,75 |
-| 6 | D5 | ✅ R | 4/6 = 0,67 | 4/4 = 1,00 |
-
-💡 On voit que la précision **diminue en général** quand le rappel augmente — c'est le comportement typique d'un système de RI.
-
-## Interprétation de la courbe P–R
 ```{mermaid}
-graph LR
-    A[Rappel faible\nPrécision haute] --> B[Rappel moyen\nPrécision moyenne] --> C[Rappel élevé\nPrécision faible]
+flowchart LR
+    A[Document] --> B[Espacement / Mise en forme]
+    B --> C[Tokenisation]
+    C --> D[Suppression des mots vides]
+    D --> E[Groupes nominaux]
+    E --> F[Racinisation / Lemmatisation]
+    F --> G[Indexation automatique ou manuelle]
+    A --> H[Reconnaissance de structure]
+    H --> G
 ```
 
-- Un système **idéal** maintient une précision de 1 quel que soit le rappel.
-- Un système **médiocre** voit sa précision chuter rapidement dès que le rappel augmente.
-- La courbe d'un **bon système** est au-dessus de celle d'un mauvais système sur tout l'axe des rappels.
+Ce pipeline se décompose en trois grandes étapes :
 
-🧠 À retenir : Plus la courbe est **proche du coin supérieur droit**, meilleur est le système.
+**Traitement initial :**
 
-## Pourquoi mesurer le rappel est difficile
+- Tokenisation
+- Suppression des mots vides (stopwords)
 
-Dans la pratique, on ne connaît jamais exhaustivement l'ensemble de tous les documents pertinents d'une collection.
+**Normalisation morphologique :**
 
-### Le problème des documents non jugés
+- Racinisation (Stemming)
+- Lemmatisation
 
-- La collection entière n'est souvent pas jugée (trop coûteux)
-- Les estimations de TP, TN, FP, FN sont donc approximatives
-- Des documents pertinents peuvent exister en dehors des documents jugés
+**Organisation de l'information :**
 
-La solution standard est l'**échantillonnage** (sampling) et le **pooling** (voir section Benchmark).
-
-⚠️ En pratique, **seule la précision est mesurable de manière fiable**. Le rappel reste une estimation.
+- Construction de l'index
+- Construction du thésaurus (vocabulaire)
 
 ---
 
-# Interpolation et Moyennage des Courbes P–R
+## Tokenisation (Tokenization)
 
-## Pourquoi interpoler ?
+### Définition
 
-Lorsqu'on veut comparer deux systèmes ou calculer une courbe moyenne sur plusieurs requêtes, les points de la courbe P–R ne correspondent pas aux mêmes valeurs de rappel.
+La **tokenisation** (aussi appelée analyse lexicale / lexical analysis, ou *lexing*) est l'opération qui transforme un document brut (une séquence d'octets) en une séquence de **tokens**, typiquement des mots.
 
-On utilise alors des **niveaux de rappel standard** : $0, 0.1, 0.2, \ldots, 1.0$.
+💡 Cela revient à définir un ou plusieurs **séparateurs** : tout ce qui n'est pas un séparateur constitue un token.
 
-## La précision interpolée
+### Cas simples : français et anglais
 
-La **précision interpolée** (Interpolated Precision) au $j$-ième niveau de rappel est définie comme :
+Pour le français et l'anglais, les séparateurs naturels sont :
 
-$$\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$$
+- Les **espaces blancs**
+- La **ponctuation** (virgule, point, point-virgule...)
 
-💡 Autrement dit, on prend le **maximum** de précision observé pour tout rappel supérieur ou égal à $R_j$ jusqu'au prochain niveau standard $R_{j+1}$.
+### Cas complexes : autres langues
 
-Cette définition assure que la courbe interpolée est **monotone non-croissante** et permet des comparaisons cohérentes.
+Le problème de la tokenisation est bien plus délicat pour d'autres langues :
 
-## Moyennage des courbes P–R
+- **Allemand** : les mots composés (Komposita) doivent être décomposés. Exemple : *Suchprogramm* = *Such* + *Programm* (programme de recherche)
+- **Arabe et langues asiatiques** : directions de lecture différentes, utilisation de symboles spéciaux, absence d'espaces entre les mots dans certaines langues (ex. : chinois, japonais)
 
-Pour évaluer un système sur un ensemble de requêtes, on calcule une **courbe P–R moyenne** :
+### Cas particuliers en tokenisation
 
-1. Pour chaque requête $q$, construire la courbe P–R interpolée aux niveaux standard
-2. Pour chaque niveau de rappel standard, **faire la moyenne** des précisions sur toutes les requêtes
-3. La courbe résultante est la **courbe P–R moyenne**
+La tokenisation doit également gérer :
 
-Cette approche est plus **robuste** car moins sensible aux requêtes atypiques (queries spécifiques).
+- **Chaînes numériques** : `1990`, `90's`, `200BC`, `17:00`, `5pm`
+- **Valeurs avec unités** : `$5`, `5.-SFr`, `5.3kg`, `1E-16`, pourcentages, âges
+- **Ponctuation et acronymes** : `U.S.A`, `RTFM` (faut-il les garder tels quels ou les décomposer ?)
+- **Balises markup** : JSON, XML (faut-il ignorer les balises ?)
+- **Mise en forme** : casse (*case folding*), tirets, polices de caractères
 
-## Micro-moyennage et Macro-moyennage
-
-Quand on évalue un système sur plusieurs catégories ou plusieurs requêtes, deux stratégies de moyennage existent.
-
-### Micro-moyennage (Micro-averaging)
-
-- On **fusionne** les tables de contingence de toutes les catégories/requêtes en **une seule table globale**
-- On calcule ensuite P et R sur cette table unique
-
-Propriétés :
-
-- Donne une **importance égale à chaque document**
-- **Favorise les catégories les plus fréquentes** (les grandes classes dominent le calcul)
-
-### Macro-moyennage (Macro-averaging)
-
-- On calcule P et R **séparément pour chaque catégorie/requête**
-- On **fait la moyenne** des scores obtenus
-
-Propriétés :
-
-- Donne une **importance égale à chaque catégorie**
-- Les catégories rares ont autant de poids que les catégories fréquentes
-
-### Quelle stratégie choisir ?
-
-| Objectif | Stratégie recommandée |
-|---|---|
-| Évaluer la performance globale sur l'ensemble du corpus | Micro-moyennage |
-| Évaluer de manière équilibrée entre catégories | Macro-moyennage |
-| Comparer des systèmes sur des classes déséquilibrées | Macro-moyennage |
-
-💡 Les deux approches peuvent donner des résultats très différents sur des données déséquilibrées. Il est souvent judicieux de **reporter les deux**.
+⚠️ Il n'existe pas de solution universelle : les choix de tokenisation dépendent de la langue, du domaine et de l'application.
 
 ---
 
-# Mesures Synthétiques
-
-## La Précision Moyenne (Mean Average Precision — mAP)
+## Suppression des Mots Vides (Stopword Removal)
 
 ### Définition
 
-La **précision moyenne** (Mean Average Precision — mAP) est l'**aire sous la courbe P–R interpolée** :
+Un **mot vide** (stopword) est un mot **non discriminant** : il apparaît dans presque tous les documents et n'apporte donc aucune information utile pour distinguer les documents les uns des autres.
 
-$$\text{mAP} = \frac{1}{11} \sum_{j=0,0.1,\ldots,1.0} \hat{P}(R_j)$$
+Exemples typiques en anglais : *"the"*, *"a"*, *"of"*, *"is"*, *"and"*...
 
-C'est la moyenne des précisions aux 11 niveaux de rappel standard : $0, 0.1, 0.2, \ldots, 1.0$.
+Ces mots sont regroupés dans des fichiers de référence (ex. : `stopwords.txt`).
 
-### Interprétation
+### Pourquoi supprimer les mots vides ?
 
-- mAP = 1 → courbe P–R parfaite (précision = 1 à tous les niveaux de rappel)
-- mAP proche de 0 → système très peu performant
-- mAP est un **scalaire unique** qui résume toute la courbe P–R
+- Ils **occupent de l'espace** dans l'index sans apporter de valeur
+- Ils **ne contribuent pas** à la réponse aux requêtes
+- En termes de RI : leur **IDF** (Inverse Document Frequency) est très élevée, ce qui les rend non discriminants
 
-💡 La mAP est la mesure la plus utilisée pour comparer des systèmes de RI en recherche, notamment dans les compétitions TREC.
+💡 Nous verrons avec la **loi de Zipf** que les mots vides correspondent précisément aux termes de très haute fréquence, dont la suppression permet une réduction significative de la taille de l'index.
 
-⚠️ La mAP suppose que tous les niveaux de rappel ont la même importance — ce qui n'est pas toujours le cas en pratique (l'utilisateur regarde souvent seulement les premiers résultats).
+---
 
-## La R-Précision (R-Precision)
+## Racinisation (Stemming)
 
 ### Définition
 
-La **R-Précision** est la précision à la position $R$ dans la liste de résultats, où $R$ est le **nombre total de documents pertinents** pour cette requête :
+La **racinisation** (Stemming) consiste à ramener chaque mot à sa **racine** (stem), c'est-à-dire sa forme tronquée, en supprimant les suffixes.
 
-$$R\text{-Precision} = \frac{TP_{N_{\text{Rel}}}}{N_{\text{Rel}}}$$
+### Algorithme de Porter
 
-où $N_{\text{Rel}}$ est le nombre total de documents pertinents, et $TP_{N_{\text{Rel}}}$ est le nombre de documents pertinents parmi les $N_{\text{Rel}}$ premiers résultats.
+L'algorithme le plus célèbre est le **stemmer de Porter** (Porter's stemmer), qui applique **5 étapes** de règles de transformation sur les mots anglais.
+
+### Comportements possibles
+
+Le stemming peut être :
+
+- **Conservateur (cautious)** : ne ramène pas *European* à *Europe* (risque de confusion sémantique)
+- **Agressif (eager)** : peut confondre *paste* et *past*, qui partagent la même racine mais ont des sens différents
+
+### Multilinguisme
+
+Des algorithmes de stemming existent pour de nombreuses langues et sont disponibles via la bibliothèque **NLTK** (Natural Language Toolkit) en Python.
+
+### Intérêt
+
+🧠 La racinisation **réduit la redondance** du vocabulaire et améliore la qualité des statistiques textuelles.
+
+---
+
+## Lemmatisation (Lemmatization)
+
+### Définition
+
+La **lemmatisation** consiste à ramener chaque mot à sa **forme de base** (lemme), en tenant compte du contexte grammatical.
+
+Contrairement au stemming, la lemmatisation produit des formes linguistiquement correctes.
+
+### Exemples de transformations
+
+- **Déconjugaison** : *"are"*, *"is"* → *"be"*
+- **Singularisation** : *"users"*, *"users'"*, *"user's"* → *"user"*
+
+### Exemple complet
+
+La phrase :
+
+> *"Users' wishes are orders"*
+
+devient après lemmatisation :
+
+> *"user wish be order"*
+
+### Intérêt
+
+🧠 Comme le stemming, la lemmatisation **réduit la redondance** et améliore les statistiques. Elle produit cependant des résultats plus précis linguistiquement.
+
+---
+
+## Construction de l'Index et du Thésaurus
+
+### Vocabulaire d'indexation
+
+La construction du vocabulaire d'index repose sur plusieurs choix :
+
+- **Mots individuels** : chaque token devient un terme d'index
+- **Paires de mots ou n-grammes** : séquences de n tokens consécutifs
+- **Groupes nominaux** (Noun phrases / groups) : combinaisons Nom + Adjectif ou constructions nominales
+
+Exemples de groupes nominaux pertinents :
+
+- *"Linear algebra"* (Algèbre linéaire)
+- *"Information retrieval"* (Recherche d'information)
+
+Ces groupes constituent la **base de l'indexation** et enrichissent significativement la précision du système.
+
+---
+
+## SOUNDEX
+
+### Principe
+
+**SOUNDEX** est une classe d'heuristiques permettant d'**étendre une requête à ses équivalents phonétiques**. L'idée est de normaliser les variantes orthographiques d'un même nom en une représentation phonétique commune.
+
+- Spécifique à une langue
+- Principalement utilisé pour les **entités nommées** (noms propres, patronymes)
 
 ### Exemple
 
-Supposons une requête avec $N_{\text{Rel}} = 7$ documents pertinents. Le système retourne une liste ordonnée. On regarde les 7 premiers résultats et on compte les pertinents.
+Le nom *Tchebichef* peut être translittéré de nombreuses façons (*Chebysheff*, *Tchebyschev*, *Chebyshov*...). SOUNDEX permet de les regrouper sous une même clé.
 
-Si parmi les 7 premiers résultats, 4 sont pertinents :
+### Algorithme SOUNDEX
 
-$$R\text{-Precision} = \frac{4}{7} \approx 0.57$$
+L'algorithme (utilisé par la plupart des langages SQL) fonctionne en **5 étapes** :
 
-### Propriétés
+1. **Sauvegarder la première lettre**. Mettre à zéro (0) toutes les occurrences de : a, e, i, o, u, y, h, w
+2. **Remplacer les consonnes** (y compris la première lettre) par leurs codes numériques
+3. **Remplacer les chiffres adjacents identiques** par un seul chiffre, puis supprimer les zéros
+4. Si le chiffre de la première lettre sauvegardée est identique au premier chiffre résultant, **supprimer ce chiffre** (garder la lettre)
+5. **Ajouter des zéros** si le résultat contient moins de 3 chiffres. Ne conserver que la première lettre et les 3 chiffres suivants
 
-- Pour un système parfait (tous les pertinents en tête de liste) : $R\text{-Precision} = 1$
-- La R-Précision est un **point unique** sur la courbe P–R
-- Elle est facile à calculer et à interpréter
-- Souvent appelée **First-Tier** dans le contexte MPEG-7
+### Exemple d'application
 
-## Le Taux de Dégradation (Fallout Rate)
+*"Herman"* → **H655**
 
-### Motivation
+💡 SOUNDEX transforme ainsi chaque token en une forme de **4 caractères** (1 lettre + 3 chiffres), permettant des recherches phonétiques robustes.
 
-La précision et le rappel présentent des limites :
+---
 
-- La **densité de documents pertinents** dans la collection n'est pas prise en compte
-- Le rappel est **indéfini** s'il n'y a aucun document pertinent ($TP + FN = 0$)
-- La précision est **indéfinie** si aucun document n'est récupéré ($TP + FP = 0$)
+# Propriétés Statistiques du Texte
 
-### Définition
+## Questions fondamentales
 
-Le **taux de dégradation** (Fallout) mesure la proportion de documents non pertinents qui ont été récupérés par rapport à l'ensemble des documents non pertinents :
+L'étude des propriétés statistiques du texte cherche à répondre à des questions essentielles :
 
-$$\text{Fallout} = \frac{\text{Non pertinents récupérés}}{\text{Non pertinents dans la collection}} = \frac{FP}{TN + FP}$$
+- Comment la **fréquence des termes** est-elle distribuée ?
+- Comment la **taille du vocabulaire** (M) croît-elle avec la taille du corpus (N) ?
+- Comment ces facteurs **affectent-ils les performances** d'un système de RI ?
+- Comment les exploiter pour **construire un système de RI adapté** ?
 
-💡 C'est l'analogue du rappel, mais pour les documents **non pertinents**. Un bon système a un Fallout faible.
+💡 L'objectif ultime est d'exploiter la **structure statistique du langage** pour optimiser la RI.
 
-## La Généralité (Generality)
+---
 
-### Définition
+## Distribution des Fréquences des Termes
 
-Introduite par [Rijsbergen, 1979], la **généralité** (Generality) mesure la densité de documents pertinents dans la collection :
+### Observations empiriques
 
-$$G = \frac{TP + FN}{TP + FP + FN + TN} = \frac{TP + FN}{N}$$
+L'analyse des corpus textuels révèle un phénomène remarquable et universel :
 
-### Relation entre P, R et Fallout
+- **Quelques termes sont très fréquents** : les 2 termes les plus fréquents d'un texte peuvent représenter environ **10 % de toutes les occurrences**
+- **La plupart des termes sont très rares** : environ **la moitié des termes d'un corpus n'apparaissent qu'une seule fois** (phénomène des *Hapax Legomena*)
 
-Connaissant $G$, on peut exprimer la précision en fonction du rappel et du Fallout :
+### Distribution à queue lourde (Heavy-tailed distribution)
 
-$$P = \frac{R \cdot G}{(R \cdot G) + \text{Fallout} \cdot (1 - G)}$$
+La distribution des fréquences des termes est dite **à queue lourde** (Heavy-tailed) : la grande majorité de la masse probabiliste se trouve dans la **queue** de la distribution (les termes rares), et non dans la tête (les termes fréquents).
 
-💡 Cette relation montre que la précision dépend non seulement de la qualité du système (Recall, Fallout) mais aussi des **caractéristiques de la collection** (G). Un système retournant les mêmes résultats aura une précision différente sur des collections de généralité différente.
+⚠️ Cette propriété a des implications directes sur la conception des index et des modèles de pondération.
 
-## La F-Mesure (F-Measure) et la E-Mesure (E-Measure)
+---
 
-### Motivation
+## Loi de Zipf (Zipf's Law)
 
-Pour combiner précision et rappel en **une seule valeur**, [Rijsbergen, 1979] a proposé la F-mesure, fondée sur la **moyenne harmonique pondérée**.
+### Définition du rang
 
-### Définition
+On définit le **rang** $r(i) \in \mathbb{N}$ d'un terme $i$ comme sa **position dans une liste triée par fréquence décroissante**.
 
-$$E = \frac{(1 + \beta^2)}{\frac{\beta^2}{R} + \frac{1}{P}} = \frac{(1 + \beta^2) \cdot P \cdot R}{\beta^2 \cdot P + R} = \frac{1}{\alpha \cdot \frac{1}{P} + (1 - \alpha) \cdot \frac{1}{R}}$$
+- Le terme le plus fréquent a le rang 1
+- Le deuxième terme le plus fréquent a le rang 2
+- Et ainsi de suite...
 
-Le paramètre $\beta$ (ou $\alpha$) contrôle l'**importance relative** de la précision et du rappel.
+### Énoncé de la loi de Zipf
 
-### Cas particulier : F₁ (β = 1)
+**Zipf (1949)** a observé empiriquement la relation suivante :
 
-Quand $\beta = 1$ (soit $\alpha = 0.5$), précision et rappel ont la **même importance** :
+$$f(i) \propto \frac{1}{r(i)} \quad \text{ou bien} \quad f(i) \cdot r(i) = K \quad (\text{constante})$$
 
-$$F_1 = \frac{2}{\frac{1}{R} + \frac{1}{P}} = \frac{2 \cdot P \cdot R}{P + R}$$
+💡 La **fréquence** d'un terme est **inversement proportionnelle à son rang**.
 
-C'est la mesure la plus utilisée. Sa valeur maximale est 1 (précision et rappel = 1).
+### Probabilité d'occurrence
 
-### Influence du paramètre β
+Si $L$ est le nombre total d'occurrences de termes dans le corpus (longueur $L = \sum_i f(i)$), alors la probabilité d'occurrence du terme $i$ est :
 
-| Valeur de β | Effet |
-|---|---|
-| $\beta = 1$ | Précision et rappel également importants |
-| $\beta > 1$ | **Précision** plus importante |
-| $\beta < 1$ | **Rappel** plus important |
+$$p(i) = \frac{f(i)}{L} = \frac{K}{r(i)} \quad \text{avec } K \approx 0.1$$
 
-💡 La F-mesure est la **moyenne harmonique** de P et R. La moyenne harmonique est particulièrement sensible aux valeurs basses — si l'une des deux mesures est faible, la F-mesure sera faible.
+Ce qui donne :
 
-⚠️ Ne pas confondre : $E = F$ est **élevée** quand $P$ et $R$ sont **tous les deux élevés**.
+$$f(i) = \frac{KL}{r(i)} \quad \text{avec } K \approx 0.1$$
 
-## Le Bull's Eye Percentage (BEP)
+🧠 À retenir : le terme de rang 1 est environ **deux fois plus fréquent** que celui de rang 2, **trois fois plus** que celui de rang 3, etc.
 
-### Contexte
+---
 
-Défini dans le standard **MPEG-7** pour l'évaluation de la recherche par forme (shape matching).
+### Prédiction des fréquences
 
-### Définition
+#### Calcul du rang
 
-Pour une requête correspondant à $Q$ documents pertinents dans la collection, le BEP est le pourcentage de correspondances correctes parmi les **2Q premiers** documents récupérés :
+D'après Zipf, un terme $i$ apparaissant $f(i) = n$ fois dans un corpus de longueur $L$ a le rang :
 
-$$BEP = \frac{TP_{2Q}}{Q}$$
+$$r(i) = r_n = \frac{KL}{n}$$
 
-### Comparaison avec la R-Précision
+où $r_n$ est le rang maximal parmi tous les termes apparaissant $n$ fois.
 
-| Mesure | Fenêtre d'évaluation | Caractère |
+#### Nombre de termes d'une fréquence donnée
+
+Puisque $r_n$ termes apparaissent $n$ fois ou plus, et $r_{n+1}$ termes apparaissent $n+1$ fois ou plus, le nombre $s_n$ de termes apparaissant **exactement $n$ fois** est :
+
+$$s_n = r_n - r_{n+1} = \frac{KL}{n} - \frac{KL}{n+1} = \frac{KL}{n(n+1)}$$
+
+#### Fraction de termes hapax
+
+En supposant que le terme de rang le plus élevé apparaît une seule fois, on a $r_1 = KL$, ce qui donne $M = r_1 = KL$ (la taille du vocabulaire).
+
+La fraction de termes apparaissant exactement $n$ fois est :
+
+$$\frac{s_n}{M} = \frac{s_n}{KL} = \frac{1}{n(n+1)}$$
+
+Pour $n = 1$ (les **hapax legomena**), cette fraction est :
+
+$$\frac{s_1}{M} = \frac{1}{1 \times 2} = \frac{1}{2}$$
+
+⚠️ Cela confirme empiriquement que **la moitié des termes distincts d'un corpus n'apparaissent qu'une seule fois**.
+
+#### Validation empirique
+
+Sur un corpus TREC Volume 3 (336 310 documents, 1 Go, ~125 millions d'occurrences, ~508 000 mots uniques) :
+
+| Nb d'occurrences (n) | Prédit 1/n(n+1) | Proportion réelle | Nb réel de mots |
+|---|---|---|---|
+| 1 | 0.500 | 0.402 | 204 357 |
+| 2 | 0.167 | 0.132 | 67 082 |
+| 3 | 0.083 | 0.069 | 35 083 |
+| 5 | 0.033 | 0.032 | 16 332 |
+| 10 | 0.009 | 0.012 | 5 893 |
+
+💡 Les prédictions de Zipf sont remarquablement proches des valeurs observées, notamment pour les fréquences intermédiaires.
+
+---
+
+### Loi de Zipf comme loi de puissance
+
+#### Définition
+
+Une loi de la forme $y = k \cdot x^c$ est appelée **loi de puissance** (power law).
+
+La loi de Zipf est une loi de puissance avec $c = -1$ :
+
+$$f(i) = KL \cdot r(i)^{-1} \quad \text{avec } K \approx 0.1$$
+
+#### Visualisation en log-log
+
+Sur un graphique **log-log**, les lois de puissance apparaissent comme des **droites** :
+
+$$\log(f(i)) = \log(KL \cdot r(i)^{-1}) = \log(KL) - \log(r(i))$$
+
+C'est précisément ce qu'on observe sur le **corpus Brown**, où les données s'alignent quasi-parfaitement sur une droite en échelle log-log, confirmant la loi de Zipf.
+
+⚠️ Des déviations existent aux **rangs extrêmes** (très fréquents ou très rares), ce qui a motivé la correction de Mandelbrot.
+
+---
+
+### Correction de Mandelbrot (1954)
+
+Pour mieux ajuster les déviations aux extrêmes, **Mandelbrot** a proposé la généralisation suivante :
+
+$$f(i) = P(r(i) + \rho)^{-B}$$
+
+avec les paramètres empiriques :
+
+- $P = 10^{5.4}$
+- $\rho = 100$
+- $B = 1.15$
+
+💡 Cette correction améliore significativement l'ajustement aux **hauts rangs** (termes peu fréquents), où la loi de Zipf pure sous-estime les fréquences.
+
+#### Fondement théorique
+
+Mandelbrot a également proposé une **dérivation théorique** : la distribution de Zipf-Mandelbrot est celle qui **minimise la longueur moyenne des termes** pour une entropie donnée (voir section sur la théorie de l'information).
+
+---
+
+### Modèle de production et interprétation
+
+#### Hypothèse de Zipf
+
+Zipf a spéculé que la loi de puissance résulte du **Principe du Moindre Effort** (Principle of Least Effort) :
+
+- L'**émetteur** (locuteur, auteur) souhaite un **petit vocabulaire** (simple à produire)
+- Le **récepteur** (auditeur, lecteur) souhaite un **grand vocabulaire** (moins ambigu à interpréter)
+
+La distribution de Zipf serait un **équilibre** entre ces deux tendances opposées.
+
+#### Résultat de Li (1992)
+
+Li a montré que la **frappe aléatoire de lettres** incluant des espaces génère des tokens (séquences de lettres) suivant une **distribution zipfienne**. Cela suggère que la loi de Zipf pourrait être un artefact de la structure combinatoire du langage.
+
+#### Conséquences pratiques
+
+La loi de Zipf a deux implications majeures pour la RI :
+
+- ✅ **Avantage** : les mots vides représentent une large fraction du texte ; leur élimination réduit considérablement les coûts de stockage et les efforts de recherche
+- ❌ **Inconvénient** : pour la plupart des mots (rares), accumuler suffisamment de données pour des statistiques significatives est difficile
+
+---
+
+### Définition du vocabulaire d'index selon Luhn
+
+**Luhn** a proposé que les termes extrêmes (très fréquents ET très rares) peuvent être **éliminés de l'index**, définissant ainsi deux seuils :
+
+- **Seuil supérieur de coupure** (Upper Cut-Off) : élimine les termes trop fréquents (mots vides)
+- **Seuil inférieur de coupure** (Lower Cut-Off) : élimine les termes trop rares (hapax, fautes de frappe)
+
+Les **termes significatifs** (Significant Terms) se situent entre ces deux seuils et correspondent aux termes ayant la plus haute **valeur discriminante**.
+
+💡 Ce cadre théorique justifie formellement la suppression des mots vides et des termes extrêmement rares dans la construction de l'index.
+
+---
+
+## Loi de Heap (Heap's Law) — Croissance du Vocabulaire
+
+### Problématique
+
+Comment la **taille du vocabulaire** (nombre de termes distincts) croît-elle avec la taille du corpus ?
+
+⚠️ La taille du vocabulaire n'est pas bornée supérieurement, notamment à cause des entités nommées, des néologismes et des fautes d'orthographe.
+
+Cette loi permet d'estimer la **croissance de l'index** à mesure que le corpus s'agrandit.
+
+### Énoncé de la loi de Heap
+
+$$M = k \cdot L^{\beta}$$
+
+où :
+
+- $M$ est la taille du vocabulaire (nombre de termes distincts)
+- $L$ est la longueur du corpus (en tokens)
+- $k$ et $\beta$ sont des constantes empiriques
+
+### Valeurs empiriques
+
+- $k \approx 10$ à $100$
+- $\beta \approx 0.4$ à $0.6$
+
+💡 Pour $\beta \approx 0.5$, la taille du vocabulaire croît approximativement comme $\sqrt{L}$ : si la taille du corpus est multipliée par 4, le vocabulaire est seulement multiplié par 2.
+
+### Lien avec la loi de Zipf
+
+La loi de Heap peut être **dérivée de la loi de Zipf** en supposant que les documents sont générés en échantillonnant des termes selon une distribution zipfienne. Les deux lois sont donc intimement liées.
+
+### Implication pratique
+
+La croissance sous-linéaire du vocabulaire indique que l'**index n'explose pas** proportionnellement à la taille du corpus. Cela est rassurant pour la conception de systèmes de RI à grande échelle.
+
+---
+
+# Perspective de la Théorie de l'Information
+
+## Entropie du texte
+
+### Entropie d'une source de termes
+
+Étant donné un vocabulaire de $M$ termes, chacun avec une probabilité $p_i$ d'être échantillonné, le **contenu informationnel attendu** d'un terme $T$ est défini par l'entropie de Shannon :
+
+$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i$$
+
+### Propriété maximale
+
+$I_H(T)$ est **maximale** lorsque tous les termes sont équiprobables ($p_i = \frac{1}{M}$) : dans ce cas, $I_H(T) = \log M$.
+
+### Application à l'alphabet
+
+Pour un alphabet de 26 lettres :
+
+- Si les lettres sont équiprobables : $I_H(T) \approx \log_2(26) \approx 4.7$ bits
+- Valeur empirique observée en anglais : **4.14 bits** (les lettres ne sont pas équiprobables)
+
+### Application aux termes
+
+Pour les mots (en utilisant la distribution de Zipf avec $p(i) = \frac{K}{r(i)}$) :
+
+| Taille du vocabulaire M | Entropie réelle $I_H(W)$ | Entropie si équiprobable |
 |---|---|---|
-| R-Précision (First-Tier) | Q premiers résultats | Plus strict |
-| Bull's Eye (Second-Tier) | 2Q premiers résultats | Plus optimiste |
+| 100 000 | 9.5 bits | 13.3 bits |
+| 500 000 | 10.9 bits | 15.6 bits |
+| 1 000 000 | 11.4 bits | 16.6 bits |
 
-💡 Le BEP est plus indulgent car il regarde dans une fenêtre deux fois plus grande que le nombre de documents pertinents.
-
----
-
-# La Courbe ROC (Receiver Operating Characteristic)
-
-## Introduction au contexte
-
-La courbe ROC est un outil d'évaluation général pour les **problèmes de classification binaire** (two-class classification problem).
-
-Dans le contexte de la RI :
-
-- La **classe positive** correspond aux documents pertinents
-- La **classe négative** correspond aux documents non pertinents
-- Le système produit un **score continu** (similarité)
-- Un **seuil T** transforme ce score en décision binaire (récupéré / non récupéré)
-
-💡 En faisant varier T, on obtient différents compromis entre taux de vrais positifs et taux de faux positifs.
-
-## Les taux fondamentaux
-
-### Sensibilité (Sensitivity) = Taux de Vrais Positifs (True Positive Rate — TPR)
-
-Probabilité qu'un document **réellement pertinent** soit **classé comme pertinent** par le système :
-
-$$\text{Sensitivity} = TPR = \frac{TP}{TP + FN} \quad (= \text{Recall !})$$
-
-⚠️ La sensibilité est identique au **rappel**. C'est la même mesure exprimée dans un vocabulaire différent (médical/clinique vs. RI).
-
-Le **taux de faux négatifs** (False Negative Rate — FNR) en est le complémentaire :
-
-$$FNR = 1 - TPR$$
-
-### Spécificité (Specificity) = Taux de Vrais Négatifs (True Negative Rate — TNR)
-
-Probabilité qu'un document **non pertinent** soit **classé comme non pertinent** :
-
-$$\text{Specificity} = TNR = \frac{TN}{TN + FP}$$
-
-Le **taux de faux positifs** (False Positive Rate — FPR) en est le complémentaire :
-
-$$FPR = 1 - TNR = \frac{FP}{TN + FP} \quad (= \text{Fallout !})$$
-
-💡 Le FPR est identique au **taux de dégradation** (Fallout) défini précédemment.
-
-## Construction de la courbe ROC
-
-La courbe ROC se construit en **faisant varier le seuil T** :
-
-1. Pour chaque valeur du seuil T, calculer TPR et FPR
-2. Porter chaque point $(FPR, TPR)$ sur le graphique
-3. La courbe résultante est la **courbe ROC**
-
-L'axe horizontal représente $1 - \text{Spécificité}$ (FPR) et l'axe vertical représente la Sensibilité (TPR).
-
-## Interprétation de la courbe ROC
-```{mermaid}
-graph TD
-    A[Courbe proche de\nl'axe des ordonnées\net du coin supérieur] --> B[Excellent système]
-    C[Courbe proche\nde la diagonale] --> D[Système non informatif\n= aléatoire]
-    E[Courbe sous\nla diagonale] --> F[Système pire que le hasard]
-```
-
-| Position de la courbe | Qualité du système |
-|---|---|
-| Très proche du coin supérieur gauche | Excellent |
-| Au-dessus de la diagonale, modérément | Bon |
-| Sur la diagonale ($y = x$) | Non informatif (aléatoire) |
-| Sous la diagonale | Pire que le hasard |
-
-💡 L'**aire sous la courbe ROC** (AUC — Area Under the Curve) est une mesure synthétique : AUC = 1 pour un système parfait, AUC = 0.5 pour un système aléatoire.
-
-## Différences entre la courbe P–R et la courbe ROC
-
-| Aspect | Courbe P–R | Courbe ROC |
-|---|---|---|
-| Axe X | Rappel (TPR) | FPR (Fallout) |
-| Axe Y | Précision | Sensibilité (TPR) |
-| Sensibilité au déséquilibre | Forte | Faible |
-| Usage privilégié | RI classique | Classification, médecine |
-
-⚠️ Sur des collections fortement déséquilibrées (très peu de pertinents), la courbe ROC peut donner une **vision optimiste** de la performance. La courbe P–R est alors plus appropriée.
+💡 L'entropie réelle est **bien inférieure** à l'entropie maximale, confirmant que les mots ne sont pas équiprobables et que le texte contient une structure exploitable.
 
 ---
 
-# Terminologie Complémentaire
+## Porteur d'information idéal
 
-## Autres mesures dérivées
+### Problème d'optimisation
 
-Les notions de TP, FP, FN, TN permettent de définir un large spectre de mesures complémentaires :
+On cherche la distribution de probabilité $p$ des termes qui **minimise le nombre moyen de lettres par terme** pour une valeur d'entropie $h$ fixée.
 
-### Exactitude (Accuracy) ou Taux de pertinence
+$$p_r^* = \arg\min_{p_r} \sum_r p_r l_r$$
 
-$$\text{Relevance} = \text{Accuracy} = \frac{TP + TN}{N}$$
+sous les contraintes :
 
-Proportion globale de décisions correctes (documents bien classifiés).
+$$\sum_r p_r = 1, \quad p_r \geq 0$$
+$$I_H(T) = -\sum_r p_r \log p_r = h$$
 
-### Taux d'erreur (Error Rate)
+où $l_r$ est la longueur du terme de rang $r$.
 
-$$\text{Error} = \frac{FP + FN}{N} = 1 - \text{Accuracy}$$
+### Solution de Mandelbrot
 
-Proportion de documents mal classifiés.
+La solution à ce problème d'optimisation est précisément la **distribution de Zipf-Mandelbrot** :
 
-### Silence (Silence)
+$$p_r^* = P(r + \rho)^{-B}$$
 
-$$\text{Silence} = 1 - \text{Recall}$$
-
-Proportion de documents pertinents manqués. Un silence élevé signifie beaucoup de documents pertinents non trouvés.
-
-### Bruit (Noise) = Taux de pollution de la récupération
-
-$$\text{Noise} = \frac{FP}{TP + FP} = 1 - \text{Precision}$$
-
-Proportion de documents non pertinents dans les résultats récupérés.
-
-### Recouvrement (Overlap) = Taux de correspondance
-
-$$\text{Overlap} = \frac{TP}{FN + TP + FP}$$
-
-Proportion de documents pertinents récupérés par rapport à l'union des pertinents et des récupérés.
-
-💡 Le recouvrement est proche de la **mesure de Jaccard** utilisée en similarité d'ensembles.
+🧠 Cela constitue le **fondement théorique** de la loi de Zipf-Mandelbrot : la distribution observée empiriquement est celle qui **optimise l'efficacité de la communication**.
 
 ---
 
-# L'Évaluation en Pratique : les Benchmarks
+## Associations Lexicales (Lexical Associations)
 
-## Qu'est-ce qu'un benchmark ?
+### Information Mutuelle (Mutual Information)
 
-Un **benchmark** (ou banc d'essai) est un environnement standardisé qui permet de comparer des systèmes de RI de manière reproductible et objective.
+L'**information mutuelle** (Mutual Information) entre deux variables $W_1$ et $W_2$ mesure la dépendance statistique entre elles :
 
-Un benchmark complet comprend :
+$$I(W_1; W_2) = I_H(W_1) - I_H(W_1 | W_2) = \sum_{w_1, w_2} \mathbb{P}(w_1, w_2) \log \frac{\mathbb{P}(w_1, w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$
 
-- Un **jeu de données ouvert** (Open Dataset) : la collection de documents
-- Des **requêtes et leurs jugements** (Queries and Judgments) : des requêtes avec les documents pertinents associés
-- Des **mesures d'évaluation** définies et standardisées
-- Un **système de référence** (Baseline) pour situer les performances
+### Interprétation
 
-## TREC (Text REtrieval Conference)
+Si $W_1$ et $W_2$ ne **co-occurrent jamais** (indépendants), alors :
 
-Le **TREC** est le benchmark de référence pour la RI textuelle, organisé par le NIST (National Institute of Standards and Technology) depuis 1992.
+$$\mathbb{P}(W_1, W_2) = \mathbb{P}(w_1)\mathbb{P}(w_2) \quad \Rightarrow \quad I(W_1; W_2) = 0$$
 
-- Site officiel : [http://trec.nist.gov](http://trec.nist.gov)
-- Organise chaque année des **campagnes d'évaluation** sur différentes tâches
-- Fournit des collections de documents, des requêtes (topics) et des jugements de pertinence
-- Utilise la technique du **pooling** pour les jugements (voir ci-dessous)
+L'information mutuelle est donc une **mesure adaptée** pour étudier les co-occurrences de termes :
 
-💡 TREC a joué un rôle déterminant dans l'essor de la RI moderne en permettant des comparaisons équitables entre systèmes du monde entier.
+- **Grande valeur** de $I(W_1; W_2)$ → co-occurrence intéressante, significative
+- **Petite valeur** de $I(W_1; W_2)$ → co-occurrence spurieuse (fortuite)
 
-## Autres benchmarks majeurs
+### Exemple : associations avec le terme *"doctor"*
 
-| Nom | Domaine |
-|---|---|
-| **CLEF** (Cross-Language Evaluation Forum) | RI multilingue |
-| **INEX** (INitiative for the Evaluation of XML retrieval) | RI structurée XML |
-| **ISMIR** (International Society for Music Information Retrieval) | RI musicale |
-| **NLP Corpora** | Traitement du langage naturel |
-| **LeToR** (Learning to Rank) | Apprentissage du classement |
+Sur le **corpus AP** ($N = 15$ millions de mots) :
 
-## La technique du pooling
+**Associations intéressantes** (haute valeur de $I$) :
 
-Comme il est impossible de juger tous les documents d'une grande collection pour chaque requête, TREC utilise la technique du **pooling** :
+| $I(x,y)$ | $f(x,y)$ | $f(x)$ | $x$ | $f(y)$ | $y$ |
+|---|---|---|---|---|---|
+| 11.3 | 12 | 111 | Honorary | 621 | Doctor |
+| 11.3 | 8 | 1105 | Doctors | 44 | Dentists |
+| 10.7 | 30 | 1105 | Doctors | 241 | Nurses |
+| 9.4 | 8 | 1105 | Doctors | 154 | Treating |
+| 8.7 | 25 | 621 | Doctor | 1407 | Bills |
 
-1. Plusieurs systèmes participent à l'évaluation
-2. Pour chaque requête, on collecte les **N premiers résultats** (ex. top-100) de chaque système
-3. On **fusionne** ces résultats (le pool)
-4. Des juges humains évaluent uniquement les documents du pool
+**Associations spurieuses** (faible valeur de $I$) :
 
-⚠️ Le pooling est une approximation : des documents pertinents non inclus dans le pool sont supposés non pertinents. Cela peut **sous-estimer** les performances, surtout pour les systèmes n'ayant pas participé à la construction du pool.
+| $I(x,y)$ | $f(x,y)$ | $f(x)$ | $x$ | $f(y)$ | $y$ |
+|---|---|---|---|---|---|
+| 0.96 | 6 | 621 | doctor | 73785 | with |
+| 0.95 | 41 | 284690 | a | 1105 | doctors |
+| 0.93 | 12 | 84716 | is | 1105 | doctors |
 
----
+⚠️ Ces associations spurieuses se produisent car le second terme (*"with"*, *"a"*, *"is"*) est **très fréquent** et co-occurrences avec pratiquement tous les autres termes, ce qui gonfle artificiellement les comptages sans révéler d'association sémantique réelle.
 
-# Synthèse : L'Évaluation en Recherche d'Information
-
-## Cadre formel général
-
-L'évaluation en RI repose sur un **modèle de classification binaire** :
-
-- Deux classes : **pertinent** et **non pertinent**
-- Quatre cas possibles : TP, FN, FP, TN
-- Plusieurs mesures dérivées de cette table de contingence
-
-## Les mesures essentielles
-
-| Mesure | Formule | Ce qu'elle mesure |
-|---|---|---|
-| Précision | $TP / (TP + FP)$ | Qualité des résultats retournés |
-| Rappel | $TP / (TP + FN)$ | Complétude de la récupération |
-| F₁ | $2PR/(P+R)$ | Compromis P–R équilibré |
-| mAP | Moyenne des précisions à 11 niveaux | Performance globale sur la courbe P–R |
-| R-Précision | $TP_R / R$ | Précision à la position R |
-| Fallout | $FP / (TN + FP)$ | Taux de faux positifs parmi les non-pertinents |
-| AUC-ROC | Aire sous la courbe ROC | Performance globale en classification |
-
-## Points critiques à retenir
-
-🧠 La précision et le rappel sont **fondamentaux** mais insuffisants seuls.
-
-🧠 Les mesures doivent souvent être **utilisées conjointement** pour une évaluation complète.
-
-🧠 Il n'existe **pas de mesure unique parfaite** — le choix dépend du contexte d'utilisation et des priorités (ex. : est-il plus grave de rater un document pertinent ou de retourner des non-pertinents ?).
-
-🧠 En pratique, **seule la précision est mesurable de façon fiable**. Le rappel nécessite de connaître tous les pertinents, ce qui est rarement possible → évaluation approximative par pooling.
-
-🧠 L'évaluation est contextualisée : les mesures pour la **récupération de données** ne sont pas les mêmes que pour la **réponse aux questions** ou l'**interaction fondée sur le contenu**.
+💡 Cet exemple illustre pourquoi la **suppression des mots vides** est cruciale avant d'analyser les co-occurrences.
 
 ---
 
-# Questions d'Entraînement
+# Synthèse et Conclusion
 
-Les questions suivantes permettent de vérifier la maîtrise des concepts de ce chapitre :
+## Résumé des points clés
 
-**Sur les mesures de base :**
+### Modélisation du texte
 
-- Comment construire des mesures d'évaluation pour la RI ?
-- Citez les mesures les plus utilisées et donnez leur définition.
-- Quelle est la différence entre précision et rappel ? Pourquoi est-il important de combiner les deux ?
+- Le texte obéit à des **modèles génératifs approximatifs** qui peuvent être exploités en RI
+- Le **modèle Sac de Mots** est le fondement de la plupart des représentations textuelles
 
-**Sur les courbes P–R :**
+### Loi de Zipf
 
-- Comment tracer une courbe P–R à partir d'une liste de résultats ?
-- Comment interpréter une courbe P–R ? Qu'est-ce qu'une courbe idéale ?
-- Comment interpole-t-on une courbe P–R aux niveaux de rappel standard ?
-- Comment moyenne-t-on des courbes P–R sur plusieurs requêtes ?
+- La loi de Zipf est un exemple typique de **loi de puissance** (power law) émergeant d'un modèle génératif basé sur des entités
+- Elle relie directement la **fréquence** et le **rang** d'un terme : $f(i) \cdot r(i) = K$
+- Elle prédit que **50 % des termes distincts** n'apparaissent qu'une seule fois
+- Elle justifie la **suppression des mots vides** et des termes trop rares
 
-**Sur les stratégies de moyennage :**
+### Loi de Heap
 
-- Quelle est la différence entre le micro-moyennage et le macro-moyennage ?
-- Pourquoi ce choix est-il important ?
+- La loi de Heap peut être **dérivée de la loi de Zipf**
+- Elle décrit la croissance **sous-linéaire** du vocabulaire : $M = k \cdot L^{\beta}$
+- Elle permet d'estimer la taille future d'un index
 
-**Sur la courbe ROC :**
+### Théorie de l'information
 
-- Qu'est-ce que la courbe ROC ? Comment la construire ?
-- Quelle relation y a-t-il entre la sensibilité et le rappel ?
-- Comment interpréter la position d'une courbe ROC par rapport à la diagonale ?
+- La théorie de la communication (Information Theory) fournit les outils pour **modéliser l'échange d'information** via le texte
+- L'**entropie** du texte est inférieure à l'entropie maximale, révélant une structure exploitable
+- L'**information mutuelle** permet d'identifier les co-occurrences significatives entre termes
 
-**Sur les benchmarks :**
+### Perspectives
 
-- Comment proposer un benchmark d'évaluation ?
-- Quels sont les composants essentiels d'un benchmark ?
-- Qu'est-ce que le pooling et pourquoi est-il utilisé ?
+- Le texte présente des **corrélations à courte et longue portée** (short-range et long-range correlations)
+- L'analyse statistique du texte a engendré le **TAL moderne** (NLP) basé sur les outils d'apprentissage profond (Deep Learning)
+- Ces propriétés sont proches de ce qui est modélisé dans les **représentations neuronales** (Neural Embeddings), comme **GloVe**
+
+🧠 À retenir : le texte n'est pas qu'un médium parmi d'autres — c'est le **modèle de base** à partir duquel tous les systèmes de RI ont été développés, et ses propriétés statistiques se retrouvent dans de nombreux autres domaines.
+
+---
+
+## Questions d'examen
+
+Ces questions nécessitent généralement des **réponses formelles et mathématiques** :
+
+- Décrire le **pipeline de traitement du texte**
+- Comment ce pipeline **change-t-il selon les langues** ?
+- Décrire la **loi de Zipf** (définition, formulation mathématique, implications)
+- Quelle est sa **signification pratique** pour la RI ?
+- Qu'est-ce que la **loi de Heap** et comment s'y rattache-t-elle à Zipf ?
+- Comment **modéliser la communication textuelle** via la théorie de l'information ?
