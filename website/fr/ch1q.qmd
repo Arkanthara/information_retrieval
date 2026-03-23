@@ -10,9 +10,8 @@ filters:
 primaryColor: '#4a90d9'
 shuffleQuestions: false
 shuffleAnswers: true
+locale: fr
 ---
-
-## 🟢 Niveau 1 — Fondamentaux
 
 ### Que signifie l'acronyme IR ?
 
@@ -21,10 +20,19 @@ shuffleAnswers: true
 - [ ] Indexed Repository
 - [ ] Intelligent Reasoning
 
-> 💡 Explication :
+> Explication :
 > IR signifie **Information Retrieval**, terme créé par Calvin N. Moors en 1950.
 > Il désigne la discipline qui consiste à retrouver automatiquement des informations pertinentes dans de grandes collections de documents.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Qui a inventé le terme "Information Retrieval" et en quelle année ?
@@ -34,10 +42,19 @@ shuffleAnswers: true
 - [x] Calvin N. Moors, 1950
 - [ ] Maron et Kuhns, 1960
 
-> 💡 Explication :
+> Explication :
 > **Calvin N. Moors** a forgé le terme *Information Retrieval* en **1950**, marquant la naissance officielle de la discipline.
 > Luhn (1959) décrit la récupération statistique, Maron et Kuhns (1960) définissent le modèle probabiliste.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Qu'est-ce qu'un zettaoctet (zetabyte) ?
@@ -47,10 +64,19 @@ shuffleAnswers: true
 - [x] $2^{70}$ octets, soit 1 milliard de téraoctets
 - [ ] $2^{50}$ octets
 
-> 💡 Explication :
+> Explication :
 > Un **zettaoctet** = $2^{70}$ octets = **1 milliard de téraoctets**.
 > C'est l'unité utilisée pour mesurer la production mondiale de données numériques, qui dépasse les 180 zettaoctets en 2025.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Quelle proportion du temps en ligne était consacrée aux recherches (Searches) en 2012 ?
@@ -60,10 +86,19 @@ shuffleAnswers: true
 - [ ] 19 %
 - [x] 21 %
 
-> 💡 Explication :
+> Explication :
 > En 2012, **21 %** du temps en ligne était consacré aux recherches.
 > En combinant recherches (21 %) et lecture de contenu (20 %), on atteint **41 %** du temps en ligne directement lié aux activités d'accès à l'information.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Lequel de ces éléments N'EST PAS une application directe de la mesure de distance en IR ?
@@ -73,10 +108,19 @@ shuffleAnswers: true
 - [ ] Réduction de dimensionnalité
 - [x] Compression de fichiers
 
-> 💡 Explication :
+> Explication :
 > La **compression de fichiers** n'est pas une application de la mesure de distance en IR.
 > En revanche, clustering, classification k-NN et réduction de dimensionnalité reposent toutes sur des mesures de distance ou de similarité entre documents.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### La croissance du volume de données numériques mondiales est de nature :
@@ -86,35 +130,60 @@ shuffleAnswers: true
 - [x] Exponentielle
 - [ ] Constante
 
-> 💡 Explication :
+> Explication :
 > La croissance est **exponentielle** : de 2 zettaoctets en 2010 à plus de 180 en 2025.
 > Cette accélération est due à la multiplication des sources de données (smartphones, IoT, réseaux sociaux, streaming...).
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Vrai ou Faux : Le projet Cranfield (1966) a défini les premières mesures d'évaluation en IR.
 
-1. [x] Vrai
-1. [ ] Faux
+- [x] Vrai
+- [ ] Faux
 
-> 💡 Explication :
+> Explication :
 > **Vrai.** Le projet Cranfield a introduit les mesures de **précision** (Precision) et **rappel** (Recall) en 1966, qui restent fondamentales en IR aujourd'hui.
 > C'est le premier projet à évaluer des systèmes IR de manière rigoureuse et comparative.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Vrai ou Faux : Un embedding dense (Dense Embedding) place la majorité de ses coordonnées à zéro.
 
-1. [ ] Vrai
-1. [x] Faux
+- [ ] Vrai
+- [x] Faux
 
-> 💡 Explication :
+> Explication :
 > **Faux.** Ce sont les **embeddings creux** (Sparse Embeddings) qui ont la majorité de leurs coordonnées à zéro (un document n'utilise qu'un petit sous-ensemble du vocabulaire total).
 > Les embeddings **denses** (Dense Embeddings) ont toutes leurs coordonnées non nulles et sont appris par des réseaux de neurones.
 
----
+```
 
-## 🟡 Niveau 2 — Compréhension
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quel est le bon ordre des étapes dans le pipeline de gestion de l'information ?
 
@@ -123,11 +192,20 @@ shuffleAnswers: true
 - [ ] Interaction utilisateur → Documents bruts → Extraction → Décision
 - [ ] Mapping → Documents bruts → Extraction → Représentation
 
-> 💡 Explication :
+> Explication :
 > Le pipeline suit toujours cet ordre :
 > **Documents bruts** (Raw Documents) → **Extraction de caractéristiques** (Feature Extraction) → **Mapping** → **Espace de représentation** → **Interaction utilisateur** → **Décision**.
 > C'est le cœur du processus de gestion de l'information.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Quelle est la différence fondamentale entre un embedding creux (Sparse) et un embedding dense (Dense) ?
@@ -137,11 +215,20 @@ shuffleAnswers: true
 - [x] Les embeddings creux ont la plupart de leurs coordonnées à zéro, les denses sont appris et entièrement remplis
 - [ ] Il n'y a pas de différence de fond, seulement de taille
 
-> 💡 Explication :
+> Explication :
 > - **Creux** (Sparse) : vecteur de grande dimension avec majoritairement des zéros (ex. : TF·IDF sur un vocabulaire de 50 000 mots).
 > - **Dense** : vecteur de petite dimension entièrement rempli, appris par un réseau de neurones (ex. : BERT, Word2Vec).
 > Les embeddings denses capturent la **sémantique**, les creux capturent la **présence de termes**.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Pourquoi l'évaluation d'un système IR est-elle indispensable ?
@@ -151,10 +238,19 @@ shuffleAnswers: true
 - [x] Pour comparer objectivement différents systèmes et valider leur efficacité
 - [ ] Pour générer automatiquement des requêtes
 
-> 💡 Explication :
+> Explication :
 > L'évaluation rigoureuse permet de **comparer des systèmes IR** sur des collections de référence avec des jugements de pertinence préétablis.
 > Sans évaluation (comme celle introduite par le projet Cranfield), il est impossible de savoir si un système est meilleur qu'un autre.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Parmi ces éléments, lesquels sont des mesures de distance ou similarité utilisées en IR ? (plusieurs réponses possibles)
@@ -164,12 +260,21 @@ shuffleAnswers: true
 - [ ] Entropie de Shannon
 - [x] Distance de Hamming (Hamming Distance)
 
-> 💡 Explication :
+> Explication :
 > - **Distance cosinus** : très utilisée pour les vecteurs de termes (mesure l'angle entre deux vecteurs).
 > - **Distance euclidienne** : mesure la distance géométrique classique.
 > - **Distance de Hamming** : utilisée pour les vecteurs binaires.
 > - L'**entropie de Shannon** est une mesure d'incertitude en théorie de l'information, pas une mesure de distance entre documents.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Pourquoi dit-on que la requête en IR est "souple" (Loose Query) ?
@@ -179,10 +284,19 @@ shuffleAnswers: true
 - [ ] Parce qu'elle ne retourne qu'un seul résultat
 - [ ] Parce qu'elle utilise toujours un opérateur booléen
 
-> 💡 Explication :
+> Explication :
 > Une **requête souple** (Loose Query Formalism) signifie que l'utilisateur n'a pas besoin de connaître le langage formel, la structure ou les métadonnées de la collection.
 > Taper "météo Paris demain" dans un moteur de recherche est une requête souple : informelle, ambiguë, mais comprise par le système IR.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Quelle est la différence entre "caractériser un document" et "comparer deux documents" avec la distance ?
@@ -192,25 +306,41 @@ shuffleAnswers: true
 - [x] Caractériser résume un document seul via ses features ; comparer quantifie la similarité entre deux documents
 - [ ] Comparer sert uniquement à la visualisation
 
-> 💡 Explication :
+> Explication :
 > - **Caractériser un document** : les **features** forment son résumé numérique individuel (ce qu'il est en lui-même).
 > - **Comparer deux documents** : la **distance** quantifie leur relation (dans quelle mesure se ressemblent-ils).
 > - **Caractériser un modèle** : la distribution des distances révèle la structure globale du corpus.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Vrai ou Faux : La pertinence d'un document en IR est une propriété absolue, indépendante de l'utilisateur.
 
-1. [ ] Vrai
-1. [x] Faux
+- [ ] Vrai
+- [x] Faux
 
-> 💡 Explication :
+> Explication :
 > **Faux.** La pertinence est **relative au besoin informationnel de l'utilisateur** (Information Need).
 > Un même document peut être très pertinent pour un utilisateur et totalement hors sujet pour un autre, selon leur contexte et leur besoin.
 
----
+```
 
-## 🔴 Niveau 3 — Maîtrise
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique — Un système IR retourne 10 documents dont 7 sont pertinents. La collection contient 20 documents pertinents au total. Quelle est la précision (Precision) de ce système ?
 
@@ -219,11 +349,20 @@ shuffleAnswers: true
 - [x] 70 %
 - [ ] 50 %
 
-> 💡 Explication :
+> Explication :
 > **Précision** = Documents pertinents retournés / Documents retournés = **7 / 10 = 70 %**.
 > Le **rappel** serait 7 / 20 = 35 %.
 > Ces deux mesures sont souvent en tension : augmenter le rappel (retourner plus de documents) tend à diminuer la précision.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Cas pratique — Vous devez construire un système de recherche dans une bibliothèque de 10 millions d'articles scientifiques. Quel composant est INDISPENSABLE pour que la recherche soit possible en moins d'une seconde ?
@@ -233,10 +372,19 @@ shuffleAnswers: true
 - [x] Un index inversé (Inverted Index)
 - [ ] Un algorithme de clustering
 
-> 💡 Explication :
+> Explication :
 > L'**index inversé** (Inverted Index) est la structure de données qui rend possible la recherche à grande échelle en temps réel.
 > Il associe à chaque terme la liste des documents qui le contiennent, permettant de retrouver instantanément les documents pertinents sans parcourir toute la collection.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Un chercheur compare deux discours politiques et observe qu'ils partagent les mots "people", "nation", "country" mais divergent sur "terror/security" vs "jobs/education". Quelle approche IR capture le mieux cette différence thématique ?
@@ -246,10 +394,19 @@ shuffleAnswers: true
 - [x] Modèle vectoriel avec pondération TF·IDF
 - [ ] Tri alphabétique des mots
 
-> 💡 Explication :
+> Explication :
 > Le **modèle vectoriel avec TF·IDF** (Term Frequency – Inverse Document Frequency) pondère les mots selon leur fréquence dans le document ET leur rareté dans la collection.
 > Les mots très fréquents partout ("people", "nation") reçoivent un faible poids ; les mots discriminants ("terror", "jobs") reçoivent un poids élevé, capturant ainsi la différence thématique.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Cas pratique — Un système retourne des documents triés par distance cosinus par rapport à la requête. Le document le plus proche a une distance cosinus de 0,95. Que signifie cette valeur ?
@@ -259,13 +416,22 @@ shuffleAnswers: true
 - [x] Les deux vecteurs sont très similaires (angle faible, forte similarité)
 - [ ] La distance est invalide car elle dépasse 0,5
 
-> 💡 Explication :
+> Explication :
 > La **similarité cosinus** mesure le cosinus de l'angle entre deux vecteurs.
 > - Valeur proche de **1** → angle faible → documents **très similaires**.
 > - Valeur proche de **0** → angle de 90° → documents **orthogonaux** (sans relation).
 > - Valeur proche de **-1** → documents **opposés**.
 > Un score de 0,95 indique donc une **très forte similarité** entre le document et la requête.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Pourquoi le Web 2.0 (réseaux sociaux) pose-t-il des défis spécifiques pour l'IR par rapport au Web 1.0 (pages statiques) ?
@@ -275,10 +441,19 @@ shuffleAnswers: true
 - [x] Le contenu est généré par les utilisateurs, évolue en temps réel et inclut des relations sociales complexes
 - [ ] Les moteurs de recherche ne peuvent pas indexer les réseaux sociaux
 
-> 💡 Explication :
+> Explication :
 > Le **Web 2.0** génère des contenus **dynamiques**, **non structurés**, **éphémères** (tweets, stories...) et intègre des **graphes sociaux** (qui suit qui, qui like quoi).
 > L'IR sur le Web 2.0 doit gérer : la fraîcheur de l'information, l'autorité sociale (influenceurs), le bruit, et des formats très variés (texte court, images, vidéos, emojis...).
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Analyse de scénario — Un système IR a une précision (Precision) de 90 % mais un rappel (Recall) de 10 %. Quel est le problème principal ?
@@ -288,11 +463,20 @@ shuffleAnswers: true
 - [ ] Le système est trop lent
 - [ ] L'index est mal construit
 
-> 💡 Explication :
+> Explication :
 > Un **rappel de 10 %** signifie que le système ne retrouve que 10 % des documents pertinents existants — il en **manque 90 %**.
 > Malgré une précision élevée (ce qu'il retourne est correct), le système est **trop restrictif** : il filtre trop agressivement et rate l'essentiel des informations pertinentes.
 > La **F-mesure** (moyenne harmonique précision + rappel) serait très basse ici, révélant ce déséquilibre.
 
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
 ---
 
 ### Parmi ces affirmations sur les embeddings neuronaux (Neural Embeddings), laquelle est INCORRECTE ?
@@ -302,7 +486,7 @@ shuffleAnswers: true
 - [x] Ils sont toujours moins performants que TF·IDF pour la recherche sémantique
 - [ ] Word2Vec est un exemple d'embedding de mots
 
-> 💡 Explication :
+> Explication :
 > L'affirmation incorrecte est que les embeddings neuronaux seraient **toujours moins performants** que TF·IDF.
 > En réalité, les embeddings neuronaux (BERT, Sentence-BERT...) **surpassent** généralement TF·IDF pour la recherche sémantique car ils capturent le sens en contexte, les synonymes et les paraphrases — ce que TF·IDF, basé sur la présence exacte de mots, ne peut pas faire.
 

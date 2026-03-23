@@ -10,9 +10,8 @@ filters:
 primaryColor: steelblue
 shuffleQuestions: false
 shuffleAnswers: true
+locale: fr
 ---
-
-# 🟢 Niveau 1 — Fondamentaux
 
 ### Quelle est la définition correcte de l'indexation (indexing) en recherche d'information ?
 
@@ -21,8 +20,19 @@ shuffleAnswers: true
 - [ ] Stocker tous les documents dans une base de données relationnelle
 - [ ] Trier les documents par ordre alphabétique
 
-> 💡 Explication :
+> Explication :
 > L'indexation consiste à construire une structure hors-ligne qui permet d'accélérer certains types d'accès aux données, au prix d'un coût de construction et d'espace supplémentaire.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelles sont les trois opérations fondamentales qu'un index doit supporter ?
 
@@ -31,8 +41,19 @@ shuffleAnswers: true
 - [ ] Tri, fusion, partitionnement
 - [ ] Compression, décompression, indexation
 
-> 💡 Explication :
+> Explication :
 > Du point de vue du Type de Données Abstrait (Abstract Data Type), un index expose insert/add, remove/delete et search/find/get.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quel est le compromis fondamental de tout index ?
 
@@ -41,8 +62,19 @@ shuffleAnswers: true
 - [x] Temps de requête contre temps d'indexation et espace de stockage
 - [ ] Vitesse d'insertion contre vitesse de suppression
 
-> 💡 Explication :
+> Explication :
 > Un index réduit le temps de requête, mais au prix d'un temps de construction (hors-ligne) et d'un espace de stockage supplémentaire. C'est le triple compromis fondamental.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Un fichier inversé (inverted file) est composé de deux éléments. Lesquels ?
 
@@ -51,8 +83,19 @@ shuffleAnswers: true
 - [ ] Une table de hachage et une liste chaînée
 - [ ] Un arbre de recherche et un tableau de fréquences
 
-> 💡 Explication :
+> Explication :
 > Le dictionnaire contient les termes avec leurs informations globales (IDF, fréquence totale). Le fichier de postings contient, pour chaque terme, la liste des documents qui le contiennent avec leur fréquence locale.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la complexité de la recherche naïve du RSV (sans fichier inversé) ?
 
@@ -61,8 +104,19 @@ shuffleAnswers: true
 - [x] O(M × N)
 - [ ] O(log N)
 
-> 💡 Explication :
+> Explication :
 > Sans fichier inversé, il faut itérer sur les N documents, et pour chacun parcourir les M termes, d'où O(M × N). Le fichier inversé réduit cela à O(|𝕀_q|), proportionnel au nombre de termes dans la requête.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Qu'est-ce qu'une requête par rayon (range query ou ε-query) en recherche de plus proche voisin ?
 
@@ -71,16 +125,38 @@ shuffleAnswers: true
 - [ ] Une requête qui trie tous les documents par distance
 - [ ] Une requête qui s'arrête après avoir parcouru N/2 documents
 
-> 💡 Explication :
+> Explication :
 > La range query retourne un ensemble de taille variable : tous les points x tels que d(x, q) ≤ ε. À l'opposé, la k-NN query retourne exactement les k points les plus proches, quelle que soit leur distance.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou faux : Des données sans structure connue peuvent être indexées efficacement.
 
 - [ ] Vrai
 - [x] Faux
 
-> ❌ Faux :
+> Faux :
 > Un index exploite les propriétés des données et les modes d'accès anticipés. Sans structure identifiable ou sans connaissance du type de requêtes, aucune indexation efficace n'est possible.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quel est le principe fondamental du k-d-Tree ?
 
@@ -89,10 +165,19 @@ shuffleAnswers: true
 - [x] Alterner les dimensions et diviser les données en deux moitiés récursivement
 - [ ] Ordonner les données selon la distance à un pivot central
 
-> 💡 Explication :
+> Explication :
 > Le k-d-Tree construit un arbre binaire en alternant les dimensions (d ← (d+1) mod D) et en coupant les données à la médiane selon la dimension courante, récursivement.
 
-# 🟡 Niveau 2 — Compréhension
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Pourquoi l'utilisation d'un fichier inversé réduit-elle la complexité du calcul du RSV ?
 
@@ -101,8 +186,19 @@ shuffleAnswers: true
 - [x] Parce que w_ij × w_iq est non nul seulement si le terme i est dans le document j ET dans la requête
 - [ ] Parce qu'il trie les documents par pertinence à l'avance
 
-> 💡 Explication :
+> Explication :
 > L'observation clé est que w_ij · w_iq ≠ 0 si et seulement si w_ij ≠ 0 et w_iq ≠ 0. Une requête ne contient qu'un petit nombre de termes, donc on ne calcule la somme que sur l'intersection 𝕀_j ∩ 𝕀_q, d'où une complexité O(|𝕀_q|).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle propriété mathématique fonde la règle d'exclusion dans l'indexation par pivots ?
 
@@ -111,8 +207,19 @@ shuffleAnswers: true
 - [x] L'inégalité triangulaire
 - [ ] La règle de Bayes
 
-> 💡 Explication :
+> Explication :
 > L'inégalité triangulaire donne : d(q, x) ≥ |d(p, x) - d(p, q)|. La partie d(p, x) est stockée hors-ligne, d(p, q) est calculée en ligne. Si cette borne inférieure dépasse la distance au meilleur candidat connu, x est éliminé sans calcul direct.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la principale limitation de l'algorithme AESA malgré son optimalité en nombre de distances calculées ?
 
@@ -121,8 +228,19 @@ shuffleAnswers: true
 - [x] Il requiert de stocker la matrice complète des distances, soit O(N²) en mémoire
 - [ ] Il est limité à la recherche du 1-NN uniquement
 
-> 💡 Explication :
+> Explication :
 > AESA est optimal en nombre de calculs de distance, mais nécessite la matrice D de toutes les distances entre les N points de la collection, ce qui représente O(N²) espace mémoire — totalement impraticable pour de grandes collections.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Qu'est-ce que la malédiction de la dimensionnalité (curse of dimensionality) dans le contexte de la recherche de plus proche voisin ?
 
@@ -131,8 +249,19 @@ shuffleAnswers: true
 - [x] La concentration des distances : en haute dimension, toutes les distances tendent à devenir égales, rendant les index spatiaux inefficaces
 - [ ] Le fait que les index prennent plus de mémoire en haute dimension
 
-> 💡 Explication :
+> Explication :
 > En haute dimension, le ratio entre la distance maximale et la distance minimale d'un point de requête à ses voisins tend vers 1. Il devient impossible de discriminer les voisins proches des voisins lointains, ce qui annule l'avantage de tout index spatial.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Dans l'indexation par permutations (PBI), comment est encodé chaque point x_i ?
 
@@ -141,8 +270,19 @@ shuffleAnswers: true
 - [x] Par l'ordre dans lequel il "voit" les pivots, c'est-à-dire le vecteur de permutation σ_i
 - [ ] Par un vecteur binaire de hachage
 
-> 💡 Explication :
+> Explication :
 > Chaque point x_i est encodé par σ_i : le classement des pivots par ordre croissant de distance depuis x_i. L'intuition est que deux points proches dans l'espace "voient" les pivots dans un ordre similaire.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quel est le rôle de la mesure de Spearman Rho dans l'indexation par permutations ?
 
@@ -151,16 +291,38 @@ shuffleAnswers: true
 - [x] Mesurer la dissimilarité entre deux permutations de pivots pour approximer la distance réelle
 - [ ] Sélectionner les meilleurs pivots parmi la collection
 
-> 💡 Explication :
+> Explication :
 > ρ(σ, θ) = Σ(σ[i] - θ[i])² est une distance entre permutations. Elle sert de métrique approximative : d̃(q, x_i) = ρ(σ_q, σ_i). Elle est calculable rapidement (entiers) et approxime la distance réelle dans l'espace d'origine.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou faux : Dans le LSH, l'objectif est de minimiser les collisions entre éléments similaires.
 
 - [ ] Vrai
 - [x] Faux
 
-> ❌ Faux :
+> Faux :
 > C'est l'inverse ! Le LSH cherche à maximiser les collisions entre éléments similaires (P(h(x_i) = h(x_j)) > p_high si d(x_i, x_j) ≤ τ_low) et à minimiser les collisions entre éléments dissimilaires. C'est le principe opposé au hachage classique.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la relation entre la recherche du plus proche voisin (NNS) et le problème MIPS quand les vecteurs sont normalisés ?
 
@@ -169,10 +331,19 @@ shuffleAnswers: true
 - [x] Les deux problèmes sont équivalents : minimiser d(x_i, q) revient à maximiser ⟨x_i, q⟩
 - [ ] MIPS est plus difficile que NNS dans tous les cas
 
-> 💡 Explication :
+> Explication :
 > d(x_i, q)² = ‖x_i‖² + ‖q‖² - 2⟨x_i, q⟩. Si tous les vecteurs sont normalisés (‖x_i‖ = ‖q‖ = 1), les termes ‖x_i‖² et ‖q‖² sont des constantes, donc argmin d(x_i, q) ≡ argmax ⟨x_i, q⟩.
 
-# 🔴 Niveau 3 — Maîtrise
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique — Un ingénieur construit un moteur de recherche textuel sur une collection de 10 millions de documents avec un vocabulaire de 500 000 termes. Les requêtes contiennent en moyenne 5 termes. Quelle est l'accélération théorique apportée par un fichier inversé ?
 
@@ -181,8 +352,19 @@ shuffleAnswers: true
 - [ ] Accélération d'un facteur N = 10 millions
 - [x] Accélération d'un facteur M/|𝕀_q| = 500 000 / 5 = 100 000
 
-> 💡 Explication :
+> Explication :
 > La complexité passe de O(M × N) à O(|𝕀_q| × N_termes_postings). Pour la partie "parcours des termes", on passe de M = 500 000 à |𝕀_q| = 5, soit un facteur 100 000. C'est pourquoi tous les moteurs de recherche modernes utilisent des fichiers inversés.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique — Un système de recommandation utilise des embeddings de dimension 1024 pour représenter des films. Pour trouver les 10 films les plus similaires à un film donné parmi 50 millions, quelle approche choisir ?
 
@@ -191,8 +373,19 @@ shuffleAnswers: true
 - [ ] Recherche exhaustive : la plus précise
 - [x] HNSW ou FAISS (Product Quantization) : seules approches scalables en haute dimension
 
-> 💡 Explication :
+> Explication :
 > En dimension 1024, le k-d-Tree dégénère (malédiction de la dimensionnalité). AESA nécessite O(N²) = O(2.5×10¹⁵) distances stockées, impossible. La recherche exhaustive sur 50M vecteurs est trop lente. HNSW ou FAISS/PQ sont les seules solutions pratiques à cette échelle et cette dimension.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Pourquoi la stratégie de partitionnement "guillotine" des k-d-Trees est-elle problématique ?
 
@@ -201,8 +394,19 @@ shuffleAnswers: true
 - [x] Les coupures droites perpendiculaires aux axes ne s'adaptent pas à la géométrie réelle des données, créant des cellules inefficaces
 - [ ] Elle ne supporte pas les requêtes k-NN
 
-> 💡 Explication :
+> Explication :
 > Le partitionnement guillotine divise l'espace avec des hyperplans alignés sur les axes. Si les données forment des clusters obliques ou des structures non-rectangulaires, ces coupures créent des cellules qui "coupent" les vrais clusters. Des approches comme les Ball-Trees (boules) s'adaptent mieux à la géométrie locale des données.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique — Vous devez choisir entre LSH et HNSW pour un système de recherche d'images similaires en production. Quelle affirmation oriente correctement le choix ?
 
@@ -211,8 +415,19 @@ shuffleAnswers: true
 - [x] HNSW offre généralement de meilleures performances empiriques mais consomme plus de mémoire ; LSH est plus compact mais nécessite plusieurs fonctions de hachage
 - [ ] Les deux sont équivalents en pratique, le choix est arbitraire
 
-> 💡 Explication :
+> Explication :
 > HNSW est actuellement l'état de l'art en termes de rapport précision/vitesse, mais son graphe en mémoire est coûteux. LSH avec une seule fonction h donne une faible probabilité de succès — on combine plusieurs fonctions (amplification). Le choix dépend des contraintes : mémoire disponible, latence cible, taux de rappel requis.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Un vecteur de requête q et un vecteur x_i ne sont pas normalisés. argmin d(x_i, q) et argmax ⟨x_i, q⟩ donnent-ils le même résultat ?
 
@@ -221,8 +436,19 @@ shuffleAnswers: true
 - [ ] Oui, si la dimension est suffisamment grande
 - [ ] Non, uniquement si les vecteurs ont des normes très différentes
 
-> 💡 Explication :
+> Explication :
 > d(x_i, q)² = ‖x_i‖² + ‖q‖² - 2⟨x_i, q⟩. Sans normalisation, ‖x_i‖² varie selon i et contribue au classement par distance. Un vecteur très long peut avoir un grand produit scalaire ⟨x_i, q⟩ mais être loin de q. MIPS et NNS sont donc deux problèmes distincts sans normalisation.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle étape de la construction d'un fichier inversé permet de regrouper toutes les occurrences d'un même terme provenant de différents documents ?
 
@@ -231,8 +457,19 @@ shuffleAnswers: true
 - [ ] La factorisation (factorisation)
 - [ ] La compression (compression)
 
-> 💡 Explication :
+> Explication :
 > Après l'extraction qui produit des couples (terme, doc_id) pour chaque document, le tri ordonne tous ces couples par terme puis par doc_id. Cela regroupe toutes les occurrences d'un même terme consécutivement, permettant ensuite le compactage.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Dans HNSW, pourquoi la structure hiérarchique (plusieurs couches) est-elle essentielle ?
 
@@ -241,8 +478,19 @@ shuffleAnswers: true
 - [x] Les couches supérieures permettent une navigation rapide à grande échelle, les couches inférieures permettent le raffinement local
 - [ ] Pour garantir l'exactitude des résultats
 
-> 💡 Explication :
+> Explication :
 > Sans hiérarchie, la recherche greedy dans un graphe plat serait lente : il faudrait traverser de nombreux nœuds pour se rapprocher de la requête. La hiérarchie reproduit l'idée des "petits mondes navigables" : les longues connexions des couches supérieures permettent des sauts rapides vers la bonne région, puis les couches basses affinent la recherche localement.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique — Dans quel scénario l'approche L-AESA est-elle préférable à AESA ?
 
@@ -251,16 +499,38 @@ shuffleAnswers: true
 - [x] Quand la collection est trop grande pour stocker la matrice complète des distances (O(N²))
 - [ ] Quand les données sont en faible dimension
 
-> 💡 Explication :
+> Explication :
 > AESA est optimal mais nécessite O(N²) stockage pour la matrice des distances. Dès que N devient grand (quelques milliers), cette matrice devient ingérable. L-AESA utilise un ensemble fixe de pivots |P| << N, réduisant le stockage à O(N × |P|) au prix d'une légère perte d'efficacité de filtrage.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou faux : Le Learning to Hash (L2H) utilise typiquement un auto-encodeur binaire pour apprendre les fonctions de hachage.
 
 - [x] Vrai
 - [ ] Faux
 
-> ✅ Vrai :
+> Vrai :
 > Le L2H utilise généralement une architecture d'auto-encodeur dont la couche goulot d'étranglement produit une représentation binaire. Ce réseau est régularisé par un terme forçant la sensibilité locale : les points similaires doivent avoir des codes binaires similaires.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Parmi les solutions suivantes pour la recherche à l'échelle du milliard, laquelle utilise des fichiers inversés comme mécanisme principal ?
 
@@ -269,7 +539,7 @@ shuffleAnswers: true
 - [x] SPANN
 - [ ] HNSW
 
-> 💡 Explication :
+> Explication :
 > SPANN (Chen et al., 2021) utilise des fichiers inversés pour organiser les milliards de vecteurs. FAISS/PQ utilise la quantification produit. DiskANN utilise une indexation par graphe stockée sur disque. HNSW est un graphe navigable hiérarchique mais ne passe pas à l'échelle milliardaire directement.
 
 ```
