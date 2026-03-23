@@ -23,13 +23,14 @@ jobs:
           tinytex: true
           chromium: true
 
-      # - name: Add extension for CeTZ diagram rendering
-      #   run: |
-      #     cd en
-      #     quarto install extension pandoc-ext/diagram --no-prompt
-      #     cd ../fr
-      #     quarto install extension pandoc-ext/diagram --no-prompt
-      #     cd ..
+
+      - name: Add Quizdown extension for Quarto
+        run: |
+          cd website/en
+          quarto add parmsam/quarto-quizdown
+          cd ../fr
+          quarto add parmsam/quarto-quizdown
+          cd ../..
 
       - name: Render French project
         uses: quarto-dev/quarto-actions/render@v2

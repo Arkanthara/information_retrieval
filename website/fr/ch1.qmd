@@ -1,229 +1,621 @@
 ---
-title: "Chapitre 1 — Introduction à la Recherche d'Information"
+title: "Recherche d'Information : Introduction"
 ---
 
-## 1. Contexte
+## Contexte général
 
-La production de données numériques ne cesse de croître de manière exponentielle. On parle aujourd'hui de **zettaoctets** ($1\text{ ZB} = 2^{70}$ octets = 1 milliard de téraoctets) de données générées chaque année.
+### L'explosion des données numériques
 
-Nous vivons dans un monde :
+Nous vivons dans une ère de **production massive de données numériques** (Digital Data Production). Le volume d'information créé, capturé, copié et consommé dans le monde croît de façon exponentielle d'année en année.
 
-- **Numérique** : explosion de la quantité de données produites
-- **Connecté** : les données circulent à travers les réseaux mondiaux
-- **En constante évolution** : par exemple, YouTube est passé de 30h à 500h de vidéo téléversées par minute en 10 ans (×15)
+Pour donner une mesure concrète de cette réalité :
 
-## 2. Motivation : Besoins de l'utilisateur
+- En 2010, le monde produisait environ **2 zettaoctets** de données.
+- En 2025, cette quantité dépasse les **180 zettaoctets**.
 
-### 2.1 Comprendre les besoins
+💡 Un **zettaoctet** (zetabyte) représente $2^{70}$ octets, soit **1 milliard de téraoctets**. C'est une quantité si grande qu'elle est difficile à concevoir intuitivement.
 
-La prise de décision nécessite des **choix éclairés**. L'avalanche d'information impose des processus avancés de **gestion de l'information**. Accéder à de vastes répertoires d'information rend possible la **science des données**.
+⚠️ Cette croissance n'est pas linéaire mais **exponentielle** : la quantité de données double tous les quelques années, ce qui rend les méthodes traditionnelles de gestion de l'information insuffisantes.
 
-Il est nécessaire de structurer les données brutes :
+#### Pourquoi cette explosion ?
 
-- **Représentation adéquate** des données (documents)
-- **Mesures de similarité** appropriées
-- **Processus d'analyse** : fouille (*mining*), apprentissage (*learning*), visualisation
+Plusieurs facteurs expliquent cette croissance :
 
-### 2.2 Gestion de l'information
+- La démocratisation des **smartphones** et des appareils connectés.
+- L'essor des **réseaux sociaux** (Facebook, Instagram, TikTok, X...).
+- La numérisation des **services publics et privés** (santé, éducation, banque...).
+- Le développement de l'**Internet des Objets** (IoT - Internet of Things).
+- La généralisation du **streaming** vidéo et audio.
 
-La gestion de l'information s'applique à tous types de médias :
+🧠 À retenir : la quantité de données numériques disponibles dépasse largement la capacité humaine à les traiter manuellement. C'est la raison d'être de la Recherche d'Information (Information Retrieval).
 
-| Type | Exemples |
-|------|----------|
-| Texte | Documents, pages web, emails |
-| Images | Photos, graphiques, scans |
-| Audio/Vidéo | Fichiers multimédias |
-| Objets complexes | Services, états de processus, personnes, communautés |
-| Web | Web 1.0 (pages), 2.0 (social), 3.0 (IoT), 4.0 (métavers) |
+---
 
-> **Point clé** : Tout objet auquel on peut attacher des caractéristiques (un *embedding*) peut faire l'objet de recherche d'information.
+### Un monde numérique
 
-## 3. La distance en RI
+#### La photographie comme exemple emblématique
 
-### 3.1 La distance est fondamentale
+La photographie illustre parfaitement la transition vers un monde entièrement numérique.
 
-La notion de **distance** (ou mesure de proximité/similarité) est au cœur de la RI :
+- En **1826**, la première photographie est prise : 0 milliard de photos par an.
+- En **1930**, avec la démocratisation des appareils argentiques, environ **1 milliard** de photos sont prises chaque année.
+- En **2000**, à l'apogée de la photographie argentique (Analog photos), ce chiffre atteint **86 milliards**, avant de chuter brutalement avec l'arrivée du numérique.
+- En **2011**, le total (photos numériques + analogiques) dépasse les **380 milliards** de photos par an.
 
-- Comment **mesurer** la similarité entre documents ?
-- Comment **tolérer** les variations (style, langue, …) ?
+💡 Ce graphique illustre deux phénomènes importants :
 
-### 3.2 L'ubiquité de la distance
+1. La **rupture technologique** : la photographie argentique s'effondre dès les années 2000, remplacée par le numérique.
+2. L'**effet d'amplification** : en supprimant le coût marginal de la prise de vue (plus besoin de pellicule), le numérique démultiplie le volume de données produites.
 
-La distance est utilisée partout en RI :
+⚠️ La même logique s'applique à toutes les formes de contenu : textes, vidéos, messages, enregistrements audio. Le numérique abaisse le coût de production et provoque une **avalanche informationnelle** (information avalanche).
 
-| Domaine | Utilisation |
-|---------|-------------|
-| **Fouille** (*Mining*) | Analyse non supervisée : clustering, détection d'anomalies, imputation |
-| **Apprentissage** (*Learning*) | Modèles supervisés : classification, régression |
-| **Visualisation** | Réduction de dimension |
+---
 
-**Rôles complémentaires** :
+### Un monde connecté
 
-- Les **features** caractérisent un document (résumé)
-- La **distance** compare 2 documents (similarité, motifs)
-- La **distance** caractérise un modèle de documents (visualisation)
+#### Ce qui se passe chaque minute sur Internet
 
-```{.cetz}
-// Diagramme : Rôle central de la distance en RI
-#cetz.canvas({
-  import cetz.draw: *
+Les chiffres illustrant l'activité en ligne sont vertigineux. À chaque **minute** qui passe sur Internet, on observe notamment :
 
-  // Titre
-  content((4, 5.5), [*Distance en RI*], anchor: "center")
+- **3,47 millions** de vidéos regardées sur YouTube.
+- **625 millions** de vidéos visionnées sur TikTok.
+- **3,5 milliards** de Snaps créés.
+- **66 000** photos et vidéos partagées sur Instagram.
+- **350 000** tweets envoyés.
+- **231 millions** d'e-mails envoyés.
+- **6,3 millions** de recherches effectuées sur Google.
+- **44 millions** de personnes regardant des Facebook Live.
 
-  // Noeud central
-  circle((4, 3.5), radius: 1.0, fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "dist")
-  content((4, 3.5), [Distance / \ Similarité], anchor: "center")
+💡 Ces chiffres mettent en évidence l'omniprésence des **besoins de recherche et d'accès à l'information** dans nos usages quotidiens. La recherche (search) représente à elle seule 21 % du temps passé en ligne.
 
-  // Mining
-  rect((0, 0.5), (rel: (2.5, 1.2)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "mine", radius: 0.15)
-  content((1.25, 1.1), [Fouille], anchor: "center")
+🧠 À retenir : la connectivité mondiale génère en permanence de nouveaux contenus et de nouveaux besoins d'accès à l'information. Les systèmes de Recherche d'Information sont au cœur de cette infrastructure.
 
-  // Learning
-  rect((3, -0.3), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "learn", radius: 0.15)
-  content((4.25, 0.3), [Apprentissage], anchor: "center")
+---
 
-  // Visualization
-  rect((6, 0.5), (rel: (2.5, 1.2)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "visu", radius: 0.15)
-  content((7.25, 1.1), [Visualisation], anchor: "center")
+### Un monde en évolution
 
-  // Arrows
-  line("dist", "mine", mark: (end: ">", fill: black))
-  line("dist", "learn", mark: (end: ">", fill: black))
-  line("dist", "visu", mark: (end: ">", fill: black))
-})
+#### La croissance continue du contenu en ligne
+
+Le monde numérique ne se stabilise pas : il évolue en permanence, et cette évolution s'accélère.
+
+Un exemple frappant concerne **YouTube** :
+
+- En **2012** : 30 heures de vidéo étaient uploadées chaque minute.
+- En **2024** : ce chiffre atteint **500 heures par minute**.
+
+C'est une multiplication par **15 en 10 ans**, illustrant l'accélération exponentielle de la production de contenu.
+
+💡 Cette évolution impose des défis constants aux systèmes de Recherche d'Information :
+
+- Les algorithmes doivent s'adapter à des volumes toujours croissants.
+- Les types de contenus se diversifient (texte, image, vidéo, audio, données structurées...).
+- Les usages évoluent (recherche vocale, multimodale, contextuelle...).
+
+---
+
+## Motivation : les besoins des utilisateurs
+
+### Comprendre les besoins des utilisateurs
+
+#### Comment les gens passent leur temps en ligne (2012)
+
+En 2012, les études sur l'utilisation d'Internet révèlent la répartition suivante du temps passé en ligne :
+
+- **22 %** : réseaux sociaux (Social Networking)
+- **21 %** : recherches (Searches)
+- **20 %** : lecture de contenu (Reading Content)
+- **19 %** : e-mails et communication (Emails/Communication)
+- **13 %** : sites multimédia (Multi-media Sites)
+- **5 %** : achats en ligne (Online Shopping)
+
+⚠️ Ainsi, **près de 41 % du temps en ligne** est consacré à des activités directement liées à la recherche et à la consommation d'information (recherches + lecture de contenu). La Recherche d'Information est donc au cœur des usages numériques.
+
+---
+
+### Les grands besoins identifiés
+
+#### Prendre des décisions éclairées
+
+La **prise de décision** (Decision Making) est un besoin fondamental des utilisateurs. Toute décision — qu'elle soit personnelle, professionnelle ou académique — nécessite un accès à une information **pertinente**, **fiable** et **à jour**.
+
+💡 Sans accès structuré à l'information, la prise de décision repose sur des données incomplètes ou biaisées.
+
+---
+
+#### Gérer l'avalanche informationnelle
+
+L'**avalanche informationnelle** (Information Avalanche) est l'un des grands défis de notre époque. Être exposé à un volume massif d'information ne signifie pas être mieux informé : au contraire, sans outils adaptés, cela génère de la **surcharge cognitive** et de la **désinformation**.
+
+Il est donc nécessaire de mettre en place des **processus avancés de gestion de l'information** (Advanced Information Management Processes), capables de :
+
+- Filtrer l'information pertinente.
+- Organiser et structurer les contenus.
+- Présenter l'information de manière exploitable.
+
+---
+
+#### Accéder à de grands dépôts d'information
+
+L'accès à de **larges dépôts d'information** (Large Information Repositories) est le fondement de la **Science des Données** (Data Science). Les algorithmes d'apprentissage automatique, d'analyse statistique ou de visualisation de données n'ont de valeur que si les données sous-jacentes sont accessibles, représentées et comparables.
+
+🧠 À retenir : la Recherche d'Information est une brique fondamentale de la Data Science, car elle permet de rendre les données exploitables à grande échelle.
+
+---
+
+### Apporter de la structure aux données brutes
+
+Pour répondre à ces besoins, il est indispensable de **structurer les données brutes** (Raw Data). Cela passe par trois étapes essentielles :
+
+#### 1. Représentation appropriée des données (Document Representation)
+
+Un document brut (texte, image, audio, vidéo...) ne peut pas être directement comparé ou analysé par un algorithme. Il faut en extraire une **représentation formelle** :
+
+- Pour un texte : un vecteur de fréquences de mots.
+- Pour une image : un histogramme de couleurs, ou un vecteur de caractéristiques visuelles.
+- Pour un audio : des descripteurs spectraux (MFCC, etc.).
+
+💡 La qualité de cette représentation détermine directement la qualité de l'analyse qui suit.
+
+#### 2. Mesures de similarité appropriées (Similarity Measurements)
+
+Une fois les documents représentés, il faut pouvoir les **comparer**. On définit pour cela des **mesures de similarité** (ou de distance) adaptées à la nature des données.
+
+- Distance euclidienne dans un espace vectoriel.
+- Distance cosinus pour les vecteurs de termes.
+- Distance de Hamming pour les données binaires.
+
+💡 Le choix de la mesure de similarité est crucial : une mauvaise mesure conduit à des résultats incohérents, même avec une bonne représentation.
+
+#### 3. Processus d'analyse : fouille, apprentissage, visualisation
+
+Une fois représentées et comparables, les données peuvent être soumises à des **processus d'analyse** :
+
+- **Fouille de données** (Mining) : clustering, détection d'anomalies, patterns fréquents.
+- **Apprentissage** (Learning) : classification, régression, ranking.
+- **Visualisation** (Visualization) : réduction de dimensionnalité, cartes de similarité.
+
+---
+
+### Le pipeline de gestion de l'information
+
+Le processus général de gestion de l'information peut être schématisé comme suit :
+
+```{mermaid}
+flowchart LR
+    A[Documents bruts\nRaw Documents] --> B[Extraction de caractéristiques\nFeature Extraction]
+    B --> C[Caractéristiques\nDocument Features]
+    C --> D[Mapping approprié\nAppropriate Mapping]
+    D --> E[Espace de représentation\nRepresentation Space]
+    E --> F[Interaction utilisateur\nUser Interaction]
+    F --> G[Processus de décision\nDecision Process]
+    G --> H[💡 Décision\nDecision]
 ```
 
-## 4. Définition de la Recherche d'Information
+💡 Ce pipeline est **universel** : il s'applique aussi bien aux textes, aux images, aux vidéos qu'à tout autre type de données numériques.
 
-### Motivation principale
+---
 
-> **Répondre à un besoin d'information → Répondre à une requête**
+### Exemples concrets
 
-### Configuration
+#### Exemple 1 : les documents textuels
 
-> Faire émerger automatiquement l'information pertinente d'une **grande collection de documents** en utilisant un **formalisme de requête souple**.
+Pour un corpus de **documents textuels** (Text Documents), le pipeline fonctionne ainsi :
 
-```{.cetz}
-// Diagramme : Processus fondamental de la RI
-#cetz.canvas({
-  import cetz.draw: *
+1. **Extraction de caractéristiques** : on compte les occurrences de chaque mot dans chaque document. On obtient des **vecteurs de fréquences de termes** (Word Occurrences / Term Frequency vectors).
 
-  // Collection de documents
-  rect((0, 0), (rel: (3, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "col", radius: 0.15)
-  content((1.5, 1.0), [Collection de \ documents], anchor: "center")
+2. **Mapping approprié** : on applique une transformation (par exemple, TF·IDF ou réduction de dimension) pour passer d'une représentation creuse à une représentation dense.
 
-  // Requête
-  rect((0, 3.5), (rel: (3, 1.2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "query", radius: 0.15)
-  content((1.5, 4.1), [Requête], anchor: "center")
+3. **Espace de représentation** : les documents sont projetés dans un espace vectoriel où des documents similaires sont proches les uns des autres — visualisable sous forme de **nuage de mots** (Tag Cloud) ou de carte thématique.
 
-  // Système RI
-  rect((5, 1.0), (rel: (3, 2.5)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "ri", radius: 0.15)
-  content((6.5, 2.25), [Système de \ Recherche \ d'Information], anchor: "center")
+4. **Interaction utilisateur** : l'utilisateur formule une requête, le système retourne les documents les plus pertinents.
 
-  // Résultats
-  rect((10, 1.0), (rel: (3, 2.5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "res", radius: 0.15)
-  content((11.5, 2.25), [Résultats \ (classés par \ pertinence)], anchor: "center")
+5. **Décision** : l'utilisateur accède à l'information dont il a besoin.
 
-  // Flèches
-  line("col", "ri", mark: (end: ">", fill: black))
-  line("query", "ri", mark: (end: ">", fill: black))
-  line("ri", "res", mark: (end: ">", fill: black))
-})
+💡 La notion de **nuage de mots** (Tag Cloud / Word Cloud) est une visualisation simple mais efficace de la distribution des termes dans un document ou un corpus.
+
+---
+
+#### Exemple 2 : les images
+
+Pour une collection d'**images** (Images), le même pipeline s'applique :
+
+1. **Extraction de caractéristiques** : on extrait des **histogrammes de couleurs** (Color Histograms) pour chaque image — un descripteur compact représentant la distribution des couleurs (rouge, vert, bleu).
+
+2. **Mapping approprié** : on projette les histogrammes dans un espace de représentation où des images visuellement similaires sont proches.
+
+3. **Espace de représentation** : les images sont disposées dans un espace 2D ou 3D selon leur similarité visuelle.
+
+4. **Interaction utilisateur** : l'utilisateur peut naviguer dans cet espace, sélectionner une image de référence, et obtenir les images les plus similaires.
+
+5. **Décision** : résultat sous forme de **collage photo** (Photo Collage) filtré selon les besoins de l'utilisateur.
+
+⚠️ Les histogrammes de couleurs sont des descripteurs **globaux** : ils capturent la palette colorimétrique d'une image, mais ignorent la position spatiale des couleurs. Des descripteurs plus sophistiqués (SIFT, CNN features) permettent de capturer des informations plus locales.
+
+---
+
+#### Exemple 3 : d'autres types de médias
+
+La Recherche d'Information n'est pas limitée au texte et aux images. Elle s'applique à :
+
+- **Audio et vidéo** : transcriptions, descripteurs spectraux, caractéristiques temporelles.
+- **Pages web** : structure hypertexte, liens, métadonnées.
+- **Messages** (e-mail, chat) : contenu textuel, métadonnées temporelles et sociales.
+- **Services et processus** : logs systèmes, états de processus.
+- **Personnes, entreprises, communautés** : graphes sociaux, profils utilisateurs.
+- **Web 1.0** (pages statiques), **Web 2.0** (réseaux sociaux), **Web 3.0** (Internet des Objets / IoT), **Web 4.0** (métavers / verse).
+
+🧠 À retenir : tout objet auquel on peut associer des **caractéristiques numériques** (un embedding) peut faire l'objet d'une Recherche d'Information. La discipline est donc **universellement applicable**.
+
+---
+
+## La distance en Recherche d'Information
+
+### La distance : un concept central
+
+#### Pourquoi la distance est-elle fondamentale ?
+
+La notion de **distance** (ou de similarité) est au cœur de la Recherche d'Information. Elle répond à une question simple mais fondamentale :
+
+> *Dans quelle mesure deux documents traitent-ils du même sujet ?*
+
+💡 La distance n'est pas seulement un outil technique : c'est la **formalisation mathématique** de l'intuition humaine de ressemblance entre deux contenus.
+
+---
+
+#### L'exemple des discours présidentiels
+
+Pour illustrer le problème de la mesure de distance, considérons deux nuages de mots issus de discours sur l'état de l'Union (State of the Union Address) :
+
+- **Discours de George W. Bush (29 janvier 2002)** : les mots les plus fréquents sont *war, terror, terrorists, security, weapons, freedom, nation, people*.
+- **Discours de Barack Obama (25 janvier 2011)** : les mots dominants sont *jobs, business, future, education, government, work, people, nation*.
+
+Ces deux discours partagent des termes communs (*people, nation, country, jobs, work*), mais leur contenu thématique est **clairement différent** : sécurité nationale vs économie et éducation.
+
+Deux questions fondamentales se posent alors :
+
+1. **Comment mesurer** cette différence de manière formelle et quantitative ?
+2. **Comment tolérer les variations** de style, de langue, de vocabulaire tout en capturant la similarité de sens ?
+
+⚠️ Ces questions ne sont pas triviales. Un document sur la "sécurité des emplois" (job security) peut utiliser simultanément le vocabulaire des deux discours. Une mesure de distance naïve (comptage de mots) ne suffit pas pour capturer la nuance sémantique.
+
+---
+
+### L'omniprésence de la distance
+
+#### Applications de la distance dans l'analyse de données
+
+La distance (ou mesure de proximité / similarité) est utilisée dans tous les grands domaines de l'analyse de données (Data Science) :
+
+##### Fouille de données non supervisée (Unsupervised Mining)
+
+- **Clustering** (regroupement) : regrouper des documents similaires sans étiquettes préalables.
+- **Détection d'anomalies** (Outlier Detection) : identifier des documents qui s'éloignent significativement des autres.
+- **Imputation** : estimer des valeurs manquantes à partir des voisins les plus proches.
+
+💡 En clustering, deux documents sont placés dans le même groupe si leur distance est inférieure à un certain seuil. Le résultat dépend entièrement de la mesure choisie.
+
+---
+
+##### Apprentissage supervisé (Supervised Learning)
+
+- **Classification** : attribuer une catégorie à un document en fonction de sa distance aux exemples d'entraînement (ex. : k-NN).
+- **Régression** : estimer une valeur numérique (ex. : pertinence d'un document) en interpolant à partir des voisins.
+- **Ranking** (classement) : ordonner les documents par pertinence décroissante par rapport à une requête.
+
+---
+
+##### Visualisation (Visualization)
+
+- **Réduction de dimensionnalité** (Dimension Reduction) : projeter des données de haute dimension dans un espace 2D ou 3D en préservant les distances entre points (ex. : t-SNE, UMAP, MDS).
+
+💡 La visualisation permet à un utilisateur de **naviguer intuitivement** dans un grand espace documentaire, en explorant des clusters thématiques.
+
+---
+
+#### Les trois rôles de la distance
+
+🧠 À retenir : la distance joue trois rôles distincts mais complémentaires en Recherche d'Information :
+
+1. **Caractériser un document** : les caractéristiques (features) d'un document forment son "résumé" numérique — ce qu'il est en lui-même.
+
+2. **Comparer deux documents** : la distance permet de quantifier la **similarité** entre deux documents — leur relation l'un par rapport à l'autre.
+
+3. **Caractériser un modèle de documents** : la distribution des distances dans une collection permet de visualiser la **structure globale** du corpus — comment les documents s'organisent entre eux.
+
+---
+
+## Définition et objectif de la Recherche d'Information
+
+### Qu'est-ce que la Recherche d'Information ?
+
+#### Motivation principale
+
+La **Recherche d'Information** (Information Retrieval, IR) a pour motivation principale de **répondre à un besoin informationnel** (Information Need).
+
+Un besoin informationnel se manifeste lorsqu'un utilisateur ne possède pas une information dont il a besoin pour accomplir une tâche ou prendre une décision. Il formule alors une **requête** (Query) pour accéder à cette information.
+
+💡 Le défi est de faire correspondre une requête imprécise (formulée en langage naturel, souvent vague) avec les documents les plus pertinents d'un large corpus.
+
+---
+
+#### Définition formelle
+
+> La Recherche d'Information consiste à **faire émerger automatiquement** l'information **pertinente** à partir d'une **grande collection de documents**, en réponse à une **requête formulée de manière souple** (loose query formalism).
+
+Décomposons cette définition :
+
+- **"Faire émerger automatiquement"** : le système doit fonctionner sans intervention humaine pour chaque requête.
+- **"Information pertinente"** : la pertinence est relative au besoin de l'utilisateur, pas seulement à la présence de mots-clés.
+- **"Grande collection de documents"** : les systèmes IR sont conçus pour passer à l'échelle (scalability).
+- **"Requête souple"** : l'utilisateur n'a pas besoin de connaître la structure interne de la collection ni d'utiliser un langage formel.
+
+---
+
+#### Le cadre général d'un système IR
+
+Un système de Recherche d'Information fonctionne selon le schéma suivant :
+
+```{mermaid}
+flowchart TD
+    A[Besoin informationnel\nInformation Need] --> B[Requête\nQuery]
+    B --> C[Système IR\nIR System]
+    D[Collection de documents\nDocument Collection] --> C
+    C --> E[Documents pertinents classés\nRanked Relevant Documents]
+    E --> F[Utilisateur\nUser]
+    F -->|Feedback| C
 ```
 
-## 5. Bref historique
+💡 La boucle de **rétroaction** (Feedback) est importante : l'utilisateur peut signaler quels résultats sont pertinents, permettant au système d'affiner ses résultats (Relevance Feedback).
 
-| Année | Événement |
-|-------|-----------|
-| 1950 | Calvin N. Moors invente le terme « *Information Retrieval* » |
-| 1959 | Luhn décrit la recherche statistique |
-| 1960 | Maron et Kuhns définissent un modèle probabiliste de RI |
-| 1966 | Le projet Cranfield définit les mesures d'évaluation |
-| 1968 | Premier livre de Gerard Salton sur le système SMART |
-| 1972 | Lockheed introduit DIALOG comme service en ligne commercial |
-| Fin 1980 | Les premiers systèmes PC intègrent la recherche |
-| Début 1990 | Disques bon marché → révolution du stockage |
-| 1992 | Westlaw utilise un système probabiliste à grande échelle |
-| Milieu 1990 | Bases de données multimédia |
-| 1994 | Explosion d'Internet et du Web |
-| 1995 | Techniques de RI omniprésentes (bouton « rechercher ») |
-| Aujourd'hui | Embeddings par Machine Learning pour la recherche |
+---
 
-## 6. Contenu et objectifs du cours
+## Histoire de la Recherche d'Information
 
-### Objectifs
+### Chronologie historique
 
-- Comprendre les modèles de base en RI
-- Comprendre la recommandation sociale
-- Comprendre les mesures de qualité
-- Comprendre les propriétés spécifiques des médias
-- Avoir un aperçu de l'indexation
-- Avoir un aperçu de la visualisation des données
+La Recherche d'Information est une discipline qui a plus de 70 ans d'histoire. Voici les grandes étapes de son développement :
 
-### Contenu détaillé
+#### Les origines (1950–1960)
 
-```{.cetz}
-// Diagramme : Structure du cours
-#cetz.canvas({
-  import cetz.draw: *
+- **1950** : **Calvin N. Moors** crée le terme *Information Retrieval*. C'est la naissance officielle de la discipline en tant que domaine de recherche autonome.
 
-  // Titre principal
-  rect((2, 8), (rel: (8, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "title", radius: 0.15)
-  content((6, 8.6), [*Recherche d'Information*], anchor: "center")
+- **1959** : **Hans Peter Luhn** (IBM) décrit la **récupération statistique** (statistical retrieval) : l'idée d'utiliser la fréquence des mots pour mesurer la pertinence d'un document.
 
-  // Embeddings
-  rect((0, 5.5), (rel: (5.5, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
-  content((2.75, 7.0), [*Embeddings*], anchor: "center")
-  content((2.75, 6.1), [TF·IDF / Prob. / LSI / Neuronaux], anchor: "center")
+  💡 Luhn introduit l'idée que les mots les plus fréquents dans un document (hors mots vides) sont les plus représentatifs de son contenu.
 
-  // Indexation
-  rect((6.5, 5.5), (rel: (3.5, 2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "idx", radius: 0.15)
-  content((8.25, 6.5), [*Indexation*], anchor: "center")
+- **1960** : **Maron et Kuhns** définissent le premier **modèle probabiliste** de l'IR : un document est pertinent avec une certaine probabilité, qui dépend de la requête.
 
-  // Évaluation
-  rect((0, 3), (rel: (4, 1.5)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "eval", radius: 0.15)
-  content((2, 3.75), [*Évaluation RI*], anchor: "center")
+#### L'émergence des modèles et évaluations (1960–1980)
 
-  // Social
-  rect((5, 3), (rel: (5, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "soc", radius: 0.15)
-  content((7.5, 3.75), [*RI Sociale & Recommandation*], anchor: "center")
+- **1966** : Le **projet Cranfield** définit les premières **mesures d'évaluation** (evaluation measures) en IR : précision (precision) et rappel (recall). Ces mesures restent fondamentales aujourd'hui.
 
-  // Médias
-  rect((0, 0.5), (rel: (5, 1.5)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "med", radius: 0.15)
-  content((2.5, 1.25), [*Spécificité des médias*], anchor: "center")
+  💡 Le projet Cranfield est le premier à évaluer des systèmes IR de manière rigoureuse et comparative, posant les bases de la recherche expérimentale en IR.
 
-  // Visualisation
-  rect((6, 0.5), (rel: (4, 1.5)), fill: rgb("#94e2d5"), stroke: rgb("#1e1e2e"), name: "vis", radius: 0.15)
-  content((8, 1.25), [*Visualisation*], anchor: "center")
+- **1968** : **Gerard Salton** publie son premier livre sur le système **SMART** (System for the Mechanical Analysis and Retrieval of Text) — l'un des premiers systèmes IR opérationnels, basé sur le modèle vectoriel (Vector Space Model).
 
-  // Liens
-  line("title", "emb", mark: (end: ">", fill: black))
-  line("title", "idx", mark: (end: ">", fill: black))
-  line("emb", "eval", mark: (end: ">", fill: black))
-  line("emb", "soc", mark: (end: ">", fill: black))
-  line("eval", "med", mark: (end: ">", fill: black))
-  line("soc", "vis", mark: (end: ">", fill: black))
-})
-```
+#### La commercialisation (1970–1990)
 
-**Embeddings** : Projeter les données dans un espace vectoriel $\mathbb{R}^D$
+- **1972** : **Lockheed** lance **DIALOG**, le premier **service commercial en ligne** d'accès à des bases de données bibliographiques.
 
-- Embeddings creux : TF·IDF, recherche par espace vectoriel, LSI
-- Recherche probabiliste
-- Embeddings denses : Embeddings neuronaux
-- *Learning to Rank*
+- **Fin des années 1980** : les premiers systèmes IR sont intégrés dans des **logiciels pour PC**, rendant la recherche documentaire accessible au grand public.
 
-**Autres thèmes** : Indexation, Évaluation RI, RI Sociale et Recommandation, Spécificité des médias (texte, image, audio), Visualisation de l'information.
+- **Début des années 1990** : la baisse du coût des disques durs provoque une **révolution du stockage d'information** : il devient possible de stocker de grandes quantités de texte sur des machines personnelles.
 
-## 7. Références générales
+#### L'ère d'Internet (1990–2000)
 
-1. Aggarwal, C. C. *Recommender Systems: The Textbook*. Springer, 2016.
-2. Baeza-Yates, R. & Ribeiro-Neto, B. *Modern Information Retrieval*. Addison-Wesley, 2011.
-3. Berry, M. W. & Kogan, J. *Text Mining: Applications and Theory*. Wiley, 2010.
-4. Büttcher, S. et al. *Information Retrieval: Implementing and Evaluating Search Engines*. MIT Press, 2010.
-5. Ceri, S. et al. *Web Information Retrieval*. Springer, 2013.
-6. Croft, B. & Larty, J. *Language Models for Information Retrieval*. Kluwer, 2002.
-7. Croft, W. B. et al. *Search Engines: Information Retrieval in Practice*. Pearson, 2015.
-8. Dominich, S. *The Modern Algebra of Information Retrieval*. Springer, 2008.
-9. Jurafsky, D. & Martin, J. H. *Speech and Language Processing*. 3ᵉ éd., 2026.
+- **1992** : **Westlaw** déploie le premier système IR probabiliste à **grande échelle** dans le domaine juridique.
+
+- **Milieu des années 1990** : émergence des **bases de données multimédia** (Multimedia Databases) — intégration de la recherche d'images, de sons et de vidéos.
+
+- **1994** : **explosion d'Internet et du Web** — le volume de documents disponibles augmente de façon vertigineuse, imposant de nouvelles solutions IR.
+
+- **1995** : les techniques IR deviennent **omniprésentes** — le bouton "Search" est partout. La recherche web devient une activité quotidienne pour des millions d'utilisateurs.
+
+#### L'ère de l'apprentissage automatique (2000 à aujourd'hui)
+
+- **Aujourd'hui** : les **embeddings** issus de l'apprentissage automatique (Machine Learning Embeddings) sont utilisés pour la recherche. Des modèles comme BERT, GPT ou les réseaux de neurones profonds permettent de capturer la **sémantique profonde** des documents et des requêtes.
+
+  💡 Un *embedding* est une représentation vectorielle dense d'un document ou d'une requête, apprise automatiquement à partir de grandes quantités de données. Il capture non seulement les mots, mais aussi leur sens en contexte.
+
+🧠 À retenir : la Recherche d'Information est passée d'une discipline académique confidentielle (années 1950) à une technologie omniprésente (moteurs de recherche web, recommandations, assistants virtuels...). Les modèles évoluent, mais les questions fondamentales — comment représenter un document ? comment mesurer la pertinence ? — restent au cœur de la discipline.
+
+---
+
+## Contenu et objectifs du cours
+
+### Objectifs pédagogiques
+
+Ce cours vise à acquérir une compréhension approfondie des fondements et des techniques modernes de la Recherche d'Information. Les objectifs spécifiques sont :
+
+- **Comprendre les modèles IR fondamentaux** : modèle booléen, vectoriel, probabiliste, neuronal.
+- **Comprendre la recommandation sociale** (Social Recommendation) : filtrage collaboratif, systèmes de recommandation.
+- **Comprendre les mesures de qualité** (Quality Measures) : précision, rappel, F-mesure, NDCG, MAP.
+- **Comprendre les propriétés spécifiques des médias** (Media Specificity) : texte, image, audio.
+- **Découvrir les techniques d'indexation** (Indexing) : index inversé, structures de données pour la recherche rapide.
+- **Découvrir la visualisation de données** (Data Visualization) : réduction de dimension, visualisation interactive.
+
+⚠️ Ce cours s'inscrit dans la continuité des cours de **Data Science et d'Apprentissage Automatique** (Machine Learning). Il suppose une familiarité avec les concepts de base de l'algèbre linéaire, des probabilités et de la statistique.
+
+---
+
+### Contenu détaillé du cours
+
+#### Partie 1 : Plongements vectoriels (Embeddings)
+
+Cette partie centrale du cours explore différentes façons de représenter des documents dans un espace vectoriel.
+
+##### Plongements creux (Sparse Embeddings)
+
+- **TF·IDF** (Term Frequency – Inverse Document Frequency) : pondération des termes en fonction de leur fréquence dans le document et de leur rareté dans la collection.
+- **Modèle Espace Vectoriel** (Vector Space Retrieval) : représentation des documents et requêtes comme vecteurs dans un espace de termes.
+- **LSI** (Latent Semantic Indexing) : réduction de dimension par décomposition en valeurs singulières (SVD) pour capturer la sémantique latente.
+
+💡 Les plongements creux sont appelés ainsi car la plupart des coordonnées du vecteur sont nulles (un document n'utilise qu'un petit sous-ensemble du vocabulaire total).
+
+##### Récupération probabiliste (Probabilistic Retrieval)
+
+- Modèles basés sur la **probabilité de pertinence** d'un document par rapport à une requête.
+- **Modèle BM25** (Best Match 25) : une des variantes les plus utilisées en pratique.
+- **Modèles de langue** (Language Models) pour l'IR.
+
+##### Plongements denses (Dense Embeddings)
+
+- **Plongements neuronaux** (Neural Embeddings) : représentations apprises par des réseaux de neurones profonds.
+- **Word2Vec**, **GloVe**, **FastText** : plongements de mots.
+- **BERT**, **Sentence-BERT** : plongements de phrases et documents.
+
+💡 Les plongements denses capturent des relations sémantiques complexes que les méthodes creuses ne peuvent pas représenter (synonymes, polysémie, contexte...).
+
+##### Apprentissage du classement (Learning to Rank)
+
+- Méthodes d'apprentissage supervisé pour ordonner des documents par pertinence.
+- Approches *pointwise*, *pairwise*, *listwise*.
+
+---
+
+#### Partie 2 : Indexation (Indexing)
+
+- **Index inversé** (Inverted Index) : structure de données permettant de trouver rapidement tous les documents contenant un terme donné.
+- Techniques pour rendre la recherche **scalable** : compression, partitionnement, calcul distribué.
+
+💡 L'indexation est ce qui rend possible la recherche dans des milliards de documents en quelques millisecondes.
+
+---
+
+#### Partie 3 : Évaluation de la Recherche d'Information
+
+- **Précision** (Precision) : proportion de documents retournés qui sont effectivement pertinents.
+- **Rappel** (Recall) : proportion de documents pertinents qui ont été effectivement retournés.
+- **F-mesure** (F-Measure) : combinaison harmonique de précision et rappel.
+- **NDCG** (Normalized Discounted Cumulative Gain) : mesure tenant compte de la position des documents pertinents dans le classement.
+- **MAP** (Mean Average Precision) : précision moyenne sur plusieurs requêtes.
+
+⚠️ Évaluer un système IR de manière rigoureuse est indispensable pour comparer différentes approches et progresser dans la discipline.
+
+---
+
+#### Partie 4 : Recherche d'Information sociale et recommandation
+
+##### Recherche d'Information sur le Web (Web Information Retrieval)
+
+- Le Web comme graphe de pages liées (hyperliens).
+- **PageRank** et algorithmes de classement basés sur la structure du graphe.
+- Crawling, indexation web, détection de spam.
+
+##### Systèmes de recommandation (Recommender Systems)
+
+- **Filtrage collaboratif** (Collaborative Filtering) : recommander à un utilisateur ce qu'ont aimé des utilisateurs similaires.
+- **Filtrage basé sur le contenu** (Content-Based Filtering) : recommander des items similaires à ceux qu'un utilisateur a appréciés.
+- **Approches hybrides**.
+
+##### Analyse de réseaux sociaux (Social Network Analysis)
+
+- Détection de communautés.
+- Mesures de centralité.
+- Propagation d'information dans les graphes.
+
+---
+
+#### Partie 5 : Spécificité des médias
+
+##### Propriétés du texte (Text Properties)
+
+- Traitement du langage naturel (NLP - Natural Language Processing).
+- Tokenisation, stemming, lemmatisation, stopwords.
+- Modèles statistiques du langage.
+
+##### Recherche d'Information Visuelle (Visual Information Retrieval)
+
+- Descripteurs d'images locaux et globaux.
+- Recherche par l'image (CBIR - Content-Based Image Retrieval).
+- Réseaux de neurones convolutifs (CNN) pour l'extraction de caractéristiques visuelles.
+
+##### Recherche d'Information Audio (Audio Information Retrieval)
+
+- Descripteurs temporels et spectraux.
+- Reconnaissance de musique, de parole.
+- Empreintes acoustiques (audio fingerprinting).
+
+---
+
+#### Partie 6 : Visualisation de l'information (Information Visualization)
+
+- **Apprentissage de variétés** (Manifold Learning) : t-SNE, UMAP, PCA.
+- Visualisation interactive de grands espaces documentaires.
+- Exploration et navigation dans des collections de documents.
+
+💡 La visualisation de l'information ferme la boucle du pipeline IR : elle permet à l'utilisateur de comprendre et d'explorer la structure de la collection, et pas seulement de répondre à des requêtes ponctuelles.
+
+---
+
+## Références générales
+
+### Bibliographie fondamentale
+
+Le cours s'appuie sur un ensemble de références faisant autorité dans le domaine. En voici les principales :
+
+#### Ouvrages généraux en IR
+
+- **Baeza-Yates & Ribeiro-Neto** — *Modern Information Retrieval: The Concepts and Technology behind Search* (2e éd., 2011, Addison-Wesley). La référence classique, couvrant les fondements théoriques et pratiques.
+
+- **Manning, Raghavan & Schütze** — *An Introduction to Information Retrieval* (Cambridge University Press, 2009). Disponible en ligne, très complet sur les modèles IR classiques.
+
+- **Croft, Metzler & Strohman** — *Search Engines: Information Retrieval in Practice* (Pearson, 2015). Axé sur l'implémentation pratique de moteurs de recherche.
+
+- **Büttcher, Clarke & Cormack** — *Information Retrieval: Implementing and Evaluating Search Engines* (MIT Press, 2010). Focus sur l'évaluation et l'implémentation.
+
+#### IR neuronal et plongements
+
+- **Mitra & Craswell** — *An Introduction to Neural Information Retrieval* (NOW, 2018). Introduction aux approches neuronales.
+
+- **Tonellotto** — *Lecture Notes on Neural Information Retrieval* (CoRR, 2022). Notes de cours récentes et accessibles.
+
+#### Traitement du langage naturel
+
+- **Jurafsky & Martin** — *Speech and Language Processing* (3e éd., Stanford, 2026, disponible en ligne). La référence incontournable pour le NLP.
+
+#### Systèmes de recommandation
+
+- **Aggarwal** — *Recommender Systems: The Textbook* (Springer, 2016). Couverture exhaustive des systèmes de recommandation.
+
+#### Fouille de texte
+
+- **Zhai & Massung** — *Text Data Management and Analysis* (Morgan Claypool, 2016). Approche unifiée de la fouille de texte et de l'IR.
+
+- **Berry & Kogan** (éd.) — *Text Mining: Applications and Theory* (Wiley, 2010).
+
+#### IR web
+
+- **Ceri et al.** — *Web Information Retrieval* (Springer, 2013). Spécifique au contexte du Web.
+
+#### Apprentissage du classement
+
+- **Liu** — *Learning to Rank for Information Retrieval* (Springer, 2011). Référence sur les approches supervisées de classement.
+
+#### Algèbre de l'IR
+
+- **Dominich** — *The Modern Algebra of Information Retrieval* (Springer, 2008). Pour les fondements mathématiques formels.
+
+- **Melucci** — *Introduction to Information Retrieval and Quantum Mechanics* (Springer, 2015). Approche non conventionnelle basée sur la mécanique quantique.
+
+⚠️ Des références spécifiques à chaque chapitre seront fournies au fur et à mesure du cours. Les suggestions bibliographiques sont les bienvenues.
+
+---
+
+## Synthèse
+
+### Ce qu'il faut retenir de cette introduction
+
+🧠 **Les points clés de ce chapitre d'introduction :**
+
+La Recherche d'Information est née d'un constat simple : la production de données numériques croît de façon exponentielle, et les humains ne peuvent pas traiter manuellement ce volume d'information.
+
+Face à cette **avalanche informationnelle**, trois besoins fondamentaux émergent : prendre de meilleures décisions, gérer l'information de façon efficace, et accéder à de grands dépôts de données pour faire de la science.
+
+Pour répondre à ces besoins, il faut **structurer les données brutes** : les représenter de manière formelle, définir des mesures de similarité appropriées, et appliquer des processus d'analyse (fouille, apprentissage, visualisation).
+
+La **distance** est le concept central de la Recherche d'Information : elle permet de comparer des documents, de les regrouper, de les classer par pertinence, et de les visualiser.
+
+Un système IR a pour objectif de **faire émerger automatiquement l'information pertinente** d'une grande collection de documents, en réponse à une requête formulée de manière souple par un utilisateur.
+
+Ce cours couvrira les modèles IR classiques et modernes, de la pondération TF·IDF aux plongements neuronaux, en passant par l'indexation, l'évaluation, les systèmes de recommandation et la visualisation de données.

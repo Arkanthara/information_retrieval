@@ -1,0 +1,294 @@
+---
+title: "Plongements Neuronaux (Neural Embeddings) — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+
+## 🟢 Niveau 1 — Fondamentaux
+
+### Question 1
+
+Quel est le principe fondamental des plongements basés sur le contexte (Context-based Embeddings) ?
+
+- [ ] La signification d'un terme est déterminée par sa fréquence dans le corpus
+- [x] La signification d'un terme est déterminée par les termes qui l'entourent
+- [ ] La signification d'un terme est déterminée par sa longueur
+- [ ] La signification d'un terme est indépendante de son environnement textuel
+
+> 💡 Explication :
+> L'hypothèse distributionnelle stipule que les mots apparaissant dans des contextes similaires ont des significations proches. C'est le fondement de Word2Vec et GloVe.
+
+### Question 2
+
+Quelle est la direction de prédiction du modèle CBoW (Continuous Bag of Words) ?
+
+- [ ] Terme cible → Termes de contexte
+- [x] Termes de contexte → Terme cible
+- [ ] Terme cible → Terme cible suivant
+- [ ] Corpus entier → Terme cible
+
+> 💡 Explication :
+> CBoW prédit le terme cible $W_T$ à partir des mots environnants $W_C$, c'est-à-dire qu'il estime $\mathbb{P}(W_T \mid W_C)$.
+
+### Question 3
+
+Quelle est la direction de prédiction du modèle Skip-gram ?
+
+- [ ] Termes de contexte → Terme cible
+- [x] Terme cible → Termes de contexte
+- [ ] Document entier → Terme cible
+- [ ] Terme précédent → Terme suivant
+
+> 💡 Explication :
+> Skip-gram est l'inverse de CBoW : il estime $\mathbb{P}(W_C \mid W_T)$, c'est-à-dire la probabilité des mots de contexte étant donné le mot cible.
+
+### Question 4
+
+Dans Word2Vec, que représentent les paramètres $\theta = [W, W']$ ?
+
+- [ ] Les termes du vocabulaire et leurs fréquences
+- [ ] Les matrices de co-occurrence et de distance
+- [x] Les matrices de poids du réseau de neurones (couche d'entrée et couche de sortie)
+- [ ] Les vecteurs de requête et de document
+
+> 💡 Explication :
+> $W$ est la matrice de poids entre la couche d'entrée et la couche cachée, et $W'$ entre la couche cachée et la couche de sortie. Ce sont ces poids appris qui constituent le plongement.
+
+### Question 5
+
+Quelle mesure de similarité est utilisée avec les plongements Word2Vec et GloVe ?
+
+- [ ] Similarité cosinus (Cosine similarity)
+- [ ] Produit scalaire normalisé
+- [x] Distance euclidienne (Euclidean distance)
+- [ ] Distance de Kullback-Leibler
+
+> 💡 Explication :
+> La mesure de similarité doit être cohérente avec la construction du plongement. Pour Word2Vec et GloVe, c'est la distance euclidienne dans l'espace vectoriel appris.
+
+### Question 6
+
+Vrai ou Faux : LSI (Latent Semantic Indexing) est un plongement basé sur le contexte local des termes.
+
+- [ ] Vrai
+- [x] Faux
+
+> ❌ Faux :
+> LSI est un plongement basé sur le **contenu** (Content-based). Il factorise la matrice termes-documents globale pour extraire des concepts latents **linéaires**, sans tenir compte du contexte local d'occurrence des termes.
+
+### Question 7
+
+Avec une fenêtre de contexte de taille $m = 2$ et le mot cible "joue" dans la phrase "Le chat **joue** avec la balle", combien de paires (cible, contexte) sont générées ?
+
+- [ ] 2
+- [ ] 3
+- [x] 4
+- [ ] 6
+
+> 💡 Explication :
+> Avec $m = 2$, on prend 2 mots avant ("Le", "chat") et 2 mots après ("avec", "la"), ce qui génère 4 paires : ("joue","Le"), ("joue","chat"), ("joue","avec"), ("joue","la").
+
+---
+
+## 🟡 Niveau 2 — Compréhension
+
+### Question 8
+
+Pourquoi la fonction softmax standard est-elle problématique pour de grands vocabulaires dans Word2Vec ?
+
+- [ ] Elle ne converge pas pour les vocabulaires larges
+- [ ] Elle produit des probabilités négatives
+- [x] Son dénominateur nécessite une somme sur tout le vocabulaire, soit une complexité $O(N)$ par étape
+- [ ] Elle ne peut pas être différentiée
+
+> 💡 Explication :
+> $\mathbb{P}(W_T \mid W_C) = \exp(v_T^{\prime\top} v_C) / \sum_i \exp(v_i^{\prime\top} v_C)$ exige le calcul de $N$ exponentielles à chaque étape. Pour $N = 10^5$ mots, cela est prohibitif.
+
+### Question 9
+
+La softmax hiérarchique (Hierarchical Softmax) réduit la complexité de calcul de $O(N)$ à :
+
+- [ ] $O(1)$
+- [ ] $O(\sqrt{N})$
+- [x] $O(\log N)$
+- [ ] $O(N^2)$
+
+> 💡 Explication :
+> En organisant le vocabulaire dans un arbre binaire (comme WordNet), la probabilité d'un terme est calculée comme un produit de probabilités le long du chemin racine→feuille, ce qui donne $O(\log N)$ opérations.
+
+### Question 10
+
+Quelle est la différence fondamentale entre GloVe et Word2Vec concernant les co-occurrences ?
+
+- [ ] GloVe utilise une fenêtre de contexte plus grande
+- [ ] Word2Vec utilise des co-occurrences globales, GloVe des co-occurrences locales
+- [x] GloVe pondère explicitement les co-occurrences selon leur fréquence globale, Word2Vec les traite implicitement
+- [ ] GloVe ignore les co-occurrences nulles, Word2Vec les inclut toutes
+
+> 💡 Explication :
+> Word2Vec optimise une prédiction locale sans tenir compte de la densité des co-occurrences. GloVe minimise une perte globale pondérée par $\psi(\text{card}\{(w_k,w_i)\})$, donnant plus d'importance aux paires fréquentes.
+
+### Question 11
+
+Dans GloVe, que capture géométriquement la différence de vecteurs $v_i - v_j$ ?
+
+- [ ] La fréquence relative des termes $w_i$ et $w_j$
+- [x] Le ratio des probabilités de co-occurrence $\mathbb{P}(w_k \mid w_i) / \mathbb{P}(w_k \mid w_j)$
+- [ ] La distance syntaxique entre $w_i$ et $w_j$
+- [ ] La somme des co-occurrences des deux termes
+
+> 💡 Explication :
+> $\exp((v_i - v_j)^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i) / \mathbb{P}_{\text{cooc}}(w_k \mid w_j)$. C'est cette propriété qui permet les analogies vectorielles du type "roi - homme + femme ≈ reine".
+
+### Question 12
+
+Vrai ou Faux : Dans le modèle CBoW, la probabilité $\mathbb{P}(W_T \mid W_C)$ est approximée par le produit scalaire $v_T^{\prime\top} v_C$.
+
+- [x] Vrai
+- [ ] Faux
+
+> ✅ Réponse :
+> Oui. Les vecteurs $v_C$ (issu de $W$) et $v_T'$ (colonne de $W'$) sont tels que leur produit scalaire approxime le score non normalisé. La softmax normalise ensuite ce score en probabilité.
+
+### Question 13
+
+Pourquoi les plongements neuronaux (Word2Vec, GloVe) capturent-ils des relations **non-linéaires**, contrairement à LSI ?
+
+- [ ] Parce qu'ils utilisent plus de données
+- [ ] Parce que leur vocabulaire est plus grand
+- [x] Parce que leur apprentissage implique des fonctions non-linéaires (exponentielle, softmax) là où LSI effectue une factorisation matricielle linéaire
+- [ ] Parce qu'ils ignorent les mots grammaticaux
+
+> 💡 Explication :
+> LSI = décomposition en valeurs singulières (SVD) = transformation **linéaire**. Word2Vec/GloVe optimisent des fonctions faisant intervenir des exponentielles, permettant d'encoder des structures géométriques complexes (translations, rotations) impossibles à représenter linéairement.
+
+### Question 14
+
+Vrai ou Faux : Un modèle Word2Vec pré-entraîné (Pre-trained model) peut être utilisé directement pour représenter des documents en calculant la moyenne des vecteurs de leurs termes.
+
+- [x] Vrai
+- [ ] Faux
+
+> ✅ Réponse :
+> Oui. Les modèles pré-entraînés fournissent une table de correspondance (lookup table). Le vecteur d'un document est calculé comme $\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w$.
+
+---
+
+## 🔴 Niveau 3 — Maîtrise
+
+### Question 15
+
+Cas pratique : On veut comparer deux systèmes de recherche d'information. Le premier utilise TF·IDF avec similarité cosinus. Le second utilise Word2Vec avec distance euclidienne. Pour la requête "voiture rapide", le second système retourne aussi des documents contenant "automobile véloce" sans que ces mots apparaissent dans la requête. Quelle propriété de Word2Vec explique ce comportement ?
+
+- [ ] Word2Vec pondère les termes rares plus fortement
+- [ ] Word2Vec indexe les synonymes explicitement dans son vocabulaire
+- [x] Les synonymes et termes sémantiquement proches ont des vecteurs proches dans l'espace de plongement car ils apparaissent dans des contextes similaires
+- [ ] Word2Vec utilise une fenêtre de contexte infinie
+
+> 💡 Explication :
+> "voiture" et "automobile", "rapide" et "véloce" co-apparaissent dans des contextes similaires dans le corpus d'entraînement. Leurs vecteurs sont donc proches dans l'espace de plongement, permettant une recherche sémantique au-delà de la correspondance exacte des termes.
+
+### Question 16
+
+Dans la fonction de perte de GloVe, à quoi sert la fonction de pondération $\psi(x)$ avec $\psi(0) = 0$ et $\psi(\infty) = 1$ ?
+
+- [ ] À normaliser les vecteurs pour qu'ils aient une norme unitaire
+- [x] À ignorer les paires de co-occurrence nulles et à plafonner l'influence des paires très fréquentes (souvent des mots grammaticaux peu informatifs)
+- [ ] À accélérer la convergence du gradient
+- [ ] À réduire la dimension du plongement automatiquement
+
+> 💡 Explication :
+> $\psi(0) = 0$ : les co-occurrences nulles ne contribuent pas à la perte. $\psi(\infty) = 1$ : les très fortes co-occurrences (souvent dues à des mots fonctionnels comme "le", "de") sont plafonnées pour ne pas dominer l'apprentissage.
+
+### Question 17
+
+Cas pratique : Un système de recherche d'information utilise des plongements Word2Vec entraînés sur des articles de presse américains des années 1990. Il associe systématiquement des noms de métiers techniques à des profils masculins. Quelle est la cause principale de ce problème et quelle est la solution proposée par la littérature ?
+
+- [ ] Cause : vocabulaire trop petit. Solution : augmenter la taille du vocabulaire
+- [ ] Cause : fenêtre de contexte trop petite. Solution : augmenter la fenêtre
+- [x] Cause : biais sociétaux (societal biases) présents dans le corpus d'entraînement. Solution : techniques de débiaisage (debiasing) des plongements
+- [ ] Cause : dimension de plongement trop faible. Solution : augmenter la dimension
+
+> 💡 Explication :
+> Les co-occurrences dans les corpus historiques reflètent des stéréotypes culturels. Bolukbasi et al. (2016) ont montré des associations comme "homme : programmeur :: femme : femme au foyer". Des techniques de débiaisage post-entraînement ont été proposées pour corriger ces associations.
+
+### Question 18
+
+Quelle est la limite fondamentale des plongements statiques (Word2Vec, GloVe) face à la polysémie, et quel modèle y répond ?
+
+- [ ] Limite : ils ne gèrent pas les mots rares. Solution : TF·IDF
+- [x] Limite : un mot polysémique reçoit un unique vecteur moyen indépendamment du sens. Solution : BERT qui génère des plongements contextuels
+- [ ] Limite : ils sont trop lents à calculer. Solution : softmax hiérarchique
+- [ ] Limite : ils ne gèrent pas les langues non-anglaises. Solution : GloVe multilingue
+
+> 💡 Explication :
+> "banque" (établissement financier) et "banque" (rive d'un fleuve) partagent un unique vecteur dans Word2Vec/GloVe. BERT (Bidirectional Encoder Representations from Transformers) génère un vecteur différent pour chaque occurrence selon son contexte phrastique.
+
+### Question 19
+
+Cas pratique : On entraîne un modèle Skip-gram sur un corpus médical spécialisé. Après entraînement, on observe que $\|v_{\text{aspirine}} - v_{\text{ibuprofène}}\|$ est très faible. Quelle interprétation linguistique peut-on donner à ce résultat ?
+
+- [ ] Les deux médicaments sont identiques chimiquement
+- [ ] Le corpus contenait peu d'occurrences de ces termes
+- [x] Les deux termes apparaissent fréquemment dans des contextes similaires (mêmes symptômes traités, même posologie, etc.), indiquant une proximité sémantique dans le domaine médical
+- [ ] La fenêtre de contexte était trop grande
+
+> 💡 Explication :
+> Une distance euclidienne faible signifie que les vecteurs sont proches, donc que les termes co-apparaissent dans des contextes similaires. Dans un corpus médical, aspirine et ibuprofène sont souvent utilisés dans les mêmes contextes (anti-inflammatoires, douleurs, fièvre), d'où leur proximité vectorielle.
+
+### Question 20
+
+Parmi les affirmations suivantes sur la relation entre Word2Vec et la recherche d'information moderne, laquelle est correcte ?
+
+- [ ] Word2Vec a remplacé définitivement TF·IDF dans tous les systèmes
+- [ ] Les plongements neuronaux sont uniquement utilisés pour la classification de textes
+- [x] Les plongements denses constituent la base du Dense Retrieval moderne, où la recherche documentaire devient un problème de plus proche voisin approximatif (Approximate Nearest Neighbor)
+- [ ] GloVe est suffisant pour tous les besoins de recherche sémantique sans nécessiter de modèles plus récents
+
+> 💡 Explication :
+> Les techniques modernes de recherche (bi-encodeurs basés sur BERT, etc.) encodent requêtes et documents en vecteurs denses, puis effectuent une recherche du plus proche voisin approximatif (ANN). Word2Vec/GloVe sont les précurseurs directs de cette approche.
+
+### Question 21
+
+Soit la phrase "Le médecin soigne le patient" avec une fenêtre $m = 1$. En CBoW, quelles paires (contexte → cible) sont générées pour le mot "soigne" ?
+
+- [ ] ("médecin", "soigne") et ("soigne", "le")
+- [x] ("Le", "médecin"), ("médecin", "soigne"), ("soigne", "le"), ("le", "patient") — et pour "soigne" spécifiquement : ("médecin", "soigne") et ("le", "soigne")
+- [ ] Toutes les combinaisons de mots de la phrase
+- [ ] Uniquement ("médecin", "le") car ils encadrent "soigne"
+
+> 💡 Explication :
+> Pour le mot cible "soigne" avec $m=1$ : les contextes sont "médecin" (gauche) et "le" (droite). Les paires générées sont ("soigne","médecin") et ("soigne","le"), qui serviront à entraîner $\mathbb{P}(W_T = \text{"soigne"} \mid W_C)$.
+
+### Question 22
+
+Vrai ou Faux : Dans GloVe, le terme $b_i$ (biais associé à $w_i$) dans la formule $v_i^\top v_k + b_i + b_k - \log\,\text{card}\{(w_k,w_i)\}$ provient du fait que $\log\,\text{card}\{(w_i)\}$ ne dépend pas de $w_k$.
+
+- [x] Vrai
+- [ ] Faux
+
+> ✅ Réponse :
+> Oui. On développe : $v_i^\top v_k = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}$. Le terme $\log\,\text{card}\{(w_i)\}$ est constant pour un $w_i$ fixé, indépendamment de $w_k$ : il constitue donc un **biais** $b_i$ absorbé dans les paramètres du modèle.
+
+### Question 23
+
+Quel modèle est le mieux adapté pour traiter des mots rares ou des néologismes (mots hors vocabulaire, Out-of-Vocabulary) ?
+
+- [ ] Word2Vec CBoW
+- [ ] Word2Vec Skip-gram
+- [ ] GloVe
+- [x] FastText, qui décompose les mots en sous-mots (subwords) et peut représenter tout mot jamais vu à l'entraînement
+
+> 💡 Explication :
+> FastText (Bojanowski et al., 2016) enrichit les vecteurs de mots avec des informations sur les n-grammes de caractères. Pour un mot inconnu, son vecteur est construit à partir de ses sous-composantes, permettant une généralisation aux mots hors vocabulaire.
+
+```
+

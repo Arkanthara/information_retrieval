@@ -1,0 +1,84 @@
+---
+title: "Synthèse — Chapitre 5 : Indexation"
+---
+
+## Pourquoi indexer ?
+
+- **Problème** : recherche naïve coûte $O(M \times N)$ à chaque requête
+- **Solution** : prétraiter pour créer une structure d'index
+- **Trade-off** : temps/espace de construction contre vitesse de requête
+
+## Concepts clés
+
+Un **index** organise l'accès aux données selon :
+- Les **propriétés des données** (dimension, type)
+- Les **modes d'accès** anticipés (requête textuelle, proximité, etc.)
+
+Opérations fondamentales : **insert, delete, search**
+
+## Fichiers Inversés (RI textuelle)
+
+**Principe** : pour chaque terme, stocker la liste des documents le contenant.
+
+**Structure** : Dictionnaire + Fichier de postings
+
+**Gain** :
+- Naïf : $O(M \cdot N)$
+- Avec index : $O(|\hat{q}| \times |\text{postings moyens}|)$ (très réduit car $|\hat{q}| \ll M$)
+
+**Usage** : moteurs textuels (Google, Elasticsearch, Lucene, etc.)
+
+## Recherche de Voisins Proches
+
+### Contexte
+
+Avec embeddings dans $\mathbb{R}^D$, trouver rapidement les points proches d'une requête.
+
+### Types de requêtes
+
+- **Range query** : points dans rayon $\epsilon$
+- **kNN query** : $k$ points les plus proches
+
+### Structures principales
+
+| Technique | Idée | Complexité | Limitation |
+|----------|------|-----------|-----------|
+| **k-d trees** | Partitionner alternant dimensions | $O(\log N)$ | Dimension élevée |
+| **L-AESA** | Pivots + inégalité triangulaire | Petit $\|P\|$ | Stockage $O(N \cdot \|P\|)$ |
+
+## Recherche Approximée (ANNS)
+
+**Motivation** : en haute dimension, ANNS beaucoup plus rapide que exact NN.
+
+**Formulation** : trouver points dans intervalle $[d_k, (1+\varepsilon)d_k]$ où $d_k = $ distance au $k$-ième vrai voisin.
+
+### Approches majeures
+
+| Approche | Principe |
+|----------|----------|
+| **Permutation-based** | Encoder chaque point comme permutation de pivots |
+| **LSH** | Similarité → collision probable; dissimilarité → collision rare |
+| **Learning to Hash** | Apprendre hacheurs adaptés aux données |
+| **HNSW** | Graphe hiérarchique avec navigation gloutonne |
+
+**Billion-scale** : FAISS (Product Quantization), DiskANN, SPANN pour des milliards de points.
+
+## Maximum Inner Product Search (MIPS)
+
+**Lien avec NN** :
+- Pour vecteurs **normalisés** : minimiser distance euclidienne = maximiser produit scalaire
+- Pour non-normalisés : nécessite transformation
+
+**Usage** : systèmes de recommandation, neural IR, matching biparti.
+
+## Défis et perspectives
+
+:::{.callout-note}
+**Problèmes ouverts** :
+- Malédiction de la dimension
+- Dynamique (insertion/suppression efficace)
+- Vecteurs non-métriques
+- Parallélisation/distribution
+
+**Tendances** : index appris (ML), hachage neuronal, hardware-aware.
+:::

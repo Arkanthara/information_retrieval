@@ -1,84 +1,263 @@
 ---
-title: "Synthèse — Chapitre 5 : Indexation"
+title: "Indexation en Recherche d'Information — Révision"
 ---
 
 ## Pourquoi indexer ?
 
-- **Problème** : recherche naïve coûte $O(M \times N)$ à chaque requête
-- **Solution** : prétraiter pour créer une structure d'index
-- **Trade-off** : temps/espace de construction contre vitesse de requête
+| Problème | Solution |
+|---|---|
+| RSV à calculer pour **tous** les documents | Prétraitement hors-ligne |
+| Complexité O(N × M) naïve | Index → accès ciblé |
+| Similarité calculable seulement au moment de la requête | Structure anticipée sur les données |
 
-## Concepts clés
+**Compromis fondamental :** temps de requête ↓ contre temps d'indexation + espace ↑
 
-Un **index** organise l'accès aux données selon :
-- Les **propriétés des données** (dimension, type)
-- Les **modes d'accès** anticipés (requête textuelle, proximité, etc.)
+> ⚠️ Pas de structure dans les données = pas d'indexation efficace
 
-Opérations fondamentales : **insert, delete, search**
+---
 
-## Fichiers Inversés (RI textuelle)
+## Opérations d'un index (ADT)
 
-**Principe** : pour chaque terme, stocker la liste des documents le contenant.
+- `insert / add` — insertion
+- `remove / delete` — suppression
+- `search / find` — recherche
 
-**Structure** : Dictionnaire + Fichier de postings
+**Recherche indexée** vs **recherche exhaustive** O(N)
 
-**Gain** :
-- Naïf : $O(M \cdot N)$
-- Avec index : $O(|\hat{q}| \times |\text{postings moyens}|)$ (très réduit car $|\hat{q}| \ll M$)
+---
 
-**Usage** : moteurs textuels (Google, Elasticsearch, Lucene, etc.)
+## Fichiers Inversés (Inverted Files)
 
-## Recherche de Voisins Proches
+### Observation clé
 
-### Contexte
+$$w_{ij} \cdot w_{iq} \neq 0 \iff w_{ij} \neq 0 \text{ ET } w_{iq} \neq 0$$
 
-Avec embeddings dans $\mathbb{R}^D$, trouver rapidement les points proches d'une requête.
+→ Remplacer $\sum_{i=1}^{M} w_{ij}w_{iq}$ par $\sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij}w_{iq}$
+
+### Complexité
+
+| Approche | Complexité |
+|---|---|
+| Naïve | O(M × N) |
+| Fichier inversé | O(\|𝕀_q\|) |
+
+### Structure
+
+- **Dictionnaire** (*Dictionary*) : terme → IDF, fréquence totale
+- **Postings** : terme → liste de (doc\_id, fréquence)
+
+### Construction (pipeline)
+
+Extraction → Tri → Compactage → Factorisation → Compression
+
+---
+
+## Recherche Plus Proche Voisin (Nearest Neighbor Search)
 
 ### Types de requêtes
 
-- **Range query** : points dans rayon $\epsilon$
-- **kNN query** : $k$ points les plus proches
+| Type | Description |
+|---|---|
+| Range query (ε-query) | Tous les voisins à distance ≤ ε |
+| k-NN query | Les k voisins les plus proches |
 
-### Structures principales
+> Supposent un **espace métrique** (Ω, d)
 
-| Technique | Idée | Complexité | Limitation |
-|----------|------|-----------|-----------|
-| **k-d trees** | Partitionner alternant dimensions | $O(\log N)$ | Dimension élevée |
-| **L-AESA** | Pivots + inégalité triangulaire | Petit $\|P\|$ | Stockage $O(N \cdot \|P\|)$ |
+### Principe des index spatiaux
 
-## Recherche Approximée (ANNS)
+- **Hors-ligne** : partitionner l'espace en cellules (*buckets*)
+- **En ligne** : identifier la cellule de la requête → candidats
 
-**Motivation** : en haute dimension, ANNS beaucoup plus rapide que exact NN.
+---
 
-**Formulation** : trouver points dans intervalle $[d_k, (1+\varepsilon)d_k]$ où $d_k = $ distance au $k$-ième vrai voisin.
+## k-d-Trees
 
-### Approches majeures
+**Principe :** alterner les dimensions, diviser par la médiane récursivement
 
-| Approche | Principe |
-|----------|----------|
-| **Permutation-based** | Encoder chaque point comme permutation de pivots |
-| **LSH** | Similarité → collision probable; dissimilarité → collision rare |
-| **Learning to Hash** | Apprendre hacheurs adaptés aux données |
-| **HNSW** | Graphe hiérarchique avec navigation gloutonne |
+| Stratégie | Critère de coupure |
+|---|---|
+| Basée sur les données | Médiane des points |
+| Basée sur les coordonnées | Moyenne de l'espace |
 
-**Billion-scale** : FAISS (Product Quantization), DiskANN, SPANN pour des milliards de points.
+**Recherche :** descendre l'arbre → inégalité triangulaire pour éliminer des branches
 
-## Maximum Inner Product Search (MIPS)
+**Profondeur** : O(log_b N)
 
-**Lien avec NN** :
-- Pour vecteurs **normalisés** : minimiser distance euclidienne = maximiser produit scalaire
-- Pour non-normalisés : nécessite transformation
+### ⚠️ Limitations
 
-**Usage** : systèmes de recommandation, neural IR, matching biparti.
+- Partitionnement "guillotine" peu flexible
+- Dimensions alternées aléatoirement → heuristiques nécessaires
+- **Malédiction de la dimensionnalité** → efficacité s'effondre en haute dimension
 
-## Défis et perspectives
+---
 
-:::{.callout-note}
-**Problèmes ouverts** :
-- Malédiction de la dimension
-- Dynamique (insertion/suppression efficace)
-- Vecteurs non-métriques
-- Parallélisation/distribution
+## Indexation par Pivots (Pivot-based Indexing)
 
-**Tendances** : index appris (ML), hachage neuronal, hardware-aware.
-:::
+**Règle d'exclusion euclidienne (inégalité triangulaire) :**
+
+$$d(\mathbf{q}, \mathbf{x}) \geq \underbrace{|d(\mathbf{p}, \mathbf{x})}_{\text{hors-ligne}} - \underbrace{d(\mathbf{p}, \mathbf{q})|}_{\text{en ligne}}$$
+
+| Phase | Action |
+|---|---|
+| Hors-ligne | Stocker $d(p, x)$ pour tout $x \in \mathcal{X}$, $p \in \mathcal{P}$ |
+| En ligne | Calculer $d(p, q)$ → borne inférieure → exclure candidats |
+
+> ⚠️ Choix des pivots $\mathcal{P}$ = clé de l'efficacité
+
+---
+
+## AESA / L-AESA
+
+**AESA** : pivots construits dynamiquement (*branch-and-bound*)
+
+$$d(\mathbf{q}, x_i) \geq \max_{\mathbf{p} \in \mathcal{P}} |d(\mathbf{p}, x_i) - d(\mathbf{p}, \mathbf{q})|$$
+
+| Propriété | Valeur |
+|---|---|
+| Calculs de distance | Minimum optimal |
+| Stockage | O(N²) ← **impraticable** |
+
+**L-AESA** : réduit le stockage à O(N × \|P\|) avec ensemble fixe de pivots
+
+---
+
+## Recherche Approximative (ANNS)
+
+**Pourquoi ?** Concentration des distances en haute dimension → exacte impossible
+
+**Définition formelle :** pour $\varepsilon > 0$ et $d_k$ distance au $k$-ième voisin :
+
+- Inclure tout $x_i$ tel que $d(x_i, q) \leq d_k$
+- Exclure tout $x_i$ tel que $d(x_i, q) > (1+\varepsilon)d_k$
+
+**Stratégie générale :** définir $\tilde{d}$ contractive : $\tilde{d}(x_1, x_2) \leq d(x_1, x_2)$
+
+---
+
+## Indexation par Permutations (Permutation-based Indexing)
+
+**Principe :** encoder chaque $x_i$ par l'ordre dans lequel il "voit" les pivots
+
+**Distance de Spearman Rho :**
+
+$$\tilde{d}(\mathbf{q}, x_i) = \rho(\sigma_q, \sigma_i) = \sum_{j=1}^{|\mathcal{P}|} (\sigma_q[j] - \sigma_i[j])^2$$
+
+| Phase | Action |
+|---|---|
+| Hors-ligne | $\sigma_i$ = ordre des pivots par distance depuis $x_i$ |
+| En ligne | $\sigma_q$ = idem pour $q$ → comparer via $\rho$ |
+
+**Accélération :** fichiers inversés sur les pivots → ne considérer que données avec $N_P$ pivots proches en commun
+
+---
+
+## Hachage Sensible à la Localité (LSH)
+
+**Principes :**
+
+- Similaires → même bucket avec haute probabilité $p_{\text{high}}$
+- Dissimilaires → collision avec faible probabilité $p_{\text{low}}$
+
+**Définition :** $h$ est LSH si :
+
+$$d(x_i, x_j) \leq \tau_{\text{low}} \Rightarrow \mathbb{P}(h(x_i) = h(x_j)) > p_{\text{high}}$$
+
+$$d(x_i, x_j) \geq \tau_{\text{high}} \Rightarrow \mathbb{P}(h(x_i) = h(x_j)) < p_{\text{low}}$$
+
+| Méthode | Base |
+|---|---|
+| SimHash | Projections aléatoires gaussiennes |
+| MinHash | Similarité de Jaccard |
+| Near-optimal hashing | Distance euclidienne haute dim. |
+
+**Learning to Hash (L2H)** : apprendre $h$ depuis les données (auto-encodeur binaire)
+
+---
+
+## HNSW (Hierarchical Navigable Small Worlds)
+
+**État de l'art** pour l'ANNS — Malkov & Yashunin (2016)
+
+| Phase | Mécanisme |
+|---|---|
+| Hors-ligne | Graphe hiérarchique : couches longues (navigation) + courtes (raffinement) |
+| En ligne | Descente greedy : se déplacer vers le voisin qui rapproche de $q$ |
+
+> ⚠️ Minimum local → risque → plusieurs redémarrages aléatoires
+
+---
+
+## Recherche à l'Échelle du Milliard
+
+**Problème :** graphe sur $10^9$ nœuds → mémoire et calcul prohibitifs
+
+**Solutions :**
+
+| Méthode | Principe | Librairie |
+|---|---|---|
+| Product Quantization | Quantification par sous-espaces | FAISS (Meta) |
+| DiskANN | Graphe stocké sur disque | DiskANN |
+| SPANN | Fichiers inversés | — |
+
+**Clé :** représentations courtes (*binary hash*) pour réduire l'empreinte mémoire
+
+---
+
+## MIPS (Maximum Inner Product Search)
+
+**Définition :**
+
+$$x^* = \underset{x_i \in \mathcal{X}}{\arg\max} \langle x_i, q \rangle$$
+
+**Lien avec NNS :**
+
+$$d(x_i, q)^2 = \|x_i\|^2 + \|q\|^2 - 2\langle x_i, q \rangle$$
+
+$$\underset{x_i}{\arg\min} \ d(x_i, q) \equiv \underset{x_i}{\arg\max} \ \langle x_i, q \rangle \quad \text{si vecteurs normalisés}$$
+
+> ⚠️ Sans normalisation : MIPS ≠ NNS → problème distinct
+
+**Solution :** bibliothèque **ScaNN** (Google)
+
+---
+
+## Tableau comparatif des méthodes
+
+| Méthode | Type | Complexité requête | Mémoire | Exact ? |
+|---|---|---|---|---|
+| Exhaustive | — | O(N) | O(N) | ✓ |
+| Fichier inversé | Textuel | O(\|𝕀_q\|) | O(N×M sparse) | ✓ |
+| k-d-Tree | Spatial | O(log N) basse dim. | O(N) | ✓ |
+| AESA | Pivot | Optimal (distances) | O(N²) | ✓ |
+| PBI | Permutation | < O(N) | O(N×\|P\|) | ✗ |
+| LSH | Hachage | O(1) bucket | O(N) | ✗ |
+| HNSW | Graphe | O(log N) | O(N×k) | ✗ |
+
+---
+
+## Pièges & Points Critiques
+
+- ⚠️ **Malédiction de la dimensionnalité** : toutes les méthodes exactes dégénèrent en haute dimension
+- ⚠️ **AESA** : optimal en distances calculées mais O(N²) mémoire → impraticable
+- ⚠️ **k-d-Tree** : efficace seulement en **faible** dimension (D ≤ ~20)
+- ⚠️ **LSH** : plusieurs fonctions nécessaires pour augmenter $p_{\text{high}}$
+- ⚠️ **MIPS ≠ NNS** sauf si vecteurs normalisés
+- ⚠️ **HNSW** : peut rester bloqué dans un minimum local → redémarrages
+
+---
+
+## Relations entre concepts
+
+```{mermaid}
+graph TD
+    A[Recherche Exacte NNS] -->|haute dimension| B[Malédiction dimensionnalité]
+    B --> C[ANNS]
+    C --> D[Permutations PBI]
+    C --> E[LSH]
+    C --> F[HNSW]
+    C --> G[Billion-scale: FAISS / DiskANN / SPANN]
+    A --> H[k-d-Tree]
+    A --> I[AESA / Pivots]
+    J[Fichier Inversé] -->|texte| K[RSV O-Iq]
+    F -->|état de l'art| G
+```

@@ -32,30 +32,40 @@ website:
                 href: ch1.qmd
               - text: "Synthèse"
                 href: ch1r.qmd
+              - text: "Quiz"
+                href: ch1q.qmd
           - section: "Embeddings"
             contents:
               - text: "Détails"
                 href: ch2.qmd
               - text: "Synthèse"
                 href: ch2r.qmd
+              - text: "Quiz"
+                href: ch2q.qmd
           - section: "Embeddings Neuronaux"
             contents:
               - text: "Détails"
                 href: ch3.qmd
               - text: "Synthèse"
                 href: ch3r.qmd
+              - text: "Quiz"
+                href: ch3q.qmd
           - section: "Indexation"
             contents:
               - text: "Détails"
                 href: ch5.qmd
               - text: "Synthèse"
                 href: ch5r.qmd
+              - text: "Quiz"
+                href: ch5q.qmd
           - section: "Évaluation"
             contents:
               - text: "Détails"
                 href: ch6.qmd
               - text: "Synthèse"
                 href: ch6r.qmd
+              - text: "Quiz"
+                href: ch6q.qmd
       - section: "Examen"
         contents:
           - section: "chapitre 1"
@@ -69,10 +79,6 @@ format:
       light: ../latte.scss
     toc: true
     embed-resources: true
-  # pdf:
-  #   toc: true
-  # docx:
-  #   toc: true
 
 filters:
-  - diagram
+  - quizdown

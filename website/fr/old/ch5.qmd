@@ -1,0 +1,401 @@
+---
+title: "Chapitre 5 — Indexation en Recherche d'Information"
+---
+
+## 1. Motivation
+
+### Problème
+
+La recherche d'information s'applique à **de grands volumes de données**. Le moteur de recherche doit calculer (ou estimer) les scores de pertinence (RSV) pour tous les documents face à une requête.
+
+- **Sans optimisation** : calcul coûteux $O(M \times N)$ à chaque requête
+- **Coût computationnel** : impossible à grande échelle en temps réel
+
+### Solution : l'indexation
+
+L'**indexation** propose une stratégie de **prétraitement** pour accélérer l'accès aux données au moment de la requête :
+
+- **Offline** : construire une structure d'index organisée
+- **Online** : utiliser l'index pour accélérer la recherche
+- **Trade-off** : temps d'indexation + espace mémoire vs gain en vitesse
+
+```{.cetz}
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Sans index
+  rect((0, 4), (rel: (3.5, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "no", radius: 0.15)
+  content((1.75, 4.75), [Sans index], anchor: "center")
+  
+  rect((0.5, 2.5), (rel: (3.5, 1)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "slow", radius: 0.1)
+  content((2.25, 3), [Recherche naïve O(N)], anchor: "center")
+
+  line("no", "slow", mark: (end: ">", fill: black))
+})
+```
+
+## 2. Qu'est-ce qu'un index ?
+
+### Définition
+
+Un **index** est une structure de données qui organise l'accès aux données selon les **propriétés des données** et les **modes d'accès anticipés**.
+
+### Opérations fondamentales
+
+Un index doit supporter :
+
+- **Insertion** : `insert`, `add`, `put`
+- **Suppression** : `remove`, `delete`
+- **Recherche** : `search`, `find`, `get`
+
+### Principe
+
+L'index **biaise l'organisation** pour accélérer certains accès (rendant les requêtes fréquentes rapides) possiblement au détriment d'autres (requêtes rares plus lentes).
+
+:::{.callout-important}
+## Principe fondamental
+L'efficacité d'un index dépend entièrement :
+- Des **propriétés des données** (dimension, distribution, métrique)
+- Du **type de requêtes** anticipées (recherche textuelle, proximité spatiale, etc.)
+:::
+
+### Exemple
+
+| Approche | Temps requête | Temps indexation | Espace |
+|----------|---|---|---|
+| **Naïve** | $O(N)$ | — | $O(N)$ |
+| **Index optimisé** | $O(\log N)$ ou moins | $O(N \log N)$ | $O(N + \text{overhead})$ |
+
+## 3. Fichiers Inversés
+
+### Contexte : Recherche textuelle
+
+Rappel du modèle Bag-of-Words :
+
+$$\text{RSV}(d_j, q) = \frac{\sum_{i=1}^{M} w_{ij} w_{iq}}{\sqrt{\sum_{i=1}^{M} w_{ij}^2} \sqrt{\sum_{i=1}^{M} w_{iq}^2}}$$
+
+où :
+- $w_{ij}$ : poids du terme $i$ dans le document $j$
+- $w_{iq}$ : poids du terme $i$ dans la requête $q$
+
+### Observation clé : Sparsité
+
+- Le produit $w_{ij} \cdot w_{iq} \neq 0$ **seulement si les deux poids sont non-nuls**
+- Donc : $\sum_{i=1}^{M} w_{ij} w_{iq}$ contient beaucoup de **zéros inutiles**
+
+**Idée** : au lieu de boucler sur tous les $M$ termes, boucler uniquement sur les termes présents dans **l'intersection** entre le document et la requête.
+
+### De la matrice au fichier inversé
+
+**Matrice terme-document** $W$ :
+- Lecture **par colonne** : tous les termes d'un document donné
+- Lecture **par ligne** : tous les documents contenant un terme donné
+
+**Fichier inversé (IF)** :
+- Pour chaque terme $i$, stocker la liste des documents le contenant
+- Structure : **Dictionnaire** + **Fichier de postings**
+
+```{.cetz}
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Matrice terme-document (à gauche)
+  rect((0, 2.5), (rel: (2.5, 2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"))
+  content((1.25, 3.75), [Matrice W], anchor: "center")
+  
+  // Fichier inversé (à droite) 
+  rect((3.5, 2.5), (rel: (3, 2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"))
+  content((5.5, 3.75), [Fichier inversé], anchor: "center")
+  content((5, 3.2), [t₁ → d₁, d₃], anchor: "center")
+  content((5, 2.8), [t₂ → d₂], anchor: "center")
+  
+  // Flèche
+  line((2.7, 3.5), (3.3, 3.5), mark: (end: ">", fill: black))
+  content((3, 3.8), [inversion], anchor: "center")
+})
+```
+
+### Algorithme avec fichier inversé
+
+**Phase offline (prétraitement)** :
+
+```
+Entrée : Matrice W, N documents, M termes
+Sortie : Dictionnaire + Fichier de postings
+
+pour chaque document j ∈ [[N]] :
+    Normaliser la colonne j de W
+```
+
+**Phase online (requête)** :
+
+```
+Entrée : Requête q, Index IF
+Sortie : Vecteur RSV[1..N]
+
+Normaliser la requête q
+RSV ← [0, ..., 0]
+
+pour chaque terme i ∈ q :
+    pour chaque document j ∈ Postings[i] :
+        RSV[j] ← RSV[j] + w_ij * w_iq
+```
+
+### Complexité
+
+| Approche | Complexité |
+|----------|-----------|
+| **Naïve** | $O(M \times N)$ |
+| **Fichier inversé** | $O(\|q\| \times \|\text{Postings moyens}\|)$ |
+
+**Gain** : au lieu de scanner tous les $M$ termes, on scanne uniquement les termes présents dans la requête (généralement très petit).
+
+:::{.callout-tip}
+Les fichiers inversés sont la fondation de tous les moteurs de recherche textuels modernes (Google, Elasticsearch, Lucene, etc.).
+:::
+
+## 4. Recherche de Voisins Proches (Nearest Neighbor)
+
+### Contexte : Au-delà du textuel
+
+Avec des **embeddings appris** (chapitres 2 et 3), les documents vivent dans un **espace vectoriel euclidien** $\mathbb{R}^D$.
+
+La question devient : **Trouver rapidement les points les plus proches d'une requête**.
+
+### Définitions
+
+**Espace métrique** $(\Omega, d)$ :
+- Ensemble de points $\Omega$
+- Distance $d : \Omega \times \Omega \to \mathbb{R}^+$ (satisfait les propriétés métriques)
+
+**Types de requêtes** :
+
+- **Range query** : tous les points $\hat{d}$ tels que $d(\hat{d}, q) \leq \epsilon$ (dans un rayon)
+- **kNN query** : les $k$ points les plus proches de $q$
+
+### Partitionnement spatial
+
+L'idée clé : **diviser l'espace en régions** (buckets, cellules) pour éliminer rapidement les zones non pertinentes.
+
+### 4.1 k-d-trees
+
+**k-d-tree** (k-dimensional tree) est une structure combinant partitionnement spatial et organisation arborescente.
+
+**Construction** (par alternance de dimension) :
+
+```
+Entrée : Ensemble X de points, profondeur d
+Sortie : k-d-tree
+
+si |X| ≤ 1 :
+    retourner feuille(X)
+
+dimension ← d mod k
+
+Trier X selon la dimension courante
+pivot ← médiane(X)
+
+gauche ← BuildKDTree(points ≤ pivot, d+1)
+droite ← BuildKDTree(points > pivot, d+1)
+
+retourner nœud(pivot, gauche, droite)
+```
+
+**Avantages** :
+- Structure équilibrée d'accès $O(\log N)$
+- Pas de coût de construction très élevé
+
+**Limitations** :
+- **Partitions "guillotine"** : les divisions alignées aux axes ne sont pas toujours optimales
+- **Malédiction de la dimension** : en haute dimension, les cellules deviennent volumineuses et peu discriminantes
+
+### 4.2 Indexation basée sur pivots (L-AESA)
+
+**Idée** : au lieu de partitionner l'espace, utiliser des **points de référence** (pivots) pour borner les distances.
+
+**Règle d'exclusion par inégalité triangulaire** :
+
+$$d(p, q) \geq |d(p, \text{pivot}) - d(q, \text{pivot})|$$
+
+Comment l'utiliser :
+- Pré-calculer (offline) les distances de tous les points aux pivots
+- À la requête, calculer la distance envers tous les pivots
+- Utiliser les bornes pour éliminer les points "trop loin"
+
+**Variant L-AESA** (Linear AESA) :
+
+| Aspect | AESA | L-AESA |
+|--------|------|--------|
+| **Stockage** | Matrice dense de toutes distances ($O(N^2)$) | Distances aux pivots uniquement ($O(N \cdot \|P\|)$) |
+| **Temps requête** | Très haut (branch-and-bound complexe) | Réduit (accès direct par pivots) |
+| **Mémoire** | Très coûteux | Raisonnable |
+
+## 5. Recherche Approximée de Voisins (ANNS)
+
+### Motivation
+
+En **haute dimension** (ex. $D > 100$), même les structures indexées (k-d, AESA) deviennent inefficaces.
+
+**Malédiction de la dimension** : le volume croit exponentiellement, les distances deviennent uniformes, les index ne discriminent plus.
+
+**Solution** : accepter une **légère approximation** pour gagner en vitesse.
+
+### Définition formelle
+
+Soit $d_k$ la distance au $k$-ième plus proche voisin exact. Un algorithme ANNS $(1+\varepsilon)$-approxime si :
+
+- Inclure tous les points avec $d \leq d_k$
+- Exclure (ou inclure approximativement) les points avec $d > (1+\varepsilon) d_k$
+
+**Gain** : vitesse dramatiquement améliorée, approximation contrôlée par $\varepsilon$.
+
+### 5.1 Indexation par permutations
+
+**Idée** : encoder chaque point comme une **permutation** de ses pivots, triés par distance.
+
+**Offline** :
+- Sélectionner $P$ pivots
+- Pour chaque point, créer sa permutation : le pivot le plus proche, puis le suivant, etc.
+
+**Online** :
+- Créer la permutation de la requête
+- Comparer avec les permutations des points via une **distance de permutation** (ex. Spearman rho)
+
+$$\rho(\pi, \theta) = \sum_{i=1}^{|P|} (\pi[i] - \theta[i])^2$$
+
+**Avantages** :
+- Très peu de calculs de distance réels
+- Accélération par fichiers inversés sur les pivots
+- Scalable
+
+**Limitations** :
+- Approximation plus ou moins bonne selon la qualité des pivots
+
+### 5.2 Locality-Sensitive Hashing (LSH)
+
+**Principes** :
+
+- Deux points distants de peu → grande probabilité de **collision** (même hash)
+- Deux points éloignés → faible probabilité de collision
+- Utiliser de nombreux hacheurs indépendants en parallèle
+
+**Exemple simple** :
+- Hash : $h(x) = \lfloor (x \cdot v + b) / w \rfloor$ pour vecteur $v$ aléatoire, offset $b$, largeur de bucket $w$
+- Document et requête similaires : collision probable → rapide
+- Documents dissimilaires : collision rare → peu examinés
+
+**Avantages** :
+- Probabiliste mais avec garanties
+- Très scalable
+- Pas de construction complexe
+
+**Variantes** : MinHash, SimHash, pour corpus spécifiques.
+
+### 5.3 Learning to Hash (L2H)
+
+Au lieu d'utiliser un hacheur prédéfini, **apprendre** les fonctions de hachage adaptées aux données et application :
+
+- Encoder par réseau de neurones → vecteur binaire
+- Minimiser la distance euclidienne tout en gardant les hashes proches
+- Combinaison perte de proximité + régularité binaire
+
+**Avantage** : meilleure adaptation au domaine applicatif.
+
+### 5.4 Stratégies basées sur graphes (HNSW)
+
+**HNSW** (Hierarchical Navigable Small World) :
+
+**Construction (offline)** :
+- Insérer les points progressivement dans le graphe
+- Chaque nouveau point se connecte aux $M$ plus proches voisins existants
+- Structure hiérarchique à plusieurs niveaux
+
+**Recherche (online)** :
+- Navigation gloutonne multi-étages
+- À chaque étage : trouver le meilleur candidat local vu
+- Descendre à l'étage suivant plus fin
+- Collecter les $k$ meilleurs trouvés
+
+**Avantages** :
+- Navigation gloutonne très rapide en pratique
+- Peu de calculs de distance
+- Scalable à des millions de points
+
+### 5.5 Billion-Scale : Passage à très grande échelle
+
+**Défis** à un milliard de points :
+- Les graphes occupent beaucoup de mémoire (même avec $M$ petit)
+- Même un hacheur demande du calcul de distance
+- Besoin de **compression** et **distribution**
+
+**Solutions majeures** :
+
+| Approche | Idée | Avantage |
+|----------|------|---------|
+| **Product Quantization (FAISS)** | Quantifier chaque document en codes courts | Compression drastique |
+| **DiskANN** | Gérer les données à partir du disque | Millions/milliards de points |
+| **SPANN** | Combiner quantification + hacheurs | Efficacité mémoire et temps |
+
+## 6. Maximum Inner Product Search (MIPS)
+
+### Motivation
+
+Certains modèles retournent un **score de produit scalaire** au lieu de distance euclidienne :
+
+$$\text{score}(d, q) = \langle d, q \rangle$$
+
+**Question** : comment utiliser les index de NNS pour MIPS ?
+
+### Lien mathématique
+
+Pour vecteurs **normalisés** $\|d\| = \|q\| = 1$ :
+
+$$d(d, q)^2 = \langle d, d \rangle + \langle q, q \rangle - 2\langle d, q \rangle = 2 - 2\langle d, q \rangle$$
+
+Donc minimiser la distance euclidienne $\Leftrightarrow$ maximiser le produit scalaire.
+
+**Pour vecteurs non-normalisés** :
+
+$$\arg \min_d d(d, q) \quad \text{≠} \quad \arg \max_d \langle d, q \rangle$$
+
+**Solution** : transformation de l'espace pour réduire MIPS à un problème NNS.
+
+### Applications
+
+- Systèmes de recommandation (score par embedding)
+- Neural information retrieval (transformers)
+- Matching biparti à grande échelle
+
+:::{.callout-note}
+Bibliothèques comme **SCANN** (Google) implémentent MIPS directement pour une efficacité maximale.
+:::
+
+## 7. Limites et perspectives
+
+### Défis ouverts
+
+1. **Haute dimension** : malédiction de la dimension irréductible
+2. **Vecteurs non-métrique** : que faire si $d$ ne satisfait pas les propriétés métriques ?
+3. **Dynamique** : insertion/suppression efficace sans reconstruction
+4. **Distribution** : paralléliser l'indexation et la recherche
+
+### Tendances
+
+- **Index appris** : ML pour apprendre les structures optimales
+- **Hachage neuronal** : combiner embeddings et compression
+- **Hardware-aware** : exploiter GPU/TPU pour les calculs de distance
+
+:::{.callout-important}
+## Récapitulatif
+L'indexation transforme la recherche de $O(N)$ naïf en $O(k \log N)$ ou mieux. L'ANNS en haute dimension reste un problème actif, avec des approches prometteuses (graphes, LSH, quantification) mais sans solution universelle.
+:::
+
+## 8. Lectures complémentaires
+
+- Fichiers inversés : bases de données, moteurs de recherche
+- k-d trees : Bentley (1975)
+- AESA : Burkhard & Keller (1973)
+- HNSW : Malkov & Yashunin (2016)
+- LSH : Indyk & Motwani (1998)
+- MIPS : Bachrach et al. (2014), SCANN: Google
+- Quantification : Jégou, Douze, Schmid (2011)

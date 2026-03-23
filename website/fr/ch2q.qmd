@@ -1,0 +1,275 @@
+---
+title: "Représentation de l'information : Embeddings — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+---
+
+# 🟢 Niveau 1 — Fondamentaux
+
+### Que signifie l'acronyme RSV en recherche d'information (Information Retrieval) ?
+
+- [ ] Random Selection Value
+- [x] Retrieval Status Value
+- [ ] Ranked Scoring Vector
+- [ ] Relevance Sampling Value
+
+> 💡 Explication :
+> Le RSV (Retrieval Status Value) est le score de pertinence attribué à chaque document par rapport à une requête. C'est sur la base de ce score que les documents sont ordonnés dans la liste de résultats.
+
+### Dans le modèle booléen (Boolean Model), sur quoi repose la représentation des termes ?
+
+- [ ] Fréquences d'apparition dans les documents
+- [ ] Probabilités de pertinence
+- [x] Encodage binaire 1-hot (1-hot encoding)
+- [ ] Décomposition en valeurs singulières
+
+> 💡 Explication :
+> Le modèle booléen utilise un encodage 1-hot : le terme $i$ est représenté par un vecteur $M$-dimensionnel avec un $1$ en position $i$ et des $0$ partout ailleurs. Les termes et documents se retrouvent ainsi sur les sommets d'un hypercube $[0,1]^M$.
+
+### Quelle est la valeur possible du RSV dans le modèle booléen (Boolean Model) ?
+
+- [ ] Un réel quelconque dans $\mathbb{R}$
+- [ ] Un réel dans $[0, 1]$
+- [x] Uniquement $0$ ou $1$
+- [ ] Un entier positif
+
+> 💡 Explication :
+> C'est la limite fondamentale du modèle booléen : la correspondance est binaire — un document correspond à la requête (RSV = 1) ou ne correspond pas (RSV = 0). Il n'y a aucun ordonnancement au sein des documents pertinents.
+
+### Quelle formule définit la fréquence des termes normalisée (Term Frequency) $\text{tf}_{ij}$ ?
+
+- [ ] $\text{tf}_{ij} = f_{ij} \cdot N$
+- [ ] $\text{tf}_{ij} = \log(f_{ij} + 1)$
+- [x] $\text{tf}_{ij} = \dfrac{f_{ij}}{\max_k f_{kj}}$
+- [ ] $\text{tf}_{ij} = \dfrac{f_{ij}}{N}$
+
+> 💡 Explication :
+> La TF normalisée divise la fréquence brute du terme $i$ dans le document $j$ par la fréquence du terme le plus fréquent dans ce même document. Cela garantit $\max_i \text{tf}_{ij} = 1$ et permet de comparer des documents de longueurs différentes.
+
+### Que mesure l'IDF (Inverse Document Frequency) ?
+
+- [ ] La fréquence d'un terme dans un document
+- [ ] La longueur moyenne des documents
+- [x] Le pouvoir discriminant d'un terme dans la collection
+- [ ] Le nombre total de requêtes traitées
+
+> 💡 Explication :
+> L'IDF est définie par $\text{idf}_i = \log(N / n_i)$. Elle mesure le pouvoir discriminant du terme $i$ : si le terme apparaît dans tous les documents ($n_i \approx N$), son IDF est proche de $0$ (non discriminant). Si le terme est rare ($n_i \ll N$), son IDF est élevé.
+
+### Un terme apparaît dans tous les $N$ documents de la collection. Quelle est la valeur approximative de son IDF ?
+
+- [ ] $\log(N)$
+- [ ] $1$
+- [x] Proche de $0$
+- [ ] $N$
+
+> 💡 Explication :
+> $\text{idf}_i = \log(N/n_i)$. Si $n_i = N$ alors $\text{idf}_i = \log(1) = 0$. Un terme présent dans tous les documents n'est pas discriminant et a un poids TF·IDF nul.
+
+### Vrai ou Faux : Dans le modèle Bag of Words (BoW), l'ordre des mots dans un document est pris en compte.
+
+- [ ] Vrai
+- [x] Faux
+
+> ❌ Faux :
+> Le modèle Bag of Words traite les termes comme des entités indépendantes et non ordonnées. La structure du document (ordre des mots, paragraphes, titre) est perdue. Seules les fréquences d'apparition sont conservées.
+
+### Quelle est la formule du poids TF·IDF du terme $i$ dans le document $j$ ?
+
+- [ ] $w_{ij} = \text{tf}_{ij} + \text{idf}_i$
+- [x] $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$
+- [ ] $w_{ij} = \dfrac{\text{tf}_{ij}}{\text{idf}_i}$
+- [ ] $w_{ij} = \text{tf}_{ij}^{\text{idf}_i}$
+
+> 💡 Explication :
+> Le poids TF·IDF est le produit de la fréquence normalisée ($\text{tf}_{ij}$) et du pouvoir discriminant ($\text{idf}_i$). Un terme fréquent dans le document ET rare dans la collection aura un poids élevé.
+
+# 🟡 Niveau 2 — Compréhension
+
+### Dans la matrice terme-document $W \in \mathbb{R}^{M \times N}$, comment est représenté le document $j$ ?
+
+- [ ] Par la ligne $j$ de $W$
+- [x] Par la colonne $j$ de $W$, soit $d_j = W_{\cdot j} \in \mathbb{R}^M$
+- [ ] Par la diagonale de $W$
+- [ ] Par le produit $W \cdot W^T$
+
+> 💡 Explication :
+> Le document $j$ est représenté par le vecteur colonne $d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{Mj}]^T \in \mathbb{R}^M$. Symétriquement, le terme $i$ est représenté par la transposée de la ligne $i$ : $t_i = W_{i\cdot}^T \in \mathbb{R}^N$.
+
+### Pourquoi la similarité cosinus (Cosine Similarity) est-elle préférée à la distance euclidienne en RI ?
+
+- [ ] Elle est plus rapide à calculer
+- [ ] Elle prend en compte la position des mots
+- [x] Elle est invariante à la norme (longueur) des vecteurs
+- [ ] Elle fonctionne uniquement avec des valeurs binaires
+
+> 💡 Explication :
+> La similarité cosinus mesure l'angle entre deux vecteurs, indépendamment de leur norme. Deux documents identiques mais l'un deux fois plus long obtiennent un cosinus de 1. La distance euclidienne pénaliserait injustement les documents plus longs.
+
+### Quelle est la formule de la similarité cosinus entre $d_j$ et $q$ ?
+
+- [ ] $\dfrac{\|d_j - q\|}{\|d_j\| + \|q\|}$
+- [x] $\dfrac{d_j^T q}{\|d_j\| \|q\|}$
+- [ ] $\dfrac{d_j^T q}{\|d_j\| + \|q\|}$
+- [ ] $d_j^T q$
+
+> 💡 Explication :
+> $\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) = \dfrac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \dfrac{\sum_i w_{ij} w_{iq}}{(\sum_i w_{ij}^2)^{1/2}(\sum_i w_{iq}^2)^{1/2}}$. Elle est comprise entre $-1$ et $1$ (en pratique entre $0$ et $1$ avec des poids positifs).
+
+### Quelle notion mathématique sous-tend la similarité cosinus en modèle vectoriel ?
+
+- [ ] La distance de Manhattan
+- [ ] La norme de Frobenius
+- [x] L'intersection ensembliste étendue aux embeddings continus
+- [ ] La décomposition en valeurs propres
+
+> 💡 Explication :
+> En représentation binaire, $\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}| = \sum_i w_{ij} w_{iq} = \langle d_j, q \rangle$. La similarité cosinus est une extension normalisée de cette intersection, permettant de comparer des documents de longueurs différentes.
+
+### Dans le modèle probabiliste, que représente la variable $R$ ?
+
+- [ ] Le rang du document dans la liste
+- [ ] Le nombre de documents retrouvés
+- [x] Une variable de Bernoulli indiquant si le document est pertinent
+- [ ] La requête reformulée
+
+> 💡 Explication :
+> $R$ est une variable aléatoire binaire (Bernoulli) : $R = \text{vrai}$ si le document est pertinent, $R = \text{faux}$ sinon. L'objectif est d'estimer $P(R = \text{vrai} \mid d_j, q)$ pour classer les documents par pertinence décroissante.
+
+### Vrai ou Faux : Dans le modèle BIR (Binary Independence Retrieval), les occurrences des termes sont supposées corrélées entre elles.
+
+- [ ] Vrai
+- [x] Faux
+
+> ❌ Faux :
+> Le nom "Independence" fait précisément référence à l'hypothèse d'**indépendance** des occurrences des termes dans les documents. C'est une hypothèse simplificatrice rarement vérifiée en pratique, mais qui permet de factoriser la probabilité du document.
+
+### Quel est le lien entre l'IDF et le modèle BIR à l'initialisation (sans feedback) ?
+
+- [ ] Il n'y a aucun lien
+- [ ] L'IDF remplace complètement le BIR
+- [x] À l'initialisation, le terme de log-odds du BIR est approximativement égal à l'IDF
+- [ ] L'IDF est la racine carrée du score BIR
+
+> 💡 Explication :
+> Sans feedback, $P(t_i | \bar{R}, q) = n_i/N$, donc $\log\frac{1 - P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} = \log\frac{N - n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. Le BIR se réduit ainsi à une pondération IDF à l'initialisation.
+
+### Parmi les éléments suivants, lesquels sont des paramètres de la formule BM25 ? (plusieurs réponses possibles)
+
+- [x] $k_1$ : paramètre de saturation de la TF
+- [x] $b$ : paramètre de normalisation par la longueur
+- [ ] $M$ : taille du vocabulaire
+- [x] $avdl$ : longueur moyenne des documents
+
+> 💡 Explication :
+> BM25 introduit $k_1$ (≈ 1.2) pour contrôler la saturation de la TF, $b$ (≈ 0.75) pour pondérer la normalisation par la longueur, et utilise $dl/avdl$ pour normaliser par rapport à la longueur moyenne. $M$ est une caractéristique de la collection, pas un paramètre de BM25.
+
+# 🔴 Niveau 3 — Maîtrise
+
+### Pourquoi le modèle TF·IDF (BoW) échoue-t-il face à la synonymie (Synonymy) ?
+
+- [ ] Parce qu'il ne calcule pas les fréquences correctement
+- [ ] Parce que l'IDF est toujours nul pour les synonymes
+- [x] Parce que deux termes synonymes ont des vecteurs orthogonaux dans l'espace TF·IDF
+- [ ] Parce que la matrice W ne peut pas contenir de synonymes
+
+> 💡 Explication :
+> Dans l'espace TF·IDF, chaque terme occupe une dimension distincte. Deux termes synonymes (ex. « voiture » et « automobile ») ont des vecteurs orthogonaux ($\langle t_i, t_j \rangle = 0$), alors qu'ils devraient être proches. Un document contenant « automobile » ne sera pas retrouvé par une requête sur « voiture ».
+
+### Quelle est la propriété fondamentale de la SVD tronquée (Truncated SVD) de rang $K$ ?
+
+- [ ] Elle maximise la trace de la matrice
+- [x] Elle fournit la meilleure approximation de rang $K$ au sens de la norme de Frobenius
+- [ ] Elle diagonalise la matrice terme-document
+- [ ] Elle minimise le nombre de valeurs singulières non nulles
+
+> 💡 Explication :
+> $W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rank}(A) = K} \|W - A\|_F^2$. C'est la propriété fondamentale de la SVD tronquée, qui justifie son utilisation pour la compression et la réduction de dimension dans la LSI.
+
+### Dans la LSI (Latent Semantic Indexing), comment est projeté un document $d_j$ dans l'espace des concepts ?
+
+- [ ] $\tilde{d}_j = U_K d_j$
+- [ ] $\tilde{d}_j = V_K^T d_j$
+- [x] $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$
+- [ ] $\tilde{d}_j = U_K \Sigma_K d_j$
+
+> 💡 Explication :
+> La projection LSI est $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$. On applique d'abord $U_K^T$ pour projeter dans l'espace des vecteurs singuliers gauches, puis $\Sigma_K^{-1}$ pour normaliser par l'importance de chaque concept.
+
+### Un ingénieur déploie un système de RI avec un modèle TF·IDF. Les utilisateurs se plaignent que rechercher « voiture » ne retrouve pas les documents parlant d' « automobile ». Quelle solution technique est la plus appropriée ?
+
+- [ ] Augmenter la valeur de $k_1$ dans BM25
+- [ ] Réduire la taille du vocabulaire $M$
+- [x] Appliquer la LSI pour projeter dans un espace de concepts latents
+- [ ] Utiliser un modèle booléen avec l'opérateur OR
+
+> 💡 Explication :
+> La LSI résout précisément le problème de synonymie en créant un espace de concepts latents où des termes sémantiquement proches se retrouvent dans des directions similaires. Un modèle booléen avec OR fonctionnerait pour des synonymes connus, mais n'est pas une solution générale et scalable.
+
+### Cas pratique — Quelle est la différence principale entre la stratégie de mise à jour exacte (Exact Update) et le repliement (Fold-in) dans la LSI ?
+
+- [ ] Le fold-in recalcule toute la SVD, l'exacte non
+- [x] L'exacte enrichit l'espace conceptuel, le fold-in projette uniquement dans l'espace existant
+- [ ] Les deux méthodes sont équivalentes en qualité
+- [ ] Le fold-in utilise $V_K$ tandis que l'exacte utilise $U_K$
+
+> 💡 Explication :
+> Dans le fold-in, les nouveaux documents sont projetés sur la base existante ($\hat{D} = U_K^T D$) sans modifier l'espace des concepts. C'est une approximation rapide mais les nouveaux concepts éventuellement apportés par les nouveaux documents sont ignorés. La mise à jour exacte recalcule partiellement la SVD pour incorporer ces nouveaux concepts.
+
+### Dans la géométrie TF·IDF, quel est le rôle exact du facteur $\text{idf}_i$ sur la représentation des documents ?
+
+- [ ] Il normalise le vecteur document à norme 1
+- [x] Il échelonne (scale) la dimension $i$ de l'espace, transformant la base canonique $e_i$ en base discriminante $\tau_i = \text{idf}_i \cdot e_i$
+- [ ] Il remplace la fréquence brute par une fréquence logarithmique
+- [ ] Il projette le document dans un espace de dimension inférieure
+
+> 💡 Explication :
+> Le document $j$ s'écrit $d_j = \sum_i \text{tf}_{ij} \cdot \tau_i$ avec $\tau_i = \text{idf}_i \cdot e_i$. L'IDF est commun à tous les documents et transforme la base canonique en une base pondérée par le pouvoir discriminant de chaque terme. La TF est la vraie coordonnée du document dans cette base.
+
+### Parmi ces affirmations sur le Principe de Classement par Probabilité (Probability Ranking Principle, Robertson 1977), laquelle est correcte ?
+
+- [ ] Il recommande de trier les documents par ordre alphabétique
+- [ ] Il garantit que tous les documents pertinents sont retrouvés
+- [x] Il stipule que classer les documents par probabilité décroissante d'utilité donne l'efficacité optimale
+- [ ] Il s'applique uniquement aux modèles booléens
+
+> 💡 Explication :
+> Robertson (1977) énonce que si le système classe les documents par ordre décroissant de probabilité d'utilité $P(R \mid d_j, q)$, estimée aussi précisément que possible, alors l'efficacité globale sera optimale sur la base des données disponibles. Ce principe fonde toute l'approche probabiliste en RI.
+
+### Vrai ou Faux : Dans la LSI, choisir $K = M$ (conserver toutes les valeurs singulières) résout les problèmes de synonymie.
+
+- [ ] Vrai
+- [x] Faux
+
+> ❌ Faux :
+> Si $K = \min(M, N)$, la SVD tronquée devient la SVD complète et $W_K = W$ : on retrouve exactement l'espace TF·IDF original avec tous ses problèmes (synonymie, polysémie). La réduction de dimension ($K \ll M$) est précisément ce qui force le modèle à généraliser et à regrouper les termes sémantiquement proches.
+
+### Cas pratique — Un système de RI retourne trop peu ou trop de documents selon la formulation exacte de la requête. Quel modèle est en cause et quelle est son alternative directe ?
+
+- [ ] LSI — alternative : BM25
+- [x] Modèle booléen — alternative : modèle vectoriel avec similarité cosinus
+- [ ] BM25 — alternative : TF·IDF standard
+- [ ] Modèle vectoriel — alternative : modèle booléen
+
+> 💡 Explication :
+> C'est la limite classique du modèle booléen : une requête trop restrictive retourne rien, trop permissive retourne tout, sans nuance. Le modèle vectoriel avec similarité cosinus produit un continuum de RSV $\in [0,1]$, permettant un classement fin des documents indépendamment de la formulation exacte.
+
+### Parmi les propositions suivantes, lesquelles sont des avantages de la LSI par rapport au TF·IDF standard ? (plusieurs réponses possibles)
+
+- [x] Gestion de la synonymie (Synonymy)
+- [x] Décorrélation des dimensions de l'espace de représentation
+- [ ] Calcul plus rapide que la TF·IDF
+- [x] Regroupement des termes sémantiquement proches dans l'espace des concepts
+
+> 💡 Explication :
+> La LSI corrige les deux faiblesses majeures du TF·IDF : la synonymie (termes différents, même sens → proches dans l'espace LSI) et la polysémie partielle via la décorrélation. Elle est en revanche plus coûteuse en calcul (SVD) que le TF·IDF standard.
+
+```

@@ -1,0 +1,454 @@
+---
+title: "Chapitre 2 — Embeddings"
+---
+
+## 1. Motivation
+
+Les documents se présentent sous forme de listes de mots (termes). Il faut :
+
+- Définir un **vocabulaire** de termes pertinents
+- **Représenter** les termes ou documents sous une forme exploitable par la machine (vecteur, distribution, …)
+
+```{.cetz}
+// Diagramme : Pipeline d'un système de RI
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Documents bruts
+  rect((0, 0), (rel: (2.5, 1.2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "raw", radius: 0.15)
+  content((1.25, 0.6), [Documents \ bruts], anchor: "center")
+
+  // Embedding
+  rect((4, 0), (rel: (2.5, 1.2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
+  content((5.25, 0.6), [Embedding \ (features)], anchor: "center")
+
+  // Comparaison
+  rect((8, 0), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "comp", radius: 0.15)
+  content((9.25, 0.6), [Comparaison \ (RSV)], anchor: "center")
+
+  // Résultat
+  rect((12, 0), (rel: (2.5, 1.2)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "res", radius: 0.15)
+  content((13.25, 0.6), [Liste \ classée], anchor: "center")
+
+  line("raw", "emb", mark: (end: ">", fill: black))
+  line("emb", "comp", mark: (end: ">", fill: black))
+  line("comp", "res", mark: (end: ">", fill: black))
+
+  // Requête
+  rect((8, 2.5), (rel: (2.5, 1)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "q", radius: 0.15)
+  content((9.25, 3.0), [Requête *q*], anchor: "center")
+  line("q", "comp", mark: (end: ">", fill: black))
+})
+```
+
+## 2. Formalisme
+
+### Notation
+
+| Symbole | Signification |
+|---------|---------------|
+| $N$ | Nombre de documents dans la collection |
+| $M$ | Taille du vocabulaire (nombre de termes) |
+| $d_j$ | Représentation du $j$-ème document |
+| $t_i$ | Représentation du $i$-ème terme |
+| $\mathbb{1}_j \subseteq [[M]]$ | Ensemble des indices des termes contenus dans le document $j$ |
+| $q$ | La requête |
+| $\text{RSV}(d_j, q)$ | **Retrieval Status Value** — pertinence du document $j$ par rapport à $q$ |
+
+Le classement des documents par RSV décroissant fournit la **liste ordonnée** de résultats.
+
+## 3. Modèle Booléen
+
+### Principe
+
+- Encodage **1-hot** (binaire) du vocabulaire et de la collection
+- Le terme $i$ est représenté par $t_i = [\delta_{ik}]_{k=1}^M$ (vecteur M-dimensionnel)
+- Le document $j$ est la disjonction : $d_j = \vee_{i \in \mathbb{1}_j} t_i$
+
+$\Rightarrow$ Termes et documents se trouvent aux **coins de l'hypercube** $[0,1]^M$
+
+### Requête
+
+La requête $q$ est une expression logique (AND, OR, NOT) traduite en composantes conjonctives, puis comparée à chaque document.
+
+### Exemple
+
+- $M = 3$ termes : A ($t_1 = 100$), B ($t_2 = 010$), C ($t_3 = 001$)
+- Requête : $q = A \wedge (B \vee \neg C)$
+- Décomposition conjonctive :
+
+$$q = (A \wedge B \wedge C) \vee (A \wedge B \wedge \neg C) \vee (A \wedge \neg B \wedge \neg C) = \underbrace{111}_{q_1} \vee \underbrace{110}_{q_2} \vee \underbrace{100}_{q_3}$$
+
+$$\text{RSV}(d_j, q) = \vee_k (d_j \stackrel{?}{=} q_k) \in \{0, 1\}$$
+
+### Bilan du modèle booléen
+
+| Avantages | Inconvénients |
+|-----------|---------------|
+| Simple et direct | Requêtes complexes difficiles à exprimer |
+| Formalisme clair (type SQL) | Match binaire → sensible à l'expression |
+| | Pas d'ordonnancement au sein des résultats |
+| | Probablement peu scalable |
+
+:::{.callout-warning}
+## Limitations
+Le modèle booléen produit $\text{RSV} \in \{0, 1\}$. On a besoin d'un **continuum de pertinence** : $\text{RSV}(d_j, q) \in [0, 1]$ et d'un formalisme de requête souple → **Query-by-Example (QbE)**.
+:::
+
+## 4. Modèle Bag of Words (BoW)
+
+### Principe
+
+- Les termes sont des parties de documents formant le vocabulaire
+- Les termes sont considérés comme des entités **indépendantes** et **non ordonnées**
+- Les termes apparaissent avec des multiplicités (fréquences) → **sac** plutôt qu'ensemble
+
+:::{.callout-note}
+La structure du document est perdue (paragraphes, titres, …). Le modèle BoW s'applique à plusieurs médias (texte, images, …) : les termes doivent être vus comme des entités génériques.
+:::
+
+### 4.1 Fréquence de terme (TF)
+
+Hypothèse : plus un mot apparaît dans un document, plus il le représente.
+
+$$f_{ij} = \text{nombre d'occurrences du terme } i \text{ dans le document } j$$
+
+$$\text{tf}_{ij} \stackrel{\text{def}}{=} \frac{f_{ij}}{\max_k f_{kj}} \quad \Rightarrow \quad \max_i \text{tf}_{ij} = 1$$
+
+### 4.2 Fréquence inverse de document (IDF)
+
+Tenir compte du **pouvoir discriminant** du terme $i$ dans la collection :
+
+$$\text{idf}_i \stackrel{\text{def}}{=} \log \frac{n_i^{-1}}{N} = \log\frac{N}{n_i}$$
+
+où $n_i$ = nombre de documents contenant le terme $i$.
+
+$\Rightarrow$ Un terme présent dans **tous** les documents ($n_i \approx N$) n'est **pas discriminant** ($\text{idf}_i \approx 0$).
+
+### 4.3 Schéma de pondération TF·IDF
+
+Le poids du terme $i$ dans le document $j$ :
+
+$$\boxed{w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i}$$
+
+La **matrice terme-document** $W \in \mathbb{R}^{M \times N}$ :
+
+$$W = \begin{pmatrix} w_{11} & \cdots & w_{1N} \\ \vdots & w_{ij} & \vdots \\ w_{M1} & \cdots & w_{MN} \end{pmatrix}$$
+
+Le document $j$ est représenté comme le vecteur $\mathbb{R}^M$ (colonne de $W$) :
+
+$$d_j = W_{\cdot j} = [w_{1j}, \dots, w_{ij}, \dots, w_{Mj}]^T$$
+
+Le terme $i$ est aussi un embedding (ligne de $W$) : $t_i = (W_{i\cdot})^T = [w_{i1}, \dots, w_{iN}]^T$
+
+```{.cetz}
+// Diagramme : Construction de l'embedding TF·IDF
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Terme
+  rect((0, 3), (rel: (2.5, 1)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "tf", radius: 0.15)
+  content((1.25, 3.5), [TF ($"tf"_(i j)$)], anchor: "center")
+
+  // IDF
+  rect((0, 1), (rel: (2.5, 1)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "idf", radius: 0.15)
+  content((1.25, 1.5), [IDF ($"idf"_i$)], anchor: "center")
+
+  // Multiplication
+  circle((5, 2.5), radius: 0.5, fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "mul")
+  content((5, 2.5), [×], anchor: "center")
+
+  // Poids
+  rect((7.5, 2), (rel: (2.5, 1)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "w", radius: 0.15)
+  content((8.75, 2.5), [$w_(i j)$], anchor: "center")
+
+  // Matrice
+  rect((11.5, 1.5), (rel: (3, 2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "W", radius: 0.15)
+  content((13, 2.5), [Matrice $W$ \ ($M times N$)], anchor: "center")
+
+  line("tf", "mul", mark: (end: ">", fill: black))
+  line("idf", "mul", mark: (end: ">", fill: black))
+  line("mul", "w", mark: (end: ">", fill: black))
+  line("w", "W", mark: (end: ">", fill: black))
+})
+```
+
+### 4.4 Géométrie de l'embedding TF·IDF
+
+Le document $j$ dans $\mathbb{R}^M$ :
+
+$$d_j = \sum_i w_{ij} e_i = \sum_i (\text{tf}_{ij} \cdot \text{idf}_i) e_i = \sum_i \text{tf}_{ij} \underbrace{\tau_i}_{\text{idf}_i \cdot e_i}$$
+
+- $\text{idf}_i$ **échelonne** la dimension $i$ ($e_i$) en $\tau_i$ selon le pouvoir discriminant du terme
+- $\text{tf}_{ij}$ est la **vraie coordonnée** $i$ du document $j$ dans cette base discriminante
+
+## 5. Modèles de recherche de base
+
+### 5.1 Recherche par espace vectoriel (Vector Space Retrieval)
+
+#### Principe
+
+- Les documents sont projetés en vecteurs $d_j \in \mathbb{R}^M$ via TF·IDF
+- Une requête est traitée comme un **document exemple** (QbE) : $q \in \mathbb{R}^M$
+- Le RSV se calcule par similarité entre représentations
+
+#### Similarité : du binaire au continu
+
+L'idée de base est l'**intersection ensembliste** :
+
+$$\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}|$$
+
+En version algébrique avec embedding binaire : $\text{RSV}(d_j, q) = \langle d_j, q \rangle$
+
+#### Mesures de similarité
+
+| Mesure | Formule continue | Formule binaire |
+|--------|-----------------|-----------------|
+| **Matching** | $\langle d_j, q \rangle$ | $\|\hat{d}_j \cap \hat{q}\|$ |
+| **Cosinus** | $\frac{\langle d_j, q \rangle}{\|d_j\|\|q\|}$ | $\frac{\|\hat{d}_j \cap \hat{q}\|}{\|\hat{d}_j\|^{1/2}\|\hat{q}\|^{1/2}}$ |
+| **Dice** | $\frac{2 \langle d_j, q \rangle}{\sum(w_{ij}+w_{iq})}$ | $\frac{2\|\hat{d}_j \cap \hat{q}\|}{\|\hat{d}_j\|+\|\hat{q}\|}$ |
+| **Overlap** | $\frac{\langle d_j, q \rangle}{\min(\sum w_{ij}, \sum w_{iq})}$ | $\frac{\|\hat{d}_j \cap \hat{q}\|}{\min(\|\hat{d}_j\|,\|\hat{q}\|)}$ |
+| **Jaccard** | $\approx\frac{\langle d_j, q \rangle}{\sum \max(w_{ij}, w_{iq})}$ | $\frac{\|\hat{d}_j \cap \hat{q}\|}{\|\hat{d}_j \cup \hat{q}\|}$ |
+
+#### Similarité cosinus (la plus populaire)
+
+$$\boxed{\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) = \frac{d_j^T q}{\|d_j\| \|q\|} = \frac{\sum_i w_{ij} w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2} \left(\sum_i w_{iq}^2\right)^{1/2}}}$$
+
+```{.cetz}
+// Diagramme : Similarité cosinus dans l'espace vectoriel
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Axes
+  line((0, 0), (5, 0), mark: (end: ">", fill: black))
+  line((0, 0), (0, 4), mark: (end: ">", fill: black))
+  content((5.3, -0.2), [$t_1$], anchor: "center")
+  content((-0.3, 4.2), [$t_2$], anchor: "center")
+
+  // Document d_j
+  line((0, 0), (4, 2.5), stroke: rgb("#89b4fa") + 2pt, mark: (end: ">", fill: rgb("#89b4fa")))
+  content((4.3, 2.8), [$d_j$], anchor: "center")
+
+  // Requête q
+  line((0, 0), (2, 3.5), stroke: rgb("#f38ba8") + 2pt, mark: (end: ">", fill: rgb("#f38ba8")))
+  content((2.3, 3.8), [$q$], anchor: "center")
+
+  // Angle theta
+  arc((0, 0), start: 32deg, stop: 60deg, radius: 1.2, stroke: rgb("#a6e3a1") + 1.5pt)
+  content((1.2, 1.5), [$theta$], anchor: "center")
+})
+```
+
+### 5.2 Recherche probabiliste
+
+#### Principe de classement probabiliste (PRP)
+
+> *Si un système de recherche classe les documents par probabilité décroissante d'utilité pour l'utilisateur, alors l'efficacité globale sera la meilleure possible.* — S. E. Robertson, 1977
+
+**Tâche** : Estimer l'utilité des documents et les présenter par ordre décroissant.
+
+$\Rightarrow$ Utilité = probabilité de pertinence : $P(R = \text{vrai} | d_j, q)$
+
+#### Décision bayésienne — Odds Ratio
+
+Pour éviter de normaliser et définir un seuil absolu, on utilise le **rapport de cotes** (*odds ratio*) :
+
+$$O(R | d_j, q) = \frac{P(R | d_j, q)}{P(\bar{R} | d_j, q)}$$
+
+Par le théorème de Bayes :
+
+$$O(R | d_j, q) = \frac{P(d_j | R, q) P(R | q)}{P(d_j | \bar{R}, q) P(\bar{R} | q)} \propto \frac{P(d_j | R, q)}{P(d_j | \bar{R}, q)}$$
+
+(car $P(R|q)$ est constant pour tous les documents)
+
+#### Régression logistique pour la RI
+
+Si on suppose $\log O(R | d_j, q) = w^T d_j + w_0$ (log-linéaire), alors :
+
+$$P(R | d_j, q) = \sigma_\theta(d_j) = \frac{1}{1 + e^{-(w^T d_j + w_0)}} \quad \text{avec } \theta = [w, w_0]$$
+
+**Apprentissage** par descente de gradient : $w_{t+1} = w_t - \eta \nabla_\theta \mathcal{L}(D, Q; \theta)$
+
+| Avantages | Inconvénients |
+|-----------|---------------|
+| Modèle de pertinence absolu | Le choix de l'embedding est critique |
+| Entraînement en ligne via feedback | Lent si entraînement au moment de la requête |
+
+#### Modèle BIR (Binary Independence Retrieval)
+
+**Hypothèses** :
+
+- Occurrence des termes **binaire**
+- Occurrences des termes **indépendantes** dans le document
+
+$$P(d_j | R, q) = \prod_{i \in \mathbb{1}_j} P(t_i | R, q) \prod_{i \notin \mathbb{1}_j} (1 - P(t_i | R, q))$$
+
+Le rapport de cotes devient :
+
+$$O(R | d_j, q) \propto \prod_{i \in \mathbb{1}_j} \frac{P(t_i | R, q)}{P(t_i | \bar{R}, q)} \cdot \prod_{i \notin \mathbb{1}_j} \frac{1 - P(t_i | R, q)}{1 - P(t_i | \bar{R}, q)}$$
+
+En passant au log et en ignorant les termes absents de la requête ($P(t_i|R,q) = P(t_i|\bar{R},q)$ pour $i \notin \mathbb{1}_q$) :
+
+$$\text{RSV}(d_j, q) \propto \sum_{i \in [[M]]} w_{ij} w_{iq} \left[\log \frac{P(t_i|R,q)}{1 - P(t_i|R,q)} + \log \frac{1 - P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)}\right]$$
+
+#### Estimation BIR
+
+Avec $r$ documents de pseudo-feedback et $n_i$ documents contenant le terme $i$ :
+
+**Au démarrage** ($\tilde{R} = \emptyset$) :
+
+$$P(t_i | R, q) = \rho \text{ (constante)}, \quad P(t_i | \bar{R}, q) = \frac{n_i}{N}$$
+
+$$\log \frac{1 - P(t_i | \bar{R}, q)}{P(t_i | \bar{R}, q)} = \log \frac{N - n_i}{n_i} \approx \log \frac{N}{n_i} = \text{idf}_i$$
+
+**En cours de recherche** (avec pseudo-feedback) :
+
+$$P(t_i | R, q) = \frac{r_i}{r}, \quad P(t_i | \bar{R}, q) = \frac{n_i - r_i}{N - r}$$
+
+$\Rightarrow$ Itérer jusqu'à convergence.
+
+#### BM25 (Okapi)
+
+Le modèle BIR de base a évolué vers le modèle **RSJ** (Robertson-Spark-Jones) puis la formule **BM25 (Okapi)**, qui incorpore la longueur du document et un ajustement des fréquences.
+
+```{.cetz}
+// Diagramme : Hiérarchie des modèles probabilistes
+#cetz.canvas({
+  import cetz.draw: *
+
+  rect((3, 4.5), (rel: (4, 1)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "prp", radius: 0.15)
+  content((5, 5), [*PRP* (Principe)], anchor: "center")
+
+  rect((0.5, 2.5), (rel: (3.5, 1)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "log", radius: 0.15)
+  content((2.25, 3), [Rég. Logistique], anchor: "center")
+
+  rect((6, 2.5), (rel: (3.5, 1)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "bir", radius: 0.15)
+  content((7.75, 3), [BIR], anchor: "center")
+
+  rect((5, 0.5), (rel: (3, 1)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "rsj", radius: 0.15)
+  content((6.5, 1), [RSJ], anchor: "center")
+
+  rect((9, 0.5), (rel: (3, 1)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "bm25", radius: 0.15)
+  content((10.5, 1), [*BM25/Okapi*], anchor: "center")
+
+  line("prp", "log", mark: (end: ">", fill: black))
+  line("prp", "bir", mark: (end: ">", fill: black))
+  line("bir", "rsj", mark: (end: ">", fill: black))
+  line("rsj", "bm25", mark: (end: ">", fill: black))
+})
+```
+
+## 6. Indexation Sémantique Latente (LSI)
+
+### 6.1 Motivation
+
+Le TF·IDF (BoW) présente des faiblesses liées au texte :
+
+- **Synonymie** : si le terme $a$ peut remplacer $b$, alors $t_a$ et $t_b$ devraient être similaires (ex. « voiture », « automobile »)
+- **Polysémie** : si un terme a des sens différents, il devrait être séparé (ex. « table »)
+
+$\Rightarrow$ Un terme $i$ est une **composition de concepts** :
+
+$$t_i = \sum_{k=1}^{K} \alpha_{ki} c_k \quad \text{où } \{c_k\}_{k=1}^K \text{ est une base de concepts : } \langle c_k, c_l \rangle = \delta_{kl}$$
+
+### 6.2 Rappel : SVD tronquée
+
+Pour $W \in \mathbb{R}^{M \times N}$, il existe $U \in \mathbb{R}^{M \times M}$, $V \in \mathbb{R}^{N \times N}$ orthogonales et $\Sigma$ diagonale :
+
+$$W = U \Sigma V^T$$
+
+En tronquant à rang $K \leq \min(M, N)$ :
+
+$$W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rang}(A)=K} \|W - A\|_F^2$$
+
+```{.cetz}
+// Diagramme : Décomposition SVD tronquée
+#cetz.canvas({
+  import cetz.draw: *
+
+  // W
+  rect((0, 1), (rel: (2, 3)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "W", radius: 0.1)
+  content((1, 2.5), [$W$ \ $M times N$], anchor: "center")
+
+  content((2.8, 2.5), [=], anchor: "center")
+
+  // U_K
+  rect((3.5, 1), (rel: (1.2, 3)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "U", radius: 0.1)
+  content((4.1, 2.5), [$U_K$ \ $M times K$], anchor: "center")
+
+  // Sigma_K
+  rect((5.2, 1.8), (rel: (1.5, 1.5)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "S", radius: 0.1)
+  content((5.95, 2.55), [$Sigma_K$ \ $K times K$], anchor: "center")
+
+  // V_K^T
+  rect((7.2, 2), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "V", radius: 0.1)
+  content((8.45, 2.6), [$V_K^T$ \ $K times N$], anchor: "center")
+})
+```
+
+### 6.3 Application à l'embedding de termes
+
+On cherche un embedding K-dimensionnel $\tilde{W} \in \mathbb{R}^{M \times K}$ tel que la **matrice de corrélation des termes** soit diagonale :
+
+$$\tilde{W}\tilde{W}^T = \text{Id}_M$$
+
+Avec $W_K = U_K \Sigma_K V_K^T$ on obtient $\Sigma_K^{-1} U_K^T W_K W_K^T U_K \Sigma_K^{-1} = \text{Id}_K$
+
+$\Rightarrow$ La projection $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$ mappe les embeddings TF·IDF dans l'**espace des concepts** où les termes sont décorrélés.
+
+### 6.4 Requêtes dans l'espace LSI
+
+- La requête $q$ est d'abord représentée en TF·IDF
+- Puis projetée : $\tilde{q} = \Sigma_K^{-1} U_K^T q$
+- Recherche par similarité cosinus classique :
+
+$$\text{RSV}(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\| \|\tilde{q}\|}$$
+
+### 6.5 Mise à jour de l'index
+
+#### Stratégie exacte
+
+Pour ajouter $n$ nouveaux documents à la représentation de rang $K$ :
+
+1. Générer $D$ comme la représentation de base des nouvelles données
+2. Projeter : $P = U_K^T D$ et calculer le reste : $H = D - U_K P$
+3. Définir $B$ base orthonormale de $H$, $J = B^T H$
+4. Former $Q = \begin{pmatrix} \Sigma_K & P \\ 0 & J \end{pmatrix}$ et appliquer la SVD sur $Q$
+
+#### Stratégie fold-in (approximation)
+
+1. Générer $D$ comme la représentation de base
+2. Projeter : $\hat{D} = U_K^T D$
+3. Concaténer : $[W_K \quad D_K] \approx U_K \Sigma_K [V_K \quad \hat{D}]^T$
+
+## 7. Résumé
+
+| Modèle | Type | Entité | Similarité |
+|--------|------|--------|------------|
+| Booléen | Contenu | Terme | Opérateurs logiques |
+| TF·IDF | Contenu | Document | Cosinus |
+| BIR | Contenu | Terme ($P(t_i\|R,q)$) | Produit (i.i.d.) |
+| LSI | Contenu | Document | Cosinus |
+
+:::{.callout-tip}
+## Points clés
+- La **pertinence** par rapport à une requête est essentielle en RI
+- TF·IDF est essentiellement un schéma d'**embedding de documents**
+- La similarité cosinus est une extension de l'**intersection ensembliste**
+- Les modèles **probabilistes** estiment la pertinence des termes
+- **LSI** décorrèle l'embedding TF·IDF et découvre des facteurs latents linéaires (concepts)
+- Les équivalents **non linéaires** existent (réseaux de neurones)
+:::
+
+## 8. Questions types
+
+- Qu'est-ce que le Retrieval Status Value ?
+- Pourquoi le modèle booléen n'est-il pas flexible ?
+- Qu'est-ce que la fréquence de terme ? La fréquence inverse de document ?
+- Quelle est la structure d'un modèle probabiliste ?
+- Comment utiliser la régression logistique en RI ?
+- Pourquoi le nom « Binary Independence Retrieval » ?
+- Qu'est-ce que le rapport de cotes (*odds ratio*) ?
+- Qu'est-ce qu'un concept dans le modèle LSI ?
+- En quel sens le modèle LSI décorrèle-t-il les features ?
+- Qu'est-ce que la stratégie fold-in ?

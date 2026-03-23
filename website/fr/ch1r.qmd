@@ -1,69 +1,194 @@
 ---
-title: "Synthèse — Chapitre 1 : Introduction"
+title: "Recherche d'Information : Introduction — Révision"
 ---
 
-## Contexte
+## Contexte : explosion des données
 
-- Production de données ≈ **zettaoctets/an** ($2^{70}$ octets)
-- Monde numérique, connecté, en évolution rapide
+| Année | Volume mondial |
+|-------|---------------|
+| 2010 | 2 zettaoctets |
+| 2018 | 33 zettaoctets |
+| 2025 | ~181 zettaoctets |
 
-## Besoin fondamental
+- **Zettaoctet** (zetabyte) = $2^{70}$ octets = 1 milliard de téraoctets
+- Croissance **exponentielle**, pas linéaire
+- Causes : smartphones, réseaux sociaux, IoT, streaming, numérisation
 
-:::{.callout-important}
-## Objectif de la RI
-**Faire émerger automatiquement l'information pertinente** d'une grande collection de documents via une requête souple.
-:::
+> ⚠️ YouTube : 30h/min uploadées (2012) → 500h/min (2024) = ×15 en 10 ans
 
-## Structurer les données brutes
+---
 
-| Élément | Rôle |
-|---------|------|
-| **Représentation** | Embedding des documents dans $\mathbb{R}^D$ |
-| **Distance** | Mesure de similarité entre documents |
-| **Analyse** | Mining, Learning, Visualisation |
+## Usages en ligne (2012)
 
-## Distance : concept central
+| Activité | Part du temps |
+|----------|--------------|
+| Réseaux sociaux (Social Networking) | 22 % |
+| Recherches (Searches) | 21 % |
+| Lecture de contenu (Reading Content) | 20 % |
+| E-mails / Communication | 19 % |
+| Multimédia | 13 % |
+| Achats en ligne | 5 % |
 
-```{.cetz}
-// Rôle de la distance
-#cetz.canvas({
-  import cetz.draw: *
+> 💡 **41 %** du temps en ligne = recherche + lecture → IR est central
 
-  circle((3, 2.5), radius: 0.9, fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "d")
-  content((3, 2.5), [*Distance*], anchor: "center")
+---
 
-  rect((-0.5, 0), (rel: (2, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "m", radius: 0.1)
-  content((0.5, 0.4), [Mining], anchor: "center")
+## Besoins utilisateurs
 
-  rect((2, 0), (rel: (2, 0.8)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "l", radius: 0.1)
-  content((3, 0.4), [Learning], anchor: "center")
+- **Prise de décision** (Decision Making) → nécessite information pertinente
+- **Avalanche informationnelle** (Information Avalanche) → surcharge cognitive
+- **Accès aux grands dépôts** (Large Repositories) → fondement de la Data Science
 
-  rect((4.5, 0), (rel: (2, 0.8)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "v", radius: 0.1)
-  content((5.5, 0.4), [Visualisation], anchor: "center")
+### Pipeline de gestion de l'information
 
-  line("d", "m", mark: (end: ">", fill: black))
-  line("d", "l", mark: (end: ">", fill: black))
-  line("d", "v", mark: (end: ">", fill: black))
-})
+```
+Documents bruts → Extraction de caractéristiques → Caractéristiques
+→ Mapping approprié → Espace de représentation
+→ Interaction utilisateur → Décision
 ```
 
-## Médias concernés
+### Trois axes pour structurer les données brutes
 
-Texte · Images · Audio/Vidéo · Web · Tout objet avec un **embedding**
+- **Représentation** (Document Representation) : vecteur de features par document
+- **Similarité** (Similarity Measurement) : comparer deux documents
+- **Analyse** (Analysis) : mining, learning, visualisation
 
-## Contenu du cours (vue d'ensemble)
+---
 
-1. **Embeddings** : TF·IDF, probabiliste, LSI, neuronaux
-2. **Indexation** : recherche rapide
-3. **Évaluation** de la RI
-4. **RI Sociale** & Recommandation
-5. **Spécificité des médias** : texte, image, audio
-6. **Visualisation** : réduction de dimension
+## Exemples de représentation par type de média
 
-## Dates clés
+| Média | Feature extraction | Représentation |
+|-------|--------------------|----------------|
+| Texte (Text) | Fréquences de mots | Vecteur TF, nuage de mots |
+| Image | Histogramme de couleurs (RGB) | Espace visuel 3D |
+| Audio | Descripteurs spectraux (MFCC) | Vecteur temporel |
+| Vidéo | Frames + audio | Multi-modal |
+| Web | Liens, métadonnées | Graphe hypertexte |
 
-- **1950** : terme « Information Retrieval » (Moors)
-- **1966** : mesures d'évaluation (Cranfield)
-- **1968** : système SMART (Salton)
-- **1994** : explosion du Web
-- **Aujourd'hui** : embeddings par ML
+> 💡 Tout objet auquel on peut associer un **embedding** est traitable par l'IR
+
+---
+
+## La distance en IR
+
+### Définition
+
+> **Distance / Similarité** = formalisation mathématique de la ressemblance entre deux documents
+
+### Trois rôles de la distance
+
+| Rôle | Ce qu'elle mesure |
+|------|-------------------|
+| Caractériser un document | Résumé numérique (features) |
+| Comparer deux documents | Similarité / patterns |
+| Caractériser un modèle | Structure globale du corpus |
+
+### Applications
+
+- **Mining non supervisé** : clustering, détection d'anomalies, imputation
+- **Apprentissage supervisé** (Supervised Learning) : classification (k-NN), régression, ranking
+- **Visualisation** : réduction de dimension (t-SNE, UMAP, PCA)
+
+> ⚠️ Le choix de la mesure de distance est **critique** : une mauvaise mesure = mauvais résultats même avec une bonne représentation
+
+---
+
+## Définition de l'IR
+
+> **Information Retrieval (IR)** = faire émerger **automatiquement** l'information **pertinente** depuis une **grande collection de documents** via une **requête souple**
+
+### Mots-clés de la définition
+
+- **Automatiquement** → sans intervention humaine par requête
+- **Pertinente** → relative au besoin, pas aux seuls mots-clés
+- **Grande collection** → passage à l'échelle (scalability)
+- **Requête souple** (Loose Query) → langage naturel, pas formel
+
+---
+
+## Histoire de l'IR — Chronologie
+
+| Année | Événement |
+|-------|-----------|
+| 1950 | Moors → terme *Information Retrieval* |
+| 1959 | Luhn → récupération **statistique** |
+| 1960 | Maron & Kuhns → modèle **probabiliste** |
+| 1966 | Projet Cranfield → mesures d'**évaluation** (précision, rappel) |
+| 1968 | Salton → système **SMART**, modèle vectoriel |
+| 1972 | DIALOG → premier service commercial en ligne |
+| ~1990 | IR sur PC, révolution du stockage |
+| 1992 | Westlaw → IR probabiliste à grande échelle |
+| 1994 | Explosion d'**Internet** |
+| 1995 | IR **omniprésent** (bouton Search) |
+| Aujourd'hui | **Embeddings** neuronaux (BERT, GPT...) |
+
+---
+
+## Contenu du cours — Vue d'ensemble
+
+### Embeddings (Plongements vectoriels)
+
+| Type | Méthodes |
+|------|----------|
+| **Creux** (Sparse) | TF·IDF, Vector Space Model, LSI |
+| **Probabiliste** | BM25, Language Models |
+| **Denses** (Dense) | Word2Vec, BERT, Sentence-BERT |
+| **Ranking** | Learning to Rank (pointwise / pairwise / listwise) |
+
+### Autres modules
+
+- **Indexation** (Indexing) → index inversé, scalabilité
+- **Évaluation** → Précision, Rappel, F-mesure, NDCG, MAP
+- **IR Social** → Web IR, Recommandation, Analyse de réseaux
+- **Spécificité médias** → Texte, Image (CBIR), Audio
+- **Visualisation** → Manifold learning, t-SNE, UMAP
+
+---
+
+## Mesures d'évaluation — Aide-mémoire
+
+| Mesure | Formule / Définition |
+|--------|----------------------|
+| Précision (Precision) | Docs pertinents retournés / Docs retournés |
+| Rappel (Recall) | Docs pertinents retournés / Docs pertinents totaux |
+| F-mesure (F-Measure) | Moyenne harmonique Précision + Rappel |
+| MAP | Précision moyenne sur plusieurs requêtes |
+| NDCG | Gain cumulé tenant compte de la **position** |
+
+---
+
+## Relations clés entre concepts
+
+```
+Besoin informationnel (Information Need)
+        ↓
+   Requête (Query)
+        ↓
+Système IR [Collection indexée]
+        ↓
+Documents classés par pertinence (Ranked Results)
+        ↓
+   Utilisateur → Feedback → Système IR
+```
+
+---
+
+## Points critiques / Pièges
+
+- ⚠️ Volume ≠ Information : plus de données ne signifie pas mieux informé
+- ⚠️ Représentation et distance sont **co-dépendantes** : changer l'une change l'autre
+- ⚠️ La pertinence est **relative à l'utilisateur**, pas absolue
+- ⚠️ Les embeddings denses capturent la **sémantique** ; les creux capturent les **termes exacts**
+- 💡 L'évaluation rigoureuse (Cranfield, 1966) est indispensable pour comparer les systèmes
+
+---
+
+## Références clés
+
+| Auteurs | Ouvrage | Note |
+|---------|---------|------|
+| Manning, Raghavan, Schütze | *Introduction to IR* (2009) | Référence classique, libre |
+| Baeza-Yates, Ribeiro-Neto | *Modern IR* (2011) | Théorie + pratique |
+| Croft, Metzler, Strohman | *Search Engines* (2015) | Pratique, libre |
+| Mitra, Craswell | *Neural IR* (2018) | Approches neuronales |
+| Jurafsky, Martin | *Speech & Language Processing* (2026) | NLP, libre |

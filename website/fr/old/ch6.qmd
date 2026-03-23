@@ -1,0 +1,262 @@
+---
+title: "Chapitre 6 — Évaluation en Recherche d'Information"
+---
+
+## 1. Pourquoi évaluer un système de RI ?
+
+L’évaluation est indispensable pour :
+
+- comparer plusieurs systèmes et identifier le meilleur pour une tâche donnée ;
+- évaluer des composants spécifiques (modèle, ranking, interaction, etc.) ;
+- comprendre les limites et orienter les progrès de recherche ;
+- valider la pertinence sur des tâches réalistes.
+
+La RI vise à satisfaire un besoin d’information, mais aussi à répondre à des tâches connexes (filtrage, gestion de données, etc.).
+
+## 2. Que faut-il évaluer ?
+
+Selon la tâche :
+
+- **Question Answering** : la réponse est-elle correcte et utile ?
+- **Data Management** : le système aide-t-il à organiser et retrouver les données ?
+- **Data Retrieval** : récupère-t-on tous les documents pertinents, et uniquement ceux-là ?
+
+Pour la RI orientée contenu, on évalue principalement :
+
+- la validité du modèle,
+- la qualité du classement,
+- l’utilité pour l’utilisateur.
+
+## 3. Outils d’évaluation
+
+### 3.1 Ground truth
+
+La base d’évaluation repose sur :
+
+- un ensemble de requêtes,
+- des jugements de pertinence (souvent multi-annotateurs),
+- les listes classées produites par le système.
+
+À partir de ces éléments, on récupère les rangs des documents pertinents et non pertinents.
+
+### 3.2 Matrice de confusion
+
+On définit les quatre cas classiques :
+
+- **TP** : pertinent et récupéré,
+- **FP** : non pertinent mais récupéré,
+- **FN** : pertinent mais non récupéré,
+- **TN** : non pertinent et non récupéré.
+
+```{.cetz}
+// Matrice de confusion pour la RI
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Grille 2x2
+  rect((0, 0), (rel: (6, 4)), stroke: black)
+  line((3, 0), (3, 4), stroke: black)
+  line((0, 2), (6, 2), stroke: black)
+
+  // En-têtes
+  content((1.5, 4.4), [Récupéré], anchor: "center")
+  content((4.5, 4.4), [Non récupéré], anchor: "center")
+  content((-1.2, 3), [Pertinent], anchor: "center")
+  content((-1.2, 1), [Non pertinent], anchor: "center")
+
+  // Cases
+  rect((0, 2), (rel: (3, 2)), fill: rgb("#a6e3a1"), stroke: black)
+  rect((3, 2), (rel: (3, 2)), fill: rgb("#f9e2af"), stroke: black)
+  rect((0, 0), (rel: (3, 2)), fill: rgb("#f38ba8"), stroke: black)
+  rect((3, 0), (rel: (3, 2)), fill: rgb("#89b4fa"), stroke: black)
+
+  content((1.5, 3), [TP], anchor: "center")
+  content((4.5, 3), [FN], anchor: "center")
+  content((1.5, 1), [FP], anchor: "center")
+  content((4.5, 1), [TN], anchor: "center")
+})
+```
+
+## 4. Mesures fondamentales : Precision et Recall
+
+### 4.1 Recall
+
+Capacité à retrouver tous les documents pertinents :
+
+$$R = \frac{TP}{TP + FN}$$
+
+### 4.2 Precision
+
+Capacité à ne récupérer que des documents pertinents :
+
+$$P = \frac{TP}{TP + FP}$$
+
+Les deux sont dans $[0,1]$ et doivent être analysées conjointement.
+
+### 4.3 Interprétation
+
+- **Precision élevée** : forte densité de documents pertinents dans la liste retournée.
+- **Recall élevé** : une grande proportion des pertinents a été retrouvée.
+
+```{.cetz}
+// Trade-off Precision / Recall
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Axes
+  line((0, 0), (7, 0), mark: (end: ">", fill: black))
+  line((0, 0), (0, 5), mark: (end: ">", fill: black))
+  content((7.4, -0.1), [Recall], anchor: "center")
+  content((-0.3, 5.2), [Precision], anchor: "center")
+
+  // Courbe idéale (haut droite)
+  line((0.1, 4.8), (5.8, 4.8), stroke: rgb("#a6e3a1") + 1.5pt)
+  line((5.8, 4.8), (5.8, 0.2), stroke: rgb("#a6e3a1") + 1.5pt)
+  content((5.1, 5.2), [Idéal], anchor: "center")
+
+  // Courbe réaliste
+  line((0.4, 4.2), (1.6, 3.9), (2.7, 3.3), (3.9, 2.6), (5.1, 1.8), (6.1, 1.2), stroke: rgb("#f38ba8") + 1.5pt)
+  content((4.8, 2.4), [Réel], anchor: "center")
+})
+```
+
+## 5. Courbe Precision-Recall
+
+Une seule valeur de P ou R est insuffisante. On trace donc la courbe **P(R)**.
+
+### 5.1 Interpolation
+
+Comme les points observés ne tombent pas sur des rappels standard, on interpole :
+
+$$\hat{P}(R_j) = \max_{R_j < R \le R_{j+1}} P(R)$$
+
+avec niveaux de rappel standard $0, 0.1, \dots, 1.0$.
+
+### 5.2 Moyenne sur requêtes
+
+On moyenne les courbes interpolées sur un grand ensemble de requêtes pour obtenir une mesure robuste.
+
+## 6. Micro- vs Macro-averaging
+
+- **Micro-averaging** : fusion globale TP/FN/FP/TN avant calcul.
+  Favorise les catégories majoritaires.
+- **Macro-averaging** : calcul par catégorie puis moyenne.
+  Donne un poids égal à chaque catégorie.
+
+## 7. Mesures dérivées importantes
+
+### 7.1 mAP (Mean Average Precision)
+
+Moyenne de la précision aux rappels standards :
+
+$$\text{mAP} = \frac{1}{11} \sum_{r \in \{0,0.1,\dots,1\}} P_{interp}(r)$$
+
+Interprétation : aire sous la courbe P-R (version discrète classique).
+
+### 7.2 R-Precision
+
+Précision à la position $R$, où $R$ est le nombre de documents pertinents pour la requête :
+
+$$R\text{-Precision} = P@R$$
+
+### 7.3 Fallout
+
+Taux de faux positifs parmi les non pertinents :
+
+$$\text{Fallout} = \frac{FP}{TN + FP}$$
+
+### 7.4 Généralité
+
+Densité de documents pertinents dans la collection :
+
+$$G = \frac{TP + FN}{N}$$
+
+Relation avec P, R et Fallout :
+
+$$P = \frac{R \cdot G}{(R \cdot G) + \text{Fallout} \cdot (1 - G)}$$
+
+### 7.5 F-measure (harmonique)
+
+Combinaison pondérée de P et R :
+
+$$F_\beta = \frac{(1+\beta^2)PR}{\beta^2 P + R}$$
+
+Cas classique :
+
+$$F_1 = \frac{2PR}{P+R}$$
+
+### 7.6 Bull’s Eye Percentage (BEP)
+
+Utilisé notamment en MPEG-7 (shape matching) :
+
+$$\text{BEP} = \frac{TP_{2Q}}{Q}$$
+
+avec $Q$ le nombre de documents pertinents de la requête.
+
+## 8. ROC et analyse seuil
+
+On convertit le score continu en décision binaire via un seuil $T$.
+
+- **TPR (Sensitivity)** :
+
+$$TPR = \frac{TP}{TP+FN}$$
+
+- **TNR (Specificity)** :
+
+$$TNR = \frac{TN}{TN+FP}$$
+
+- **FPR** :
+
+$$FPR = 1 - TNR$$
+
+La courbe ROC trace **TPR** en fonction de **FPR** lorsque le seuil varie.
+
+```{.cetz}
+// Schéma ROC
+#cetz.canvas({
+  import cetz.draw: *
+
+  // Axes
+  line((0, 0), (6, 0), mark: (end: ">", fill: black))
+  line((0, 0), (0, 5), mark: (end: ">", fill: black))
+  content((6.4, -0.1), [FPR], anchor: "center")
+  content((-0.3, 5.2), [TPR], anchor: "center")
+
+  // Diagonale aléatoire
+  line((0, 0), (5.5, 4.5), stroke: rgb("#6c7086"))
+  content((3.9, 2.7), [Aléatoire], anchor: "center")
+
+  // Courbe ROC bonne
+  line((0, 0), (0.4, 2.3), (1.0, 3.6), (2.0, 4.2), (3.5, 4.5), (5.5, 4.7), stroke: rgb("#a6e3a1") + 1.8pt)
+  content((2.6, 4.8), [Bon classifieur], anchor: "center")
+})
+```
+
+## 9. Vocabulaire complémentaire
+
+- **Accuracy (correct rate)** : $(TP+TN)/N$
+- **Error rate** : $(FP+FN)/N$
+- **Silence** : $1 - Recall$
+- **Noise** : $FP/(TP+FP)$
+- **Overlap** : $TP/(FN+TP+FP)$
+
+## 10. Benchmarks
+
+Un benchmark d’évaluation comprend :
+
+- un dataset ouvert,
+- des requêtes et jugements,
+- des mesures d’évaluation,
+- un système baseline.
+
+Exemples : **TREC**, CLEF, INEX, ISMIR, LeToR, corpus NLP.
+
+## 11. Résumé
+
+:::{.callout-tip}
+## À retenir
+- L’évaluation en RI est fondée sur le modèle binaire pertinent / non pertinent.
+- Precision et Recall sont les deux mesures centrales.
+- Aucune mesure unique ne suffit : il faut combiner P-R, mAP, R-Precision, ROC, F-measure selon le contexte.
+- En pratique, l’évaluation est souvent approximative (pooling, jugements partiels).
+:::

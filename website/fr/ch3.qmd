@@ -1,618 +1,539 @@
 ---
-title: "Chapitre 3 — Embeddings Neuronaux"
+title: "Plongements Neuronaux (Neural Embeddings)"
 ---
 
-## 1. Motivation
+# Motivation : Pourquoi des plongements neuronaux ?
 
-### Embeddings basés sur le contenu (rappel)
+## Limites des approches précédentes
 
-- **TF·IDF** : basé sur la fréquence des termes
-- **Recherche probabiliste** : estimation de la probabilité de pertinence par terme
-- **LSI** : estimation linéaire de concepts latents
+Les techniques classiques de représentation en recherche d'information (Information Retrieval) reposent sur des propriétés **statistiques** des termes, indépendamment de leur sens réel.
 
-$\Rightarrow$ L'embedding est une estimation **linéaire** à partir des propriétés de chaque terme.
+Trois grandes familles ont précédé les plongements neuronaux :
 
-### Embeddings basés sur le contexte
+- **TF·IDF** : pondère chaque terme par sa fréquence dans le document et son inverse dans la collection. C'est une représentation purement basée sur le **contenu** (Content-based).
 
-- La caractérisation (embedding) d'un terme est dérivée du **contexte** (phrase) dans lequel il apparaît
-- L'embedding aide à **prédire** le terme dans son contexte
-- Utilisation du **Machine Learning** pour la prédiction
+- **Récupération probabiliste (Probabilistic Retrieval)** : estime la probabilité qu'un terme soit pertinent pour une requête donnée. Elle reste également ancrée dans la fréquence des termes.
 
-$\Rightarrow$ Les termes co-occurrents dans le même contexte (ex. synonymes) reçoivent un embedding similaire.
+- **Indexation sémantique latente — ISL (Latent Semantic Indexing, LSI)** : factorise la matrice termes-documents pour extraire des **concepts latents linéaires**. C'est une projection dans un espace de dimension réduite.
 
-```{.cetz}
-// Diagramme : Contenu vs Contexte
-#cetz.canvas({
-  import cetz.draw: *
+💡 Dans tous ces cas, la représentation d'un terme est **calculée à partir de ses propriétés intrinsèques** (fréquences, co-occurrences globales) sans tenir compte du **contexte local** dans lequel il apparaît.
 
-  // Contenu
-  rect((0, 3), (rel: (4, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "cont", radius: 0.15)
-  content((2, 4.2), [*Basé sur le contenu*], anchor: "center")
-  content((2, 3.5), [TF·IDF, BIR, LSI], anchor: "center")
+## Vers les plongements basés sur le contexte
 
-  // Contexte
-  rect((6, 3), (rel: (4, 1.5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "ctx", radius: 0.15)
-  content((8, 4.2), [*Basé sur le contexte*], anchor: "center")
-  content((8, 3.5), [Word2Vec, GloVe], anchor: "center")
+L'idée centrale des plongements neuronaux est radicalement différente :
 
-  // Embedding
-  rect((3, 0.5), (rel: (4, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
-  content((5, 1.1), [Embedding $v_w in RR^N$], anchor: "center")
+> La signification d'un terme est **déterminée par le contexte** dans lequel il apparaît.
 
-  // Différences
-  content((2, 2.2), [Fréquence / Linéaire], anchor: "center")
-  content((8, 2.2), [Prédiction / Non-linéaire], anchor: "center")
+Cette intuition, issue de la linguistique distributionnelle, est résumée par la maxime de J.R. Firth (1957) : *"You shall know a word by the company it keeps."*
 
-  line("cont", "emb", mark: (end: ">", fill: black))
-  line("ctx", "emb", mark: (end: ">", fill: black))
-})
+💡 **Intuition** : deux mots qui apparaissent systématiquement dans les mêmes contextes (par exemple, "rapide" et "véloce") partagent probablement une signification proche. Leur représentation vectorielle devrait donc être similaire.
+
+### Deux grandes familles de plongements
+
+| Type | Base | Exemple de modèle | Relation capturée |
+|------|------|-------------------|-------------------|
+| Basé sur le contenu (Content-based) | Fréquence des termes | TF·IDF, LSI | Corrélation linéaire |
+| Basé sur le contexte (Context-based) | Co-occurrences locales | Word2Vec, GloVe | Relations non-linéaires |
+
+🧠 **À retenir** : les plongements contextuels utilisent le **machine learning** pour apprendre à **prédire** un terme à partir de son voisinage, ce qui permet de capturer des structures sémantiques complexes.
+
+---
+
+# Word2Vec
+
+## Principe général
+
+Word2Vec est une famille de modèles qui apprend des représentations vectorielles de mots en exploitant leur contexte d'occurrence dans un corpus textuel.
+
+**Idée centrale** : les termes qui co-apparaissent fréquemment dans les mêmes contextes reçoivent des représentations vectorielles proches.
+
+### Intuition progressive
+
+Pour comprendre ce que signifie "utiliser le contexte", considérons ces niveaux de contrainte :
+
+1. **Choix libre** — "La personne est …" → n'importe quel mot est possible.
+
+2. **Choix contraint** — "La personne est … rapide" → le champ lexical est restreint.
+
+3. **Remplacement guidé** — "Le chat joue avec la **balle**" → on peut remplacer *balle* par *peluche*, mais pas par *nuage*.
+
+💡 Plus le contexte est précis, plus le choix du terme cible est contraint. C'est exactement ce que Word2Vec cherche à modéliser.
+
+⚠️ Ce cadre est étroitement lié au traitement automatique du langage naturel (NLP) et notamment à l'analyse morpho-syntaxique (part-of-speech tagging) et aux syntagmes nominaux (noun phrases).
+
+## Formulation probabiliste
+
+Soit un vocabulaire fixé. On définit deux variables aléatoires :
+
+- $W_T$ : le terme **cible** (Target Word)
+- $W_C$ : un terme du **contexte** (Context Word)
+
+L'objectif du plongement est d'estimer la distribution conditionnelle :
+
+$$\mathbb{P}(W_T \mid W_C)$$
+
+pour tous les termes du vocabulaire.
+
+💡 En d'autres termes : *étant donné un mot de contexte, quelle est la probabilité que le mot cible soit $w$ ?*
+
+---
+
+# Continuous Bag of Words (CBoW)
+
+## Idée principale
+
+Le modèle CBoW (Sac de Mots Continu) cherche à **prédire un terme cible** à partir de son contexte local.
+
+> **Direction** : contexte → terme cible
+
+Le principe opérationnel est le suivant :
+
+1. Définir une **fenêtre de contexte** (window size) de taille $m$ autour d'un mot cible.
+2. Créer des paires **(contexte, cible)** à partir des co-occurrences observées.
+3. Entraîner un modèle pour **apprendre $\mathbb{P}(W_T \mid W_C)$**.
+
+## Exemple détaillé
+
+Considérons la phrase célèbre :
+
+> *"All work and no play makes Jack a dull boy"*
+
+Avec une **fenêtre de taille 2** ($m = 2$) et le mot cible $W_T = \text{"play"}$ :
+
+- Le contexte gauche (2 mots avant) : *"and"*, *"no"*
+- Le contexte droit (2 mots après) : *"makes"*, *"Jack"*
+
+Les paires générées sont :
+
+```
+("play", "and")
+("play", "no")
+("play", "makes")
+("play", "Jack")
 ```
 
-```{.cetz}
-#cetz.canvas({
-  import cetz.draw: *
+Chaque paire $(W_T, W_C)$ constitue un exemple d'apprentissage pour estimer $\mathbb{P}(W_T \mid W_C)$.
 
-  // Catppuccin Mocha palette
-  let base    = rgb("#1e1e2e")
-  let mantle  = rgb("#181825")
-  let crust   = rgb("#11111b")
-  let textc   = rgb("#cdd6f4")
-  let blue    = rgb("#89b4fa")
-  let green   = rgb("#a6e3a1")
-  let mauve   = rgb("#cba6f7")
-  let peach   = rgb("#fab387")
-  let red     = rgb("#f38ba8")
-  let surface = rgb("#45475a")
+💡 En pratique, on itère sur **tous les mots** du corpus comme cible potentielle, et on génère toutes les paires correspondantes.
 
-  // Background panel (optional, for clear catppuccin look)
-  rect((-0.9, 0.2), (rel: (13.8, 7.2)), fill: base, stroke: crust, radius: 0.12)
+## Formalisation mathématique
 
-  // Left context vectors: w_c1, w_c2, ..., w_cm
-  rect((0.0, 5.1), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wc1", radius: 0.06)
-  rect((0.0, 3.0), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wc2", radius: 0.06)
-  rect((0.0, 0.9), (rel: (0.55, 1.8)), stroke: textc, fill: mantle, name: "wcm", radius: 0.06)
+### Fonction de perte par terme
 
-  content((-0.35, 6.0), text(textc)[$w_(c_1)$], anchor: "east")
-  content((-0.35, 3.9), text(textc)[$w_(c_2)$], anchor: "east")
-  content((-0.35, 1.8), text(textc)[$w_(c_m)$], anchor: "east")
-  content((0.24, 2.45), text(textc)[$\vdots$], anchor: "center")
+Pour un terme cible $W_T$ donné, la perte (loss) est la **log-vraisemblance négative** sur tous ses mots de contexte :
 
-  // Merge points
-  circle((2.25, 4.9), radius: 0.04, fill: peach, stroke: peach, name: "n1")
-  circle((2.25, 2.5), radius: 0.04, fill: peach, stroke: peach, name: "n2")
+$$\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log\,\mathbb{P}(W_T \mid W_C)$$
 
-  // Crossed connections from contexts
-  line((0.55, 6.0), "n1", stroke: blue)
-  line((0.55, 3.9), "n1", stroke: blue)
-  line((0.55, 1.8), "n1", stroke: blue)
+### Perte globale sur le corpus
 
-  line((0.55, 6.0), "n2", stroke: blue)
-  line((0.55, 3.9), "n2", stroke: blue)
-  line((0.55, 1.8), "n2", stroke: blue)
+En supposant l'indépendance conditionnelle des termes (hypothèse i.i.d.), la perte globale sur le corpus $\mathcal{X}$ de taille $N$ est :
 
-  // W block
-  rect((2.7, 2.1), (rel: (2.8, 2.9)), stroke: textc, fill: surface, name: "W", radius: 0.08)
-  content((4.1, 3.55), text(textc)[$W$], anchor: "center")
-  line("n1", (2.7, 4.75), stroke: green)
-  line("n2", (2.7, 2.35), stroke: green)
+$$\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N} \sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta)$$
 
-  // Central thin bars (h and c)
-  rect((5.95, 2.0), (rel: (0.45, 3.2)), stroke: textc, fill: mauve, name: "hbar", radius: 0.05)
-  rect((6.65, 2.0), (rel: (0.45, 3.2)), stroke: textc, fill: mauve, name: "cbar", radius: 0.05)
+### Optimisation
 
-  content((6.17, 5.45), text(textc)[$h$], anchor: "center")
-  content((6.87, 3.55), text(textc)[$c$], anchor: "center")
+L'objectif est de trouver les paramètres optimaux :
 
-  line((5.5, 4.75), (5.95, 5.0), stroke: green)
-  line((5.5, 2.35), (5.95, 2.2), stroke: green)
-  line((5.5, 4.75), (6.65, 2.2), stroke: red)
-  line((5.5, 2.35), (6.65, 5.0), stroke: red)
+$$\theta^* = \arg\min_{\theta}\; \mathcal{L}(\mathcal{X};\,\theta)$$
 
-  // W' block
-  rect((7.8, 2.1), (rel: (2.8, 2.9)), stroke: textc, fill: surface, name: "Wp", radius: 0.08)
-  content((9.2, 3.55), text(textc)[$W'$], anchor: "center")
+💡 L'optimiseur est un **réseau de neurones** (Neural Network). Les paramètres $\theta$ sont les **poids** du réseau, appris par rétropropagation du gradient.
 
-  line((7.1, 5.0), (7.8, 4.1), stroke: blue)
-  line((7.1, 2.2), (7.8, 3.0), stroke: blue)
+⚠️ Pour rendre l'apprentissage tractable sur de grands vocabulaires, on utilise le **Negative Sampling** : plutôt que de calculer la distribution complète sur tout le vocabulaire à chaque étape, on compare la cible correcte à quelques exemples négatifs tirés aléatoirement.
 
-  // Output column
-  rect((11.35, 1.0), (rel: (0.62, 5.8)), stroke: textc, fill: mantle, name: "out", radius: 0.06)
-  line((10.6, 4.1), (11.35, 6.3), stroke: peach)
-  line((10.6, 3.0), (11.35, 1.5), stroke: peach)
+## Architecture du réseau Word2Vec (CBoW)
 
-  content((12.05, 6.95), text(peach)[*softmax*], anchor: "west")
-  content((12.05, 4.0), text(textc)[$N$], anchor: "west")
-  content((12.05, 1.1), text(textc)[$w_T$], anchor: "west")
-})
+Le réseau CBoW est composé de trois couches :
+
+### Couche d'entrée (Input Layer)
+
+- Représentation one-hot des mots de contexte $W_{C_1}, W_{C_2}, \ldots, W_{C_m}$
+- Dimension : $N$ (taille du vocabulaire)
+
+### Couche de projection / couche cachée (Hidden Layer)
+
+- Les encodages des mots de contexte sont **multipliés par la matrice de poids $W$** (dimension $N \times C$, où $C$ est la dimension du plongement)
+- La couche cachée est la **somme** (ou moyenne) des vecteurs de contexte projetés
+- Vecteur résultant : $v_C$ de dimension $C$
+
+### Couche de sortie (Output Layer)
+
+- Le vecteur caché est multiplié par une seconde matrice $W'$ (dimension $C \times N$)
+- Une fonction **softmax** produit une distribution de probabilité sur le vocabulaire
+- Le terme prédit correspond à la valeur maximale
+
+🧠 **À retenir** : les paramètres appris sont $\theta = [W, W']$. La probabilité est approximée par :
+
+$$\mathbb{P}(W_T \mid W_C) \;\sim\; v_T^{\prime\,\top}\, v_C$$
+
+où $v_C$ est l'encodage du contexte via $W$, et $v_T'$ est la colonne correspondant à $W_T$ dans $W'$.
+
+## La fonction Softmax
+
+### Définition
+
+La fonction softmax transforme un vecteur de scores réels en distribution de probabilité :
+
+$$\mathbb{P}(W_T \mid W_C) = \frac{\exp\!\left(v_T^{\prime\,\top}\, v_C\right)}{\displaystyle\sum_{v_i} \exp\!\left(v_i^{\prime\,\top}\, v_C\right)}$$
+
+### Interprétation
+
+- **Numérateur** : amplifie exponentiellement les scores élevés → sélection du terme le plus probable.
+
+- **Dénominateur** : normalise sur l'ensemble du vocabulaire → garantit que la somme des probabilités vaut 1.
+
+💡 La softmax est la **généralisation catégorielle** de la fonction logistique (sigmoïde) binaire. Elle s'applique ici à un problème de classification à $N$ classes (une par mot du vocabulaire).
+
+⚠️ Connexion avec la **perte d'entropie croisée** (cross-entropy loss) : minimiser $-\log\,\mathbb{P}(W_T \mid W_C)$ revient à minimiser l'entropie croisée entre la distribution prédite et la distribution cible (one-hot).
+
+## Softmax hiérarchique (Hierarchical Softmax)
+
+### Problème
+
+Le **calcul du dénominateur** de la softmax requiert une somme sur tout le vocabulaire, soit $O(N)$ opérations à chaque étape d'apprentissage. Pour un vocabulaire de 100 000 mots, cela est prohibitif.
+
+### Solution : arbre hiérarchique
+
+Les termes du vocabulaire présentent des dépendances hiérarchiques (illustrées par exemple dans **WordNet**, base lexicale de l'anglais). On peut organiser les mots dans un **arbre binaire** reflétant cette structure.
+
+- Chaque mot est une **feuille** de l'arbre.
+- La probabilité $\mathbb{P}(W_T \mid W_C)$ est calculée comme un **produit de probabilités** le long du chemin de la racine à la feuille correspondante.
+
+**Complexité réduite** : $O(\log N)$ au lieu de $O(N)$ pour accéder à la probabilité d'un terme.
+
+💡 Cette astuce rend l'entraînement de Word2Vec **pratiquement réalisable** sur de très grands corpus.
+
+---
+
+# Le modèle Skip-gram
+
+## Principe : inversion de la prédiction
+
+Le modèle **Skip-gram** est le **dual** de CBoW. Il inverse la direction de la prédiction :
+
+| Modèle | Direction | Objectif |
+|--------|-----------|----------|
+| CBoW | Contexte → Cible | $\mathbb{P}(W_T \mid W_C)$ |
+| Skip-gram | Cible → Contexte | $\mathbb{P}(W_C \mid W_T)$ |
+
+> **Idée** : étant donné un mot cible $W_T$, prédire les mots de son contexte.
+
+## Architecture Skip-gram
+
+Le réseau Skip-gram est structuré ainsi :
+
+- **Entrée** : encodage one-hot du **mot cible** $W_T$ (vecteur de dimension $N$)
+
+- **Couche de projection** : multiplication par la matrice $W$ → vecteur caché de dimension $C$
+
+- **Sortie** : pour chaque position dans la fenêtre de contexte, un score softmax est calculé via $W'$, produisant $m$ distributions de probabilité sur le vocabulaire (une par position de contexte)
+
+💡 Le Skip-gram génère **plus de paires d'apprentissage** que CBoW (un mot cible génère $2m$ exemples), ce qui le rend particulièrement efficace sur les **corpus de petite taille** et pour les **mots rares**.
+
+⚠️ En pratique, le Skip-gram avec Negative Sampling (SGNS) est l'un des variants les plus utilisés de Word2Vec.
+
+## Comparaison CBoW vs Skip-gram
+
+```{mermaid}
+graph LR
+    subgraph CBoW
+        C1["w(t-2)"] --> H1["Somme"]
+        C2["w(t-1)"] --> H1
+        C3["w(t+1)"] --> H1
+        C4["w(t+2)"] --> H1
+        H1 --> T1["w(t) prédit"]
+    end
+
+    subgraph Skip-gram
+        S["w(t)"] --> P["Projection"]
+        P --> O1["w(t-2)"]
+        P --> O2["w(t-1)"]
+        P --> O3["w(t+1)"]
+        P --> O4["w(t+2)"]
+    end
 ```
 
-## 2. Word2Vec
+🧠 **À retenir** :
 
-### 2.1 Principe général
+- **CBoW** : rapide à entraîner, bon pour les mots fréquents.
 
-Utiliser le **contexte** pour caractériser un terme. Deux modèles :
+- **Skip-gram** : plus lent mais meilleure qualité pour les mots rares et les corpus modestes.
 
-| Modèle | Direction | Estimation |
-|--------|-----------|------------|
-| **CBoW** (Continuous Bag of Words) | Contexte → Terme | $\mathbb{P}(W_T \| W_C)$ |
-| **Skip-gram** | Terme → Contexte | $\mathbb{P}(W_C \| W_T)$ |
+## Utilisation des modèles entraînés
 
-### 2.2 Configuration formelle
+Une fois Word2Vec entraîné, les **poids appris** constituent les plongements des termes :
 
-- Soit un vocabulaire avec $W_T$ et $W_C$ les variables aléatoires modélisant le terme cible et son contexte
-- L'embedding vise à estimer $\mathbb{P}(W_T | W_C)$ pour tous les termes du vocabulaire
+- **Bibliothèques logicielles** disponibles (gensim, fastText, etc.) pour entraîner ses propres modèles.
 
-### 2.3 Continuous Bag of Words (CBoW)
-
-#### Idée principale
-
-**Prédire un terme à partir de son contexte.** On crée des paires (contexte, cible) à partir des co-occurrences.
-
-**Exemple** : « All work and no play makes Jack a dull boy » avec fenêtre = 2
-
-- $W_T$ = « play »
-- Contexte $W_C$ : {and, no, makes, Jack}
-- Paires : (play, and), (play, no), (play, makes), (play, Jack)
-
-```{.cetz}
-// Diagramme : Fenêtre de contexte CBoW
-#cetz.canvas({
-  import cetz.draw: *
-
-  // Les mots de la phrase
-  let words = ("All", "work", "and", "no", "play", "makes", "Jack", "a", "dull", "boy")
-  let x-start = 0
-  let spacing = 1.8
-
-  // Dessiner chaque mot
-  rect((0 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((0 * 1.8 + 0.75, 0.4), text(white)[All], anchor: "center")
-
-  rect((1 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((1 * 1.8 + 0.75, 0.4), text(white)[work], anchor: "center")
+- **Modèles pré-entraînés** (Pre-trained models) : des plongements appris sur de très grands corpus (Google News, Wikipedia) sont disponibles publiquement.
 
-  rect((2 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((2 * 1.8 + 0.75, 0.4), text(white)[and], anchor: "center")
+### Application à la recherche documentaire
 
-  rect((3 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((3 * 1.8 + 0.75, 0.4), text(white)[no], anchor: "center")
+Pour **représenter un document** dans l'espace de plongement :
 
-  rect((4 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((4 * 1.8 + 0.75, 0.4), text(white)[*play*], anchor: "center")
+- On récupère le vecteur de chaque terme du document via la **table de correspondance** (lookup table).
+- On calcule le **vecteur moyen** des termes : $\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w$
 
-  rect((5 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((5 * 1.8 + 0.75, 0.4), text(white)[makes], anchor: "center")
+### Mesure de similarité
 
-  rect((6 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((6 * 1.8 + 0.75, 0.4), text(white)[Jack], anchor: "center")
+La similarité entre documents (ou entre requête et document) est calculée à partir de la **distance euclidienne** (Euclidean distance) dans l'espace de plongement.
 
-  rect((7 * 1.8, 0), (rel: (1.5, 0.8)), fill: rgb("#585b70"), stroke: rgb("#1e1e2e"), radius: 0.1)
-  content((7 * 1.8 + 0.75, 0.4), text(white)[a], anchor: "center")
+💡 Il est crucial que la **mesure de similarité soit cohérente** avec la construction du plongement. Une mesure inadaptée donnerait des résultats incohérents.
 
-  // Légende
-  rect((2 * 1.8, -1.2), (rel: (0.5, 0.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), radius: 0.05)
-  content((2 * 1.8 + 0.7, -0.95), [= Contexte], anchor: "west")
+---
 
-  rect((5 * 1.8, -1.2), (rel: (0.5, 0.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), radius: 0.05)
-  content((5 * 1.8 + 0.7, -0.95), [= Cible], anchor: "west")
-})
-```
-
-```{.cetz}
-// CBoW - reproduction "intelligente" du schéma manuscrit
-// Theme: Catppuccin Latte
-#cetz.canvas({
-  import cetz.draw: *
-
-  // Palette Catppuccin Latte
-  let base = rgb("#eff1f5")
-  let crust = rgb("#dce0e8")
-  let textc = rgb("#4c4f69")
-  let blue = rgb("#1e66f5")
-  let green = rgb("#40a02b")
-  let yellow = rgb("#df8e1d")
-  let mauve = rgb("#8839ef")
-  let surface0 = rgb("#ccd0da")
-  let surface1 = rgb("#bcc0cc")
-
-  // Fond
-  rect((-0.8, -1.8), (rel: (16.2, 9.2)), fill: base, stroke: crust, radius: 0.08)
-
-  // 1) Encodage de wc (one-hot)
-  rect((0.0, 0.6), (rel: (0.75, 5.8)), fill: surface1, stroke: textc, radius: 0.06, name: "x")
-  content((0.38, 3.5), text(base)[$1$], anchor: "center")
-  content((-0.25, 3.5), text(yellow)[$N$], anchor: "east")
-  content((0.35, -0.1), text(textc)[Encodage de $w_C$], anchor: "north")
-
-  // 2) Matrice W avec ligne active vc
-  rect((2.0, 1.8), (rel: (2.8, 3.4)), fill: surface0, stroke: textc, radius: 0.08, name: "W")
-  content((3.4, 3.45), text(yellow)[$W$], anchor: "center")
-  rect((2.08, 4.15), (rel: (2.64, 0.24)), fill: green, stroke: green, radius: 0.03)
-  content((3.5, 4.9), text(green)[$v_c$], anchor: "south")
-  line((0.75, 6.0), (2.0, 4.55), stroke: textc)
-  line((0.75, 0.6), (2.0, 1.8), stroke: textc)
-
-  // 3) Couche cachee (dimension C)
-  rect((6.0, 1.7), (rel: (0.8, 3.6)), fill: mauve, stroke: textc, radius: 0.06, name: "h")
-  content((6.4, 3.5), text(base)[h], anchor: "center")
-  content((5.55, 3.5), text(yellow)[$C$], anchor: "east")
-  content((6.4, 0.8), text(yellow)[hidden layer], anchor: "north")
-  line((4.8, 3.5), (6.0, 3.5), stroke: textc)
+# GloVe : Global Vectors for Word Representation
 
-  // 4) Matrice W' avec colonne active v'_t
-  rect((8.8, 1.8), (rel: (2.8, 3.4)), fill: surface0, stroke: textc, radius: 0.08, name: "Wp")
-  content((10.2, 3.45), text(yellow)[$W'$], anchor: "center")
-  rect((10.45, 1.88), (rel: (0.22, 3.24)), fill: green, stroke: green, radius: 0.03)
-  content((10.55, 5.0), text(green)[$v'_t$], anchor: "south")
-  line((6.8, 5.2), (8.8, 4.3), stroke: textc)
-  line((6.8, 1.7), (8.8, 2.6), stroke: textc)
+## Motivation et critique de Word2Vec
 
-  // 5) Sortie + softmax (one-hot)
-  rect((12.8, 0.6), (rel: (0.75, 5.8)), fill: surface1, stroke: textc, radius: 0.06, name: "y")
-  content((13.17, 4.2), text(base)[$1$], anchor: "center")
-  content((14.05, 4.2), text(yellow)[$N$], anchor: "west")
-  content((12.45, 6.55), text(yellow)[softmax], anchor: "west")
-  content((13.15, -0.1), text(textc)[Encodage de $w_T$], anchor: "north")
-  content((12.55, 1.0), text(textc)[$q$], anchor: "east")
+Word2Vec apprend à prédire les co-occurrences locales de termes, mais **ignore la densité globale** de ces co-occurrences dans le corpus.
 
-  line((11.6, 4.3), (12.8, 6.0), stroke: textc)
-  line((11.6, 2.6), (12.8, 0.6), stroke: textc)
-})
-```
-
-#### Formalisation
-
-**Fonction de perte** pour un terme cible $W_T$ :
-
-$$\mathcal{L}(W_T; \theta) = -\sum_{W_C \in \text{context}(W_T)} \log \mathbb{P}(W_T | W_C)$$
-
-**Fonction de perte globale** (sur le dataset $X$) :
-
-$$\mathcal{L}(X; \theta) = \frac{1}{N} \sum_{W_T \in X} \mathcal{L}(W_T; \theta)$$
-
-$$\theta^* = \arg\min_\theta \mathcal{L}(X; \theta)$$
-
-L'optimiseur est un **réseau de neurones** et les paramètres $\theta$ sont les poids $[W, W']$.
-
-#### Architecture du réseau
-
-```{.cetz}
-// Diagramme : Architecture CBoW
-#cetz.canvas({
-  import cetz.draw: *
-
-  // Input layer
-  rect((0, 0), (rel: (2.5, 5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "input", radius: 0.15)
-  content((1.25, 5.4), [*Couche d'entrée*], anchor: "center")
-  content((1.25, 4.2), [$x_1$], anchor: "center")
-  content((1.25, 3.0), [$x_2$], anchor: "center")
-  content((1.25, 1.5), [$...$], anchor: "center")
-  content((1.25, 0.5), [$x_V$], anchor: "center")
-  content((1.25, -0.5), [($V$ dim)], anchor: "center")
-
-  // Hidden layer
-  rect((5, 1), (rel: (2.5, 3)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "hidden", radius: 0.15)
-  content((6.25, 4.4), [*Couche cachée*], anchor: "center")
-  content((6.25, 3.2), [$h_1$], anchor: "center")
-  content((6.25, 2.5), [$...$], anchor: "center")
-  content((6.25, 1.6), [$h_N$], anchor: "center")
-  content((6.25, 0.5), [($N$ dim)], anchor: "center")
-
-  // Output layer
-  rect((10, 0), (rel: (2.5, 5)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "output", radius: 0.15)
-  content((11.25, 5.4), [*Couche de sortie*], anchor: "center")
-  content((11.25, 4.2), [$y_1$], anchor: "center")
-  content((11.25, 3.0), [$y_2$], anchor: "center")
-  content((11.25, 1.5), [$...$], anchor: "center")
-  content((11.25, 0.5), [$y_V$], anchor: "center")
-  content((11.25, -0.5), [($V$ dim)], anchor: "center")
-
-  // Weights
-  line("input", "hidden", mark: (end: ">", fill: black))
-  content((3.75, 3.5), [$W_(V times N)$], anchor: "center")
-
-  line("hidden", "output", mark: (end: ">", fill: black))
-  content((8.25, 3.5), [$W'_(N times V)$], anchor: "center")
-})
-```
-
-#### Softmax
-
-$$\mathbb{P}(W_T | W_C) = \frac{\exp(v_T'^T \bar{v}_C)}{\sum_{v_i} \exp(v_i'^T \bar{v}_C)}$$
-
-- **Numérateur** : booste exponentiellement les grandes valeurs
-- **Dénominateur** : normalise pour obtenir une distribution catégorielle
-
-$\Rightarrow$ Extension catégorielle de la fonction logistique binaire.
-
-#### Softmax hiérarchique
-
-Le normaliseur du softmax est **coûteux** à calculer ($O(V)$). Puisque les termes ont une dépendance hiérarchique (cf. WordNet), on les organise dans un **arbre** :
-
-$\Rightarrow$ Complexité réduite à $O(\log V)$ pour accéder à $\mathbb{P}(W_T | W_C)$.
-
-### 2.4 Skip-gram
-
-Le modèle est **inversé** par rapport à CBoW :
-
-- **Entrée** : le mot cible
-- **Sortie** : les mots du contexte
-- On estime $\mathbb{P}(W_C | W_T)$
-
-```{.cetz}
-#cetz.canvas({
-  import cetz.draw: *
-
-  // Palette proche de l'image
-  let bg = rgb("#efefef")
-  let boxfill = rgb("#f7f7f7")
-  let stroke = rgb("#888888")
-  let ink = rgb("#222222")
-
-  // Fond
-  rect((0, 0), (rel: (20, 10)), fill: bg, stroke: none)
-
-  // =========================
-  // Gauche : CBOW
-  // =========================
-  content((2.0, 9.2), text(ink)[INPUT], anchor: "center")
-  content((5.0, 9.2), text(ink)[PROJECTION], anchor: "center")
-  content((7.9, 9.2), text(ink)[OUTPUT], anchor: "center")
-
-  // Inputs contextuels
-  rect((1.2, 6.9), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in1")
-  rect((1.2, 5.1), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in2")
-  rect((1.2, 2.4), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in3")
-  rect((1.2, 0.7), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "l_in4")
-
-  content((0.9, 7.45), text(ink)[w(t-2)], anchor: "east")
-  content((0.9, 5.65), text(ink)[w(t-1)], anchor: "east")
-  content((0.9, 2.95), text(ink)[w(t+1)], anchor: "east")
-  content((0.9, 1.25), text(ink)[w(t+2)], anchor: "east")
-
-  // Projection (sum)
-  rect((4.4, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "l_sum")
-  content((4.85, 4.8), text(ink)[SUM], anchor: "center")
+⚠️ Deux mots qui co-apparaissent 2 fois sont traités de la même façon que deux mots qui co-apparaissent 2000 fois, du point de vue de la structure de l'apprentissage.
 
-  // Output central
-  rect((7.5, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "l_out")
-  content((8.55, 3.85), text(ink)[w(t)], anchor: "west")
-
-  // Flèches CBOW
-  line((2.1, 7.45), (4.4, 3.95), stroke: ink, mark: (end: ">"))
-  line((2.1, 5.65), (4.4, 3.75), stroke: ink, mark: (end: ">"))
-  line((2.1, 2.95), (4.4, 3.45), stroke: ink, mark: (end: ">"))
-  line((2.1, 1.25), (4.4, 3.25), stroke: ink, mark: (end: ">"))
-  line((5.3, 3.85), (7.5, 3.85), stroke: ink, mark: (end: ">"))
+> **Idée de GloVe** : les co-occurrences **fréquentes** devraient avoir un poids plus important dans la construction du plongement.
 
-  content((5.0, 0.15), text(ink, 1.1em)[*CBOW*], anchor: "center")
+## Intuition probabiliste
 
-  // =========================
-  // Droite : Skip-gram
-  // =========================
-  content((12.0, 9.2), text(ink)[INPUT], anchor: "center")
-  content((15.0, 9.2), text(ink)[PROJECTION], anchor: "center")
-  content((17.9, 9.2), text(ink)[OUTPUT], anchor: "center")
+On définit la probabilité de co-occurrence conditionnelle :
 
-  // Input centre
-  rect((11.3, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "r_in")
-  content((10.9, 3.85), text(ink)[w(t)], anchor: "east")
+$$\mathbb{P}_{\text{cooc}}(w_k \mid w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
 
-  // Projection centre
-  rect((14.0, 3.2), (rel: (0.9, 1.3)), fill: boxfill, stroke: stroke, name: "r_proj")
+où $\text{card}\{(w_k, w_i)\}$ est le nombre de fois où $w_k$ et $w_i$ co-apparaissent dans une même fenêtre.
 
-  // Outputs contextuels
-  rect((16.8, 6.9), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out1")
-  rect((16.8, 5.1), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out2")
-  rect((16.8, 2.4), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out3")
-  rect((16.8, 0.7), (rel: (0.9, 1.1)), fill: boxfill, stroke: stroke, name: "r_out4")
+### Exemple illustratif
 
-  content((17.8, 7.45), text(ink)[w(t-2)], anchor: "west")
-  content((17.8, 5.65), text(ink)[w(t-1)], anchor: "west")
-  content((17.8, 2.95), text(ink)[w(t+1)], anchor: "west")
-  content((17.8, 1.25), text(ink)[w(t+2)], anchor: "west")
+Prenons $w_1 = \text{"Poisson"}$ et $w_2 = \text{"Vache"}$ :
 
-  // Flèches Skip-gram
-  line((12.2, 3.85), (14.0, 3.85), stroke: ink, mark: (end: ">"))
-  line((14.9, 3.85), (16.8, 7.45), stroke: ink, mark: (end: ">"))
-  line((14.9, 3.85), (16.8, 5.65), stroke: ink, mark: (end: ">"))
-  line((14.9, 3.85), (16.8, 2.95), stroke: ink, mark: (end: ">"))
-  line((14.9, 3.85), (16.8, 1.25), stroke: ink, mark: (end: ">"))
+| Mot $w_3$ | $\mathbb{P}(w_3 \mid w_1)$ | $\mathbb{P}(w_3 \mid w_2)$ | Ratio |
+|-----------|---------------------------|---------------------------|-------|
+| nager | haute | basse | **élevé** |
+| manger | haute | haute | ≈ 1 |
+| voler | basse | basse | ≈ 1 |
 
-  content((15.0, 0.15), text(ink, 1.1em)[*Skip-gram*], anchor: "center")
-})
-```
+💡 Le **ratio des probabilités** de co-occurrence discrimine mieux que les probabilités brutes. C'est ce ratio que GloVe cherche à capturer dans l'espace vectoriel.
 
-```{.cetz}
-// Diagramme : CBoW vs Skip-gram
-#cetz.canvas({
-  import cetz.draw: *
+## Le modèle GloVe
 
-  // CBoW
-  content((3, 5.5), [*CBoW*], anchor: "center")
-  rect((0, 3.5), (rel: (2, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "cb-ctx", radius: 0.15)
-  content((1, 4.25), [Contexte \ $W_C$], anchor: "center")
+### Construction formelle
 
-  rect((4, 3.5), (rel: (2, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "cb-tgt", radius: 0.15)
-  content((5, 4.25), [Cible \ $W_T$], anchor: "center")
+On définit une fonction paramétrée $\phi_\theta$ telle que :
 
-  line("cb-ctx", "cb-tgt", mark: (end: ">", fill: black))
+$$\phi_\theta(w_i, w_k) = \exp(v_i^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i)$$
 
-  // Skip-gram
-  content((3, 2.5), [*Skip-gram*], anchor: "center")
-  rect((0, 0.5), (rel: (2, 1.5)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "sg-tgt", radius: 0.15)
-  content((1, 1.25), [Cible \ $W_T$], anchor: "center")
+En passant au logarithme :
 
-  rect((4, 0.5), (rel: (2, 1.5)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "sg-ctx", radius: 0.15)
-  content((5, 1.25), [Contexte \ $W_C$], anchor: "center")
+$$v_i^\top v_k = \log\,\mathbb{P}_{\text{cooc}}(w_k \mid w_i) = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}$$
 
-  line("sg-tgt", "sg-ctx", mark: (end: ">", fill: black))
-})
-```
+Le terme $\log\,\text{card}\{(w_i)\}$ ne dépend pas de $w_k$ : il joue le rôle d'un **biais** $b_i$.
 
-### 2.5 Utilisation des embeddings Word2Vec
+### Propriété remarquable : mesure de différence
 
-- Bibliothèques logicielles pour entraîner son propre modèle
-- Modèles **pré-entraînés** → vecteurs d'embedding directement utilisables
-- Embedding de document : par exemple **vecteur moyen** des termes qu'il contient
-- Similarité dérivée de la **distance euclidienne**
+Pour deux termes $w_i$ et $w_j$, on peut mesurer leur "différence" vectorielle :
 
-## 3. GloVe (Global Vectors)
+$$\phi_\theta(v_i - v_j,\; w_k) = \frac{\exp(v_i^\top v_k)}{\exp(v_j^\top v_k)} = \frac{\mathbb{P}_{\text{cooc}}(w_k \mid w_i)}{\mathbb{P}_{\text{cooc}}(w_k \mid w_j)}$$
 
-### 3.1 Motivation
+💡 La **différence** des vecteurs de plongement encode le **ratio de co-occurrence** — ce qui permet des analogies vectorielles du type : *"roi" - "homme" + "femme" ≈ "reine"*.
 
-- Les modèles de contexte se basent sur les co-occurrences terme→cible
-- Word2Vec apprend la prédiction **indépendamment de la densité** des co-occurrences
-- **GloVe** part de l'idée que les co-occurrences **fréquentes** pilotent l'embedding
+## Fonction de perte de GloVe
 
-### 3.2 Intuition
+### Objectif
 
-On définit la probabilité de co-occurrence :
+Maintenir le produit scalaire $v_i^\top v_k$ aussi proche que possible du **logarithme du nombre de co-occurrences**.
 
-$$\mathbb{P}_{\text{cooc}}(w_k | w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
+### Formule
 
-**Exemple** : $w_1$ = « Fish », $w_2$ = « Cow »
+$$\mathcal{L}(\mathcal{X};\,\theta) = \sum_{w_i, w_k \in \mathcal{X}} \underbrace{\psi\!\left(\text{card}\{(w_k, w_i)\}\right)}_{\text{fenêtre de pondération}} \left(\underbrace{v_i^\top v_k}_{\text{plongement}} + b_i + b_k - \log\,\text{card}\{(w_k, w_i)\}\right)^2$$
 
-| $w_3$ | $\mathbb{P}_{\text{cooc}}(w_3 \| w_1)$ | $\mathbb{P}_{\text{cooc}}(w_3 \| w_2)$ | Ratio |
-|-------|------|------|-------|
-| swim | élevée | faible | **élevé** |
-| feed | élevée | élevée | ≈ 1 |
-| fly | faible | faible | ≈ 1 |
+### La fonction de pondération $\psi$
 
-$\Rightarrow$ Le ratio des co-occurrences est **discriminant** pour caractériser les relations entre termes.
+La fonction $\psi$ contrôle l'importance accordée aux différentes paires selon leur fréquence de co-occurrence :
 
-### 3.3 Modèle GloVe
+$$\psi(x) = \begin{cases} \left(\dfrac{x}{x_{\max}}\right)^\alpha & \text{si } x < x_{\max} \\ 1 & \text{sinon} \end{cases}$$
 
-On définit :
+avec les conditions aux bords :
 
-$$\phi_\theta(w_i, w_k) = \exp(v_i^T v_k) = \mathbb{P}_{\text{cooc}}(w_k | w_i)$$
+- $\psi(0) = 0$ : les co-occurrences nulles ne contribuent pas.
+- $\psi(\infty) = 1$ : les très fortes co-occurrences ont un poids maximal unitaire.
 
-Donc :
+💡 $x_{\max}$ est un seuil au-delà duquel la pondération est plafonnée. Cela évite que les **co-occurrences très fréquentes** (souvent dues à des mots grammaticaux peu informatifs) ne dominent l'apprentissage.
 
-$$v_i^T v_k = \log \text{card}\{(w_k, w_i)\} - \log \text{card}\{(w_i)\}$$
+⚠️ En pratique, $\alpha = 3/4$ et $x_{\max} = 100$ sont des valeurs couramment utilisées (Pennington et al., 2014).
 
-Le terme $\log \text{card}\{(w_i)\}$ ne dépend pas de $w_k$ → c'est un **biais** $b_i$.
+## Propriétés des plongements GloVe
 
-**Mesure de « $w_i - w_j$ »** :
+Les visualisations en 2D (après réduction de dimensionnalité) montrent des structures géométriques cohérentes :
 
-$$\phi_\theta(w_i - w_j, w_k) = \frac{\exp(v_i^T v_k)}{\exp(v_j^T v_k)} = \frac{\mathbb{P}_{\text{cooc}}(w_k | w_i)}{\mathbb{P}_{\text{cooc}}(w_k | w_j)}$$
+- **Relations de genre** : les vecteurs "roi" → "reine", "homme" → "femme" sont approximativement **parallèles**.
 
-### 3.4 Fonction de perte
+- **Relations entreprise-dirigeant** : IBM → Rometty, Exxon → Tillerson, etc. forment des structures parallèles.
 
-$$\mathcal{L}(X; \theta) = \sum_{w_i, w_k \in X} \psi(\text{card}\{(w_k, w_i)\}) \left(v_i^T v_k + b_i + b_k - \log \text{card}\{(w_k, w_i)\}\right)^2$$
+- **Codes postaux et villes** : le modèle capture des correspondances géographiques.
 
-avec la fonction de pondération $\psi$ :
+- **Degrés de comparaison** : "slow" → "slower" → "slowest" s'alignent régulièrement.
 
-$$\psi(x) = \begin{cases} (x / x_{\max})^\alpha & \text{si } x < x_{\max} \\ 1 & \text{sinon} \end{cases} \quad \text{et } \psi(0) = 0$$
+🧠 **À retenir** : GloVe encode des **relations sémantiques et syntaxiques** sous forme de transformations géométriques régulières dans l'espace vectoriel.
 
-```{.cetz}
-// Diagramme : Flux d'entraînement GloVe
-#cetz.canvas({
-  import cetz.draw: *
+---
 
-  // Corpus
-  rect((0, 2), (rel: (2.5, 1.2)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "corpus", radius: 0.15)
-  content((1.25, 2.6), [Corpus], anchor: "center")
+# Comparaison des modèles de plongement
 
-  // Matrice co-occ
-  rect((4, 2), (rel: (3, 1.2)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "cooc", radius: 0.15)
-  content((5.5, 2.6), [Matrice de \ co-occurrences], anchor: "center")
+## Tableau récapitulatif
 
-  // Optimisation
-  rect((9, 2), (rel: (3, 1.2)), fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "opt", radius: 0.15)
-  content((10.5, 2.6), [Min. de $cal(L)$ \ (moindres carrés)], anchor: "center")
+| Plongement | Type | Entité | Commentaire | Similarité |
+|------------|------|--------|-------------|------------|
+| Booléen | Contenu | Terme | Représentation binaire | Opérateurs logiques |
+| TF·IDF | Contenu | Document | Base pour LSI | Similarité cosinus |
+| BIR | Contenu | Terme | $\mathbb{P}(t_i \mid R, q)$, voir BM25/Okapi | Produit (i.i.d.) |
+| LSI | Contenu | Document | Décorrélation des termes | Similarité cosinus |
+| Word2Vec | Contexte | Terme | Prédiction du terme dans la phrase | Distance euclidienne |
+| GloVe | Contexte | Terme | Co-occurrences pondérées | Distance euclidienne |
 
-  // Embeddings
-  rect((14, 2), (rel: (2.5, 1.2)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "emb", radius: 0.15)
-  content((15.25, 2.6), [Vecteurs \ $v_i$], anchor: "center")
+## Pourquoi les modèles neuronaux capturent-ils des relations non-linéaires ?
 
-  line("corpus", "cooc", mark: (end: ">", fill: black))
-  line("cooc", "opt", mark: (end: ">", fill: black))
-  line("opt", "emb", mark: (end: ">", fill: black))
-})
-```
+Les modèles TF·IDF et LSI sont des transformations **linéaires** des données (pondération, factorisation matricielle). Ils capturent des **corrélations**.
 
-## 4. Résumé comparatif
+Word2Vec et GloVe utilisent des réseaux de neurones avec des **non-linéarités** (softmax, exponentielle) dans leur processus d'apprentissage. Ils peuvent donc encoder des **relations complexes** entre termes qui ne sont pas réductibles à une simple corrélation.
 
-| Embedding | Type | Entité | Commentaire | Similarité |
-|-----------|------|--------|-------------|------------|
-| Booléen | Contenu | Terme | Mapping binaire | Opérateurs logiques |
-| TF·IDF | Contenu | Document | Base pour LSI | Cosinus |
-| BIR | Contenu | Terme | Voir BM25/Okapi | Produit (i.i.d.) |
-| LSI | Contenu | Document | Décorrélation des termes | Cosinus |
-| **Word2Vec** | Contexte | Terme | Prédiction de terme en phrase | **Euclidien** |
-| **GloVe** | Contexte | Terme | Co-occurrence | **Euclidien** |
+💡 Par exemple, la relation sémantique *"capitale de"* (Paris : France :: Berlin : Allemagne) est encodée comme une translation vectorielle régulière — impossible à capturer avec LSI.
 
-:::{.callout-tip}
-## Points clés
-- Word2Vec et GloVe capturent des relations **non linéaires** entre termes (grâce aux réseaux neuronaux)
-- Les modèles pré-entraînés encodent les **biais sociétaux** présents dans le texte d'entraînement
-- Extensions notables : **FastText**, **BERT**
-- La **similarité** utilisée doit être cohérente avec la construction de l'embedding
-:::
+## Différences fondamentales entre Word2Vec et GloVe
 
-## 5. Matériel supplémentaire
+| Critère | Word2Vec | GloVe |
+|---------|----------|-------|
+| Mode d'apprentissage | En ligne (stochastique) | Sur matrice globale de co-occurrence |
+| Co-occurrences | Ignorées dans leur densité | Pondérées explicitement |
+| Complexité | $O(N \cdot C \cdot |\mathcal{X}|)$ | Dépend du nombre de paires non nulles |
+| Interprétabilité | Moins directe | Liée aux probabilités de co-occurrence |
 
-:::{.callout-note collapse="true"}
-## Détails techniques — Word2Vec Parameter Learning Explained (Rong, 2016)
+---
 
-### Modèle CBoW — Un mot de contexte
+# Utilisation pratique des plongements
 
-Le réseau a une couche d'entrée ($V$ unités, one-hot), une couche cachée ($N$ unités) et une couche de sortie ($V$ unités) :
+## De l'entraînement à l'application
 
-- **Input → Hidden** : $h = W^T x = v_{w_I}^T$ (copie de la ligne $k$ de $W$)
-- **Hidden → Output** : $u_j = v_{w_j}'^T h$, puis softmax : $p(w_j | w_I) = \frac{\exp(u_j)}{\sum_{j'=1}^{V} \exp(u_{j'})}$
+### Entraînement
 
-**Mise à jour des poids sortie** :
+- Des **bibliothèques logicielles** permettent d'entraîner ses propres modèles sur un corpus spécialisé (médical, juridique, etc.).
 
-$$v_{w_j}'^{(\text{new})} = v_{w_j}'^{(\text{old})} - \eta \cdot e_j \cdot h \quad \text{avec } e_j = y_j - t_j$$
+- L'entraînement requiert de grands corpus et une puissance de calcul significative.
 
-**Mise à jour des poids entrée** :
+### Modèles pré-entraînés (Pre-trained Models)
 
-$$v_{w_I}^{(\text{new})} = v_{w_I}^{(\text{old})} - \eta \cdot EH^T \quad \text{avec } EH_i = \sum_{j=1}^{V} e_j \cdot w'_{ij}$$
+- Des vecteurs pré-entraînés sur des corpus massifs (Wikipedia, Common Crawl) sont publiquement disponibles.
 
-### Modèle CBoW — Multi-mots
+- On les utilise directement comme **table de correspondance** (lookup table) : un vecteur par mot du vocabulaire.
 
-Couche cachée = **moyenne** des vecteurs d'entrée :
+### Représentation de documents
 
-$$h = \frac{1}{C} W^T (x_1 + x_2 + \cdots + x_C) = \frac{1}{C}(v_{w_1} + \cdots + v_{w_C})^T$$
+Pour utiliser les plongements en recherche d'information :
 
-Mise à jour entrée : $v_{w_{I,c}}^{(\text{new})} = v_{w_{I,c}}^{(\text{old})} - \frac{1}{C} \eta \cdot EH^T$
+1. Chaque terme du document est remplacé par son vecteur de plongement.
 
-### Skip-gram
+2. Le document est représenté par la **moyenne** de ces vecteurs.
 
-Entrée = mot cible, sortie = $C$ panneaux de contexte (même matrice $W'$) :
+3. La similarité entre requête et document est calculée dans cet espace vectoriel.
 
-$$p(w_{c,j} = w_{O,c} | w_I) = \frac{\exp(u_j)}{\sum_{j'=1}^{V} \exp(u_{j'})}$$
+⚠️ Il est indispensable que la **mesure de similarité** utilisée soit **cohérente** avec la métrique induite par le modèle de plongement. Pour Word2Vec et GloVe, c'est la **distance euclidienne** (ou le cosinus dans certaines variantes).
 
-Perte : $E = -\sum_{c=1}^{C} u_{j_c^*} + C \cdot \log \sum_{j'=1}^{V} \exp(u_{j'})$
+---
 
-### Softmax hiérarchique
+# Biais et limites des plongements
 
-Utilise un **arbre binaire de Huffman**. Chaque unité interne a un vecteur de sortie $v'_{n(w,j)}$ :
+## Biais sociétaux (Societal Biases)
 
-$$p(w = w_O) = \prod_{j=1}^{L(w)-1} \sigma\left([\![n(w,j+1) = \text{ch}(n(w,j))]\!] \cdot v_{n(w,j)}'^T h\right)$$
+⚠️ Les plongements sont appris sur des textes réels, qui reflètent les **biais culturels et sociaux** présents dans la société.
 
-Complexité réduite de $O(V)$ à $O(\log V)$.
+Des études ont montré (Bolukbasi et al., 2016) que des analogies problématiques émergent naturellement :
 
-### Negative Sampling
+> *"homme est à programmeur informatique ce que femme est à femme au foyer"*
 
-Au lieu de mettre à jour tous les $V$ vecteurs de sortie, on n'en met à jour qu'un échantillon :
+Ces associations non désirées sont héritées des **co-occurrences biaisées** dans les corpus d'entraînement.
 
-$$E = -\log \sigma(v_{w_O}'^T h) - \sum_{w_j \in W_{\text{neg}}} \log \sigma(-v_{w_j}'^T h)$$
+💡 Des techniques de **débiaisage** (debiasing) ont été proposées pour corriger ces associations, mais le problème reste ouvert.
 
-Mise à jour :
-$$v_{w_j}'^{(\text{new})} = v_{w_j}'^{(\text{old})} - \eta \cdot (\sigma(v_{w_j}'^T h) - t_j) \cdot h$$
+## Limitations techniques
 
-avec $t_j = 1$ si $w_j = w_O$ (échantillon positif), $t_j = 0$ sinon.
+- **Mots hors vocabulaire (Out-of-Vocabulary, OOV)** : les mots non vus à l'entraînement n'ont pas de vecteur. **FastText** [Bojanowski et al., 2016] résout partiellement ce problème en travaillant au niveau des **sous-mots** (subwords).
 
-Distribution de bruit : $P_n(w) \propto U(w)^{3/4}$ (distribution unigram élevée à la puissance $3/4$).
-:::
+- **Polysémie non résolue** : un même mot avec plusieurs sens (ex. *"banque"* : établissement financier vs rive d'un cours d'eau) reçoit un **unique vecteur** moyen. Les modèles contextuels comme **BERT** [Devlin et al., 2018] résolvent ce problème.
 
-## 6. Questions types
+---
 
-- Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non linéaires entre termes ?
-- Quelles sont les différences fondamentales dans la construction de ces modèles ?
-- Comment utilise-t-on l'embedding de termes résultant ?
-- Quelle est la dimensionnalité impliquée ?
-- Quel est le risque d'enregistrer des relations inappropriées entre termes ?
+# Vers les modèles modernes
+
+## Prolongements de Word2Vec et GloVe
+
+Les plongements statiques (un vecteur par mot) ont pavé la voie à des architectures plus puissantes :
+
+- **FastText** : enrichit les vecteurs avec des informations sur les sous-mots (préfixes, suffixes), ce qui améliore la gestion des mots rares et des langues morphologiquement riches.
+
+- **BERT** (Bidirectional Encoder Representations from Transformers) : génère des plongements **contextuels** — le vecteur d'un mot change selon la phrase dans laquelle il apparaît.
+
+- **Modèles de traduction automatique** (Machine Translation) : utilisent des architectures de type **Transformer** (Vaswani et al., 2017) pour des plongements séquentiels.
+
+💡 La frontière entre la recherche d'information (IR) et le NLP moderne est de plus en plus floue. Les techniques actuelles de recherche sémantique dense (Dense Retrieval) reposent directement sur BERT et ses variantes.
+
+## IR moderne : recherche du plus proche voisin
+
+> Les techniques récentes de recherche d'information représentent requêtes et documents par des vecteurs denses, et la recherche devient un **problème de plus proche voisin approximatif** (Approximate Nearest Neighbor Search).
+
+Cette évolution illustre comment les plongements neuronaux ont transformé en profondeur la discipline.
+
+---
+
+# Questions d'examen
+
+Les questions suivantes, issues du cours, nécessitent des **réponses formelles et mathématiques** :
+
+## Question 1 : Relations non-linéaires
+
+**Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non-linéaires entre termes ?**
+
+La non-linéarité vient de l'utilisation de fonctions exponentielles (softmax, exp) dans le processus d'apprentissage. Contrairement à LSI qui effectue une factorisation matricielle linéaire, Word2Vec optimise une vraisemblance via un réseau de neurones avec activation softmax, et GloVe minimise une perte quadratique sur les logarithmes de co-occurrences. Ces formulations permettent d'encoder des relations géométriques complexes (translations, rotations) impossibles à représenter linéairement.
+
+## Question 2 : Différences fondamentales
+
+**Quelles sont les différences fondamentales dans la construction de ces modèles ?**
+
+CBoW et Skip-gram apprennent en optimisant une **prédiction locale** (contexte ↔ cible) de manière stochastique. GloVe, en revanche, minimise une perte globale sur la **matrice entière de co-occurrence**, pondérée par $\psi$. GloVe intègre donc explicitement l'information de fréquence globale des co-occurrences, tandis que Word2Vec la traite implicitement.
+
+## Question 3 : Utilisation du plongement
+
+**Comment utilise-t-on le plongement résultant ?**
+
+Les poids de la matrice $W$ (ou $W'$) servent de table de correspondance. Pour représenter un document, on calcule la moyenne des vecteurs de ses termes. La recherche s'effectue ensuite par calcul de distance euclidienne entre le vecteur de la requête et les vecteurs des documents.
+
+## Question 4 : Dimensionnalité
+
+**Quelle est la dimensionnalité impliquée ?**
+
+- Vocabulaire : $N$ mots (typiquement $10^4$ à $10^6$)
+- Dimension du plongement : $C$ (typiquement 100 à 300)
+- La matrice $W$ est de dimension $N \times C$
+- La matrice $W'$ est de dimension $C \times N$
+- Le produit $v_T^{\prime\,\top} v_C$ est un scalaire
+
+## Question 5 : Risque de relations inappropriées
+
+**Quel est le risque d'enregistrer des relations inappropriées entre termes ?**
+
+Les co-occurrences reflètent les biais présents dans les corpus d'entraînement (biais de genre, biais culturels, stéréotypes). Des associations indésirables peuvent être apprises et propagées dans les applications, avec des conséquences éthiques potentiellement importantes.
+
+---
+
+# Résumé du chapitre
+
+🧠 **Points clés à retenir** :
+
+- Les plongements neuronaux sont **basés sur le contexte** : la signification d'un terme est définie par ses co-occurrences.
+
+- **Word2Vec** (CBoW et Skip-gram) apprend à **prédire** des termes à partir de leur contexte via un réseau de neurones.
+
+- **GloVe** exploite les **fréquences globales** de co-occurrence pour construire un plongement plus stable.
+
+- Ces modèles capturent des **relations non-linéaires** que les approches classiques (TF·IDF, LSI) ne peuvent pas représenter.
+
+- La **mesure de similarité** utilisée doit être cohérente avec le modèle de plongement (distance euclidienne pour Word2Vec et GloVe).
+
+- Les plongements héritent des **biais sociétaux** présents dans les corpus d'entraînement.
+
+- Ils constituent le socle des modèles modernes comme **FastText** et **BERT**, à la frontière entre IR et NLP.

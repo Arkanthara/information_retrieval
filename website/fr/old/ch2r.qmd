@@ -1,0 +1,114 @@
+---
+title: "Synthèse — Chapitre 2 : Embeddings"
+---
+
+## Notation rapide
+
+| Symbole | Sens |
+|---------|------|
+| $N$ / $M$ | Nb documents / Nb termes |
+| $d_j$ / $t_i$ | Repr. document $j$ / terme $i$ |
+| $\text{RSV}(d_j,q)$ | Score de pertinence |
+
+---
+
+## 1. Modèle Booléen
+
+- Embedding **binaire** (1-hot) : $d_j \in \{0,1\}^M$
+- Requête = expression logique (AND, OR, NOT)
+- $\text{RSV} \in \{0,1\}$ → **pas de classement**
+
+:::{.callout-warning}
+Trop rigide : pas de continuum de pertinence.
+:::
+
+---
+
+## 2. Bag of Words — TF·IDF
+
+### Formules clés
+
+$$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}} \qquad \text{idf}_i = \log\frac{N}{n_i} \qquad \boxed{w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i}$$
+
+**Matrice** $W \in \mathbb{R}^{M \times N}$ : colonnes = documents, lignes = termes.
+
+```{.cetz}
+// Pipeline TF·IDF compact
+#cetz.canvas({
+  import cetz.draw: *
+
+  rect((0, 0), (rel: (1.8, 0.8)), fill: rgb("#f9e2af"), stroke: rgb("#1e1e2e"), name: "tf", radius: 0.1)
+  content((0.9, 0.4), [TF], anchor: "center")
+
+  rect((2.5, 0), (rel: (1.8, 0.8)), fill: rgb("#fab387"), stroke: rgb("#1e1e2e"), name: "idf", radius: 0.1)
+  content((3.4, 0.4), [IDF], anchor: "center")
+
+  circle((5.5, 0.4), radius: 0.35, fill: rgb("#cba6f7"), stroke: rgb("#1e1e2e"), name: "x")
+  content((5.5, 0.4), [×], anchor: "center")
+
+  rect((6.8, 0), (rel: (2, 0.8)), fill: rgb("#a6e3a1"), stroke: rgb("#1e1e2e"), name: "w", radius: 0.1)
+  content((7.8, 0.4), [$w_(i j)$], anchor: "center")
+
+  line("tf", "x", mark: (end: ">", fill: black))
+  line("idf", "x", mark: (end: ">", fill: black))
+  line("x", "w", mark: (end: ">", fill: black))
+})
+```
+
+---
+
+## 3. Recherche vectorielle
+
+### Similarité cosinus
+
+$$\boxed{\text{RSV}(d_j, q) = \frac{d_j^T q}{\|d_j\| \|q\|}}$$
+
+Idée : extension de l'**intersection ensembliste** au continu.
+
+---
+
+## 4. Recherche probabiliste
+
+### Odds ratio
+
+$$O(R|d_j,q) \propto \frac{P(d_j|R,q)}{P(d_j|\bar{R},q)}$$
+
+### BIR (indépendance binaire)
+
+- Termes binaires + indépendants
+- Au démarrage : $\log\frac{1 - P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} \approx \text{idf}_i$
+- Avec feedback : itérer $r_i/r$ et $(n_i - r_i)/(N-r)$
+
+### Évolution : BIR → RSJ → **BM25 (Okapi)**
+
+---
+
+## 5. LSI (Indexation Sémantique Latente)
+
+### Problèmes TF·IDF
+
+Synonymie (« voiture » ≈ « automobile ») et polysémie (« table »)
+
+### Solution : SVD tronquée
+
+$$W_K = U_K \Sigma_K V_K^T \qquad \tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$$
+
+$\Rightarrow$ Projection dans un espace de **concepts** (dimension $K$) où les termes sont **décorrélés**.
+
+### Mise à jour
+
+| Stratégie | Précision | Coût |
+|-----------|-----------|------|
+| Exacte | Parfaite | Élevé (re-SVD partielle) |
+| Fold-in | Approximative | Faible (simple projection) |
+
+---
+
+## Tableau récapitulatif
+
+| Modèle | Embedding | Similarité | Limite principale |
+|--------|-----------|------------|-------------------|
+| Booléen | Binaire | Logique | Pas de ranking |
+| TF·IDF | Creux ($\mathbb{R}^M$) | Cosinus | Synonymie / Polysémie |
+| BIR/BM25 | Probabiliste | Odds ratio | Estimation coûteuse |
+| LSI | Dense ($\mathbb{R}^K$) | Cosinus | Linéaire seulement |

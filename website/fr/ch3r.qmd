@@ -1,88 +1,156 @@
 ---
-title: "Synthèse — Chapitre 3 : Embeddings Neuronaux"
+title: "Plongements Neuronaux (Neural Embeddings) — Révision"
 ---
 
-## Contenu vs Contexte
+# Vue d'ensemble
 
-| | Contenu | Contexte |
-|--|---------|----------|
-| **Méthode** | Fréquence, statistiques | Prédiction par réseau neuronal |
-| **Relation** | Linéaire | **Non linéaire** |
-| **Exemples** | TF·IDF, BIR, LSI | Word2Vec, GloVe |
+## Deux types de plongements (Embeddings)
+
+| Type | Base | Modèles | Relation capturée |
+|------|------|---------|-------------------|
+| Contenu (Content-based) | Fréquence des termes | TF·IDF, LSI, BIR | Corrélations **linéaires** |
+| Contexte (Context-based) | Co-occurrences locales | Word2Vec, GloVe | Relations **non-linéaires** |
+
+💡 **Principe fondamental** : un terme est caractérisé par les termes qui l'entourent.
 
 ---
 
-## Word2Vec — Deux modèles
+# Word2Vec
 
-### CBoW : Contexte → Cible
+## Setup formel
 
-$$\mathbb{P}(W_T | W_C) = \text{softmax}(v_T'^T \bar{v}_C)$$
+- $W_T$ : terme **cible** (Target Word)
+- $W_C$ : terme de **contexte** (Context Word)
+- **Objectif** : estimer $\mathbb{P}(W_T \mid W_C)$
 
-- Paires (contexte, cible) via fenêtre glissante
-- Perte : $\mathcal{L} = -\sum \log \mathbb{P}(W_T | W_C)$
+## CBoW vs Skip-gram
 
-### Skip-gram : Cible → Contexte
+| | CBoW | Skip-gram |
+|-|------|-----------|
+| Direction | Contexte → Cible | Cible → Contexte |
+| Probabilité cible | $\mathbb{P}(W_T \mid W_C)$ | $\mathbb{P}(W_C \mid W_T)$ |
+| Avantage | Rapide, mots fréquents | Mots rares, petits corpus |
 
-$$\mathbb{P}(W_C | W_T) = \text{softmax}(v_C'^T v_T)$$
+## Architecture (CBoW)
 
-```{.cetz}
-// CBoW vs Skip-gram compact
-#cetz.canvas({
-  import cetz.draw: *
-
-  content((1.5, 3.2), [*CBoW*], anchor: "center")
-  rect((0, 2), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "c1", radius: 0.1)
-  content((0.75, 2.4), [Ctx], anchor: "center")
-  rect((2.5, 2), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "t1", radius: 0.1)
-  content((3.25, 2.4), [Cible], anchor: "center")
-  line("c1", "t1", mark: (end: ">", fill: black))
-
-  content((1.5, 1.2), [*Skip-gram*], anchor: "center")
-  rect((0, 0), (rel: (1.5, 0.8)), fill: rgb("#f38ba8"), stroke: rgb("#1e1e2e"), name: "t2", radius: 0.1)
-  content((0.75, 0.4), [Cible], anchor: "center")
-  rect((2.5, 0), (rel: (1.5, 0.8)), fill: rgb("#89b4fa"), stroke: rgb("#1e1e2e"), name: "c2", radius: 0.1)
-  content((3.25, 0.4), [Ctx], anchor: "center")
-  line("t2", "c2", mark: (end: ">", fill: black))
-})
+```
+[w(t-2)]  ─┐
+[w(t-1)]  ─┤─→ W (N×C) ─→ Somme ─→ W' (C×N) ─→ Softmax ─→ [w(t)]
+[w(t+1)]  ─┤
+[w(t+2)]  ─┘
 ```
 
-### Optimisations
+- Paramètres : $\theta = [W, W']$
+- Approximation : $\mathbb{P}(W_T \mid W_C) \sim v_T^{\prime\,\top} v_C$
 
-| Technique | Complexité | Principe |
-|-----------|-----------|----------|
-| Softmax standard | $O(V)$ | Normalisation sur tout le vocabulaire |
-| Softmax hiérarchique | $O(\log V)$ | Arbre binaire (Huffman) |
-| Negative Sampling | $O(K)$ | $K$ échantillons négatifs |
+## Fonction de perte (Loss Function)
 
----
+$$\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log\,\mathbb{P}(W_T \mid W_C)$$
 
-## GloVe — Co-occurrences globales
+$$\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N}\sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta) \quad \Rightarrow \quad \theta^* = \arg\min_\theta\,\mathcal{L}(\mathcal{X};\,\theta)$$
 
-### Idée clé
+## Softmax
 
-$$v_i^T v_k + b_i + b_k \approx \log \text{card}\{(w_k, w_i)\}$$
+$$\mathbb{P}(W_T \mid W_C) = \frac{\exp(v_T^{\prime\,\top} v_C)}{\sum_i \exp(v_i^{\prime\,\top} v_C)}$$
 
-Le **ratio** $\frac{\mathbb{P}_{\text{cooc}}(w_k | w_i)}{\mathbb{P}_{\text{cooc}}(w_k | w_j)}$ discrimine les relations.
+⚠️ **Coût** : $O(N)$ — prohibitif pour grand vocabulaire.
 
-### Perte
+**Solution** : Softmax hiérarchique (Hierarchical Softmax) → $O(\log N)$ via arbre binaire (ex. WordNet).
 
-Moindres carrés pondérés par $\psi(\text{card})$ (supprime les co-occurrences nulles, plafonne les fréquentes).
+**Alternative** : Negative Sampling — comparer la cible correcte à quelques exemples négatifs aléatoires.
 
 ---
 
-## Tableau récapitulatif global
+# GloVe (Global Vectors)
 
-| Embedding | Type | Similarité | Force | Limite |
-|-----------|------|------------|-------|--------|
-| TF·IDF | Contenu | Cosinus | Simple, interprétable | Synonymie/Polysémie |
-| LSI | Contenu | Cosinus | Décorrèle | Linéaire seulement |
-| **Word2Vec** | Contexte | Euclidien | Non-linéaire | Ignore densité co-occ. |
-| **GloVe** | Contexte | Euclidien | Exploite densité | Biais sociétaux |
+## Motivation
 
-:::{.callout-important}
-## À retenir
-- Embeddings neuronaux = **vecteurs denses** appris par prédiction contextuelle
-- Modèles pré-entraînés disponibles → **lookup table** directe
-- Embedding de document = **moyenne** des vecteurs de termes
-- **Attention aux biais** : les embeddings reflètent les biais du corpus d'entraînement
-:::
+⚠️ Word2Vec ignore la **densité globale** des co-occurrences.
+
+GloVe : les co-occurrences **fréquentes** pèsent davantage.
+
+## Probabilité de co-occurrence
+
+$$\mathbb{P}_{\text{cooc}}(w_k \mid w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
+
+## Modèle
+
+$$v_i^\top v_k = \log\,\text{card}\{(w_k, w_i)\} - \underbrace{\log\,\text{card}\{(w_i)\}}_{b_i\text{ (biais)}}$$
+
+### Propriété clé — différence vectorielle
+
+$$\frac{\mathbb{P}_{\text{cooc}}(w_k \mid w_i)}{\mathbb{P}_{\text{cooc}}(w_k \mid w_j)} = \exp\!\left((v_i - v_j)^\top v_k\right)$$
+
+💡 La **translation** $v_i - v_j$ encode le ratio de co-occurrence → analogies vectorielles.
+
+## Fonction de perte GloVe
+
+$$\mathcal{L} = \sum_{w_i, w_k} \underbrace{\psi(\text{card}\{(w_k,w_i)\})}_{\text{pondération}} \left(v_i^\top v_k + b_i + b_k - \log\,\text{card}\{(w_k,w_i)\}\right)^2$$
+
+### Fonction $\psi$ (pondération)
+
+$$\psi(x) = \begin{cases} (x / x_{\max})^\alpha & x < x_{\max} \\ 1 & \text{sinon} \end{cases}$$
+
+- $\psi(0) = 0$ : co-occurrences nulles ignorées
+- $\psi(\infty) = 1$ : co-occurrences très fréquentes plafonnées
+- Valeurs typiques : $\alpha = 3/4$, $x_{\max} = 100$
+
+---
+
+# Tableau récapitulatif global
+
+| Modèle | Type | Entité | Similarité |
+|--------|------|--------|------------|
+| Booléen | Contenu | Terme | Opérateurs logiques |
+| TF·IDF | Contenu | Document | Cosinus |
+| BIR | Contenu | Terme | Produit (i.i.d.) |
+| LSI | Contenu | Document | Cosinus |
+| Word2Vec | Contexte | Terme | **Distance euclidienne** |
+| GloVe | Contexte | Terme | **Distance euclidienne** |
+
+---
+
+# Points critiques ⚠️
+
+## Pourquoi non-linéaire ?
+
+- Fonctions **exp / softmax** dans l'apprentissage → relations géométriques complexes (translations, rotations)
+- LSI = linéaire (factorisation matricielle) → seulement des corrélations
+
+## Utilisation pratique
+
+1. Récupérer vecteur de chaque terme via la **table de correspondance** (lookup table)
+2. Document = **moyenne** des vecteurs de ses termes
+3. Similarité = **distance euclidienne** dans l'espace de plongement
+
+⚠️ La mesure de similarité **doit être cohérente** avec le modèle de plongement.
+
+## Biais sociétaux (Societal Biases)
+
+- Les plongements héritent des **biais** du corpus d'entraînement
+- Exemple : associations de genre problématiques (Bolukbasi et al., 2016)
+
+## Limites
+
+| Limite | Solution |
+|--------|----------|
+| Mots hors vocabulaire (OOV) | **FastText** (sous-mots / subwords) |
+| Polysémie (un vecteur par mot) | **BERT** (plongements contextuels) |
+| Biais sociétaux | Techniques de débiaisage |
+
+---
+
+# Dimensionnalité
+
+- Vocabulaire : $N$ mots ($10^4$–$10^6$)
+- Dimension plongement : $C$ (100–300 typiquement)
+- $W$ : $N \times C$ — $W'$ : $C \times N$
+- $v_T^{\prime\,\top} v_C$ : **scalaire**
+
+---
+
+# Prolongements modernes
+
+- **FastText** : vecteurs enrichis par sous-mots
+- **BERT** : plongements contextuels (Transformers)
+- **Dense Retrieval** : IR moderne = recherche du **plus proche voisin approximatif** (Approximate Nearest Neighbor)
