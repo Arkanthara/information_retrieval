@@ -27,9 +27,9 @@ jobs:
       - name: Add Quizdown extension for Quarto
         run: |
           cd website/en
-          quarto add parmsam/quarto-quizdown
+          quarto add parmsam/quarto-quizdown --no-prompt
           cd ../fr
-          quarto add parmsam/quarto-quizdown
+          quarto add parmsam/quarto-quizdown --no-prompt
           cd ../..
 
       - name: Render French project
