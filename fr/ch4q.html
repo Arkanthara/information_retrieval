@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Indexation en Recherche d’Information – Information Retrieval</title>
+<title>Évaluation en Recherche d’Information — Quiz – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4029,145 +4029,6 @@ vertical-align: -.125em;
   }
 }</script>
 
-  <script>/*
- * Polyfill service v3.111.0
- * Disable minification (remove `.min` from URL path) for more info
-*/
-
-(function(self, undefined) {!function(t){"use strict";function e(t){switch(typeof t){case"undefined":return"undefined";case"boolean":return"boolean";case"number":return"number";case"string":return"string";default:return null===t?"null":"object"}}function r(t){return Object.prototype.toString.call(t).replace(/^\[object *|\]$/g,"")}function n(t){return"function"==typeof t}function o(t){if(null===t||t===B)throw TypeError();return Object(t)}function i(t){return t>>0}function f(t){return t>>>0}function u(e){if(!("TYPED_ARRAY_POLYFILL_NO_ARRAY_ACCESSORS"in t)){if(e.length>N)throw RangeError("Array too large for polyfill");var r;for(r=0;r<e.length;r+=1)!function n(t){try{Object.defineProperty(e,t,{get:function(){return e._getter(t)},set:function(r){e._setter(t,r)},enumerable:!0,configurable:!1})}catch(r){}}(r)}}function a(t,e){var r=32-e;return t<<r>>r}function h(t,e){var r=32-e;return t<<r>>>r}function y(t){return[255&t]}function s(t){return a(t[0],8)}function l(t){return[255&t]}function p(t){return h(t[0],8)}function c(t){return t=x(Number(t)),[t<0?0:t>255?255:255&t]}function b(t){return[255&t,t>>8&255]}function g(t){return a(t[1]<<8|t[0],16)}function E(t){return[255&t,t>>8&255]}function v(t){return h(t[1]<<8|t[0],16)}function _(t){return[255&t,t>>8&255,t>>16&255,t>>24&255]}function O(t){return a(t[3]<<24|t[2]<<16|t[1]<<8|t[0],32)}function d(t){return[255&t,t>>8&255,t>>16&255,t>>24&255]}function j(t){return h(t[3]<<24|t[2]<<16|t[1]<<8|t[0],32)}function P(t,e,r){function n(t){var e=m(t),r=t-e;return r<.5?e:r>.5?e+1:e%2?e+1:e}var o,i,f,u=(1<<e-1)-1;if(t!==t)i=(1<<e)-1,f=F(2,r-1),o=0;else if(t===Infinity||t===-Infinity)i=(1<<e)-1,f=0,o=t<0?1:0;else if(0===t)i=0,f=0,o=1/t==-Infinity?1:0;else if(o=t<0,(t=M(t))>=F(2,1-u)){i=Y(m(I(t)/S),1023);var a=t/F(2,i);a<1&&(i-=1,a*=2),a>=2&&(i+=1,a/=2);var h=F(2,r);f=n(a*h)-h,i+=u,f/h>=1&&(i+=1,f=0),i>2*u&&(i=(1<<e)-1,f=0)}else i=0,f=n(t/F(2,1-u-r));var y,s=[];for(y=r;y;y-=1)s.push(f%2?1:0),f=m(f/2);for(y=e;y;y-=1)s.push(i%2?1:0),i=m(i/2);s.push(o?1:0),s.reverse();for(var l=s.join(""),p=[];l.length;)p.unshift(parseInt(l.substring(0,8),2)),l=l.substring(8);return p}function T(t,e,r){var n,o,i,f,u,a,h,y,s=[];for(n=0;n<t.length;++n)for(i=t[n],o=8;o;o-=1)s.push(i%2?1:0),i>>=1;return s.reverse(),f=s.join(""),u=(1<<e-1)-1,a=parseInt(f.substring(0,1),2)?-1:1,h=parseInt(f.substring(1,1+e),2),y=parseInt(f.substring(1+e),2),h===(1<<e)-1?0!==y?NaN:a*Infinity:h>0?a*F(2,h-u)*(1+y/F(2,r)):0!==y?a*F(2,-(u-1))*(y/F(2,r)):a<0?-0:0}function w(t){return T(t,11,52)}function A(t){return P(t,11,52)}function L(t){return T(t,8,23)}function R(t){return P(t,8,23)}var B=void 0,N=1e5,S=Math.LN2,M=Math.abs,m=Math.floor,I=Math.log,U=Math.max,Y=Math.min,F=Math.pow,x=Math.round;!function(){var t=Object.defineProperty,e=!function(){try{return Object.defineProperty({},"x",{})}catch(t){return!1}}();t&&!e||(Object.defineProperty=function(e,r,n){if(t)try{return t(e,r,n)}catch(o){}if(e!==Object(e))throw TypeError("Object.defineProperty called on non-object");return Object.prototype.__defineGetter__&&"get"in n&&Object.prototype.__defineGetter__.call(e,r,n.get),Object.prototype.__defineSetter__&&"set"in n&&Object.prototype.__defineSetter__.call(e,r,n.set),"value"in n&&(e[r]=n.value),e})}(),function(){function a(t){if((t=i(t))<0)throw RangeError("ArrayBuffer size is not a small enough positive integer.");Object.defineProperty(this,"byteLength",{value:t}),Object.defineProperty(this,"_bytes",{value:Array(t)});for(var e=0;e<t;e+=1)this._bytes[e]=0}function h(){if(!arguments.length||"object"!=typeof arguments[0])return function(t){if((t=i(t))<0)throw RangeError("length is not a small enough positive integer.");Object.defineProperty(this,"length",{value:t}),Object.defineProperty(this,"byteLength",{value:t*this.BYTES_PER_ELEMENT}),Object.defineProperty(this,"buffer",{value:new a(this.byteLength)}),Object.defineProperty(this,"byteOffset",{value:0})}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&arguments[0]instanceof h)return function(t){if(this.constructor!==t.constructor)throw TypeError();var e=t.length*this.BYTES_PER_ELEMENT;Object.defineProperty(this,"buffer",{value:new a(e)}),Object.defineProperty(this,"byteLength",{value:e}),Object.defineProperty(this,"byteOffset",{value:0}),Object.defineProperty(this,"length",{value:t.length});for(var r=0;r<this.length;r+=1)this._setter(r,t._getter(r))}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&!(arguments[0]instanceof h)&&!(arguments[0]instanceof a||"ArrayBuffer"===r(arguments[0])))return function(t){var e=t.length*this.BYTES_PER_ELEMENT;Object.defineProperty(this,"buffer",{value:new a(e)}),Object.defineProperty(this,"byteLength",{value:e}),Object.defineProperty(this,"byteOffset",{value:0}),Object.defineProperty(this,"length",{value:t.length});for(var r=0;r<this.length;r+=1){var n=t[r];this._setter(r,Number(n))}}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&(arguments[0]instanceof a||"ArrayBuffer"===r(arguments[0])))return function(t,e,r){if((e=f(e))>t.byteLength)throw RangeError("byteOffset out of range");if(e%this.BYTES_PER_ELEMENT)throw RangeError("buffer length minus the byteOffset is not a multiple of the element size.");if(r===B){var n=t.byteLength-e;if(n%this.BYTES_PER_ELEMENT)throw RangeError("length of buffer minus byteOffset not a multiple of the element size");r=n/this.BYTES_PER_ELEMENT}else r=f(r),n=r*this.BYTES_PER_ELEMENT;if(e+n>t.byteLength)throw RangeError("byteOffset and length reference an area beyond the end of the buffer");Object.defineProperty(this,"buffer",{value:t}),Object.defineProperty(this,"byteLength",{value:n}),Object.defineProperty(this,"byteOffset",{value:e}),Object.defineProperty(this,"length",{value:r})}.apply(this,arguments);throw TypeError()}function P(t,e,r){var n=function(){Object.defineProperty(this,"constructor",{value:n}),h.apply(this,arguments),u(this)};"__proto__"in n?n.__proto__=h:(n.from=h.from,n.of=h.of),n.BYTES_PER_ELEMENT=t;var o=function(){};return o.prototype=T,n.prototype=new o,Object.defineProperty(n.prototype,"BYTES_PER_ELEMENT",{value:t}),Object.defineProperty(n.prototype,"_pack",{value:e}),Object.defineProperty(n.prototype,"_unpack",{value:r}),n}t.ArrayBuffer=t.ArrayBuffer||a,Object.defineProperty(h,"from",{value:function(t){return new this(t)}}),Object.defineProperty(h,"of",{value:function(){return new this(arguments)}});var T={};h.prototype=T,Object.defineProperty(h.prototype,"_getter",{value:function(t){if(arguments.length<1)throw SyntaxError("Not enough arguments");if((t=f(t))>=this.length)return B;var e,r,n=[];for(e=0,r=this.byteOffset+t*this.BYTES_PER_ELEMENT;e<this.BYTES_PER_ELEMENT;e+=1,r+=1)n.push(this.buffer._bytes[r]);return this._unpack(n)}}),Object.defineProperty(h.prototype,"get",{value:h.prototype._getter}),Object.defineProperty(h.prototype,"_setter",{value:function(t,e){if(arguments.length<2)throw SyntaxError("Not enough arguments");if(!((t=f(t))>=this.length)){var r,n,o=this._pack(e);for(r=0,n=this.byteOffset+t*this.BYTES_PER_ELEMENT;r<this.BYTES_PER_ELEMENT;r+=1,n+=1)this.buffer._bytes[n]=o[r]}}}),Object.defineProperty(h.prototype,"constructor",{value:h}),Object.defineProperty(h.prototype,"copyWithin",{value:function(t,e){var r=arguments[2],n=o(this),u=n.length,a=f(u);a=U(a,0);var h,y=i(t);h=y<0?U(a+y,0):Y(y,a);var s,l=i(e);s=l<0?U(a+l,0):Y(l,a);var p;p=r===B?a:i(r);var c;c=p<0?U(a+p,0):Y(p,a);var b,g=Y(c-s,a-h);for(s<h&&h<s+g?(b=-1,s=s+g-1,h=h+g-1):b=1;g>0;)n._setter(h,n._getter(s)),s+=b,h+=b,g-=1;return n}}),Object.defineProperty(h.prototype,"every",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)if(!t.call(o,e._getter(i),i,e))return!1;return!0}}),Object.defineProperty(h.prototype,"fill",{value:function(t){var e=arguments[1],r=arguments[2],n=o(this),u=n.length,a=f(u);a=U(a,0);var h,y=i(e);h=y<0?U(a+y,0):Y(y,a);var s;s=r===B?a:i(r);var l;for(l=s<0?U(a+s,0):Y(s,a);h<l;)n._setter(h,t),h+=1;return n}}),Object.defineProperty(h.prototype,"filter",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=[],i=arguments[1],u=0;u<r;u++){var a=e._getter(u);t.call(i,a,u,e)&&o.push(a)}return new this.constructor(o)}}),Object.defineProperty(h.prototype,"find",{value:function(t){var e=o(this),r=e.length,i=f(r);if(!n(t))throw TypeError();for(var u=arguments.length>1?arguments[1]:B,a=0;a<i;){var h=e._getter(a),y=t.call(u,h,a,e);if(Boolean(y))return h;++a}return B}}),Object.defineProperty(h.prototype,"findIndex",{value:function(t){var e=o(this),r=e.length,i=f(r);if(!n(t))throw TypeError();for(var u=arguments.length>1?arguments[1]:B,a=0;a<i;){var h=e._getter(a),y=t.call(u,h,a,e);if(Boolean(y))return a;++a}return-1}}),Object.defineProperty(h.prototype,"forEach",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)t.call(o,e._getter(i),i,e)}}),Object.defineProperty(h.prototype,"indexOf",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(0===r)return-1;var n=0;if(arguments.length>0&&(n=Number(arguments[1]),n!==n?n=0:0!==n&&n!==1/0&&n!==-1/0&&(n=(n>0||-1)*m(M(n)))),n>=r)return-1;for(var o=n>=0?n:U(r-M(n),0);o<r;o++)if(e._getter(o)===t)return o;return-1}}),Object.defineProperty(h.prototype,"join",{value:function(t){if(this===B||null===this)throw TypeError();for(var e=Object(this),r=f(e.length),n=Array(r),o=0;o<r;++o)n[o]=e._getter(o);return n.join(t===B?",":t)}}),Object.defineProperty(h.prototype,"lastIndexOf",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(0===r)return-1;var n=r;arguments.length>1&&(n=Number(arguments[1]),n!==n?n=0:0!==n&&n!==1/0&&n!==-1/0&&(n=(n>0||-1)*m(M(n))));for(var o=n>=0?Y(n,r-1):r-M(n);o>=0;o--)if(e._getter(o)===t)return o;return-1}}),Object.defineProperty(h.prototype,"map",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();var o=[];o.length=r;for(var i=arguments[1],u=0;u<r;u++)o[u]=t.call(i,e._getter(u),u,e);return new this.constructor(o)}}),Object.defineProperty(h.prototype,"reduce",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();if(0===r&&1===arguments.length)throw TypeError();var o,i=0;for(o=arguments.length>=2?arguments[1]:e._getter(i++);i<r;)o=t.call(B,o,e._getter(i),i,e),i++;return o}}),Object.defineProperty(h.prototype,"reduceRight",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();if(0===r&&1===arguments.length)throw TypeError();var o,i=r-1;for(o=arguments.length>=2?arguments[1]:e._getter(i--);i>=0;)o=t.call(B,o,e._getter(i),i,e),i--;return o}}),Object.defineProperty(h.prototype,"reverse",{value:function(){if(this===B||null===this)throw TypeError();for(var t=Object(this),e=f(t.length),r=m(e/2),n=0,o=e-1;n<r;++n,--o){var i=t._getter(n);t._setter(n,t._getter(o)),t._setter(o,i)}return t}}),Object.defineProperty(h.prototype,"set",{value:function(t,e){if(arguments.length<1)throw SyntaxError("Not enough arguments");var r,n,o,i,u,a,h,y,s,l;if("object"==typeof arguments[0]&&arguments[0].constructor===this.constructor){if(r=arguments[0],(o=f(arguments[1]))+r.length>this.length)throw RangeError("Offset plus length of array is out of range");if(y=this.byteOffset+o*this.BYTES_PER_ELEMENT,s=r.length*this.BYTES_PER_ELEMENT,r.buffer===this.buffer){for(l=[],u=0,a=r.byteOffset;u<s;u+=1,a+=1)l[u]=r.buffer._bytes[a];for(u=0,h=y;u<s;u+=1,h+=1)this.buffer._bytes[h]=l[u]}else for(u=0,a=r.byteOffset,h=y;u<s;u+=1,a+=1,h+=1)this.buffer._bytes[h]=r.buffer._bytes[a]}else{if("object"!=typeof arguments[0]||"undefined"==typeof arguments[0].length)throw TypeError("Unexpected argument type(s)");if(n=arguments[0],i=f(n.length),(o=f(arguments[1]))+i>this.length)throw RangeError("Offset plus length of array is out of range");for(u=0;u<i;u+=1)a=n[u],this._setter(o+u,Number(a))}}}),Object.defineProperty(h.prototype,"slice",{value:function(t,e){for(var r=o(this),n=r.length,u=f(n),a=i(t),h=a<0?U(u+a,0):Y(a,u),y=e===B?u:i(e),s=y<0?U(u+y,0):Y(y,u),l=s-h,p=r.constructor,c=new p(l),b=0;h<s;){var g=r._getter(h);c._setter(b,g),++h,++b}return c}}),Object.defineProperty(h.prototype,"some",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)if(t.call(o,e._getter(i),i,e))return!0;return!1}}),Object.defineProperty(h.prototype,"sort",{value:function(t){function e(e,r){return e!==e&&r!==r?0:e!==e?1:r!==r?-1:t!==B?t(e,r):e<r?-1:e>r?1:0}if(this===B||null===this)throw TypeError();for(var r=Object(this),n=f(r.length),o=Array(n),i=0;i<n;++i)o[i]=r._getter(i);for(o.sort(e),i=0;i<n;++i)r._setter(i,o[i]);return r}}),Object.defineProperty(h.prototype,"subarray",{value:function(t,e){function r(t,e,r){return t<e?e:t>r?r:t}t=i(t),e=i(e),arguments.length<1&&(t=0),arguments.length<2&&(e=this.length),t<0&&(t=this.length+t),e<0&&(e=this.length+e),t=r(t,0,this.length),e=r(e,0,this.length);var n=e-t;return n<0&&(n=0),new this.constructor(this.buffer,this.byteOffset+t*this.BYTES_PER_ELEMENT,n)}});var N=P(1,y,s),S=P(1,l,p),I=P(1,c,p),F=P(2,b,g),x=P(2,E,v),k=P(4,_,O),C=P(4,d,j),z=P(4,R,L),D=P(8,A,w);t.Int8Array=t.Int8Array||N,t.Uint8Array=t.Uint8Array||S,t.Uint8ClampedArray=t.Uint8ClampedArray||I,t.Int16Array=t.Int16Array||F,t.Uint16Array=t.Uint16Array||x,t.Int32Array=t.Int32Array||k,t.Uint32Array=t.Uint32Array||C,t.Float32Array=t.Float32Array||z,t.Float64Array=t.Float64Array||D}(),function(){function e(t,e){return n(t.get)?t.get(e):t[e]}function o(t,e,n){if(!(t instanceof ArrayBuffer||"ArrayBuffer"===r(t)))throw TypeError();if((e=f(e))>t.byteLength)throw RangeError("byteOffset out of range");if(n=n===B?t.byteLength-e:f(n),e+n>t.byteLength)throw RangeError("byteOffset and length reference an area beyond the end of the buffer");Object.defineProperty(this,"buffer",{value:t}),Object.defineProperty(this,"byteLength",{value:n}),Object.defineProperty(this,"byteOffset",{value:e})}function i(t){return function r(n,o){if((n=f(n))+t.BYTES_PER_ELEMENT>this.byteLength)throw RangeError("Array index out of range");n+=this.byteOffset;for(var i=new Uint8Array(this.buffer,n,t.BYTES_PER_ELEMENT),u=[],h=0;h<t.BYTES_PER_ELEMENT;h+=1)u.push(e(i,h));return Boolean(o)===Boolean(a)&&u.reverse(),e(new t(new Uint8Array(u).buffer),0)}}function u(t){return function r(n,o,i){if((n=f(n))+t.BYTES_PER_ELEMENT>this.byteLength)throw RangeError("Array index out of range");var u,h,y=new t([o]),s=new Uint8Array(y.buffer),l=[];for(u=0;u<t.BYTES_PER_ELEMENT;u+=1)l.push(e(s,u));Boolean(i)===Boolean(a)&&l.reverse(),h=new Uint8Array(this.buffer,n,t.BYTES_PER_ELEMENT),h.set(l)}}var a=function(){var t=new Uint16Array([4660]);return 18===e(new Uint8Array(t.buffer),0)}();Object.defineProperty(o.prototype,"getUint8",{value:i(Uint8Array)}),Object.defineProperty(o.prototype,"getInt8",{value:i(Int8Array)}),Object.defineProperty(o.prototype,"getUint16",{value:i(Uint16Array)}),Object.defineProperty(o.prototype,"getInt16",{value:i(Int16Array)}),Object.defineProperty(o.prototype,"getUint32",{value:i(Uint32Array)}),Object.defineProperty(o.prototype,"getInt32",{value:i(Int32Array)}),Object.defineProperty(o.prototype,"getFloat32",{value:i(Float32Array)}),Object.defineProperty(o.prototype,"getFloat64",{value:i(Float64Array)}),Object.defineProperty(o.prototype,"setUint8",{value:u(Uint8Array)}),Object.defineProperty(o.prototype,"setInt8",{value:u(Int8Array)}),Object.defineProperty(o.prototype,"setUint16",{value:u(Uint16Array)}),Object.defineProperty(o.prototype,"setInt16",{value:u(Int16Array)}),Object.defineProperty(o.prototype,"setUint32",{value:u(Uint32Array)}),Object.defineProperty(o.prototype,"setInt32",{value:u(Int32Array)}),Object.defineProperty(o.prototype,"setFloat32",{value:u(Float32Array)}),Object.defineProperty(o.prototype,"setFloat64",{value:u(Float64Array)}),t.DataView=t.DataView||o}()}(self);if (!("defineProperty"in Object&&function(){try{var e={}
-return Object.defineProperty(e,"test",{value:42}),!0}catch(t){return!1}}()
-)) {!function(e){var t=Object.prototype.hasOwnProperty.call(Object.prototype,"__defineGetter__"),r="A property cannot both have accessors and be writable or have a value";Object.defineProperty=function n(o,i,f){if(e&&(o===window||o===document||o===Element.prototype||o instanceof Element))return e(o,i,f);if(null===o||!(o instanceof Object||"object"==typeof o))throw new TypeError("Object.defineProperty called on non-object");if(!(f instanceof Object))throw new TypeError("Property description must be an object");var c=String(i),a="value"in f||"writable"in f,p="get"in f&&typeof f.get,s="set"in f&&typeof f.set;if(p){if(p===undefined)return o;if("function"!==p)throw new TypeError("Getter must be a function");if(!t)throw new TypeError("Getters & setters cannot be defined on this javascript engine");if(a)throw new TypeError(r);Object.__defineGetter__.call(o,c,f.get)}else o[c]=f.value;if(s){if(s===undefined)return o;if("function"!==s)throw new TypeError("Setter must be a function");if(!t)throw new TypeError("Getters & setters cannot be defined on this javascript engine");if(a)throw new TypeError(r);Object.__defineSetter__.call(o,c,f.set)}return"value"in f&&(o[c]=f.value),o}}(Object.defineProperty);}if (!("name"in Function.prototype
-)) {!function(){var n=/^\s*function\s+([^(\s]*)\s*/,t=Function,e=t.prototype,r=e.constructor,o=function(o){var c,u;return o===t||o===r?u="Function":o!==e&&(c=(""+o).match(n),u=c&&c[1]),u||""};Object.defineProperty(e,"name",{get:function c(){var n=this,t=o(n);return n!==e&&Object.defineProperty(n,"name",{value:t,configurable:!0}),t},configurable:!0})}();}if (!("EPSILON"in Number
-)) {Object.defineProperty(Number,"EPSILON",{enumerable:!1,configurable:!1,writable:!1,value:Math.pow(2,-52)});}if (!("MAX_SAFE_INTEGER"in Number
-)) {Object.defineProperty(Number,"MAX_SAFE_INTEGER",{enumerable:!1,configurable:!1,writable:!1,value:Math.pow(2,53)-1});}if (!("MIN_SAFE_INTEGER"in Number
-)) {Object.defineProperty(Number,"MIN_SAFE_INTEGER",{enumerable:!1,configurable:!1,writable:!1,value:-(Math.pow(2,53)-1)});}function ArrayCreate(r){if(1/r==-Infinity&&(r=0),r>Math.pow(2,32)-1)throw new RangeError("Invalid array length");var n=[];return n.length=r,n}function Call(t,l){var n=arguments.length>2?arguments[2]:[];if(!1===IsCallable(t))throw new TypeError(Object.prototype.toString.call(t)+"is not a function.");return t.apply(l,n)}function CreateDataProperty(e,r,t){var a={value:t,writable:!0,enumerable:!0,configurable:!0};try{return Object.defineProperty(e,r,a),!0}catch(n){return!1}}function CreateDataPropertyOrThrow(t,r,o){var e=CreateDataProperty(t,r,o);if(!e)throw new TypeError("Cannot assign value `"+Object.prototype.toString.call(o)+"` to property `"+Object.prototype.toString.call(r)+"` on object `"+Object.prototype.toString.call(t)+"`");return e}function CreateMethodProperty(e,r,t){var a={value:t,writable:!0,enumerable:!1,configurable:!0};Object.defineProperty(e,r,a)}if (!("acosh"in Math
-)) {CreateMethodProperty(Math,"acosh",function t(a){return isNaN(a)?NaN:a<1?NaN:1===a?0:a===Infinity?Infinity:Math.log(a+Math.sqrt(a*a-1))});}if (!("asinh"in Math
-)) {CreateMethodProperty(Math,"asinh",function n(i){return isNaN(i)?NaN:0===i&&1/i===Infinity?0:0===i&&1/i==-Infinity?-0:i===Infinity?Infinity:i===-Infinity?-Infinity:Math.log(i+Math.sqrt(i*i+1))});}if (!("atanh"in Math
-)) {CreateMethodProperty(Math,"atanh",function n(t){return isNaN(t)?NaN:t<-1?NaN:t>1?NaN:-1===t?-Infinity:1===t?Infinity:0===t&&1/t===Infinity?0:0===t&&1/t==-Infinity?-0:Math.log((1+t)/(1-t))/2});}if (!("cbrt"in Math
-)) {CreateMethodProperty(Math,"cbrt",function n(t){if(isNaN(t))return NaN;if(0===t&&1/t===Infinity)return 0;if(0===t&&1/t==-Infinity)return-0;if(t===Infinity)return Infinity;if(t===-Infinity)return-Infinity;var i=Math.pow(Math.abs(t),1/3);return t<0?-i:i});}if (!("cosh"in Math
-)) {CreateMethodProperty(Math,"cosh",function n(t){if(isNaN(t))return NaN;if(0===t&&1/t===Infinity)return 1;if(0===t&&1/t==-Infinity)return 1;if(t===Infinity)return Infinity;if(t===-Infinity)return Infinity;if((t=Math.abs(t))>709){var i=Math.exp(.5*t);return i/2*i}return((i=Math.exp(t))+1/i)/2});}if (!("expm1"in Math
-)) {CreateMethodProperty(Math,"expm1",function n(i){return isNaN(i)?NaN:0===i&&1/i===Infinity?0:0===i&&1/i==-Infinity?-0:i===Infinity?Infinity:i===-Infinity?-1:i>-1e-6&&i<1e-6?i+i*i/2:Math.exp(i)-1});}if (!("fround"in Math
-)) {CreateMethodProperty(Math,"fround",function(n){return isNaN(n)?NaN:1/n==+Infinity||1/n==-Infinity||n===+Infinity||n===-Infinity?n:new Float32Array([n])[0]});}if (!("hypot"in Math
-)) {CreateMethodProperty(Math,"hypot",function t(n,r){if(0===arguments.length)return 0;for(var i=0,e=0,a=0;a<arguments.length;++a){if(arguments[a]===Infinity)return Infinity;if(arguments[a]===-Infinity)return Infinity;var f=Math.abs(Number(arguments[a]));f>e&&(i*=Math.pow(e/f,2),e=f),0===f&&0===e||(i+=Math.pow(f/e,2))}return e*Math.sqrt(i)});}if (!("log10"in Math
-)) {CreateMethodProperty(Math,"log10",function t(e){return Math.log(e)/Math.LN10});}if (!("log1p"in Math
-)) {CreateMethodProperty(Math,"log1p",function r(t){if(-1<(t=Number(t))&&t<1){for(var o=t,e=2;e<=300;e++)o+=Math.pow(-1,e-1)*Math.pow(t,e)/e;return o}return Math.log(1+t)});}if (!("log2"in Math
-)) {CreateMethodProperty(Math,"log2",function t(e){return Math.log(e)/Math.LN2});}if (!("sign"in Math
-)) {CreateMethodProperty(Math,"sign",function i(n){return n=Number(n),isNaN(n)?NaN:1/n==-Infinity?-0:1/n===Infinity?0:n<0?-1:n>0?1:void 0});}if (!("sinh"in Math
-)) {CreateMethodProperty(Math,"sinh",function r(t){var a=t<0?-1:1,e=Math.abs(t);if(e<22){if(e<Math.pow(2,-28))return t;var h=Math.exp(e)-1;return e<1?a*(2*h-h*h/(h+1))/2:a*(h+h/(h+1))/2}if(e<709.7822265625)return a*Math.exp(e)/2;var n=Math.exp(.5*e);return(h=a*n/2)*n});}if (!("tanh"in Math
-)) {CreateMethodProperty(Math,"tanh",function t(n){var e;return n===Infinity?1:n===-Infinity?-1:((e=Math.exp(2*n))-1)/(e+1)});}if (!("trunc"in Math
-)) {CreateMethodProperty(Math,"trunc",function t(r){return r<0?Math.ceil(r):Math.floor(r)});}if (!("freeze"in Object
-)) {CreateMethodProperty(Object,"freeze",function e(r){return r});}if (!("getPrototypeOf"in Object
-)) {CreateMethodProperty(Object,"getPrototypeOf",function t(o){if(o!==Object(o))throw new TypeError("Object.getPrototypeOf called on non-object");var e=o.__proto__;return e||null===e?e:"function"==typeof o.constructor&&o instanceof o.constructor?o.constructor.prototype:o instanceof Object?Object.prototype:null});}if (!("keys"in Object&&function(){return 2===Object.keys(arguments).length}(1,2)&&function(){try{return Object.keys(""),!0}catch(t){return!1}}()
-)) {CreateMethodProperty(Object,"keys",function(){"use strict";function t(){var t;try{t=Object.create({})}catch(r){return!0}return o.call(t,"__proto__")}function r(t){var r=n.call(t),e="[object Arguments]"===r;return e||(e="[object Array]"!==r&&null!==t&&"object"==typeof t&&"number"==typeof t.length&&t.length>=0&&"[object Function]"===n.call(t.callee)),e}var e=Object.prototype.hasOwnProperty,n=Object.prototype.toString,o=Object.prototype.propertyIsEnumerable,c=!o.call({toString:null},"toString"),l=o.call(function(){},"prototype"),i=["toString","toLocaleString","valueOf","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","constructor"],u=function(t){var r=t.constructor;return r&&r.prototype===t},a={$console:!0,$external:!0,$frame:!0,$frameElement:!0,$frames:!0,$innerHeight:!0,$innerWidth:!0,$outerHeight:!0,$outerWidth:!0,$pageXOffset:!0,$pageYOffset:!0,$parent:!0,$scrollLeft:!0,$scrollTop:!0,$scrollX:!0,$scrollY:!0,$self:!0,$webkitIndexedDB:!0,$webkitStorageInfo:!0,$window:!0},f=function(){if("undefined"==typeof window)return!1;for(var t in window)try{if(!a["$"+t]&&e.call(window,t)&&null!==window[t]&&"object"==typeof window[t])try{u(window[t])}catch(r){return!0}}catch(r){return!0}return!1}(),p=function(t){if("undefined"==typeof window||!f)return u(t);try{return u(t)}catch(r){return!1}};return function s(o){var u="[object Function]"===n.call(o),a=r(o),f="[object String]"===n.call(o),s=[];if(o===undefined||null===o)throw new TypeError("Cannot convert undefined or null to object");var y=l&&u;if(f&&o.length>0&&!e.call(o,0))for(var h=0;h<o.length;++h)s.push(String(h));if(a&&o.length>0)for(var g=0;g<o.length;++g)s.push(String(g));else for(var w in o)t()&&"__proto__"===w||y&&"prototype"===w||!e.call(o,w)||s.push(String(w));if(c)for(var d=p(o),$=0;$<i.length;++$)d&&"constructor"===i[$]||!e.call(o,i[$])||s.push(i[$]);return s}}());}function Get(n,t){return n[t]}function HasOwnProperty(r,t){return Object.prototype.hasOwnProperty.call(r,t)}function HasProperty(n,r){return r in n}function IsArray(r){return"[object Array]"===Object.prototype.toString.call(r)}if (!("isArray"in Array
-)) {CreateMethodProperty(Array,"isArray",function r(e){return IsArray(e)});}function IsCallable(n){return"function"==typeof n}if (!("bind"in Function.prototype
-)) {CreateMethodProperty(Function.prototype,"bind",function t(n){var r=Array,o=Object,e=r.prototype,l=function g(){},p=e.slice,a=e.concat,i=e.push,c=Math.max,u=this;if(!IsCallable(u))throw new TypeError("Function.prototype.bind called on incompatible "+u);for(var y,h=p.call(arguments,1),s=function(){if(this instanceof y){var t=u.apply(this,a.call(h,p.call(arguments)));return o(t)===t?t:this}return u.apply(n,a.call(h,p.call(arguments)))},f=c(0,u.length-h.length),b=[],d=0;d<f;d++)i.call(b,"$"+d);return y=Function("binder","return function ("+b.join(",")+"){ return binder.apply(this, arguments); }")(s),u.prototype&&(l.prototype=u.prototype,y.prototype=new l,l.prototype=null),y});}function RequireObjectCoercible(e){if(null===e||e===undefined)throw TypeError(Object.prototype.toString.call(e)+" is not coercible to Object.");return e}function SameValueNonNumber(e,n){return e===n}function ToBoolean(o){return Boolean(o)}function ToNumber(r){return Number(r)}function ToObject(e){if(null===e||e===undefined)throw TypeError();return Object(e)}function GetV(t,e){return ToObject(t)[e]}function GetMethod(e,n){var r=GetV(e,n);if(null===r||r===undefined)return undefined;if(!1===IsCallable(r))throw new TypeError("Method not callable: "+n);return r}function ToUint32(n){var i=Number(n);return isNaN(i)||1/i===Infinity||1/i==-Infinity||i===Infinity||i===-Infinity?0:(i<0?-1:1)*Math.floor(Math.abs(i))>>>0}if (!("clz32"in Math
-)) {CreateMethodProperty(Math,"clz32",function t(r){var e=ToUint32(r);return e?32-e.toString(2).length:32});}if (!("imul"in Math
-)) {CreateMethodProperty(Math,"imul",function t(r,e){var n=ToUint32(r),o=ToUint32(e),i=n>>>16&65535,a=65535&n,u=o>>>16&65535,h=65535&o;return a*h+(i*h+a*u<<16>>>0)|0});}function Type(e){switch(typeof e){case"undefined":return"undefined";case"boolean":return"boolean";case"number":return"number";case"string":return"string";case"symbol":return"symbol";default:return null===e?"null":"Symbol"in self&&(e instanceof self.Symbol||e.constructor===self.Symbol)?"symbol":"object"}}if (!("isFinite"in Number
-)) {!function(){var e=self;CreateMethodProperty(Number,"isFinite",function i(n){return"number"===Type(n)&&e.isFinite(n)})}();}if (!("isNaN"in Number
-)) {!function(){var e=self;CreateMethodProperty(Number,"isNaN",function r(n){return"number"===Type(n)&&!!e.isNaN(n)})}();}if (!("isExtensible"in Object
-)) {!function(e){CreateMethodProperty(Object,"isExtensible",function t(n){return"object"===Type(n)&&(!e||e(n))})}(Object.isExtensible);}if (!("seal"in Object&&function(){try{return Object.seal("1"),!0}catch(t){return!1}}()
-)) {!function(e){CreateMethodProperty(Object,"seal",function t(c){return"object"===Type(c)?c:e?e(c):c})}(Object.seal);}if (!("flags"in RegExp.prototype
-)) {Object.defineProperty(RegExp.prototype,"flags",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!==Type(e))throw new TypeError("Method called on incompatible type: must be an object.");var o="";return ToBoolean(Get(e,"global"))&&(o+="g"),ToBoolean(Get(e,"ignoreCase"))&&(o+="i"),ToBoolean(Get(e,"multiline"))&&(o+="m"),ToBoolean(Get(e,"unicode"))&&(o+="u"),ToBoolean(Get(e,"sticky"))&&(o+="y"),o}});}function CreateIterResultObject(e,r){if("boolean"!==Type(r))throw new Error;var t={};return CreateDataProperty(t,"value",e),CreateDataProperty(t,"done",r),t}function GetPrototypeFromConstructor(t,o){var r=Get(t,"prototype");return"object"!==Type(r)&&(r=o),r}function IsConstructor(t){return"object"===Type(t)&&("function"==typeof t&&!!t.prototype)}function IsRegExp(e){if("object"!==Type(e))return!1;var n="Symbol"in self&&"match"in self.Symbol?Get(e,self.Symbol.match):undefined;if(n!==undefined)return ToBoolean(n);try{var t=e.lastIndex;return e.lastIndex=0,RegExp.prototype.exec.call(e),!0}catch(l){}finally{e.lastIndex=t}return!1}function IteratorClose(r,t){if("object"!==Type(r["[[Iterator]]"]))throw new Error(Object.prototype.toString.call(r["[[Iterator]]"])+"is not an Object.");var e=r["[[Iterator]]"],o=GetMethod(e,"return");if(o===undefined)return t;try{var n=Call(o,e)}catch(c){var a=c}if(t)return t;if(a)throw a;if("object"!==Type(n))throw new TypeError("Iterator's return method returned a non-object.");return t}function IteratorComplete(t){if("object"!==Type(t))throw new Error(Object.prototype.toString.call(t)+"is not an Object.");return ToBoolean(Get(t,"done"))}function IteratorNext(t){if(arguments.length<2)var e=Call(t["[[NextMethod]]"],t["[[Iterator]]"]);else e=Call(t["[[NextMethod]]"],t["[[Iterator]]"],[arguments[1]]);if("object"!==Type(e))throw new TypeError("bad iterator");return e}function IteratorStep(t){var r=IteratorNext(t);return!0!==IteratorComplete(r)&&r}function IteratorValue(t){if("object"!==Type(t))throw new Error(Object.prototype.toString.call(t)+"is not an Object.");return Get(t,"value")}function OrdinaryToPrimitive(r,t){if("string"===t)var e=["toString","valueOf"];else e=["valueOf","toString"];for(var i=0;i<e.length;++i){var n=e[i],a=Get(r,n);if(IsCallable(a)){var o=Call(a,r);if("object"!==Type(o))return o}}throw new TypeError("Cannot convert to primitive.")}function SameValue(e,a){return Type(e)===Type(a)&&("number"===Type(e)?!(!isNaN(e)||!isNaN(a))||(0!==e||0!==a||1/e==1/a)&&e===a:SameValueNonNumber(e,a))}if (!("is"in Object
-)) {CreateMethodProperty(Object,"is",function e(t,r){return SameValue(t,r)});}function SameValueZero(n,e){return Type(n)===Type(e)&&("number"===Type(n)?!(!isNaN(n)||!isNaN(e))||(1/n===Infinity&&1/e==-Infinity||(1/n==-Infinity&&1/e===Infinity||n===e)):SameValueNonNumber(n,e))}function ToInteger(n){if("symbol"===Type(n))throw new TypeError("Cannot convert a Symbol value to a number");var t=Number(n);return isNaN(t)?0:1/t===Infinity||1/t==-Infinity||t===Infinity||t===-Infinity?t:(t<0?-1:1)*Math.floor(Math.abs(t))}if (!("copyWithin"in Array.prototype&&function(){try{var t=function n(){}
-t.prototype[0]="foo"
-var o=new t
-o[1]=1,o[2]=2,o.length=3
-var r=Array.prototype.copyWithin.call(o,1,0)
-return!(!r[0]||Object.prototype.hasOwnProperty.call(r,"0")||!Object.prototype.hasOwnProperty.call(r,"1")||"foo"!==r[0]||"foo"!==r[1]||1!==r[2]||3!==r.length)}catch(e){return!1}}()
-)) {CreateMethodProperty(Array.prototype,"copyWithin",function t(r,e){"use strict";var a=arguments[2];if(null===this||this===undefined)throw new TypeError("Cannot call method on "+this);var n=Object(this),i=ToInteger(n.length);i<=0&&(i=0),i=i===Infinity?Math.pow(2,53)-1:Math.min(i,Math.pow(2,53)-1),i=Math.max(i,0);var h,o=ToInteger(r);h=o<0?Math.max(i+o,0):Math.min(o,i);var M,m=ToInteger(e);M=m<0?Math.max(i+m,0):Math.min(m,i);var v;v=a===undefined?i:ToInteger(a);var p;p=v<0?Math.max(i+v,0):Math.min(v,i);var s,d=Math.min(p-M,i-h);for(M<h&&h<M+d?(s=-1,M=M+d-1,h=h+d-1):s=1;d>0;){var f=String(M),g=String(h);if(HasProperty(n,f)){var l=n[f];n[g]=l}else delete n[g];M+=s,h+=s,d-=1}return n});}if (!("isInteger"in Number
-)) {CreateMethodProperty(Number,"isInteger",function e(n){return"number"===Type(n)&&(!isNaN(n)&&n!==Infinity&&n!==-Infinity&&ToInteger(n)===n)});}if (!("isSafeInteger"in Number
-)) {CreateMethodProperty(Number,"isSafeInteger",function e(r){if("number"!==Type(r))return!1;if(isNaN(r)||r===Infinity||r===-Infinity)return!1;var t=ToInteger(r);return t===r&&Math.abs(t)<=Math.pow(2,53)-1});}function ToLength(n){var t=ToInteger(n);return t<=0?0:Math.min(t,Math.pow(2,53)-1)}function ToPrimitive(e){var t=arguments.length>1?arguments[1]:undefined;if("object"===Type(e)){if(arguments.length<2)var i="default";else t===String?i="string":t===Number&&(i="number");var r="function"==typeof self.Symbol&&"symbol"==typeof self.Symbol.toPrimitive?GetMethod(e,self.Symbol.toPrimitive):undefined;if(r!==undefined){var n=Call(r,e,[i]);if("object"!==Type(n))return n;throw new TypeError("Cannot convert exotic object to primitive.")}return"default"===i&&(i="number"),OrdinaryToPrimitive(e,i)}return e}function ToString(t){switch(Type(t)){case"symbol":throw new TypeError("Cannot convert a Symbol value to a string");case"object":return ToString(ToPrimitive(t,String));default:return String(t)}}if (!("fill"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"fill",function t(e){for(var r=arguments[1],n=arguments[2],o=ToObject(this),a=ToLength(Get(o,"length")),h=ToInteger(r),i=h<0?Math.max(a+h,0):Math.min(h,a),g=n===undefined?a:ToInteger(n),M=g<0?Math.max(a+g,0):Math.min(g,a);i<M;){o[ToString(i)]=e,i+=1}return o});}if (!("find"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"find",function e(r){var t=ToObject(this),n=ToLength(Get(t,"length"));if(!1===IsCallable(r))throw new TypeError(r+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,a=0;a<n;){var i=ToString(a),f=Get(t,i);if(ToBoolean(Call(r,o,[f,a,t])))return f;a+=1}return undefined});}if (!("findIndex"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"findIndex",function e(r){var t=ToObject(this),n=ToLength(Get(t,"length"));if(!1===IsCallable(r))throw new TypeError(r+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,a=0;a<n;){var i=ToString(a),l=Get(t,i);if(ToBoolean(Call(r,o,[l,a,t])))return a;a+=1}return-1});}if (!("forEach"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"forEach",function r(t){var e=ToObject(this),n=e instanceof String?e.split(""):e,o=ToLength(Get(e,"length"));if(!1===IsCallable(t))throw new TypeError(t+" is not a function");for(var a=arguments.length>1?arguments[1]:undefined,i=0;i<o;){var f=ToString(i);if(HasProperty(n,f)){var l=Get(n,f);Call(t,a,[l,i,e])}i+=1}return undefined});}if (!("includes"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"includes",function e(r){"use strict";var t=ToObject(this),o=ToLength(Get(t,"length"));if(0===o)return!1;var n=ToInteger(arguments[1]);if(n>=0)var a=n;else(a=o+n)<0&&(a=0);for(;a<o;){var i=Get(t,ToString(a));if(SameValueZero(r,i))return!0;a+=1}return!1});}if (!("indexOf"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"indexOf",function r(t){var e=ToObject(this),n=ToLength(Get(e,"length"));if(0===n)return-1;var i=ToInteger(arguments[1]);if(i>=n)return-1;if(i>=0)var o=1/i==-Infinity?0:i;else(o=n+i)<0&&(o=0);for(;o<n;){if(HasProperty(e,ToString(o))){if(t===Get(e,ToString(o)))return o}o+=1}return-1});}if (!("getOwnPropertyNames"in Object&&function(){try{return Object.getOwnPropertyNames(1),!0}catch(t){return!1}}()
-)) {!function(){var t={}.toString,e="".split,r=[].concat,o=Object.prototype.hasOwnProperty,c=Object.getOwnPropertyNames||Object.keys,n="object"==typeof self?c(self):[];CreateMethodProperty(Object,"getOwnPropertyNames",function l(a){var p=ToObject(a);if("[object Window]"===t.call(p))try{return c(p)}catch(j){return r.call([],n)}p="[object String]"==t.call(p)?e.call(p,""):Object(p);for(var i=c(p),s=["length","prototype"],O=0;O<s.length;O++){var b=s[O];o.call(p,b)&&!i.includes(b)&&i.push(b)}if(i.includes("__proto__")){var f=i.indexOf("__proto__");i.splice(f,1)}return i})}();}if (!("endsWith"in String.prototype
-)) {CreateMethodProperty(String.prototype,"endsWith",function e(t){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(t))throw new TypeError("First argument to String.prototype.endsWith must not be a regular expression");var o=ToString(t),s=i.length,g=r===undefined?s:ToInteger(r),h=Math.min(Math.max(g,0),s),u=o.length,a=h-u;return!(a<0)&&i.substr(a,u)===o});}if (!("includes"in String.prototype
-)) {CreateMethodProperty(String.prototype,"includes",function e(t){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(t))throw new TypeError("First argument to String.prototype.includes must not be a regular expression");var o=ToString(t),g=ToInteger(r),a=i.length,p=Math.min(Math.max(g,0),a);return-1!==String.prototype.indexOf.call(i,o,p)});}if (!("repeat"in String.prototype
-)) {CreateMethodProperty(String.prototype,"repeat",function r(e){"use strict";var t=RequireObjectCoercible(this),n=ToString(t),o=ToInteger(e);if(o<0)throw new RangeError("Invalid count value");if(o===Infinity)throw new RangeError("Invalid count value");return 0===o?"":new Array(o+1).join(n)});}if (!("startsWith"in String.prototype
-)) {CreateMethodProperty(String.prototype,"startsWith",function t(e){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(e))throw new TypeError("First argument to String.prototype.startsWith must not be a regular expression");var o=ToString(e),s=ToInteger(r),a=i.length,g=Math.min(Math.max(s,0),a);return!(o.length+g>a)&&0===i.substr(g).indexOf(e)});}function ToPropertyKey(r){var i=ToPrimitive(r,String);return"symbol"===Type(i)?i:ToString(i)}if (!("getOwnPropertyDescriptor"in Object&&"function"==typeof Object.getOwnPropertyDescriptor&&function(){try{return"3"===Object.getOwnPropertyDescriptor("13.7",1).value}catch(t){return!1}}()
-)) {!function(){var e=Object.getOwnPropertyDescriptor,t=function(){try{return 1===Object.defineProperty(document.createElement("div"),"one",{get:function(){return 1}}).one}catch(e){return!1}},r={}.toString,n="".split;CreateMethodProperty(Object,"getOwnPropertyDescriptor",function c(o,i){var a=ToObject(o);a=("string"===Type(a)||a instanceof String)&&"[object String]"==r.call(o)?n.call(o,""):Object(o);var u=ToPropertyKey(i);if(t)try{return e(a,u)}catch(l){}if(HasOwnProperty(a,u))return{enumerable:!0,configurable:!0,writable:!0,value:a[u]}})}();}if (!("assign"in Object
-)) {CreateMethodProperty(Object,"assign",function e(t,r){var n=ToObject(t);if(1===arguments.length)return n;var o,c,a,l,i=Array.prototype.slice.call(arguments,1);for(o=0;o<i.length;o++){var p=i[o];for(p===undefined||null===p?a=[]:(l="[object String]"===Object.prototype.toString.call(p)?String(p).split(""):ToObject(p),a=Object.keys(l)),c=0;c<a.length;c++){var b,y=a[c];try{var g=Object.getOwnPropertyDescriptor(l,y);b=g!==undefined&&!0===g.enumerable}catch(u){b=Object.prototype.propertyIsEnumerable.call(l,y)}if(b){var j=Get(l,y);n[y]=j}}}return n});}if (!("defineProperties"in Object
-)) {CreateMethodProperty(Object,"defineProperties",function e(r,t){if("object"!==Type(r))throw new TypeError("Object.defineProperties called on non-object");for(var o=ToObject(t),n=Object.keys(o),c=[],i=0;i<n.length;i++){var b=n[i],f=Object.getOwnPropertyDescriptor(o,b);if(f!==undefined&&f.enumerable){var p=Get(o,b),a=p;c.push([b,a])}}for(var j=0;j<c.length;j++){var d=c[j][0];a=c[j][1],Object.defineProperty(r,d,a)}return r});}if (!("create"in Object
-)) {!function(){function e(){}if({__proto__:null}instanceof Object)t=function(){var e=document.createElement("iframe");e.style.display="none";var o=document.body||document.documentElement;o.appendChild(e),e.src="javascript:";var n=e.contentWindow.Object.prototype;o.removeChild(e),e=null,delete n.constructor,delete n.hasOwnProperty,delete n.propertyIsEnumerable,delete n.isPrototypeOf,delete n.toLocaleString,delete n.toString,delete n.valueOf;var r=function l(){};return r.prototype=n,t=function(){return new r},new r};else var t=function(){return{__proto__:null}};CreateMethodProperty(Object,"create",function o(n,r){if("object"!==Type(n)&&"null"!==Type(n))throw new TypeError("Object prototype may only be an Object or null");if("null"===Type(n))var l=t();else e.prototype=n,l=new e,l.__proto__=n,l.constructor.prototype=n,l.__proto__=n;return 1 in arguments?Object.defineProperties(l,r):l})}();}function OrdinaryCreateFromConstructor(r,e){var t=arguments[2]||{},o=GetPrototypeFromConstructor(r,e),a=Object.create(o);for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&Object.defineProperty(a,n,{configurable:!0,enumerable:!1,writable:!0,value:t[n]});return a}function Construct(r){var t=arguments.length>2?arguments[2]:r,o=arguments.length>1?arguments[1]:[];if(!IsConstructor(r))throw new TypeError("F must be a constructor.");if(!IsConstructor(t))throw new TypeError("newTarget must be a constructor.");if(t===r)return new(Function.prototype.bind.apply(r,[null].concat(o)));var n=OrdinaryCreateFromConstructor(t,Object.prototype);return Call(r,n,o)}if (!("of"in Array
-)) {CreateMethodProperty(Array,"of",function r(){var r=arguments.length,t=arguments,e=this;if(IsConstructor(e))var a=Construct(e,[r]);else a=ArrayCreate(r);for(var o=0;o<r;){var n=t[o],h=ToString(o);CreateDataPropertyOrThrow(a,h,n),o+=1}return a.length=r,a});}function ArraySpeciesCreate(e,r){if(0===r&&1/r==-Infinity&&(r=0),!1===IsArray(e))return ArrayCreate(r);var n=Get(e,"constructor");if("object"===Type(n)&&null===(n="Symbol"in self&&"species"in self.Symbol?Get(n,self.Symbol.species):undefined)&&(n=undefined),n===undefined)return ArrayCreate(r);if(!IsConstructor(n))throw new TypeError("C must be a constructor");return Construct(n,[r])}if (!("filter"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"filter",function r(e){var t=ToObject(this),o=ToLength(Get(t,"length"));if(!1===IsCallable(e))throw new TypeError(e+" is not a function");for(var a=arguments.length>1?arguments[1]:undefined,n=ArraySpeciesCreate(t,0),i=0,l=0;i<o;){var f=ToString(i);if(HasProperty(t,f)){var h=Get(t,f);ToBoolean(Call(e,a,[h,i,t]))&&(CreateDataPropertyOrThrow(n,ToString(l),h),l+=1)}i+=1}return n});}if (!("map"in Array.prototype
-)) {CreateMethodProperty(Array.prototype,"map",function r(e){var t=ToObject(this),a=ToLength(Get(t,"length"));if(!1===IsCallable(e))throw new TypeError(e+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,n=ArraySpeciesCreate(t,a),i=0;i<a;){var p=ToString(i);if(HasProperty(t,p)){var h=Get(t,p),l=Call(e,o,[h,i,t]);CreateDataPropertyOrThrow(n,p,l)}i+=1}return n});}if (!("sort"in Array.prototype&&function(){var r={length:3,0:2,1:1,2:3}
-return Array.prototype.sort.call(r,function(r,t){return r-t})===r}()
-)) {"use strict";var origSort=Array.prototype.sort;CreateMethodProperty(Array.prototype,"sort",function r(t){if(t!==undefined&&!1===IsCallable(t))throw new TypeError("The comparison function must be either a function or undefined");if(t===undefined)origSort.call(this);else{var e=Array.prototype.map.call(this,function(r,t){return{item:r,index:t}});origSort.call(e,function(r,e){var i=t.call(undefined,r.item,e.item);return 0===i?r.index-e.index:i});for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&e[i].item!==this[i]&&(this[i]=e[i].item)}return this});}if (!("setPrototypeOf"in Object
-)) {!function(){if(!Object.setPrototypeOf){var t,e,o=Object.getOwnPropertyNames,r=Object.getOwnPropertyDescriptor,n=Object.create,c=Object.defineProperty,_=Object.getPrototypeOf,f=Object.prototype,p=function(t,e){return o(e).forEach(function(o){c(t,o,r(e,o))}),t},O=function i(t,e){return p(n(e),t)};try{t=r(f,"__proto__").set,t.call({},null),e=function a(e,o){return t.call(e,o),e}}catch(u){t={__proto__:null},t instanceof Object?e=O:(t.__proto__=f,e=t instanceof Object?function o(t,e){return t.__proto__=e,t}:function r(t,e){return _(t)?(t.__proto__=e,t):O(t,e)})}CreateMethodProperty(Object,"setPrototypeOf",e)}}();}if (!("Symbol"in self&&0===self.Symbol.length
-)) {!function(e,r,n){"use strict";function t(e){if("symbol"===Type(e))return e;throw TypeError(e+" is not a symbol")}var u,o=function(){try{var r={};return e.defineProperty(r,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!r.t}catch(n){return!1}}(),i=0,a=""+Math.random(),c="__symbol:",l=c.length,f="__symbol@@"+a,s={},v="defineProperty",y="defineProperties",b="getOwnPropertyNames",p="getOwnPropertyDescriptor",h="propertyIsEnumerable",m=e.prototype,d=m.hasOwnProperty,g=m[h],w=m.toString,S=Array.prototype.concat,P=e.getOwnPropertyNames?e.getOwnPropertyNames(self):[],O=e[b],j=function $(e){if("[object Window]"===w.call(e))try{return O(e)}catch(r){return S.call([],P)}return O(e)},E=e[p],N=e.create,T=e.keys,_=e.freeze||e,k=e[v],F=e[y],I=E(e,b),x=function(e,r,n){if(!d.call(e,f))try{k(e,f,{enumerable:!1,configurable:!1,writable:!1,value:{}})}catch(t){e[f]={}}e[f]["@@"+r]=n},z=function(e,r){var n=N(e);return j(r).forEach(function(e){q.call(r,e)&&L(n,e,r[e])}),n},A=function(e){var r=N(e);return r.enumerable=!1,r},D=function ee(){},M=function(e){return e!=f&&!d.call(H,e)},W=function(e){return e!=f&&d.call(H,e)},q=function re(e){var r=""+e;return W(r)?d.call(this,r)&&this[f]&&this[f]["@@"+r]:g.call(this,e)},B=function(r){var n={enumerable:!1,configurable:!0,get:D,set:function(e){u(this,r,{enumerable:!1,configurable:!0,writable:!0,value:e}),x(this,r,!0)}};try{k(m,r,n)}catch(o){m[r]=n.value}H[r]=k(e(r),"constructor",J);var t=E(G.prototype,"description");return t&&k(H[r],"description",t),_(H[r])},C=function(e){var r=t(e);if(Y){var n=V(r);if(""!==n)return n.slice(1,-1)}if(s[r]!==undefined)return s[r];var u=r.toString(),o=u.lastIndexOf("0.");return u=u.slice(10,o),""===u?undefined:u},G=function ne(){var r=arguments[0];if(this instanceof ne)throw new TypeError("Symbol is not a constructor");var n=c.concat(r||"",a,++i);r===undefined||null!==r&&!isNaN(r)&&""!==String(r)||(s[n]=String(r));var t=B(n);return o||e.defineProperty(t,"description",{configurable:!0,enumerable:!1,value:C(t)}),t},H=N(null),J={value:G},K=function(e){return H[e]},L=function te(e,r,n){var t=""+r;return W(t)?(u(e,t,n.enumerable?A(n):n),x(e,t,!!n.enumerable)):k(e,r,n),e},Q=function(e){return function(r){return d.call(e,f)&&d.call(e[f],"@@"+r)}},R=function ue(e){return j(e).filter(e===m?Q(e):W).map(K)};I.value=L,k(e,v,I),I.value=R,k(e,"getOwnPropertySymbols",I),I.value=function oe(e){return j(e).filter(M)},k(e,b,I),I.value=function ie(e,r){var n=R(r);return n.length?T(r).concat(n).forEach(function(n){q.call(r,n)&&L(e,n,r[n])}):F(e,r),e},k(e,y,I),I.value=q,k(m,h,I),I.value=G,k(n,"Symbol",I),I.value=function(e){var r=c.concat(c,e,a);return r in m?H[r]:B(r)},k(G,"for",I),I.value=function(e){if(M(e))throw new TypeError(e+" is not a symbol");return d.call(H,e)?e.slice(2*l,-a.length):void 0},k(G,"keyFor",I),I.value=function ae(e,r){var n=E(e,r);return n&&W(r)&&(n.enumerable=q.call(e,r)),n},k(e,p,I),I.value=function ce(e,r){return 1===arguments.length||void 0===r?N(e):z(e,r)},k(e,"create",I);var U=null===function(){return this}.call(null);if(I.value=U?function(){var e=w.call(this);return"[object String]"===e&&W(this)?"[object Symbol]":e}:function(){if(this===window)return"[object Null]";var e=w.call(this);return"[object String]"===e&&W(this)?"[object Symbol]":e},k(m,"toString",I),u=function(e,r,n){var t=E(m,r);delete m[r],k(e,r,n),e!==m&&k(m,r,t)},function(){try{var r={};return e.defineProperty(r,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!r.t}catch(n){return!1}}()){var V;try{V=Function("s","var v = s.valueOf(); return { [v]() {} }[v].name;")}catch(Z){}var X=function(){},Y=V&&"inferred"===X.name?V:null;e.defineProperty(n.Symbol.prototype,"description",{configurable:!0,enumerable:!1,get:function(){return C(this)}})}}(Object,0,self);}if (!("Symbol"in self&&"hasInstance"in self.Symbol
-)) {Object.defineProperty(Symbol,"hasInstance",{value:Symbol("hasInstance")});}if (!("Symbol"in self&&"isConcatSpreadable"in self.Symbol
-)) {Object.defineProperty(Symbol,"isConcatSpreadable",{value:Symbol("isConcatSpreadable")});}if (!("Symbol"in self&&"iterator"in self.Symbol
-)) {Object.defineProperty(self.Symbol,"iterator",{value:self.Symbol("iterator")});}function GetIterator(t){var e=arguments.length>1?arguments[1]:GetMethod(t,Symbol.iterator),r=Call(e,t);if("object"!==Type(r))throw new TypeError("bad iterator");var o=GetV(r,"next"),a=Object.create(null);return a["[[Iterator]]"]=r,a["[[NextMethod]]"]=o,a["[[Done]]"]=!1,a}if (!("Symbol"in self&&"match"in self.Symbol
-)) {Object.defineProperty(Symbol,"match",{value:Symbol("match")});}if (!("Symbol"in self&&"replace"in self.Symbol
-)) {Object.defineProperty(Symbol,"replace",{value:Symbol("replace")});}if (!("Symbol"in self&&"search"in self.Symbol
-)) {Object.defineProperty(Symbol,"search",{value:Symbol("search")});}if (!("Symbol"in self&&"species"in self.Symbol
-)) {Object.defineProperty(Symbol,"species",{value:Symbol("species")});}if (!("Map"in self&&function(t){try{var n=new t.Map([[1,1],[2,2]])
-return 0===t.Map.length&&2===n.size&&"Symbol"in t&&"iterator"in t.Symbol&&"function"==typeof n[t.Symbol.iterator]}catch(e){return!1}}(self)
-)) {!function(e){function t(e,t){if("object"!==Type(e))throw new TypeError("createMapIterator called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("createMapIterator called on incompatible receiver "+Object.prototype.toString.call(e));var r=Object.create(u);return Object.defineProperty(r,"[[Map]]",{configurable:!0,enumerable:!1,writable:!0,value:e}),Object.defineProperty(r,"[[MapNextIndex]]",{configurable:!0,enumerable:!1,writable:!0,value:0}),Object.defineProperty(r,"[[MapIterationKind]]",{configurable:!0,enumerable:!1,writable:!0,value:t}),r}var r=function(){try{var e={};return Object.defineProperty(e,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!e.t}catch(t){return!1}}(),o=0,a=Symbol("meta_"+(1e8*Math.random()+"").replace(".","")),n=function(e){if("object"==typeof e?null!==e:"function"==typeof e){if(!Object.isExtensible(e))return!1;if(!Object.prototype.hasOwnProperty.call(e,a)){var t=typeof e+"-"+ ++o;Object.defineProperty(e,a,{configurable:!1,enumerable:!1,writable:!1,value:t})}return e[a]}return""+e},i=function(e,t){var r=n(t);if(!1===r)return p(e,t);var o=e._table[r];return o!==undefined&&o},p=function(e,t){for(var r=0;r<e._keys.length;r++){var o=e._keys[r];if(o!==c&&SameValueZero(o,t))return r}return!1},l=function(e,t,r){var o=n(t);return!1!==o&&(!1===r?delete e._table[o]:e._table[o]=r,!0)},c=Symbol("undef"),y=function f(){if(!(this instanceof f))throw new TypeError('Constructor Map requires "new"');var e=OrdinaryCreateFromConstructor(this,f.prototype,{_table:{},_keys:[],_values:[],_size:0,_es6Map:!0});r||Object.defineProperty(e,"size",{configurable:!0,enumerable:!1,writable:!0,value:0});var t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var o=e.set;if(!IsCallable(o))throw new TypeError("Map.prototype.set is not a function");try{for(var a=GetIterator(t);;){var n=IteratorStep(a);if(!1===n)return e;var i=IteratorValue(n);if("object"!==Type(i))try{throw new TypeError("Iterator value "+i+" is not an entry object")}catch(u){return IteratorClose(a,u)}try{var p=i[0],l=i[1];o.call(e,p,l)}catch(s){return IteratorClose(a,s)}}}catch(s){if(Array.isArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var c,y=t.length;for(c=0;c<y;c++)o.call(e,t[c][0],t[c][1])}}return e};Object.defineProperty(y,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),r?Object.defineProperty(y,Symbol.species,{configurable:!0,enumerable:!1,get:function(){return this},set:undefined}):CreateMethodProperty(y,Symbol.species,y),CreateMethodProperty(y.prototype,"clear",function b(){var e=this;if("object"!==Type(e))throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._keys,o=0;o<t.length;o++)e._keys[o]=c,e._values[o]=c;return this._size=0,r||(this.size=this._size),this._table={},undefined}),CreateMethodProperty(y.prototype,"constructor",y),CreateMethodProperty(y.prototype,"delete",function(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(t));var o=i(t,e);if(!1!==o){var a=t._keys[o];if(a!==c&&SameValueZero(a,e))return this._keys[o]=c,this._values[o]=c,this._size=--this._size,r||(this.size=this._size),l(this,e,!1),!0}return!1}),CreateMethodProperty(y.prototype,"entries",function h(){return t(this,"key+value")}),CreateMethodProperty(y.prototype,"forEach",function(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!IsCallable(e))throw new TypeError(Object.prototype.toString.call(e)+" is not a function.");if(arguments[1])var r=arguments[1];for(var o=t._keys,a=0;a<o.length;a++)t._keys[a]!==c&&t._values[a]!==c&&e.call(r,t._values[a],t._keys[a],t);return undefined}),CreateMethodProperty(y.prototype,"get",function d(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.get called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.get called on incompatible receiver "+Object.prototype.toString.call(t));var r=i(t,e);if(!1!==r){var o=t._keys[r];if(o!==c&&SameValueZero(o,e))return t._values[r]}return undefined}),CreateMethodProperty(y.prototype,"has",function v(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Map.prototype.has called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.has called on incompatible receiver "+Object.prototype.toString.call(t));var r=i(t,e);if(!1!==r){var o=t._keys[r];if(o!==c&&SameValueZero(o,e))return!0}return!1}),CreateMethodProperty(y.prototype,"keys",function M(){return t(this,"key")}),CreateMethodProperty(y.prototype,"set",function w(e,t){var o=this;if("object"!==Type(o))throw new TypeError("Method Map.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));if(!0!==o._es6Map)throw new TypeError("Method Map.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));var a=i(o,e);if(!1!==a)o._values[a]=t;else{-0===e&&(e=0);var n={"[[Key]]":e,"[[Value]]":t};o._keys.push(n["[[Key]]"]),o._values.push(n["[[Value]]"]),l(o,e,o._keys.length-1),++o._size,r||(o.size=o._size)}return o}),r&&Object.defineProperty(y.prototype,"size",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!==Type(e))throw new TypeError("Method Map.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("Method Map.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));return this._size},set:undefined}),CreateMethodProperty(y.prototype,"values",function j(){return t(this,"value")}),CreateMethodProperty(y.prototype,Symbol.iterator,y.prototype.entries),"name"in y||Object.defineProperty(y,"name",{configurable:!0,enumerable:!1,writable:!1,value:"Map"});var u={};Object.defineProperty(u,"isMapIterator",{configurable:!1,enumerable:!1,writable:!1,value:!0}),CreateMethodProperty(u,"next",function _(){var e=this;if("object"!==Type(e))throw new TypeError("Method %MapIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));if(!e.isMapIterator)throw new TypeError("Method %MapIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));var t=e["[[Map]]"],r=e["[[MapNextIndex]]"],o=e["[[MapIterationKind]]"];if(t===undefined)return CreateIterResultObject(undefined,!0);if(!t._es6Map)throw new Error(Object.prototype.toString.call(t)+" has a [[MapData]] internal slot.");for(var a=t._keys,n=a.length;r<n;){var i=Object.create(null);if(i["[[Key]]"]=t._keys[r],i["[[Value]]"]=t._values[r],r+=1,e["[[MapNextIndex]]"]=r,i["[[Key]]"]!==c){if("key"===o)var p=i["[[Key]]"];else if("value"===o)p=i["[[Value]]"];else{if("key+value"!==o)throw new Error;p=[i["[[Key]]"],i["[[Value]]"]]}return CreateIterResultObject(p,!1)}}return e["[[Map]]"]=undefined,CreateIterResultObject(undefined,!0)}),CreateMethodProperty(u,Symbol.iterator,function g(){return this});try{CreateMethodProperty(e,"Map",y)}catch(s){e.Map=y}}(self);}if (!("Set"in self&&function(){try{var e=new self.Set([1,2])
-return 0===self.Set.length&&2===e.size&&"Symbol"in self&&"iterator"in self.Symbol&&"function"==typeof e[self.Symbol.iterator]}catch(t){return!1}}()
-)) {!function(e){function t(e,t){if("object"!=typeof e)throw new TypeError("createSetIterator called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("createSetIterator called on incompatible receiver "+Object.prototype.toString.call(e));var r=Object.create(i);return Object.defineProperty(r,"[[IteratedSet]]",{configurable:!0,enumerable:!1,writable:!0,value:e}),Object.defineProperty(r,"[[SetNextIndex]]",{configurable:!0,enumerable:!1,writable:!0,value:0}),Object.defineProperty(r,"[[SetIterationKind]]",{configurable:!0,enumerable:!1,writable:!0,value:t}),r}var r=function(){try{var e={};return Object.defineProperty(e,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!e.t}catch(t){return!1}}(),o=Symbol("undef"),n=function c(){if(!(this instanceof c))throw new TypeError('Constructor Set requires "new"');var e=OrdinaryCreateFromConstructor(this,c.prototype,{_values:[],_size:0,_es6Set:!0});r||Object.defineProperty(e,"size",{configurable:!0,enumerable:!1,writable:!0,value:0});var t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var o=e.add;if(!IsCallable(o))throw new TypeError("Set.prototype.add is not a function");try{for(var n=GetIterator(t);;){var a=IteratorStep(n);if(!1===a)return e;var i=IteratorValue(a);try{o.call(e,i)}catch(y){return IteratorClose(n,y)}}}catch(y){if(!Array.isArray(t)&&"[object Arguments]"!==Object.prototype.toString.call(t)&&!t.callee)throw y;var l,p=t.length;for(l=0;l<p;l++)o.call(e,t[l])}return e};Object.defineProperty(n,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),r?Object.defineProperty(n,Symbol.species,{configurable:!0,enumerable:!1,get:function(){return this},set:undefined}):CreateMethodProperty(n,Symbol.species,n),CreateMethodProperty(n.prototype,"add",function p(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.add called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.add called on incompatible receiver "+Object.prototype.toString.call(t));for(var n=t._values,a=0;a<n.length;a++){var i=n[a];if(i!==o&&SameValueZero(i,e))return t}return 0===e&&1/e==-Infinity&&(e=0),t._values.push(e),this._size=++this._size,r||(this.size=this._size),t}),CreateMethodProperty(n.prototype,"clear",function y(){var e=this;if("object"!=typeof e)throw new TypeError("Method Set.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("Method Set.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._values,n=0;n<t.length;n++)t[n]=o;return this._size=0,r||(this.size=this._size),undefined}),CreateMethodProperty(n.prototype,"constructor",n),CreateMethodProperty(n.prototype,"delete",function(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(t));for(var n=t._values,a=0;a<n.length;a++){var i=n[a];if(i!==o&&SameValueZero(i,e))return n[a]=o,this._size=--this._size,r||(this.size=this._size),!0}return!1}),CreateMethodProperty(n.prototype,"entries",function u(){return t(this,"key+value")}),CreateMethodProperty(n.prototype,"forEach",function f(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!IsCallable(e))throw new TypeError(Object.prototype.toString.call(e)+" is not a function.");if(arguments[1])var r=arguments[1];for(var n=t._values,a=0;a<n.length;a++){var i=n[a];i!==o&&e.call(r,i,i,t)}return undefined}),CreateMethodProperty(n.prototype,"has",function d(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));for(var r=t._values,n=0;n<r.length;n++){var a=r[n];if(a!==o&&SameValueZero(a,e))return!0}return!1});var a=function h(){return t(this,"value")};CreateMethodProperty(n.prototype,"values",a),CreateMethodProperty(n.prototype,"keys",a),r&&Object.defineProperty(n.prototype,"size",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!=typeof e)throw new TypeError("Method Set.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("Method Set.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._values,r=0,n=0;n<t.length;n++){t[n]!==o&&(r+=1)}return r},set:undefined}),CreateMethodProperty(n.prototype,Symbol.iterator,a),"name"in n||Object.defineProperty(n,"name",{configurable:!0,enumerable:!1,writable:!1,value:"Set"});var i={};Object.defineProperty(i,"isSetIterator",{configurable:!1,enumerable:!1,writable:!1,value:!0}),CreateMethodProperty(i,"next",function b(){var e=this;if("object"!=typeof e)throw new TypeError("Method %SetIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));if(!e.isSetIterator)throw new TypeError("Method %SetIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));var t=e["[[IteratedSet]]"],r=e["[[SetNextIndex]]"],n=e["[[SetIterationKind]]"];if(t===undefined)return CreateIterResultObject(undefined,!0);if(!t._es6Set)throw new Error(Object.prototype.toString.call(t)+" does not have [[SetData]] internal slot.");for(var a=t._values,i=a.length;r<i;){var l=a[r];if(r+=1,e["[[SetNextIndex]]"]=r,l!==o)return"key+value"===n?CreateIterResultObject([l,l],!1):CreateIterResultObject(l,!1)}return e["[[IteratedSet]]"]=undefined,CreateIterResultObject(undefined,!0)}),CreateMethodProperty(i,Symbol.iterator,function s(){return this});try{CreateMethodProperty(e,"Set",n)}catch(l){e.Set=n}}(self);}if (!("from"in Array&&function(){try{return Array.from({length:-Infinity}),"a"===Array.from(new self.Set(["a"]))[0]&&"a"===Array.from(new self.Map([["a","one"]]))[0][0]}catch(r){return!1}}()
-)) {!function(){function r(r){return"string"==typeof r||"object"==typeof r&&"[object String]"===t.call(r)}var t=Object.prototype.toString,e=String.prototype.match;CreateMethodProperty(Array,"from",function o(t){var o=this,a=arguments.length>1?arguments[1]:undefined;if(a===undefined)var n=!1;else{if(!1===IsCallable(a))throw new TypeError(Object.prototype.toString.call(a)+" is not a function.");var i=arguments.length>2?arguments[2]:undefined;if(i!==undefined)var l=i;else l=undefined;n=!0}var u=GetMethod(t,Symbol.iterator);if(u!==undefined){if(IsConstructor(o))var f=Construct(o);else f=ArrayCreate(0);for(var c=GetIterator(t,u),s=0;;){if(s>=Math.pow(2,53)-1){var h=new TypeError("Iteration count can not be greater than or equal 9007199254740991.");return IteratorClose(c,h)}var y=ToString(s),C=IteratorStep(c);if(!1===C)return f.length=s,f;var g=IteratorValue(C);if(n)try{var p=Call(a,l,[g,s])}catch(b){return IteratorClose(c,b)}else p=g;try{CreateDataPropertyOrThrow(f,y,p)}catch(b){return IteratorClose(c,b)}s+=1}}if(r(t))var v=e.call(t,/[\uD800-\uDBFF][\uDC00-\uDFFF]?|[^\uD800-\uDFFF]|./g)||[];else v=ToObject(t);var d=ToLength(Get(v,"length"));for(f=IsConstructor(o)?Construct(o,[d]):ArrayCreate(d),s=0;s<d;){y=ToString(s);var I=Get(v,y);p=!0===n?Call(a,l,[I,s]):I,CreateDataPropertyOrThrow(f,y,p),s+=1}return f.length=d,f})}();}if (!("Symbol"in self&&"split"in self.Symbol
-)) {Object.defineProperty(Symbol,"split",{value:Symbol("split")});}if (!("Symbol"in self&&"toPrimitive"in self.Symbol
-)) {Object.defineProperty(Symbol,"toPrimitive",{value:Symbol("toPrimitive")});}if (!("Symbol"in self&&"toStringTag"in self.Symbol
-)) {Object.defineProperty(Symbol,"toStringTag",{value:Symbol("toStringTag")});}if (!("Promise"in self
-)) {!function(){"use strict";function n(){return tn[q][B]||D}function t(n){return n&&"object"==typeof n}function e(n){return"function"==typeof n}function r(n,t){return n instanceof t}function o(n){return r(n,A)}function i(n,t,e){if(!t(n))throw a(e)}function u(){try{return b.apply(R,arguments)}catch(n){return Y.e=n,Y}}function c(n,t){return b=n,R=t,u}function f(n,t){function e(){for(var e=0;e<o;)t(r[e],r[e+1]),r[e++]=T,r[e++]=T;o=0,r.length>n&&(r.length=n)}var r=L(n),o=0;return function(n,t){r[o++]=n,r[o++]=t,2===o&&tn.nextTick(e)}}function s(n,t){var o,i,u,f,s=0;if(!n)throw a(N);var l=n[tn[q][z]];if(e(l))i=l.call(n);else{if(!e(n.next)){if(r(n,L)){for(o=n.length;s<o;)t(n[s],s++);return s}throw a(N)}i=n}for(;!(u=i.next()).done;)if((f=c(t)(u.value,s++))===Y)throw e(i[G])&&i[G](),f.e;return s}function a(n){return new TypeError(n)}function l(n){return(n?"":Q)+(new A).stack}function h(n,t){var e="on"+n.toLowerCase(),r=F[e];E&&E.listeners(n).length?n===X?E.emit(n,t._v,t):E.emit(n,t):r?r({reason:t._v,promise:t}):tn[n](t._v,t)}function v(n){return n&&n._s}function _(n){if(v(n))return new n(Z);var t,r,o;return t=new n(function(n,e){if(t)throw a();r=n,o=e}),i(r,e),i(o,e),t}function d(n,t){var e=!1;return function(r){e||(e=!0,I&&(n[M]=l(!0)),t===U?g(n,r):y(n,t,r))}}function p(n,t,r,o){return e(r)&&(t._onFulfilled=r),e(o)&&(n[J]&&h(W,n),t._onRejected=o),I&&(t._p=n),n[n._c++]=t,n._s!==$&&rn(n,t),t}function m(n){if(n._umark)return!0;n._umark=!0;for(var t,e=0,r=n._c;e<r;)if(t=n[e++],t._onRejected||m(t))return!0}function w(n,t){function e(n){return r.push(n.replace(/^\s+|\s+$/g,""))}var r=[];return I&&(t[M]&&e(t[M]),function o(n){n&&K in n&&(o(n._next),e(n[K]+""),o(n._p))}(t)),(n&&n.stack?n.stack:n)+("\n"+r.join("\n")).replace(nn,"")}function j(n,t){return n(t)}function y(n,t,e){var r=0,i=n._c;if(n._s===$)for(n._s=t,n._v=e,t===O&&(I&&o(e)&&(e.longStack=w(e,n)),on(n));r<i;)rn(n,n[r++]);return n}function g(n,r){if(r===n&&r)return y(n,O,a(V)),n;if(r!==S&&(e(r)||t(r))){var o=c(k)(r);if(o===Y)return y(n,O,o.e),n;e(o)?(I&&v(r)&&(n._next=r),v(r)?x(n,r,o):tn.nextTick(function(){x(n,r,o)})):y(n,U,r)}else y(n,U,r);return n}function k(n){return n.then}function x(n,t,e){var r=c(e,t)(function(e){t&&(t=S,g(n,e))},function(e){t&&(t=S,y(n,O,e))});r===Y&&t&&(y(n,O,r.e),t=S)}var T,b,R,S=null,C="object"==typeof self,F=self,P=F.Promise,E=F.process,H=F.console,I=!0,L=Array,A=Error,O=1,U=2,$=3,q="Symbol",z="iterator",B="species",D=q+"("+B+")",G="return",J="_uh",K="_pt",M="_st",N="Invalid argument",Q="\nFrom previous ",V="Chaining cycle detected for promise",W="rejectionHandled",X="unhandledRejection",Y={e:S},Z=function(){},nn=/^.+\/node_modules\/yaku\/.+\n?/gm,tn=function(n){var r,o=this;if(!t(o)||o._s!==T)throw a("Invalid this");if(o._s=$,I&&(o[K]=l()),n!==Z){if(!e(n))throw a(N);r=c(n)(d(o,U),d(o,O)),r===Y&&y(o,O,r.e)}};tn["default"]=tn,function en(n,t){for(var e in t)n[e]=t[e]}(tn.prototype,{then:function(n,t){if(this._s===undefined)throw a();return p(this,_(tn.speciesConstructor(this,tn)),n,t)},"catch":function(n){return this.then(T,n)},"finally":function(n){return this.then(function(t){return tn.resolve(n()).then(function(){return t})},function(t){return tn.resolve(n()).then(function(){throw t})})},_c:0,_p:S}),tn.resolve=function(n){return v(n)?n:g(_(this),n)},tn.reject=function(n){return y(_(this),O,n)},tn.race=function(n){var t=this,e=_(t),r=function(n){y(e,U,n)},o=function(n){y(e,O,n)},i=c(s)(n,function(n){t.resolve(n).then(r,o)});return i===Y?t.reject(i.e):e},tn.all=function(n){function t(n){y(o,O,n)}var e,r=this,o=_(r),i=[];return(e=c(s)(n,function(n,u){r.resolve(n).then(function(n){i[u]=n,--e||y(o,U,i)},t)}))===Y?r.reject(e.e):(e||y(o,U,[]),o)},tn.Symbol=F[q]||{},c(function(){Object.defineProperty(tn,n(),{get:function(){return this}})})(),tn.speciesConstructor=function(t,e){var r=t.constructor;return r?r[n()]||e:e},tn.unhandledRejection=function(n,t){H&&H.error("Uncaught (in promise)",I?t.longStack:w(n,t))},tn.rejectionHandled=Z,tn.enableLongStackTrace=function(){I=!0},tn.nextTick=C?function(n){P?new P(function(n){n()}).then(n):setTimeout(n)}:E.nextTick,tn._s=1;var rn=f(999,function(n,t){var e,r;return(r=n._s!==O?t._onFulfilled:t._onRejected)===T?void y(t,n._s,n._v):(e=c(j)(r,n._v))===Y?void y(t,O,e.e):void g(t,e)}),on=f(9,function(n){m(n)||(n[J]=1,h(X,n))});F.Promise=tn}();}if (!("Symbol"in self&&"unscopables"in self.Symbol
-)) {Object.defineProperty(Symbol,"unscopables",{value:Symbol("unscopables")});}if (!((function(){try{if("WeakMap"in self&&0===self.WeakMap.length){var e={},t=new self.WeakMap([[e,"test"]])
-return"test"===t.get(e)&&!1===t["delete"](0)}return!1}catch(a){return!1}})()
-)) {!function(e){var t=Symbol("undef"),r=function a(){if(!(this instanceof a))throw new TypeError('Constructor WeakMap requires "new"');var e=OrdinaryCreateFromConstructor(this,a.prototype,{_keys:[],_values:[],_es6WeakMap:!0}),t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var r=Get(e,"set");if(!IsCallable(r))throw new TypeError("WeakMap.prototype.set is not a function");try{for(var o=GetIterator(t);;){var p=IteratorStep(o);if(!1===p)return e;var n=IteratorValue(p);if("object"!==Type(n))try{throw new TypeError("Iterator value "+n+" is not an entry object")}catch(s){return IteratorClose(o,s)}try{var i=Get(n,"0"),l=Get(n,"1");Call(r,e,[i,l])}catch(u){return IteratorClose(o,u)}}}catch(u){if(Array.isArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var y,c=t.length;for(y=0;y<c;y++)i=t[y][0],l=t[y][1],Call(r,e,[i,l])}}return e};Object.defineProperty(r,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),CreateMethodProperty(r.prototype,"constructor",r),CreateMethodProperty(r.prototype,"delete",function(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakMap.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return this._keys[a]=t,this._values[a]=t,this._size=--this._size,!0;return!1}),CreateMethodProperty(r.prototype,"get",function p(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakMap.prototype.get called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.get called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return undefined;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return r._values[a];return undefined}),CreateMethodProperty(r.prototype,"has",function n(e){var r=this;if("object"!=typeof r)throw new TypeError("Method WeakMap.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return!0;return!1}),CreateMethodProperty(r.prototype,"set",function i(e,r){var o=this;if("object"!==Type(o))throw new TypeError("Method WeakMap.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));if(!0!==o._es6WeakMap)throw new TypeError("Method WeakMap.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));var a=o._keys;if("object"!==Type(e))throw new TypeError("Invalid value used as weak map key");for(var p=0;p<a.length;p++)if(o._keys[p]!==t&&SameValue(o._keys[p],e))return o._values[p]=r,o;var n={"[[Key]]":e,"[[Value]]":r};return o._keys.push(n["[[Key]]"]),o._values.push(n["[[Value]]"]),o}),Object.defineProperty(r.prototype,Symbol.toStringTag,{configurable:!0,enumerable:!1,writable:!1,value:"WeakMap"}),"name"in r||Object.defineProperty(r,"name",{configurable:!0,enumerable:!1,writable:!1,value:"WeakMap"});try{CreateMethodProperty(e,"WeakMap",r)}catch(o){e.WeakMap=r}}(self);}if (!((function(e){try{if(Object.prototype.hasOwnProperty.call(e,"WeakSet")&&0===e.WeakSet.length){var t={},r=new e.WeakSet([t])
-return r.has(t)&&!1===r["delete"](0)}return!1}catch(a){return!1}})(self)
-)) {!function(e){var t=Symbol("undef"),r=function a(){if(!(this instanceof a))throw new TypeError('Constructor WeakSet requires "new"');var e=OrdinaryCreateFromConstructor(this,a.prototype,{_values:[],_size:0,_es6WeakSet:!0}),t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var r=Get(e,"add");if(!IsCallable(r))throw new TypeError("WeakSet.prototype.add is not a function");try{for(var o=GetIterator(t);;){var n=IteratorStep(o);if(!1===n)return e;var l=IteratorValue(n);try{Call(r,e,[l])}catch(c){return IteratorClose(o,c)}}}catch(c){if(IsArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var p,i=t.length;for(p=0;p<i;p++)Call(r,e,[t[p]])}}return e};Object.defineProperty(r,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),CreateMethodProperty(r.prototype,"add",function n(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.add called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.add called on incompatible receiver "+Object.prototype.toString.call(r));if("object"!==Type(e))throw new TypeError("Invalid value used in weak set");for(var o=r._values,a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return r}return r._values.push(e),r}),CreateMethodProperty(r.prototype,"constructor",r),CreateMethodProperty(r.prototype,"delete",function(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(r));if("object"!==Type(e))return!1;for(var o=r._values,a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return o[a]=t,!0}return!1}),CreateMethodProperty(r.prototype,"has",function l(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._values;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return!0}return!1}),"name"in r||Object.defineProperty(r,"name",{configurable:!0,enumerable:!1,writable:!1,value:"WeakSet"});try{CreateMethodProperty(e,"WeakSet",r)}catch(o){e.WeakSet=r}}(self);}function TrimString(e,u){var r=RequireObjectCoercible(e),t=ToString(r),n=/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]+/.source;if("start"===u)var p=String.prototype.replace.call(t,new RegExp("^"+n,"g"),"");else p="end"===u?String.prototype.replace.call(t,new RegExp(n+"$","g"),""):String.prototype.replace.call(t,new RegExp("^"+n+"|"+n+"$","g"),"");return p}if (!("trim"in String.prototype&&function(){var r="​᠎"
-return!"\t\n\x0B\f\r                　\u2028\u2029\ufeff".trim()&&r.trim()===r}()
-)) {CreateMethodProperty(String.prototype,"trim",function t(){"use strict";var t=this;return TrimString(t,"start+end")});}if (!("parseFloat"in Number&&1/parseFloat("\t\n\x0B\f\r                　\u2028\u2029\ufeff-0")==-Infinity
-)) {!function(r,t){var a=function o(t){var a=String(t).trim(),e=r(a);return 0===e&&"-"==a.charAt(0)?-0:e};try{CreateMethodProperty(t,"parseFloat",a)}catch(e){t.parseFloat=a}CreateMethodProperty(Number,"parseFloat",t.parseFloat)}(parseFloat,this);}if (!("parseInt"in Number&&8===Number.parseInt("08")
-)) {!function(t,r){var e=function a(r,e){var n=String(r).trim();return t(n,e>>>0||(/^[-+]?0[xX]/.test(n)?16:10))};try{CreateMethodProperty(r,"parseInt",e)}catch(n){r.parseInt=e}CreateMethodProperty(Number,"parseInt",r.parseInt)}(parseInt,this);}function UTF16Decode(e,n){return 1024*(e-55296)+(n-56320)+65536}if (!("codePointAt"in String.prototype
-)) {CreateMethodProperty(String.prototype,"codePointAt",function e(t){var r=RequireObjectCoercible(this),o=ToString(r),n=ToInteger(t),i=o.length;if(n<0||n>=i)return undefined;var c=String.prototype.charCodeAt.call(o,n);if(c<55296||c>56319||n+1===i)return c;var a=String.prototype.charCodeAt.call(o,n+1);return a<56320||a>57343?c:UTF16Decode(c,a)});}function UTF16Encoding(n){return n<=65535?n:[Math.floor((n-65536)/1024)+55296,(n-65536)%1024+56320]}if (!("fromCodePoint"in String&&1===String.fromCodePoint.length
-)) {CreateMethodProperty(String,"fromCodePoint",function r(o){for(var t=[],e=arguments,n=arguments.length,a=[],i=0;i<n;){a=[];var l=e[i],p=ToNumber(l);if(!1===SameValue(p,ToInteger(p)))throw new RangeError("Invalid code point "+Object.prototype.toString.call(p));if(p<0||p>1114111)throw new RangeError("Invalid code point "+Object.prototype.toString.call(p));var c=UTF16Encoding(p);IsArray(c)?a=a.concat(c):a.push(c),i+=1,t.push(String.fromCharCode.apply(null,a))}return 0===n?"":t.join("")});}var Iterator=function(){var e=function(){return this.length=0,this},t=function(e){if("function"!=typeof e)throw new TypeError(e+" is not a function");return e},_=function(e,n){if(!(this instanceof _))return new _(e,n);Object.defineProperties(this,{__list__:{writable:!0,value:e},__context__:{writable:!0,value:n},__nextIndex__:{writable:!0,value:0}}),n&&(t(n.on),n.on("_add",this._onAdd.bind(this)),n.on("_delete",this._onDelete.bind(this)),n.on("_clear",this._onClear.bind(this)))};return Object.defineProperties(_.prototype,Object.assign({constructor:{value:_,configurable:!0,enumerable:!1,writable:!0},_next:{value:function(){var e;if(this.__list__)return this.__redo__&&(e=this.__redo__.shift())!==undefined?e:this.__nextIndex__<this.__list__.length?this.__nextIndex__++:void this._unBind()},configurable:!0,enumerable:!1,writable:!0},next:{value:function(){return this._createResult(this._next())},configurable:!0,enumerable:!1,writable:!0},_createResult:{value:function(e){return e===undefined?{done:!0,value:undefined}:{done:!1,value:this._resolve(e)}},configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(e){return this.__list__[e]},configurable:!0,enumerable:!1,writable:!0},_unBind:{value:function(){this.__list__=null,delete this.__redo__,this.__context__&&(this.__context__.off("_add",this._onAdd.bind(this)),this.__context__.off("_delete",this._onDelete.bind(this)),this.__context__.off("_clear",this._onClear.bind(this)),this.__context__=null)},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object Iterator]"},configurable:!0,enumerable:!1,writable:!0}},{_onAdd:{value:function(e){if(!(e>=this.__nextIndex__)){if(++this.__nextIndex__,!this.__redo__)return void Object.defineProperty(this,"__redo__",{value:[e],configurable:!0,enumerable:!1,writable:!1});this.__redo__.forEach(function(t,_){t>=e&&(this.__redo__[_]=++t)},this),this.__redo__.push(e)}},configurable:!0,enumerable:!1,writable:!0},_onDelete:{value:function(e){var t;e>=this.__nextIndex__||(--this.__nextIndex__,this.__redo__&&(t=this.__redo__.indexOf(e),-1!==t&&this.__redo__.splice(t,1),this.__redo__.forEach(function(t,_){t>e&&(this.__redo__[_]=--t)},this)))},configurable:!0,enumerable:!1,writable:!0},_onClear:{value:function(){this.__redo__&&e.call(this.__redo__),this.__nextIndex__=0},configurable:!0,enumerable:!1,writable:!0}})),Object.defineProperty(_.prototype,Symbol.iterator,{value:function(){return this},configurable:!0,enumerable:!1,writable:!0}),Object.defineProperty(_.prototype,Symbol.toStringTag,{value:"Iterator",configurable:!1,enumerable:!1,writable:!0}),_}();var ArrayIterator=function(){var e=function(t,r){if(!(this instanceof e))return new e(t,r);Iterator.call(this,t),r=r?String.prototype.includes.call(r,"key+value")?"key+value":String.prototype.includes.call(r,"key")?"key":"value":"value",Object.defineProperty(this,"__kind__",{value:r,configurable:!1,enumerable:!1,writable:!1})};return Object.setPrototypeOf&&Object.setPrototypeOf(e,Iterator.prototype),e.prototype=Object.create(Iterator.prototype,{constructor:{value:e,configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(e){return"value"===this.__kind__?this.__list__[e]:"key+value"===this.__kind__?[e,this.__list__[e]]:e},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object Array Iterator]"},configurable:!0,enumerable:!1,writable:!0}}),e}();if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype.entries
-)) {CreateMethodProperty(Array.prototype,"entries",function r(){var r=ToObject(this);return new ArrayIterator(r,"key+value")});}if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype.keys
-)) {CreateMethodProperty(Array.prototype,"keys",function r(){var r=ToObject(this);return new ArrayIterator(r,"key")});}if (!("values"in Array.prototype
-)) {"Symbol"in self&&"iterator"in Symbol&&"function"==typeof Array.prototype[Symbol.iterator]?CreateMethodProperty(Array.prototype,"values",Array.prototype[Symbol.iterator]):CreateMethodProperty(Array.prototype,"values",function r(){var r=ToObject(this);return new ArrayIterator(r,"value")});}if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype[self.Symbol.iterator]
-)) {CreateMethodProperty(Array.prototype,Symbol.iterator,Array.prototype.values);}var StringIterator=function(){var t=function(e){if(!(this instanceof t))return new t(e);e=String(e),Iterator.call(this,e),Object.defineProperty(this,"__length__",{value:e.length,configurable:!1,enumerable:!1,writable:!1})};return Object.setPrototypeOf&&Object.setPrototypeOf(t,Iterator),t.prototype=Object.create(Iterator.prototype,{constructor:{value:t,configurable:!0,enumerable:!1,writable:!0},_next:{value:function(){if(this.__list__)return this.__nextIndex__<this.__length__?this.__nextIndex__++:void this._unBind()},configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(t){var e,r=this.__list__[t];return this.__nextIndex__===this.__length__?r:(e=r.charCodeAt(0),e>=55296&&e<=56319?r+this.__list__[this.__nextIndex__++]:r)},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object String Iterator]"},configurable:!0,enumerable:!1,writable:!0}}),t}();if (!("Symbol"in self&&"iterator"in self.Symbol&&!!String.prototype[self.Symbol.iterator]
-)) {CreateMethodProperty(String.prototype,Symbol.iterator,function(){var r=RequireObjectCoercible(this),t=ToString(r);return new StringIterator(t)});}})('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});</script>
-  
-  <script>
-    (function () {
-      var script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js";
-      document.getElementsByTagName("head")[0].appendChild(script);
-    })();
-  </script>
-
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -4377,7 +4238,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch5.html">Indexation</a></li><li class="breadcrumb-item"><a href="./ch5.html">Détails</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch4.html">Évaluation</a></li><li class="breadcrumb-item"><a href="./ch4q.html">Quiz</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4495,13 +4356,13 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Évaluation</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch4.html" class="sidebar-item-text sidebar-link">
@@ -4516,7 +4377,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch4q.html" class="sidebar-item-text sidebar-link">
+  <a href="./ch4q.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Quiz</span></a>
   </div>
 </li>
@@ -4524,16 +4385,16 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
  <span class="menu-text">Indexation</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch5.html" class="sidebar-item-text sidebar-link active">
+  <a href="./ch5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Détails</span></a>
   </div>
 </li>
@@ -4602,112 +4463,16 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#motivation-pourquoi-indexer" id="toc-motivation-pourquoi-indexer" class="nav-link active" data-scroll-target="#motivation-pourquoi-indexer">Motivation : pourquoi indexer ?</a>
-  <ul class="collapse">
-  <li><a href="#le-problème-fondamental" id="toc-le-problème-fondamental" class="nav-link" data-scroll-target="#le-problème-fondamental">Le problème fondamental</a></li>
-  <li><a href="#le-pipeline-de-recherche-dinformation" id="toc-le-pipeline-de-recherche-dinformation" class="nav-link" data-scroll-target="#le-pipeline-de-recherche-dinformation">Le pipeline de recherche d’information</a></li>
-  </ul></li>
-  <li><a href="#indexation-indexing" id="toc-indexation-indexing" class="nav-link" data-scroll-target="#indexation-indexing">Indexation (Indexing)</a>
-  <ul class="collapse">
-  <li><a href="#définition-générale" id="toc-définition-générale" class="nav-link" data-scroll-target="#définition-générale">Définition générale</a></li>
-  <li><a href="#le-type-de-données-abstrait-abstract-data-type" id="toc-le-type-de-données-abstrait-abstract-data-type" class="nav-link" data-scroll-target="#le-type-de-données-abstrait-abstract-data-type">Le Type de Données Abstrait (Abstract Data Type)</a></li>
-  <li><a href="#le-compromis-fondamental" id="toc-le-compromis-fondamental" class="nav-link" data-scroll-target="#le-compromis-fondamental">Le compromis fondamental</a></li>
-  <li><a href="#recherche-indexée-vs.-recherche-exhaustive" id="toc-recherche-indexée-vs.-recherche-exhaustive" class="nav-link" data-scroll-target="#recherche-indexée-vs.-recherche-exhaustive">Recherche indexée vs. recherche exhaustive</a></li>
-  </ul></li>
-  <li><a href="#les-structures-dindexation-classiques" id="toc-les-structures-dindexation-classiques" class="nav-link" data-scroll-target="#les-structures-dindexation-classiques">Les structures d’indexation classiques</a></li>
-  <li><a href="#fichiers-inversés-inverted-files" id="toc-fichiers-inversés-inverted-files" class="nav-link" data-scroll-target="#fichiers-inversés-inverted-files">Fichiers Inversés (Inverted Files)</a>
-  <ul class="collapse">
-  <li><a href="#le-principe-de-lindexation-par-intersection" id="toc-le-principe-de-lindexation-par-intersection" class="nav-link" data-scroll-target="#le-principe-de-lindexation-par-intersection">Le principe de l’indexation par intersection</a></li>
-  <li><a href="#lobservation-clé" id="toc-lobservation-clé" class="nav-link" data-scroll-target="#lobservation-clé">L’observation clé</a></li>
-  <li><a href="#reformulation-du-problème" id="toc-reformulation-du-problème" class="nav-link" data-scroll-target="#reformulation-du-problème">Reformulation du problème</a></li>
-  <li><a href="#approche-naïve-vs.-approche-avec-fichier-inversé" id="toc-approche-naïve-vs.-approche-avec-fichier-inversé" class="nav-link" data-scroll-target="#approche-naïve-vs.-approche-avec-fichier-inversé">Approche naïve vs. approche avec fichier inversé</a></li>
-  <li><a href="#construction-du-fichier-inversé" id="toc-construction-du-fichier-inversé" class="nav-link" data-scroll-target="#construction-du-fichier-inversé">Construction du fichier inversé</a></li>
-  <li><a href="#processus-de-construction" id="toc-processus-de-construction" class="nav-link" data-scroll-target="#processus-de-construction">Processus de construction</a></li>
-  </ul></li>
-  <li><a href="#recherche-du-plus-proche-voisin-nearest-neighbor-search" id="toc-recherche-du-plus-proche-voisin-nearest-neighbor-search" class="nav-link" data-scroll-target="#recherche-du-plus-proche-voisin-nearest-neighbor-search">Recherche du Plus Proche Voisin (Nearest Neighbor Search)</a>
-  <ul class="collapse">
-  <li><a href="#pourquoi-la-recherche-par-similarité" id="toc-pourquoi-la-recherche-par-similarité" class="nav-link" data-scroll-target="#pourquoi-la-recherche-par-similarité">Pourquoi la recherche par similarité ?</a></li>
-  <li><a href="#types-de-requêtes-de-voisinage" id="toc-types-de-requêtes-de-voisinage" class="nav-link" data-scroll-target="#types-de-requêtes-de-voisinage">Types de requêtes de voisinage</a></li>
-  <li><a href="#principe-des-index-spatiaux" id="toc-principe-des-index-spatiaux" class="nav-link" data-scroll-target="#principe-des-index-spatiaux">Principe des index spatiaux</a></li>
-  </ul></li>
-  <li><a href="#k-d-trees" id="toc-k-d-trees" class="nav-link" data-scroll-target="#k-d-trees">k-d-Trees</a>
-  <ul class="collapse">
-  <li><a href="#présentation" id="toc-présentation" class="nav-link" data-scroll-target="#présentation">Présentation</a></li>
-  <li><a href="#algorithme-de-construction" id="toc-algorithme-de-construction" class="nav-link" data-scroll-target="#algorithme-de-construction">Algorithme de construction</a></li>
-  <li><a href="#stratégies-de-partitionnement" id="toc-stratégies-de-partitionnement" class="nav-link" data-scroll-target="#stratégies-de-partitionnement">Stratégies de partitionnement</a></li>
-  <li><a href="#algorithme-de-recherche" id="toc-algorithme-de-recherche" class="nav-link" data-scroll-target="#algorithme-de-recherche">Algorithme de recherche</a></li>
-  <li><a href="#limitations-des-k-d-trees" id="toc-limitations-des-k-d-trees" class="nav-link" data-scroll-target="#limitations-des-k-d-trees">Limitations des k-d-Trees</a></li>
-  </ul></li>
-  <li><a href="#indexation-par-pivots-pivot-based-indexing" id="toc-indexation-par-pivots-pivot-based-indexing" class="nav-link" data-scroll-target="#indexation-par-pivots-pivot-based-indexing">Indexation par Pivots (Pivot-based Indexing)</a>
-  <ul class="collapse">
-  <li><a href="#principe-général" id="toc-principe-général" class="nav-link" data-scroll-target="#principe-général">Principe général</a></li>
-  <li><a href="#algorithme" id="toc-algorithme" class="nav-link" data-scroll-target="#algorithme">Algorithme</a></li>
-  <li><a href="#la-règle-dexclusion-euclidienne" id="toc-la-règle-dexclusion-euclidienne" class="nav-link" data-scroll-target="#la-règle-dexclusion-euclidienne">La règle d’exclusion euclidienne</a></li>
-  <li><a href="#principe-dexclusion" id="toc-principe-dexclusion" class="nav-link" data-scroll-target="#principe-dexclusion">Principe d’exclusion</a></li>
-  </ul></li>
-  <li><a href="#aesa-et-l-aesa" id="toc-aesa-et-l-aesa" class="nav-link" data-scroll-target="#aesa-et-l-aesa">AESA et L-AESA</a>
-  <ul class="collapse">
-  <li><a href="#lalgorithme-aesa" id="toc-lalgorithme-aesa" class="nav-link" data-scroll-target="#lalgorithme-aesa">L’algorithme AESA</a></li>
-  <li><a href="#algorithme-aesa-simplifié" id="toc-algorithme-aesa-simplifié" class="nav-link" data-scroll-target="#algorithme-aesa-simplifié">Algorithme AESA (simplifié)</a></li>
-  <li><a href="#propriétés-et-limites-daesa" id="toc-propriétés-et-limites-daesa" class="nav-link" data-scroll-target="#propriétés-et-limites-daesa">Propriétés et limites d’AESA</a></li>
-  </ul></li>
-  <li><a href="#recherche-approximative-du-plus-proche-voisin-approximate-nearest-neighbor-search" id="toc-recherche-approximative-du-plus-proche-voisin-approximate-nearest-neighbor-search" class="nav-link" data-scroll-target="#recherche-approximative-du-plus-proche-voisin-approximate-nearest-neighbor-search">Recherche Approximative du Plus Proche Voisin (Approximate Nearest Neighbor Search)</a>
-  <ul class="collapse">
-  <li><a href="#pourquoi-lapproximation" id="toc-pourquoi-lapproximation" class="nav-link" data-scroll-target="#pourquoi-lapproximation">Pourquoi l’approximation ?</a></li>
-  <li><a href="#définition-formelle-de-lanns" id="toc-définition-formelle-de-lanns" class="nav-link" data-scroll-target="#définition-formelle-de-lanns">Définition formelle de l’ANNS</a></li>
-  </ul></li>
-  <li><a href="#indexation-par-permutations-permutation-based-indexing" id="toc-indexation-par-permutations-permutation-based-indexing" class="nav-link" data-scroll-target="#indexation-par-permutations-permutation-based-indexing">Indexation par Permutations (Permutation-based Indexing)</a>
-  <ul class="collapse">
-  <li><a href="#principe" id="toc-principe" class="nav-link" data-scroll-target="#principe">Principe</a></li>
-  <li><a href="#algorithme-1" id="toc-algorithme-1" class="nav-link" data-scroll-target="#algorithme-1">Algorithme</a></li>
-  <li><a href="#la-mesure-de-spearman-rho" id="toc-la-mesure-de-spearman-rho" class="nav-link" data-scroll-target="#la-mesure-de-spearman-rho">La mesure de Spearman Rho</a></li>
-  <li><a href="#avantages-et-accélération" id="toc-avantages-et-accélération" class="nav-link" data-scroll-target="#avantages-et-accélération">Avantages et accélération</a></li>
-  </ul></li>
-  <li><a href="#hachage-sensible-à-la-localité-locality-sensitive-hashing" id="toc-hachage-sensible-à-la-localité-locality-sensitive-hashing" class="nav-link" data-scroll-target="#hachage-sensible-à-la-localité-locality-sensitive-hashing">Hachage Sensible à la Localité (Locality-Sensitive Hashing)</a>
-  <ul class="collapse">
-  <li><a href="#principe-fondamental-du-lsh" id="toc-principe-fondamental-du-lsh" class="nav-link" data-scroll-target="#principe-fondamental-du-lsh">Principe fondamental du LSH</a></li>
-  <li><a href="#définition-formelle" id="toc-définition-formelle" class="nav-link" data-scroll-target="#définition-formelle">Définition formelle</a></li>
-  <li><a href="#exemples-de-fonctions-lsh" id="toc-exemples-de-fonctions-lsh" class="nav-link" data-scroll-target="#exemples-de-fonctions-lsh">Exemples de fonctions LSH</a></li>
-  <li><a href="#apprentissage-des-fonctions-de-hachage-learning-to-hash" id="toc-apprentissage-des-fonctions-de-hachage-learning-to-hash" class="nav-link" data-scroll-target="#apprentissage-des-fonctions-de-hachage-learning-to-hash">Apprentissage des fonctions de hachage (Learning to Hash)</a></li>
-  </ul></li>
-  <li><a href="#graphes-navigables-hnsw" id="toc-graphes-navigables-hnsw" class="nav-link" data-scroll-target="#graphes-navigables-hnsw">Graphes Navigables — HNSW</a>
-  <ul class="collapse">
-  <li><a href="#hierarchical-navigable-small-worlds-hnsw" id="toc-hierarchical-navigable-small-worlds-hnsw" class="nav-link" data-scroll-target="#hierarchical-navigable-small-worlds-hnsw">Hierarchical Navigable Small Worlds (HNSW)</a></li>
-  <li><a href="#algorithme-hnsw" id="toc-algorithme-hnsw" class="nav-link" data-scroll-target="#algorithme-hnsw">Algorithme HNSW</a></li>
-  <li><a href="#propriétés-du-graphe-hnsw" id="toc-propriétés-du-graphe-hnsw" class="nav-link" data-scroll-target="#propriétés-du-graphe-hnsw">Propriétés du graphe HNSW</a></li>
-  </ul></li>
-  <li><a href="#recherche-du-plus-proche-voisin-à-léchelle-du-milliard" id="toc-recherche-du-plus-proche-voisin-à-léchelle-du-milliard" class="nav-link" data-scroll-target="#recherche-du-plus-proche-voisin-à-léchelle-du-milliard">Recherche du Plus Proche Voisin à l’Échelle du Milliard</a>
-  <ul class="collapse">
-  <li><a href="#le-défi-de-léchelle-milliardaire" id="toc-le-défi-de-léchelle-milliardaire" class="nav-link" data-scroll-target="#le-défi-de-léchelle-milliardaire">Le défi de l’échelle milliardaire</a></li>
-  <li><a href="#solutions-actuelles" id="toc-solutions-actuelles" class="nav-link" data-scroll-target="#solutions-actuelles">Solutions actuelles</a></li>
-  </ul></li>
-  <li><a href="#recherche-du-produit-intérieur-maximum-maximum-inner-product-search" id="toc-recherche-du-produit-intérieur-maximum-maximum-inner-product-search" class="nav-link" data-scroll-target="#recherche-du-produit-intérieur-maximum-maximum-inner-product-search">Recherche du Produit Intérieur Maximum (Maximum Inner Product Search)</a>
-  <ul class="collapse">
-  <li><a href="#définition-du-problème-mips" id="toc-définition-du-problème-mips" class="nav-link" data-scroll-target="#définition-du-problème-mips">Définition du problème MIPS</a></li>
-  <li><a href="#lien-avec-la-recherche-de-plus-proche-voisin" id="toc-lien-avec-la-recherche-de-plus-proche-voisin" class="nav-link" data-scroll-target="#lien-avec-la-recherche-de-plus-proche-voisin">Lien avec la recherche de plus proche voisin</a></li>
-  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
-  </ul></li>
-  <li><a href="#résumé-et-synthèse" id="toc-résumé-et-synthèse" class="nav-link" data-scroll-target="#résumé-et-synthèse">Résumé et Synthèse</a>
-  <ul class="collapse">
-  <li><a href="#ce-quil-faut-retenir" id="toc-ce-quil-faut-retenir" class="nav-link" data-scroll-target="#ce-quil-faut-retenir">Ce qu’il faut retenir</a></li>
-  <li><a href="#les-grandes-familles-dindex" id="toc-les-grandes-familles-dindex" class="nav-link" data-scroll-target="#les-grandes-familles-dindex">Les grandes familles d’index</a></li>
-  </ul></li>
-  <li><a href="#questions-de-révision" id="toc-questions-de-révision" class="nav-link" data-scroll-target="#questions-de-révision">Questions de Révision</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch5.html">Indexation</a></li><li class="breadcrumb-item"><a href="./ch5.html">Détails</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch4.html">Évaluation</a></li><li class="breadcrumb-item"><a href="./ch4q.html">Quiz</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Indexation en Recherche d’Information</h1>
+<h1 class="title">Évaluation en Recherche d’Information — Quiz</h1>
 </div>
 
 
@@ -4724,588 +4489,440 @@ window.Quarto = {
 </header>
 
 
-<section id="motivation-pourquoi-indexer" class="level1">
-<h1>Motivation : pourquoi indexer ?</h1>
-<p>La recherche d’information (Information Retrieval) est <strong>fondamentalement liée à de grands volumes de données</strong>. Lorsqu’un utilisateur formule une requête, le moteur de recherche doit calculer — ou estimer — une valeur de pertinence (RSV, <em>Retrieval Status Value</em>) pour <strong>chaque document</strong> de la collection par rapport à cette requête.</p>
-<p>Ce processus naïf est coûteux : il implique de parcourir l’ensemble des documents à chaque requête, ce qui est inacceptable à grande échelle.</p>
-<section id="le-problème-fondamental" class="level2">
-<h2 class="anchored" data-anchor-id="le-problème-fondamental">Le problème fondamental</h2>
-<p>La similarité entre un document et une requête ne peut être calculée <strong>qu’au moment de la requête</strong> (<em>at query time</em>). Cependant, une partie du travail peut être anticipée lors d’une phase de <strong>prétraitement hors-ligne</strong> (<em>offline preprocessing</em>).</p>
-<p>💡 L’idée centrale de l’indexation est simple : <strong>organiser les données à l’avance</strong> pour pouvoir y accéder plus rapidement lors des requêtes, au prix d’un coût de construction de l’index et d’un espace de stockage supplémentaire.</p>
-</section>
-<section id="le-pipeline-de-recherche-dinformation" class="level2">
-<h2 class="anchored" data-anchor-id="le-pipeline-de-recherche-dinformation">Le pipeline de recherche d’information</h2>
-<p>Le système de recherche d’information fonctionne en deux grandes phases :</p>
-<p><strong>Phase hors-ligne (Offline) :</strong></p>
-<ul>
-<li>Extraction de caractéristiques (<em>Feature extraction</em>) à partir des documents</li>
-<li>Construction de l’index (<em>Indexing</em>) à partir de ces caractéristiques</li>
-</ul>
-<p><strong>Phase interactive (Online) :</strong></p>
-<ul>
-<li>Formulation de la requête par l’utilisateur</li>
-<li>Traitement de la requête (<em>Query processing</em>)</li>
-<li>Recherche via le moteur de similarité (<em>Search engine</em>)</li>
-<li>Classement des résultats (<em>Rank by relevance</em>)</li>
-<li>Affichage et retour de pertinence (<em>Relevance feedback</em>)</li>
-</ul>
-<p>⚠️ L’indexation intervient dans la phase hors-ligne : elle prépare une structure de données qui permettra à la phase en ligne d’être rapide.</p>
-<hr>
-</section>
-</section>
-<section id="indexation-indexing" class="level1">
-<h1>Indexation (Indexing)</h1>
-<section id="définition-générale" class="level2">
-<h2 class="anchored" data-anchor-id="définition-générale">Définition générale</h2>
-<p>Un <strong>index</strong> est une structure de données auxiliaire qui organise l’accès aux données principales. L’objectif est de rendre certains types d’accès beaucoup plus rapides, potentiellement au détriment d’autres types d’accès moins fréquents.</p>
-<p>💡 Pensez à l’index d’un livre : il ne contient pas le texte complet, mais il permet de trouver rapidement la page où un sujet est traité.</p>
-</section>
-<section id="le-type-de-données-abstrait-abstract-data-type" class="level2">
-<h2 class="anchored" data-anchor-id="le-type-de-données-abstrait-abstract-data-type">Le Type de Données Abstrait (Abstract Data Type)</h2>
-<p>Du point de vue algorithmique, un index doit supporter trois opérations fondamentales :</p>
-<ul>
-<li><strong>Insertion</strong> (<em>insert, add, put</em>) : ajouter une nouvelle donnée à l’index</li>
-<li><strong>Suppression</strong> (<em>remove, delete</em>) : retirer une donnée de l’index</li>
-<li><strong>Recherche</strong> (<em>search, find, get</em>) : retrouver des données selon un critère</li>
-</ul>
-</section>
-<section id="le-compromis-fondamental" class="level2">
-<h2 class="anchored" data-anchor-id="le-compromis-fondamental">Le compromis fondamental</h2>
-<p>L’index exploite les <strong>propriétés des données</strong> et les <strong>modes d’accès anticipés</strong> pour rendre les accès probables rapides — éventuellement au prix de rendre les accès improbables plus lents — et cela au coût d’un stockage accru.</p>
-<p>On parle d’un triple compromis :</p>
-<ul>
-<li><strong>Temps de requête</strong> (<em>query time</em>) : réduit grâce à l’index</li>
-<li><strong>Temps d’indexation</strong> (<em>indexing time</em>) : coût de construction de l’index</li>
-<li><strong>Espace de stockage</strong> (<em>space</em>) : l’index occupe de la mémoire supplémentaire</li>
-</ul>
-<p>🧠 À retenir : un index dépend à la fois des propriétés des données <strong>et</strong> du type de requêtes anticipées. Des données sans structure, ou dont le mode d’accès est inconnu, <strong>ne peuvent pas être indexées efficacement</strong>.</p>
-</section>
-<section id="recherche-indexée-vs.-recherche-exhaustive" class="level2">
-<h2 class="anchored" data-anchor-id="recherche-indexée-vs.-recherche-exhaustive">Recherche indexée vs. recherche exhaustive</h2>
-<p>La <strong>recherche exhaustive</strong> (<em>exhaustive search</em>) parcourt tous les N éléments de la collection : sa complexité est O(N).</p>
-<p>La <strong>recherche indexée</strong> (<em>index search</em>) vise à réduire drastiquement ce coût en exploitant la structure de l’index, idéalement à O(log N) ou mieux.</p>
-<hr>
-</section>
-</section>
-<section id="les-structures-dindexation-classiques" class="level1">
-<h1>Les structures d’indexation classiques</h1>
-<p>Il existe une très grande variété de structures d’index, développées depuis les années 1960 jusqu’aux années 1990 et au-delà. Parmi les grandes familles :</p>
-<ul>
-<li><strong>Arbres multidimensionnels</strong> : B-Tree, R-Tree, R*-Tree, k-d-Tree, Ball-Tree, M-Tree…</li>
-<li><strong>Structures de hachage</strong> : Extendible Hashing, Linear Hashing, Grid File…</li>
-<li><strong>Structures textuelles</strong> : Suffix Tree, Trie, Inverted File…</li>
-<li><strong>Structures hybrides</strong> : BANG File, Twin Grid File, BV-Tree…</li>
-</ul>
-<p>💡 Cette diversité reflète la richesse des types de données (texte, images, géométrie, séries temporelles…) et des types de requêtes (exacte, par intervalle, par similarité…).</p>
-<hr>
-</section>
-<section id="fichiers-inversés-inverted-files" class="level1">
-<h1>Fichiers Inversés (Inverted Files)</h1>
-<section id="le-principe-de-lindexation-par-intersection" class="level2">
-<h2 class="anchored" data-anchor-id="le-principe-de-lindexation-par-intersection">Le principe de l’indexation par intersection</h2>
-<p>Rappelons la formule du RSV basée sur la similarité cosinus entre un document <span class="math inline">\(d_j\)</span> et une requête <span class="math inline">\(q\)</span> :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) = \frac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \frac{\sum_i w_{ij} w_{iq}}{(\sum_i w_{ij}^2)^{1/2} (\sum_i w_{iq}^2)^{1/2}}\]</span></p>
-<p>On peut voir cela comme une version continue de l’intersection d’ensembles :</p>
-<p><span class="math display">\[\text{RSV}(\hat{d}_j, \hat{q}) = \frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|^{1/2} |\hat{q}|^{1/2}}\]</span></p>
-</section>
-<section id="lobservation-clé" class="level2">
-<h2 class="anchored" data-anchor-id="lobservation-clé">L’observation clé</h2>
-<p>⚠️ Observation fondamentale : <span class="math inline">\(w_{ij} \cdot w_{iq} \neq 0\)</span> <strong>si et seulement si</strong> <span class="math inline">\(w_{ij} \neq 0\)</span> <strong>et</strong> <span class="math inline">\(w_{iq} \neq 0\)</span>.</p>
-<p>Autrement dit, un terme contribue au score d’un document <strong>uniquement s’il apparaît à la fois dans le document et dans la requête</strong>.</p>
-<p>Or, une requête ne contient généralement que <strong>quelques termes</strong> parmi les milliers ou millions possibles. Calculer la somme <span class="math inline">\(\sum_{i=1}^{M} w_{ij} w_{iq}\)</span> sur tous les M termes est donc un <strong>gaspillage de ressources</strong>.</p>
-<p>Il est bien plus efficace de calculer :</p>
-<p><span class="math display">\[\sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij} w_{iq}\]</span></p>
-<p>où <span class="math inline">\(\mathbb{1}_j\)</span> désigne l’ensemble des termes présents dans le document <span class="math inline">\(j\)</span> et <span class="math inline">\(\mathbb{1}_q\)</span> l’ensemble des termes de la requête.</p>
-</section>
-<section id="reformulation-du-problème" class="level2">
-<h2 class="anchored" data-anchor-id="reformulation-du-problème">Reformulation du problème</h2>
-<p>Au lieu de demander “quels termes sont contenus dans le document <span class="math inline">\(j\)</span> et dans la requête <span class="math inline">\(q\)</span> ?”, on reformule en : <strong>“quels documents contiennent ce terme de la requête ?”</strong></p>
-<p>Ce renversement de perspective est le cœur du fichier inversé.</p>
-</section>
-<section id="approche-naïve-vs.-approche-avec-fichier-inversé" class="level2">
-<h2 class="anchored" data-anchor-id="approche-naïve-vs.-approche-avec-fichier-inversé">Approche naïve vs. approche avec fichier inversé</h2>
-<p><strong>Approche naïve — O(M × N) :</strong></p>
-<pre><code>procedure ComputeRSV(W, q):
-    Normaliser la requête q
-    r = 0
-    pour j dans [1..N]:          // O(N) documents
-        pour i dans [1..M]:      // O(M) termes
-            r[j] = r[j] + w_ij * w_iq</code></pre>
-<p><strong>Approche avec fichier inversé — O(|𝕀_q|) :</strong></p>
-<pre><code>procedure ComputeRSV(W, q):
-    Normaliser la requête q
-    r = 0
-    pour i dans 𝕀_q:                          // O(|𝕀_q|) termes de la requête
-        pour j dans [1..N] tel que i ∈ 𝕀_j:   // i ∈ 𝕀_j ∩ 𝕀_q
-            r[j] = r[j] + w_ij * w_iq</code></pre>
-<p>💡 La complexité passe de O(M × N) à O(|𝕀_q|), c’est-à-dire proportionnelle au nombre de termes dans la requête — typiquement très petit !</p>
-</section>
-<section id="construction-du-fichier-inversé" class="level2">
-<h2 class="anchored" data-anchor-id="construction-du-fichier-inversé">Construction du fichier inversé</h2>
-<p>Pour que la recherche de “tous les documents contenant le terme <span class="math inline">\(i\)</span>” soit en O(1), on construit une <strong>liste inversée</strong> :</p>
-<p><span class="math display">\[i \rightarrow \{j \mid i \in \mathbb{1}_j\}\]</span></p>
-<p>Chaque terme pointe vers la liste des documents qui le contiennent (avec leur poids associé).</p>
-<p>Un fichier inversé est composé de deux parties :</p>
-<ul>
-<li><strong>Le dictionnaire</strong> (<em>Dictionary</em>) : contient les termes (avec informations globales comme l’IDF)</li>
-<li><strong>Le fichier de postings</strong> (<em>Posting file</em>) : contient, pour chaque terme, la liste des documents avec leurs fréquences</li>
-</ul>
-</section>
-<section id="processus-de-construction" class="level2">
-<h2 class="anchored" data-anchor-id="processus-de-construction">Processus de construction</h2>
-<p>La construction d’un fichier inversé suit plusieurs étapes :</p>
-<ol type="1">
-<li><strong>Extraction</strong> (<em>Extraction</em>) : pour chaque document, lister les couples (terme, doc_id)</li>
-<li><strong>Tri</strong> (<em>Sorting</em>) : trier tous ces couples par terme puis par doc_id</li>
-<li><strong>Compactage</strong> (<em>Compaction</em>) : regrouper les occurrences du même terme dans le même document</li>
-<li><strong>Factorisation</strong> : séparer le dictionnaire (terme → fréquence totale) des postings (doc_id, fréquence locale)</li>
-<li><strong>Opérations diverses</strong> : compression du fichier de postings, optimisations…</li>
-</ol>
-<p>🧠 À retenir : le fichier inversé est la structure d’indexation <strong>la plus utilisée en pratique</strong> pour la recherche textuelle. C’est la base de tous les moteurs de recherche modernes.</p>
-<hr>
-</section>
-</section>
-<section id="recherche-du-plus-proche-voisin-nearest-neighbor-search" class="level1">
-<h1>Recherche du Plus Proche Voisin (Nearest Neighbor Search)</h1>
-<section id="pourquoi-la-recherche-par-similarité" class="level2">
-<h2 class="anchored" data-anchor-id="pourquoi-la-recherche-par-similarité">Pourquoi la recherche par similarité ?</h2>
-<p>Avec l’émergence des représentations vectorielles (<em>embeddings</em>) apprises par des modèles de Machine Learning (minimisation de l’erreur quadratique — MMSE), les données sont organisées dans un espace euclidien. La recherche par similarité correspond alors à la recherche du <strong>plus proche voisin</strong> (<em>Nearest Neighbor Search</em>, NNS).</p>
-</section>
-<section id="types-de-requêtes-de-voisinage" class="level2">
-<h2 class="anchored" data-anchor-id="types-de-requêtes-de-voisinage">Types de requêtes de voisinage</h2>
-<p>Deux types principaux de requêtes :</p>
-<p><strong>Requêtes par rayon</strong> (<em>Range queries</em>, ε-queries) :</p>
-<ul>
-<li>Trouver tous les voisins dans un rayon ε &gt; 0 autour de la requête</li>
-<li>Résultat : un ensemble de taille variable</li>
-</ul>
-<p><strong>Requêtes des k plus proches voisins</strong> (<em>k-NN queries</em>) :</p>
-<ul>
-<li>Trouver les k voisins les plus proches d’une requête</li>
-<li>Résultat : exactement k éléments</li>
-</ul>
-<p>Ces deux types de requêtes supposent la structure d’un <strong>espace métrique</strong> <span class="math inline">\((\Omega, d)\)</span>, c’est-à-dire un espace muni d’une distance vérifiant la symétrie, la séparation et l’inégalité triangulaire.</p>
-</section>
-<section id="principe-des-index-spatiaux" class="level2">
-<h2 class="anchored" data-anchor-id="principe-des-index-spatiaux">Principe des index spatiaux</h2>
-<p>Étant donné une requête <span class="math inline">\(q\)</span>, pour trouver ses plus proches voisins efficacement :</p>
-<p><strong>Phase hors-ligne :</strong></p>
-<ul>
-<li>Partitionner l’espace en cellules (<em>buckets</em>) contenant une partie des données</li>
-<li>Capturer les relations entre cellules via une structure (arbre, graphe)</li>
-</ul>
-<p><strong>Phase en ligne :</strong></p>
-<ul>
-<li>Identifier la cellule contenant la requête</li>
-<li>Toutes les données de cette cellule (et des cellules voisines) sont candidates</li>
-<li>Exploiter les relations entre cellules pour étendre la recherche si nécessaire</li>
-</ul>
-<p>💡 L’idée fondamentale est que <strong>des données proches dans l’espace ont de bonnes chances d’être dans la même cellule ou dans des cellules voisines</strong>.</p>
-<hr>
-</section>
-</section>
-<section id="k-d-trees" class="level1">
-<h1>k-d-Trees</h1>
-<section id="présentation" class="level2">
-<h2 class="anchored" data-anchor-id="présentation">Présentation</h2>
-<p>Les <strong>k-d-Trees</strong> (k-dimensional trees), proposés par Bentley en 1975, sont des arbres binaires de recherche multidimensionnels. Leur principe est simple :</p>
-<blockquote class="blockquote">
-<p>Alterner les dimensions et diviser les données en deux moitiés de manière récursive.</p>
-</blockquote>
-</section>
-<section id="algorithme-de-construction" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-de-construction">Algorithme de construction</h2>
-<pre><code>procedure KDTree(T, X, d):
-    // T : arbre, X : données ⊂ ℝ^D, d : dimension courante
-    tant que X n&#39;est pas vide :
-        d ← (d + 1) mod D           // alterner les dimensions
-        Trier X selon la dimension d
-        x ← médiane(X)              // point de coupure
-        Ajouter x dans T comme nœud v
-        X.remove(x)
-        Diviser X en X_right et X_left par rapport à x
-        v.right ← KDTree(T, X_right, d)
-        v.left  ← KDTree(T, X_left, d)</code></pre>
-</section>
-<section id="stratégies-de-partitionnement" class="level2">
-<h2 class="anchored" data-anchor-id="stratégies-de-partitionnement">Stratégies de partitionnement</h2>
-<p>Deux variantes principales existent :</p>
-<p><strong>Partitionnement basé sur les données (médiane) :</strong></p>
-<ul>
-<li>Le point de coupure est la médiane des données selon la dimension courante</li>
-<li>Garantit des sous-arbres équilibrés</li>
-<li>La coupure dépend de la distribution des données</li>
-</ul>
-<p><strong>Partitionnement basé sur les coordonnées (moyenne) :</strong></p>
-<ul>
-<li>Le point de coupure est la moyenne de l’espace selon la dimension courante</li>
-<li>La coupure divise l’espace en régions égales</li>
-<li>Peut générer des déséquilibres si les données sont irrégulièrement distribuées</li>
-</ul>
-</section>
-<section id="algorithme-de-recherche" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-de-recherche">Algorithme de recherche</h2>
-<p>Pour une requête <span class="math inline">\(q\)</span> donnée :</p>
-<ol type="1">
-<li><strong>Descendre l’arbre</strong> avec <span class="math inline">\(q\)</span> pour localiser la cellule à laquelle il appartient → candidate au 1-NN</li>
-<li><strong>Utiliser la géométrie euclidienne</strong> (inégalité triangulaire) pour éliminer des branches entières de l’arbre</li>
-<li><strong>Étendre à k-NN</strong> en remontant l’arbre et en explorant les branches potentiellement utiles</li>
-</ol>
-<p>La profondeur de l’arbre est O(log_b N), ce qui peut permettre une recherche très efficace.</p>
-</section>
-<section id="limitations-des-k-d-trees" class="level2">
-<h2 class="anchored" data-anchor-id="limitations-des-k-d-trees">Limitations des k-d-Trees</h2>
-<p>⚠️ Malgré leur élégance, les k-d-Trees souffrent de plusieurs limitations importantes :</p>
-<ul>
-<li><strong>Partitionnement “guillotine”</strong> (<em>guillotine partitioning</em>) : les coupures droites ne sont pas toujours bien adaptées à la forme des données</li>
-<li><strong>Dimensions aléatoires</strong> : la rotation des dimensions (ligne 4 de l’algorithme) ne tient pas compte de la variabilité des données dans chaque dimension → nécessite des heuristiques</li>
-<li><strong>Malédiction de la dimensionnalité</strong> (<em>Curse of dimensionality</em>) : en haute dimension, les k-d-Trees dégénèrent et leur efficacité s’effondre</li>
-</ul>
-<p>💡 Des variantes comme les <strong>Ball-Trees</strong> (partitionnement en boules) offrent plus de flexibilité et gèrent mieux certaines distributions de données.</p>
-<hr>
-</section>
-</section>
-<section id="indexation-par-pivots-pivot-based-indexing" class="level1">
-<h1>Indexation par Pivots (Pivot-based Indexing)</h1>
-<section id="principe-général" class="level2">
-<h2 class="anchored" data-anchor-id="principe-général">Principe général</h2>
-<p>L’indexation par pivots utilise un ensemble de <strong>points représentatifs</strong> (les pivots) <span class="math inline">\(\mathcal{P} \subset \mathcal{X}\)</span> comme <strong>points de repère</strong> (<em>landmarks</em>) dans l’espace.</p>
-<p>L’idée est que les distances entre les données et ces pivots permettent d’<strong>exclure des candidats</strong> sans calculer toutes les distances exactes.</p>
-</section>
-<section id="algorithme" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme">Algorithme</h2>
-<pre><code>procedure PivotIndexing(X, q):
+<div class="quizdown">
 
-    // Phase hors-ligne
-    Sélectionner P ⊂ X
-    Calculer et stocker f(x, p) pour tout x ∈ X, p ∈ P
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
-    // Phase en ligne
-    Calculer f(q, p) pour tout p ∈ P
-    Sélectionner les cellules pertinentes
-    Toutes les données de ces cellules sont candidates au k-NN</code></pre>
-<p>⚠️ La question clé est : <strong>comment sélectionner les pivots</strong> <span class="math inline">\(\mathcal{P}\)</span> pour maximiser l’efficacité de l’exclusion ?</p>
-</section>
-<section id="la-règle-dexclusion-euclidienne" class="level2">
-<h2 class="anchored" data-anchor-id="la-règle-dexclusion-euclidienne">La règle d’exclusion euclidienne</h2>
-<p>Le fondement théorique de l’indexation par pivots est l’<strong>inégalité triangulaire</strong> :</p>
-<p><span class="math display">\[d(\mathbf{p}, \mathbf{q}) \leq d(\mathbf{p}, \mathbf{x}) + d(\mathbf{x}, \mathbf{q}) \implies d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{q}) - d(\mathbf{p}, \mathbf{x})\]</span></p>
-<p><span class="math display">\[d(\mathbf{p}, \mathbf{x}) \leq d(\mathbf{p}, \mathbf{q}) + d(\mathbf{q}, \mathbf{x}) \implies d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})\]</span></p>
-<p>En combinant ces deux inégalités :</p>
-<p><span class="math display">\[d(\mathbf{q}, \mathbf{x}) \geq \underbrace{|d(\mathbf{p}, \mathbf{x})}_{\text{hors-ligne}} - \underbrace{d(\mathbf{p}, \mathbf{q})|}_{\text{en ligne}}\]</span></p>
-<p>💡 Cette borne inférieure sur <span class="math inline">\(d(q, x)\)</span> est calculable <strong>sans</strong> connaître <span class="math inline">\(d(q, x)\)</span> directement : on utilise <span class="math inline">\(d(p, x)\)</span> stocké hors-ligne et <span class="math inline">\(d(p, q)\)</span> calculé en ligne !</p>
-</section>
-<section id="principe-dexclusion" class="level2">
-<h2 class="anchored" data-anchor-id="principe-dexclusion">Principe d’exclusion</h2>
-<p>Le mécanisme d’exclusion fonctionne ainsi :</p>
-<ul>
-<li><strong>Indexer</strong> les données par rapport aux pivots : <span class="math inline">\(f(x, p) = d(p, x)\)</span> (stocké hors-ligne)</li>
-<li><strong>Calculer</strong> la distance de la requête aux pivots : <span class="math inline">\(f(q, p) = d(p, q)\)</span> (calculé en ligne)</li>
-<li><strong>Borner inférieurement</strong> la distance de chaque donnée à la requête</li>
-<li><strong>Exclure</strong> les données dont la borne inférieure dépasse la distance au meilleur candidat connu</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="aesa-et-l-aesa" class="level1">
-<h1>AESA et L-AESA</h1>
-<section id="lalgorithme-aesa" class="level2">
-<h2 class="anchored" data-anchor-id="lalgorithme-aesa">L’algorithme AESA</h2>
-<p>L’<strong>Approximating and Eliminating Search Algorithm</strong> (AESA), proposé par Micó, Oncina et Vidal (1994), pousse le concept de pivots à l’extrême : les pivots sont construits <strong>dynamiquement au cours de la recherche</strong> via une stratégie de <em>branch-and-bound</em>.</p>
-<p>La borne inférieure utilisée est :</p>
-<p><span class="math display">\[d(\mathbf{q}, \mathbf{x}_i) \geq \max_{\mathbf{p} \in \mathcal{P}} |d(\mathbf{p}, \mathbf{x}_i) - d(\mathbf{p}, \mathbf{q})| \quad \forall \mathbf{x}_i \in \mathcal{X}\]</span></p>
-<p>L’algorithme maintient un vecteur <span class="math inline">\(\mathbf{b}\)</span> où <span class="math inline">\(\mathbf{b}[i]\)</span> est la meilleure borne inférieure connue pour <span class="math inline">\(d(q, x_i)\)</span>.</p>
-</section>
-<section id="algorithme-aesa-simplifié" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-aesa-simplifié">Algorithme AESA (simplifié)</h2>
-<pre><code>procedure AESA(X, q):
+### Quelle est la définition correcte de la **précision** (Precision) en RI ?
 
-    // Phase hors-ligne
-    Calculer D : matrice des distances pour X   // O(N²) stockage
+- [ ] Le rapport entre les documents pertinents récupérés et le total des documents pertinents
+- [x] Le rapport entre les documents pertinents récupérés et le total des documents récupérés
+- [ ] Le rapport entre les vrais négatifs et les non-pertinents récupérés
+- [ ] La moyenne harmonique du rappel et du taux de dégradation
 
-    // Phase en ligne
-    b ← 0 ; A ← X ; x ← random(A) ; A ← A - {x} ; d_min ← ∞
-    tant que A n&#39;est pas vide :
-        d_current = d(x, q)
-        d_min = min(d_min, d_current)
-        Mettre à jour x* si d_current &lt; d_min
-        b[i] = max(b[i], |D[x_i, x] - d_current|)  pour tout x_i ∈ A
-        A ← A - {x_i | b[i] ≥ d_min}               // Élimination (Bound)
-        x ← argmin_A b ; A ← A - {x}               // Sélection (Branch)</code></pre>
-</section>
-<section id="propriétés-et-limites-daesa" class="level2">
-<h2 class="anchored" data-anchor-id="propriétés-et-limites-daesa">Propriétés et limites d’AESA</h2>
-<p><strong>Points forts :</strong></p>
-<ul>
-<li>AESA est <strong>optimal en nombre de calculs de distance</strong> : il minimise le nombre de distances exactes calculées</li>
-</ul>
-<p><strong>Limitation critique :</strong></p>
-<ul>
-<li>⚠️ AESA nécessite de stocker la <strong>matrice complète des distances</strong> entre tous les points : <span class="math inline">\(\mathbf{D} \in \mathbb{R}^{N \times N}\)</span></li>
-<li>Cela représente un stockage en <strong>O(N²)</strong>, totalement impraticable pour de grandes collections</li>
-</ul>
-<p><strong>L-AESA</strong> (Linear AESA) est une variante qui réduit le coût de stockage à O(N × |P|) en utilisant un ensemble fixe de pivots plutôt que la matrice complète, au prix d’une légère perte d’efficacité.</p>
-<hr>
-</section>
-</section>
-<section id="recherche-approximative-du-plus-proche-voisin-approximate-nearest-neighbor-search" class="level1">
-<h1>Recherche Approximative du Plus Proche Voisin (Approximate Nearest Neighbor Search)</h1>
-<section id="pourquoi-lapproximation" class="level2">
-<h2 class="anchored" data-anchor-id="pourquoi-lapproximation">Pourquoi l’approximation ?</h2>
-<p>De nombreux algorithmes résolvent efficacement la recherche exacte du plus proche voisin en <strong>faible dimension</strong>. Cependant, en <strong>haute dimension</strong>, le phénomène de <strong>concentration des distances</strong> (<em>concentration of distance</em>) rend ces stratégies largement inefficaces.</p>
-<p>Le phénomène de concentration des distances : en haute dimension, toutes les distances entre un point de requête et les points de la collection tendent à devenir <strong>égales</strong>. Il devient alors impossible de distinguer les voisins proches des voisins lointains.</p>
-<p>⚠️ Ce phénomène est une manifestation de la <strong>malédiction de la dimensionnalité</strong> (<em>curse of dimensionality</em>).</p>
-<p>Pour pallier cette complexité, on se tourne vers la <strong>Recherche Approximative du Plus Proche Voisin</strong> (<em>Approximate Nearest Neighbor Search</em>, ANNS).</p>
-</section>
-<section id="définition-formelle-de-lanns" class="level2">
-<h2 class="anchored" data-anchor-id="définition-formelle-de-lanns">Définition formelle de l’ANNS</h2>
-<p>Étant donné un jeu de données <span class="math inline">\(\mathcal{X} \subset \Omega\)</span> dans un espace métrique <span class="math inline">\((\Omega, d)\)</span>, une requête <span class="math inline">\(q \in \Omega\)</span>, et des paramètres <span class="math inline">\(k &gt; 0\)</span> et <span class="math inline">\(\varepsilon &gt; 0\)</span> :</p>
-<p>Soit <span class="math inline">\(d_k\)</span> la distance (inconnue) de <span class="math inline">\(q\)</span> à son <span class="math inline">\(k\)</span>-ième plus proche voisin. L’ANNS cherche un ensemble de résultats tel que :</p>
-<ul>
-<li>Tous les <span class="math inline">\(x_i\)</span> avec <span class="math inline">\(d(x_i, q) \leq d_k\)</span> sont <strong>inclus</strong> (vrais positifs)</li>
-<li>Aucun <span class="math inline">\(x_i\)</span> avec <span class="math inline">\(d(x_i, q) &gt; (1 + \varepsilon) d_k\)</span> n’est inclus</li>
-</ul>
-<p>💡 On tolère donc une zone grise <span class="math inline">\([d_k, (1+\varepsilon)d_k]\)</span> où des points peuvent être inclus ou exclus sans garantie. Le paramètre <span class="math inline">\(\varepsilon\)</span> contrôle le compromis précision/vitesse.</p>
-<p>La stratégie générale consiste à <strong>définir une nouvelle métrique</strong> <span class="math inline">\(\tilde{d}(.,.)\)</span> <strong>contractive</strong> : <span class="math inline">\(\tilde{d}(x_1, x_2) \leq d(x_1, x_2)\)</span>, qui est moins coûteuse à calculer et préserve approximativement la structure de voisinage.</p>
-<hr>
-</section>
-</section>
-<section id="indexation-par-permutations-permutation-based-indexing" class="level1">
-<h1>Indexation par Permutations (Permutation-based Indexing)</h1>
-<section id="principe" class="level2">
-<h2 class="anchored" data-anchor-id="principe">Principe</h2>
-<p>L’indexation par permutations (<em>Permutation-based Indexing</em>, PBI) est une technique d’ANNS proposée par Chávez, Figueroa et Navarro (2008). L’idée est de <strong>caractériser chaque donnée par l’ordre dans lequel elle voit les pivots</strong>.</p>
-<p>💡 Intuition : si deux points <span class="math inline">\(x\)</span> et <span class="math inline">\(y\)</span> sont proches dans l’espace, alors ils devraient “voir” les pivots dans un ordre similaire (les mêmes pivots sont proches d’eux, dans le même ordre).</p>
-</section>
-<section id="algorithme-1" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-1">Algorithme</h2>
-<pre><code>procedure PBI(X, q):
+&gt; Explication :
+&gt; $P = TP / (TP + FP)$ — La précision mesure la **qualité** des résultats retournés : quelle proportion des documents récupérés est réellement pertinente.
 
-    // Phase hors-ligne
-    Sélectionner P ⊂ X
-    pour tout x_i ∈ X :
-        Ordonner P par distances depuis x_i
-        x_i est encodé par le vecteur de permutation σ_i
+</div>
+<div class="quizdown">
 
-    // Phase en ligne
-    Encoder q en σ_q : ordonner P et retenir la permutation
-    Utiliser la distance de permutation pour comparer σ_q et σ_i</code></pre>
-</section>
-<section id="la-mesure-de-spearman-rho" class="level2">
-<h2 class="anchored" data-anchor-id="la-mesure-de-spearman-rho">La mesure de Spearman Rho</h2>
-<p>Pour comparer deux permutations <span class="math inline">\(\sigma\)</span> et <span class="math inline">\(\theta\)</span> de <span class="math inline">\([\![P]\!]\)</span>, on utilise la <strong>mesure de Spearman Rho</strong> :</p>
-<p><span class="math display">\[\rho(\sigma, \theta) = \sum_{i=1}^{P} (\sigma[i] - \theta[i])^2\]</span></p>
-<p>Dans notre contexte, <span class="math inline">\(\sigma_i[j]\)</span> indique la <strong>position du <span class="math inline">\(j\)</span>-ème pivot</strong> dans l’ordre vu depuis <span class="math inline">\(x_i\)</span>. La distance approximative entre la requête et une donnée est alors :</p>
-<p><span class="math display">\[\tilde{d}(\mathbf{q}, x_i) = \rho(\sigma_q, \sigma_i) = \sum_{j=1}^{|\mathcal{P}|} (\sigma_q[j] - \sigma_i[j])^2\]</span></p>
-</section>
-<section id="avantages-et-accélération" class="level2">
-<h2 class="anchored" data-anchor-id="avantages-et-accélération">Avantages et accélération</h2>
-<ul>
-<li>Le calcul de <span class="math inline">\(\rho\)</span> est <strong>rapide</strong> : il n’implique que des comparaisons d’entiers</li>
-<li>On peut l’accélérer davantage en utilisant des <strong>fichiers inversés sur les pivots</strong> :
-<ul>
-<li>Définir <span class="math inline">\(N_P\)</span> (nombre de pivots proches considérés)</li>
-<li>Via fichiers inversés, ne considérer que les données dont les <span class="math inline">\(N_P\)</span> pivots les plus proches ont une <strong>intersection commune</strong> avec ceux de <span class="math inline">\(q\)</span></li>
-</ul></li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="hachage-sensible-à-la-localité-locality-sensitive-hashing" class="level1">
-<h1>Hachage Sensible à la Localité (Locality-Sensitive Hashing)</h1>
-<section id="principe-fondamental-du-lsh" class="level2">
-<h2 class="anchored" data-anchor-id="principe-fondamental-du-lsh">Principe fondamental du LSH</h2>
-<p>Le <strong>Locality-Sensitive Hashing</strong> (LSH) est une famille de méthodes de hachage conçues spécifiquement pour la recherche approximative de voisins. Les deux principes clés sont :</p>
-<ul>
-<li><strong>Points similaires</strong> → hachés dans le <strong>même bucket</strong> avec <strong>haute probabilité</strong></li>
-<li><strong>Points dissimilaires</strong> → collision avec <strong>faible probabilité</strong></li>
-</ul>
-<p>💡 C’est l’inverse du hachage classique qui cherche à minimiser les collisions ! Ici, on les exploite.</p>
-</section>
-<section id="définition-formelle" class="level2">
-<h2 class="anchored" data-anchor-id="définition-formelle">Définition formelle</h2>
-<p>Étant donnés <span class="math inline">\(p_{\text{high}} &gt; 0\)</span>, <span class="math inline">\(p_{\text{low}} &gt; 0\)</span> et des seuils <span class="math inline">\(\tau_{\text{low}} &gt; 0\)</span>, <span class="math inline">\(\tau_{\text{high}} &gt; 0\)</span>, une fonction de hachage <span class="math inline">\(h\)</span> est dite <strong>LSH</strong> si :</p>
-<ul>
-<li>Si <span class="math inline">\(d(x_i, x_j) \leq \tau_{\text{low}}\)</span> alors <span class="math inline">\(\mathbb{P}(h(x_i) = h(x_j)) &gt; p_{\text{high}}\)</span></li>
-<li>Si <span class="math inline">\(d(x_i, x_j) \geq \tau_{\text{high}}\)</span> alors <span class="math inline">\(\mathbb{P}(h(x_i) = h(x_j)) &lt; p_{\text{low}}\)</span></li>
-</ul>
-<p>En pratique, on utilise plusieurs fonctions LSH en parallèle pour augmenter la probabilité de trouver les vrais voisins.</p>
-</section>
-<section id="exemples-de-fonctions-lsh" class="level2">
-<h2 class="anchored" data-anchor-id="exemples-de-fonctions-lsh">Exemples de fonctions LSH</h2>
-<ul>
-<li><strong>Hachage quasi-optimal</strong> (<em>Near-optimal hashing</em>) — Andoni &amp; Indyk (2008) : optimal pour la distance euclidienne en haute dimension</li>
-<li><strong>SimHash</strong> (<em>Similarity Hash</em>) — Charikar (2002) : basé sur des <strong>projections aléatoires</strong> (<em>random projections</em>). Un vecteur est haché selon le signe de sa projection sur un vecteur aléatoire gaussien</li>
-<li><strong>MinHash</strong> : adapté à la similarité de Jaccard entre ensembles</li>
-</ul>
-</section>
-<section id="apprentissage-des-fonctions-de-hachage-learning-to-hash" class="level2">
-<h2 class="anchored" data-anchor-id="apprentissage-des-fonctions-de-hachage-learning-to-hash">Apprentissage des fonctions de hachage (Learning to Hash)</h2>
-<p>Face à la difficulté de concevoir des fonctions LSH à la main, une tendance émergente est d’<strong>apprendre ces fonctions</strong> directement à partir des données (<em>Learning to Hash</em>, L2H).</p>
-<p><strong>Caractéristiques :</strong></p>
-<ul>
-<li>Surtout utilisé pour des applications spécifiques (images, recherche cross-modale)</li>
-<li>Architecture typique : un <strong>auto-encodeur binaire</strong> régularisé par un réseau enforçant la sensibilité locale</li>
-<li>Approche supervisée ou non-supervisée selon le contexte</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="graphes-navigables-hnsw" class="level1">
-<h1>Graphes Navigables — HNSW</h1>
-<section id="hierarchical-navigable-small-worlds-hnsw" class="level2">
-<h2 class="anchored" data-anchor-id="hierarchical-navigable-small-worlds-hnsw">Hierarchical Navigable Small Worlds (HNSW)</h2>
-<p>L’index <strong>HNSW</strong> (Hierarchical Navigable Small Worlds), proposé par Malkov et Yashunin (2016), est actuellement <strong>l’état de l’art</strong> pour la recherche approximative du plus proche voisin en haute dimension.</p>
-<p>Il repose sur la construction d’un <strong>graphe navigable hiérarchique</strong> (<em>hierarchical navigable spanner</em>) sur les données.</p>
-</section>
-<section id="algorithme-hnsw" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-hnsw">Algorithme HNSW</h2>
-<pre><code>procedure HNSW(X, q):
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
-    // Phase hors-ligne
-    Construire un graphe navigable hiérarchique G sur X :
-    répéter :
-        Connecter chaque donnée à ses k-NN déjà dans G
-    jusqu&#39;à : plus de données à indexer
+### Quelle est la définition correcte du **rappel** (Recall) en RI ?
 
-    // Phase en ligne
-    répéter :
-        Partir d&#39;un nœud aléatoire v
-        répéter :
-            Se déplacer vers le voisin de v qui se rapproche le plus de q
-        jusqu&#39;à : minimum local
-        Ajouter v dans l&#39;ensemble des voisins candidats de q
-    jusqu&#39;à : assez de candidats collectés</code></pre>
-</section>
-<section id="propriétés-du-graphe-hnsw" class="level2">
-<h2 class="anchored" data-anchor-id="propriétés-du-graphe-hnsw">Propriétés du graphe HNSW</h2>
-<p><strong>Structure hiérarchique :</strong> le graphe est organisé en plusieurs couches. Les couches supérieures contiennent peu de nœuds avec de longues connexions (navigation rapide à grande échelle), les couches inférieures contiennent tous les nœuds avec des connexions courtes (raffinement local).</p>
-<p><strong>Navigation greedy :</strong> la recherche en ligne est une descente greedy dans le graphe — on se déplace toujours vers le voisin qui rapproche le plus de la requête.</p>
-<p>💡 Ce principe s’inspire des <strong>petits mondes navigables</strong> (<em>navigable small worlds</em>) de la théorie des réseaux : n’importe quel nœud peut être atteint depuis n’importe quel autre en peu d’étapes.</p>
-<hr>
-</section>
-</section>
-<section id="recherche-du-plus-proche-voisin-à-léchelle-du-milliard" class="level1">
-<h1>Recherche du Plus Proche Voisin à l’Échelle du Milliard</h1>
-<section id="le-défi-de-léchelle-milliardaire" class="level2">
-<h2 class="anchored" data-anchor-id="le-défi-de-léchelle-milliardaire">Le défi de l’échelle milliardaire</h2>
-<p>Avec l’essor du Machine Learning et des représentations vectorielles apprises (<em>embeddings</em>), le besoin de recherche efficace de plus proches voisins à très grande échelle s’est imposé. On parle de collections de <strong>plusieurs milliards de vecteurs</strong>.</p>
-<p>⚠️ Les techniques existantes ne passent pas à cette échelle :</p>
-<ul>
-<li>Un graphe sur un milliard de nœuds est trop coûteux à construire et à exploiter</li>
-<li>Les structures en mémoire (RAM) deviennent prohibitives</li>
-</ul>
-<p>La solution : utiliser des <strong>représentations courtes</strong> (<em>short representations</em>) par donnée, comme le <strong>hachage binaire</strong> (<em>binary hash</em>).</p>
-</section>
-<section id="solutions-actuelles" class="level2">
-<h2 class="anchored" data-anchor-id="solutions-actuelles">Solutions actuelles</h2>
-<p><strong>Product Quantization (PQ) — Jégou, Douze, Schmid (2011) :</strong></p>
-<ul>
-<li>Décompose l’espace en sous-espaces et quantifie chacun indépendamment</li>
-<li>Implémenté dans la bibliothèque <strong>FAISS</strong> de Facebook/Meta</li>
-<li>Permet de stocker des milliards de vecteurs avec une empreinte mémoire réduite</li>
-</ul>
-<p><strong>DiskANN — Subramanya et al. (2019) :</strong></p>
-<ul>
-<li>Utilise une indexation par graphe stockée <strong>sur disque</strong> (<em>disk-based</em>)</li>
-<li>Permet une recherche précise sur un seul nœud avec des données trop volumineuses pour la RAM</li>
-</ul>
-<p><strong>SPANN — Chen et al. (2021) :</strong></p>
-<ul>
-<li>Utilise des <strong>fichiers inversés</strong> (<em>Inverted Files</em>)</li>
-<li>Optimisé pour les données partiellement en mémoire et partiellement sur disque</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="recherche-du-produit-intérieur-maximum-maximum-inner-product-search" class="level1">
-<h1>Recherche du Produit Intérieur Maximum (Maximum Inner Product Search)</h1>
-<section id="définition-du-problème-mips" class="level2">
-<h2 class="anchored" data-anchor-id="définition-du-problème-mips">Définition du problème MIPS</h2>
-<p>La <strong>Recherche du Produit Intérieur Maximum</strong> (<em>Maximum Inner Product Search</em>, MIPS) consiste à trouver, pour une requête <span class="math inline">\(q\)</span>, le point <span class="math inline">\(x^*\)</span> qui maximise le produit scalaire :</p>
-<p><span class="math display">\[x^* = \underset{x_i \in \mathcal{X}}{\arg\max} \langle x_i, q \rangle\]</span></p>
-</section>
-<section id="lien-avec-la-recherche-de-plus-proche-voisin" class="level2">
-<h2 class="anchored" data-anchor-id="lien-avec-la-recherche-de-plus-proche-voisin">Lien avec la recherche de plus proche voisin</h2>
-<p>En espace euclidien, la distance au carré entre <span class="math inline">\(x_i\)</span> et <span class="math inline">\(q\)</span> se décompose comme suit :</p>
-<p><span class="math display">\[d(x_i, q)^2 = \langle x_i - q, x_i - q \rangle = \langle x_i, x_i \rangle + \langle q, q \rangle - 2 \langle x_i, q \rangle\]</span></p>
-<p>Donc :</p>
-<p><span class="math display">\[\underset{x_i}{\arg\min} \ d(x_i, q) \quad \text{est lié à} \quad \underset{x_i}{\arg\max} \ \langle x_i, q \rangle\]</span></p>
-<p>⚠️ Ces deux problèmes sont <strong>équivalents si et seulement si les vecteurs sont normalisés</strong> (de norme 1), car dans ce cas <span class="math inline">\(\langle x_i, x_i \rangle\)</span> et <span class="math inline">\(\langle q, q \rangle\)</span> sont des constantes.</p>
-<p>💡 MIPS est donc une <strong>généralisation</strong> de la recherche de plus proche voisin au cas où les vecteurs ne sont pas normalisés. C’est le problème naturel qui émerge dans les systèmes de recommandation et les LLMs (couche d’attention, recherche dans un vocabulaire…).</p>
-</section>
-<section id="solutions" class="level2">
-<h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
-<p>La bibliothèque <strong>ScaNN</strong> (<em>Scalable Nearest Neighbors</em>) de Google (Guo et al., 2020) propose une solution efficace basée sur une <strong>quantification vectorielle anisotrope</strong>.</p>
-<hr>
-</section>
-</section>
-<section id="résumé-et-synthèse" class="level1">
-<h1>Résumé et Synthèse</h1>
-<section id="ce-quil-faut-retenir" class="level2">
-<h2 class="anchored" data-anchor-id="ce-quil-faut-retenir">Ce qu’il faut retenir</h2>
-<ul>
-<li>Les moteurs de recherche ont besoin d’un <strong>accès rapide</strong> aux données pertinentes (éléments similaires)</li>
-<li>L’<strong>indexation</strong> est une façon de biaiser l’organisation des données pour accélérer certains accès</li>
-<li>L’indexation n’a de sens que si l’on peut identifier des <strong>structures dans les données</strong> ou leur mode d’accès</li>
-</ul>
-</section>
-<section id="les-grandes-familles-dindex" class="level2">
-<h2 class="anchored" data-anchor-id="les-grandes-familles-dindex">Les grandes familles d’index</h2>
-<p><strong>Fichiers Inversés</strong> (<em>Inverted Files</em>) :</p>
-<ul>
-<li>Très courants pour les requêtes basées sur l’intersection de termes</li>
-<li>Fondement de tous les moteurs de recherche textuels modernes</li>
-</ul>
-<p><strong>Index spatiaux</strong> (<em>Spatial Indexes</em>) :</p>
-<ul>
-<li>Créent une hiérarchie de partitions pour exploiter la structure arborescente</li>
-<li>Efficaces en faible dimension, mais limités par la malédiction de la dimensionnalité</li>
-</ul>
-<p><strong>Encodage binaire</strong> (<em>Binary encoding</em>, hachage) :</p>
-<ul>
-<li>Une solution de contournement face à la malédiction de la dimensionnalité</li>
-<li>Fondement du LSH et des méthodes modernes à grande échelle</li>
-</ul>
-<p>🧠 À retenir final : les index sont des <strong>structures de données avancées</strong>. Ils représentent un compromis entre temps de requête, temps d’indexation et espace de stockage. Le choix d’un index dépend toujours des propriétés des données et des requêtes anticipées.</p>
-<hr>
-</section>
-</section>
-<section id="questions-de-révision" class="level1">
-<h1>Questions de Révision</h1>
-<p>Les questions suivantes couvrent les notions fondamentales de ce chapitre :</p>
-<p><strong>Sur l’indexation :</strong></p>
-<ul>
-<li>Qu’est-ce que l’indexation et pourquoi indexer ?</li>
-<li>Quel est le compromis fondamental de tout index ?</li>
-<li>Pourquoi des données sans structure ne peuvent-elles pas être indexées efficacement ?</li>
-</ul>
-<p><strong>Sur les fichiers inversés :</strong></p>
-<ul>
-<li>Qu’est-ce qu’un fichier inversé (inverted index) ? Quelles sont ses deux composantes ?</li>
-<li>Comment les fichiers inversés permettent-ils de réduire la complexité du calcul du RSV ?</li>
-</ul>
-<p><strong>Sur la recherche de plus proche voisin :</strong></p>
-<ul>
-<li>Comment le partitionnement est-il équivalent à la construction d’un graphe ou au hachage ?</li>
-<li>Quelle est la différence entre la recherche exacte et la recherche approximative ?</li>
-<li>Quel est l’impact de la malédiction de la dimensionnalité sur les index spatiaux ?</li>
-</ul>
-<p><strong>Sur les méthodes spécifiques :</strong></p>
-<ul>
-<li>Quel est le principe de l’indexation par permutations ?</li>
-<li>Quel est le principe de l’indexation par graphe (HNSW) ?</li>
-<li>Pourquoi s’intéresse-t-on à la recherche à l’échelle du milliard ?</li>
-<li>Quel est le principe du hachage ? Quelle est la différence avec le LSH ?</li>
-</ul>
-<p><strong>Sur MIPS :</strong></p>
-<ul>
-<li>Qu’est-ce que le problème MIPS (<em>Maximum Inner Product Search</em>) ?</li>
-<li>Comment est-il lié à la recherche de similarité ?</li>
-</ul>
+- [ ] Le rapport entre les documents pertinents récupérés et le total des documents récupérés
+- [x] Le rapport entre les documents pertinents récupérés et le total des documents pertinents
+- [ ] Le rapport entre les vrais positifs et les vrais négatifs
+- [ ] La proportion de faux positifs dans la collection
+
+&gt; Explication :
+&gt; $R = TP / (TP + FN)$ — Le rappel mesure la **complétude** de la récupération : quelle proportion des documents pertinents a été effectivement retrouvée.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Un système récupère **tous** les documents de la collection. Quel est l&#39;effet sur précision et rappel ?
+
+- [ ] Précision = 1, Rappel = 1
+- [ ] Précision = 1, Rappel faible
+- [x] Rappel = 1, Précision ≈ densité de pertinents dans la collection
+- [ ] Rappel = 0, Précision = 0
+
+&gt; Explication :
+&gt; Récupérer tout garantit de ne rater aucun pertinent (Rappel = 1), mais la précision sera très faible car on récupère aussi tous les non-pertinents. Ce comportement trivial montre pourquoi on ne peut pas utiliser le rappel seul.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Vrai ou Faux : La **sensibilité** (Sensitivity) en analyse ROC est une mesure différente du rappel (Recall).
+
+- [ ] Vrai
+- [x] Faux
+
+&gt; Faux :
+&gt; La sensibilité (Sensitivity = TPR = True Positive Rate) est **identique** au rappel : $TP / (TP + FN)$. Ce sont les mêmes formules, issues de vocabulaires différents (médical vs. RI).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Dans la table de contingence, un document pertinent qui n&#39;est **pas récupéré** correspond à :
+
+- [ ] Un vrai positif (TP)
+- [ ] Un faux positif (FP)
+- [x] Un faux négatif (FN)
+- [ ] Un vrai négatif (TN)
+
+&gt; Explication :
+&gt; FN (Faux Négatif) : le système a raté un document pertinent. C&#39;est ce que le rappel cherche à minimiser. Un FN élevé signifie un rappel faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Quelle formule correspond à la **F₁-mesure** ?
+
+- [ ] $F_1 = (P + R) / 2$
+- [x] $F_1 = 2PR / (P + R)$
+- [ ] $F_1 = TP / (TP + FP + FN)$
+- [ ] $F_1 = P \times R$
+
+&gt; Explication :
+&gt; La F₁ est la **moyenne harmonique** de P et R. Elle est différente de la moyenne arithmétique : elle pénalise fortement les cas où l&#39;une des deux mesures est très faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Dans la F-mesure généralisée $E$, si $\beta &gt; 1$, quelle mesure est favorisée ?
+
+- [x] La précision (Precision)
+- [ ] Le rappel (Recall)
+- [ ] Le fallout
+- [ ] La généralité
+
+&gt; Explication :
+&gt; Quand $\beta &gt; 1$, le dénominateur $\beta^2 P + R$ donne plus de poids à P. Un $\beta &lt; 1$ favorise le rappel. À $\beta = 1$, P et R sont équivalents ($F_1$).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Vrai ou Faux : Sur une courbe P–R, un système idéal maintient une précision de 1 pour tous les niveaux de rappel.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; Réponse :
+&gt; Un système parfait retourne en tête de liste **uniquement** des documents pertinents, quel que soit le nombre récupéré. Sa courbe P–R longe les bords supérieur et droit du graphique.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Quelle est la formule du **taux de dégradation** (Fallout) ?
+
+- [ ] $FP / (TP + FP)$
+- [ ] $FN / (TP + FN)$
+- [x] $FP / (TN + FP)$
+- [ ] $TN / (TN + TP)$
+
+&gt; Explication :
+&gt; Le Fallout mesure la proportion de documents **non pertinents** qui ont été récupérés parmi tous les non-pertinents de la collection. C&#39;est aussi le FPR (False Positive Rate) utilisé dans la courbe ROC, et il est égal à $1 - \text{Spécificité}$.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### La **précision interpolée** $\hat{P}(R_j)$ à un niveau de rappel $R_j$ est définie comme :
+
+- [ ] La précision exacte observée au niveau $R_j$
+- [ ] La moyenne des précisions entre $R_j$ et $R_{j+1}$
+- [x] Le maximum des précisions observées pour tout rappel entre $R_j$ et $R_{j+1}$
+- [ ] La précision minimale dans l&#39;intervalle $[R_j, R_{j+1}]$
+
+&gt; Explication :
+&gt; $\hat{P}(R_j) = \max_{R_j &lt; R \leq R_{j+1}} P(R)$. Cette définition assure une courbe monotone non-croissante et permet de comparer des courbes mesurées à des points différents.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Quelle est la différence principale entre **micro-moyennage** et **macro-moyennage** ?
+
+- [ ] Le micro-moyennage traite chaque catégorie également ; le macro-moyennage traite chaque document également
+- [x] Le micro-moyennage traite chaque document également ; le macro-moyennage traite chaque catégorie également
+- [ ] Le micro-moyennage est plus précis pour les petites collections
+- [ ] Il n&#39;y a pas de différence si les catégories sont équilibrées en taille
+
+&gt; Explication :
+&gt; En **micro-averaging**, on fusionne toutes les tables → les grandes catégories dominent. En **macro-averaging**, on calcule une performance par catégorie puis on moyenne → toutes les catégories ont le même poids, indépendamment de leur taille.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Un système de RI est évalué sur une collection avec **très peu de documents pertinents** (collection déséquilibrée). Quelle courbe est la plus appropriée ?
+
+- [ ] La courbe ROC (Receiver Operating Characteristic)
+- [x] La courbe P–R (Precision–Recall)
+- [ ] Les deux sont équivalentes dans ce cas
+- [ ] La courbe de généralité
+
+&gt; Explication :
+&gt; Sur des collections déséquilibrées (peu de pertinents), la courbe ROC peut paraître optimiste car le grand nombre de TN fait paraître le FPR très faible. La courbe P–R est plus sensible aux performances réelles sur la classe minoritaire (pertinents).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Quelle est la définition de la **R-Précision** (R-Precision) ?
+
+- [ ] La précision calculée au niveau de rappel $R = 1.0$
+- [ ] La moyenne des précisions aux 11 niveaux de rappel standard
+- [x] La précision à la position $R$ dans la liste, où $R$ est le nombre total de documents pertinents
+- [ ] Le rappel à la position égale au nombre de documents récupérés
+
+&gt; Explication :
+&gt; $R\text{-Precision} = TP_{N_{Rel}} / N_{Rel}$. On regarde les $N_{Rel}$ premiers résultats (autant qu&#39;il y a de pertinents) et on calcule la précision. Un système parfait obtient R-Précision = 1.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Cas pratique : Une requête a **7 documents pertinents** dans la collection. Le système retourne une liste de 10 documents. Parmi les 7 premiers résultats, 4 sont pertinents. Quelle est la **R-Précision** ?
+
+- [ ] $4/10 = 0.40$
+- [x] $4/7 \approx 0.57$
+- [ ] $7/10 = 0.70$
+- [ ] $4/4 = 1.00$
+
+&gt; Explication :
+&gt; La R-Précision s&#39;évalue aux **$N_{Rel}$ premières positions** (ici 7). On compte les TP dans ces 7 premières positions : $TP_7 = 4$. Donc $R\text{-Precision} = 4/7 \approx 0.57$.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Vrai ou Faux : Le **Bull&#39;s Eye Percentage** (BEP) est toujours supérieur ou égal à la R-Précision pour la même requête.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; Réponse :
+&gt; Le BEP évalue les $2Q$ premiers résultats (fenêtre deux fois plus large que Q). En élargissant la fenêtre, on donne plus de chances de capturer des pertinents. Le BEP est donc plus **optimiste** que la R-Précision (First-Tier).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Sur une courbe ROC, une courbe qui **longe la diagonale** $y = x$ indique :
+
+- [ ] Un excellent système
+- [ ] Un système qui favorise trop la précision
+- [ ] Un système avec un rappel parfait
+- [x] Un système non informatif, équivalent à une classification aléatoire
+
+&gt; Explication :
+&gt; La diagonale $y = x$ correspond à un système qui classe aléatoirement (AUC = 0.5). Un bon système doit être **au-dessus** de cette diagonale. Plus la courbe est proche du coin supérieur gauche, meilleur est le système.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Cas pratique : Un système A a une courbe P–R **toujours au-dessus** de celle du système B. Que peut-on conclure ?
+
+- [ ] Le système A a nécessairement un meilleur rappel que B
+- [ ] Les deux systèmes sont équivalents
+- [x] Le système A est globalement meilleur que B (mAP_A &gt; mAP_B)
+- [ ] Le système B est meilleur à bas rappel
+
+&gt; Explication :
+&gt; Si la courbe P–R de A domine celle de B à tous les niveaux de rappel, alors l&#39;aire sous la courbe de A (mAP_A) est supérieure à celle de B. Le système A est donc globalement supérieur.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Quelle est la **généralité** (Generality) d&#39;une collection et quel est son impact sur la précision ?
+
+- [ ] La généralité mesure la taille de la collection ; elle n&#39;impacte pas la précision
+- [ ] La généralité est le ratio de faux positifs ; une généralité élevée diminue le rappel
+- [x] La généralité est la densité de pertinents dans la collection ; une faible généralité rend la précision élevée plus difficile à maintenir
+- [ ] La généralité est le nombre de requêtes ; elle impacte le macro-moyennage
+
+&gt; Explication :
+&gt; $G = (TP + FN) / N$. La formule $P = (R \cdot G) / (R \cdot G + \text{Fallout} \cdot (1-G))$ montre que même avec un bon rappel et un Fallout faible, si $G$ est très petit (peu de pertinents), la précision reste faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Cas pratique : Vous devez choisir entre **micro-averaging** et **macro-averaging** pour évaluer un système de classification de documents en 10 catégories, dont 2 très fréquentes représentent 80% du corpus. Quelle stratégie choisissez-vous pour une évaluation **équitable entre catégories** ?
+
+- [ ] Micro-averaging, car il tient compte de tous les documents
+- [x] Macro-averaging, car il donne le même poids à chaque catégorie
+- [ ] Les deux donnent le même résultat dans ce cas
+- [ ] Ni l&#39;un ni l&#39;autre — il faut utiliser la F-mesure uniquement
+
+&gt; Explication :
+&gt; Le **micro-averaging** favoriserait les 2 catégories dominantes (80% des docs). Le **macro-averaging** calcule une performance par catégorie puis fait la moyenne, donnant le même poids aux 10 catégories — c&#39;est le choix adapté quand on veut une évaluation équitable.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Pourquoi mesurer le **rappel** est-il difficile en pratique dans un vrai système de RI ?
+
+- [ ] Parce que la formule du rappel est trop complexe à calculer
+- [ ] Parce que les utilisateurs ne fournissent jamais de requêtes réalistes
+- [x] Parce qu&#39;on ne connaît jamais exhaustivement l&#39;ensemble de tous les documents pertinents d&#39;une collection
+- [ ] Parce que le rappel dépend du seuil de similarité choisi
+
+&gt; Explication :
+&gt; Pour calculer le rappel exactement, il faudrait connaître **tous** les documents pertinents ($TP + FN$). Or, dans une grande collection, juger tous les documents est impossible. On utilise le **pooling** (jugement d&#39;un sous-ensemble) → le rappel reste une estimation.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Qu&#39;est-ce que le **pooling** utilisé dans les benchmarks comme TREC ?
+
+- [ ] Un algorithme de fusion de requêtes
+- [ ] Une technique de compression des index
+- [x] La fusion des top-N résultats de plusieurs systèmes pour créer un sous-ensemble à juger par des humains
+- [ ] Une méthode de pondération des termes
+
+&gt; Explication :
+&gt; Le pooling consiste à collecter les top-N résultats de chaque système participant, à les fusionner, puis à faire juger uniquement ce pool par des assesseurs humains. C&#39;est une **approximation** : les documents hors du pool sont supposés non pertinents, ce qui peut sous-estimer les performances.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
+
+### Vrai ou Faux : La **mAP** (Mean Average Precision) est équivalente à l&#39;aire sous la courbe P–R interpolée aux 11 niveaux standard.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; Réponse :
+&gt; La mAP est définie comme la moyenne des précisions interpolées aux 11 niveaux $\{0, 0.1, 0.2, \ldots, 1.0\}$, ce qui correspond à une approximation de l&#39;aire sous la courbe P–R. C&#39;est la mesure de synthèse la plus utilisée en RI.
+
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
