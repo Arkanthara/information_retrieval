@@ -4466,6 +4466,7 @@ vertical-align: -.125em;
 primaryColor: steelblue
 shuffleQuestions: false
 shuffleAnswers: true
+locale: fr
 ---
 
 ### Quelle est la définition correcte de la **précision** (Precision) en RI ?
@@ -4475,8 +4476,18 @@ shuffleAnswers: true
 - [ ] Le rapport entre les vrais négatifs et les non-pertinents récupérés
 - [ ] La moyenne harmonique du rappel et du taux de dégradation
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; $P = TP / (TP + FP)$ — La précision mesure la **qualité** des résultats retournés : quelle proportion des documents récupérés est réellement pertinente.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la définition correcte du **rappel** (Recall) en RI ?
 
@@ -4485,8 +4496,18 @@ shuffleAnswers: true
 - [ ] Le rapport entre les vrais positifs et les vrais négatifs
 - [ ] La proportion de faux positifs dans la collection
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; $R = TP / (TP + FN)$ — Le rappel mesure la **complétude** de la récupération : quelle proportion des documents pertinents a été effectivement retrouvée.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Un système récupère **tous** les documents de la collection. Quel est l&#39;effet sur précision et rappel ?
 
@@ -4495,16 +4516,36 @@ shuffleAnswers: true
 - [x] Rappel = 1, Précision ≈ densité de pertinents dans la collection
 - [ ] Rappel = 0, Précision = 0
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Récupérer tout garantit de ne rater aucun pertinent (Rappel = 1), mais la précision sera très faible car on récupère aussi tous les non-pertinents. Ce comportement trivial montre pourquoi on ne peut pas utiliser le rappel seul.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou Faux : La **sensibilité** (Sensitivity) en analyse ROC est une mesure différente du rappel (Recall).
 
 - [ ] Vrai
 - [x] Faux
 
-&gt; ❌ Faux :
+&gt; Faux :
 &gt; La sensibilité (Sensitivity = TPR = True Positive Rate) est **identique** au rappel : $TP / (TP + FN)$. Ce sont les mêmes formules, issues de vocabulaires différents (médical vs. RI).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Dans la table de contingence, un document pertinent qui n&#39;est **pas récupéré** correspond à :
 
@@ -4513,8 +4554,18 @@ shuffleAnswers: true
 - [x] Un faux négatif (FN)
 - [ ] Un vrai négatif (TN)
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; FN (Faux Négatif) : le système a raté un document pertinent. C&#39;est ce que le rappel cherche à minimiser. Un FN élevé signifie un rappel faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle formule correspond à la **F₁-mesure** ?
 
@@ -4523,8 +4574,18 @@ shuffleAnswers: true
 - [ ] $F_1 = TP / (TP + FP + FN)$
 - [ ] $F_1 = P \times R$
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; La F₁ est la **moyenne harmonique** de P et R. Elle est différente de la moyenne arithmétique : elle pénalise fortement les cas où l&#39;une des deux mesures est très faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Dans la F-mesure généralisée $E$, si $\beta &gt; 1$, quelle mesure est favorisée ?
 
@@ -4533,16 +4594,36 @@ shuffleAnswers: true
 - [ ] Le fallout
 - [ ] La généralité
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Quand $\beta &gt; 1$, le dénominateur $\beta^2 P + R$ donne plus de poids à P. Un $\beta &lt; 1$ favorise le rappel. À $\beta = 1$, P et R sont équivalents ($F_1$).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou Faux : Sur une courbe P–R, un système idéal maintient une précision de 1 pour tous les niveaux de rappel.
 
 - [x] Vrai
 - [ ] Faux
 
-&gt; ✅ Réponse :
+&gt; Réponse :
 &gt; Un système parfait retourne en tête de liste **uniquement** des documents pertinents, quel que soit le nombre récupéré. Sa courbe P–R longe les bords supérieur et droit du graphique.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la formule du **taux de dégradation** (Fallout) ?
 
@@ -4551,8 +4632,18 @@ shuffleAnswers: true
 - [x] $FP / (TN + FP)$
 - [ ] $TN / (TN + TP)$
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Le Fallout mesure la proportion de documents **non pertinents** qui ont été récupérés parmi tous les non-pertinents de la collection. C&#39;est aussi le FPR (False Positive Rate) utilisé dans la courbe ROC, et il est égal à $1 - \text{Spécificité}$.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### La **précision interpolée** $\hat{P}(R_j)$ à un niveau de rappel $R_j$ est définie comme :
 
@@ -4561,8 +4652,18 @@ shuffleAnswers: true
 - [x] Le maximum des précisions observées pour tout rappel entre $R_j$ et $R_{j+1}$
 - [ ] La précision minimale dans l&#39;intervalle $[R_j, R_{j+1}]$
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; $\hat{P}(R_j) = \max_{R_j &lt; R \leq R_{j+1}} P(R)$. Cette définition assure une courbe monotone non-croissante et permet de comparer des courbes mesurées à des points différents.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la différence principale entre **micro-moyennage** et **macro-moyennage** ?
 
@@ -4571,8 +4672,18 @@ shuffleAnswers: true
 - [ ] Le micro-moyennage est plus précis pour les petites collections
 - [ ] Il n&#39;y a pas de différence si les catégories sont équilibrées en taille
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; En **micro-averaging**, on fusionne toutes les tables → les grandes catégories dominent. En **macro-averaging**, on calcule une performance par catégorie puis on moyenne → toutes les catégories ont le même poids, indépendamment de leur taille.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Un système de RI est évalué sur une collection avec **très peu de documents pertinents** (collection déséquilibrée). Quelle courbe est la plus appropriée ?
 
@@ -4581,8 +4692,18 @@ shuffleAnswers: true
 - [ ] Les deux sont équivalentes dans ce cas
 - [ ] La courbe de généralité
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Sur des collections déséquilibrées (peu de pertinents), la courbe ROC peut paraître optimiste car le grand nombre de TN fait paraître le FPR très faible. La courbe P–R est plus sensible aux performances réelles sur la classe minoritaire (pertinents).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la définition de la **R-Précision** (R-Precision) ?
 
@@ -4591,8 +4712,18 @@ shuffleAnswers: true
 - [x] La précision à la position $R$ dans la liste, où $R$ est le nombre total de documents pertinents
 - [ ] Le rappel à la position égale au nombre de documents récupérés
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; $R\text{-Precision} = TP_{N_{Rel}} / N_{Rel}$. On regarde les $N_{Rel}$ premiers résultats (autant qu&#39;il y a de pertinents) et on calcule la précision. Un système parfait obtient R-Précision = 1.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique : Une requête a **7 documents pertinents** dans la collection. Le système retourne une liste de 10 documents. Parmi les 7 premiers résultats, 4 sont pertinents. Quelle est la **R-Précision** ?
 
@@ -4601,16 +4732,36 @@ shuffleAnswers: true
 - [ ] $7/10 = 0.70$
 - [ ] $4/4 = 1.00$
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; La R-Précision s&#39;évalue aux **$N_{Rel}$ premières positions** (ici 7). On compte les TP dans ces 7 premières positions : $TP_7 = 4$. Donc $R\text{-Precision} = 4/7 \approx 0.57$.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou Faux : Le **Bull&#39;s Eye Percentage** (BEP) est toujours supérieur ou égal à la R-Précision pour la même requête.
 
 - [x] Vrai
 - [ ] Faux
 
-&gt; ✅ Réponse :
+&gt; Réponse :
 &gt; Le BEP évalue les $2Q$ premiers résultats (fenêtre deux fois plus large que Q). En élargissant la fenêtre, on donne plus de chances de capturer des pertinents. Le BEP est donc plus **optimiste** que la R-Précision (First-Tier).
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Sur une courbe ROC, une courbe qui **longe la diagonale** $y = x$ indique :
 
@@ -4619,8 +4770,18 @@ shuffleAnswers: true
 - [ ] Un système avec un rappel parfait
 - [x] Un système non informatif, équivalent à une classification aléatoire
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; La diagonale $y = x$ correspond à un système qui classe aléatoirement (AUC = 0.5). Un bon système doit être **au-dessus** de cette diagonale. Plus la courbe est proche du coin supérieur gauche, meilleur est le système.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique : Un système A a une courbe P–R **toujours au-dessus** de celle du système B. Que peut-on conclure ?
 
@@ -4629,8 +4790,18 @@ shuffleAnswers: true
 - [x] Le système A est globalement meilleur que B (mAP_A &gt; mAP_B)
 - [ ] Le système B est meilleur à bas rappel
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Si la courbe P–R de A domine celle de B à tous les niveaux de rappel, alors l&#39;aire sous la courbe de A (mAP_A) est supérieure à celle de B. Le système A est donc globalement supérieur.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Quelle est la **généralité** (Generality) d&#39;une collection et quel est son impact sur la précision ?
 
@@ -4639,8 +4810,18 @@ shuffleAnswers: true
 - [x] La généralité est la densité de pertinents dans la collection ; une faible généralité rend la précision élevée plus difficile à maintenir
 - [ ] La généralité est le nombre de requêtes ; elle impacte le macro-moyennage
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; $G = (TP + FN) / N$. La formule $P = (R \cdot G) / (R \cdot G + \text{Fallout} \cdot (1-G))$ montre que même avec un bon rappel et un Fallout faible, si $G$ est très petit (peu de pertinents), la précision reste faible.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Cas pratique : Vous devez choisir entre **micro-averaging** et **macro-averaging** pour évaluer un système de classification de documents en 10 catégories, dont 2 très fréquentes représentent 80% du corpus. Quelle stratégie choisissez-vous pour une évaluation **équitable entre catégories** ?
 
@@ -4649,8 +4830,18 @@ shuffleAnswers: true
 - [ ] Les deux donnent le même résultat dans ce cas
 - [ ] Ni l&#39;un ni l&#39;autre — il faut utiliser la F-mesure uniquement
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Le **micro-averaging** favoriserait les 2 catégories dominantes (80% des docs). Le **macro-averaging** calcule une performance par catégorie puis fait la moyenne, donnant le même poids aux 10 catégories — c&#39;est le choix adapté quand on veut une évaluation équitable.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Pourquoi mesurer le **rappel** est-il difficile en pratique dans un vrai système de RI ?
 
@@ -4659,8 +4850,18 @@ shuffleAnswers: true
 - [x] Parce qu&#39;on ne connaît jamais exhaustivement l&#39;ensemble de tous les documents pertinents d&#39;une collection
 - [ ] Parce que le rappel dépend du seuil de similarité choisi
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Pour calculer le rappel exactement, il faudrait connaître **tous** les documents pertinents ($TP + FN$). Or, dans une grande collection, juger tous les documents est impossible. On utilise le **pooling** (jugement d&#39;un sous-ensemble) → le rappel reste une estimation.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Qu&#39;est-ce que le **pooling** utilisé dans les benchmarks comme TREC ?
 
@@ -4669,15 +4870,25 @@ shuffleAnswers: true
 - [x] La fusion des top-N résultats de plusieurs systèmes pour créer un sous-ensemble à juger par des humains
 - [ ] Une méthode de pondération des termes
 
-&gt; 💡 Explication :
+&gt; Explication :
 &gt; Le pooling consiste à collecter les top-N résultats de chaque système participant, à les fusionner, puis à faire juger uniquement ce pool par des assesseurs humains. C&#39;est une **approximation** : les documents hors du pool sont supposés non pertinents, ce qui peut sous-estimer les performances.
+
+</div>
+<div class="quizdown">
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: fr
+---
 
 ### Vrai ou Faux : La **mAP** (Mean Average Precision) est équivalente à l&#39;aire sous la courbe P–R interpolée aux 11 niveaux standard.
 
 - [x] Vrai
 - [ ] Faux
 
-&gt; ✅ Réponse :
+&gt; Réponse :
 &gt; La mAP est définie comme la moyenne des précisions interpolées aux 11 niveaux $\{0, 0.1, 0.2, \ldots, 1.0\}$, ce qui correspond à une approximation de l&#39;aire sous la courbe P–R. C&#39;est la mesure de synthèse la plus utilisée en RI.
 
 </div>
