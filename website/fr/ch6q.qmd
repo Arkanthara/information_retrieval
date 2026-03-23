@@ -6,6 +6,8 @@ filters:
   - quizdown
 ---
 
+## 🟢 Niveau 1 — Fondamentaux
+
 ```{quizdown}
 ---
 primaryColor: "#3b82f6"
@@ -251,6 +253,8 @@ shuffleAnswers: true
 ```
 
 ---
+
+## 🔴 Niveau 3 — Maîtrise
 
 ```{quizdown}
 ---
