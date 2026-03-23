@@ -4,7 +4,8 @@ project:
   output-dir: ../_site/fr
 
 website:
-  # Language switching setup
+  page-footer:
+    center: "Copyright © 2026 University of Geneva"
 
   navbar:
     # background: primary
