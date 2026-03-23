@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Recherche d’Information – Information Retrieval</title>
+<title>Plongements Neuronaux (Neural Embeddings) — Quiz – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4238,7 +4238,7 @@ vertical-align: -.125em;
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Recherche d’Information</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch3.html">Embeddings Neuronaux</a></li><li class="breadcrumb-item"><a href="./ch3q.html">Quiz</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4327,13 +4327,13 @@ vertical-align: -.125em;
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Embeddings Neuronaux</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch3.html" class="sidebar-item-text sidebar-link">
@@ -4348,7 +4348,7 @@ vertical-align: -.125em;
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch3q.html" class="sidebar-item-text sidebar-link">
+  <a href="./ch3q.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Quiz</span></a>
   </div>
 </li>
@@ -4434,25 +4434,16 @@ vertical-align: -.125em;
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#bienvenue" id="toc-bienvenue" class="nav-link active" data-scroll-target="#bienvenue">Bienvenue</a></li>
-  <li><a href="#contenu-du-cours" id="toc-contenu-du-cours" class="nav-link" data-scroll-target="#contenu-du-cours">Contenu du cours</a></li>
-  <li><a href="#objectifs" id="toc-objectifs" class="nav-link" data-scroll-target="#objectifs">Objectifs</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch3.html">Embeddings Neuronaux</a></li><li class="breadcrumb-item"><a href="./ch3q.html">Quiz</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Recherche d’Information</h1>
-<p class="subtitle lead">Notes de cours</p>
+<h1 class="title">Plongements Neuronaux (Neural Embeddings) — Quiz</h1>
 </div>
 
 
@@ -4469,56 +4460,295 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="bienvenue" class="level2">
-<h2 class="anchored" data-anchor-id="bienvenue">Bienvenue</h2>
-<p>Ce site regroupe les notes de cours du module <strong>Recherche d’Information</strong> (<em>Information Retrieval</em>) du Master en Sciences Informatiques.</p>
-</section>
-<section id="contenu-du-cours" class="level2">
-<h2 class="anchored" data-anchor-id="contenu-du-cours">Contenu du cours</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Chapitre</th>
-<th>Sujet</th>
-<th>Pages</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>Introduction à la Recherche d’Information</td>
-<td><a href="./ch1.html">Détails</a> · <a href="./ch1r.html">Synthèse</a></td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>Embeddings (TF·IDF, Modèles probabilistes, LSI)</td>
-<td><a href="./ch2.html">Détails</a> · <a href="./ch2r.html">Synthèse</a></td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>Embeddings Neuronaux (Word2Vec, GloVe)</td>
-<td><a href="./ch3.html">Détails</a> · <a href="./ch3r.html">Synthèse</a></td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>Évaluation en Recherche d’Information</td>
-<td><a href="./ch6.html">Détails</a> · <a href="./ch6r.html">Synthèse</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="objectifs" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs">Objectifs</h2>
-<ul>
-<li>Comprendre les modèles de base en RI</li>
-<li>Comprendre les embeddings de documents et de termes</li>
-<li>Comprendre les modèles de recommandation sociale</li>
-<li>Comprendre les mesures de qualité</li>
-<li>Avoir un aperçu de l’indexation et de la visualisation de données</li>
-</ul>
+<div class="quizdown">
+
+---
+primaryColor: &quot;#3b82f6&quot;
+shuffleQuestions: false
+shuffleAnswers: true
+---
+
+## 🟢 Niveau 1 — Fondamentaux
+
+### Question 1
+
+Quel est le principe fondamental des plongements basés sur le contexte (Context-based Embeddings) ?
+
+- [ ] La signification d&#39;un terme est déterminée par sa fréquence dans le corpus
+- [x] La signification d&#39;un terme est déterminée par les termes qui l&#39;entourent
+- [ ] La signification d&#39;un terme est déterminée par sa longueur
+- [ ] La signification d&#39;un terme est indépendante de son environnement textuel
+
+&gt; 💡 Explication :
+&gt; L&#39;hypothèse distributionnelle stipule que les mots apparaissant dans des contextes similaires ont des significations proches. C&#39;est le fondement de Word2Vec et GloVe.
+
+### Question 2
+
+Quelle est la direction de prédiction du modèle CBoW (Continuous Bag of Words) ?
+
+- [ ] Terme cible → Termes de contexte
+- [x] Termes de contexte → Terme cible
+- [ ] Terme cible → Terme cible suivant
+- [ ] Corpus entier → Terme cible
+
+&gt; 💡 Explication :
+&gt; CBoW prédit le terme cible $W_T$ à partir des mots environnants $W_C$, c&#39;est-à-dire qu&#39;il estime $\mathbb{P}(W_T \mid W_C)$.
+
+### Question 3
+
+Quelle est la direction de prédiction du modèle Skip-gram ?
+
+- [ ] Termes de contexte → Terme cible
+- [x] Terme cible → Termes de contexte
+- [ ] Document entier → Terme cible
+- [ ] Terme précédent → Terme suivant
+
+&gt; 💡 Explication :
+&gt; Skip-gram est l&#39;inverse de CBoW : il estime $\mathbb{P}(W_C \mid W_T)$, c&#39;est-à-dire la probabilité des mots de contexte étant donné le mot cible.
+
+### Question 4
+
+Dans Word2Vec, que représentent les paramètres $\theta = [W, W&#39;]$ ?
+
+- [ ] Les termes du vocabulaire et leurs fréquences
+- [ ] Les matrices de co-occurrence et de distance
+- [x] Les matrices de poids du réseau de neurones (couche d&#39;entrée et couche de sortie)
+- [ ] Les vecteurs de requête et de document
+
+&gt; 💡 Explication :
+&gt; $W$ est la matrice de poids entre la couche d&#39;entrée et la couche cachée, et $W&#39;$ entre la couche cachée et la couche de sortie. Ce sont ces poids appris qui constituent le plongement.
+
+### Question 5
+
+Quelle mesure de similarité est utilisée avec les plongements Word2Vec et GloVe ?
+
+- [ ] Similarité cosinus (Cosine similarity)
+- [ ] Produit scalaire normalisé
+- [x] Distance euclidienne (Euclidean distance)
+- [ ] Distance de Kullback-Leibler
+
+&gt; 💡 Explication :
+&gt; La mesure de similarité doit être cohérente avec la construction du plongement. Pour Word2Vec et GloVe, c&#39;est la distance euclidienne dans l&#39;espace vectoriel appris.
+
+### Question 6
+
+Vrai ou Faux : LSI (Latent Semantic Indexing) est un plongement basé sur le contexte local des termes.
+
+- [ ] Vrai
+- [x] Faux
+
+&gt; ❌ Faux :
+&gt; LSI est un plongement basé sur le **contenu** (Content-based). Il factorise la matrice termes-documents globale pour extraire des concepts latents **linéaires**, sans tenir compte du contexte local d&#39;occurrence des termes.
+
+### Question 7
+
+Avec une fenêtre de contexte de taille $m = 2$ et le mot cible &quot;joue&quot; dans la phrase &quot;Le chat **joue** avec la balle&quot;, combien de paires (cible, contexte) sont générées ?
+
+- [ ] 2
+- [ ] 3
+- [x] 4
+- [ ] 6
+
+&gt; 💡 Explication :
+&gt; Avec $m = 2$, on prend 2 mots avant (&quot;Le&quot;, &quot;chat&quot;) et 2 mots après (&quot;avec&quot;, &quot;la&quot;), ce qui génère 4 paires : (&quot;joue&quot;,&quot;Le&quot;), (&quot;joue&quot;,&quot;chat&quot;), (&quot;joue&quot;,&quot;avec&quot;), (&quot;joue&quot;,&quot;la&quot;).
+
+---
+
+## 🟡 Niveau 2 — Compréhension
+
+### Question 8
+
+Pourquoi la fonction softmax standard est-elle problématique pour de grands vocabulaires dans Word2Vec ?
+
+- [ ] Elle ne converge pas pour les vocabulaires larges
+- [ ] Elle produit des probabilités négatives
+- [x] Son dénominateur nécessite une somme sur tout le vocabulaire, soit une complexité $O(N)$ par étape
+- [ ] Elle ne peut pas être différentiée
+
+&gt; 💡 Explication :
+&gt; $\mathbb{P}(W_T \mid W_C) = \exp(v_T^{\prime\top} v_C) / \sum_i \exp(v_i^{\prime\top} v_C)$ exige le calcul de $N$ exponentielles à chaque étape. Pour $N = 10^5$ mots, cela est prohibitif.
+
+### Question 9
+
+La softmax hiérarchique (Hierarchical Softmax) réduit la complexité de calcul de $O(N)$ à :
+
+- [ ] $O(1)$
+- [ ] $O(\sqrt{N})$
+- [x] $O(\log N)$
+- [ ] $O(N^2)$
+
+&gt; 💡 Explication :
+&gt; En organisant le vocabulaire dans un arbre binaire (comme WordNet), la probabilité d&#39;un terme est calculée comme un produit de probabilités le long du chemin racine→feuille, ce qui donne $O(\log N)$ opérations.
+
+### Question 10
+
+Quelle est la différence fondamentale entre GloVe et Word2Vec concernant les co-occurrences ?
+
+- [ ] GloVe utilise une fenêtre de contexte plus grande
+- [ ] Word2Vec utilise des co-occurrences globales, GloVe des co-occurrences locales
+- [x] GloVe pondère explicitement les co-occurrences selon leur fréquence globale, Word2Vec les traite implicitement
+- [ ] GloVe ignore les co-occurrences nulles, Word2Vec les inclut toutes
+
+&gt; 💡 Explication :
+&gt; Word2Vec optimise une prédiction locale sans tenir compte de la densité des co-occurrences. GloVe minimise une perte globale pondérée par $\psi(\text{card}\{(w_k,w_i)\})$, donnant plus d&#39;importance aux paires fréquentes.
+
+### Question 11
+
+Dans GloVe, que capture géométriquement la différence de vecteurs $v_i - v_j$ ?
+
+- [ ] La fréquence relative des termes $w_i$ et $w_j$
+- [x] Le ratio des probabilités de co-occurrence $\mathbb{P}(w_k \mid w_i) / \mathbb{P}(w_k \mid w_j)$
+- [ ] La distance syntaxique entre $w_i$ et $w_j$
+- [ ] La somme des co-occurrences des deux termes
+
+&gt; 💡 Explication :
+&gt; $\exp((v_i - v_j)^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i) / \mathbb{P}_{\text{cooc}}(w_k \mid w_j)$. C&#39;est cette propriété qui permet les analogies vectorielles du type &quot;roi - homme + femme ≈ reine&quot;.
+
+### Question 12
+
+Vrai ou Faux : Dans le modèle CBoW, la probabilité $\mathbb{P}(W_T \mid W_C)$ est approximée par le produit scalaire $v_T^{\prime\top} v_C$.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; ✅ Réponse :
+&gt; Oui. Les vecteurs $v_C$ (issu de $W$) et $v_T&#39;$ (colonne de $W&#39;$) sont tels que leur produit scalaire approxime le score non normalisé. La softmax normalise ensuite ce score en probabilité.
+
+### Question 13
+
+Pourquoi les plongements neuronaux (Word2Vec, GloVe) capturent-ils des relations **non-linéaires**, contrairement à LSI ?
+
+- [ ] Parce qu&#39;ils utilisent plus de données
+- [ ] Parce que leur vocabulaire est plus grand
+- [x] Parce que leur apprentissage implique des fonctions non-linéaires (exponentielle, softmax) là où LSI effectue une factorisation matricielle linéaire
+- [ ] Parce qu&#39;ils ignorent les mots grammaticaux
+
+&gt; 💡 Explication :
+&gt; LSI = décomposition en valeurs singulières (SVD) = transformation **linéaire**. Word2Vec/GloVe optimisent des fonctions faisant intervenir des exponentielles, permettant d&#39;encoder des structures géométriques complexes (translations, rotations) impossibles à représenter linéairement.
+
+### Question 14
+
+Vrai ou Faux : Un modèle Word2Vec pré-entraîné (Pre-trained model) peut être utilisé directement pour représenter des documents en calculant la moyenne des vecteurs de leurs termes.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; ✅ Réponse :
+&gt; Oui. Les modèles pré-entraînés fournissent une table de correspondance (lookup table). Le vecteur d&#39;un document est calculé comme $\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w$.
+
+---
+
+## 🔴 Niveau 3 — Maîtrise
+
+### Question 15
+
+Cas pratique : On veut comparer deux systèmes de recherche d&#39;information. Le premier utilise TF·IDF avec similarité cosinus. Le second utilise Word2Vec avec distance euclidienne. Pour la requête &quot;voiture rapide&quot;, le second système retourne aussi des documents contenant &quot;automobile véloce&quot; sans que ces mots apparaissent dans la requête. Quelle propriété de Word2Vec explique ce comportement ?
+
+- [ ] Word2Vec pondère les termes rares plus fortement
+- [ ] Word2Vec indexe les synonymes explicitement dans son vocabulaire
+- [x] Les synonymes et termes sémantiquement proches ont des vecteurs proches dans l&#39;espace de plongement car ils apparaissent dans des contextes similaires
+- [ ] Word2Vec utilise une fenêtre de contexte infinie
+
+&gt; 💡 Explication :
+&gt; &quot;voiture&quot; et &quot;automobile&quot;, &quot;rapide&quot; et &quot;véloce&quot; co-apparaissent dans des contextes similaires dans le corpus d&#39;entraînement. Leurs vecteurs sont donc proches dans l&#39;espace de plongement, permettant une recherche sémantique au-delà de la correspondance exacte des termes.
+
+### Question 16
+
+Dans la fonction de perte de GloVe, à quoi sert la fonction de pondération $\psi(x)$ avec $\psi(0) = 0$ et $\psi(\infty) = 1$ ?
+
+- [ ] À normaliser les vecteurs pour qu&#39;ils aient une norme unitaire
+- [x] À ignorer les paires de co-occurrence nulles et à plafonner l&#39;influence des paires très fréquentes (souvent des mots grammaticaux peu informatifs)
+- [ ] À accélérer la convergence du gradient
+- [ ] À réduire la dimension du plongement automatiquement
+
+&gt; 💡 Explication :
+&gt; $\psi(0) = 0$ : les co-occurrences nulles ne contribuent pas à la perte. $\psi(\infty) = 1$ : les très fortes co-occurrences (souvent dues à des mots fonctionnels comme &quot;le&quot;, &quot;de&quot;) sont plafonnées pour ne pas dominer l&#39;apprentissage.
+
+### Question 17
+
+Cas pratique : Un système de recherche d&#39;information utilise des plongements Word2Vec entraînés sur des articles de presse américains des années 1990. Il associe systématiquement des noms de métiers techniques à des profils masculins. Quelle est la cause principale de ce problème et quelle est la solution proposée par la littérature ?
+
+- [ ] Cause : vocabulaire trop petit. Solution : augmenter la taille du vocabulaire
+- [ ] Cause : fenêtre de contexte trop petite. Solution : augmenter la fenêtre
+- [x] Cause : biais sociétaux (societal biases) présents dans le corpus d&#39;entraînement. Solution : techniques de débiaisage (debiasing) des plongements
+- [ ] Cause : dimension de plongement trop faible. Solution : augmenter la dimension
+
+&gt; 💡 Explication :
+&gt; Les co-occurrences dans les corpus historiques reflètent des stéréotypes culturels. Bolukbasi et al. (2016) ont montré des associations comme &quot;homme : programmeur :: femme : femme au foyer&quot;. Des techniques de débiaisage post-entraînement ont été proposées pour corriger ces associations.
+
+### Question 18
+
+Quelle est la limite fondamentale des plongements statiques (Word2Vec, GloVe) face à la polysémie, et quel modèle y répond ?
+
+- [ ] Limite : ils ne gèrent pas les mots rares. Solution : TF·IDF
+- [x] Limite : un mot polysémique reçoit un unique vecteur moyen indépendamment du sens. Solution : BERT qui génère des plongements contextuels
+- [ ] Limite : ils sont trop lents à calculer. Solution : softmax hiérarchique
+- [ ] Limite : ils ne gèrent pas les langues non-anglaises. Solution : GloVe multilingue
+
+&gt; 💡 Explication :
+&gt; &quot;banque&quot; (établissement financier) et &quot;banque&quot; (rive d&#39;un fleuve) partagent un unique vecteur dans Word2Vec/GloVe. BERT (Bidirectional Encoder Representations from Transformers) génère un vecteur différent pour chaque occurrence selon son contexte phrastique.
+
+### Question 19
+
+Cas pratique : On entraîne un modèle Skip-gram sur un corpus médical spécialisé. Après entraînement, on observe que $\|v_{\text{aspirine}} - v_{\text{ibuprofène}}\|$ est très faible. Quelle interprétation linguistique peut-on donner à ce résultat ?
+
+- [ ] Les deux médicaments sont identiques chimiquement
+- [ ] Le corpus contenait peu d&#39;occurrences de ces termes
+- [x] Les deux termes apparaissent fréquemment dans des contextes similaires (mêmes symptômes traités, même posologie, etc.), indiquant une proximité sémantique dans le domaine médical
+- [ ] La fenêtre de contexte était trop grande
+
+&gt; 💡 Explication :
+&gt; Une distance euclidienne faible signifie que les vecteurs sont proches, donc que les termes co-apparaissent dans des contextes similaires. Dans un corpus médical, aspirine et ibuprofène sont souvent utilisés dans les mêmes contextes (anti-inflammatoires, douleurs, fièvre), d&#39;où leur proximité vectorielle.
+
+### Question 20
+
+Parmi les affirmations suivantes sur la relation entre Word2Vec et la recherche d&#39;information moderne, laquelle est correcte ?
+
+- [ ] Word2Vec a remplacé définitivement TF·IDF dans tous les systèmes
+- [ ] Les plongements neuronaux sont uniquement utilisés pour la classification de textes
+- [x] Les plongements denses constituent la base du Dense Retrieval moderne, où la recherche documentaire devient un problème de plus proche voisin approximatif (Approximate Nearest Neighbor)
+- [ ] GloVe est suffisant pour tous les besoins de recherche sémantique sans nécessiter de modèles plus récents
+
+&gt; 💡 Explication :
+&gt; Les techniques modernes de recherche (bi-encodeurs basés sur BERT, etc.) encodent requêtes et documents en vecteurs denses, puis effectuent une recherche du plus proche voisin approximatif (ANN). Word2Vec/GloVe sont les précurseurs directs de cette approche.
+
+### Question 21
+
+Soit la phrase &quot;Le médecin soigne le patient&quot; avec une fenêtre $m = 1$. En CBoW, quelles paires (contexte → cible) sont générées pour le mot &quot;soigne&quot; ?
+
+- [ ] (&quot;médecin&quot;, &quot;soigne&quot;) et (&quot;soigne&quot;, &quot;le&quot;)
+- [x] (&quot;Le&quot;, &quot;médecin&quot;), (&quot;médecin&quot;, &quot;soigne&quot;), (&quot;soigne&quot;, &quot;le&quot;), (&quot;le&quot;, &quot;patient&quot;) — et pour &quot;soigne&quot; spécifiquement : (&quot;médecin&quot;, &quot;soigne&quot;) et (&quot;le&quot;, &quot;soigne&quot;)
+- [ ] Toutes les combinaisons de mots de la phrase
+- [ ] Uniquement (&quot;médecin&quot;, &quot;le&quot;) car ils encadrent &quot;soigne&quot;
+
+&gt; 💡 Explication :
+&gt; Pour le mot cible &quot;soigne&quot; avec $m=1$ : les contextes sont &quot;médecin&quot; (gauche) et &quot;le&quot; (droite). Les paires générées sont (&quot;soigne&quot;,&quot;médecin&quot;) et (&quot;soigne&quot;,&quot;le&quot;), qui serviront à entraîner $\mathbb{P}(W_T = \text{&quot;soigne&quot;} \mid W_C)$.
+
+### Question 22
+
+Vrai ou Faux : Dans GloVe, le terme $b_i$ (biais associé à $w_i$) dans la formule $v_i^\top v_k + b_i + b_k - \log\,\text{card}\{(w_k,w_i)\}$ provient du fait que $\log\,\text{card}\{(w_i)\}$ ne dépend pas de $w_k$.
+
+- [x] Vrai
+- [ ] Faux
+
+&gt; ✅ Réponse :
+&gt; Oui. On développe : $v_i^\top v_k = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}$. Le terme $\log\,\text{card}\{(w_i)\}$ est constant pour un $w_i$ fixé, indépendamment de $w_k$ : il constitue donc un **biais** $b_i$ absorbé dans les paramètres du modèle.
+
+### Question 23
+
+Quel modèle est le mieux adapté pour traiter des mots rares ou des néologismes (mots hors vocabulaire, Out-of-Vocabulary) ?
+
+- [ ] Word2Vec CBoW
+- [ ] Word2Vec Skip-gram
+- [ ] GloVe
+- [x] FastText, qui décompose les mots en sous-mots (subwords) et peut représenter tout mot jamais vu à l&#39;entraînement
+
+&gt; 💡 Explication :
+&gt; FastText (Bojanowski et al., 2016) enrichit les vecteurs de mots avec des informations sur les n-grammes de caractères. Pour un mot inconnu, son vecteur est construit à partir de ses sous-composantes, permettant une généralisation aux mots hors vocabulaire.
+
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

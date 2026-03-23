@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Recherche d’Information – Information Retrieval</title>
+<title>Représentation de l’information : Embeddings — Quiz – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4238,7 +4238,7 @@ vertical-align: -.125em;
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Recherche d’Information</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch2.html">Embeddings</a></li><li class="breadcrumb-item"><a href="./ch2q.html">Quiz</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4298,13 +4298,13 @@ vertical-align: -.125em;
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Embeddings</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch2.html" class="sidebar-item-text sidebar-link">
@@ -4319,7 +4319,7 @@ vertical-align: -.125em;
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch2q.html" class="sidebar-item-text sidebar-link">
+  <a href="./ch2q.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Quiz</span></a>
   </div>
 </li>
@@ -4434,25 +4434,16 @@ vertical-align: -.125em;
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#bienvenue" id="toc-bienvenue" class="nav-link active" data-scroll-target="#bienvenue">Bienvenue</a></li>
-  <li><a href="#contenu-du-cours" id="toc-contenu-du-cours" class="nav-link" data-scroll-target="#contenu-du-cours">Contenu du cours</a></li>
-  <li><a href="#objectifs" id="toc-objectifs" class="nav-link" data-scroll-target="#objectifs">Objectifs</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch2.html">Embeddings</a></li><li class="breadcrumb-item"><a href="./ch2q.html">Quiz</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Recherche d’Information</h1>
-<p class="subtitle lead">Notes de cours</p>
+<h1 class="title">Représentation de l’information : Embeddings — Quiz</h1>
 </div>
 
 
@@ -4469,56 +4460,277 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="bienvenue" class="level2">
-<h2 class="anchored" data-anchor-id="bienvenue">Bienvenue</h2>
-<p>Ce site regroupe les notes de cours du module <strong>Recherche d’Information</strong> (<em>Information Retrieval</em>) du Master en Sciences Informatiques.</p>
-</section>
-<section id="contenu-du-cours" class="level2">
-<h2 class="anchored" data-anchor-id="contenu-du-cours">Contenu du cours</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Chapitre</th>
-<th>Sujet</th>
-<th>Pages</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>Introduction à la Recherche d’Information</td>
-<td><a href="./ch1.html">Détails</a> · <a href="./ch1r.html">Synthèse</a></td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>Embeddings (TF·IDF, Modèles probabilistes, LSI)</td>
-<td><a href="./ch2.html">Détails</a> · <a href="./ch2r.html">Synthèse</a></td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>Embeddings Neuronaux (Word2Vec, GloVe)</td>
-<td><a href="./ch3.html">Détails</a> · <a href="./ch3r.html">Synthèse</a></td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>Évaluation en Recherche d’Information</td>
-<td><a href="./ch6.html">Détails</a> · <a href="./ch6r.html">Synthèse</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="objectifs" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs">Objectifs</h2>
-<ul>
-<li>Comprendre les modèles de base en RI</li>
-<li>Comprendre les embeddings de documents et de termes</li>
-<li>Comprendre les modèles de recommandation sociale</li>
-<li>Comprendre les mesures de qualité</li>
-<li>Avoir un aperçu de l’indexation et de la visualisation de données</li>
-</ul>
+<div class="quizdown">
+
+---
+primaryColor: &#39;#4a90d9&#39;
+shuffleQuestions: false
+shuffleAnswers: true
+---
+
+# 🟢 Niveau 1 — Fondamentaux
+
+### Que signifie l&#39;acronyme RSV en recherche d&#39;information (Information Retrieval) ?
+
+- [ ] Random Selection Value
+- [x] Retrieval Status Value
+- [ ] Ranked Scoring Vector
+- [ ] Relevance Sampling Value
+
+&gt; 💡 Explication :
+&gt; Le RSV (Retrieval Status Value) est le score de pertinence attribué à chaque document par rapport à une requête. C&#39;est sur la base de ce score que les documents sont ordonnés dans la liste de résultats.
+
+### Dans le modèle booléen (Boolean Model), sur quoi repose la représentation des termes ?
+
+- [ ] Fréquences d&#39;apparition dans les documents
+- [ ] Probabilités de pertinence
+- [x] Encodage binaire 1-hot (1-hot encoding)
+- [ ] Décomposition en valeurs singulières
+
+&gt; 💡 Explication :
+&gt; Le modèle booléen utilise un encodage 1-hot : le terme $i$ est représenté par un vecteur $M$-dimensionnel avec un $1$ en position $i$ et des $0$ partout ailleurs. Les termes et documents se retrouvent ainsi sur les sommets d&#39;un hypercube $[0,1]^M$.
+
+### Quelle est la valeur possible du RSV dans le modèle booléen (Boolean Model) ?
+
+- [ ] Un réel quelconque dans $\mathbb{R}$
+- [ ] Un réel dans $[0, 1]$
+- [x] Uniquement $0$ ou $1$
+- [ ] Un entier positif
+
+&gt; 💡 Explication :
+&gt; C&#39;est la limite fondamentale du modèle booléen : la correspondance est binaire — un document correspond à la requête (RSV = 1) ou ne correspond pas (RSV = 0). Il n&#39;y a aucun ordonnancement au sein des documents pertinents.
+
+### Quelle formule définit la fréquence des termes normalisée (Term Frequency) $\text{tf}_{ij}$ ?
+
+- [ ] $\text{tf}_{ij} = f_{ij} \cdot N$
+- [ ] $\text{tf}_{ij} = \log(f_{ij} + 1)$
+- [x] $\text{tf}_{ij} = \dfrac{f_{ij}}{\max_k f_{kj}}$
+- [ ] $\text{tf}_{ij} = \dfrac{f_{ij}}{N}$
+
+&gt; 💡 Explication :
+&gt; La TF normalisée divise la fréquence brute du terme $i$ dans le document $j$ par la fréquence du terme le plus fréquent dans ce même document. Cela garantit $\max_i \text{tf}_{ij} = 1$ et permet de comparer des documents de longueurs différentes.
+
+### Que mesure l&#39;IDF (Inverse Document Frequency) ?
+
+- [ ] La fréquence d&#39;un terme dans un document
+- [ ] La longueur moyenne des documents
+- [x] Le pouvoir discriminant d&#39;un terme dans la collection
+- [ ] Le nombre total de requêtes traitées
+
+&gt; 💡 Explication :
+&gt; L&#39;IDF est définie par $\text{idf}_i = \log(N / n_i)$. Elle mesure le pouvoir discriminant du terme $i$ : si le terme apparaît dans tous les documents ($n_i \approx N$), son IDF est proche de $0$ (non discriminant). Si le terme est rare ($n_i \ll N$), son IDF est élevé.
+
+### Un terme apparaît dans tous les $N$ documents de la collection. Quelle est la valeur approximative de son IDF ?
+
+- [ ] $\log(N)$
+- [ ] $1$
+- [x] Proche de $0$
+- [ ] $N$
+
+&gt; 💡 Explication :
+&gt; $\text{idf}_i = \log(N/n_i)$. Si $n_i = N$ alors $\text{idf}_i = \log(1) = 0$. Un terme présent dans tous les documents n&#39;est pas discriminant et a un poids TF·IDF nul.
+
+### Vrai ou Faux : Dans le modèle Bag of Words (BoW), l&#39;ordre des mots dans un document est pris en compte.
+
+- [ ] Vrai
+- [x] Faux
+
+&gt; ❌ Faux :
+&gt; Le modèle Bag of Words traite les termes comme des entités indépendantes et non ordonnées. La structure du document (ordre des mots, paragraphes, titre) est perdue. Seules les fréquences d&#39;apparition sont conservées.
+
+### Quelle est la formule du poids TF·IDF du terme $i$ dans le document $j$ ?
+
+- [ ] $w_{ij} = \text{tf}_{ij} + \text{idf}_i$
+- [x] $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$
+- [ ] $w_{ij} = \dfrac{\text{tf}_{ij}}{\text{idf}_i}$
+- [ ] $w_{ij} = \text{tf}_{ij}^{\text{idf}_i}$
+
+&gt; 💡 Explication :
+&gt; Le poids TF·IDF est le produit de la fréquence normalisée ($\text{tf}_{ij}$) et du pouvoir discriminant ($\text{idf}_i$). Un terme fréquent dans le document ET rare dans la collection aura un poids élevé.
+
+# 🟡 Niveau 2 — Compréhension
+
+### Dans la matrice terme-document $W \in \mathbb{R}^{M \times N}$, comment est représenté le document $j$ ?
+
+- [ ] Par la ligne $j$ de $W$
+- [x] Par la colonne $j$ de $W$, soit $d_j = W_{\cdot j} \in \mathbb{R}^M$
+- [ ] Par la diagonale de $W$
+- [ ] Par le produit $W \cdot W^T$
+
+&gt; 💡 Explication :
+&gt; Le document $j$ est représenté par le vecteur colonne $d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{Mj}]^T \in \mathbb{R}^M$. Symétriquement, le terme $i$ est représenté par la transposée de la ligne $i$ : $t_i = W_{i\cdot}^T \in \mathbb{R}^N$.
+
+### Pourquoi la similarité cosinus (Cosine Similarity) est-elle préférée à la distance euclidienne en RI ?
+
+- [ ] Elle est plus rapide à calculer
+- [ ] Elle prend en compte la position des mots
+- [x] Elle est invariante à la norme (longueur) des vecteurs
+- [ ] Elle fonctionne uniquement avec des valeurs binaires
+
+&gt; 💡 Explication :
+&gt; La similarité cosinus mesure l&#39;angle entre deux vecteurs, indépendamment de leur norme. Deux documents identiques mais l&#39;un deux fois plus long obtiennent un cosinus de 1. La distance euclidienne pénaliserait injustement les documents plus longs.
+
+### Quelle est la formule de la similarité cosinus entre $d_j$ et $q$ ?
+
+- [ ] $\dfrac{\|d_j - q\|}{\|d_j\| + \|q\|}$
+- [x] $\dfrac{d_j^T q}{\|d_j\| \|q\|}$
+- [ ] $\dfrac{d_j^T q}{\|d_j\| + \|q\|}$
+- [ ] $d_j^T q$
+
+&gt; 💡 Explication :
+&gt; $\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) = \dfrac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \dfrac{\sum_i w_{ij} w_{iq}}{(\sum_i w_{ij}^2)^{1/2}(\sum_i w_{iq}^2)^{1/2}}$. Elle est comprise entre $-1$ et $1$ (en pratique entre $0$ et $1$ avec des poids positifs).
+
+### Quelle notion mathématique sous-tend la similarité cosinus en modèle vectoriel ?
+
+- [ ] La distance de Manhattan
+- [ ] La norme de Frobenius
+- [x] L&#39;intersection ensembliste étendue aux embeddings continus
+- [ ] La décomposition en valeurs propres
+
+&gt; 💡 Explication :
+&gt; En représentation binaire, $\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}| = \sum_i w_{ij} w_{iq} = \langle d_j, q \rangle$. La similarité cosinus est une extension normalisée de cette intersection, permettant de comparer des documents de longueurs différentes.
+
+### Dans le modèle probabiliste, que représente la variable $R$ ?
+
+- [ ] Le rang du document dans la liste
+- [ ] Le nombre de documents retrouvés
+- [x] Une variable de Bernoulli indiquant si le document est pertinent
+- [ ] La requête reformulée
+
+&gt; 💡 Explication :
+&gt; $R$ est une variable aléatoire binaire (Bernoulli) : $R = \text{vrai}$ si le document est pertinent, $R = \text{faux}$ sinon. L&#39;objectif est d&#39;estimer $P(R = \text{vrai} \mid d_j, q)$ pour classer les documents par pertinence décroissante.
+
+### Vrai ou Faux : Dans le modèle BIR (Binary Independence Retrieval), les occurrences des termes sont supposées corrélées entre elles.
+
+- [ ] Vrai
+- [x] Faux
+
+&gt; ❌ Faux :
+&gt; Le nom &quot;Independence&quot; fait précisément référence à l&#39;hypothèse d&#39;**indépendance** des occurrences des termes dans les documents. C&#39;est une hypothèse simplificatrice rarement vérifiée en pratique, mais qui permet de factoriser la probabilité du document.
+
+### Quel est le lien entre l&#39;IDF et le modèle BIR à l&#39;initialisation (sans feedback) ?
+
+- [ ] Il n&#39;y a aucun lien
+- [ ] L&#39;IDF remplace complètement le BIR
+- [x] À l&#39;initialisation, le terme de log-odds du BIR est approximativement égal à l&#39;IDF
+- [ ] L&#39;IDF est la racine carrée du score BIR
+
+&gt; 💡 Explication :
+&gt; Sans feedback, $P(t_i | \bar{R}, q) = n_i/N$, donc $\log\frac{1 - P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} = \log\frac{N - n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. Le BIR se réduit ainsi à une pondération IDF à l&#39;initialisation.
+
+### Parmi les éléments suivants, lesquels sont des paramètres de la formule BM25 ? (plusieurs réponses possibles)
+
+- [x] $k_1$ : paramètre de saturation de la TF
+- [x] $b$ : paramètre de normalisation par la longueur
+- [ ] $M$ : taille du vocabulaire
+- [x] $avdl$ : longueur moyenne des documents
+
+&gt; 💡 Explication :
+&gt; BM25 introduit $k_1$ (≈ 1.2) pour contrôler la saturation de la TF, $b$ (≈ 0.75) pour pondérer la normalisation par la longueur, et utilise $dl/avdl$ pour normaliser par rapport à la longueur moyenne. $M$ est une caractéristique de la collection, pas un paramètre de BM25.
+
+# 🔴 Niveau 3 — Maîtrise
+
+### Pourquoi le modèle TF·IDF (BoW) échoue-t-il face à la synonymie (Synonymy) ?
+
+- [ ] Parce qu&#39;il ne calcule pas les fréquences correctement
+- [ ] Parce que l&#39;IDF est toujours nul pour les synonymes
+- [x] Parce que deux termes synonymes ont des vecteurs orthogonaux dans l&#39;espace TF·IDF
+- [ ] Parce que la matrice W ne peut pas contenir de synonymes
+
+&gt; 💡 Explication :
+&gt; Dans l&#39;espace TF·IDF, chaque terme occupe une dimension distincte. Deux termes synonymes (ex. « voiture » et « automobile ») ont des vecteurs orthogonaux ($\langle t_i, t_j \rangle = 0$), alors qu&#39;ils devraient être proches. Un document contenant « automobile » ne sera pas retrouvé par une requête sur « voiture ».
+
+### Quelle est la propriété fondamentale de la SVD tronquée (Truncated SVD) de rang $K$ ?
+
+- [ ] Elle maximise la trace de la matrice
+- [x] Elle fournit la meilleure approximation de rang $K$ au sens de la norme de Frobenius
+- [ ] Elle diagonalise la matrice terme-document
+- [ ] Elle minimise le nombre de valeurs singulières non nulles
+
+&gt; 💡 Explication :
+&gt; $W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rank}(A) = K} \|W - A\|_F^2$. C&#39;est la propriété fondamentale de la SVD tronquée, qui justifie son utilisation pour la compression et la réduction de dimension dans la LSI.
+
+### Dans la LSI (Latent Semantic Indexing), comment est projeté un document $d_j$ dans l&#39;espace des concepts ?
+
+- [ ] $\tilde{d}_j = U_K d_j$
+- [ ] $\tilde{d}_j = V_K^T d_j$
+- [x] $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$
+- [ ] $\tilde{d}_j = U_K \Sigma_K d_j$
+
+&gt; 💡 Explication :
+&gt; La projection LSI est $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$. On applique d&#39;abord $U_K^T$ pour projeter dans l&#39;espace des vecteurs singuliers gauches, puis $\Sigma_K^{-1}$ pour normaliser par l&#39;importance de chaque concept.
+
+### Un ingénieur déploie un système de RI avec un modèle TF·IDF. Les utilisateurs se plaignent que rechercher « voiture » ne retrouve pas les documents parlant d&#39; « automobile ». Quelle solution technique est la plus appropriée ?
+
+- [ ] Augmenter la valeur de $k_1$ dans BM25
+- [ ] Réduire la taille du vocabulaire $M$
+- [x] Appliquer la LSI pour projeter dans un espace de concepts latents
+- [ ] Utiliser un modèle booléen avec l&#39;opérateur OR
+
+&gt; 💡 Explication :
+&gt; La LSI résout précisément le problème de synonymie en créant un espace de concepts latents où des termes sémantiquement proches se retrouvent dans des directions similaires. Un modèle booléen avec OR fonctionnerait pour des synonymes connus, mais n&#39;est pas une solution générale et scalable.
+
+### Cas pratique — Quelle est la différence principale entre la stratégie de mise à jour exacte (Exact Update) et le repliement (Fold-in) dans la LSI ?
+
+- [ ] Le fold-in recalcule toute la SVD, l&#39;exacte non
+- [x] L&#39;exacte enrichit l&#39;espace conceptuel, le fold-in projette uniquement dans l&#39;espace existant
+- [ ] Les deux méthodes sont équivalentes en qualité
+- [ ] Le fold-in utilise $V_K$ tandis que l&#39;exacte utilise $U_K$
+
+&gt; 💡 Explication :
+&gt; Dans le fold-in, les nouveaux documents sont projetés sur la base existante ($\hat{D} = U_K^T D$) sans modifier l&#39;espace des concepts. C&#39;est une approximation rapide mais les nouveaux concepts éventuellement apportés par les nouveaux documents sont ignorés. La mise à jour exacte recalcule partiellement la SVD pour incorporer ces nouveaux concepts.
+
+### Dans la géométrie TF·IDF, quel est le rôle exact du facteur $\text{idf}_i$ sur la représentation des documents ?
+
+- [ ] Il normalise le vecteur document à norme 1
+- [x] Il échelonne (scale) la dimension $i$ de l&#39;espace, transformant la base canonique $e_i$ en base discriminante $\tau_i = \text{idf}_i \cdot e_i$
+- [ ] Il remplace la fréquence brute par une fréquence logarithmique
+- [ ] Il projette le document dans un espace de dimension inférieure
+
+&gt; 💡 Explication :
+&gt; Le document $j$ s&#39;écrit $d_j = \sum_i \text{tf}_{ij} \cdot \tau_i$ avec $\tau_i = \text{idf}_i \cdot e_i$. L&#39;IDF est commun à tous les documents et transforme la base canonique en une base pondérée par le pouvoir discriminant de chaque terme. La TF est la vraie coordonnée du document dans cette base.
+
+### Parmi ces affirmations sur le Principe de Classement par Probabilité (Probability Ranking Principle, Robertson 1977), laquelle est correcte ?
+
+- [ ] Il recommande de trier les documents par ordre alphabétique
+- [ ] Il garantit que tous les documents pertinents sont retrouvés
+- [x] Il stipule que classer les documents par probabilité décroissante d&#39;utilité donne l&#39;efficacité optimale
+- [ ] Il s&#39;applique uniquement aux modèles booléens
+
+&gt; 💡 Explication :
+&gt; Robertson (1977) énonce que si le système classe les documents par ordre décroissant de probabilité d&#39;utilité $P(R \mid d_j, q)$, estimée aussi précisément que possible, alors l&#39;efficacité globale sera optimale sur la base des données disponibles. Ce principe fonde toute l&#39;approche probabiliste en RI.
+
+### Vrai ou Faux : Dans la LSI, choisir $K = M$ (conserver toutes les valeurs singulières) résout les problèmes de synonymie.
+
+- [ ] Vrai
+- [x] Faux
+
+&gt; ❌ Faux :
+&gt; Si $K = \min(M, N)$, la SVD tronquée devient la SVD complète et $W_K = W$ : on retrouve exactement l&#39;espace TF·IDF original avec tous ses problèmes (synonymie, polysémie). La réduction de dimension ($K \ll M$) est précisément ce qui force le modèle à généraliser et à regrouper les termes sémantiquement proches.
+
+### Cas pratique — Un système de RI retourne trop peu ou trop de documents selon la formulation exacte de la requête. Quel modèle est en cause et quelle est son alternative directe ?
+
+- [ ] LSI — alternative : BM25
+- [x] Modèle booléen — alternative : modèle vectoriel avec similarité cosinus
+- [ ] BM25 — alternative : TF·IDF standard
+- [ ] Modèle vectoriel — alternative : modèle booléen
+
+&gt; 💡 Explication :
+&gt; C&#39;est la limite classique du modèle booléen : une requête trop restrictive retourne rien, trop permissive retourne tout, sans nuance. Le modèle vectoriel avec similarité cosinus produit un continuum de RSV $\in [0,1]$, permettant un classement fin des documents indépendamment de la formulation exacte.
+
+### Parmi les propositions suivantes, lesquelles sont des avantages de la LSI par rapport au TF·IDF standard ? (plusieurs réponses possibles)
+
+- [x] Gestion de la synonymie (Synonymy)
+- [x] Décorrélation des dimensions de l&#39;espace de représentation
+- [ ] Calcul plus rapide que la TF·IDF
+- [x] Regroupement des termes sémantiquement proches dans l&#39;espace des concepts
+
+&gt; 💡 Explication :
+&gt; La LSI corrige les deux faiblesses majeures du TF·IDF : la synonymie (termes différents, même sens → proches dans l&#39;espace LSI) et la polysémie partielle via la décorrélation. Elle est en revanche plus coûteuse en calcul (SVD) que le TF·IDF standard.
+
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Représentation de l’information : les embeddings – Information Retrieval</title>
+<title>Plongements Neuronaux (Neural Embeddings) – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -7479,7 +7479,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch2.html">Embeddings</a></li><li class="breadcrumb-item"><a href="./ch2.html">Détails</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch3.html">Embeddings Neuronaux</a></li><li class="breadcrumb-item"><a href="./ch3.html">Détails</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -7539,16 +7539,16 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
  <span class="menu-text">Embeddings</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch2.html" class="sidebar-item-text sidebar-link active">
+  <a href="./ch2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Détails</span></a>
   </div>
 </li>
@@ -7568,16 +7568,16 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Embeddings Neuronaux</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch3.html" class="sidebar-item-text sidebar-link">
+  <a href="./ch3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Détails</span></a>
   </div>
 </li>
@@ -7680,134 +7680,114 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a>
+  <li><a href="#motivation-pourquoi-des-plongements-neuronaux" id="toc-motivation-pourquoi-des-plongements-neuronaux" class="nav-link active" data-scroll-target="#motivation-pourquoi-des-plongements-neuronaux">Motivation : Pourquoi des plongements neuronaux ?</a>
   <ul class="collapse">
-  <li><a href="#pourquoi-représenter-linformation" id="toc-pourquoi-représenter-linformation" class="nav-link" data-scroll-target="#pourquoi-représenter-linformation">Pourquoi représenter l’information ?</a></li>
-  <li><a href="#vocabulaire-et-termes" id="toc-vocabulaire-et-termes" class="nav-link" data-scroll-target="#vocabulaire-et-termes">Vocabulaire et termes</a></li>
-  <li><a href="#structure-dun-système-de-ri-rappel" id="toc-structure-dun-système-de-ri-rappel" class="nav-link" data-scroll-target="#structure-dun-système-de-ri-rappel">Structure d’un système de RI (Rappel)</a></li>
+  <li><a href="#limites-des-approches-précédentes" id="toc-limites-des-approches-précédentes" class="nav-link" data-scroll-target="#limites-des-approches-précédentes">Limites des approches précédentes</a></li>
+  <li><a href="#vers-les-plongements-basés-sur-le-contexte" id="toc-vers-les-plongements-basés-sur-le-contexte" class="nav-link" data-scroll-target="#vers-les-plongements-basés-sur-le-contexte">Vers les plongements basés sur le contexte</a>
+  <ul class="collapse">
+  <li><a href="#deux-grandes-familles-de-plongements" id="toc-deux-grandes-familles-de-plongements" class="nav-link" data-scroll-target="#deux-grandes-familles-de-plongements">Deux grandes familles de plongements</a></li>
   </ul></li>
-  <li><a href="#formalisation" id="toc-formalisation" class="nav-link" data-scroll-target="#formalisation">Formalisation</a>
-  <ul class="collapse">
-  <li><a href="#notation-générale" id="toc-notation-générale" class="nav-link" data-scroll-target="#notation-générale">Notation générale</a></li>
-  <li><a href="#la-requête-et-la-valeur-de-statut-de-récupération" id="toc-la-requête-et-la-valeur-de-statut-de-récupération" class="nav-link" data-scroll-target="#la-requête-et-la-valeur-de-statut-de-récupération">La requête et la valeur de statut de récupération</a></li>
   </ul></li>
-  <li><a href="#le-modèle-booléen-boolean-model" id="toc-le-modèle-booléen-boolean-model" class="nav-link" data-scroll-target="#le-modèle-booléen-boolean-model">Le Modèle Booléen (Boolean Model)</a>
+  <li><a href="#word2vec" id="toc-word2vec" class="nav-link" data-scroll-target="#word2vec">Word2Vec</a>
   <ul class="collapse">
-  <li><a href="#principe" id="toc-principe" class="nav-link" data-scroll-target="#principe">Principe</a></li>
-  <li><a href="#requêtes-booléennes" id="toc-requêtes-booléennes" class="nav-link" data-scroll-target="#requêtes-booléennes">Requêtes booléennes</a></li>
-  <li><a href="#exemple-avec-3-termes" id="toc-exemple-avec-3-termes" class="nav-link" data-scroll-target="#exemple-avec-3-termes">Exemple avec 3 termes</a></li>
-  <li><a href="#exemple-concret" id="toc-exemple-concret" class="nav-link" data-scroll-target="#exemple-concret">Exemple concret</a></li>
-  <li><a href="#avantages-et-limites" id="toc-avantages-et-limites" class="nav-link" data-scroll-target="#avantages-et-limites">Avantages et limites</a></li>
+  <li><a href="#principe-général" id="toc-principe-général" class="nav-link" data-scroll-target="#principe-général">Principe général</a>
+  <ul class="collapse">
+  <li><a href="#intuition-progressive" id="toc-intuition-progressive" class="nav-link" data-scroll-target="#intuition-progressive">Intuition progressive</a></li>
   </ul></li>
-  <li><a href="#le-modèle-sac-de-mots-bag-of-words" id="toc-le-modèle-sac-de-mots-bag-of-words" class="nav-link" data-scroll-target="#le-modèle-sac-de-mots-bag-of-words">Le Modèle Sac de Mots (Bag of Words)</a>
+  <li><a href="#formulation-probabiliste" id="toc-formulation-probabiliste" class="nav-link" data-scroll-target="#formulation-probabiliste">Formulation probabiliste</a></li>
+  </ul></li>
+  <li><a href="#continuous-bag-of-words-cbow" id="toc-continuous-bag-of-words-cbow" class="nav-link" data-scroll-target="#continuous-bag-of-words-cbow">Continuous Bag of Words (CBoW)</a>
   <ul class="collapse">
-  <li><a href="#principe-général" id="toc-principe-général" class="nav-link" data-scroll-target="#principe-général">Principe général</a></li>
-  <li><a href="#fréquence-des-termes-term-frequency-tf" id="toc-fréquence-des-termes-term-frequency-tf" class="nav-link" data-scroll-target="#fréquence-des-termes-term-frequency-tf">Fréquence des termes (Term Frequency, TF)</a>
+  <li><a href="#idée-principale" id="toc-idée-principale" class="nav-link" data-scroll-target="#idée-principale">Idée principale</a></li>
+  <li><a href="#exemple-détaillé" id="toc-exemple-détaillé" class="nav-link" data-scroll-target="#exemple-détaillé">Exemple détaillé</a></li>
+  <li><a href="#formalisation-mathématique" id="toc-formalisation-mathématique" class="nav-link" data-scroll-target="#formalisation-mathématique">Formalisation mathématique</a>
+  <ul class="collapse">
+  <li><a href="#fonction-de-perte-par-terme" id="toc-fonction-de-perte-par-terme" class="nav-link" data-scroll-target="#fonction-de-perte-par-terme">Fonction de perte par terme</a></li>
+  <li><a href="#perte-globale-sur-le-corpus" id="toc-perte-globale-sur-le-corpus" class="nav-link" data-scroll-target="#perte-globale-sur-le-corpus">Perte globale sur le corpus</a></li>
+  <li><a href="#optimisation" id="toc-optimisation" class="nav-link" data-scroll-target="#optimisation">Optimisation</a></li>
+  </ul></li>
+  <li><a href="#architecture-du-réseau-word2vec-cbow" id="toc-architecture-du-réseau-word2vec-cbow" class="nav-link" data-scroll-target="#architecture-du-réseau-word2vec-cbow">Architecture du réseau Word2Vec (CBoW)</a>
+  <ul class="collapse">
+  <li><a href="#couche-dentrée-input-layer" id="toc-couche-dentrée-input-layer" class="nav-link" data-scroll-target="#couche-dentrée-input-layer">Couche d’entrée (Input Layer)</a></li>
+  <li><a href="#couche-de-projection-couche-cachée-hidden-layer" id="toc-couche-de-projection-couche-cachée-hidden-layer" class="nav-link" data-scroll-target="#couche-de-projection-couche-cachée-hidden-layer">Couche de projection / couche cachée (Hidden Layer)</a></li>
+  <li><a href="#couche-de-sortie-output-layer" id="toc-couche-de-sortie-output-layer" class="nav-link" data-scroll-target="#couche-de-sortie-output-layer">Couche de sortie (Output Layer)</a></li>
+  </ul></li>
+  <li><a href="#la-fonction-softmax" id="toc-la-fonction-softmax" class="nav-link" data-scroll-target="#la-fonction-softmax">La fonction Softmax</a>
   <ul class="collapse">
   <li><a href="#définition" id="toc-définition" class="nav-link" data-scroll-target="#définition">Définition</a></li>
-  </ul></li>
-  <li><a href="#fréquence-inverse-de-document-inverse-document-frequency-idf" id="toc-fréquence-inverse-de-document-inverse-document-frequency-idf" class="nav-link" data-scroll-target="#fréquence-inverse-de-document-inverse-document-frequency-idf">Fréquence Inverse de Document (Inverse Document Frequency, IDF)</a>
-  <ul class="collapse">
-  <li><a href="#définition-1" id="toc-définition-1" class="nav-link" data-scroll-target="#définition-1">Définition</a></li>
   <li><a href="#interprétation" id="toc-interprétation" class="nav-link" data-scroll-target="#interprétation">Interprétation</a></li>
   </ul></li>
-  <li><a href="#schéma-de-pondération-tfidf" id="toc-schéma-de-pondération-tfidf" class="nav-link" data-scroll-target="#schéma-de-pondération-tfidf">Schéma de pondération TF·IDF</a>
+  <li><a href="#softmax-hiérarchique-hierarchical-softmax" id="toc-softmax-hiérarchique-hierarchical-softmax" class="nav-link" data-scroll-target="#softmax-hiérarchique-hierarchical-softmax">Softmax hiérarchique (Hierarchical Softmax)</a>
   <ul class="collapse">
-  <li><a href="#définition-du-poids" id="toc-définition-du-poids" class="nav-link" data-scroll-target="#définition-du-poids">Définition du poids</a></li>
-  <li><a href="#la-matrice-terme-document" id="toc-la-matrice-terme-document" class="nav-link" data-scroll-target="#la-matrice-terme-document">La matrice terme-document</a></li>
-  <li><a href="#embedding-des-documents" id="toc-embedding-des-documents" class="nav-link" data-scroll-target="#embedding-des-documents">Embedding des documents</a></li>
-  <li><a href="#embedding-des-termes" id="toc-embedding-des-termes" class="nav-link" data-scroll-target="#embedding-des-termes">Embedding des termes</a></li>
+  <li><a href="#problème" id="toc-problème" class="nav-link" data-scroll-target="#problème">Problème</a></li>
+  <li><a href="#solution-arbre-hiérarchique" id="toc-solution-arbre-hiérarchique" class="nav-link" data-scroll-target="#solution-arbre-hiérarchique">Solution : arbre hiérarchique</a></li>
   </ul></li>
-  <li><a href="#exemple-nuage-de-tags-tag-cloud" id="toc-exemple-nuage-de-tags-tag-cloud" class="nav-link" data-scroll-target="#exemple-nuage-de-tags-tag-cloud">Exemple : nuage de tags (Tag Cloud)</a></li>
-  <li><a href="#géométrie-de-lembedding-tfidf" id="toc-géométrie-de-lembedding-tfidf" class="nav-link" data-scroll-target="#géométrie-de-lembedding-tfidf">Géométrie de l’embedding TF·IDF</a>
+  </ul></li>
+  <li><a href="#le-modèle-skip-gram" id="toc-le-modèle-skip-gram" class="nav-link" data-scroll-target="#le-modèle-skip-gram">Le modèle Skip-gram</a>
   <ul class="collapse">
-  <li><a href="#interprétation-vectorielle" id="toc-interprétation-vectorielle" class="nav-link" data-scroll-target="#interprétation-vectorielle">Interprétation vectorielle</a></li>
-  <li><a href="#rôle-de-chaque-facteur" id="toc-rôle-de-chaque-facteur" class="nav-link" data-scroll-target="#rôle-de-chaque-facteur">Rôle de chaque facteur</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#modèles-de-récupération-de-base" id="toc-modèles-de-récupération-de-base" class="nav-link" data-scroll-target="#modèles-de-récupération-de-base">Modèles de Récupération de Base</a>
+  <li><a href="#principe-inversion-de-la-prédiction" id="toc-principe-inversion-de-la-prédiction" class="nav-link" data-scroll-target="#principe-inversion-de-la-prédiction">Principe : inversion de la prédiction</a></li>
+  <li><a href="#architecture-skip-gram" id="toc-architecture-skip-gram" class="nav-link" data-scroll-target="#architecture-skip-gram">Architecture Skip-gram</a></li>
+  <li><a href="#comparaison-cbow-vs-skip-gram" id="toc-comparaison-cbow-vs-skip-gram" class="nav-link" data-scroll-target="#comparaison-cbow-vs-skip-gram">Comparaison CBoW vs Skip-gram</a></li>
+  <li><a href="#utilisation-des-modèles-entraînés" id="toc-utilisation-des-modèles-entraînés" class="nav-link" data-scroll-target="#utilisation-des-modèles-entraînés">Utilisation des modèles entraînés</a>
   <ul class="collapse">
-  <li><a href="#vue-densemble" id="toc-vue-densemble" class="nav-link" data-scroll-target="#vue-densemble">Vue d’ensemble</a></li>
+  <li><a href="#application-à-la-recherche-documentaire" id="toc-application-à-la-recherche-documentaire" class="nav-link" data-scroll-target="#application-à-la-recherche-documentaire">Application à la recherche documentaire</a></li>
+  <li><a href="#mesure-de-similarité" id="toc-mesure-de-similarité" class="nav-link" data-scroll-target="#mesure-de-similarité">Mesure de similarité</a></li>
   </ul></li>
-  <li><a href="#modèle-vectoriel-vector-space-retrieval" id="toc-modèle-vectoriel-vector-space-retrieval" class="nav-link" data-scroll-target="#modèle-vectoriel-vector-space-retrieval">Modèle Vectoriel (Vector Space Retrieval)</a>
+  </ul></li>
+  <li><a href="#glove-global-vectors-for-word-representation" id="toc-glove-global-vectors-for-word-representation" class="nav-link" data-scroll-target="#glove-global-vectors-for-word-representation">GloVe : Global Vectors for Word Representation</a>
   <ul class="collapse">
-  <li><a href="#principe-1" id="toc-principe-1" class="nav-link" data-scroll-target="#principe-1">Principe</a></li>
-  <li><a href="#première-tentative-distance-euclidienne" id="toc-première-tentative-distance-euclidienne" class="nav-link" data-scroll-target="#première-tentative-distance-euclidienne">Première tentative : distance euclidienne</a></li>
-  <li><a href="#notion-de-similarité-ensembliste" id="toc-notion-de-similarité-ensembliste" class="nav-link" data-scroll-target="#notion-de-similarité-ensembliste">Notion de similarité ensembliste</a></li>
-  <li><a href="#mesures-de-similarité" id="toc-mesures-de-similarité" class="nav-link" data-scroll-target="#mesures-de-similarité">Mesures de similarité</a></li>
-  <li><a href="#similarité-cosinus-cosine-similarity" id="toc-similarité-cosinus-cosine-similarity" class="nav-link" data-scroll-target="#similarité-cosinus-cosine-similarity">Similarité cosinus (Cosine Similarity)</a>
+  <li><a href="#motivation-et-critique-de-word2vec" id="toc-motivation-et-critique-de-word2vec" class="nav-link" data-scroll-target="#motivation-et-critique-de-word2vec">Motivation et critique de Word2Vec</a></li>
+  <li><a href="#intuition-probabiliste" id="toc-intuition-probabiliste" class="nav-link" data-scroll-target="#intuition-probabiliste">Intuition probabiliste</a>
   <ul class="collapse">
-  <li><a href="#définition-2" id="toc-définition-2" class="nav-link" data-scroll-target="#définition-2">Définition</a></li>
-  <li><a href="#propriétés" id="toc-propriétés" class="nav-link" data-scroll-target="#propriétés">Propriétés</a></li>
+  <li><a href="#exemple-illustratif" id="toc-exemple-illustratif" class="nav-link" data-scroll-target="#exemple-illustratif">Exemple illustratif</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#modèles-probabilistes-probabilistic-retrieval-models" id="toc-modèles-probabilistes-probabilistic-retrieval-models" class="nav-link" data-scroll-target="#modèles-probabilistes-probabilistic-retrieval-models">Modèles Probabilistes (Probabilistic Retrieval Models)</a>
+  <li><a href="#le-modèle-glove" id="toc-le-modèle-glove" class="nav-link" data-scroll-target="#le-modèle-glove">Le modèle GloVe</a>
   <ul class="collapse">
-  <li><a href="#principe-général-1" id="toc-principe-général-1" class="nav-link" data-scroll-target="#principe-général-1">Principe général</a></li>
-  <li><a href="#principe-de-classement-par-probabilité" id="toc-principe-de-classement-par-probabilité" class="nav-link" data-scroll-target="#principe-de-classement-par-probabilité">Principe de classement par probabilité</a>
+  <li><a href="#construction-formelle" id="toc-construction-formelle" class="nav-link" data-scroll-target="#construction-formelle">Construction formelle</a></li>
+  <li><a href="#propriété-remarquable-mesure-de-différence" id="toc-propriété-remarquable-mesure-de-différence" class="nav-link" data-scroll-target="#propriété-remarquable-mesure-de-différence">Propriété remarquable : mesure de différence</a></li>
+  </ul></li>
+  <li><a href="#fonction-de-perte-de-glove" id="toc-fonction-de-perte-de-glove" class="nav-link" data-scroll-target="#fonction-de-perte-de-glove">Fonction de perte de GloVe</a>
   <ul class="collapse">
-  <li><a href="#énoncé-robertson-1977" id="toc-énoncé-robertson-1977" class="nav-link" data-scroll-target="#énoncé-robertson-1977">Énoncé (Robertson, 1977)</a></li>
-  <li><a href="#formulation" id="toc-formulation" class="nav-link" data-scroll-target="#formulation">Formulation</a></li>
+  <li><a href="#objectif" id="toc-objectif" class="nav-link" data-scroll-target="#objectif">Objectif</a></li>
+  <li><a href="#formule" id="toc-formule" class="nav-link" data-scroll-target="#formule">Formule</a></li>
+  <li><a href="#la-fonction-de-pondération-psi" id="toc-la-fonction-de-pondération-psi" class="nav-link" data-scroll-target="#la-fonction-de-pondération-psi">La fonction de pondération <span class="math inline">\(\psi\)</span></a></li>
   </ul></li>
-  <li><a href="#estimation-itérative-de-lensemble-mathcalr" id="toc-estimation-itérative-de-lensemble-mathcalr" class="nav-link" data-scroll-target="#estimation-itérative-de-lensemble-mathcalr">Estimation itérative de l’ensemble <span class="math inline">\(\mathcal{R}\)</span></a></li>
-  <li><a href="#décision-bayésienne" id="toc-décision-bayésienne" class="nav-link" data-scroll-target="#décision-bayésienne">Décision Bayésienne</a>
+  <li><a href="#propriétés-des-plongements-glove" id="toc-propriétés-des-plongements-glove" class="nav-link" data-scroll-target="#propriétés-des-plongements-glove">Propriétés des plongements GloVe</a></li>
+  </ul></li>
+  <li><a href="#comparaison-des-modèles-de-plongement" id="toc-comparaison-des-modèles-de-plongement" class="nav-link" data-scroll-target="#comparaison-des-modèles-de-plongement">Comparaison des modèles de plongement</a>
   <ul class="collapse">
-  <li><a href="#problème-de-seuil" id="toc-problème-de-seuil" class="nav-link" data-scroll-target="#problème-de-seuil">Problème de seuil</a></li>
-  <li><a href="#application-du-théorème-de-bayes" id="toc-application-du-théorème-de-bayes" class="nav-link" data-scroll-target="#application-du-théorème-de-bayes">Application du théorème de Bayes</a></li>
+  <li><a href="#tableau-récapitulatif" id="toc-tableau-récapitulatif" class="nav-link" data-scroll-target="#tableau-récapitulatif">Tableau récapitulatif</a></li>
+  <li><a href="#pourquoi-les-modèles-neuronaux-capturent-ils-des-relations-non-linéaires" id="toc-pourquoi-les-modèles-neuronaux-capturent-ils-des-relations-non-linéaires" class="nav-link" data-scroll-target="#pourquoi-les-modèles-neuronaux-capturent-ils-des-relations-non-linéaires">Pourquoi les modèles neuronaux capturent-ils des relations non-linéaires ?</a></li>
+  <li><a href="#différences-fondamentales-entre-word2vec-et-glove" id="toc-différences-fondamentales-entre-word2vec-et-glove" class="nav-link" data-scroll-target="#différences-fondamentales-entre-word2vec-et-glove">Différences fondamentales entre Word2Vec et GloVe</a></li>
   </ul></li>
-  <li><a href="#régression-logistique-pour-la-ri" id="toc-régression-logistique-pour-la-ri" class="nav-link" data-scroll-target="#régression-logistique-pour-la-ri">Régression Logistique pour la RI</a>
+  <li><a href="#utilisation-pratique-des-plongements" id="toc-utilisation-pratique-des-plongements" class="nav-link" data-scroll-target="#utilisation-pratique-des-plongements">Utilisation pratique des plongements</a>
   <ul class="collapse">
-  <li><a href="#modèle" id="toc-modèle" class="nav-link" data-scroll-target="#modèle">Modèle</a></li>
-  <li><a href="#apprentissage" id="toc-apprentissage" class="nav-link" data-scroll-target="#apprentissage">Apprentissage</a></li>
-  <li><a href="#avantages-et-limites-1" id="toc-avantages-et-limites-1" class="nav-link" data-scroll-target="#avantages-et-limites-1">Avantages et limites</a></li>
-  </ul></li>
-  <li><a href="#récupération-par-indépendance-binaire-binary-independence-retrieval-bir" id="toc-récupération-par-indépendance-binaire-binary-independence-retrieval-bir" class="nav-link" data-scroll-target="#récupération-par-indépendance-binaire-binary-independence-retrieval-bir">Récupération par Indépendance Binaire (Binary Independence Retrieval, BIR)</a>
+  <li><a href="#de-lentraînement-à-lapplication" id="toc-de-lentraînement-à-lapplication" class="nav-link" data-scroll-target="#de-lentraînement-à-lapplication">De l’entraînement à l’application</a>
   <ul class="collapse">
-  <li><a href="#modèle-1" id="toc-modèle-1" class="nav-link" data-scroll-target="#modèle-1">Modèle</a></li>
-  <li><a href="#décomposition" id="toc-décomposition" class="nav-link" data-scroll-target="#décomposition">Décomposition</a></li>
-  <li><a href="#simplification-algébrique" id="toc-simplification-algébrique" class="nav-link" data-scroll-target="#simplification-algébrique">Simplification algébrique</a></li>
-  <li><a href="#estimation-des-probabilités" id="toc-estimation-des-probabilités" class="nav-link" data-scroll-target="#estimation-des-probabilités">Estimation des probabilités</a></li>
+  <li><a href="#entraînement" id="toc-entraînement" class="nav-link" data-scroll-target="#entraînement">Entraînement</a></li>
+  <li><a href="#modèles-pré-entraînés-pre-trained-models" id="toc-modèles-pré-entraînés-pre-trained-models" class="nav-link" data-scroll-target="#modèles-pré-entraînés-pre-trained-models">Modèles pré-entraînés (Pre-trained Models)</a></li>
+  <li><a href="#représentation-de-documents" id="toc-représentation-de-documents" class="nav-link" data-scroll-target="#représentation-de-documents">Représentation de documents</a></li>
   </ul></li>
-  <li><a href="#le-modèle-rsj-et-la-formule-bm25" id="toc-le-modèle-rsj-et-la-formule-bm25" class="nav-link" data-scroll-target="#le-modèle-rsj-et-la-formule-bm25">Le modèle RSJ et la formule BM25</a>
+  </ul></li>
+  <li><a href="#biais-et-limites-des-plongements" id="toc-biais-et-limites-des-plongements" class="nav-link" data-scroll-target="#biais-et-limites-des-plongements">Biais et limites des plongements</a>
   <ul class="collapse">
-  <li><a href="#robertson-sparck-jones-rsj" id="toc-robertson-sparck-jones-rsj" class="nav-link" data-scroll-target="#robertson-sparck-jones-rsj">Robertson-Sparck-Jones (RSJ)</a></li>
-  <li><a href="#bm25-best-match-25-okapi" id="toc-bm25-best-match-25-okapi" class="nav-link" data-scroll-target="#bm25-best-match-25-okapi">BM25 (Best Match 25 / OKAPI)</a></li>
+  <li><a href="#biais-sociétaux-societal-biases" id="toc-biais-sociétaux-societal-biases" class="nav-link" data-scroll-target="#biais-sociétaux-societal-biases">Biais sociétaux (Societal Biases)</a></li>
+  <li><a href="#limitations-techniques" id="toc-limitations-techniques" class="nav-link" data-scroll-target="#limitations-techniques">Limitations techniques</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#indexation-sémantique-latente-latent-semantic-indexing-lsi" id="toc-indexation-sémantique-latente-latent-semantic-indexing-lsi" class="nav-link" data-scroll-target="#indexation-sémantique-latente-latent-semantic-indexing-lsi">Indexation Sémantique Latente (Latent Semantic Indexing, LSI)</a>
+  <li><a href="#vers-les-modèles-modernes" id="toc-vers-les-modèles-modernes" class="nav-link" data-scroll-target="#vers-les-modèles-modernes">Vers les modèles modernes</a>
   <ul class="collapse">
-  <li><a href="#limites-du-tfidf" id="toc-limites-du-tfidf" class="nav-link" data-scroll-target="#limites-du-tfidf">Limites du TF·IDF</a>
+  <li><a href="#prolongements-de-word2vec-et-glove" id="toc-prolongements-de-word2vec-et-glove" class="nav-link" data-scroll-target="#prolongements-de-word2vec-et-glove">Prolongements de Word2Vec et GloVe</a></li>
+  <li><a href="#ir-moderne-recherche-du-plus-proche-voisin" id="toc-ir-moderne-recherche-du-plus-proche-voisin" class="nav-link" data-scroll-target="#ir-moderne-recherche-du-plus-proche-voisin">IR moderne : recherche du plus proche voisin</a></li>
+  </ul></li>
+  <li><a href="#questions-dexamen" id="toc-questions-dexamen" class="nav-link" data-scroll-target="#questions-dexamen">Questions d’examen</a>
   <ul class="collapse">
-  <li><a href="#synonymie-synonymy" id="toc-synonymie-synonymy" class="nav-link" data-scroll-target="#synonymie-synonymy">Synonymie (Synonymy)</a></li>
-  <li><a href="#polysémie-polysemy" id="toc-polysémie-polysemy" class="nav-link" data-scroll-target="#polysémie-polysemy">Polysémie (Polysemy)</a></li>
+  <li><a href="#question-1-relations-non-linéaires" id="toc-question-1-relations-non-linéaires" class="nav-link" data-scroll-target="#question-1-relations-non-linéaires">Question 1 : Relations non-linéaires</a></li>
+  <li><a href="#question-2-différences-fondamentales" id="toc-question-2-différences-fondamentales" class="nav-link" data-scroll-target="#question-2-différences-fondamentales">Question 2 : Différences fondamentales</a></li>
+  <li><a href="#question-3-utilisation-du-plongement" id="toc-question-3-utilisation-du-plongement" class="nav-link" data-scroll-target="#question-3-utilisation-du-plongement">Question 3 : Utilisation du plongement</a></li>
+  <li><a href="#question-4-dimensionnalité" id="toc-question-4-dimensionnalité" class="nav-link" data-scroll-target="#question-4-dimensionnalité">Question 4 : Dimensionnalité</a></li>
+  <li><a href="#question-5-risque-de-relations-inappropriées" id="toc-question-5-risque-de-relations-inappropriées" class="nav-link" data-scroll-target="#question-5-risque-de-relations-inappropriées">Question 5 : Risque de relations inappropriées</a></li>
   </ul></li>
-  <li><a href="#vers-un-espace-de-concepts" id="toc-vers-un-espace-de-concepts" class="nav-link" data-scroll-target="#vers-un-espace-de-concepts">Vers un espace de concepts</a></li>
-  <li><a href="#rappel-décomposition-en-valeurs-singulières-svd" id="toc-rappel-décomposition-en-valeurs-singulières-svd" class="nav-link" data-scroll-target="#rappel-décomposition-en-valeurs-singulières-svd">Rappel : Décomposition en Valeurs Singulières (SVD)</a>
-  <ul class="collapse">
-  <li><a href="#définition-3" id="toc-définition-3" class="nav-link" data-scroll-target="#définition-3">Définition</a></li>
-  <li><a href="#svd-tronquée-truncated-svd" id="toc-svd-tronquée-truncated-svd" class="nav-link" data-scroll-target="#svd-tronquée-truncated-svd">SVD tronquée (Truncated SVD)</a></li>
-  </ul></li>
-  <li><a href="#application-à-la-lsi" id="toc-application-à-la-lsi" class="nav-link" data-scroll-target="#application-à-la-lsi">Application à la LSI</a>
-  <ul class="collapse">
-  <li><a href="#embedding-de-termes-orthogonaux" id="toc-embedding-de-termes-orthogonaux" class="nav-link" data-scroll-target="#embedding-de-termes-orthogonaux">Embedding de termes orthogonaux</a></li>
-  <li><a href="#construction-via-svd" id="toc-construction-via-svd" class="nav-link" data-scroll-target="#construction-via-svd">Construction via SVD</a></li>
-  <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">Visualisation</a></li>
-  </ul></li>
-  <li><a href="#traitement-des-requêtes-en-espace-lsi" id="toc-traitement-des-requêtes-en-espace-lsi" class="nav-link" data-scroll-target="#traitement-des-requêtes-en-espace-lsi">Traitement des requêtes en espace LSI</a></li>
-  <li><a href="#choix-du-rang-k" id="toc-choix-du-rang-k" class="nav-link" data-scroll-target="#choix-du-rang-k">Choix du rang <span class="math inline">\(K\)</span></a></li>
-  <li><a href="#mise-à-jour-de-lindex-index-update" id="toc-mise-à-jour-de-lindex-index-update" class="nav-link" data-scroll-target="#mise-à-jour-de-lindex-index-update">Mise à jour de l’index (Index Update)</a>
-  <ul class="collapse">
-  <li><a href="#stratégie-de-mise-à-jour-exacte" id="toc-stratégie-de-mise-à-jour-exacte" class="nav-link" data-scroll-target="#stratégie-de-mise-à-jour-exacte">Stratégie de mise à jour exacte</a></li>
-  <li><a href="#stratégie-de-repliement-fold-in" id="toc-stratégie-de-repliement-fold-in" class="nav-link" data-scroll-target="#stratégie-de-repliement-fold-in">Stratégie de repliement (Fold-in)</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#résumé-général" id="toc-résumé-général" class="nav-link" data-scroll-target="#résumé-général">Résumé Général</a>
-  <ul class="collapse">
-  <li><a href="#récapitulatif-des-modèles" id="toc-récapitulatif-des-modèles" class="nav-link" data-scroll-target="#récapitulatif-des-modèles">Récapitulatif des modèles</a></li>
-  <li><a href="#progression-des-modèles" id="toc-progression-des-modèles" class="nav-link" data-scroll-target="#progression-des-modèles">Progression des modèles</a></li>
-  </ul></li>
-  <li><a href="#questions-dexamen" id="toc-questions-dexamen" class="nav-link" data-scroll-target="#questions-dexamen">Questions d’Examen</a></li>
-  <li><a href="#références" id="toc-références" class="nav-link" data-scroll-target="#références">Références</a></li>
+  <li><a href="#résumé-du-chapitre" id="toc-résumé-du-chapitre" class="nav-link" data-scroll-target="#résumé-du-chapitre">Résumé du chapitre</a></li>
   </ul>
 </nav>
     </div>
@@ -7815,9 +7795,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch2.html">Embeddings</a></li><li class="breadcrumb-item"><a href="./ch2.html">Détails</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch3.html">Embeddings Neuronaux</a></li><li class="breadcrumb-item"><a href="./ch3.html">Détails</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Représentation de l’information : les embeddings</h1>
+<h1 class="title">Plongements Neuronaux (Neural Embeddings)</h1>
 </div>
 
 
@@ -7834,741 +7814,659 @@ window.Quarto = {
 </header>
 
 
-<section id="motivation" class="level1">
-<h1>Motivation</h1>
-<section id="pourquoi-représenter-linformation" class="level2">
-<h2 class="anchored" data-anchor-id="pourquoi-représenter-linformation">Pourquoi représenter l’information ?</h2>
-<p>Les documents textuels se présentent naturellement comme des séquences de mots. Pour qu’un ordinateur puisse les traiter, les comparer et les classer, il faut les convertir en une forme numérique manipulable : un vecteur, une distribution, ou plus généralement un <strong>embedding</strong>.</p>
-<p>Un <strong>embedding</strong> est une fonction qui associe à chaque document (ou terme) une représentation mathématique dans un espace de features.</p>
-<p>💡 L’intuition fondamentale : passer d’une pile de documents textuels à une matrice de nombres, tout en préservant l’information pertinente pour la recherche.</p>
-</section>
-<section id="vocabulaire-et-termes" class="level2">
-<h2 class="anchored" data-anchor-id="vocabulaire-et-termes">Vocabulaire et termes</h2>
-<p>Avant de représenter les documents, il faut définir un <strong>vocabulaire</strong> (Vocabulary) :</p>
+<section id="motivation-pourquoi-des-plongements-neuronaux" class="level1">
+<h1>Motivation : Pourquoi des plongements neuronaux ?</h1>
+<section id="limites-des-approches-précédentes" class="level2">
+<h2 class="anchored" data-anchor-id="limites-des-approches-précédentes">Limites des approches précédentes</h2>
+<p>Les techniques classiques de représentation en recherche d’information (Information Retrieval) reposent sur des propriétés <strong>statistiques</strong> des termes, indépendamment de leur sens réel.</p>
+<p>Trois grandes familles ont précédé les plongements neuronaux :</p>
 <ul>
-<li>Les documents sont composés de <strong>termes</strong> (Terms) — typiquement des mots séparés par des espaces.</li>
-<li>On construit un vocabulaire de <span class="math inline">\(M\)</span> termes <strong>pertinents</strong> à partir de la collection.</li>
-<li>Ce vocabulaire sert de référentiel commun pour tous les documents et toutes les requêtes.</li>
+<li><p><strong>TF·IDF</strong> : pondère chaque terme par sa fréquence dans le document et son inverse dans la collection. C’est une représentation purement basée sur le <strong>contenu</strong> (Content-based).</p></li>
+<li><p><strong>Récupération probabiliste (Probabilistic Retrieval)</strong> : estime la probabilité qu’un terme soit pertinent pour une requête donnée. Elle reste également ancrée dans la fréquence des termes.</p></li>
+<li><p><strong>Indexation sémantique latente — ISL (Latent Semantic Indexing, LSI)</strong> : factorise la matrice termes-documents pour extraire des <strong>concepts latents linéaires</strong>. C’est une projection dans un espace de dimension réduite.</p></li>
 </ul>
-<p>⚠️ Le choix du vocabulaire est crucial : inclure des termes trop fréquents (« le », « de »…) pollue la représentation, tandis qu’un vocabulaire trop restreint fait perdre de l’information.</p>
+<p>💡 Dans tous ces cas, la représentation d’un terme est <strong>calculée à partir de ses propriétés intrinsèques</strong> (fréquences, co-occurrences globales) sans tenir compte du <strong>contexte local</strong> dans lequel il apparaît.</p>
 </section>
-<section id="structure-dun-système-de-ri-rappel" class="level2">
-<h2 class="anchored" data-anchor-id="structure-dun-système-de-ri-rappel">Structure d’un système de RI (Rappel)</h2>
-<p>Un système de Recherche d’Information (Information Retrieval, IR) fonctionne en deux phases principales :</p>
-<p><strong>Phase hors-ligne (Offline) :</strong></p>
-<ul>
-<li>Les documents sont collectés.</li>
-<li>Des <strong>features</strong> sont extraites (étape d’embedding).</li>
-<li>Un <strong>index</strong> est construit à partir de ces features pour permettre une recherche rapide.</li>
-</ul>
-<p><strong>Phase interactive (Interactive) :</strong></p>
-<ul>
-<li>L’utilisateur formule une <strong>requête</strong> (Query).</li>
-<li>La requête est traitée et projetée dans le même espace que les documents.</li>
-<li>Le moteur de recherche (Search Engine) calcule la pertinence de chaque document et produit une <strong>liste ordonnée</strong> (Ranked List).</li>
-<li>L’utilisateur peut fournir un <strong>retour de pertinence</strong> (Relevance Feedback) pour raffiner les résultats.</li>
-</ul>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    A[Documents] --&gt;|Feature extraction| B[Features]
-    B --&gt;|Indexing| C[Index]
-    D[Query] --&gt;|Query processing| E[Processed Query]
-    E --&gt; F[Search Engine]
-    C --&gt; F
-    F --&gt;|Rank by relevance| G[Ranked List]
-    G --&gt;|Fetching results| H[Display Results]
-    H --&gt;|Relevance Feedback| D
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="formalisation" class="level1">
-<h1>Formalisation</h1>
-<section id="notation-générale" class="level2">
-<h2 class="anchored" data-anchor-id="notation-générale">Notation générale</h2>
-<p>On utilise la notation suivante tout au long du cours :</p>
-<ul>
-<li><span class="math inline">\(N\)</span> : nombre de documents dans la collection.</li>
-<li><span class="math inline">\(d_j \in \mathbb{R}^{[\![N]\!]}\)</span> : représentation du <span class="math inline">\(j\)</span>-ième document. L’espace (et sa dimension) dépend du modèle choisi.</li>
-<li><span class="math inline">\(M\)</span> : taille du vocabulaire.</li>
-<li><span class="math inline">\(t_i \in \mathbb{R}^{[\![M]\!]}\)</span> : représentation du <span class="math inline">\(i\)</span>-ième terme.</li>
-<li><span class="math inline">\(\mathcal{I}_j \subseteq [\![M]\!]\)</span> : ensemble des indices <span class="math inline">\(i\)</span> des termes contenus dans le document <span class="math inline">\(j\)</span>.</li>
-</ul>
-</section>
-<section id="la-requête-et-la-valeur-de-statut-de-récupération" class="level2">
-<h2 class="anchored" data-anchor-id="la-requête-et-la-valeur-de-statut-de-récupération">La requête et la valeur de statut de récupération</h2>
-<ul>
-<li><span class="math inline">\(q\)</span> : représentation de la requête dans le même espace que les documents (dépend du modèle).</li>
-<li>L’indice <span class="math inline">\(q\)</span> est utilisé pour les éléments relatifs à la requête (ex. <span class="math inline">\(w_{iq}\)</span>).</li>
-</ul>
-<p>🧠 <strong>À retenir</strong> : Le défi central de la RI est de définir une fonction <strong>RSV (Retrieval Status Value)</strong> :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) \in \mathbb{R}\]</span></p>
-<p>qui mesure la pertinence du document <span class="math inline">\(d_j\)</span> par rapport à la requête <span class="math inline">\(q\)</span>. L’ordonnancement des documents selon leur RSV produit la liste de résultats.</p>
-<hr>
-</section>
-</section>
-<section id="le-modèle-booléen-boolean-model" class="level1">
-<h1>Le Modèle Booléen (Boolean Model)</h1>
-<section id="principe" class="level2">
-<h2 class="anchored" data-anchor-id="principe">Principe</h2>
-<p>Le modèle booléen est le modèle de représentation le plus simple. Il repose sur l’idée d’un <strong>encodage binaire</strong> (Binary Embedding / 1-hot encoding) de chaque terme du vocabulaire.</p>
-<p><strong>Représentation d’un terme :</strong></p>
-<p>Le <span class="math inline">\(i\)</span>-ième terme est représenté par un vecteur <span class="math inline">\(M\)</span>-dimensionnel :</p>
-<p><span class="math display">\[t_i = [\delta_{ik}]_{k=1}^{M}\]</span></p>
-<p>où <span class="math inline">\(\delta_{ik} = 1\)</span> si <span class="math inline">\(k = i\)</span>, <span class="math inline">\(0\)</span> sinon. C’est un vecteur avec un seul <span class="math inline">\(1\)</span> en position <span class="math inline">\(i\)</span>.</p>
-<p><strong>Représentation d’un document :</strong></p>
-<p>Un document <span class="math inline">\(d_j\)</span> est représenté par la disjonction (OR logique) des représentations de tous les termes qu’il contient :</p>
-<p><span class="math display">\[d_j = \bigvee_{i \in \mathcal{I}_j} t_i\]</span></p>
-<p>⚠️ Les termes et les documents se trouvent ainsi sur les <strong>sommets d’un hypercube</strong> <span class="math inline">\([0,1]^M\)</span>. Chaque coordonnée vaut <span class="math inline">\(0\)</span> ou <span class="math inline">\(1\)</span>.</p>
-</section>
-<section id="requêtes-booléennes" class="level2">
-<h2 class="anchored" data-anchor-id="requêtes-booléennes">Requêtes booléennes</h2>
-<p>Une requête <span class="math inline">\(q\)</span> est exprimée comme une <strong>expression logique générique</strong> utilisant les opérateurs AND (<span class="math inline">\(\wedge\)</span>), OR (<span class="math inline">\(\vee\)</span>) et NOT (<span class="math inline">\(\neg\)</span>).</p>
-<p>Pour l’évaluation, la requête est convertie en <strong>forme normale disjonctive</strong> (Disjunctive Normal Form, DNF), c’est-à-dire une disjonction de composantes conjonctives.</p>
-<p>La valeur RSV est binaire :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) = \bigvee_k (d_j \stackrel{?}{=} q_k)\]</span></p>
-<p>Un document <strong>correspond</strong> (<span class="math inline">\(\text{RSV} = 1\)</span>) ou <strong>ne correspond pas</strong> (<span class="math inline">\(\text{RSV} = 0\)</span>) à la requête.</p>
-</section>
-<section id="exemple-avec-3-termes" class="level2">
-<h2 class="anchored" data-anchor-id="exemple-avec-3-termes">Exemple avec 3 termes</h2>
-<p>Avec <span class="math inline">\(M = 3\)</span> termes : A (<span class="math inline">\(t_1 = 100\)</span>), B (<span class="math inline">\(t_2 = 010\)</span>), C (<span class="math inline">\(t_3 = 001\)</span>).</p>
-<p>Soit la requête <span class="math inline">\(q = A \wedge (B \vee \neg C)\)</span>.</p>
-<p><strong>Conversion en DNF :</strong></p>
-<p><span class="math display">\[q = (A \wedge B \wedge C) \vee (A \wedge B \wedge \neg C) \vee (A \wedge \neg B \wedge \neg C)\]</span></p>
-<p><span class="math display">\[q = \underbrace{111}_{q_1} \vee \underbrace{110}_{q_2} \vee \underbrace{100}_{q_3}\]</span></p>
-<p><strong>Documents correspondants :</strong></p>
-<p>Tout document de la forme <span class="math inline">\(111\)</span>, <span class="math inline">\(110\)</span> ou <span class="math inline">\(100\)</span> satisfait la requête.</p>
-<ul>
-<li>✅ AAA (→ <span class="math inline">\(100\)</span>), AAB (→ <span class="math inline">\(110\)</span>), ABCC (→ <span class="math inline">\(111\)</span>), ABBC (→ <span class="math inline">\(110\)</span>), A (→ <span class="math inline">\(100\)</span>)</li>
-<li>❌ CCC (→ <span class="math inline">\(001\)</span>), BCCC (→ <span class="math inline">\(011\)</span>), BBBB (→ <span class="math inline">\(010\)</span>)</li>
-</ul>
-<p>💡 La visualisation par diagramme de Venn est très utile : les régions colorées correspondent aux zones du cube qui satisfont la requête.</p>
-</section>
-<section id="exemple-concret" class="level2">
-<h2 class="anchored" data-anchor-id="exemple-concret">Exemple concret</h2>
-<p>Requête : <span class="math inline">\(q = (\text{Geneva} \wedge \text{particle}) \vee \text{CERN}\)</span></p>
-<ul>
-<li>✅ « Particle physics is well-studied in Geneva » → contient Geneva ET particle</li>
-<li>✅ « CERN leads the search for W boson » → contient CERN</li>
-<li>❌ « EU invests in searching for new particles » → contient particle mais pas Geneva ni CERN</li>
-<li>❌ « Geneva is a place for scientific research » → contient Geneva mais pas particle ni CERN</li>
-<li>❌ « The quick brown fox jumps over the lazy dog » → aucun terme pertinent</li>
-</ul>
-</section>
-<section id="avantages-et-limites" class="level2">
-<h2 class="anchored" data-anchor-id="avantages-et-limites">Avantages et limites</h2>
-<p><strong>Avantages (Pros) :</strong></p>
-<ul>
-<li>Modèle simple et formel.</li>
-<li>Requête explicite et stricte (similaire au SQL).</li>
-<li>Facile à implémenter.</li>
-</ul>
-<p><strong>Limites (Cons) :</strong></p>
-<ul>
-<li>Certaines requêtes sont difficiles à exprimer en logique booléenne.</li>
-<li>Correspondance binaire → sensible à la formulation exacte.</li>
-<li><strong>Pas d’ordonnancement</strong> parmi les documents pertinents ni parmi les non-pertinents.</li>
-<li>Peut retourner trop peu ou trop de documents.</li>
-<li>Probablement peu scalable.</li>
-</ul>
-<p>🧠 <strong>Besoins identifiés :</strong></p>
-<ul>
-<li>Un formalisme de requête plus flexible → <strong>Query-by-Example (QbE)</strong></li>
-<li>Un continuum de pertinence → <span class="math inline">\(\text{RSV}(d_j, q) \in [0, 1]\)</span></li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="le-modèle-sac-de-mots-bag-of-words" class="level1">
-<h1>Le Modèle Sac de Mots (Bag of Words)</h1>
-<section id="principe-général" class="level2">
-<h2 class="anchored" data-anchor-id="principe-général">Principe général</h2>
-<p>Le modèle <strong>Sac de Mots</strong> (Bag of Words, BoW) est une représentation dans laquelle :</p>
-<ul>
-<li>Les termes sont les unités constituant le vocabulaire (ex. mots séparés par des espaces).</li>
-<li>Les termes sont considérés comme des <strong>entités indépendantes et non ordonnées</strong>.</li>
-<li>Les termes apparaissent avec des <strong>multiplicités</strong> (fréquences) → on parle de « sac » (bag) plutôt que d’ensemble (set).</li>
-</ul>
-<p>⚠️ La structure du document (paragraphes, titre, ordre des mots…) est <strong>perdue</strong>. Seules les fréquences d’apparition des termes sont conservées.</p>
-<p>💡 Bien que présenté ici pour le texte, le modèle BoW s’applique à d’autres médias (images, audio) : les termes deviennent alors des « patterns » génériques.</p>
-</section>
-<section id="fréquence-des-termes-term-frequency-tf" class="level2">
-<h2 class="anchored" data-anchor-id="fréquence-des-termes-term-frequency-tf">Fréquence des termes (Term Frequency, TF)</h2>
-<section id="définition" class="level3">
-<h3 class="anchored" data-anchor-id="définition">Définition</h3>
-<p>Plutôt que de simplement noter la présence ou l’absence d’un terme (encodage binaire), on compte ses <strong>occurrences</strong>.</p>
-<p><strong>Hypothèse fondatrice :</strong> Plus un mot apparaît fréquemment dans un document, plus ce mot est représentatif du document.</p>
-<p>On définit :</p>
-<ul>
-<li><span class="math inline">\(f_{ij}\)</span> : nombre brut d’occurrences du terme <span class="math inline">\(i\)</span> dans le document <span class="math inline">\(j\)</span>.</li>
-<li><span class="math inline">\(\text{tf}_{ij}\)</span> : fréquence normalisée du terme <span class="math inline">\(i\)</span> dans le document <span class="math inline">\(j\)</span> :</li>
-</ul>
-<p><span class="math display">\[\text{tf}_{ij} \stackrel{\text{def}}{=} \frac{f_{ij}}{\max_k f_{kj}}\]</span></p>
-<p>La normalisation par le terme le plus fréquent garantit <span class="math inline">\(\max_i \text{tf}_{ij} = 1\)</span>.</p>
-<p>💡 Cette normalisation permet de comparer des documents de longueurs différentes sur un pied d’égalité.</p>
-</section>
-</section>
-<section id="fréquence-inverse-de-document-inverse-document-frequency-idf" class="level2">
-<h2 class="anchored" data-anchor-id="fréquence-inverse-de-document-inverse-document-frequency-idf">Fréquence Inverse de Document (Inverse Document Frequency, IDF)</h2>
-<section id="définition-1" class="level3">
-<h3 class="anchored" data-anchor-id="définition-1">Définition</h3>
-<p>La TF seule ne suffit pas : un terme très fréquent dans <strong>tous</strong> les documents (ex. « le », « est »…) n’est pas discriminant.</p>
-<p>On introduit l’<strong>IDF</strong> pour mesurer le <strong>pouvoir discriminant</strong> du terme <span class="math inline">\(i\)</span> dans la collection :</p>
-<p><span class="math display">\[\text{idf}_i \stackrel{\text{def}}{=} \log \left(\frac{n_i}{N}\right)^{-1} = \log \frac{N}{n_i}\]</span></p>
-<p>où <span class="math inline">\(n_i\)</span> est le nombre de documents contenant le terme <span class="math inline">\(i\)</span>.</p>
-</section>
-<section id="interprétation" class="level3">
-<h3 class="anchored" data-anchor-id="interprétation">Interprétation</h3>
-<ul>
-<li>Si un terme est présent dans <strong>tous</strong> les documents (<span class="math inline">\(n_i \approx N\)</span>) → <span class="math inline">\(\text{idf}_i \approx 0\)</span> → non discriminant.</li>
-<li>Si un terme est présent dans <strong>très peu</strong> de documents (<span class="math inline">\(n_i \ll N\)</span>) → <span class="math inline">\(\text{idf}_i\)</span> est grand → très discriminant.</li>
-</ul>
-<p>💡 L’IDF pénalise les termes omniprésents et valorise les termes rares et spécifiques.</p>
-</section>
-</section>
-<section id="schéma-de-pondération-tfidf" class="level2">
-<h2 class="anchored" data-anchor-id="schéma-de-pondération-tfidf">Schéma de pondération TF·IDF</h2>
-<section id="définition-du-poids" class="level3">
-<h3 class="anchored" data-anchor-id="définition-du-poids">Définition du poids</h3>
-<p>Le <strong>poids</strong> (weight) du terme <span class="math inline">\(i\)</span> dans le document <span class="math inline">\(j\)</span> est :</p>
-<p><span class="math display">\[w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i\]</span></p>
-<p>C’est le schéma de pondération <strong>TF·IDF</strong>, et il constitue un embedding de documents et de termes.</p>
-</section>
-<section id="la-matrice-terme-document" class="level3">
-<h3 class="anchored" data-anchor-id="la-matrice-terme-document">La matrice terme-document</h3>
-<p>L’ensemble des poids forme la <strong>matrice terme-document</strong> <span class="math inline">\(W \in \mathbb{R}^{M \times N}\)</span> :</p>
-<p><span class="math display">\[W = \begin{pmatrix} w_{11} &amp; \cdots &amp; w_{1N} \\ \vdots &amp; w_{ij} &amp; \vdots \\ w_{M1} &amp; \cdots &amp; w_{MN} \end{pmatrix}\]</span></p>
-</section>
-<section id="embedding-des-documents" class="level3">
-<h3 class="anchored" data-anchor-id="embedding-des-documents">Embedding des documents</h3>
-<p>Le document <span class="math inline">\(j\)</span> est représenté par le vecteur colonne de <span class="math inline">\(W\)</span> :</p>
-<p><span class="math display">\[d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{ij}, \ldots, w_{Mj}]^T \in \mathbb{R}^M\]</span></p>
-</section>
-<section id="embedding-des-termes" class="level3">
-<h3 class="anchored" data-anchor-id="embedding-des-termes">Embedding des termes</h3>
-<p>Le terme <span class="math inline">\(i\)</span> est représenté par le vecteur ligne de <span class="math inline">\(W\)</span> (transposé) :</p>
-<p><span class="math display">\[t_i = (W_{i\cdot})^T = [w_{i1}, \ldots, w_{ij}, \ldots, w_{iN}]^T \in \mathbb{R}^N\]</span></p>
-<p>💡 Le terme est ainsi représenté par sa <strong>présence dans la collection</strong> : deux termes similaires auront des vecteurs proches dans <span class="math inline">\(\mathbb{R}^N\)</span>.</p>
-</section>
-</section>
-<section id="exemple-nuage-de-tags-tag-cloud" class="level2">
-<h2 class="anchored" data-anchor-id="exemple-nuage-de-tags-tag-cloud">Exemple : nuage de tags (Tag Cloud)</h2>
-<p>Un <strong>nuage de tags</strong> (Tag Cloud) est une visualisation directe du TF·IDF :</p>
-<ul>
-<li>La <strong>taille</strong> de chaque mot est proportionnelle à son poids <span class="math inline">\(w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i\)</span>.</li>
-<li>Les mots très fréquents dans un document <strong>et</strong> rares dans la collection apparaissent en grand.</li>
-<li>Les mots omniprésents dans la collection (ex. « photo ») apparaissent en petit malgré leur fréquence.</li>
-</ul>
-</section>
-<section id="géométrie-de-lembedding-tfidf" class="level2">
-<h2 class="anchored" data-anchor-id="géométrie-de-lembedding-tfidf">Géométrie de l’embedding TF·IDF</h2>
-<section id="interprétation-vectorielle" class="level3">
-<h3 class="anchored" data-anchor-id="interprétation-vectorielle">Interprétation vectorielle</h3>
-<p>Le document <span class="math inline">\(j\)</span> peut être vu comme une combinaison linéaire dans <span class="math inline">\(\mathbb{R}^M\)</span> :</p>
-<p><span class="math display">\[d_j = \sum_i w_{ij} e_i = \sum_i (\text{tf}_{ij} \cdot \text{idf}_i) e_i = \sum_i \text{tf}_{ij} \tau_i\]</span></p>
-<p>où <span class="math inline">\(\tau_i = \text{idf}_i \cdot e_i\)</span> est la <strong>base discriminante</strong> associée au terme <span class="math inline">\(i\)</span>.</p>
-</section>
-<section id="rôle-de-chaque-facteur" class="level3">
-<h3 class="anchored" data-anchor-id="rôle-de-chaque-facteur">Rôle de chaque facteur</h3>
-<ul>
-<li><strong><span class="math inline">\(\text{idf}_i\)</span></strong> (commun à tous les documents) : <strong>scale</strong> la dimension <span class="math inline">\(i\)</span> selon le pouvoir discriminant du terme. Il transforme la base canonique <span class="math inline">\(\{e_i\}\)</span> en une base pondérée <span class="math inline">\(\{\tau_i\}\)</span>.</li>
-<li><strong><span class="math inline">\(\text{tf}_{ij}\)</span></strong> : constitue la <strong>vraie coordonnée</strong> du document <span class="math inline">\(j\)</span> dans cette base discriminante.</li>
-</ul>
-<p>💡 Géométriquement, l’IDF étire ou contracte les axes de l’espace selon l’importance des termes. Les coordonnées dans cet espace étiré sont les fréquences TF.</p>
-<hr>
-</section>
-</section>
-</section>
-<section id="modèles-de-récupération-de-base" class="level1">
-<h1>Modèles de Récupération de Base</h1>
-<section id="vue-densemble" class="level2">
-<h2 class="anchored" data-anchor-id="vue-densemble">Vue d’ensemble</h2>
-<p>Les embeddings TF·IDF servent de fondation pour plusieurs modèles de récupération classiques :</p>
-<ul>
-<li><strong>Modèle vectoriel</strong> (Vector Space Retrieval) : similarité géométrique par cosinus.</li>
-<li><strong>Récupération par indépendance binaire</strong> (Binary Independence Retrieval, BIR) : estimation probabiliste de la pertinence → conduit au modèle BM25.</li>
-</ul>
-<p>Ces modèles s’appliquent au texte mais aussi aux médias (images, audio) via des embeddings adaptés.</p>
-<hr>
-</section>
-</section>
-<section id="modèle-vectoriel-vector-space-retrieval" class="level1">
-<h1>Modèle Vectoriel (Vector Space Retrieval)</h1>
-<section id="principe-1" class="level2">
-<h2 class="anchored" data-anchor-id="principe-1">Principe</h2>
-<p>Avec le schéma TF·IDF, chaque document <span class="math inline">\(d_j\)</span> est un vecteur de <span class="math inline">\(\mathbb{R}^M\)</span>.</p>
-<p>On peut donc utiliser l’<strong>algèbre de cet espace vectoriel</strong> pour mesurer la similarité entre documents et requêtes.</p>
-<p><strong>Paradigme Query-by-Example (QbE) :</strong></p>
-<p>La requête est traitée comme un <strong>document exemple</strong>. Elle est projetée dans le même espace <span class="math inline">\(\mathbb{R}^M\)</span> avec le même embedding TF·IDF :</p>
-<p><span class="math display">\[q \in \mathbb{R}^M\]</span></p>
-<p>Le RSV est alors calculé à partir de la <strong>similarité géométrique</strong> entre <span class="math inline">\(d_j\)</span> et <span class="math inline">\(q\)</span>.</p>
-</section>
-<section id="première-tentative-distance-euclidienne" class="level2">
-<h2 class="anchored" data-anchor-id="première-tentative-distance-euclidienne">Première tentative : distance euclidienne</h2>
-<p>Une première idée serait :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) = \|q - d_j\|\]</span></p>
-<p>Cependant, cette mesure est sensible à la <strong>norme</strong> des vecteurs (longueur des documents). Un long document contenant les mêmes termes qu’un court document aurait une distance plus grande, ce qui n’est pas souhaitable.</p>
-</section>
-<section id="notion-de-similarité-ensembliste" class="level2">
-<h2 class="anchored" data-anchor-id="notion-de-similarité-ensembliste">Notion de similarité ensembliste</h2>
-<p>L’embedding BoW repose sur l’idée de <strong>sac de termes</strong> : la similarité devrait refléter l’<strong>intersection</strong> des ensembles de termes.</p>
-<p>En notation ensembliste, si <span class="math inline">\(\hat{d}_j\)</span> est l’ensemble des termes du document <span class="math inline">\(j\)</span> et <span class="math inline">\(\hat{q}\)</span> l’ensemble des termes de la requête :</p>
-<p><span class="math display">\[\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}|\]</span></p>
-<p><strong>Version algébrique</strong> (dans un espace binaire) :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) = \sum_i w_{ij} w_{iq} = w_{\cdot j}^T w_{\cdot q} = \langle d_j, q \rangle\]</span></p>
-<p>avec <span class="math inline">\(w_{ij} = 1\)</span> si le terme <span class="math inline">\(i\)</span> est dans le document <span class="math inline">\(j\)</span>, <span class="math inline">\(0\)</span> sinon.</p>
-</section>
-<section id="mesures-de-similarité" class="level2">
-<h2 class="anchored" data-anchor-id="mesures-de-similarité">Mesures de similarité</h2>
-<p>En passant à l’embedding continu (TF·IDF), on obtient plusieurs mesures de similarité par extension de la notion d’intersection :</p>
+<section id="vers-les-plongements-basés-sur-le-contexte" class="level2">
+<h2 class="anchored" data-anchor-id="vers-les-plongements-basés-sur-le-contexte">Vers les plongements basés sur le contexte</h2>
+<p>L’idée centrale des plongements neuronaux est radicalement différente :</p>
+<blockquote class="blockquote">
+<p>La signification d’un terme est <strong>déterminée par le contexte</strong> dans lequel il apparaît.</p>
+</blockquote>
+<p>Cette intuition, issue de la linguistique distributionnelle, est résumée par la maxime de J.R. Firth (1957) : <em>“You shall know a word by the company it keeps.”</em></p>
+<p>💡 <strong>Intuition</strong> : deux mots qui apparaissent systématiquement dans les mêmes contextes (par exemple, “rapide” et “véloce”) partagent probablement une signification proche. Leur représentation vectorielle devrait donc être similaire.</p>
+<section id="deux-grandes-familles-de-plongements" class="level3">
+<h3 class="anchored" data-anchor-id="deux-grandes-familles-de-plongements">Deux grandes familles de plongements</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 40%">
-<col style="width: 40%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 38%">
+<col style="width: 38%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Mesure</th>
-<th>Formule continue</th>
-<th>Formule binaire</th>
+<th>Type</th>
+<th>Base</th>
+<th>Exemple de modèle</th>
+<th>Relation capturée</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Matching</strong></td>
-<td><span class="math inline">\(\langle d_j, q \rangle\)</span></td>
-<td><span class="math inline">\(\|\hat{d}_j \cap \hat{q}\|\)</span></td>
+<td>Basé sur le contenu (Content-based)</td>
+<td>Fréquence des termes</td>
+<td>TF·IDF, LSI</td>
+<td>Corrélation linéaire</td>
 </tr>
 <tr class="even">
-<td><strong>Cosinus</strong></td>
-<td><span class="math inline">\(\frac{\langle d_j, q \rangle}{\|d_j\| \|q\|}\)</span></td>
-<td><span class="math inline">\(\frac{\|\hat{d}_j \cap \hat{q}\|}{|\hat{d}_j|^{1/2} |\hat{q}|^{1/2}}\)</span></td>
+<td>Basé sur le contexte (Context-based)</td>
+<td>Co-occurrences locales</td>
+<td>Word2Vec, GloVe</td>
+<td>Relations non-linéaires</td>
 </tr>
+</tbody>
+</table>
+<p>🧠 <strong>À retenir</strong> : les plongements contextuels utilisent le <strong>machine learning</strong> pour apprendre à <strong>prédire</strong> un terme à partir de son voisinage, ce qui permet de capturer des structures sémantiques complexes.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="word2vec" class="level1">
+<h1>Word2Vec</h1>
+<section id="principe-général" class="level2">
+<h2 class="anchored" data-anchor-id="principe-général">Principe général</h2>
+<p>Word2Vec est une famille de modèles qui apprend des représentations vectorielles de mots en exploitant leur contexte d’occurrence dans un corpus textuel.</p>
+<p><strong>Idée centrale</strong> : les termes qui co-apparaissent fréquemment dans les mêmes contextes reçoivent des représentations vectorielles proches.</p>
+<section id="intuition-progressive" class="level3">
+<h3 class="anchored" data-anchor-id="intuition-progressive">Intuition progressive</h3>
+<p>Pour comprendre ce que signifie “utiliser le contexte”, considérons ces niveaux de contrainte :</p>
+<ol type="1">
+<li><p><strong>Choix libre</strong> — “La personne est …” → n’importe quel mot est possible.</p></li>
+<li><p><strong>Choix contraint</strong> — “La personne est … rapide” → le champ lexical est restreint.</p></li>
+<li><p><strong>Remplacement guidé</strong> — “Le chat joue avec la <strong>balle</strong>” → on peut remplacer <em>balle</em> par <em>peluche</em>, mais pas par <em>nuage</em>.</p></li>
+</ol>
+<p>💡 Plus le contexte est précis, plus le choix du terme cible est contraint. C’est exactement ce que Word2Vec cherche à modéliser.</p>
+<p>⚠️ Ce cadre est étroitement lié au traitement automatique du langage naturel (NLP) et notamment à l’analyse morpho-syntaxique (part-of-speech tagging) et aux syntagmes nominaux (noun phrases).</p>
+</section>
+</section>
+<section id="formulation-probabiliste" class="level2">
+<h2 class="anchored" data-anchor-id="formulation-probabiliste">Formulation probabiliste</h2>
+<p>Soit un vocabulaire fixé. On définit deux variables aléatoires :</p>
+<ul>
+<li><span class="math inline">\(W_T\)</span> : le terme <strong>cible</strong> (Target Word)</li>
+<li><span class="math inline">\(W_C\)</span> : un terme du <strong>contexte</strong> (Context Word)</li>
+</ul>
+<p>L’objectif du plongement est d’estimer la distribution conditionnelle :</p>
+<p><span class="math display">\[\mathbb{P}(W_T \mid W_C)\]</span></p>
+<p>pour tous les termes du vocabulaire.</p>
+<p>💡 En d’autres termes : <em>étant donné un mot de contexte, quelle est la probabilité que le mot cible soit <span class="math inline">\(w\)</span> ?</em></p>
+<hr>
+</section>
+</section>
+<section id="continuous-bag-of-words-cbow" class="level1">
+<h1>Continuous Bag of Words (CBoW)</h1>
+<section id="idée-principale" class="level2">
+<h2 class="anchored" data-anchor-id="idée-principale">Idée principale</h2>
+<p>Le modèle CBoW (Sac de Mots Continu) cherche à <strong>prédire un terme cible</strong> à partir de son contexte local.</p>
+<blockquote class="blockquote">
+<p><strong>Direction</strong> : contexte → terme cible</p>
+</blockquote>
+<p>Le principe opérationnel est le suivant :</p>
+<ol type="1">
+<li>Définir une <strong>fenêtre de contexte</strong> (window size) de taille <span class="math inline">\(m\)</span> autour d’un mot cible.</li>
+<li>Créer des paires <strong>(contexte, cible)</strong> à partir des co-occurrences observées.</li>
+<li>Entraîner un modèle pour <strong>apprendre <span class="math inline">\(\mathbb{P}(W_T \mid W_C)\)</span></strong>.</li>
+</ol>
+</section>
+<section id="exemple-détaillé" class="level2">
+<h2 class="anchored" data-anchor-id="exemple-détaillé">Exemple détaillé</h2>
+<p>Considérons la phrase célèbre :</p>
+<blockquote class="blockquote">
+<p><em>“All work and no play makes Jack a dull boy”</em></p>
+</blockquote>
+<p>Avec une <strong>fenêtre de taille 2</strong> (<span class="math inline">\(m = 2\)</span>) et le mot cible <span class="math inline">\(W_T = \text{&quot;play&quot;}\)</span> :</p>
+<ul>
+<li>Le contexte gauche (2 mots avant) : <em>“and”</em>, <em>“no”</em></li>
+<li>Le contexte droit (2 mots après) : <em>“makes”</em>, <em>“Jack”</em></li>
+</ul>
+<p>Les paires générées sont :</p>
+<pre><code>(&quot;play&quot;, &quot;and&quot;)
+(&quot;play&quot;, &quot;no&quot;)
+(&quot;play&quot;, &quot;makes&quot;)
+(&quot;play&quot;, &quot;Jack&quot;)</code></pre>
+<p>Chaque paire <span class="math inline">\((W_T, W_C)\)</span> constitue un exemple d’apprentissage pour estimer <span class="math inline">\(\mathbb{P}(W_T \mid W_C)\)</span>.</p>
+<p>💡 En pratique, on itère sur <strong>tous les mots</strong> du corpus comme cible potentielle, et on génère toutes les paires correspondantes.</p>
+</section>
+<section id="formalisation-mathématique" class="level2">
+<h2 class="anchored" data-anchor-id="formalisation-mathématique">Formalisation mathématique</h2>
+<section id="fonction-de-perte-par-terme" class="level3">
+<h3 class="anchored" data-anchor-id="fonction-de-perte-par-terme">Fonction de perte par terme</h3>
+<p>Pour un terme cible <span class="math inline">\(W_T\)</span> donné, la perte (loss) est la <strong>log-vraisemblance négative</strong> sur tous ses mots de contexte :</p>
+<p><span class="math display">\[\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log\,\mathbb{P}(W_T \mid W_C)\]</span></p>
+</section>
+<section id="perte-globale-sur-le-corpus" class="level3">
+<h3 class="anchored" data-anchor-id="perte-globale-sur-le-corpus">Perte globale sur le corpus</h3>
+<p>En supposant l’indépendance conditionnelle des termes (hypothèse i.i.d.), la perte globale sur le corpus <span class="math inline">\(\mathcal{X}\)</span> de taille <span class="math inline">\(N\)</span> est :</p>
+<p><span class="math display">\[\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N} \sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta)\]</span></p>
+</section>
+<section id="optimisation" class="level3">
+<h3 class="anchored" data-anchor-id="optimisation">Optimisation</h3>
+<p>L’objectif est de trouver les paramètres optimaux :</p>
+<p><span class="math display">\[\theta^* = \arg\min_{\theta}\; \mathcal{L}(\mathcal{X};\,\theta)\]</span></p>
+<p>💡 L’optimiseur est un <strong>réseau de neurones</strong> (Neural Network). Les paramètres <span class="math inline">\(\theta\)</span> sont les <strong>poids</strong> du réseau, appris par rétropropagation du gradient.</p>
+<p>⚠️ Pour rendre l’apprentissage tractable sur de grands vocabulaires, on utilise le <strong>Negative Sampling</strong> : plutôt que de calculer la distribution complète sur tout le vocabulaire à chaque étape, on compare la cible correcte à quelques exemples négatifs tirés aléatoirement.</p>
+</section>
+</section>
+<section id="architecture-du-réseau-word2vec-cbow" class="level2">
+<h2 class="anchored" data-anchor-id="architecture-du-réseau-word2vec-cbow">Architecture du réseau Word2Vec (CBoW)</h2>
+<p>Le réseau CBoW est composé de trois couches :</p>
+<section id="couche-dentrée-input-layer" class="level3">
+<h3 class="anchored" data-anchor-id="couche-dentrée-input-layer">Couche d’entrée (Input Layer)</h3>
+<ul>
+<li>Représentation one-hot des mots de contexte <span class="math inline">\(W_{C_1}, W_{C_2}, \ldots, W_{C_m}\)</span></li>
+<li>Dimension : <span class="math inline">\(N\)</span> (taille du vocabulaire)</li>
+</ul>
+</section>
+<section id="couche-de-projection-couche-cachée-hidden-layer" class="level3">
+<h3 class="anchored" data-anchor-id="couche-de-projection-couche-cachée-hidden-layer">Couche de projection / couche cachée (Hidden Layer)</h3>
+<ul>
+<li>Les encodages des mots de contexte sont <strong>multipliés par la matrice de poids <span class="math inline">\(W\)</span></strong> (dimension <span class="math inline">\(N \times C\)</span>, où <span class="math inline">\(C\)</span> est la dimension du plongement)</li>
+<li>La couche cachée est la <strong>somme</strong> (ou moyenne) des vecteurs de contexte projetés</li>
+<li>Vecteur résultant : <span class="math inline">\(v_C\)</span> de dimension <span class="math inline">\(C\)</span></li>
+</ul>
+</section>
+<section id="couche-de-sortie-output-layer" class="level3">
+<h3 class="anchored" data-anchor-id="couche-de-sortie-output-layer">Couche de sortie (Output Layer)</h3>
+<ul>
+<li>Le vecteur caché est multiplié par une seconde matrice <span class="math inline">\(W&#39;\)</span> (dimension <span class="math inline">\(C \times N\)</span>)</li>
+<li>Une fonction <strong>softmax</strong> produit une distribution de probabilité sur le vocabulaire</li>
+<li>Le terme prédit correspond à la valeur maximale</li>
+</ul>
+<p>🧠 <strong>À retenir</strong> : les paramètres appris sont <span class="math inline">\(\theta = [W, W&#39;]\)</span>. La probabilité est approximée par :</p>
+<p><span class="math display">\[\mathbb{P}(W_T \mid W_C) \;\sim\; v_T^{\prime\,\top}\, v_C\]</span></p>
+<p>où <span class="math inline">\(v_C\)</span> est l’encodage du contexte via <span class="math inline">\(W\)</span>, et <span class="math inline">\(v_T&#39;\)</span> est la colonne correspondant à <span class="math inline">\(W_T\)</span> dans <span class="math inline">\(W&#39;\)</span>.</p>
+</section>
+</section>
+<section id="la-fonction-softmax" class="level2">
+<h2 class="anchored" data-anchor-id="la-fonction-softmax">La fonction Softmax</h2>
+<section id="définition" class="level3">
+<h3 class="anchored" data-anchor-id="définition">Définition</h3>
+<p>La fonction softmax transforme un vecteur de scores réels en distribution de probabilité :</p>
+<p><span class="math display">\[\mathbb{P}(W_T \mid W_C) = \frac{\exp\!\left(v_T^{\prime\,\top}\, v_C\right)}{\displaystyle\sum_{v_i} \exp\!\left(v_i^{\prime\,\top}\, v_C\right)}\]</span></p>
+</section>
+<section id="interprétation" class="level3">
+<h3 class="anchored" data-anchor-id="interprétation">Interprétation</h3>
+<ul>
+<li><p><strong>Numérateur</strong> : amplifie exponentiellement les scores élevés → sélection du terme le plus probable.</p></li>
+<li><p><strong>Dénominateur</strong> : normalise sur l’ensemble du vocabulaire → garantit que la somme des probabilités vaut 1.</p></li>
+</ul>
+<p>💡 La softmax est la <strong>généralisation catégorielle</strong> de la fonction logistique (sigmoïde) binaire. Elle s’applique ici à un problème de classification à <span class="math inline">\(N\)</span> classes (une par mot du vocabulaire).</p>
+<p>⚠️ Connexion avec la <strong>perte d’entropie croisée</strong> (cross-entropy loss) : minimiser <span class="math inline">\(-\log\,\mathbb{P}(W_T \mid W_C)\)</span> revient à minimiser l’entropie croisée entre la distribution prédite et la distribution cible (one-hot).</p>
+</section>
+</section>
+<section id="softmax-hiérarchique-hierarchical-softmax" class="level2">
+<h2 class="anchored" data-anchor-id="softmax-hiérarchique-hierarchical-softmax">Softmax hiérarchique (Hierarchical Softmax)</h2>
+<section id="problème" class="level3">
+<h3 class="anchored" data-anchor-id="problème">Problème</h3>
+<p>Le <strong>calcul du dénominateur</strong> de la softmax requiert une somme sur tout le vocabulaire, soit <span class="math inline">\(O(N)\)</span> opérations à chaque étape d’apprentissage. Pour un vocabulaire de 100 000 mots, cela est prohibitif.</p>
+</section>
+<section id="solution-arbre-hiérarchique" class="level3">
+<h3 class="anchored" data-anchor-id="solution-arbre-hiérarchique">Solution : arbre hiérarchique</h3>
+<p>Les termes du vocabulaire présentent des dépendances hiérarchiques (illustrées par exemple dans <strong>WordNet</strong>, base lexicale de l’anglais). On peut organiser les mots dans un <strong>arbre binaire</strong> reflétant cette structure.</p>
+<ul>
+<li>Chaque mot est une <strong>feuille</strong> de l’arbre.</li>
+<li>La probabilité <span class="math inline">\(\mathbb{P}(W_T \mid W_C)\)</span> est calculée comme un <strong>produit de probabilités</strong> le long du chemin de la racine à la feuille correspondante.</li>
+</ul>
+<p><strong>Complexité réduite</strong> : <span class="math inline">\(O(\log N)\)</span> au lieu de <span class="math inline">\(O(N)\)</span> pour accéder à la probabilité d’un terme.</p>
+<p>💡 Cette astuce rend l’entraînement de Word2Vec <strong>pratiquement réalisable</strong> sur de très grands corpus.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="le-modèle-skip-gram" class="level1">
+<h1>Le modèle Skip-gram</h1>
+<section id="principe-inversion-de-la-prédiction" class="level2">
+<h2 class="anchored" data-anchor-id="principe-inversion-de-la-prédiction">Principe : inversion de la prédiction</h2>
+<p>Le modèle <strong>Skip-gram</strong> est le <strong>dual</strong> de CBoW. Il inverse la direction de la prédiction :</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Modèle</th>
+<th>Direction</th>
+<th>Objectif</th>
+</tr>
+</thead>
+<tbody>
 <tr class="odd">
-<td><strong>Dice</strong></td>
-<td><span class="math inline">\(\frac{2\langle d_j, q \rangle}{\sum_i (w_{ij} + w_{iq})}\)</span></td>
-<td><span class="math inline">\(\frac{2|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j| + |\hat{q}|}\)</span></td>
+<td>CBoW</td>
+<td>Contexte → Cible</td>
+<td><span class="math inline">\(\mathbb{P}(W_T \mid W_C)\)</span></td>
 </tr>
 <tr class="even">
-<td><strong>Overlap</strong></td>
-<td><span class="math inline">\(\frac{\langle d_j, q \rangle}{\min(\sum_i w_{ij}, \sum_i w_{iq})}\)</span></td>
-<td><span class="math inline">\(\frac{|\hat{d}_j \cap \hat{q}|}{\min(|\hat{d}_j|, |\hat{q}|)}\)</span></td>
+<td>Skip-gram</td>
+<td>Cible → Contexte</td>
+<td><span class="math inline">\(\mathbb{P}(W_C \mid W_T)\)</span></td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Idée</strong> : étant donné un mot cible <span class="math inline">\(W_T\)</span>, prédire les mots de son contexte.</p>
+</blockquote>
+</section>
+<section id="architecture-skip-gram" class="level2">
+<h2 class="anchored" data-anchor-id="architecture-skip-gram">Architecture Skip-gram</h2>
+<p>Le réseau Skip-gram est structuré ainsi :</p>
+<ul>
+<li><p><strong>Entrée</strong> : encodage one-hot du <strong>mot cible</strong> <span class="math inline">\(W_T\)</span> (vecteur de dimension <span class="math inline">\(N\)</span>)</p></li>
+<li><p><strong>Couche de projection</strong> : multiplication par la matrice <span class="math inline">\(W\)</span> → vecteur caché de dimension <span class="math inline">\(C\)</span></p></li>
+<li><p><strong>Sortie</strong> : pour chaque position dans la fenêtre de contexte, un score softmax est calculé via <span class="math inline">\(W&#39;\)</span>, produisant <span class="math inline">\(m\)</span> distributions de probabilité sur le vocabulaire (une par position de contexte)</p></li>
+</ul>
+<p>💡 Le Skip-gram génère <strong>plus de paires d’apprentissage</strong> que CBoW (un mot cible génère <span class="math inline">\(2m\)</span> exemples), ce qui le rend particulièrement efficace sur les <strong>corpus de petite taille</strong> et pour les <strong>mots rares</strong>.</p>
+<p>⚠️ En pratique, le Skip-gram avec Negative Sampling (SGNS) est l’un des variants les plus utilisés de Word2Vec.</p>
+</section>
+<section id="comparaison-cbow-vs-skip-gram" class="level2">
+<h2 class="anchored" data-anchor-id="comparaison-cbow-vs-skip-gram">Comparaison CBoW vs Skip-gram</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    subgraph CBoW
+        C1[&quot;w(t-2)&quot;] --&gt; H1[&quot;Somme&quot;]
+        C2[&quot;w(t-1)&quot;] --&gt; H1
+        C3[&quot;w(t+1)&quot;] --&gt; H1
+        C4[&quot;w(t+2)&quot;] --&gt; H1
+        H1 --&gt; T1[&quot;w(t) prédit&quot;]
+    end
+
+    subgraph Skip-gram
+        S[&quot;w(t)&quot;] --&gt; P[&quot;Projection&quot;]
+        P --&gt; O1[&quot;w(t-2)&quot;]
+        P --&gt; O2[&quot;w(t-1)&quot;]
+        P --&gt; O3[&quot;w(t+1)&quot;]
+        P --&gt; O4[&quot;w(t+2)&quot;]
+    end
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>🧠 <strong>À retenir</strong> :</p>
+<ul>
+<li><p><strong>CBoW</strong> : rapide à entraîner, bon pour les mots fréquents.</p></li>
+<li><p><strong>Skip-gram</strong> : plus lent mais meilleure qualité pour les mots rares et les corpus modestes.</p></li>
+</ul>
+</section>
+<section id="utilisation-des-modèles-entraînés" class="level2">
+<h2 class="anchored" data-anchor-id="utilisation-des-modèles-entraînés">Utilisation des modèles entraînés</h2>
+<p>Une fois Word2Vec entraîné, les <strong>poids appris</strong> constituent les plongements des termes :</p>
+<ul>
+<li><p><strong>Bibliothèques logicielles</strong> disponibles (gensim, fastText, etc.) pour entraîner ses propres modèles.</p></li>
+<li><p><strong>Modèles pré-entraînés</strong> (Pre-trained models) : des plongements appris sur de très grands corpus (Google News, Wikipedia) sont disponibles publiquement.</p></li>
+</ul>
+<section id="application-à-la-recherche-documentaire" class="level3">
+<h3 class="anchored" data-anchor-id="application-à-la-recherche-documentaire">Application à la recherche documentaire</h3>
+<p>Pour <strong>représenter un document</strong> dans l’espace de plongement :</p>
+<ul>
+<li>On récupère le vecteur de chaque terme du document via la <strong>table de correspondance</strong> (lookup table).</li>
+<li>On calcule le <strong>vecteur moyen</strong> des termes : <span class="math inline">\(\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w\)</span></li>
+</ul>
+</section>
+<section id="mesure-de-similarité" class="level3">
+<h3 class="anchored" data-anchor-id="mesure-de-similarité">Mesure de similarité</h3>
+<p>La similarité entre documents (ou entre requête et document) est calculée à partir de la <strong>distance euclidienne</strong> (Euclidean distance) dans l’espace de plongement.</p>
+<p>💡 Il est crucial que la <strong>mesure de similarité soit cohérente</strong> avec la construction du plongement. Une mesure inadaptée donnerait des résultats incohérents.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="glove-global-vectors-for-word-representation" class="level1">
+<h1>GloVe : Global Vectors for Word Representation</h1>
+<section id="motivation-et-critique-de-word2vec" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-et-critique-de-word2vec">Motivation et critique de Word2Vec</h2>
+<p>Word2Vec apprend à prédire les co-occurrences locales de termes, mais <strong>ignore la densité globale</strong> de ces co-occurrences dans le corpus.</p>
+<p>⚠️ Deux mots qui co-apparaissent 2 fois sont traités de la même façon que deux mots qui co-apparaissent 2000 fois, du point de vue de la structure de l’apprentissage.</p>
+<blockquote class="blockquote">
+<p><strong>Idée de GloVe</strong> : les co-occurrences <strong>fréquentes</strong> devraient avoir un poids plus important dans la construction du plongement.</p>
+</blockquote>
+</section>
+<section id="intuition-probabiliste" class="level2">
+<h2 class="anchored" data-anchor-id="intuition-probabiliste">Intuition probabiliste</h2>
+<p>On définit la probabilité de co-occurrence conditionnelle :</p>
+<p><span class="math display">\[\mathbb{P}_{\text{cooc}}(w_k \mid w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}\]</span></p>
+<p>où <span class="math inline">\(\text{card}\{(w_k, w_i)\}\)</span> est le nombre de fois où <span class="math inline">\(w_k\)</span> et <span class="math inline">\(w_i\)</span> co-apparaissent dans une même fenêtre.</p>
+<section id="exemple-illustratif" class="level3">
+<h3 class="anchored" data-anchor-id="exemple-illustratif">Exemple illustratif</h3>
+<p>Prenons <span class="math inline">\(w_1 = \text{&quot;Poisson&quot;}\)</span> et <span class="math inline">\(w_2 = \text{&quot;Vache&quot;}\)</span> :</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 37%">
+<col style="width: 37%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mot <span class="math inline">\(w_3\)</span></th>
+<th><span class="math inline">\(\mathbb{P}(w_3 \mid w_1)\)</span></th>
+<th><span class="math inline">\(\mathbb{P}(w_3 \mid w_2)\)</span></th>
+<th>Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nager</td>
+<td>haute</td>
+<td>basse</td>
+<td><strong>élevé</strong></td>
+</tr>
+<tr class="even">
+<td>manger</td>
+<td>haute</td>
+<td>haute</td>
+<td>≈ 1</td>
 </tr>
 <tr class="odd">
-<td><strong>Jaccard</strong></td>
-<td><span class="math inline">\(\approx \frac{\langle d_j, q \rangle}{\sum_i \max(w_{ij}, w_{iq})}\)</span></td>
-<td><span class="math inline">\(\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j \cup \hat{q}|}\)</span></td>
+<td>voler</td>
+<td>basse</td>
+<td>basse</td>
+<td>≈ 1</td>
+</tr>
+</tbody>
+</table>
+<p>💡 Le <strong>ratio des probabilités</strong> de co-occurrence discrimine mieux que les probabilités brutes. C’est ce ratio que GloVe cherche à capturer dans l’espace vectoriel.</p>
+</section>
+</section>
+<section id="le-modèle-glove" class="level2">
+<h2 class="anchored" data-anchor-id="le-modèle-glove">Le modèle GloVe</h2>
+<section id="construction-formelle" class="level3">
+<h3 class="anchored" data-anchor-id="construction-formelle">Construction formelle</h3>
+<p>On définit une fonction paramétrée <span class="math inline">\(\phi_\theta\)</span> telle que :</p>
+<p><span class="math display">\[\phi_\theta(w_i, w_k) = \exp(v_i^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i)\]</span></p>
+<p>En passant au logarithme :</p>
+<p><span class="math display">\[v_i^\top v_k = \log\,\mathbb{P}_{\text{cooc}}(w_k \mid w_i) = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}\]</span></p>
+<p>Le terme <span class="math inline">\(\log\,\text{card}\{(w_i)\}\)</span> ne dépend pas de <span class="math inline">\(w_k\)</span> : il joue le rôle d’un <strong>biais</strong> <span class="math inline">\(b_i\)</span>.</p>
+</section>
+<section id="propriété-remarquable-mesure-de-différence" class="level3">
+<h3 class="anchored" data-anchor-id="propriété-remarquable-mesure-de-différence">Propriété remarquable : mesure de différence</h3>
+<p>Pour deux termes <span class="math inline">\(w_i\)</span> et <span class="math inline">\(w_j\)</span>, on peut mesurer leur “différence” vectorielle :</p>
+<p><span class="math display">\[\phi_\theta(v_i - v_j,\; w_k) = \frac{\exp(v_i^\top v_k)}{\exp(v_j^\top v_k)} = \frac{\mathbb{P}_{\text{cooc}}(w_k \mid w_i)}{\mathbb{P}_{\text{cooc}}(w_k \mid w_j)}\]</span></p>
+<p>💡 La <strong>différence</strong> des vecteurs de plongement encode le <strong>ratio de co-occurrence</strong> — ce qui permet des analogies vectorielles du type : <em>“roi” - “homme” + “femme” ≈ “reine”</em>.</p>
+</section>
+</section>
+<section id="fonction-de-perte-de-glove" class="level2">
+<h2 class="anchored" data-anchor-id="fonction-de-perte-de-glove">Fonction de perte de GloVe</h2>
+<section id="objectif" class="level3">
+<h3 class="anchored" data-anchor-id="objectif">Objectif</h3>
+<p>Maintenir le produit scalaire <span class="math inline">\(v_i^\top v_k\)</span> aussi proche que possible du <strong>logarithme du nombre de co-occurrences</strong>.</p>
+</section>
+<section id="formule" class="level3">
+<h3 class="anchored" data-anchor-id="formule">Formule</h3>
+<p><span class="math display">\[\mathcal{L}(\mathcal{X};\,\theta) = \sum_{w_i, w_k \in \mathcal{X}} \underbrace{\psi\!\left(\text{card}\{(w_k, w_i)\}\right)}_{\text{fenêtre de pondération}} \left(\underbrace{v_i^\top v_k}_{\text{plongement}} + b_i + b_k - \log\,\text{card}\{(w_k, w_i)\}\right)^2\]</span></p>
+</section>
+<section id="la-fonction-de-pondération-psi" class="level3">
+<h3 class="anchored" data-anchor-id="la-fonction-de-pondération-psi">La fonction de pondération <span class="math inline">\(\psi\)</span></h3>
+<p>La fonction <span class="math inline">\(\psi\)</span> contrôle l’importance accordée aux différentes paires selon leur fréquence de co-occurrence :</p>
+<p><span class="math display">\[\psi(x) = \begin{cases} \left(\dfrac{x}{x_{\max}}\right)^\alpha &amp; \text{si } x &lt; x_{\max} \\ 1 &amp; \text{sinon} \end{cases}\]</span></p>
+<p>avec les conditions aux bords :</p>
+<ul>
+<li><span class="math inline">\(\psi(0) = 0\)</span> : les co-occurrences nulles ne contribuent pas.</li>
+<li><span class="math inline">\(\psi(\infty) = 1\)</span> : les très fortes co-occurrences ont un poids maximal unitaire.</li>
+</ul>
+<p>💡 <span class="math inline">\(x_{\max}\)</span> est un seuil au-delà duquel la pondération est plafonnée. Cela évite que les <strong>co-occurrences très fréquentes</strong> (souvent dues à des mots grammaticaux peu informatifs) ne dominent l’apprentissage.</p>
+<p>⚠️ En pratique, <span class="math inline">\(\alpha = 3/4\)</span> et <span class="math inline">\(x_{\max} = 100\)</span> sont des valeurs couramment utilisées (Pennington et al., 2014).</p>
+</section>
+</section>
+<section id="propriétés-des-plongements-glove" class="level2">
+<h2 class="anchored" data-anchor-id="propriétés-des-plongements-glove">Propriétés des plongements GloVe</h2>
+<p>Les visualisations en 2D (après réduction de dimensionnalité) montrent des structures géométriques cohérentes :</p>
+<ul>
+<li><p><strong>Relations de genre</strong> : les vecteurs “roi” → “reine”, “homme” → “femme” sont approximativement <strong>parallèles</strong>.</p></li>
+<li><p><strong>Relations entreprise-dirigeant</strong> : IBM → Rometty, Exxon → Tillerson, etc. forment des structures parallèles.</p></li>
+<li><p><strong>Codes postaux et villes</strong> : le modèle capture des correspondances géographiques.</p></li>
+<li><p><strong>Degrés de comparaison</strong> : “slow” → “slower” → “slowest” s’alignent régulièrement.</p></li>
+</ul>
+<p>🧠 <strong>À retenir</strong> : GloVe encode des <strong>relations sémantiques et syntaxiques</strong> sous forme de transformations géométriques régulières dans l’espace vectoriel.</p>
+<hr>
+</section>
+</section>
+<section id="comparaison-des-modèles-de-plongement" class="level1">
+<h1>Comparaison des modèles de plongement</h1>
+<section id="tableau-récapitulatif" class="level2">
+<h2 class="anchored" data-anchor-id="tableau-récapitulatif">Tableau récapitulatif</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 25%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Plongement</th>
+<th>Type</th>
+<th>Entité</th>
+<th>Commentaire</th>
+<th>Similarité</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Booléen</td>
+<td>Contenu</td>
+<td>Terme</td>
+<td>Représentation binaire</td>
+<td>Opérateurs logiques</td>
+</tr>
+<tr class="even">
+<td>TF·IDF</td>
+<td>Contenu</td>
+<td>Document</td>
+<td>Base pour LSI</td>
+<td>Similarité cosinus</td>
+</tr>
+<tr class="odd">
+<td>BIR</td>
+<td>Contenu</td>
+<td>Terme</td>
+<td><span class="math inline">\(\mathbb{P}(t_i \mid R, q)\)</span>, voir BM25/Okapi</td>
+<td>Produit (i.i.d.)</td>
+</tr>
+<tr class="even">
+<td>LSI</td>
+<td>Contenu</td>
+<td>Document</td>
+<td>Décorrélation des termes</td>
+<td>Similarité cosinus</td>
+</tr>
+<tr class="odd">
+<td>Word2Vec</td>
+<td>Contexte</td>
+<td>Terme</td>
+<td>Prédiction du terme dans la phrase</td>
+<td>Distance euclidienne</td>
+</tr>
+<tr class="even">
+<td>GloVe</td>
+<td>Contexte</td>
+<td>Terme</td>
+<td>Co-occurrences pondérées</td>
+<td>Distance euclidienne</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="similarité-cosinus-cosine-similarity" class="level2">
-<h2 class="anchored" data-anchor-id="similarité-cosinus-cosine-similarity">Similarité cosinus (Cosine Similarity)</h2>
-<section id="définition-2" class="level3">
-<h3 class="anchored" data-anchor-id="définition-2">Définition</h3>
-<p>La mesure la plus utilisée en pratique est la <strong>similarité cosinus</strong> :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) \stackrel{\text{def}}{=} \cos(\angle(d_j, q)) = \frac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \frac{d_j^T q}{\|d_j\| \|q\|} = \frac{\sum_i w_{ij} w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2} \left(\sum_i w_{iq}^2\right)^{1/2}}\]</span></p>
+<section id="pourquoi-les-modèles-neuronaux-capturent-ils-des-relations-non-linéaires" class="level2">
+<h2 class="anchored" data-anchor-id="pourquoi-les-modèles-neuronaux-capturent-ils-des-relations-non-linéaires">Pourquoi les modèles neuronaux capturent-ils des relations non-linéaires ?</h2>
+<p>Les modèles TF·IDF et LSI sont des transformations <strong>linéaires</strong> des données (pondération, factorisation matricielle). Ils capturent des <strong>corrélations</strong>.</p>
+<p>Word2Vec et GloVe utilisent des réseaux de neurones avec des <strong>non-linéarités</strong> (softmax, exponentielle) dans leur processus d’apprentissage. Ils peuvent donc encoder des <strong>relations complexes</strong> entre termes qui ne sont pas réductibles à une simple corrélation.</p>
+<p>💡 Par exemple, la relation sémantique <em>“capitale de”</em> (Paris : France :: Berlin : Allemagne) est encodée comme une translation vectorielle régulière — impossible à capturer avec LSI.</p>
 </section>
-<section id="propriétés" class="level3">
-<h3 class="anchored" data-anchor-id="propriétés">Propriétés</h3>
+<section id="différences-fondamentales-entre-word2vec-et-glove" class="level2">
+<h2 class="anchored" data-anchor-id="différences-fondamentales-entre-word2vec-et-glove">Différences fondamentales entre Word2Vec et GloVe</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Critère</th>
+<th>Word2Vec</th>
+<th>GloVe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mode d’apprentissage</td>
+<td>En ligne (stochastique)</td>
+<td>Sur matrice globale de co-occurrence</td>
+</tr>
+<tr class="even">
+<td>Co-occurrences</td>
+<td>Ignorées dans leur densité</td>
+<td>Pondérées explicitement</td>
+</tr>
+<tr class="odd">
+<td>Complexité</td>
+<td><span class="math inline">\(O(N \cdot C \cdot |\mathcal{X}|)\)</span></td>
+<td>Dépend du nombre de paires non nulles</td>
+</tr>
+<tr class="even">
+<td>Interprétabilité</td>
+<td>Moins directe</td>
+<td>Liée aux probabilités de co-occurrence</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="utilisation-pratique-des-plongements" class="level1">
+<h1>Utilisation pratique des plongements</h1>
+<section id="de-lentraînement-à-lapplication" class="level2">
+<h2 class="anchored" data-anchor-id="de-lentraînement-à-lapplication">De l’entraînement à l’application</h2>
+<section id="entraînement" class="level3">
+<h3 class="anchored" data-anchor-id="entraînement">Entraînement</h3>
 <ul>
-<li><span class="math inline">\(\text{RSV} \in [-1, 1]\)</span> (en pratique <span class="math inline">\([0, 1]\)</span> avec des poids positifs).</li>
-<li><span class="math inline">\(\text{RSV} = 1\)</span> si <span class="math inline">\(d_j\)</span> et <span class="math inline">\(q\)</span> sont parfaitement alignés (même direction).</li>
-<li><span class="math inline">\(\text{RSV} = 0\)</span> si <span class="math inline">\(d_j\)</span> et <span class="math inline">\(q\)</span> sont orthogonaux (aucun terme commun).</li>
+<li><p>Des <strong>bibliothèques logicielles</strong> permettent d’entraîner ses propres modèles sur un corpus spécialisé (médical, juridique, etc.).</p></li>
+<li><p>L’entraînement requiert de grands corpus et une puissance de calcul significative.</p></li>
 </ul>
-<p>💡 La similarité cosinus est <strong>invariante à la norme</strong> : elle mesure l’angle entre les vecteurs, indépendamment de leur longueur. Deux documents identiques mais l’un deux fois plus long auront un cosinus de 1.</p>
-<p>🧠 <strong>À retenir</strong> : La similarité cosinus est la mesure de référence en IR vectoriel, directement dérivée de la notion d’intersection ensembliste étendue aux embeddings continus.</p>
+</section>
+<section id="modèles-pré-entraînés-pre-trained-models" class="level3">
+<h3 class="anchored" data-anchor-id="modèles-pré-entraînés-pre-trained-models">Modèles pré-entraînés (Pre-trained Models)</h3>
+<ul>
+<li><p>Des vecteurs pré-entraînés sur des corpus massifs (Wikipedia, Common Crawl) sont publiquement disponibles.</p></li>
+<li><p>On les utilise directement comme <strong>table de correspondance</strong> (lookup table) : un vecteur par mot du vocabulaire.</p></li>
+</ul>
+</section>
+<section id="représentation-de-documents" class="level3">
+<h3 class="anchored" data-anchor-id="représentation-de-documents">Représentation de documents</h3>
+<p>Pour utiliser les plongements en recherche d’information :</p>
+<ol type="1">
+<li><p>Chaque terme du document est remplacé par son vecteur de plongement.</p></li>
+<li><p>Le document est représenté par la <strong>moyenne</strong> de ces vecteurs.</p></li>
+<li><p>La similarité entre requête et document est calculée dans cet espace vectoriel.</p></li>
+</ol>
+<p>⚠️ Il est indispensable que la <strong>mesure de similarité</strong> utilisée soit <strong>cohérente</strong> avec la métrique induite par le modèle de plongement. Pour Word2Vec et GloVe, c’est la <strong>distance euclidienne</strong> (ou le cosinus dans certaines variantes).</p>
 <hr>
 </section>
 </section>
 </section>
-<section id="modèles-probabilistes-probabilistic-retrieval-models" class="level1">
-<h1>Modèles Probabilistes (Probabilistic Retrieval Models)</h1>
-<section id="principe-général-1" class="level2">
-<h2 class="anchored" data-anchor-id="principe-général-1">Principe général</h2>
-<p>L’approche probabiliste aborde la récupération sous l’angle de la <strong>vraisemblance de pertinence</strong> :</p>
-<p>Pour une requête <span class="math inline">\(q\)</span>, il existe un ensemble idéal <span class="math inline">\(\mathcal{R}\)</span> de documents pertinents dans la collection. Cet ensemble possède des <strong>propriétés décrites par des termes d’index</strong>.</p>
-<p><strong>Idée centrale :</strong> Formuler le problème de récupération comme la <strong>spécification des propriétés de l’ensemble <span class="math inline">\(\mathcal{R}\)</span></strong> à partir des termes disponibles.</p>
-</section>
-<section id="principe-de-classement-par-probabilité" class="level2">
-<h2 class="anchored" data-anchor-id="principe-de-classement-par-probabilité">Principe de classement par probabilité</h2>
-<section id="énoncé-robertson-1977" class="level3">
-<h3 class="anchored" data-anchor-id="énoncé-robertson-1977">Énoncé (Robertson, 1977)</h3>
+<section id="biais-et-limites-des-plongements" class="level1">
+<h1>Biais et limites des plongements</h1>
+<section id="biais-sociétaux-societal-biases" class="level2">
+<h2 class="anchored" data-anchor-id="biais-sociétaux-societal-biases">Biais sociétaux (Societal Biases)</h2>
+<p>⚠️ Les plongements sont appris sur des textes réels, qui reflètent les <strong>biais culturels et sociaux</strong> présents dans la société.</p>
+<p>Des études ont montré (Bolukbasi et al., 2016) que des analogies problématiques émergent naturellement :</p>
 <blockquote class="blockquote">
-<p>Si la réponse d’un système de référence à chaque requête est un classement des documents dans l’ordre décroissant de probabilité d’utilité pour l’utilisateur, alors l’efficacité globale du système sera la meilleure possible sur la base des données disponibles.</p>
+<p><em>“homme est à programmeur informatique ce que femme est à femme au foyer”</em></p>
 </blockquote>
-<p>— <em>Stephen E. Robertson, Journal of Documentation, 1977</em></p>
+<p>Ces associations non désirées sont héritées des <strong>co-occurrences biaisées</strong> dans les corpus d’entraînement.</p>
+<p>💡 Des techniques de <strong>débiaisage</strong> (debiasing) ont été proposées pour corriger ces associations, mais le problème reste ouvert.</p>
 </section>
-<section id="formulation" class="level3">
-<h3 class="anchored" data-anchor-id="formulation">Formulation</h3>
-<p><strong>Tâche :</strong> Estimer la pertinence des documents et présenter les résultats par <strong>ordre décroissant d’utilité</strong>.</p>
-<p>Ici, utilité = vraisemblance de pertinence → estimer :</p>
-<p><span class="math display">\[P(R = \text{vrai} \mid d_j, q)\]</span></p>
-<p>où <span class="math inline">\(R\)</span> est une variable aléatoire de Bernoulli indiquant la pertinence.</p>
-</section>
-</section>
-<section id="estimation-itérative-de-lensemble-mathcalr" class="level2">
-<h2 class="anchored" data-anchor-id="estimation-itérative-de-lensemble-mathcalr">Estimation itérative de l’ensemble <span class="math inline">\(\mathcal{R}\)</span></h2>
-<p>Le processus est <strong>itératif</strong> :</p>
-<ol type="1">
-<li>Le système fournit une réponse initiale.</li>
-<li>L’utilisateur juge certains documents comme pertinents ou non pertinents.</li>
-<li>Ces jugements sont utilisés comme <strong>feedback</strong> pour adapter la réponse.</li>
-<li>Le processus se répète jusqu’à satisfaction de l’utilisateur.</li>
-</ol>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart TD
-    A[Requête q] --&gt;|System Response| B[Result Set]
-    B --&gt;|User Judgment| C{Satisfaction?}
-    C --&gt;|Yes| D[Query Result]
-    C --&gt;|No| E[Adapted System Response]
-    E --&gt; B
-    B --&gt; F[User marks some documents\nrelevant or non-relevant]
-    F --&gt; C
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
-<section id="décision-bayésienne" class="level2">
-<h2 class="anchored" data-anchor-id="décision-bayésienne">Décision Bayésienne</h2>
-<section id="problème-de-seuil" class="level3">
-<h3 class="anchored" data-anchor-id="problème-de-seuil">Problème de seuil</h3>
-<p>Plutôt que de fixer un seuil absolu <span class="math inline">\(P(R \mid d_j, q) &gt; \tau\)</span>, on utilise le <strong>rapport de cotes</strong> (Odds Ratio) bayésien :</p>
-<p><span class="math display">\[O(R \mid d_j, q) = \frac{P(R = \text{vrai} \mid d_j, q)}{P(R = \text{faux} \mid d_j, q)} = \frac{P(R \mid d_j, q)}{P(\bar{R} \mid d_j, q)}\]</span></p>
-</section>
-<section id="application-du-théorème-de-bayes" class="level3">
-<h3 class="anchored" data-anchor-id="application-du-théorème-de-bayes">Application du théorème de Bayes</h3>
-<p><span class="math display">\[O(R \mid d_j, q) = \frac{P(d_j \mid R, q) P(R \mid q)}{P(d_j \mid \bar{R}, q) P(\bar{R} \mid q)}\]</span></p>
-<p>Comme <span class="math inline">\(P(R \mid q)\)</span> est constant pour tous les documents, on obtient :</p>
-<p><span class="math display">\[O(R \mid d_j, q) \propto \frac{P(d_j \mid R, q)}{P(d_j \mid \bar{R}, q)}\]</span></p>
-</section>
-</section>
-<section id="régression-logistique-pour-la-ri" class="level2">
-<h2 class="anchored" data-anchor-id="régression-logistique-pour-la-ri">Régression Logistique pour la RI</h2>
-<section id="modèle" class="level3">
-<h3 class="anchored" data-anchor-id="modèle">Modèle</h3>
-<p>Si on suppose que le log-rapport de cotes est une <strong>fonction log-linéaire</strong> des features du document :</p>
-<p><span class="math display">\[\log O(R \mid d_j, q) = \phi_\theta(d_j, q) = w^T d_j + w_0\]</span></p>
-<p>Alors :</p>
-<p><span class="math display">\[P(R \mid d_j, q) = \sigma_\theta(d_j) = \frac{1}{1 + e^{-(w^T d_j + w_0)}}\]</span></p>
-<p>avec <span class="math inline">\(\theta = [w, w_0]\)</span> les paramètres à apprendre.</p>
-</section>
-<section id="apprentissage" class="level3">
-<h3 class="anchored" data-anchor-id="apprentissage">Apprentissage</h3>
-<p>Les paramètres <span class="math inline">\(\theta\)</span> sont appris par <strong>régression logistique</strong> (Logistic Regression) :</p>
-<ol type="1">
-<li>Calculer les features <span class="math inline">\(d_j\)</span> pour chaque document <span class="math inline">\(j\)</span>, former la matrice <span class="math inline">\(D\)</span>.</li>
-<li>Sélectionner des requêtes, former la matrice <span class="math inline">\(Q\)</span>.</li>
-<li>À partir de paires de pertinence exemple <span class="math inline">\((D, Q)\)</span>, apprendre <span class="math inline">\(\theta\)</span> par <strong>descente de gradient</strong> :</li>
-</ol>
-<p><span class="math display">\[w_{t+1} = w_t - \eta \nabla_\theta \mathcal{L}(D, Q; \theta)\]</span></p>
-<p>Il s’agit d’un modèle de <strong>classification</strong> entre pertinence (<span class="math inline">\(R\)</span>) et non-pertinence (<span class="math inline">\(\bar{R}\)</span>).</p>
-<p>💡 Les features typiques incluent les poids TF·IDF combinés à la longueur du document. N’importe quel embedding peut être utilisé.</p>
-</section>
-<section id="avantages-et-limites-1" class="level3">
-<h3 class="anchored" data-anchor-id="avantages-et-limites-1">Avantages et limites</h3>
-<p><strong>Avantages :</strong></p>
+<section id="limitations-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-techniques">Limitations techniques</h2>
 <ul>
-<li><span class="math inline">\(\phi_\theta(d_j, q)\)</span> est un modèle de pertinence <strong>absolu</strong>.</li>
-<li>Apprentissage en ligne avec les jugements de feedback.</li>
+<li><p><strong>Mots hors vocabulaire (Out-of-Vocabulary, OOV)</strong> : les mots non vus à l’entraînement n’ont pas de vecteur. <strong>FastText</strong> [Bojanowski et al., 2016] résout partiellement ce problème en travaillant au niveau des <strong>sous-mots</strong> (subwords).</p></li>
+<li><p><strong>Polysémie non résolue</strong> : un même mot avec plusieurs sens (ex. <em>“banque”</em> : établissement financier vs rive d’un cours d’eau) reçoit un <strong>unique vecteur</strong> moyen. Les modèles contextuels comme <strong>BERT</strong> [Devlin et al., 2018] résolvent ce problème.</p></li>
 </ul>
-<p><strong>Limites :</strong></p>
-<ul>
-<li>Le choix des features (embedding) est critique.</li>
-<li>Lent si l’apprentissage est effectué au moment de la requête.</li>
-</ul>
-</section>
-</section>
-<section id="récupération-par-indépendance-binaire-binary-independence-retrieval-bir" class="level2">
-<h2 class="anchored" data-anchor-id="récupération-par-indépendance-binaire-binary-independence-retrieval-bir">Récupération par Indépendance Binaire (Binary Independence Retrieval, BIR)</h2>
-<section id="modèle-1" class="level3">
-<h3 class="anchored" data-anchor-id="modèle-1">Modèle</h3>
-<p>On suppose :</p>
-<ul>
-<li>L’occurrence de chaque terme est <strong>binaire</strong> (présent ou absent).</li>
-<li>Les occurrences des termes sont <strong>indépendantes</strong> dans le document.</li>
-</ul>
-<p>Ces deux hypothèses justifient le nom <strong>Binary Independence</strong> Retrieval.</p>
-</section>
-<section id="décomposition" class="level3">
-<h3 class="anchored" data-anchor-id="décomposition">Décomposition</h3>
-<p>Sous ces hypothèses :</p>
-<p><span class="math display">\[P(d_j \mid R, q) = \prod_{i \in \mathcal{I}_j} P(t_i \mid R, q) \prod_{i \notin \mathcal{I}_j} (1 - P(t_i \mid R, q))\]</span></p>
-<p>En combinant avec le rapport de cotes :</p>
-<p><span class="math display">\[O(R \mid d_j, q) \propto \prod_{i \in \mathcal{I}_j} \frac{P(t_i \mid R, q)}{P(t_i \mid \bar{R}, q)} \cdot \prod_{i \notin \mathcal{I}_j} \frac{1 - P(t_i \mid R, q)}{1 - P(t_i \mid \bar{R}, q)}\]</span></p>
-</section>
-<section id="simplification-algébrique" class="level3">
-<h3 class="anchored" data-anchor-id="simplification-algébrique">Simplification algébrique</h3>
-<p>En factorisant les termes présents et absents, et en passant au logarithme :</p>
-<p><span class="math display">\[\log O(R \mid d_j, q) \propto \sum_{i \in \mathcal{I}_j} \left[ \log \frac{P(t_i \mid R, q)}{1 - P(t_i \mid R, q)} + \log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} \right]\]</span></p>
-<p>On peut <strong>ignorer les termes absents de la requête</strong> puisque pour <span class="math inline">\(i \notin \mathcal{I}_q\)</span> :</p>
-<p><span class="math display">\[P(t_i \mid R, q) = P(t_i \mid \bar{R}, q)\]</span></p>
-<p>D’où le RSV final :</p>
-<p><span class="math display">\[\text{RSV}(d_j, q) \propto \sum_{i \in [\![M]\!]} w_{ij} w_{iq} \left[ \log \frac{P(t_i \mid R, q)}{1 - P(t_i \mid R, q)} + \log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} \right]\]</span></p>
-<p>avec <span class="math inline">\(w_{ij}\)</span> et <span class="math inline">\(w_{iq}\)</span> indicateurs binaires de présence du terme <span class="math inline">\(i\)</span> dans le document <span class="math inline">\(j\)</span> et la requête <span class="math inline">\(q\)</span>.</p>
-</section>
-<section id="estimation-des-probabilités" class="level3">
-<h3 class="anchored" data-anchor-id="estimation-des-probabilités">Estimation des probabilités</h3>
-<p>En pratique, on estime ces probabilités par comptage, en utilisant un ensemble <span class="math inline">\(S\)</span> des <span class="math inline">\(r\)</span> premiers documents récupérés comme <strong>pseudo-feedback</strong> positif :</p>
-<ul>
-<li><span class="math inline">\(r_i\)</span> : nombre de ces documents contenant le terme <span class="math inline">\(i\)</span>.</li>
-<li><span class="math inline">\(n_i\)</span> : nombre total de documents contenant le terme <span class="math inline">\(i\)</span>.</li>
-</ul>
-<p><strong>Initialisation (sans feedback) :</strong></p>
-<p><span class="math display">\[P(t_i \mid R, q) = \rho \text{ (constante)} \quad \text{et} \quad P(t_i \mid \bar{R}, q) = \frac{n_i}{N}\]</span></p>
-<p>On remarque que <span class="math inline">\(\log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} = \log \frac{N - n_i}{n_i} \approx \log \frac{N}{n_i} = \text{idf}_i\)</span>.</p>
-<p>⚠️ <strong>Connexion avec TF·IDF</strong> : à l’initialisation, le BIR est lié à l’IDF !</p>
-<p><strong>À l’itération (avec feedback) :</strong></p>
-<p><span class="math display">\[P(t_i \mid R, q) = \frac{r_i}{r} \quad \text{et} \quad P(t_i \mid \bar{R}, q) = \frac{n_i - r_i}{N - r}\]</span></p>
-<p>Le processus s’itère jusqu’à convergence.</p>
-</section>
-</section>
-<section id="le-modèle-rsj-et-la-formule-bm25" class="level2">
-<h2 class="anchored" data-anchor-id="le-modèle-rsj-et-la-formule-bm25">Le modèle RSJ et la formule BM25</h2>
-<section id="robertson-sparck-jones-rsj" class="level3">
-<h3 class="anchored" data-anchor-id="robertson-sparck-jones-rsj">Robertson-Sparck-Jones (RSJ)</h3>
-<p>Le modèle BIR de base a évolué vers le modèle <strong>Robertson-Sparck-Jones (RSJ)</strong>, avec une pondération :</p>
-<p><span class="math display">\[w_i^{\text{RSJ}} = \log \frac{(r_i + 0.5)(N - R - n_i + r_i + 0.5)}{(n_i - r_i + 0.5)(R - r_i + 0.5)}\]</span></p>
-</section>
-<section id="bm25-best-match-25-okapi" class="level3">
-<h3 class="anchored" data-anchor-id="bm25-best-match-25-okapi">BM25 (Best Match 25 / OKAPI)</h3>
-<p>La formule <strong>BM25</strong> (aussi appelée OKAPI BM25) étend le modèle RSJ en incorporant :</p>
-<ul>
-<li>La <strong>fréquence du terme</strong> dans le document (TF).</li>
-<li>La <strong>longueur du document</strong> (normalization par la longueur).</li>
-</ul>
-<p><span class="math display">\[w_i^{\text{BM25}}(tf) = \frac{tf&#39;}{k_1 + tf&#39;} w_i^{\text{RSJ}} = \frac{tf}{k_1\left((1-b) + b\frac{dl}{avdl}\right) + tf} w_i^{\text{RSJ}}\]</span></p>
-<p>où :</p>
-<ul>
-<li><span class="math inline">\(tf\)</span> : fréquence du terme dans le document.</li>
-<li><span class="math inline">\(dl\)</span> : longueur du document.</li>
-<li><span class="math inline">\(avdl\)</span> : longueur moyenne des documents.</li>
-<li><span class="math inline">\(k_1\)</span> (≈ 1.2), <span class="math inline">\(b\)</span> (≈ 0.75) : paramètres de contrôle.</li>
-</ul>
-<p>La formule BM25 complète (avec les termes de la requête) :</p>
-<p><span class="math display">\[\sum_{T \in Q} w^{(1)} \frac{(k_1 + 1)tf}{K + tf} \frac{(k_3 + 1)qtf}{k_3 + qtf}\]</span></p>
-<p>où <span class="math inline">\(qtf\)</span> est la fréquence du terme dans la requête et <span class="math inline">\(K = k_1\left((1-b) + b\frac{dl}{avdl}\right)\)</span>.</p>
-<p>🧠 <strong>À retenir</strong> : BM25 est le modèle de référence en RI probabiliste, encore utilisé aujourd’hui dans des systèmes modernes (Elasticsearch, Lucene…).</p>
 <hr>
 </section>
 </section>
-</section>
-<section id="indexation-sémantique-latente-latent-semantic-indexing-lsi" class="level1">
-<h1>Indexation Sémantique Latente (Latent Semantic Indexing, LSI)</h1>
-<section id="limites-du-tfidf" class="level2">
-<h2 class="anchored" data-anchor-id="limites-du-tfidf">Limites du TF·IDF</h2>
-<p>L’embedding TF·IDF (BoW) présente deux faiblesses fondamentales liées à la nature du langage :</p>
-<section id="synonymie-synonymy" class="level3">
-<h3 class="anchored" data-anchor-id="synonymie-synonymy">Synonymie (Synonymy)</h3>
-<p>Si deux termes <span class="math inline">\(a\)</span> et <span class="math inline">\(b\)</span> ont le même sens (ex. « voiture » et « automobile »), leur embedding TF·IDF <span class="math inline">\(t_a\)</span> et <span class="math inline">\(t_b\)</span> peut être orthogonal, alors qu’ils devraient être similaires.</p>
-<p>⚠️ Un document contenant « automobile » ne sera pas retrouvé par une requête sur « voiture » avec le modèle BoW standard.</p>
-</section>
-<section id="polysémie-polysemy" class="level3">
-<h3 class="anchored" data-anchor-id="polysémie-polysemy">Polysémie (Polysemy)</h3>
-<p>Un terme peut avoir <strong>plusieurs sens</strong> selon le contexte (ex. « table » → meuble ou tableau de données). Un seul vecteur ne peut pas représenter fidèlement ces sens multiples.</p>
-</section>
-</section>
-<section id="vers-un-espace-de-concepts" class="level2">
-<h2 class="anchored" data-anchor-id="vers-un-espace-de-concepts">Vers un espace de concepts</h2>
-<p><strong>Idée fondatrice de la LSI :</strong> Les termes sont des <strong>compositions de concepts</strong> latents (Latent Concepts).</p>
-<p>Formellement, on cherche une base orthonormale <span class="math inline">\(\{c_k\}_{k=1}^K\)</span> pour un espace de concepts telle que <span class="math inline">\(\langle c_k, c_l \rangle = \delta_{kl}\)</span>, et chaque terme <span class="math inline">\(i\)</span> se décompose comme :</p>
-<p><span class="math display">\[t_i = \sum_{k=1}^K \alpha_{ki} c_k\]</span></p>
-<p>Deux termes synonymes auront des coefficients <span class="math inline">\(\alpha\)</span> similaires et se retrouveront proches dans l’espace des concepts.</p>
-</section>
-<section id="rappel-décomposition-en-valeurs-singulières-svd" class="level2">
-<h2 class="anchored" data-anchor-id="rappel-décomposition-en-valeurs-singulières-svd">Rappel : Décomposition en Valeurs Singulières (SVD)</h2>
-<section id="définition-3" class="level3">
-<h3 class="anchored" data-anchor-id="définition-3">Définition</h3>
-<p>Pour toute matrice <span class="math inline">\(W \in \mathbb{R}^{M \times N}\)</span>, il existe deux matrices orthogonales <span class="math inline">\(U \in \mathbb{R}^{M \times M}\)</span> et <span class="math inline">\(V \in \mathbb{R}^{N \times N}\)</span>, et une matrice diagonale <span class="math inline">\(\Sigma \in \mathbb{R}^{M \times N}\)</span> telles que :</p>
-<p><span class="math display">\[W = U \Sigma V^T\]</span></p>
-<p>avec les <strong>valeurs singulières</strong> <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \ldots \geq 0\)</span> sur la diagonale de <span class="math inline">\(\Sigma\)</span>.</p>
-</section>
-<section id="svd-tronquée-truncated-svd" class="level3">
-<h3 class="anchored" data-anchor-id="svd-tronquée-truncated-svd">SVD tronquée (Truncated SVD)</h3>
-<p>Pour <span class="math inline">\(K \leq \min(M, N)\)</span>, on conserve uniquement les <span class="math inline">\(K\)</span> premières valeurs singulières et vecteurs associés :</p>
-<p><span class="math display">\[W_K = U_K \Sigma_K V_K^T\]</span></p>
-<p>avec <span class="math inline">\(U_K \in \mathbb{R}^{M \times K}\)</span>, <span class="math inline">\(\Sigma_K \in \mathbb{R}^{K \times K}\)</span>, <span class="math inline">\(V_K \in \mathbb{R}^{N \times K}\)</span>.</p>
-<p><span class="math inline">\(W_K\)</span> est <strong>l’approximation de rang <span class="math inline">\(K\)</span> de <span class="math inline">\(W\)</span> au sens de Frobenius</strong> :</p>
-<p><span class="math display">\[W_K = \arg\min_{\text{rank}(A) = K} \|W - A\|_F^2\]</span></p>
-<p>💡 Comme <span class="math inline">\(U\)</span> et <span class="math inline">\(V\)</span> sont orthogonales, leurs colonnes forment des <strong>bases orthonormales</strong> : <span class="math inline">\(\langle u_i, u_j \rangle = \delta_{ij}\)</span> et <span class="math inline">\(\langle v_i, v_j \rangle = \delta_{ij}\)</span>.</p>
-</section>
-</section>
-<section id="application-à-la-lsi" class="level2">
-<h2 class="anchored" data-anchor-id="application-à-la-lsi">Application à la LSI</h2>
-<section id="embedding-de-termes-orthogonaux" class="level3">
-<h3 class="anchored" data-anchor-id="embedding-de-termes-orthogonaux">Embedding de termes orthogonaux</h3>
-<p>On cherche <span class="math inline">\(\tilde{W} \in \mathbb{R}^{M \times K}\)</span> tel que les termes <span class="math inline">\(\tilde{t}_i = \tilde{W}_{i\cdot}\)</span> vérifient :</p>
-<p><span class="math display">\[\tilde{W} \tilde{W}^T = I_M \quad \text{(termes décorrélés)}\]</span></p>
-</section>
-<section id="construction-via-svd" class="level3">
-<h3 class="anchored" data-anchor-id="construction-via-svd">Construction via SVD</h3>
-<p>En appliquant la SVD tronquée à <span class="math inline">\(W\)</span> : <span class="math inline">\(W_K = U_K \Sigma_K V_K^T\)</span>, on a :</p>
-<p><span class="math display">\[W_K W_K^T = U_K \Sigma_K^2 U_K^T\]</span></p>
-<p>d’où :</p>
-<p><span class="math display">\[\Sigma_K^{-1} U_K^T W_K W_K^T U_K \Sigma_K^{-1} = I_K\]</span></p>
-<p><strong>Embedding LSI des documents :</strong></p>
-<p><span class="math display">\[\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j\]</span></p>
-<p>Les coordonnées TF·IDF <span class="math inline">\(d_j\)</span> sont <strong>projetées dans l’espace des concepts</strong> <span class="math inline">\(\mathbb{R}^K\)</span> où les termes sont décorrélés.</p>
-</section>
-<section id="visualisation" class="level3">
-<h3 class="anchored" data-anchor-id="visualisation">Visualisation</h3>
-<p>La décomposition SVD pour la LSI peut être vue ainsi :</p>
+<section id="vers-les-modèles-modernes" class="level1">
+<h1>Vers les modèles modernes</h1>
+<section id="prolongements-de-word2vec-et-glove" class="level2">
+<h2 class="anchored" data-anchor-id="prolongements-de-word2vec-et-glove">Prolongements de Word2Vec et GloVe</h2>
+<p>Les plongements statiques (un vecteur par mot) ont pavé la voie à des architectures plus puissantes :</p>
 <ul>
-<li><strong><span class="math inline">\(U_K\)</span></strong> : matrice des <strong>vecteurs de termes</strong> (Term Vectors) — colonnes = directions des concepts dans l’espace des termes.</li>
-<li><strong><span class="math inline">\(\Sigma_K\)</span></strong> : matrice des valeurs singulières — importance de chaque concept.</li>
-<li><strong><span class="math inline">\(V_K^T\)</span></strong> : matrice des <strong>vecteurs de documents</strong> (Document Vectors) — représentation des documents dans l’espace des concepts.</li>
+<li><p><strong>FastText</strong> : enrichit les vecteurs avec des informations sur les sous-mots (préfixes, suffixes), ce qui améliore la gestion des mots rares et des langues morphologiquement riches.</p></li>
+<li><p><strong>BERT</strong> (Bidirectional Encoder Representations from Transformers) : génère des plongements <strong>contextuels</strong> — le vecteur d’un mot change selon la phrase dans laquelle il apparaît.</p></li>
+<li><p><strong>Modèles de traduction automatique</strong> (Machine Translation) : utilisent des architectures de type <strong>Transformer</strong> (Vaswani et al., 2017) pour des plongements séquentiels.</p></li>
 </ul>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    W[&quot;W (M×N)\nTF-IDF Matrix&quot;] --&gt; SVD[&quot;SVD Tronquée&quot;]
-    SVD --&gt; Uk[&quot;U_k (M×K)\nTerm Vectors&quot;]
-    SVD --&gt; Sk[&quot;Σ_k (K×K)\nSingular Values&quot;]
-    SVD --&gt; Vkt[&quot;V_k^T (K×N)\nDocument Vectors&quot;]
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
+<p>💡 La frontière entre la recherche d’information (IR) et le NLP moderne est de plus en plus floue. Les techniques actuelles de recherche sémantique dense (Dense Retrieval) reposent directement sur BERT et ses variantes.</p>
 </section>
-</section>
-<section id="traitement-des-requêtes-en-espace-lsi" class="level2">
-<h2 class="anchored" data-anchor-id="traitement-des-requêtes-en-espace-lsi">Traitement des requêtes en espace LSI</h2>
-<p>La requête est traitée comme un document (paradigme QbE) :</p>
-<ol type="1">
-<li>Représenter la requête <span class="math inline">\(q\)</span> dans l’espace TF·IDF standard.</li>
-<li>Projeter dans l’espace LSI : <span class="math inline">\(\tilde{q} = \Sigma_K^{-1} U_K^T q\)</span>.</li>
-<li>Appliquer la similarité cosinus dans l’espace LSI :</li>
-</ol>
-<p><span class="math display">\[\text{RSV}(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\| \|\tilde{q}\|}\]</span></p>
-<p>💡 Dans l’espace LSI, deux documents traitant du même sujet avec des vocabulaires différents (synonymes) seront proches, ce qui était impossible avec le BoW standard.</p>
-</section>
-<section id="choix-du-rang-k" class="level2">
-<h2 class="anchored" data-anchor-id="choix-du-rang-k">Choix du rang <span class="math inline">\(K\)</span></h2>
-<p>Le paramètre <span class="math inline">\(K\)</span> contrôle le <strong>niveau de généralisation</strong> :</p>
-<ul>
-<li><span class="math inline">\(K\)</span> trop petit → perte d’information, concepts trop grossiers.</li>
-<li><span class="math inline">\(K\)</span> trop grand → on se rapproche de l’espace TF·IDF original avec ses problèmes.</li>
-<li>Choix pratique : observer la décroissance des valeurs singulières <span class="math inline">\(\sigma_k\)</span> et choisir <span class="math inline">\(K\)</span> au coude de la courbe.</li>
-</ul>
-</section>
-<section id="mise-à-jour-de-lindex-index-update" class="level2">
-<h2 class="anchored" data-anchor-id="mise-à-jour-de-lindex-index-update">Mise à jour de l’index (Index Update)</h2>
-<p>L’espace de concepts dépend de la collection initiale. Que faire lorsque de nouveaux documents arrivent ?</p>
-<p>Étant donné les <span class="math inline">\(N\)</span> documents initiaux avec <span class="math inline">\(W_K = U_K \Sigma_K V_K^T\)</span>, on veut ajouter <span class="math inline">\(n\)</span> nouveaux documents représentés par <span class="math inline">\(D\)</span>.</p>
-<section id="stratégie-de-mise-à-jour-exacte" class="level3">
-<h3 class="anchored" data-anchor-id="stratégie-de-mise-à-jour-exacte">Stratégie de mise à jour exacte</h3>
-<ol type="1">
-<li>Générer <span class="math inline">\(D\)</span>, la représentation de base des nouvelles données.</li>
-<li>Projeter sur la représentation existante : <span class="math inline">\(P = U_K^T D\)</span> ; remainder : <span class="math inline">\(H = D - U_K P\)</span>.</li>
-<li>Calculer une base orthonormale <span class="math inline">\(B\)</span> de <span class="math inline">\(H\)</span> ; projection : <span class="math inline">\(J = B^T H\)</span>.</li>
-<li>Former la matrice <span class="math inline">\(Q = \begin{pmatrix} \Sigma_K &amp; P \\ 0 &amp; J \end{pmatrix}\)</span>, calculer sa SVD <span class="math inline">\(Q = U_n \Sigma_n V_n^T\)</span>.</li>
-<li>Mettre à jour : <span class="math inline">\([U_K B] U_n \Sigma_n \begin{pmatrix} V_K &amp; 0 \\ 0 &amp; I \end{pmatrix} = [W_K \; D]\)</span>.</li>
-</ol>
-</section>
-<section id="stratégie-de-repliement-fold-in" class="level3">
-<h3 class="anchored" data-anchor-id="stratégie-de-repliement-fold-in">Stratégie de repliement (Fold-in)</h3>
-<p>Une approche plus simple : utiliser la représentation existante pour les nouveaux documents sans recalculer la base de concepts.</p>
-<ol type="1">
-<li>Générer <span class="math inline">\(D\)</span>, représentation des nouvelles données.</li>
-<li>Projeter sur la représentation existante : <span class="math inline">\(\hat{D} = U_K^T D\)</span>.</li>
-<li>Concaténer : <span class="math inline">\([W_K \; D] \approx U_K \Sigma_K [V_K \; \hat{D}]^T\)</span>.</li>
-</ol>
-<p>⚠️ La stratégie fold-in est une approximation : les nouveaux documents sont supposés s’exprimer dans les concepts existants, sans enrichir l’espace conceptuel.</p>
-<hr>
-</section>
-</section>
-</section>
-<section id="résumé-général" class="level1">
-<h1>Résumé Général</h1>
-<section id="récapitulatif-des-modèles" class="level2">
-<h2 class="anchored" data-anchor-id="récapitulatif-des-modèles">Récapitulatif des modèles</h2>
-<p>🧠 <strong>Les points clés à retenir :</strong></p>
-<ul>
-<li>La <strong>pertinence</strong> par rapport à une requête est centrale en RI.</li>
-<li>Les documents sont <strong>projetés dans un espace de features</strong> via des embeddings.</li>
-<li>L’embedding <strong>booléen</strong> (binaire) n’est pas assez flexible.</li>
-<li>Le modèle <strong>Bag of Words</strong> est basé sur les fréquences (TF·IDF).</li>
-<li>La <strong>distance cosinus</strong> est une extension de l’intersection ensembliste.</li>
-<li>Les <strong>modèles probabilistes</strong> estiment la pertinence des termes.</li>
-<li>La <strong>LSI</strong> vise à décorréler l’embedding TF·IDF.</li>
-<li>La LSI révèle des <strong>facteurs latents linéaires</strong> (concepts).</li>
-<li>Les modèles de <strong>bas rang</strong> (basés sur la SVD) sont communs dans de nombreux domaines.</li>
-<li>Des équivalents <strong>non-linéaires</strong> existent (basés sur les réseaux de neurones).</li>
-</ul>
-</section>
-<section id="progression-des-modèles" class="level2">
-<h2 class="anchored" data-anchor-id="progression-des-modèles">Progression des modèles</h2>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart TD
-    A[Texte brut] --&gt; B[Boolean Model\nBinaire, inflexible]
-    B --&gt; C[Bag of Words / TF-IDF\nFréquences, continu]
-    C --&gt; D1[Vector Space Model\nSimilarité cosinus]
-    C --&gt; D2[Probabilistic Model\nBIR / BM25]
-    C --&gt; D3[LSI\nDécorrélation, SVD]
-    D3 --&gt; E[Neural Embeddings\nWord2Vec, BERT...]
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
+<section id="ir-moderne-recherche-du-plus-proche-voisin" class="level2">
+<h2 class="anchored" data-anchor-id="ir-moderne-recherche-du-plus-proche-voisin">IR moderne : recherche du plus proche voisin</h2>
+<blockquote class="blockquote">
+<p>Les techniques récentes de recherche d’information représentent requêtes et documents par des vecteurs denses, et la recherche devient un <strong>problème de plus proche voisin approximatif</strong> (Approximate Nearest Neighbor Search).</p>
+</blockquote>
+<p>Cette évolution illustre comment les plongements neuronaux ont transformé en profondeur la discipline.</p>
 <hr>
 </section>
 </section>
 <section id="questions-dexamen" class="level1">
-<h1>Questions d’Examen</h1>
-<p>Les questions suivantes (tirées du cours) nécessitent généralement des réponses formelles et mathématiques :</p>
+<h1>Questions d’examen</h1>
+<p>Les questions suivantes, issues du cours, nécessitent des <strong>réponses formelles et mathématiques</strong> :</p>
+<section id="question-1-relations-non-linéaires" class="level2">
+<h2 class="anchored" data-anchor-id="question-1-relations-non-linéaires">Question 1 : Relations non-linéaires</h2>
+<p><strong>Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non-linéaires entre termes ?</strong></p>
+<p>La non-linéarité vient de l’utilisation de fonctions exponentielles (softmax, exp) dans le processus d’apprentissage. Contrairement à LSI qui effectue une factorisation matricielle linéaire, Word2Vec optimise une vraisemblance via un réseau de neurones avec activation softmax, et GloVe minimise une perte quadratique sur les logarithmes de co-occurrences. Ces formulations permettent d’encoder des relations géométriques complexes (translations, rotations) impossibles à représenter linéairement.</p>
+</section>
+<section id="question-2-différences-fondamentales" class="level2">
+<h2 class="anchored" data-anchor-id="question-2-différences-fondamentales">Question 2 : Différences fondamentales</h2>
+<p><strong>Quelles sont les différences fondamentales dans la construction de ces modèles ?</strong></p>
+<p>CBoW et Skip-gram apprennent en optimisant une <strong>prédiction locale</strong> (contexte ↔︎ cible) de manière stochastique. GloVe, en revanche, minimise une perte globale sur la <strong>matrice entière de co-occurrence</strong>, pondérée par <span class="math inline">\(\psi\)</span>. GloVe intègre donc explicitement l’information de fréquence globale des co-occurrences, tandis que Word2Vec la traite implicitement.</p>
+</section>
+<section id="question-3-utilisation-du-plongement" class="level2">
+<h2 class="anchored" data-anchor-id="question-3-utilisation-du-plongement">Question 3 : Utilisation du plongement</h2>
+<p><strong>Comment utilise-t-on le plongement résultant ?</strong></p>
+<p>Les poids de la matrice <span class="math inline">\(W\)</span> (ou <span class="math inline">\(W&#39;\)</span>) servent de table de correspondance. Pour représenter un document, on calcule la moyenne des vecteurs de ses termes. La recherche s’effectue ensuite par calcul de distance euclidienne entre le vecteur de la requête et les vecteurs des documents.</p>
+</section>
+<section id="question-4-dimensionnalité" class="level2">
+<h2 class="anchored" data-anchor-id="question-4-dimensionnalité">Question 4 : Dimensionnalité</h2>
+<p><strong>Quelle est la dimensionnalité impliquée ?</strong></p>
 <ul>
-<li>Qu’est-ce que la <strong>Valeur de Statut de Récupération</strong> (RSV) ?</li>
-<li>Pourquoi le <strong>modèle booléen</strong> n’est-il pas flexible ?</li>
-<li>Qu’est-ce que la <strong>fréquence des termes</strong> (TF) ? L’<strong>IDF</strong> ?</li>
-<li>Comment TF et IDF se reflètent-ils dans un <strong>nuage de tags</strong> ?</li>
-<li>Quelle information chacun de ces facteurs véhicule-t-il ?</li>
-<li>Quelle est la <strong>structure d’un modèle probabiliste</strong> ?</li>
-<li>Comment utiliser la <strong>régression logistique</strong> en RI ?</li>
-<li>Pourquoi le modèle BIR s’appelle-t-il <strong>Binary Independence</strong> ?</li>
-<li>Qu’est-ce que le <strong>rapport de cotes</strong> (odds ratio) ?</li>
-<li>Qu’est-ce qu’un <strong>concept</strong> dans le modèle LSI ?</li>
-<li>En quel sens le modèle LSI <strong>décorrèle-t-il</strong> les features ?</li>
-<li>Qu’est-ce que la <strong>stratégie de repliement</strong> (fold-in) ?</li>
+<li>Vocabulaire : <span class="math inline">\(N\)</span> mots (typiquement <span class="math inline">\(10^4\)</span> à <span class="math inline">\(10^6\)</span>)</li>
+<li>Dimension du plongement : <span class="math inline">\(C\)</span> (typiquement 100 à 300)</li>
+<li>La matrice <span class="math inline">\(W\)</span> est de dimension <span class="math inline">\(N \times C\)</span></li>
+<li>La matrice <span class="math inline">\(W&#39;\)</span> est de dimension <span class="math inline">\(C \times N\)</span></li>
+<li>Le produit <span class="math inline">\(v_T^{\prime\,\top} v_C\)</span> est un scalaire</li>
 </ul>
+</section>
+<section id="question-5-risque-de-relations-inappropriées" class="level2">
+<h2 class="anchored" data-anchor-id="question-5-risque-de-relations-inappropriées">Question 5 : Risque de relations inappropriées</h2>
+<p><strong>Quel est le risque d’enregistrer des relations inappropriées entre termes ?</strong></p>
+<p>Les co-occurrences reflètent les biais présents dans les corpus d’entraînement (biais de genre, biais culturels, stéréotypes). Des associations indésirables peuvent être apprises et propagées dans les applications, avec des conséquences éthiques potentiellement importantes.</p>
 <hr>
 </section>
-<section id="références" class="level1">
-<h1>Références</h1>
+</section>
+<section id="résumé-du-chapitre" class="level1">
+<h1>Résumé du chapitre</h1>
+<p>🧠 <strong>Points clés à retenir</strong> :</p>
 <ul>
-<li>[1] Sheldon Axler. <em>Linear Algebra Done Right</em>. Springer, 2015.</li>
-<li>[2] Jonathan S. Golan. <em>The Linear Algebra a Beginning Graduate Student Ought to Know</em>. Springer, 2004.</li>
-<li>[3] Daniel Jurafsky and James H. Martin. <em>Speech and Language Processing</em>. 3rd edition, 2026.</li>
-<li>[4] Stephen Robertson et al. <em>Okapi at TREC-3</em>. NIST, 1995.</li>
-<li>[5] Stephen Robertson and Hugo Zaragoza. <em>The probabilistic relevance framework: BM25 and beyond</em>. Foundations and Trends in IR, 2009.</li>
-<li>[6] K. Sparck Jones, S. Walker and S.E. Robertson. <em>A probabilistic model of information retrieval: Part 1 &amp; 2</em>. Information Processing &amp; Management, 2000.</li>
+<li><p>Les plongements neuronaux sont <strong>basés sur le contexte</strong> : la signification d’un terme est définie par ses co-occurrences.</p></li>
+<li><p><strong>Word2Vec</strong> (CBoW et Skip-gram) apprend à <strong>prédire</strong> des termes à partir de leur contexte via un réseau de neurones.</p></li>
+<li><p><strong>GloVe</strong> exploite les <strong>fréquences globales</strong> de co-occurrence pour construire un plongement plus stable.</p></li>
+<li><p>Ces modèles capturent des <strong>relations non-linéaires</strong> que les approches classiques (TF·IDF, LSI) ne peuvent pas représenter.</p></li>
+<li><p>La <strong>mesure de similarité</strong> utilisée doit être cohérente avec le modèle de plongement (distance euclidienne pour Word2Vec et GloVe).</p></li>
+<li><p>Les plongements héritent des <strong>biais sociétaux</strong> présents dans les corpus d’entraînement.</p></li>
+<li><p>Ils constituent le socle des modèles modernes comme <strong>FastText</strong> et <strong>BERT</strong>, à la frontière entre IR et NLP.</p></li>
 </ul>
 
 
