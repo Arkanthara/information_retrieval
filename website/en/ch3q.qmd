@@ -1,0 +1,480 @@
+---
+title: "Neural Embeddings — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental principle of context-based Embeddings (embeddings)?
+
+- [ ] The meaning of a term is determined by its frequency in the corpus
+- [x] The meaning of a term is determined by the terms that surround it
+- [ ] The meaning of a term is determined by its length
+- [ ] The meaning of a term is independent of its textual environment
+
+> Explanation:
+> The distributional hypothesis states that words appearing in similar contexts have close meanings. This is the foundation of Word2Vec and GloVe.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the prediction direction of the CBoW (Continuous Bag of Words) model?
+
+- [ ] Target term → Context terms
+- [x] Context terms → Target term
+- [ ] Target term → Next target term
+- [ ] Whole body → Target term
+
+> Explanation:
+> CBoW predicts the target term $W_T$ from the surrounding words $W_C$, that is, it estimates $\mathbb{P}(W_T \mid W_C)$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the prediction direction of the Skip-gram model?
+
+- [ ] Context terms → Target term
+- [x] Target term → Context terms
+- [ ] Full document → Target term
+- [ ] Previous term → Next term
+
+> Explanation:
+> Skip-gram is the opposite of CBoW: he estimates $\mathbb{P}(W_C \mid W_T)$, i.e. the probability of context words given the target word.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In Word2Vec, what are the $\theta = [W, W']$ parameters?
+
+- [ ] The terms of the vocabulary and their frequencies
+- [ ] Co-occurrence and distance matrices
+- [x] The weight matrices of the neuron network (inlet layer and output layer)
+- [ ] The vectors of query and document
+
+> Explanation:
+> $W$ is the weight matrix between the input layer and the hidden layer, and $W'$ between the hidden layer and the output layer. It is these learned weights that constitute embedding.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What similarity measure is used with PhG0PH Word2Vec and GloVe?
+
+- [ ] Cosine similarity
+- [ ] Standard scalar product
+- [x] Euclidian distance (Euclidean distance)
+- [ ] Distance from Kullback-Leibler
+
+> Explanation:
+> The similarity measurement shall be consistent with the construction of the embedding. For Word2Vec and GloVe, this is the Euclidean distance in the vector space learned.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: LSI (Latent Semantic Indexing) is a embedding based on the local context of terms.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> LSI is a embedding based on **content** (Content-based). It factorizes the global term-document matrix to extract latent concepts **linear**, regardless of the local context of the occurrence of terms.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### With a $m = 2$ size context window and the target word "plays" in the sentence "The cat **plays** with the ball", how many pairs (target, context) are generated?
+
+- [ ] 2
+- [ ] 3
+- [x] 4
+- [ ] 6
+
+> Explanation:
+> With $m = 2$, you take 2 words before ("Le", "chat") and 2 words after ("with", "la"), which generates 4 pairs: ("play","Le"), ("play","chat"), ("play","with"), ("play","la").
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is the standard softmax function problematic for large vocabularies in Word2Vec?
+
+- [ ] It does not converge for broad vocabularies
+- [ ] It produces negative probabilities
+- [x] Its denominator requires a sum on all vocabulary, i.e. a $O(N)$ complexity per step
+- [ ] It cannot be differentiated
+
+> Explanation:
+> $\mathbb{P}(W_T \mid W_C) = \exp(v_T^{\prime\top} v_C) / \sum_i \exp(v_i^{\prime\top} v_C)$ requires the calculation of exponential $N$ at each step. For $N = 10^5$ words, this is prohibitive.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Hierarchical Softmax reduces the calculation complexity of $O(N)$ to:
+
+- [ ] $O(1)$
+- [ ] $O(\sqrt{N})$
+- [x] $O(\log N)$
+- [ ] $O(N^2)$
+
+> Explanation:
+> By organizing vocabulary in a binary tree (like WordNet), the probability of a term is calculated as a product of probability along the root path→sheet, which gives $O(\log N)$ operations.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental difference between GloVe and Word2Vec regarding co-occurrences?
+
+- [ ] GloVe uses a larger context window
+- [ ] Word2Vec uses global co-occurrences, GloVe local co-occurrences
+- [x] Glove explicitly weighs co-occurrences according to their overall frequency, Word2Vec implicitly treats them
+- [ ] GloVe ignores null co-occurrences, Word2Vec includes them all
+
+> Explanation:
+> Word2Vec optimizes a local prediction without considering the density of co-occurrences. GloVe minimizes an overall loss weighted by $\psi(\text{card}\{(w_k,w_i)\})$, giving more importance to frequent pairs.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In GloVe, what geometrically captures the difference in $v_i - v_j$ vectors?
+
+- [ ] Relative frequency of the terms $w_i$ and $w_j$
+- [x] The ratio of probability of co-occurrence $\mathbb{P}(w_k \mid w_i) / \mathbb{P}(w_k \mid w_j)$
+- [ ] The syntactic distance between $w_i$ and $w_j$
+- [ ] The sum of the co-occurrences of the two terms
+
+> Explanation:
+> $\exp((v_i - v_j)^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i) / \mathbb{P}_{\text{cooc}}(w_k \mid w_j)$. It is this property that allows vector analogies of the type "king - man + woman 
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: In the CBoW model, the probability $\mathbb{P}(W_T \mid W_C)$ is approximated by the scalar product $v_T^{\prime\top} v_C$.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> Yes. The $v_C$ vectors (from $W$) and $v_T'$ ($W'$ column) are such that their scalar product approximates the non-standardized score. Softmax then normalizes this score in probability.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why do neuronal embeddingss (Word2Vec, GloVe) capture **nonlinear relationships**, unlike LSI?
+
+- [ ] Because they use more data
+- [ ] Because their vocabulary is bigger
+- [x] Because their learning involves nonlinear functions (exponential, softmax) where LSI performs linear matrix factorization
+- [ ] Because they ignore grammatical words
+
+> Explanation:
+> LSI = decomposition into singular values (SVD) = transformation **linear**. Word2Vec/GloVe optimize exponential functions to encode complex geometric structures (translations, rotations) that cannot be linearly represented.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: Pre-trained model Word2Vec can be used directly to represent documents by calculating the average vectors of their terms.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> Yes. Pre-entry models provide a table of matches (lookup table). The vector of a document is calculated as $\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: We want to compare two systems of information retrieval. The first uses TF·IDF with cosinus similarity. The second uses Word2Vec with Euclidian distance. For the query "fast car", the second system also returns documents containing "automobile speed" without these words appearing in the query. What property of Word2Vec explains this behavior?
+
+- [ ] Word2Vec weighs rare terms more strongly
+- [ ] Word2Vec indexing synonyms explicitly in his vocabulary
+- [x] Close synonyms and semantically terms have close vectors in the space of embedding because they appear in similar contexts
+- [ ] Word2Vec uses infinite context window
+
+> Explanation:
+> "car" and "automobile", "fast" and "veloce" co-appear in similar contexts in the training corpus. Their vectors are therefore close in the space of embedding, allowing a semantic search beyond the exact correspondence of the terms.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the GloVe loss function, what is the $\psi(x)$ weighting function for $\psi(0) = 0$ and $\psi(\infty) = 1$?
+
+- [ ] Standardize vectors to have a unit standard
+- [x] To ignore null co-occurrence pairs and to cap the influence of very frequent pairs (often not very informative grammatical words)
+- [ ] Accelerate gradient convergence
+- [ ] To reduce the embedding dimension automatically
+
+> Explanation:
+> $\psi(0) = 0$: null co-occurrence does not contribute to loss. $\psi(\infty) = 1$: The very strong co-occurrences (often due to functional words such as "the", "of") are capped so as not to dominate learning.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: A information retrieval system uses Word2Vec embeddings trained on American press articles from the 1990s. It systematically combines technical trade names with male profiles. What is the main cause of this problem and what is the solution proposed by the literature?
+
+- [ ] Cause: vocabulary too small. Solution: Increase vocabulary size
+- [ ] Cause: context window too small. Solution: Increase window
+- [x] Cause: societal bias (societal biases) present in the training corpus. Solution: debiasing techniques of embeddings
+- [ ] Cause: dimension of embedding too small. Solution: Increase dimension
+
+> Explanation:
+> Co-occurrence in historical corpus reflects cultural stereotypes. Bolukbasi et al. (2016) showed associations like "man: programmer :: woman: housewife". Post-training clearance techniques were proposed to correct these associations.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the basic limit of static embeddingss (Word2Vec, GloVe) against polysemia, and what model responds to it?
+
+- [ ] Limit: they do not handle rare words. Solution : TF·IDF
+- [x] Limit: A polysemic word receives a single mean vector regardless of the meaning. Solution: BERT that generates contextual embeddingss
+- [ ] Limit: they are too slow to calculate. Solution: hierarchical softmax
+- [ ] Limit: they do not manage non-English languages. Solution: Multilingual Glove
+
+> Explanation:
+> "bank" (financial institution) and "bank" (river river) share a single vector in Word2Vec/GloVe. BERT (Bidirectional Encoder Representations from Transformers) generates a different vector for each occurrence according to its phrasing context.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: We train a Skip-gram model on a specialized medical corpus. After training, $\|v_{\text{aspirine}} - v_{\text{ibuprofène}}\|$ is observed to be very weak. What language interpretation can be given to this result?
+
+- [ ] Both drugs are chemically identical
+- [ ] The corpus contained few occurrences of these terms
+- [x] Both terms frequently appear in similar contexts (same symptoms treated, same dosage, etc.), indicating semantic proximity in the medical field
+- [ ] The context window was too large
+
+> Explanation:
+> A low Euclidian distance means that the vectors are close, so that the terms co-appear in similar contexts. In a medical corpus, aspirin and ibuprofen are often used in the same contexts (anti-inflammatory, pain, fever), hence their vectorial proximity.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among the following statements about the relationship between Word2Vec and modern information retrieval, which is correct?
+
+- [ ] Word2Vec has permanently replaced TF·IDF in all systems
+- [ ] Neuronal embeddings are only used for text classification
+- [x] The dense embeddingss form the basis of the modern Dense Retrieval, where documentary research becomes a problem of nearer approximate neighbour (Approximate Nearest Neighbor)
+- [ ] GloVe is sufficient for all semantic research needs without requiring more recent models
+
+> Explanation:
+> Modern research techniques (bi-encoders based on BERT, etc.) encode queries and documents in dense vectors, then perform a search of the nearest approximate neighbour (ANN). Word2Vec/GloVe are the direct precursors of this approach.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Either the sentence "The doctor treats the patient" with a $m = 1$ window. In CBoW, what pairs (context → target) are generated for the word "sign"?
+
+- [ ] "Medicine", "Lord" and "Lord", "The"
+- [x] "The", "Medicine", "Medicine", "Nord", "Nord", "The", "Patient" — and for "Nord" specifically: "Medicine", "Nord" and "The", "Nord"
+- [ ] All phrase word combinations
+- [ ] Only ("physician", "the") because they frame "sign"
+
+> Explanation:
+> For the target word "sign" with $m=1$: the contexts are "doctors" (left) and "the" (right). The pairs generated are ("Lord","Medicine") and ("Lord","The"), which will be used to train $\mathbb{P}(W_T = \text{"soigne"} \mid W_C)$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: In GloVe, the term $b_i$ (bias associated with $w_i$) in the formula $v_i^\top v_k + b_i + b_k - \log\,\text{card}\{(w_k,w_i)\}$ comes from the fact that $\log\,\text{card}\{(w_i)\}$ does not depend on $w_k$.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> Yes. We develop: $v_i^\top v_k = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}$. The term $\log\,\text{card}\{(w_i)\}$ is constant for a fixed $w_i$, regardless of $w_k$: it therefore constitutes a **bias** $b_i$ absorbed in the model parameters.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Which model is best suited to deal with rare words or neologisms (out of vocabulary, Out-of-Vocabulary)?
+
+- [ ] Word2Vec CBoW
+- [ ] Word2Vec Skip-gram
+- [ ] Glove
+- [x] FastText, which breaks down words into subwords and can represent any word ever seen in training
+
+> Explanation:
+> FastText (Bojanowski et al., 2016) enriches word vectors with information on character n-grams. For an unknown word, its vector is built from its subcomponents, allowing a generalization to words outside vocabulary.
+
+```

@@ -1,0 +1,545 @@
+---
+title: "Indexing to Information Retrieval — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the correct definition of indexing in information retrieval?
+
+- [ ] Calculate the similarity between all documents and a query at the time of search
+- [x] Create an auxiliary data structure to organize and accelerate data access
+- [ ] Store all documents in a relational database
+- [ ] Sort documents in alphabetical order
+
+> Explanation:
+> Indexing consists of building an off-line structure that accelerates certain types of access to data, at the cost of construction and additional space.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What are the three basic operations that an index must take?
+
+- [x] Insertion, deletion, search
+- [ ] Reading, writing, execution
+- [ ] Sort, merge, partitioning
+- [ ] Compression, decompression, indexing
+
+> Explanation:
+> From the perspective of Abstract Data Type, an index displays insert/add, remove/delete and search/find/get.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental compromise of any index?
+
+- [ ] Precision versus recall
+- [ ] Data size versus number of queries
+- [x] query time versus indexing time and storage space
+- [ ] Insert speed against removal speed
+
+> Explanation:
+> An index reduces the time of query, but at the cost of a construction time (offline) and additional storage space. This is the threefold fundamental compromise.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### An inverted file consists of two elements. Which ones?
+
+- [x] A dictionary and a posting file
+- [ ] A primary index and a secondary index
+- [ ] A hash table and a chained list
+- [ ] A search tree and a frequency array
+
+> Explanation:
+> The dictionary contains the terms with their global information (IDF, total frequency). The posting file contains, for each term, a list of documents containing it with their local frequency.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the complexity of the naive RSV search (without inverted file)?
+
+- [ ] O(N)
+- [ ] O(M)
+- [x] O(M × N)
+- [ ] O(log N)
+
+> Explanation:
+> Without inverted file, it is necessary to iterate on the N documents, and for each to browse the M terms, hence O(M × N). The inverted file reduces this to O(
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is a query per ray (range query or ε-query) looking for nearest neighbour?
+
+- [ ] A query that returns exactly k results
+- [x] A query that returns all neighbours at a distance of less than or equal to ε
+- [ ] A query that sorts all documents by distance
+- [ ] A query that stops after browsing N/2 documents
+
+> Explanation:
+> The query range returns a set of variable size: all x points such as d(x, q) ≤ ε. In contrast, the k-NN query returns exactly the nearest k points, regardless of their distance.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or false: Data without known structure can be indexed effectively.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> An index exploits data properties and anticipated access modes. Without an identifiable structure or knowledge of the queries type, no effective indexing is possible.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental principle of k-d-Tree?
+
+- [ ] Hatch data in random fuckets
+- [ ] Connect each point to its nearest k neighbours
+- [x] Alternate dimensions and divide data into two halves recursively
+- [ ] Order data by distance to central pivot
+
+> Explanation:
+> The k-d-Tree builds a binary tree by alternating the dimensions (d ← (d+1) mod D) and cutting the data at the median according to the current dimension, recursively.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why does the use of an inverted file reduce the complexity of calculating the RSV?
+
+- [ ] Because he compresses the weight of the terms
+- [ ] Because it removes uncommon terms
+- [x] Because w ij × w iq is not null only if the term i is in the document j ET in the query
+- [ ] Because it sorts documents out of relevance in advance
+
+> Explanation:
+> The key observation is that w ij · w iq A query contains only a small number of terms, so the sum is calculated only on the intersection I j 
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What mathematical property does the exclusion rule in pivot indexing base?
+
+- [ ] Cauchy-Schwarz Inequality
+- [ ] Pythagorean Theorem
+- [x] Triangular inequality
+- [ ] Bayes rule
+
+> Explanation:
+> Triangular inequality gives: d(q, x) ≥ The part d(p, x) is stored offline, d(p, q) is calculated online. If this lower limit exceeds the distance to the best known candidate, x is eliminated without direct calculation.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the main limitation of the AESA algorithm despite its optimum number of calculated distances?
+
+- [ ] It only works in dimension 2
+- [ ] It requires fixed pivots selected in advance
+- [x] It requires storing the complete distance matrix, O(N2) in memory
+- [ ] It is limited to searching for 1-NN only
+
+> Explanation:
+> AESA is optimal in number of distance calculations, but requires the D matrix of all distances between N points in the collection, which represents O(N2) memory space — totally impracticable for large collections.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the curse of dimensionality in the context of the closest neighbour's search?
+
+- [ ] The fact that algorithms are slower on limited processors
+- [ ] The difficulty of viewing data in more than 3 dimensions
+- [x] Distance concentration: in high dimension, all distances tend to become equal, making space indexes ineffective
+- [ ] The fact that indexes take more memory in high dimension
+
+> Explanation:
+> In high dimensions, the ratio between the maximum distance and the minimum distance from a point of query to its neighbours tends to be 1. It becomes impossible to discriminate against neighbours close to distant neighbours, which cancels the advantage of any spatial index.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In permutation indexing (PBI), how is each x i point encoded?
+
+- [ ] By its coordinates in the original space
+- [ ] By its distance to all other points
+- [x] By the order in which he "sees" the pivots, i.e. the permutation vector
+- [ ] By a binary hash vector
+
+> Explanation:
+> Each x i point is encoded by γ i: the ranking of the pivots in increasing order of distance from x i. The intuition is that two close points in space "see" the pivots in a similar order.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the role of Spearman Rho's measurement in permutation indexing?
+
+- [ ] Calculate the exact Euclidean distance between two points
+- [ ] Measuring the frequency of a term in a document
+- [x] Measure the dissimilarity between two pivot permutations to approximate the actual distance
+- [ ] Select the best pivots from the collection
+
+> Explanation:
+> ρ(γ, γ) = It serves as an approximate metric: d It can be calculated quickly (integers) and approximates the actual distance in the original space.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or false: In LSH, the objective is to minimize collisions between similar elements.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> The other way around! LSH seeks to maximize collisions between similar elements (P(h(x i) = h(x j)) > p high if d(x i, x j) ≤ τ low) and minimize collisions between dissimilar elements. That is the principle against the classic hash.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the relationship between the search for the closest neighbour (NNS) and the MIPS problem when vectors are standardized?
+
+- [ ] MIPS and NNS are still separate problems
+- [ ] NNS is a special case of MIPS only in size 1
+- [x] The two problems are equivalent: to minimize d(x i, q) is to maximize 
+- [ ] MIPS is more difficult than NNS in all cases
+
+> Explanation:
+> d(x i, q)2 = If all vectors are standardized (-) (-) (-) (-) (-) (-) (-) (-) (-) (-) (-) (-) (-) (-)
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — An engineer builds a text search engine on a collection of 10 million documents with 500,000 term vocabulary. queries contains an average of 5 terms. What is the theoretical acceleration brought by an inverted file?
+
+- [ ] No acceleration, both approaches are equivalent
+- [ ] Acceleration of a factor 10
+- [ ] Acceleration of a factor N = 10 million
+- [x] Acceleration of a factor M/
+
+> Explanation:
+> Complexity is reduced from O(M × N) to O( For the "terms of terms" part, the number of M = 500,000 is changed to I = 5, a factor of 100,000. This is why all modern search engines use inverted files.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — A recommendation system uses 1024-size eddings to represent films. To find the 10 films most similar to a given film among 50 million, what approach to choose?
+
+- [ ] k-d-Tree: optimal for high dimension
+- [ ] EASA: minimum distance calculation
+- [ ] Comprehensive research: the most accurate
+- [x] HNSW or FAISS (Product Quantization): only scalable approaches in high dimension
+
+> Explanation:
+> In dimension 1024, k-d-Tree degenerates (malediction of dimensionality). AESA requires O(N2) = O(2.5×1015) distances stored, impossible. Comprehensive research on 50M vectors is too slow. HNSW or FAISS/PQ are the only practical solutions on this scale and dimension.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is the "guillotine" partitioning strategy of k-d-Trees problematic?
+
+- [ ] It's too slow to build
+- [ ] It takes too much memory
+- [x] Straight cuts perpendicular to the axes do not adapt to the actual geometry of the data, creating ineffective cells
+- [ ] It does not support queries k-NN
+
+> Explanation:
+> The guillotine partition divides the space with hyperplanes aligned on the axes. If the data form oblique clusters or non-rectangular structures, these cuts create cells that "cut" the real clusters. Approaches such as Ball-Trees (balls) better adapt to the local geometry of the data.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — You must choose between LSH and HNSW for a similar image search system in production. Which statement correctly directs the choice?
+
+- [ ] LSH is always better because it guarantees theoretical terminals
+- [ ] HNSW is unusable as it can stay locked in local minima
+- [x] HNSW usually offers better empirical performance but consumes more memory; LSH is more compact but requires several hash functions
+- [ ] Both are equivalent in practice, the choice is arbitrary
+
+> Explanation:
+> HNSW is currently the state of art in terms of precision/speed ratio, but its graph in memory is expensive. LSH with a single function h gives a low probability of success — several functions are combined (amplification). The choice depends on the constraints: available memory, target latency, recall required.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### A vector of query q and an x i vector are not standardized. argmin d(x i, q) and argmax 
+
+- [ ] Yes, always
+- [x] No, because the terms 
+- [ ] Yes, if the size is large enough
+- [ ] No, only if vectors have very different standards
+
+> Explanation:
+> d(x i, q)2 = Without normalization, it varies according to i and contributes to ranking by distance. A very long vector can have a large scalar product 
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What stage of building an inverted file allows to group all occurrences of the same term from different documents?
+
+- [ ] Extraction (extraction)
+- [x] Sorting
+- [ ] Factorization (factorization)
+- [ ] Compression (compression)
+
+> Explanation:
+> After extraction that produces couples (term, doc id) for each document, sorting orders all these pairs by term and then by doc id. This brings together all the occurrences of the same term consecutively, then allowing compaction.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In HNSW, why is the hierarchical structure (several layers) essential?
+
+- [ ] To reduce the memory used by the graph
+- [ ] To support queries k-NN with k > 1
+- [x] The upper layers allow rapid navigation on a large scale, the lower layers allow local refinement
+- [ ] To ensure accuracy of results
+
+> Explanation:
+> Without hierarchies, the search in a flat graph would be slow: you would have to cross many knots to get closer to the query. The hierarchy reproduces the idea of "small navigable worlds": the long connections of the upper layers allow rapid jumps to the right region, then the lower layers refine the research locally.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — In what scenario is the L-EASA approach preferable to EASA?
+
+- [ ] When the collection contains less than 1000 points
+- [ ] When you want to guarantee an exact result with the minimum calculation
+- [x] When the collection is too large to store the complete distance matrix (O(N2))
+- [ ] When data are small
+
+> Explanation:
+> AESA is optimal but requires O(N2) storage for distance matrix. As soon as N becomes large (some thousands), this matrix becomes unmanageable. L-EASA uses a fixed set of pivots - P
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: Learning to Hash (L2H) typically uses a binary autoencoder to learn hash functions.
+
+- [x] True
+- [ ] False
+
+> True:
+> The L2H usually uses an autoencoder architecture whose bottleneck layer produces binary representation. This network is regulated by a term forcing local sensitivity: similar points must have similar binary codes.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among the following solutions for billion-scale research, which uses reverse files as the main mechanism?
+
+- [ ] FAISS with Product Quantization
+- [ ] Diskann
+- [x] SPANN
+- [ ] HNSW
+
+> Explanation:
+> SPANN (Chen et al., 2021) uses reverse files to organize billions of vectors. FAISS/PQ uses product quantification. DiskANN uses indexing per graph stored on disk. HNSW is a hierarchical navigable graph but does not go directly to the billionaire scale.
+
+```

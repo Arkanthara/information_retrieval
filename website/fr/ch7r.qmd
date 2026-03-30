@@ -1,0 +1,222 @@
+---
+title: "Web Information Retrieval — Révision"
+---
+
+# Motivation
+
+**Principe** : combiner analyse du **contenu** + analyse de la **structure des liens** (hyperliens).
+
+> Si une page est citée par de nombreuses pages de qualité → elle est probablement de qualité.
+
+---
+
+# Le WWW comme graphe
+
+## Modèle "Nœud Papillon" (Bow Tie Model)
+
+| Composante | Pages | Description |
+|---|---|---|
+| Central Core (SCC) | ~56M | Fortement connexe (chemins dans les 2 sens) |
+| IN | ~44M | Pointent vers le cœur, pas l'inverse |
+| OUT | ~44M | Le cœur pointe vers elles, pas l'inverse |
+| Tendrils & Tubes | ~44M | Connectées à IN ou OUT, pas au cœur |
+| Disconnected | ~17M | Isolées |
+
+**Propriétés statistiques** :
+
+- Weak CC ≈ 91%, Strong CC ≈ 26%
+- P(chemin(u,v)) ≈ 0,24 ; longueur moyenne dirigée = 16 ; non-dirigée = 6
+- Nombreuses **lois de puissance** (in-links, out-links, longueur pages…)
+
+---
+
+# Analyse des citations (Citation Analysis)
+
+$$G = (\text{documents},\ \text{références})$$
+
+| Mesure | Auteur | Définition |
+|---|---|---|
+| **Facteur d'impact** (Impact Factor) | Garfield 1972 | Nb moyen de citations vers J en année y (articles de y−1 ou y−2) |
+| **Couplage bibliographique** (Bibliographic Coupling) | Kessler 1963 | $\|bib(d_A) \cap bib(d_B)\|$ — sources communes (passé) |
+| **Co-citation** | Small 1973 | Nb de docs citant à la fois $d_A$ et $d_B$ — citants communs (avenir) |
+
+**Normalisation possible** : indice de Jaccard $J = \frac{|A \cap B|}{|A \cup B|}$
+
+⚠️ **Limite** : le facteur d'impact ne tient pas compte de la qualité de l'article citant.
+
+---
+
+# Citations vs Liens Web
+
+| Citations académiques | Liens Web |
+|---|---|
+| Endorsement éditorial (peer-review) | Souvent navigationaux |
+| Pas de conflit d'intérêts | Pas de liens vers concurrents |
+| Pertinence garantie | Portails ≠ pages de contenu |
+
+---
+
+# Autorités & Hubs (Link Analysis)
+
+| Concept | Définition |
+|---|---|
+| **Autorité** (Authority) | Page très citée par des pages de qualité — fournit de l'information de référence |
+| **Hub** | Page d'index pointant vers de nombreuses autorités |
+
+- Ensemble : **graphe bipartite** Hubs → Autorités
+- In-degree seul = mesure trop grossière (traite tous les liens comme égaux)
+
+---
+
+# Algorithme HITS
+
+**HITS** (*Hyperlink-Induced Topic Search*) — Kleinberg 1999
+
+## Construction du sous-graphe
+
+1. **Ensemble racine R** : top t pages renvoyées par un moteur classique (ex. VSR)
+2. **Ensemble de base S** : S ← R + pages pointées par R + pages pointant vers R
+
+**Heuristiques** : limiter back-pointers à b pages ; éliminer liens intra-hôte ; max m pages d'un même hôte.
+
+## Algorithme itératif
+
+$$a[p] = \sum_{q \to p} h[q] \qquad \text{(hubs alimentent autorités)}$$
+
+$$h[p] = \sum_{p \to q} a[q] \qquad \text{(autorités alimentent hubs)}$$
+
+```
+Initialiser a[p] = h[p] = 1/|S|
+répéter
+    a[p] = Σ_{q→p} h[q]
+    h[p] = Σ_{p→q} a[q]
+    Normaliser : Σ a[p] = 1,  Σ h[p] = 1
+jusqu'à convergence (~20 itérations)
+```
+
+## Formulation matricielle
+
+Soit $S$ la matrice d'adjacence ($S_{ij}=1$ si $i \to j$) :
+
+- **a** → vecteur propre principal de $S^T S$
+- **h** → vecteur propre principal de $S S^T$
+
+**Preuve** : $a = S^T h$, $h = Sa$ ⟹ $a = S^T S\, a$
+
+⚠️ **Requête polysémique** : le vecteur propre principal couvre un sens ; les vecteurs propres non-principaux couvrent les autres sens (*ex. "jaguar" : jeu vidéo / NFL / automobile*).
+
+---
+
+# PageRank
+
+## HITS vs PageRank
+
+| | HITS | PageRank |
+|---|---|---|
+| Hub/Autorité | Oui | Non (autorité seul) |
+| Portée | Sous-graphe local | Tout le Web |
+| Calcul | À la requête | Pré-calculé |
+
+## Équation de base
+
+$$r[p] = c \sum_{q \to p} \frac{r[q]}{\deg^+(q)}$$
+
+- $\deg^+(q)$ = nombre de liens sortants de q
+- $c$ = constante de normalisation ($\sum_p r[p] = 1$)
+- Chaque page q distribue **équitablement** son PR à ses voisins sortants
+
+## Problème : attracteur PageRank (PageRank Sink)
+
+Un groupe de pages ne pointant qu'entre elles **absorbe tout le PageRank** → le flux entre dans le cycle et n'en sort plus.
+
+## Téléportation (Teleport) — paramètre $\alpha$
+
+$$r[p] = c\!\left(\alpha + (1-\alpha)\sum_{q \to p} \frac{r[q]}{\deg^+(q)}\right)$$
+
+**Rôle** : empêcher le surfeur aléatoire de rester piégé dans un attracteur.
+
+## Algorithme PageRank complet
+
+```
+Initialiser r[p] = 1/|S|,  choisir α > 0
+répéter
+    r[p] = Σ_{q→p} r[q]/deg+(q)    // Propagation
+    r[p] = α + (1−α)·r[p]           // Téléportation
+    c = 1 / Σ r[p]                   // Normalisation
+    r[p] = c·r[p]
+jusqu'à convergence (~52 iter. pour 322M liens ; O(log|M|))
+```
+
+## Formulation matricielle
+
+$$r = c\,r\!\left(\alpha\,\mathbf{1}\mathbf{1}^T + (1-\alpha)S\right)$$
+
+→ **r** est le **vecteur propre gauche principal (vecteur de Perron)** de $\alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S$
+
+**Garantie** : cette matrice est irréductible & apériodique → existence et unicité (Perron-Frobenius).
+
+## Personnalisation & Spidering
+
+- **Personnalisation** : téléport non-uniforme $t[p]$ → biais vers pages proches de l'utilisateur
+- **Spidering** : ordonner la file du crawler selon le PR estimé courant
+
+---
+
+# Marches aléatoires (Random Walks)
+
+## Définitions clés
+
+| Terme | Définition |
+|---|---|
+| **Marche aléatoire** (Random Walk) | Processus $W=\{w_0,w_1,\ldots\}$ sur $G=(V,E)$ |
+| **Probabilité de transition** | $p_{ij} = 1/d_i$ si $(v_i,v_j)\in E$, sinon 0 |
+| **Chaîne de Markov** | Processus sans mémoire : $P(w_{t+1}=v_j\mid w_t=v_i)$ |
+| **Matrice stochastique** | $P=(p_{ij})$ : lignes somment à 1, $P=DS$ |
+| **Distribution stationnaire** | $\pi = \pi P$ (point fixe) |
+| **Temps d'atteinte** (Hitting time) | $H_{ij}$ = nb espéré de pas de $v_i$ à $v_j$ |
+| **Temps de navette** (Commute time) | $H_{ij} + H_{ji}$ |
+| **Temps de couverture** (Cover time) | Nb espéré de pas pour visiter tous les nœuds |
+
+## Formules essentielles
+
+$$w_{t+1} = w_t P \qquad \Rightarrow \qquad w_t = w_0 P^t$$
+
+$$P = DS \quad \text{où } D = \mathrm{diag}(1/d_1,\ldots,1/d_{|V|})$$
+
+**Convergence** : requiert graphe **irréductible** (connexe) + **apériodique** (pas de k>1 divisant tous les cycles).
+
+---
+
+# PageRank = Surfeur Aléatoire (Random Surfer)
+
+- Surfe aléatoirement ; avec prob. $t[p]$ : **téléporte** vers p
+- $r[p]$ = probabilité d'être sur p à l'équilibre = **mesure de centralité** du graphe Web
+- Téléport nécessaire pour éviter les puits (pages sans liens sortants)
+
+---
+
+# Relations entre concepts
+
+```
+Bibliométrie  ──────────►  Analyse de citations
+                                    │
+                           ┌────────┴────────┐
+                        HITS              PageRank
+                    (sous-graphe)       (Web entier)
+                    hub + autorité       autorité seule
+                    calcul à la req.    pré-calculé
+                           │                 │
+                    Vecteurs propres   Marche aléatoire
+                    de S^T S, SS^T     + téléportation
+```
+
+---
+
+# Points critiques / Pièges ⚠️
+
+- **HITS** : les autorités finales **ne sont souvent pas dans R** (amenées par S)
+- **In-degree** seul ≠ autorité (portails populaires != pages de contenu)
+- **PageRank de base** : cycles fermés = attracteurs → toujours utiliser la téléportation
+- **Téléportation** $\alpha$ : doit être > 0 pour garantir l'irréductibilité
+- **Lois de puissance** sur le Web : distribution très inégale des liens
+- **Requête polysémique HITS** : vecteur propre principal = 1 seul sens

@@ -1,0 +1,750 @@
+---
+title: "Representation of Information: Embeddings"
+---
+
+# Motivation
+
+## Why represent information?
+
+Text documents naturally appear as sequences of words. For a computer to process, compare and classify them, it is necessary to convert them into a manipulable digital form: a vector, a distribution, or more generally a **embedding**.
+
+A **embedding** is a function that associates to each document (or term) a mathematical representation in a feature space.
+
+Fundamental intuition: moving from a stack of textual documents to a matrix of numbers, while preserving information relevant to research.
+
+## Vocabulary and terms
+
+Before representing the documents, define a **vocabulary** (Vocabulary):
+
+- Documents are composed of **terms** (Terms) — typically words separated by spaces.
+- A vocabulary of $M$ terms ** relevant** is built from the collection.
+- This vocabulary serves as a common repository for all documents and queriess.
+
+The choice of vocabulary is crucial: to include too frequent terms ("the", "de" ...) pollutes representation, while too small a vocabulary loses information.
+
+## Structure of an IR system (Recall)
+
+A system of Information Retrieval (Information Retrieval, IR) operates in two main phases:
+
+** Offline phase (Offline):**
+
+- The documents are collected.
+- **features** are extracted (embedding stage).
+- A **index** is built from these features to allow a quick search.
+
+**Interactive phase:**
+
+- The user formulates a **query** (Query).
+- The query is processed and projected in the same space as the documents.
+- The Search Engine calculates the relevance of each document and produces an ordered **list** (Ranked List).
+- The user can provide a **Relevance Return** (Relevance Feedback) to refine the results.
+
+```{mermaid}
+flowchart LR
+    A[Documents] -->|Feature extraction| B[Features]
+    B -->|Indexing| C[Index]
+    D[Query] -->|Query processing| E[Processed Query]
+    E --> F[Search Engine]
+    C --> F
+    F -->|Rank by raise| G[Ranked List]
+    G -->|Fetching results| H[Display Results]
+    H -->|Relevance Feedback| D
+```
+
+---
+
+# Formalization
+
+## General rating
+
+The following rating is used throughout the course:
+
+- $N$: Number of documents in the collection.
+- $d_j \in \mathbb{R}^{[\![N]\!]}$: representation of $j$-th document. The space (and its size) depends on the model chosen.
+- $M$: vocabulary size.
+- $t_i \in \mathbb{R}^{[\![M]\!]}$: representation of $i$-th term.
+- $\mathcal{I}_j \subseteq [\![M]\!]$: set of $i$ indices of the terms contained in $j$.
+
+## query and recovery status value
+
+- $q$: representation of query in the same space as documents (depending on the model).
+- The $q$ index is used for elements related to query (e.g. $w_{iq}$).
+
+**To be retained**: The central challenge of the RI is to define a function **RSV (Retrieval Status Value)**:
+
+$$\text{RSV}(d_j, q) \in \mathbb{R}$$
+
+qui mesure la pertinence du document $d_j$ par rapport à la requête $q$. L'ordonnancement des documents selon leur RSV produit la liste de résultats.
+
+---
+
+# Le Modèle Booléen (Boolean Model)
+
+## Principe
+
+Le modèle booléen est le modèle de représentation le plus simple. Il repose sur l'idée d'un **encodage binaire** (Binary Embedding / 1-hot encoding) de chaque terme du vocabulaire.
+
+**Représentation d'un terme :**
+
+Le $i$-ième terme est représenté par un vecteur $M$-dimensionnel :
+
+$$t_i = [\delta_{ik}]_{k=1}^{M}$$
+
+where $\delta_{ik} = 1$ if $k = i$, $0$ otherwise. It is a vector with a single $1$ in the $i$ position.
+
+**Representation of a document:**
+
+A $d_j$ document is represented by the logical OR of the representations of all the terms it contains:
+
+$$d_j = \bigvee_{i \in \mathcal{I}_j} t_i$$
+
+⚠️ Les termes et les documents se trouvent ainsi sur les **sommets d'un hypercube** $[0,1]^M$. Chaque coordonnée vaut $0$ ou $1$.
+
+## Requêtes booléennes
+
+Une requête $q$ est exprimée comme une **expression logique générique** utilisant les opérateurs AND ($\wedge$), OR ($\vee$) et NOT ($\neg$).
+
+Pour l'évaluation, la requête est convertie en **forme normale disjonctive** (Disjunctive Normal Form, DNF), c'est-à-dire une disjonction de composantes conjonctives.
+
+La valeur RSV est binaire :
+
+$$\text{RSV}(d_j, q) = \bigvee_k (d_j \stackrel{?}{=} q_k)$$
+
+A **correspond** ($\text{RSV} = 1$) or **does not correspond** ($\text{RSV} = 0$) to the query.
+
+## Example with 3 terms
+
+With $M = 3$ terms: A ($t_1 = 100$), B ($t_2 = 010$), C ($t_3 = 001$).
+
+Either query $q = A \wedge (B \vee \neg C)$.
+
+**Conversion to DNF:**
+
+$$q = (A \wedge B \wedge C) \vee (A \wedge B \wedge \neg C) \vee (A \wedge \neg B \wedge \neg C)$$
+
+$$q = \underbrace{111}_{q_1} \vee \underbrace{110}_{q_2} \vee \underbrace{100}_{q_3}$$
+
+**Related documents:**
+
+Any document of the form $111$, $110$ or $100$ satisfies the query.
+
+- AAA (→ $100$), AAB (→ $110$), ABCC (→ $111$), ABCC (→ $110$), A (→ $100$)
+- CCC (→ $001$), BCCC (→ $011$), BBBB (→ $010$)
+
+Venn diagram visualization is very useful: the coloured regions correspond to the cube areas that satisfy the query.
+
+## Concrete example
+
+Query: $q = (\text{Geneva} \wedge \text{particle}) \vee \text{CERN}$
+
+- « Particle physics is well-studented in Geneva » → contains Geneva ET particle
+- "CERN leads the search for W boson" → contains CERN
+- « EU investments in searching for new items » → contains particle but not Geneva or CERN
+- "Geneva is a place for scientific research" → contains Geneva but not particle or CERN
+- "The quick brown fox jumps over the lazy dog" → no relevant terms
+
+## Benefits and limitations
+
+**Pros benefits:**
+
+- Simple and formal model.
+- Explicit and strict Query (similar to SQL).
+- Easy to implement.
+
+**Limitations (Cons):**
+
+- Some queries are difficult to express in Boolean logic.
+- binary correspondence → sensitive to exact formulation.
+- **No scheduling** among relevant documents or non-relevant documents.
+- Can return too little or too many documents.
+- Probably unscalable.
+
+**Identified needs:**
+
+- A more flexible formalism of query → **Query-by-Example (QbE)**
+- A continuum of relevance → $\text{RSV}(d_j, q) \in [0, 1]$
+
+---
+
+# The Bag of Words Model
+
+## General principle
+
+The **Sac de Mots** (Bag of Words, BoW) model is a representation in which:
+
+- Terms are the units constituting the vocabulary (e.g. words separated by spaces).
+- The terms are considered to be **independent and unordered entities**.
+- The terms appear with **multiplicities** (frequencies) → we speak of "bag" (bag) rather than overall (set).
+
+The structure of the document (paragraphs, title, word order...) is **lost**. Only the frequencies of appearance of the terms are kept.
+
+Although presented here for the text, the BoW model applies to other media (images, audio): the terms then become generic "patterns".
+
+## Frequency of terms (Term Frequency, TF)
+
+### Definition
+
+Rather than simply noting the presence or absence of a term (binary encoding), its ** occurrences** are counted.
+
+** Founder's hyposthesis:** The more frequently a word appears in a document, the more representative that word is of the document.
+
+It defines:
+
+- $f_{ij}$: gross number of occurrences of the term $i$ in $j$.
+- $\text{tf}_{ij}$: Standardized frequency of the term $i$ in $j$:
+
+$$\text{tf}_{ij} \stackrel{\text{def}}{=} \frac{f_{ij}}{\max_k f_{kj}}$$
+
+La normalisation par le terme le plus fréquent garantit $\max_i \text{tf}_{ij} = 1$.
+
+💡 Cette normalisation permet de comparer des documents de longueurs différentes sur un pied d'égalité.
+
+## Fréquence Inverse de Document (Inverse Document Frequency, IDF)
+
+### Définition
+
+La TF seule ne suffit pas : un terme très fréquent dans **tous** les documents (ex. « le », « est »…) n'est pas discriminant.
+
+On introduit l'**IDF** pour mesurer le **pouvoir discriminant** du terme $i$ dans la collection :
+
+$$\text{idf}_i \stackrel{\text{def}}{=} \log \left(\frac{n_i}{N}\right)^{-1} = \log \frac{N}{n_i}$$
+
+where $n_i$ is the number of documents containing the term $i$.
+
+### Interpretation
+
+- If a term is present in **all** documents ($n_i \approx N$) → $\text{idf}_i \approx 0$ → non-discriminatory.
+- If a term is present in **very few** documents ($n_i \ll N$) → $\text{idf}_i$ is great → very discriminating.
+
+The IDF penalizes ubiquitous terms and values rare and specific terms.
+
+## Weighting scheme TF·IDF
+
+### Definition of weight
+
+The **weight** of the term $i$ in $j$ is:
+
+$$w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$$
+
+C'est le schéma de pondération **TF·IDF**, et il constitue un embedding de documents et de termes.
+
+### La matrice terme-document
+
+L'ensemble des poids forme la **matrice terme-document** $W \in \mathbb{R}^{M \times N}$ :
+
+$$W = \begin{pmatrix} w_{11} & \cdots & w_{1N} \\ \vdots & w_{ij} & \vdots \\ w_{M1} & \cdots & w_{MN} \end{pmatrix}$$
+
+### Embedded documents
+
+$j$ is represented by the column vector of $W$:
+
+$$d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{ij}, \ldots, w_{Mj}]^T \in \mathbb{R}^M$$
+
+### Embedding des termes
+
+Le terme $i$ est représenté par le vecteur ligne de $W$ (transposé) :
+
+$$t_i = (W_{i\cdot})^T = [w_{i1}, \ldots, w_{ij}, \ldots, w_{iN}]^T \in \mathbb{R}^N$$
+
+The term is thus represented by its **presence in the collection**: two similar terms will have similar vectors in $\mathbb{R}^N$.
+
+## Example: Tag Cloud (Tag Cloud)
+
+A **Tag Cloud is a direct view of the TF·IDF:
+
+- The **size** of each word is proportional to its weight $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$.
+- Very common words in a document **and** rare in the collection appear in large.
+- The ubiquitous words in the collection (e.g. "photo") appear in small numbers despite their frequency.
+
+## Geometry of TF·IDF embedding
+
+### Vector interpretation
+
+The $j$ document can be seen as a linear combination in $\mathbb{R}^M$:
+
+$$d_j = \sum_i w_{ij} e_i = \sum_i (\text{tf}_{ij} \cdot \text{idf}_i) e_i = \sum_i \text{tf}_{ij} \tau_i$$
+
+où $\tau_i = \text{idf}_i \cdot e_i$ est la **base discriminante** associée au terme $i$.
+
+### Rôle de chaque facteur
+
+- **$\text{idf}_i$** (commun à tous les documents) : **scale** la dimension $i$ selon le pouvoir discriminant du terme. Il transforme la base canonique $\{e_i\}$ en une base pondérée $\{\tau_i\}$.
+- **$\text{tf}_{ij}$** : constitue la **vraie coordonnée** du document $j$ dans cette base discriminante.
+
+💡 Géométriquement, l'IDF étire ou contracte les axes de l'espace selon l'importance des termes. Les coordonnées dans cet espace étiré sont les fréquences TF.
+
+---
+
+# Modèles de Récupération de Base
+
+## Vue d'ensemble
+
+Les embeddings TF·IDF servent de fondation pour plusieurs modèles de récupération classiques :
+
+- **Modèle vectoriel** (Vector Space Retrieval) : similarité géométrique par cosinus.
+- **Récupération par indépendance binaire** (Binary Independence Retrieval, BIR) : estimation probabiliste de la pertinence → conduit au modèle BM25.
+
+Ces modèles s'appliquent au texte mais aussi aux médias (images, audio) via des embeddings adaptés.
+
+---
+
+# Modèle Vectoriel (Vector Space Retrieval)
+
+## Principe
+
+Avec le schéma TF·IDF, chaque document $d_j$ est un vecteur de $\mathbb{R}^M$.
+
+On peut donc utiliser l'**algèbre de cet espace vectoriel** pour mesurer la similarité entre documents et requêtes.
+
+**Paradigme Query-by-Example (QbE) :**
+
+La requête est traitée comme un **document exemple**. Elle est projetée dans le même espace $\mathbb{R}^M$ avec le même embedding TF·IDF :
+
+$$q \in \mathbb{R}^M$$
+
+The RSV is then calculated from the **geometric similarity** between $d_j$ and $q$.
+
+## First attempt: Euclidian distance
+
+A first idea would be:
+
+$$\text{RSV}(d_j, q) = \|q - d_j\|$$
+
+Cependant, cette mesure est sensible à la **norme** des vecteurs (longueur des documents). Un long document contenant les mêmes termes qu'un court document aurait une distance plus grande, ce qui n'est pas souhaitable.
+
+## Notion de similarité ensembliste
+
+L'embedding BoW repose sur l'idée de **sac de termes** : la similarité devrait refléter l'**intersection** des ensembles de termes.
+
+En notation ensembliste, si $\hat{d}_j$ est l'ensemble des termes du document $j$ et $\hat{q}$ l'ensemble des termes de la requête :
+
+$$\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}|$$
+
+**Algebraic version** (in binary space):
+
+$$\text{RSV}(d_j, q) = \sum_i w_{ij} w_{iq} = w_{\cdot j}^T w_{\cdot q} = \langle d_j, q \rangle$$
+
+avec $w_{ij} = 1$ si le terme $i$ est dans le document $j$, $0$ sinon.
+
+## Mesures de similarité
+
+En passant à l'embedding continu (TF·IDF), on obtient plusieurs mesures de similarité par extension de la notion d'intersection :
+
+| Mesure | Formule continue | Formule binaire |
+|--------|-----------------|-----------------|
+| **Matching** | $\langle d_j, q \rangle$ | $\|\hat{d}_j \cap \hat{q}\|$ |
+| **Cosinus** | $\frac{\langle d_j, q \rangle}{\|d_j\| \|q\|}$ | $\frac{\|\hat{d}_j \cap \hat{q}\|}{|\hat{d}_j|^{1/2} |\hat{q}|^{1/2}}$ |
+| **Dice** | $\frac{2\langle d_j, q \rangle}{\sum_i (w_{ij} + w_{iq})}$ | $\frac{2|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j| + |\hat{q}|}$ |
+| **Overlap** | $\frac{\langle d_j, q \rangle}{\min(\sum_i w_{ij}, \sum_i w_{iq})}$ | $\frac{|\hat{d}_j \cap \hat{q}|}{\min(|\hat{d}_j|, |\hat{q}|)}$ |
+| **Jaccard** | $\approx \frac{\langle d_j, q \rangle}{\sum_i \max(w_{ij}, w_{iq})}$ | $\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j \cup \hat{q}|}$ |
+
+## Similarité cosinus (Cosine Similarity)
+
+### Définition
+
+La mesure la plus utilisée en pratique est la **similarité cosinus** :
+
+$$\text{RSV}(d_j, q) \stackrel{\text{def}}{=} \cos(\angle(d_j, q)) = \frac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \frac{d_j^T q}{\|d_j\| \|q\|} = \frac{\sum_i w_{ij} w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2} \left(\sum_i w_{iq}^2\right)^{1/2}}$$
+
+### Properties
+
+- $\text{RSV} \in [-1, 1]$ (in practice $[0, 1]$ with positive weights).
+- $\text{RSV} = 1$ if $d_j$ and $q$ are perfectly aligned (same direction).
+- $\text{RSV} = 0$ if $d_j$ and $q$ are orthogonal (no common term).
+
+Cosine similarity is **invariant to standard**: it measures the angle between vectors, regardless of their length. Two identical documents but one twice as long will have a cosine of 1.
+
+**To be retained**: Cosinus similarity is the reference measure in vector IR, directly derived from the concept of extended embossing intersection to continuous embeddings.
+
+---
+
+# Probabilistic Retrieval Models
+
+## General principle
+
+The probabilistic approach addresses recovery from the perspective of **reliability**:
+
+For a query $q$, there is an ideal set of relevant documents in the collection. This set has **properties described by index terms**.
+
+**Central idea:** Formulate the recovery problem as the **specification of the properties of the $\mathcal{R}$** set from the available terms.
+
+## ranking principle by probability
+
+### Statement (Robertson, 1977)
+
+> If the response of a reference system to each query is a ranking of the documents in descending order of probability of utility to the user, then the overall efficiency of the system will be best possible based on the available data.
+
+— *Stephen E. Robertson, Journal of Documentation, 1977 *
+
+### Formulation
+
+**Task:** Estimate the relevance of the documents and present the results by ** Descending order of usefulness**.
+
+Here, utility = likelihood of relevance → estimate:
+
+$$P(R = \text{vrai} \mid d_j, q)$$
+
+où $R$ est une variable aléatoire de Bernoulli indiquant la pertinence.
+
+## Estimation itérative de l'ensemble $\mathcal{R}$
+
+Le processus est **itératif** :
+
+1. Le système fournit une réponse initiale.
+2. L'utilisateur juge certains documents comme pertinents ou non pertinents.
+3. Ces jugements sont utilisés comme **feedback** pour adapter la réponse.
+4. Le processus se répète jusqu'à satisfaction de l'utilisateur.
+
+```{mermaid}
+flowchart TD
+    A[Query q] -->|System Response| B[Result Set]
+    B -->|User Judgment| C{Satisfaction?}
+    C -->|Yes| D[Query Result]
+    C -->|No| E[Adapted System Response]
+    E --> B
+    B --> F[User marks some documents\nrelevant or non-relevant]
+    F --> C
+```
+
+## Décision Bayésienne
+
+### Problème de seuil
+
+Plutôt que de fixer un seuil absolu $P(R \mid d_j, q) > \tau$, on utilise le **rapport de cotes** (Odds Ratio) bayésien :
+
+$$O(R \mid d_j, q) = \frac{P(R = \text{vrai} \mid d_j, q)}{P(R = \text{faux} \mid d_j, q)} = \frac{P(R \mid d_j, q)}{P(\bar{R} \mid d_j, q)}$$
+
+### Application of Bayes Theorem
+
+$$O(R \mid d_j, q) = \frac{P(d_j \mid R, q) P(R \mid q)}{P(d_j \mid \bar{R}, q) P(\bar{R} \mid q)}$$
+
+Comme $P(R \mid q)$ est constant pour tous les documents, on obtient :
+
+$$O(R \mid d_j, q) \propto \frac{P(d_j \mid R, q)}{P(d_j \mid \bar{R}, q)}$$
+
+## Logistic regression for RI
+
+### Model
+
+If it is assumed that the log-value ratio is a **log-linear function** of the features of the document:
+
+$$\log O(R \mid d_j, q) = \phi_\theta(d_j, q) = w^T d_j + w_0$$
+
+Alors :
+
+$$P(R \mid d_j, q) = \sigma_\theta(d_j) = \frac{1}{1 + e^{-(w^T d_j + w_0)}}$$
+
+with $\theta = [w, w_0]$ the parameters to learn.
+
+### Learning
+
+$\theta$ parameters are learned by **Logistic Regression**:
+
+1. Calculate the $d_j$ features for each $j$ document, form the $D$ matrix.
+2. Select queries, form the $Q$ matrix.
+3. From pairs of relevance example $(D, Q)$, learn $\theta$ by **gradient descent**:
+
+$$w_{t+1} = w_t - \eta \nabla_\theta \mathcal{L}(D, Q; \theta)$$
+
+Il s'agit d'un modèle de **classification** entre pertinence ($R$) et non-pertinence ($\bar{R}$).
+
+💡 Les features typiques incluent les poids TF·IDF combinés à la longueur du document. N'importe quel embedding peut être utilisé.
+
+### Avantages et limites
+
+**Avantages :**
+
+- $\phi_\theta(d_j, q)$ est un modèle de pertinence **absolu**.
+- Apprentissage en ligne avec les jugements de feedback.
+
+**Limites :**
+
+- Le choix des features (embedding) est critique.
+- Lent si l'apprentissage est effectué au moment de la requête.
+
+## Récupération par Indépendance Binaire (Binary Independence Retrieval, BIR)
+
+### Modèle
+
+On suppose :
+
+- L'occurrence de chaque terme est **binaire** (présent ou absent).
+- Les occurrences des termes sont **indépendantes** dans le document.
+
+Ces deux hypothèses justifient le nom **Binary Independence** Retrieval.
+
+### Décomposition
+
+Sous ces hypothèses :
+
+$$P(d_j \mid R, q) = \prod_{i \in \mathcal{I}_j} P(t_i \mid R, q) \prod_{i \notin \mathcal{I}_j} (1 - P(t_i \mid R, q))$$
+
+Combining with the odds ratio:
+
+$$O(R \mid d_j, q) \propto \prod_{i \in \mathcal{I}_j} \frac{P(t_i \mid R, q)}{P(t_i \mid \bar{R}, q)} \cdot \prod_{i \notin \mathcal{I}_j} \frac{1 - P(t_i \mid R, q)}{1 - P(t_i \mid \bar{R}, q)}$$
+
+### Simplification algébrique
+
+En factorisant les termes présents et absents, et en passant au logarithme :
+
+$$\log O(R \mid d_j, q) \propto \sum_{i \in \mathcal{I}_j} \left[ \log \frac{P(t_i \mid R, q)}{1 - P(t_i \mid R, q)} + \log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} \right]$$
+
+The terms missing from query** may be **not known since for $i \notin \mathcal{I}_q$:
+
+$$P(t_i \mid R, q) = P(t_i \mid \bar{R}, q)$$
+
+D'où le RSV final :
+
+$$\text{RSV}(d_j, q) \propto \sum_{i \in [\![M]\!]} w_{ij} w_{iq} \left[ \log \frac{P(t_i \mid R, q)}{1 - P(t_i \mid R, q)} + \log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} \right]$$
+
+with $w_{ij}$ and $w_{iq}$ binary indicators of the term $i$ in document $j$ and query $q$.
+
+### Estimation of probabilities
+
+In practice, these probabilities are estimated by counting, using a $S$ set of the first recovered $r$ documents as **pseudo-feedback** positive:
+
+- $r_i$: number of these documents containing the term $i$.
+- $n_i$: total number of documents containing the term $i$.
+
+**Initialization (without feedback):**
+
+$$P(t_i \mid R, q) = \rho \text{ (constante)} \quad \text{et} \quad P(t_i \mid \bar{R}, q) = \frac{n_i}{N}$$
+
+On remarque que $\log \frac{1 - P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} = \log \frac{N - n_i}{n_i} \approx \log \frac{N}{n_i} = \text{idf}_i$.
+
+⚠️ **Connexion avec TF·IDF** : à l'initialisation, le BIR est lié à l'IDF !
+
+**À l'itération (avec feedback) :**
+
+$$P(t_i \mid R, q) = \frac{r_i}{r} \quad \text{et} \quad P(t_i \mid \bar{R}, q) = \frac{n_i - r_i}{N - r}$$
+
+The process continues until convergence.
+
+## Model RSJ and formula BM25
+
+### Robertson-Sparck-Jones (RSJ)
+
+The basic BIR model evolved to the **Robertson-Sparck-Jones (RSJ)** model with a weighting:
+
+$$w_i^{\text{RSJ}} = \log \frac{(r_i + 0.5)(N - R - n_i + r_i + 0.5)}{(n_i - r_i + 0.5)(R - r_i + 0.5)}$$
+
+### BM25 (Best Match 25 / OKAPI)
+
+La formule **BM25** (aussi appelée OKAPI BM25) étend le modèle RSJ en incorporant :
+
+- La **fréquence du terme** dans le document (TF).
+- La **longueur du document** (normalization par la longueur).
+
+$$w_i^{\text{BM25}}(tf) = \frac{tf'}{k_1 + tf'} w_i^{\text{RSJ}} = \frac{tf}{k_1\left((1-b) + b\frac{dl}{avdl}\right) + tf} w_i^{\text{RSJ}}$$
+
+where:
+
+- $tf$: frequency of the term in the document.
+- $dl$: Document length.
+- $avdl$: average length of documents.
+- $k_1$ (-1.2), $b$ (-0.75): control parameters.
+
+The formula BM25 completes (with the terms of the query):
+
+$$\sum_{T \in Q} w^{(1)} \frac{(k_1 + 1)tf}{K + tf} \frac{(k_3 + 1)qtf}{k_3 + qtf}$$
+
+où $qtf$ est la fréquence du terme dans la requête et $K = k_1\left((1-b) + b\frac{dl}{avdl}\right)$.
+
+🧠 **À retenir** : BM25 est le modèle de référence en RI probabiliste, encore utilisé aujourd'hui dans des systèmes modernes (Elasticsearch, Lucene…).
+
+---
+
+# Indexation Sémantique Latente (Latent Semantic Indexing, LSI)
+
+## Limites du TF·IDF
+
+L'embedding TF·IDF (BoW) présente deux faiblesses fondamentales liées à la nature du langage :
+
+### Synonymie (Synonymy)
+
+Si deux termes $a$ et $b$ ont le même sens (ex. « voiture » et « automobile »), leur embedding TF·IDF $t_a$ et $t_b$ peut être orthogonal, alors qu'ils devraient être similaires.
+
+⚠️ Un document contenant « automobile » ne sera pas retrouvé par une requête sur « voiture » avec le modèle BoW standard.
+
+### Polysémie (Polysemy)
+
+Un terme peut avoir **plusieurs sens** selon le contexte (ex. « table » → meuble ou tableau de données). Un seul vecteur ne peut pas représenter fidèlement ces sens multiples.
+
+## Vers un espace de concepts
+
+**Idée fondatrice de la LSI :** Les termes sont des **compositions de concepts** latents (Latent Concepts).
+
+Formellement, on cherche une base orthonormale $\{c_k\}_{k=1}^K$ pour un espace de concepts telle que $\langle c_k, c_l \rangle = \delta_{kl}$, et chaque terme $i$ se décompose comme :
+
+$$t_i = \sum_{k=1}^K \alpha_{ki} c_k$$
+
+Two synonym terms will have similar $\alpha$ coefficients and will be close in the space of concepts.
+
+## Recall : Decomposition in Single Values (SVD)
+
+### Definition
+
+For any $W \in \mathbb{R}^{M \times N}$ matrix, there are two $U \in \mathbb{R}^{M \times M}$ and $V \in \mathbb{R}^{N \times N}$ orthogonal matrices, and a $\Sigma \in \mathbb{R}^{M \times N}$ diagonal matrice such as:
+
+$$W = U \Sigma V^T$$
+
+avec les **valeurs singulières** $\sigma_1 \geq \sigma_2 \geq \ldots \geq 0$ sur la diagonale de $\Sigma$.
+
+### SVD tronquée (Truncated SVD)
+
+Pour $K \leq \min(M, N)$, on conserve uniquement les $K$ premières valeurs singulières et vecteurs associés :
+
+$$W_K = U_K \Sigma_K V_K^T$$
+
+with $U_K \in \mathbb{R}^{M \times K}$, $\Sigma_K \in \mathbb{R}^{K \times K}$, $V_K \in \mathbb{R}^{N \times K}$.
+
+$W_K$ is **the $K$ row approximation of $W$ in the sense of Frobenius**:
+
+$$W_K = \arg\min_{\text{rank}(A) = K} \|W - A\|_F^2$$
+
+💡 Comme $U$ et $V$ sont orthogonales, leurs colonnes forment des **bases orthonormales** : $\langle u_i, u_j \rangle = \delta_{ij}$ et $\langle v_i, v_j \rangle = \delta_{ij}$.
+
+## Application à la LSI
+
+### Embedding de termes orthogonaux
+
+On cherche $\tilde{W} \in \mathbb{R}^{M \times K}$ tel que les termes $\tilde{t}_i = \tilde{W}_{i\cdot}$ vérifient :
+
+$$\tilde{W} \tilde{W}^T = I_M \quad \text{(termes décorrélés)}$$
+
+### Construction via SVD
+
+Applying the truncated SVD to $W$: $W_K = U_K \Sigma_K V_K^T$, we have:
+
+$$W_K W_K^T = U_K \Sigma_K^2 U_K^T$$
+
+d'où :
+
+$$\Sigma_K^{-1} U_K^T W_K W_K^T U_K \Sigma_K^{-1} = I_K$$
+
+**Embedding LSI documents:**
+
+$$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$$
+
+Les coordonnées TF·IDF $d_j$ sont **projetées dans l'espace des concepts** $\mathbb{R}^K$ où les termes sont décorrélés.
+
+### Visualisation
+
+La décomposition SVD pour la LSI peut être vue ainsi :
+
+- **$U_K$** : matrice des **vecteurs de termes** (Term Vectors) — colonnes = directions des concepts dans l'espace des termes.
+- **$\Sigma_K$** : matrice des valeurs singulières — importance de chaque concept.
+- **$V_K^T$** : matrice des **vecteurs de documents** (Document Vectors) — représentation des documents dans l'espace des concepts.
+
+```{mermaid}
+flowchart LR
+    W["W (M×N)\nTF-IDF Matrix"] --> SVD[Truncated DSV]
+    SVD --> Uk["U k (M×K)\nTerm Vectors"]
+    SVD --> Sk[(K×K)\nSingle Values]
+    SVD --> Vkt["V k^T (K×N)\nDocument Vectors"]
+```
+
+## Traitement des requêtes en espace LSI
+
+La requête est traitée comme un document (paradigme QbE) :
+
+1. Représenter la requête $q$ dans l'espace TF·IDF standard.
+2. Projeter dans l'espace LSI : $\tilde{q} = \Sigma_K^{-1} U_K^T q$.
+3. Appliquer la similarité cosinus dans l'espace LSI :
+
+$$\text{RSV}(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\| \|\tilde{q}\|}$$
+
+In the LSI space, two documents dealing with the same subject with different vocabularies (synonyms) will be close, which was impossible with the standard BoW.
+
+## Choice of rank $K$
+
+The $K$ parameter controls the **generalization level**:
+
+- $K$ too small → loss of information, too coarse concepts.
+- $K$ too large → we get closer to the original TF·IDF space with its problems.
+- Practical choice: observe the decrease of the singular values $\sigma_k$ and choose $K$ at the elbow of the curve.
+
+## Index Update
+
+The concept space depends on the original collection. What to do when new documents arrive?
+
+Given the initial $N$ documents with $W_K = U_K \Sigma_K V_K^T$, we want to add $n$ new documents represented by $D$.
+
+### Accurate update strategy
+
+1. Generate $D$, the basic representation of new data.
+2. Project on existing representation: $P = U_K^T D$; Remain: $H = D - U_K P$.
+3. Calculate an orthonormal $B$ base of $H$; projection: $J = B^T H$.
+4. Form the $Q = \begin{pmatrix} \Sigma_K & P \\ 0 & J \end{pmatrix}$ matrix, calculate its SVD $Q = U_n \Sigma_n V_n^T$.
+5. Update: $[U_K B] U_n \Sigma_n \begin{pmatrix} V_K & 0 \\ 0 & I \end{pmatrix} = [W_K \; D]$.
+
+### Fold-in folding strategy
+
+A simpler approach: using existing representation for new documents without recalculating the concept base.
+
+1. Generate $D$, representation of new data.
+2. Project on existing representation: $\hat{D} = U_K^T D$.
+3. Concatenate: $[W_K \; D] \approx U_K \Sigma_K [V_K \; \hat{D}]^T$.
+
+Fold-in strategy is an approximation: new documents are supposed to express themselves in existing concepts, without enriching the conceptual space.
+
+---
+
+# Executive summary
+
+## Summary of models
+
+**Key points to remember:**
+
+- **Relevance** to query is central to RI.
+- The documents are **projected in a feature space** via embeddings.
+- The embedding **boolean** (binary) is not flexible enough.
+- The **Bag of Words** model is frequency based (TF·IDF).
+- The **distance cosinus** is an extension of the ensemblist intersection.
+- The **probabilistic models** consider the terms to be relevant.
+- The **LSI** aims to decorate the TF·IDF embedding.
+- The LSI reveals **linear latent factors** (concepts).
+- The **low-rank** models (based on SVD) are common in many areas.
+- **nonlinear equivalents** exist (based on neuron networks).
+
+## Model progression
+
+```{mermaid}
+flowchart TD
+    A[Gross text] --> B[Boolean Model\nBinaire, inflexible]
+    B --> C[Bag of Words / TF-IDF\nFrequences, continuous]
+    C --> D1[Vector Space Model\nSimilarity cosinus]
+    C --> D2[Probabilistic Model\nBIR / BM25]
+    C --> D3[LSI\nDecoration, SVD]
+    D3 --> E[Neural Embeddings\nWord2Vec, BERT...]
+```
+
+---
+
+# Review questions
+
+The following questions (from the course) generally require formal and mathematical answers:
+
+- What is the **Recovery Status Value** (RSV)?
+- Why is the **boolean model** not flexible?
+- What is **frequency of terms** (TF)? The**IDF**?
+- How are TF and IDF reflected in a **tag cloud**?
+- What information does each of these factors convey?
+- What is the **structure of a probabilistic model**?
+- How to use **logistical regression** in RI?
+- Why is the BIR model called **Binary Independence**?
+- What is the **odds ratio?
+- What is a **concept** in the LSI model?
+- In what sense does the LSI model **decorrelate the features?
+- What is the **fold-in strategy?
+
+---
+
+# References
+
+- Sheldon Axler. *Linear Algebra Done Right*. Springer, 2015.
+- Jonathan S. Golan. *The Linear Algebra a Beginning Graduate Student Ought to Know*. Springer, 2004.
+- [3\] Daniel Jurafsky and James H. Martin. *Speech and Language Processing*. 3rd edition, 2026.
+- *Okapi at TREC-3*. NIST, 1995.
+- Stephen Robertson and Hugo Zaragoza. *The probabilistic lift framework: BM25 and beyond*. Foundations and Trends in IR, 2009.
+- \[6\] K. Sparck Jones, S. Walker and H.E. Robertson. *A probabilistic model of information retrieval: Part 1 & 2*. Information Processing & Management, 2000.

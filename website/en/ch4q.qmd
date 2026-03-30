@@ -1,0 +1,459 @@
+---
+title: "Evaluation in Information Retrieval — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the correct definition of **precision** (Precision) in RI?
+
+- [ ] The relationship between the relevant recovered documents and the total of relevant documents
+- [x] The relationship between the relevant recovered documents and the total recovered documents
+- [ ] The relationship between real negatives and non-relevant recovered
+- [ ] The harmonic mean of recall and the rate of degradation
+
+> Explanation:
+> $P = TP / (TP + FP)$ — precision measures **quality** of returned results: what proportion of recovered documents is really relevant.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the correct definition of **recall** (Recall) in RI?
+
+- [ ] The relationship between the relevant recovered documents and the total recovered documents
+- [x] The relationship between the relevant recovered documents and the total of relevant documents
+- [ ] The relationship between real positives and real negatives
+- [ ] The proportion of false positives in the collection
+
+> Explanation:
+> $R = TP / (TP + FN)$ — The recall measures the **complete** recovery: what proportion of relevant documents were actually found.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### A system recovers **all** documents from the collection. What is the effect on precision and recall?
+
+- [ ] Precision = 1, Recall = 1
+- [ ] Precision = 1, Recall faible
+- [x] Recall = 1, Precision, density of relevant in the collection
+- [ ] Recall = 0, Precision = 0
+
+> Explanation:
+> Recovering everything guarantees you do not miss any relevant (Recall = 1), but the precision will be very low because you also recover all non-relevants. This trivial behavior shows why you cannot use recall alone.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: The **sensitivity** (Sensitivity) in ROC analysis is a different measure of recall (Recall).
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> Sensitivity = TPR = True Positive Rate is **identical** to recall: $TP / (TP + FN)$. These are the same formulas from different vocabularies (medical vs. RI).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the contingency table, a relevant document that is not **not recovered** is:
+
+- [ ] A real positive (TP)
+- [ ] A false positive (FP)
+- [x] A false negative (FN)
+- [ ] A Real Negative (TN)
+
+> Explanation:
+> FN (False Negative): The system missed a relevant document. This is what recall seeks to minimize. A high FN means a low recall.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Which formula corresponds to the **F1-measure**?
+
+- [ ] $F_1 = (P + R) / 2$
+- [x] $F_1 = 2PR / (P + R)$
+- [ ] $F_1 = TP / (TP + FP + FN)$
+- [ ] $F_1 = P \times R$
+
+> Explanation:
+> F1 is the **harmonic average** of P and R. It is different from the arithmetic mean: it severely penalizes cases where one of the two measures is very low.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the generalised F-measure $E$, if $\beta > 1$, what measure is favoured?
+
+- [x] precision (Precision)
+- [ ] recall (Recall)
+- [ ] The fallout
+- [ ] Generality
+
+> Explanation:
+> When $\beta > 1$, the $\beta^2 P + R$ denominator gives more weight to P. A $\beta < 1$ favours recall. At $\beta = 1$, P and R are equivalent ($F_1$).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: On a P–R curve, an ideal system maintains a precision of 1 for all levels of recall.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> A perfect system returns to the top of the list **only** of relevant documents, regardless of the number recovered. Its P–R curve runs along the top and right edges of the graph.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the formula of **Fallout?
+
+- [ ] $FP / (TP + FP)$
+- [ ] $FN / (TP + FN)$
+- [x] $FP / (TN + FP)$
+- [ ] $TN / (TN + TP)$
+
+> Explanation:
+> The Fallout measures the proportion of **not relevant** documents that have been recovered from all non-relevant items in the collection. It is also the FPR (False Positive Rate) used in the ROC curve, and it is equal to $1 - \text{Spécificité}$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### The **precision interpolated** $\hat{P}(R_j)$ at a recall $R_j$ level is defined as:
+
+- [ ] The exact precision observed at the $R_j$ level
+- [ ] Average precisions between $R_j$ and $R_{j+1}$
+- [x] Maximum observed precision for any recall between $R_j$ and $R_{j+1}$
+- [ ] Minimum precision in the $[R_j, R_{j+1}]$ interval
+
+> Explanation:
+> $\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$. This definition ensures a non-croising monotonous curve and compares measured curves at different points.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the main difference between **micro-medium** and **macro-medium**?
+
+- [ ] Micro-meaning also covers each category; the macro-meaning process each document also
+- [x] The micro-meaning also processes each document; macro-meaning treats each category also
+- [ ] Micro-mediumning is more accurate for small collections
+- [ ] There is no difference if the categories are balanced in size
+
+> Explanation:
+> In **micro-averaging**, we merge all tables → major categories dominate. In **macro-averaging**, one calculates one performance by category and then averages → all categories have the same weight, regardless of their size.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### An IR system is evaluated on a collection with **very few relevant documents** (unbalanced collection). Which curve is the most appropriate?
+
+- [ ] La courbe ROC (Receiver Operating Characteristic)
+- [x] The P–R curve (Precision–Recall)
+- [ ] Both are equivalent in this case
+- [ ] The generality curve
+
+> Explanation:
+> On unbalanced collections (not much relevant), the ROC curve may seem optimistic because the large number of TNs makes the RPF appear very low. The P–R curve is more sensitive to actual performance on the minority (relevant) class.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the definition of **R-Precision** (R-Precision)?
+
+- [ ] precision calculated at recall $R = 1.0$
+- [ ] Average precisions at 11 standard recall levels
+- [x] The precision at the $R$ position in the list, where $R$ is the total number of relevant documents
+- [ ] The recall at the position equal to the number of recovered documents
+
+> Explanation:
+> $R\text{-Precision} = TP_{N_{Rel}} / N_{Rel}$. We look at the first $N_{Rel}$ results (where relevant) and calculate the precision. A perfect system gets R-Precision = 1.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: A query has **7 relevant documents** in the collection. The system returns a list of 10 documents. Of the first 7 results, 4 are relevant. What is **R-Precision**?
+
+- [ ] $4/10 = 0.40$
+- [x] $4/7 \approx 0.57$
+- [ ] $7/10 = 0.70$
+- [ ] $4/4 = 1.00$
+
+> Explanation:
+> The R-Precision is evaluated at the first **$N_{Rel}$ positions** (here 7). There are TPs in these first 7 positions: $TP_7 = 4$. So $R\text{-Precision} = 4/7 \approx 0.57$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: The **Bull's Eye Percent** (BEP) is always greater than or equal to the R-Precision for the same query.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> BEP evaluates the first $2Q$ results (window twice as wide as Q). By expanding the window, you are more likely to capture relevant ones. Therefore, BEP is more **optimistic** than R-Precision (First-Tier).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### On a ROC curve, a curve that **done the diagonal** $y = x$ indicates:
+
+- [ ] An excellent system
+- [ ] A system that promotes precision too much
+- [ ] A system with a perfect recall
+- [x] A non-information system equivalent to a random classification
+
+> Explanation:
+> The diagonal $y = x$ corresponds to a system that randomly ranks (AUC = 0.5). A good system must be ** above** of this diagonal. The closer the curve is to the upper left corner, the better the system.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: A system has a P–R curve **still above** that of system B. What can we conclude?
+
+- [ ] System A necessarily has a better recall than B
+- [ ] Both systems are equivalent
+- [x] The A system is generally better than B (mAP A > mAP B)
+- [ ] The B system is better at low recall
+
+> Explanation:
+> If the P–R curve of A dominates that of B at all levels of recall, then the area under the curve of A (mAP A) is greater than that of B. System A is therefore generally superior.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the generality** of a collection and what is its impact on the precision?
+
+- [ ] Generality measures the size of the collection; it does not impact the precision
+- [ ] Generality is the ratio of false positives; high generality decreases recall
+- [x] Generality is the density of relevant in the collection; low generality makes precision high more difficult to maintain
+- [ ] The generality is the number of queries; it impacts macro-meaning
+
+> Explanation:
+> $G = (TP + FN) / N$. The $P = (R \cdot G) / (R \cdot G + \text{Fallout} \cdot (1-G))$ formula shows that even with a good recall and a low Fallout, if $G$ is very small (not much relevant), the precision remains weak.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case: You have to choose between **micro-awareness** and **macro-awareness** to evaluate a document classification system in 10 categories, 2 of which are very frequent and represent 80% of the corpus. Which strategy do you choose for an evaluation **fair between categories**?
+
+- [ ] Micro-awareness because it takes into account all documents
+- [x] Macro-averaging because it gives the same weight to each category
+- [ ] Both give the same result in this case
+- [ ] Neither — use F-measure only
+
+> Explanation:
+> **micro-awareness** would favour both dominant categories (80% of docs). **macro-averaging** calculates a performance by category and then averages, giving the same weight to the 10 categories — this is the right choice when you want a fair assessment.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is measuring **recall** difficult in practice in a real RI system?
+
+- [ ] Because the recall formula is too complex to calculate
+- [ ] Because users never provide realistic queries
+- [x] Because all relevant documents in a collection are never fully known
+- [ ] Because the recall depends on the threshold of similarity chosen
+
+> Explanation:
+> To calculate recall exactly, you should know **all** relevant documents ($TP + FN$). In a large collection, judging all documents is impossible. **pooling** (judgement of a subset) → recall remains an estimate.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is **pooling** used in benchmarks like TREC?
+
+- [ ] A merge algorithm of queries
+- [ ] An index compression technique
+- [x] The fusion of top-N results from several systems to create a subset to be judged by humans
+- [ ] A method of weighing terms
+
+> Explanation:
+> Pooling consists of collecting the top-N results of each participating system, merging them, and then having only this pool judged by human assessors. This is a **approximation**: documents outside the pool are assumed to be irrelevant, which may underestimate performance.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: steelblue
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: The **mAP** (Mean Average Precision) is equivalent to the area under the P–R curve interpolated to the 11 standard levels.
+
+- [x] True
+- [ ] False
+
+> Answer:
+> The mAP is defined as the mean of the interpolated precisions at 11 levels $\{0, 0.1, 0.2, \ldots, 1.0\}$, which corresponds to an approximation of the area under the P–R curve. This is the most widely used synthetic measure in RI.
+
+```

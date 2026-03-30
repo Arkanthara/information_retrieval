@@ -1,0 +1,156 @@
+---
+title: "New Embeddings — Revision"
+---
+
+# Overview
+
+## Two types of embeddings (Embeddings)
+
+| Type | Base | Models | Relationship captured |
+|------|------|---------|-------------------|
+| Content | Frequency of terms | TF·IDF, LSI, BIR | Correlations **linear** |
+| Context-based | Local co-occurrence | Word2Vec, Glove | Relations **nonlinear** |
+
+A term is characterized by the terms that surround it.
+
+---
+
+# Word2Vec
+
+## Formal Setup
+
+- $W_T$: term **target** (Target Word)
+- $W_C$: **context term** (Context Word)
+- **Objective**: estimate $\mathbb{P}(W_T \mid W_C)$
+
+## CBoW vs Skip-gram
+
+| | CBoW | Skip-gram |
+|-|------|-----------|
+| Directorate | Context → Target | Target → Background |
+| Target probability | $\mathbb{P}(W_T \mid W_C)$ | $\mathbb{P}(W_C \mid W_T)$ |
+| Advantage | Quick, common words | Rare words, small corpus |
+
+## Architecture (CBoW)
+
+```
+[w(t-2)]  ─┐
+[w(t-1)]  ─┤─→ W (N×C) ─→ Somme ─→ W' (C×N) ─→ Softmax ─→ [w(t)]
+[w(t+1)]  ─┤
+[w(t+2)]  ─┘
+```
+
+- Parameters : $\theta = [W, W']$
+- Approximation: $\mathbb{P}(W_T \mid W_C) \sim v_T^{\prime\,\top} v_C$
+
+## Loss Function
+
+$$\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log\,\mathbb{P}(W_T \mid W_C)$$
+
+$$\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N}\sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta) \quad \Rightarrow \quad \theta^* = \arg\min_\theta\,\mathcal{L}(\mathcal{X};\,\theta)$$
+
+## Softmax
+
+$$\mathbb{P}(W_T \mid W_C) = \frac{\exp(v_T^{\prime\,\top} v_C)}{\sum_i \exp(v_i^{\prime\,\top} v_C)}$$
+
+⚠️ **Coût** : $O(N)$ — prohibitif pour grand vocabulaire.
+
+**Solution** : Softmax hiérarchique (Hierarchical Softmax) → $O(\log N)$ via arbre binaire (ex. WordNet).
+
+**Alternative** : Negative Sampling — comparer la cible correcte à quelques exemples négatifs aléatoires.
+
+---
+
+# GloVe (Global Vectors)
+
+## Motivation
+
+⚠️ Word2Vec ignore la **densité globale** des co-occurrences.
+
+GloVe : les co-occurrences **fréquentes** pèsent davantage.
+
+## Probabilité de co-occurrence
+
+$$\mathbb{P}_{\text{cooc}}(w_k \mid w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
+
+## Model
+
+$$v_i^\top v_k = \log\,\text{card}\{(w_k, w_i)\} - \underbrace{\log\,\text{card}\{(w_i)\}}_{b_i\text{ (biais)}}$$
+
+### Propriété clé — différence vectorielle
+
+$$\frac{\mathbb{P}_{\text{cooc}}(w_k \mid w_i)}{\mathbb{P}_{\text{cooc}}(w_k \mid w_j)} = \exp\!\left((v_i - v_j)^\top v_k\right)$$
+
+The **translation** $v_i - v_j$ encodes the co-occurrence ratio → vector analogies.
+
+## Glove Loss Function
+
+$$\mathcal{L} = \sum_{w_i, w_k} \underbrace{\psi(\text{card}\{(w_k,w_i)\})}_{\text{pondération}} \left(v_i^\top v_k + b_i + b_k - \log\,\text{card}\{(w_k,w_i)\}\right)^2$$
+
+### Fonction $\psi$ (pondération)
+
+$$\psi(x) = \begin{cases} (x / x_{\max})^\alpha & x < x_{\max} \\ 1 & \text{sinon} \end{cases}$$
+
+- $\psi(0) = 0$: null co-occurrence ignored
+- $\psi(\infty) = 1$: co-occurrences very frequent capped
+- Typical values: $\alpha = 3/4$, $x_{\max} = 100$
+
+---
+
+# Overall summary table
+
+| Model | Type | Entity | Similarity |
+|--------|------|--------|------------|
+| Boolean | Content | Term | Logic operators |
+| TF·IDF | Content | Document | Cosinus |
+| BIR | Content | Term | Product (i.e.) |
+| LSI | Content | Document | Cosinus |
+| Word2Vec | Background | Term | **Euclidian distance** |
+| Glove | Background | Term | **Euclidian distance** |
+
+---
+
+# Critical points
+
+## Why nonlinear?
+
+- Functions **exp / softmax** in learning → complex geometric relationships (translations, rotations)
+- LSI = linear (matrix factorization) → only correlations
+
+## Practical use
+
+1. Recover vector of each term via **correlation table** (lookup table)
+2. Document = **average** vectors of its terms
+3. Similarity = **Euclidian distance** in embedding space
+
+The similarity measurement **must be consistent** with the embedding model.
+
+## Societal Biais (Societal Biases)
+
+- embeddings inherits the **bias** from the training corpus
+- Example: problematic gender associations (Bolukbasi et al., 2016)
+
+## Limits
+
+| Limit | Solution |
+|--------|----------|
+| Words outside vocabulary (OOV) | **FastText** (subwords / subwords) |
+| Polysemia (one vector per word) | **BERT** (embeddings contexts) |
+| Societal bias | Debishing techniques |
+
+---
+
+# Dimensionality
+
+- Vocabulary: $N$ words ($10^4$–$10^6$)
+- embedding dimension: $C$ (typically 100–300)
+- $W$ : $N \times C$ — $W'$ : $C \times N$
+- $v_T^{\prime\,\top} v_C$: **scalar**
+
+---
+
+# Modern extensions
+
+- **FastText**: sub-word enriched vectors
+- **BERT** : embeddings contexts (Transformers)
+- **Dense Retrieval** : Modern IR = search for the ** nearest approximate neighbour** (Approximate Nearest Neighbor)

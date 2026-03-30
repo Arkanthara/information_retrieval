@@ -1,0 +1,194 @@
+---
+title: "Information Retrieval: Introduction — Revision"
+---
+
+## Context: data explosion
+
+| Year | Global volume |
+|-------|---------------|
+| 2010 | 2 zettabytes |
+| 2018 | 33 zettabytes |
+| 2025 | ~181 zettabytes |
+
+- **Zettabyte** (zetabyte) = $2^{70}$ bytes = 1 billion terabytes
+- Growth **exponential**, not linear
+- Causes : smartphones, social networks, IoT, streaming, digitisation
+
+> YouTube: 30h/min Uploaded (2012) → 500h/min (2024) = ×15 in 10 years
+
+---
+
+## Online uses (2012)
+
+| Activity | Share of time |
+|----------|--------------|
+| Social Networking | 22% |
+| Research (Searches) | 21 % |
+| Reading Content | 20 % |
+| E-mails / Communication | 19% |
+| Multimedia | 13% |
+| Online purchases | 5 % |
+
+> 
+
+---
+
+## User requirements
+
+- **Decision** (Decision Making) → requires relevant information
+- **Informational avalanche** (Information Avalanche) → Cognitive overload
+- **Access to large deposits** (Large Repositories) → Foundation of Data Science
+
+### Information Management Pipeline
+
+```
+Documents bruts → Extraction de caractéristiques → Caractéristiques
+→ Mapping approprié → Espace de représentation
+→ Interaction utilisateur → Décision
+```
+
+### Three axes to structure raw data
+
+- **Representation** (Document Representation): feature vector by document
+- **Similarity** (Similarity Measurement): compare two documents
+- **Analysis** (Analysis): mining, learning, visualization
+
+---
+
+## Examples of representation by media type
+
+| Media | Feature extraction | Representation |
+|-------|--------------------|----------------|
+| Text | Word frequencies | TF vector, word cloud |
+| Image | Colour Histogram (RGB) | 3D visual space |
+| Audio | Spectral descriptors (MFCC) | Time vector |
+| Video | Frames + audio | Multimodal |
+| Web | Links, metadata | Hypertext Graph |
+
+> Any object to which a **embedding** can be associated is processed by the IR
+
+---
+
+## Distance in IR
+
+### Definition
+
+> **Distance / Similarity** = mathematical formalization of the similarity between two documents
+
+### Three roles of distance
+
+| Role | What it measures |
+|------|-------------------|
+| Characterizing a document | Digital summary (features) |
+| Compare two documents | Similarity / Patterns |
+| Characterize a model | Overall structure of the corpus |
+
+### Applications
+
+- **Unsupervised Mining**: clustering, fault detection, imputation
+- **Supervised Learning: Classification (k-NN), Regression, Ranking
+- **Visualization**: dimension reduction (t-SNE, UMAP, PCA)
+
+> The choice of distance measurement is **critical**: a bad measure = poor results even with good representation
+
+---
+
+## Definition of IR
+
+> **Information Retrieval (IR)** = to bring out **automatically** information **relevant** from a **large collection of documents** via a **loose query**
+
+### Keywords of the definition
+
+- **Automatically** → without human intervention by query
+- **Pertinent** → related to need, not just keywords
+- **Large collection** → transition to scale (scalability)
+- **Loose query** (Loose Query) → natural language, not formal
+
+---
+
+## History of the IR — Chronology
+
+| Year | Event |
+|-------|-----------|
+| 1950 | Moors → term *Information Retrieval* |
+| 1959 | Luhn → recovery **statistic** |
+| 1960 | Maron & Kuhns → model **probabilistic** |
+| 1966 | Cranfield Project → Evaluation** (precision, recall) |
+| 1968 | Salton → system **SMART**, vector model |
+| 1972 | DIALOG → first online commercial service |
+| ~1990 | IR on PC, storage revolution |
+| 1992 | Westlaw → Large-scale probabilistic IR |
+| 1994 | Explosion of**Internet** |
+| 1995 | IR **omnipresent** (Search button) |
+| Today | **Embeddings** neurals (BERT, GPT...) |
+
+---
+
+## Course content — Overview
+
+### Embeddings (Vector embeddings)
+
+| Type | Methods |
+|------|----------|
+| **Low** (Spare) | TF·IDF, Vector Space Model, LSI |
+| **Probabilistic** | BM25, Language Models |
+| **Dense** (Dense) | Word2Vec, BERT, Sentence-BERT |
+| **Ranking** | Learning to Rank (pointwise / pairwise / listwise) |
+
+### Other modules
+
+- **Indexing** (Indexing) → Inverted index, scalability
+- **Evaluation** → Precision, Recall, F-measure, NDCG, MAP
+- **IR Social** → Web IR, Recommendation, Network Analysis
+- **Media specific** → Text, Image (CBIR), Audio
+- **Visualization** → Manifold learning, t-SNE, UMAP
+
+---
+
+## Assessment measures — Notes
+
+| Measure | Formula / Definition |
+|--------|----------------------|
+| Precision (Precision) | Relevant Docs returned / Docs returned |
+| Recall (Recall) | Relevant Docs returned / Total relevant Docs |
+| F-measure (F-Measure) | Average harmonic Precision + Recall |
+| MAP | Precision average on several queries |
+| NDCG | Cumulative gain taking into account **position** |
+
+---
+
+## Key relationships between concepts
+
+```
+Besoin informationnel (Information Need)
+        ↓
+   Requête (Query)
+        ↓
+Système IR [Collection indexée]
+        ↓
+Documents classés par pertinence (Ranked Results)
+        ↓
+   Utilisateur → Feedback → Système IR
+```
+
+---
+
+## Critical Points / Traps
+
+- More data does not mean better informed
+- 
+- Relevance is **for the user**, not absolute
+- Dense embeddings capture **semantics**; the hollows capture the exact **terms**
+- Strict evaluation (Cranfield, 1966) is essential for comparing systems
+
+---
+
+## Key references
+
+| Authors | Book | Note |
+|---------|---------|------|
+| Manning, Raghavan, Schütze | *Introduction to IR* (2009) | Standard reference, free |
+| Baeza-Yates, Ribeiro-Neto | *Modern IR* (2011) | Theory + practice |
+| Croft, Metzler, Strohman | *Search Engines* (2015) | Practical, free |
+| Mitra, Craswell | *Neural IR* (2018) | Neuronal approaches |
+| Jurafsky, Martin | *Speech & Language Processing* (2026) | NLP, free |

@@ -1,0 +1,639 @@
+---
+title: "Indexing to Information Retrieval"
+---
+
+# Motivation: why index?
+
+The information retrieval (Information Retrieval) is **fundamentally linked to large volumes of data**. When a user formulates a query, the search engine must calculate — or estimate — a relevancy value (RSV, *Retrieval Status Value*) for **each document** in the collection relative to this query.
+
+This naive process is costly: it involves going through all the documents at each query, which is unacceptable on a large scale.
+
+## The fundamental problem
+
+The similarity between a document and a query can only be calculated ** at the time of the query** (*at query time*). However, part of the work can be anticipated during a phase of **offline pretreatment** (*offline preprocessing*).
+
+The central idea of indexing is simple: **organize data in advance** so that it can be accessed more quickly during queries, at the cost of building the index and additional storage space.
+
+## The information retrieval pipeline
+
+The information retrieval system operates in two main phases:
+
+** Offline phase (Offline):**
+
+- Extracting characteristics (*Feature extraction*) from documents
+- Construction of index (*Indexing*) from these characteristics
+
+**Interactive phase (Online):**
+
+- Formulation of query by user
+- Treatment of query (*Query processing*)
+- Search through the similarity engine (*Search engine*)
+- Ranking of results (*Rank by survey*)
+- View and Relevancy Return (*Relevance feedback*)
+
+Indexing occurs in the offline phase: it prepares a data structure that will allow the online phase to be fast.
+
+---
+
+# Indexing
+
+## General definition
+
+An **index** is an auxiliary data structure that organizes access to the main data. The aim is to make certain types of access much faster, potentially at the expense of other types of access less frequent.
+
+Think of the index of a book: it does not contain the full text, but it allows to quickly find the page where a subject is dealt with.
+
+## Abstract Data Type
+
+From an algorithmic point of view, an index must support three fundamental operations:
+
+- **Insertion** (*insert, add, put*): add new data to index
+- **Deletion** (*remove, delete*): remove data from index
+- **Research** (*search, find, get*): find data according to a criterion
+
+## The fundamental compromise
+
+The index uses **data properties** and **anticipated access modes** to make likely access quick — possibly at the cost of making access unlikely slower — at the cost of increased storage.
+
+We're talking about a triple compromise:
+
+- **Time of query** (*query time*): reduced with index
+- **indexing time**: construction cost of index
+- **Storage space** (*space*): index occupies additional memory
+
+To be remembered: an index depends both on the properties of the data **and** of the type of queries expected. Data without structure, or whose access mode is unknown, **cannot be indexed effectively**.
+
+## Indexed search vs. exhaustive search
+
+The **exhaustive search** (*exhaustive search*) covers all N items in the collection: its complexity is O(N).
+
+The **index search** aims to drastically reduce this cost by exploiting the index structure, ideally at O(log N) or better.
+
+---
+
+# Traditional indexing structures
+
+There is a wide variety of index structures developed from the 1960s to the 1990s and beyond. Among the large families:
+
+- ** Multidimensional trees** : B-Tree, R-Tree, R*-Tree, k-d-Tree, Ball-Tree, M-Tree...
+- **Hash structures** : Extended Hashing, Linear Hashing, Grid File...
+- **Text structures** : Suffix Tree, Trie, Inverted File...
+- **Hybrid structures** : BANG File, Twin Grid File, BV-Tree...
+
+This diversity reflects the richness of data types (text, images, geometry, time series...) and queries types (exact, by interval, by similarity...).
+
+---
+
+# Inverted Files
+
+## The principle of intersection indexation
+
+Recall The RSV formula based on the cosine similarity between a $d_j$ document and a query $q$:
+
+$$\text{RSV}(d_j, q) = \frac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \frac{\sum_i w_{ij} w_{iq}}{(\sum_i w_{ij}^2)^{1/2} (\sum_i w_{iq}^2)^{1/2}}$$
+
+On peut voir cela comme une version continue de l'intersection d'ensembles :
+
+$$\text{RSV}(\hat{d}_j, \hat{q}) = \frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|^{1/2} |\hat{q}|^{1/2}}$$
+
+## Key observation
+
+Basic observation: $w_{ij} \cdot w_{iq} \neq 0$ **if and only if** $w_{ij} \neq 0$ **and** $w_{iq} \neq 0$.
+
+In other words, a term contributes to the score of a document ** only if it appears both in the document and in the query**.
+
+However, a query usually contains only **a few terms** among the thousands or millions possible. Calculating the sum of $\sum_{i=1}^{M} w_{ij} w_{iq}$ on all M terms is therefore a **waste of resources**.
+
+It is much more efficient to calculate:
+
+$$\sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij} w_{iq}$$
+
+où $\mathbb{1}_j$ désigne l'ensemble des termes présents dans le document $j$ et $\mathbb{1}_q$ l'ensemble des termes de la requête.
+
+## Reformulation du problème
+
+Au lieu de demander "quels termes sont contenus dans le document $j$ et dans la requête $q$ ?", on reformule en : **"quels documents contiennent ce terme de la requête ?"**
+
+Ce renversement de perspective est le cœur du fichier inversé.
+
+## Approche naïve vs. approche avec fichier inversé
+
+**Approche naïve — O(M × N) :**
+
+```
+procedure ComputeRSV(W, q):
+    Normaliser la requête q
+    r = 0
+    pour j dans [1..N]:          // O(N) documents
+        pour i dans [1..M]:      // O(M) termes
+            r[j] = r[j] + w_ij * w_iq
+```
+
+**Approche avec fichier inversé — O(|𝕀_q|) :**
+
+```
+procedure ComputeRSV(W, q):
+    Normaliser la requête q
+    r = 0
+    pour i dans 𝕀_q:                          // O(|𝕀_q|) termes de la requête
+        pour j dans [1..N] tel que i ∈ 𝕀_j:   // i ∈ 𝕀_j ∩ 𝕀_q
+            r[j] = r[j] + w_ij * w_iq
+```
+
+💡 La complexité passe de O(M × N) à O(|𝕀_q|), c'est-à-dire proportionnelle au nombre de termes dans la requête — typiquement très petit !
+
+## Construction du fichier inversé
+
+Pour que la recherche de "tous les documents contenant le terme $i$" soit en O(1), on construit une **liste inversée** :
+
+$$i \rightarrow \{j \mid i \in \mathbb{1}_j\}$$
+
+Each term points to the list of documents containing it (with their associated weight).
+
+An inverted file consists of two parts:
+
+- **The dictionary** (*Dictionary*): contains terms (with global information like the IDF)
+- **The posting file** (*Posting file*): contains, for each term, the list of documents with their frequencies
+
+## Construction process
+
+The construction of an inverted file follows several steps:
+
+1. **Extraction** (*Extraction*): for each document, list the couples (term, doc id)
+2. **Tri** (*Sorting*): sort all these pairs by term and then by doc id
+3. **Compacting** (*Compaction*): grouping the occurrences of the same term in the same document
+4. **Factorization**: separate dictionary (term → total frequency) from postings (doc id, local frequency)
+5. **Miscellaneous operations**: compression of the posting file, optimizations...
+
+Remember: the inverted file is the ** indexing structure most used in practice** for text search. This is the basis of all modern search engines.
+
+---
+
+# Search for the Nearest Neighbor (Nearest Neighbor Search)
+
+## Why the search by similarity?
+
+With the emergence of vector representations (*embeddings*) learned by models of Machine Learning (minimization of quadratic error — MMSE), the data are organized in a Euclidian space. The match search then corresponds to the search for the next ** neighbour** (*Nearest Neighbor Search*, NNS).
+
+## Neighbourhood queries Types
+
+Two main types of queries:
+
+**Queries per radius** (*Ranges queries*, ε-queries):
+
+- Find all neighbours in a radius ε > 0 around the query
+- Result: a variable size set
+
+**Queries of nearest k neighbours** (*k-NN queries*):
+
+- Find the closest neighbors k to a query
+- Result: exactly k elements
+
+These two types of queries assume the structure of a **metric space** $(\Omega, d)$, i.e. a space with a distance verifying symmetry, separation and triangular inequality.
+
+## Space index principle
+
+Given a query $q$, to find its closest neighbours effectively:
+
+** Offline phase:**
+
+- Partition the space into cells (*buckets*) containing part of the data
+- Capture cell relationships via a structure (tree, graph)
+
+**Online phase:**
+
+- Identify the cell containing query
+- All data from this cell (and neighbouring cells) are candidate
+- Exploit cell relationships to expand research if necessary
+
+The fundamental idea is that **close data in space are likely to be in the same or neighbouring cells**.
+
+---
+
+# k-d-Trees
+
+## Introduction
+
+The **k-d-Trees** (k-dimensional trees), proposed by Bentley in 1975, are multidimensional binary research trees. Their principle is simple:
+
+> Alternate the dimensions and divide the data into two halves recursively.
+
+## Construction algorithm
+
+```
+procedure KDTree(T, X, d):
+    // T : arbre, X : données ⊂ ℝ^D, d : dimension courante
+    tant que X n'est pas vide :
+        d ← (d + 1) mod D           // alterner les dimensions
+        Trier X selon la dimension d
+        x ← médiane(X)              // point de coupure
+        Ajouter x dans T comme nœud v
+        X.remove(x)
+        Diviser X en X_right et X_left par rapport à x
+        v.right ← KDTree(T, X_right, d)
+        v.left  ← KDTree(T, X_left, d)
+```
+
+## Partitioning strategies
+
+There are two main variants:
+
+**Data-based partnership (median):**
+
+- The cut-off point is the median of the data according to the current dimension
+- Guarantees balanced sub-trees
+- Cut-off depends on data distribution
+
+**Partitioning based on coordinates (average):**
+
+- The cut-off point is the average of the space according to the current dimension
+- The cut divides the space into equal regions
+- Can generate imbalances if data are irregularly distributed
+
+## Search algorithm
+
+For a given query $q$:
+
+1. ** Descend the tree** with $q$ to locate the cell to which it belongs → 1-NN candidate
+2. **Use Euclidean geometry** (triangular inequality) to eliminate whole branches of the tree
+3. ** Extend to k-NN** by climbing the tree and exploring potentially useful branches
+
+The depth of the tree is O(log b N), which can allow a very efficient search.
+
+## Limitations on k-d-Trees
+
+Despite their elegance, k-d-Trees suffer from several important limitations:
+
+- **Partitioning "guillotine"** (*guillotine partitioning*): straight cuts are not always well adapted to the form of the data
+- **Random dimensions**: the rotation of dimensions (line 4 of the algorithm) does not take into account the variability of the data in each dimension → requires heuristics
+- **Médiction de la dimensionality** (*Curse of dimensionality*): in high dimension, k-d-Trees degenerate and their effectiveness collapses
+
+Variants such as **Ball-Trees** offer more flexibility and better manage some data distributions.
+
+---
+
+# Indexation by Pivots (Pivot-based Indexing)
+
+## General principle
+
+Pivot indexing uses a set of **representative points** (pivots) $\mathcal{P} \subset \mathcal{X}$ as **mark points** (*landmarks*) in space.
+
+The idea is that the distances between the data and these pivots allow** to exclude candidates** without calculating all the exact distances.
+
+## Algorithm
+
+```
+procedure PivotIndexing(X, q):
+
+    // Phase hors-ligne
+    Sélectionner P ⊂ X
+    Calculer et stocker f(x, p) pour tout x ∈ X, p ∈ P
+
+    // Phase en ligne
+    Calculer f(q, p) pour tout p ∈ P
+    Sélectionner les cellules pertinentes
+    Toutes les données de ces cellules sont candidates au k-NN
+```
+
+The key question is: **how to select the pivots** $\mathcal{P}$ to maximize the effectiveness of exclusion?
+
+## The Euclidian exclusion rule
+
+The theoretical basis for pivot indexing is** triangular inequality**:
+
+$$d(\mathbf{p}, \mathbf{q}) \leq d(\mathbf{p}, \mathbf{x}) + d(\mathbf{x}, \mathbf{q}) \implies d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{q}) - d(\mathbf{p}, \mathbf{x})$$
+
+$$d(\mathbf{p}, \mathbf{x}) \leq d(\mathbf{p}, \mathbf{q}) + d(\mathbf{q}, \mathbf{x}) \implies d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})$$
+
+By combining these two inequalities:
+
+$$d(\mathbf{q}, \mathbf{x}) \geq \underbrace{|d(\mathbf{p}, \mathbf{x})}_{\text{hors-ligne}} - \underbrace{d(\mathbf{p}, \mathbf{q})|}_{\text{en ligne}}$$
+
+💡 Cette borne inférieure sur $d(q, x)$ est calculable **sans** connaître $d(q, x)$ directement : on utilise $d(p, x)$ stocké hors-ligne et $d(p, q)$ calculé en ligne !
+
+## Principe d'exclusion
+
+Le mécanisme d'exclusion fonctionne ainsi :
+
+- **Indexer** les données par rapport aux pivots : $f(x, p) = d(p, x)$ (stocké hors-ligne)
+- **Calculer** la distance de la requête aux pivots : $f(q, p) = d(p, q)$ (calculé en ligne)
+- **Borner inférieurement** la distance de chaque donnée à la requête
+- **Exclure** les données dont la borne inférieure dépasse la distance au meilleur candidat connu
+
+---
+
+# AESA et L-AESA
+
+## L'algorithme AESA
+
+L'**Approximating and Eliminating Search Algorithm** (AESA), proposé par Micó, Oncina et Vidal (1994), pousse le concept de pivots à l'extrême : les pivots sont construits **dynamiquement au cours de la recherche** via une stratégie de *branch-and-bound*.
+
+La borne inférieure utilisée est :
+
+$$d(\mathbf{q}, \mathbf{x}_i) \geq \max_{\mathbf{p} \in \mathcal{P}} |d(\mathbf{p}, \mathbf{x}_i) - d(\mathbf{p}, \mathbf{q})| \quad \forall \mathbf{x}_i \in \mathcal{X}$$
+
+The algorithm maintains a $\mathbf{b}$ vector where $\mathbf{b}[i]$ is the best known lower terminal for $d(q, x_i)$.
+
+## AESA algorithm (simplified)
+
+```
+procedure AESA(X, q):
+
+    // Phase hors-ligne
+    Calculer D : matrice des distances pour X   // O(N²) stockage
+
+    // Phase en ligne
+    b ← 0 ; A ← X ; x ← random(A) ; A ← A - {x} ; d_min ← ∞
+    tant que A n'est pas vide :
+        d_current = d(x, q)
+        d_min = min(d_min, d_current)
+        Mettre à jour x* si d_current < d_min
+        b[i] = max(b[i], |D[x_i, x] - d_current|)  pour tout x_i ∈ A
+        A ← A - {x_i | b[i] ≥ d_min}               // Élimination (Bound)
+        x ← argmin_A b ; A ← A - {x}               // Sélection (Branch)
+```
+
+## Properties and boundaries of EASA
+
+**Highlights:**
+
+- AESA is **optimal in number of distance calculations**: it minimizes the number of exact distances calculated
+
+**Critical limitation:**
+
+- 
+- This represents a storage in **O(N2)**, totally impracticable for large collections
+
+**L-EASA** (Linear AESA) is a variant that reduces the cost of storage at O(N ×
+
+---
+
+# Nearest Neighbor Search Approximative
+
+## Why the approximation?
+
+Many algorithms effectively resolve the exact search of the nearest neighbour in **low dimension**. However, in **high dimension**, the phenomenon of **concentration of distance** makes these strategies largely ineffective.
+
+The phenomenon of concentration of distances: in high dimension, all distances between a point of query and points in the collection tend to become **equal**. It becomes impossible to distinguish close neighbours from distant neighbours.
+
+This phenomenon is a manifestation of the **malediction of dimensionality** (*curse of dimensionality*).
+
+To overcome this complexity, we turn to the **Approximative Search of the Nearest Neighbor Search** (*Approximate Nearest Neighbor Search*, ANNS).
+
+## Formal definition of ANNS
+
+Given a $\mathcal{X} \subset \Omega$ data set in a $(\Omega, d)$ metric space, a query $q \in \Omega$, and the $k > 0$ and $\varepsilon > 0$ parameters:
+
+Either $d_k$ the (unknown) distance from $q$ to its nearest neighbour $k$-th. ANNS seeks a set of results such as:
+
+- All $x_i$ with $d(x_i, q) \leq d_k$ are **included** (real positives)
+- No $x_i$ with $d(x_i, q) > (1 + \varepsilon) d_k$ is included
+
+Therefore, a grey $[d_k, (1+\varepsilon)d_k]$ area is tolerated where points can be included or excluded without warranty. The $\varepsilon$ parameter controls the precision/speed compromise.
+
+The overall strategy is to **define a new metric** $\tilde{d}(.,.)$ **contractive**: $\tilde{d}(x_1, x_2) \leq d(x_1, x_2)$, which is less expensive to calculate and preserve approximately the neighbourhood structure.
+
+---
+
+# Permutation-based Indexing
+
+## Principle
+
+Permutation-based Indexing* PBI is an ANNS technique proposed by Chávez, Figueroa and Navarro (2008). The idea is to **characterize each data by the order in which it sees the pivots**.
+
+Intuition: if two $x$ and $y$ dots are close in space, then they should "see" the pivots in a similar order (the same pivots are close to them, in the same order).
+
+## Algorithm
+
+```
+procedure PBI(X, q):
+
+    // Phase hors-ligne
+    Sélectionner P ⊂ X
+    pour tout x_i ∈ X :
+        Ordonner P par distances depuis x_i
+        x_i est encodé par le vecteur de permutation σ_i
+
+    // Phase en ligne
+    Encoder q en σ_q : ordonner P et retenir la permutation
+    Utiliser la distance de permutation pour comparer σ_q et σ_i
+```
+
+## Spearman Rho's measurement
+
+To compare two $\sigma$ and $\theta$ permutations of $[\![P]\!]$, the **measurement of Spearman Rho** is used:
+
+$$\rho(\sigma, \theta) = \sum_{i=1}^{P} (\sigma[i] - \theta[i])^2$$
+
+Dans notre contexte, $\sigma_i[j]$ indique la **position du $j$-ème pivot** dans l'ordre vu depuis $x_i$. La distance approximative entre la requête et une donnée est alors :
+
+$$\tilde{d}(\mathbf{q}, x_i) = \rho(\sigma_q, \sigma_i) = \sum_{j=1}^{|\mathcal{P}|} (\sigma_q[j] - \sigma_i[j])^2$$
+
+## Benefits and acceleration
+
+- The calculation of $\rho$ is **fast**: it involves only integer comparisons
+- It can be further accelerated by using **reverse files on the pivots**:
+  - Set $N_P$ (number of nearby pivots considered)
+  - Via inverted files, consider only data whose nearest pivot $N_P$ have a ** common intersection** with those of $q$
+
+---
+
+# Locality-Sensitive Hashing
+
+## Fundamental principle of LSH
+
+The **Locality-Sensitive Hashing** (LSH) is a family of hash methods designed specifically for the approximate search of neighbours. The two key principles are:
+
+- **Similar points** → chopped in the same **bucket** with **high probability**
+- **Dissimilar points** → collision with **low probability**
+
+It is the opposite of the classic hash that seeks to minimize collisions! Here, we exploit them.
+
+## Formal definition
+
+Given $p_{\text{high}} > 0$, $p_{\text{low}} > 0$ and $\tau_{\text{low}} > 0$ thresholds, $\tau_{\text{high}} > 0$, a $h$ hash function is called **LSH** if:
+
+- If $d(x_i, x_j) \leq \tau_{\text{low}}$ then $\mathbb{P}(h(x_i) = h(x_j)) > p_{\text{high}}$
+- If $d(x_i, x_j) \geq \tau_{\text{high}}$ then $\mathbb{P}(h(x_i) = h(x_j)) < p_{\text{low}}$
+
+In practice, several LSH functions are used in parallel to increase the probability of finding the real neighbors.
+
+## Examples of LSH functions
+
+- ** Quasi-optimal hash** (*Near-optimal hashing*) — Andoni & Indyk (2008): optimal for high-dimensional Euclidian distance
+- **SimHash** (*Similarity Hash*) — Charikar (2002): based on **random projections**. A vector is chopped according to the sign of its projection on a Gaussian random vector
+- **MinHash**: adapted to Jaccard's similarity between ensembles
+
+## Learning to Hash
+
+Faced with the difficulty of designing LSH functions by hand, an emerging tendency is to** learn these functions** directly from data (*Learning to Hash*, L2H).
+
+**Characteristics:**
+
+- Mostly used for specific applications (images, cross-modal search)
+- Typical architecture: a **binary autoencoder** regulated by a network strengthening local sensitivity
+- Supervised or unsupervised approach according to context
+
+---
+
+# Navigable Graphs — HNSW
+
+## Hierarchical Navigable Small Worlds (HNSW)
+
+The **HNSW** index (Hierarchical Navigable Small Worlds), proposed by Malkov and Yashunin (2016), is currently **the state of art** for the approximate search of the closest neighbour in high dimension.
+
+It is based on the construction of a **hierarchical hierarchical navigable graph** (*hierarchical navigable spanner*) on the data.
+
+## HNSW algorithm
+
+```
+procedure HNSW(X, q):
+
+    // Phase hors-ligne
+    Construire un graphe navigable hiérarchique G sur X :
+    répéter :
+        Connecter chaque donnée à ses k-NN déjà dans G
+    jusqu'à : plus de données à indexer
+
+    // Phase en ligne
+    répéter :
+        Partir d'un nœud aléatoire v
+        répéter :
+            Se déplacer vers le voisin de v qui se rapproche le plus de q
+        jusqu'à : minimum local
+        Ajouter v dans l'ensemble des voisins candidats de q
+    jusqu'à : assez de candidats collectés
+```
+
+## Properties of the HNSW graph
+
+**Horizontal structure:** the graph is organized in several layers. The upper layers contain few nodes with long connections (fast large-scale navigation), the lower layers contain all nodes with short connections (local refinement).
+
+**Greedy navigation:** Online search is a great descent in the graph — you always move to the neighbour that is closest to the query.
+
+This principle is inspired by the **small navigable worlds** (*navigable small worlds*) of network theory: any node can be reached from any other node in few steps.
+
+---
+
+# Search for the Nearest Neighborhood at the Milliard Scale
+
+## The billionaire scale challenge
+
+With the rise of the Machine Learning and the vectorial representations learned (*embeddings*), the need for effective search of closest neighbours on a very large scale was established. We are talking about collections of several billion vectors**.
+
+Existing techniques do not move to this scale:
+
+- One graph over a billion knots is too expensive to build and operate
+- Memory structures (RAM) become prohibitive
+
+The solution: use **short representations** (*short representations*) by data, such as **binary hash** (*binary hash*).
+
+## Current solutions
+
+**Product Quantization (PQ) — Jegu, Twelve, Schmid (2011):**
+
+- Decomposes space into subspaces and quantifies each independently
+- Implemented in the library **FIISS** from Facebook/Meta
+- Store billions of vectors with reduced memory footprint
+
+**Diskann — Subramanya et al. (2019):**
+
+- Use indexation per graph stored **on disk** (*disk-based*)
+- Allows accurate search on a single node with data too large for RAM
+
+**SPANN — Chen et al. (2021):**
+
+- Use **Inverted Files*
+- Optimized for data partially in memory and partly on disk
+
+---
+
+# Product Search (Maximum Inner Product Search)
+
+## Definition of the MIPS problem
+
+*Maximum Inner Product Search* (MIPS) consists of finding, for a query $q$, the $x^*$ point that maximizes the scalar product:
+
+$$x^* = \underset{x_i \in \mathcal{X}}{\arg\max} \langle x_i, q \rangle$$
+
+## Lien avec la recherche de plus proche voisin
+
+En espace euclidien, la distance au carré entre $x_i$ et $q$ se décompose comme suit :
+
+$$d(x_i, q)^2 = \langle x_i - q, x_i - q \rangle = \langle x_i, x_i \rangle + \langle q, q \rangle - 2 \langle x_i, q \rangle$$
+
+So:
+
+$$\underset{x_i}{\arg\min} \ d(x_i, q) \quad \text{est lié à} \quad \underset{x_i}{\arg\max} \ \langle x_i, q \rangle$$
+
+⚠️ Ces deux problèmes sont **équivalents si et seulement si les vecteurs sont normalisés** (de norme 1), car dans ce cas $\langle x_i, x_i \rangle$ et $\langle q, q \rangle$ sont des constantes.
+
+💡 MIPS est donc une **généralisation** de la recherche de plus proche voisin au cas où les vecteurs ne sont pas normalisés. C'est le problème naturel qui émerge dans les systèmes de recommandation et les LLMs (couche d'attention, recherche dans un vocabulaire...).
+
+## Solutions
+
+La bibliothèque **ScaNN** (*Scalable Nearest Neighbors*) de Google (Guo et al., 2020) propose une solution efficace basée sur une **quantification vectorielle anisotrope**.
+
+---
+
+# Résumé et Synthèse
+
+## Ce qu'il faut retenir
+
+- Les moteurs de recherche ont besoin d'un **accès rapide** aux données pertinentes (éléments similaires)
+- L'**indexation** est une façon de biaiser l'organisation des données pour accélérer certains accès
+- L'indexation n'a de sens que si l'on peut identifier des **structures dans les données** ou leur mode d'accès
+
+## Les grandes familles d'index
+
+**Fichiers Inversés** (*Inverted Files*) :
+
+- Très courants pour les requêtes basées sur l'intersection de termes
+- Fondement de tous les moteurs de recherche textuels modernes
+
+**Index spatiaux** (*Spatial Indexes*) :
+
+- Créent une hiérarchie de partitions pour exploiter la structure arborescente
+- Efficaces en faible dimension, mais limités par la malédiction de la dimensionnalité
+
+**Encodage binaire** (*Binary encoding*, hachage) :
+
+- Une solution de contournement face à la malédiction de la dimensionnalité
+- Fondement du LSH et des méthodes modernes à grande échelle
+
+🧠 À retenir final : les index sont des **structures de données avancées**. Ils représentent un compromis entre temps de requête, temps d'indexation et espace de stockage. Le choix d'un index dépend toujours des propriétés des données et des requêtes anticipées.
+
+---
+
+# Questions de Révision
+
+Les questions suivantes couvrent les notions fondamentales de ce chapitre :
+
+**Sur l'indexation :**
+
+- Qu'est-ce que l'indexation et pourquoi indexer ?
+- Quel est le compromis fondamental de tout index ?
+- Pourquoi des données sans structure ne peuvent-elles pas être indexées efficacement ?
+
+**Sur les fichiers inversés :**
+
+- Qu'est-ce qu'un fichier inversé (inverted index) ? Quelles sont ses deux composantes ?
+- Comment les fichiers inversés permettent-ils de réduire la complexité du calcul du RSV ?
+
+**Sur la recherche de plus proche voisin :**
+
+- Comment le partitionnement est-il équivalent à la construction d'un graphe ou au hachage ?
+- Quelle est la différence entre la recherche exacte et la recherche approximative ?
+- Quel est l'impact de la malédiction de la dimensionnalité sur les index spatiaux ?
+
+**Sur les méthodes spécifiques :**
+
+- Quel est le principe de l'indexation par permutations ?
+- Quel est le principe de l'indexation par graphe (HNSW) ?
+- Pourquoi s'intéresse-t-on à la recherche à l'échelle du milliard ?
+- Quel est le principe du hachage ? Quelle est la différence avec le LSH ?
+
+**Sur MIPS :**
+
+- Qu'est-ce que le problème MIPS (*Maximum Inner Product Search*) ?
+- Comment est-il lié à la recherche de similarité ?

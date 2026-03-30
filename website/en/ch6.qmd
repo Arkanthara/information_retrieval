@@ -1,0 +1,662 @@
+---
+title: "Information Retrieval Textual"
+---
+
+# Motivation and Objectives
+
+## Why study the text structure?
+
+Text Information Retrieval (information retrieval) is central to the RI domain. Understanding the text means understanding the original support on which all indexing and search models were built.
+
+The basic objectives of this study are:
+
+- Understanding the **textual information structure** for better use
+- Use **text modeling** to optimize indexing and search
+- Understanding ** Text Generation Mechanisms** and Language
+- Determine whether the same statistical assumptions can apply to any information based on terms
+
+The central idea is that the text is not random: it obeys precise statistical laws that can be used to build effective RI systems.
+
+---
+
+# Text Modeling
+
+## The benefits of the text for the RI
+
+The text presents several properties particularly favourable to RI, compared to other types of media.
+
+### Interpretation benefits
+
+- **Goodly understood material**: the text is a medium controlled for centuries
+- **Readable characteristics**: descriptors (root, terms) are directly interpretable by a human
+- **Comparability**: it is relatively easy to compare one textual document with itself or another
+
+### Computational benefits
+
+- **Small data**: text is compact compared to images or videos
+- **Effective analytical mechanisms**: Syntactic analysis (parsing) is well developed
+- **Proven structuring techniques**: JSON, XML, and other formats to organize text with precision
+
+### Text as a reference model
+
+In spite of its advantages, the text does not escape the traditional challenges of the RI: similarity, indexing, scaling.
+
+The text was the **first indexed medium**, which generated a very rich scientific literature. It is often used as **concept proof** for all systems that can be decomposed into "words", including Bags of Visual Words.
+
+---
+
+## The Bag of Words Model
+
+### Why not use the full TAL?
+
+The Automatic Language Processing (TAL) offers rigorous approaches thanks to advances in language. However:
+
+- It is **costful** in calculation time and resources
+- It is **complex** to implement
+- It **is not always necessary**: in RI, we work with approximations
+- It is not always desirable**: we want a flexible formalism that tolerates ambiguity
+
+We are looking for a representation that captures most of the thematic content without needing to reconstruct or generate text.
+
+### Definition of the Word Bag Model
+
+The **Bag of Words (BoW) model is based on the following principles:
+
+- **terms** are the constituent units of the document forming the vocabulary (e.g. words separated by spaces)
+- Terms are considered to be **independent and unordered entities**
+- The terms appear with **multiplicity** (frequency): it is a **sac** (bag) rather than a set (set)
+
+In this model, the **structure is lost** (paragraphs, titles, order of words...).
+
+### Generalization of the BoW
+
+The BoW model is not limited to text. Since it applies to several media (text, images, audio...), terms must be seen as **generic entities**: words, visual patterns, acoustic patterns...
+
+### BoW model limits
+
+- ** Grammatical and structural information loss**: the order of words is ignored
+- **Synonymy**: two different words can express the same concept
+- **Polysemia**: the same word may have several meanings depending on the context
+
+---
+
+# Text Processing
+
+## Overview of the pipeline
+
+Text processing follows a **structured pipeline** ranging from raw to index terms.
+
+```{mermaid}
+flowchart LR
+    A[Document] --> B[Spacing / Formatting]
+    B --> C[Tokenization]
+    C --> D[Removal of empty words]
+    D --> E[Named groups]
+    E --> F[Racineisation / Lemmatisation]
+    F --> G[Automatic or manual indexing]
+    A --> H[Structure recognition]
+    H --> G
+```
+
+This pipeline is broken down into three main stages:
+
+**Initial treatment:**
+
+- Tokenization
+- Delete empty words (stopwords)
+
+** Morphological normalization:**
+
+- Rooting (Stemming)
+- Lemmatisation
+
+**Organization of information:**
+
+- Construction of index
+- Construction of the thesaurus (vocabulary)
+
+---
+
+## Tokenization (Tokenization)
+
+### Definition
+
+**tokenization** (also called lexical analysis/lexical analysis, or *lexing*) is the operation that transforms a raw document (a sequence of bytes) into a sequence of **tokens**, typically words.
+
+This amounts to defining one or more **separators**: everything that is not a separator constitutes a token.
+
+### Simple cases: French and English
+
+For French and English, natural separators are:
+
+- **Whitespaces**
+- **ponctuation** (virgulate, dot, semicolon...)
+
+### Complex cases: other languages
+
+The problem of tokenization is much more difficult for other languages:
+
+- **German**: compound words (Komposita) must be decomposed. Example: *Suchprogramm* = *Such* + *Programm* (Research Program)
+- **Arabic and Asian languages**: different reading directions, use of special symbols, absence of spaces between words in certain languages (e.g. Chinese, Japanese)
+
+### Special cases in tokenization
+
+Tokenization must also manage:
+
+- **Digital chain**: `1990`, `90's`, `200BC`, `17:00`, `5pm`
+- **Values with units**: `$5`, `5.-SFr`, `5.3kg`, `1E-16`, percentages, ages
+- **Punctuation and acronyms**: `U.S.A`, `RTFM` (should they be kept as is or broken down?)
+- **markup Tags**: JSON, XML (should tags be ignored?)
+- **Shape**: cassage (*casefolding*), dashes, fonts
+
+There is no universal solution: Tokenization choices depend on language, domain and application.
+
+---
+
+## Removal of Empty Words (Stopword Removal)
+
+### Definition
+
+An empty **word** (stopword) is a non-discriminatory ** word**: it appears in almost all documents and therefore does not provide any useful information to distinguish between documents.
+
+Typical examples in English: *"the"*, *"a"*, *"of"*, *"is"*, *"and"*...
+
+These words are grouped into reference files (e.g. `stopwords.txt`).
+
+### Why delete empty words?
+
+- They ** occupy space** in the index without bringing value
+- They **do not contribute** to the response to queries
+- In terms of RI: their **IDF** (Inverse Document Frequency) is very high, making them non-discriminatory
+
+We will see with Zipf's **law** that empty words correspond precisely to the very high frequency terms, the deletion of which allows a significant reduction in index size.
+
+---
+
+## Rooting (Stemming)
+
+### Definition
+
+**racinization** (Stemming) consists in bringing each word back to its **root** (stem), that is, its truncated form, by removing suffixes.
+
+### Porter algorithm
+
+The most famous algorithm is the Porter **stemmer** (Porter's steamer), which applies **5 steps** of transformation rules on English words.
+
+### Possible behaviour
+
+Stemming can be:
+
+- **Conservative (cautious)**: does not reduce *European* to *Europe* (risk of semantic confusion)
+- **Agressive (earlier)**: may confuse *paste* and *past*, which share the same root but have different meanings
+
+### Multilingualism
+
+Stemming algorithms exist for many languages and are available through the **NLTK** (Natural Language Toolkit) library in Python.
+
+### Interest
+
+Rooting ** reduces the redundancy** of vocabulary and improves the quality of text statistics.
+
+---
+
+## Lemmatization
+
+### Definition
+
+**lemmatization** consists of bringing each word back to its basic **form** (lemma), taking into account the grammatical context.
+
+Unlike stemming, lemmatization produces linguistically correct forms.
+
+### Examples of transformations
+
+- **Unconjugation** : *"are"*, *"is"* → *"be"*
+- **Singularization** : *"users"*, *"users"*, *"user's"* → *"user"*
+
+### Full example
+
+The sentence:
+
+> "Users' wishes are orders"
+
+becomes after lemmatization:
+
+> *"user wish be order"*
+
+### Interest
+
+Like stemming, lemmatization** reduces redundancy** and improves statistics. However, it produces more precise results linguistically.
+
+---
+
+## Construction of the Index and Thesaurus
+
+### Indexing Vocabulary
+
+The construction of the index vocabulary is based on several choices:
+
+- **Individual words**: each token becomes an index term
+- **Pairs of words or n-grams**: consecutive n token sequences
+- **Nominal groups** (Noun phrases / groups): combinations Name + Adjective or nominal constructions
+
+Examples of relevant nominal groups:
+
+- "Linear algebra"
+- "Information retrieval" (information retrieval)
+
+These groups form the **base of indexation** and significantly enrich the precision of the system.
+
+---
+
+## SOUNDEX
+
+### Principle
+
+**SOUNDEX** is a heuristic class for extending a query to its phonetic equivalents**. The idea is to normalize spelling variants of the same name into a common phonetic representation.
+
+- Specific to a language
+- Mainly used for named ** entities** (own names, surnames)
+
+### Example
+
+The name *Chebichef* can be transliterated in many ways (*Chebysheff*, *Chebyshev*, *Chebyshev*...). SOUNDEX allows them to be grouped under one key.
+
+### Algorithm SOUNDEX
+
+The algorithm (used by most SQL languages) works in **5 steps**:
+
+1. **Save the first letter**. Set all occurrences of: a, e, i, o, u, y, h, w
+2. **Replace consonants** (including first letter) with their numeric codes
+3. **Replace the adjacent identical numbers** by one digit, then remove the zeros
+4. If the number of the first saved letter is identical to the first resulting digit, **delete this number** (keep the letter)
+5. **Add zeros** if the result contains less than 3 digits. Keep only the first letter and the following 3 digits
+
+### Example of application
+
+*"Herman"* → **H655**
+
+SOUNDEX thus transforms each token into a form of **4 characters** (1 letter + 3 digits), allowing robust phonetic searches.
+
+---
+
+# Text Statistics Properties
+
+## Basic issues
+
+The study of the statistical properties of the text seeks to answer key questions:
+
+- How is the **frequency of terms** distributed?
+- How does the **language size** (M) grow with the size of the corpus (N)?
+- How do these factors ** affect the performance** of an IR system?
+- How to use them for **build an adapted IR system**?
+
+The ultimate goal is to use the **statistical structure of language** to optimize the RI.
+
+---
+
+## Distribution of Terms Frequency
+
+### Empirical observations
+
+The analysis of textual corpus reveals a remarkable and universal phenomenon:
+
+- **Some terms are very common**: the 2 most common terms of a text may represent about **10% of all occurrences**
+- **Most terms are very rare**: about **half of the terms of a corpus appear only once** (phenomenon of the Hapax Legomena*)
+
+### Heavy-tailed distribution
+
+The frequency distribution of the terms is called "heavy-tailed" (heavy-tailed): the vast majority of the probabilistic mass is in the **tail** of the distribution (the rare terms), not in the head (the frequent terms).
+
+This property has direct implications for index design and weighting models.
+
+---
+
+## Zipf's Law
+
+### Definition of rank
+
+The **rang** $r(i) \in \mathbb{N}$ of a $i$ term is defined as its **position in a list sorted by decreasing frequency**.
+
+- The most common term is 1
+- The second most common term has rank 2
+- And so on...
+
+### Zipf Law Statement
+
+**Zipf (1949)** empirically observed the following relationship:
+
+$$f(i) \propto \frac{1}{r(i)} \quad \text{ou bien} \quad f(i) \cdot r(i) = K \quad (\text{constante})$$
+
+💡 La **fréquence** d'un terme est **inversement proportionnelle à son rang**.
+
+### Probabilité d'occurrence
+
+Si $L$ est le nombre total d'occurrences de termes dans le corpus (longueur $L = \sum_i f(i)$), alors la probabilité d'occurrence du terme $i$ est :
+
+$$p(i) = \frac{f(i)}{L} = \frac{K}{r(i)} \quad \text{avec } K \approx 0.1$$
+
+This gives:
+
+$$f(i) = \frac{KL}{r(i)} \quad \text{avec } K \approx 0.1$$
+
+🧠 À retenir : le terme de rang 1 est environ **deux fois plus fréquent** que celui de rang 2, **trois fois plus** que celui de rang 3, etc.
+
+---
+
+### Prédiction des fréquences
+
+#### Calcul du rang
+
+D'après Zipf, un terme $i$ apparaissant $f(i) = n$ fois dans un corpus de longueur $L$ a le rang :
+
+$$r(i) = r_n = \frac{KL}{n}$$
+
+where $r_n$ is the maximum rank among all terms appearing $n$ times.
+
+#### Number of terms of a given frequency
+
+Since $r_n$ terms appear $n$ times or more, and $r_{n+1}$ terms appear $n+1$ times or more, the $s_n$ number of terms appearing **exactly $n$ times** is:
+
+$$s_n = r_n - r_{n+1} = \frac{KL}{n} - \frac{KL}{n+1} = \frac{KL}{n(n+1)}$$
+
+#### Fraction de termes hapax
+
+En supposant que le terme de rang le plus élevé apparaît une seule fois, on a $r_1 = KL$, ce qui donne $M = r_1 = KL$ (la taille du vocabulaire).
+
+La fraction de termes apparaissant exactement $n$ fois est :
+
+$$\frac{s_n}{M} = \frac{s_n}{KL} = \frac{1}{n(n+1)}$$
+
+For $n = 1$ (the **hapax legomena**), this fraction is:
+
+$$\frac{s_1}{M} = \frac{1}{1 \times 2} = \frac{1}{2}$$
+
+⚠️ Cela confirme empiriquement que **la moitié des termes distincts d'un corpus n'apparaissent qu'une seule fois**.
+
+#### Validation empirique
+
+Sur un corpus TREC Volume 3 (336 310 documents, 1 Go, ~125 millions d'occurrences, ~508 000 mots uniques) :
+
+| Nb d'occurrences (n) | Prédit 1/n(n+1) | Proportion réelle | Nb réel de mots |
+|---|---|---|---|
+| 1 | 0.500 | 0.402 | 204 357 |
+| 2 | 0.167 | 0.132 | 67 082 |
+| 3 | 0.083 | 0.069 | 35 083 |
+| 5 | 0.033 | 0.032 | 16 332 |
+| 10 | 0.009 | 0.012 | 5 893 |
+
+💡 Les prédictions de Zipf sont remarquablement proches des valeurs observées, notamment pour les fréquences intermédiaires.
+
+---
+
+### Loi de Zipf comme loi de puissance
+
+#### Définition
+
+Une loi de la forme $y = k \cdot x^c$ est appelée **loi de puissance** (power law).
+
+La loi de Zipf est une loi de puissance avec $c = -1$ :
+
+$$f(i) = KL \cdot r(i)^{-1} \quad \text{avec } K \approx 0.1$$
+
+#### Log-log visualization
+
+On a **log-log** graph, power laws appear as **right**:
+
+$$\log(f(i)) = \log(KL \cdot r(i)^{-1}) = \log(KL) - \log(r(i))$$
+
+C'est précisément ce qu'on observe sur le **corpus Brown**, où les données s'alignent quasi-parfaitement sur une droite en échelle log-log, confirmant la loi de Zipf.
+
+⚠️ Des déviations existent aux **rangs extrêmes** (très fréquents ou très rares), ce qui a motivé la correction de Mandelbrot.
+
+---
+
+### Correction de Mandelbrot (1954)
+
+Pour mieux ajuster les déviations aux extrêmes, **Mandelbrot** a proposé la généralisation suivante :
+
+$$f(i) = P(r(i) + \rho)^{-B}$$
+
+with empirical parameters:
+
+- $P = 10^{5.4}$
+- $\rho = 100$
+- $B = 1.15$
+
+This correction significantly improves the adjustment to **high rows** (infrequent terms), where the pure Zipf law underestimates frequencies.
+
+#### Theoretical basis
+
+Mandelbrot also proposed a **theoretical derivative**: the distribution of Zipf-Mandelbrot is that which **minimizes the average length of terms** for a given entropy (see section on information theory).
+
+---
+
+### Production model and interpretation
+
+#### Zipf Hypothesis
+
+Zipf speculated that the power law is the result of the **Principle of Less Effort**:
+
+- The** transmitter** (locutor, author) wants a **small vocabulary** (simple to produce)
+- The **receptor** (lister, reader) wants a **large vocabulary** (less ambiguous to interpret)
+
+The distribution of Zipf would be a ** balance** between these two opposing trends.
+
+#### Result of Li (1992)
+
+Li showed that the **random stroke of letters** including spaces generates tokens (sequences of letters) following a **zip distribution**. This suggests that Zipf's law could be an artifact of the combinatorial structure of language.
+
+#### Practical consequences
+
+Zipf's law has two major implications for the IR:
+
+- **Advantage**: empty words represent a large fraction of the text; removal significantly reduces storage costs and research efforts
+- 
+
+---
+
+### Definition of Index Vocabulary by Luhn
+
+**Luhn** suggested that extreme terms (very common AND very rare) can be **eliminated from the index**, thus defining two thresholds:
+
+- ** Upper Cut-Off: eliminates too frequent terms (empty words)
+- **Lower Cut-Off: eliminates too few terms (hapax, typing errors)
+
+The **significant terms** (Significant Terms) lie between these two thresholds and correspond to the terms with the highest **discriminant value**.
+
+This theoretical framework formally justifies the deletion of empty words and extremely rare terms in the construction of the index.
+
+---
+
+## Heap's Law — Growth of the Vocabulary
+
+### Issue
+
+How does the **size of the vocabulary** (number of distinct terms) grow with the size of the corpus?
+
+The size of the vocabulary is not limited to a higher level, especially because of named entities, neologisms and spelling errors.
+
+This law allows us to estimate the **growth of the index** as the corpus grows.
+
+### Statement of Heap's Law
+
+$$M = k \cdot L^{\beta}$$
+
+où :
+
+- $M$ est la taille du vocabulaire (nombre de termes distincts)
+- $L$ est la longueur du corpus (en tokens)
+- $k$ et $\beta$ sont des constantes empiriques
+
+### Valeurs empiriques
+
+- $k \approx 10$ à $100$
+- $\beta \approx 0.4$ à $0.6$
+
+💡 Pour $\beta \approx 0.5$, la taille du vocabulaire croît approximativement comme $\sqrt{L}$ : si la taille du corpus est multipliée par 4, le vocabulaire est seulement multiplié par 2.
+
+### Lien avec la loi de Zipf
+
+La loi de Heap peut être **dérivée de la loi de Zipf** en supposant que les documents sont générés en échantillonnant des termes selon une distribution zipfienne. Les deux lois sont donc intimement liées.
+
+### Implication pratique
+
+La croissance sous-linéaire du vocabulaire indique que l'**index n'explose pas** proportionnellement à la taille du corpus. Cela est rassurant pour la conception de systèmes de RI à grande échelle.
+
+---
+
+# Perspective de la Théorie de l'Information
+
+## Entropie du texte
+
+### Entropie d'une source de termes
+
+Étant donné un vocabulaire de $M$ termes, chacun avec une probabilité $p_i$ d'être échantillonné, le **contenu informationnel attendu** d'un terme $T$ est défini par l'entropie de Shannon :
+
+$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i$$
+
+### Maximum ownership
+
+$I_H(T)$ is **maximum** when all terms are equiprobable ($p_i = \frac{1}{M}$): in this case, $I_H(T) = \log M$.
+
+### Application to the alphabet
+
+For an alphabet of 26 letters:
+
+- If letters are equiprobable: $I_H(T) \approx \log_2(26) \approx 4.7$ bits
+- Empirical value observed in English: **4.14 bits** (letters are not equiprobable)
+
+### Application to terms
+
+For words (using Zipf distribution with $p(i) = \frac{K}{r(i)}$):
+
+| Size of vocabulary M | Actual Entropy $I_H(W)$ | Entropy so equiprobable |
+|---|---|---|
+| 100 000 | 9.5 bits | 13.3 bits |
+| 500,000 | 10.9 bits | 15.6 bits |
+| 1 000 000 | 11.4 bits | 16.6 bits |
+
+The actual entropy is ** much lower** than the maximum entropy, confirming that the words are not equiprobable and that the text contains a usable structure.
+
+---
+
+## Ideal information carrier
+
+### Optimization problem
+
+The $p$ probability distribution of terms that **minimizes the average number of letters per term** for a fixed $h$ entropy value is sought.
+
+$$p_r^* = \arg\min_{p_r} \sum_r p_r l_r$$
+
+sous les contraintes :
+
+$$\sum_r p_r = 1, \quad p_r \geq 0$$
+$$I_H(T) = -\sum_r p_r \log p_r = h$$
+
+où $l_r$ est la longueur du terme de rang $r$.
+
+### Solution de Mandelbrot
+
+La solution à ce problème d'optimisation est précisément la **distribution de Zipf-Mandelbrot** :
+
+$$p_r^* = P(r + \rho)^{-B}$$
+
+This constitutes the **theoretical foundation** of Zipf-Mandelbrot's law: the empirically observed distribution is that which **optimizes the effectiveness of communication**.
+
+---
+
+## Legal Associations
+
+### Mutual Information
+
+Mutual Information** between two variables $W_1$ and $W_2$ measures the statistical dependence between them:
+
+$$I(W_1; W_2) = I_H(W_1) - I_H(W_1 | W_2) = \sum_{w_1, w_2} \mathbb{P}(w_1, w_2) \log \frac{\mathbb{P}(w_1, w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$
+
+### Interprétation
+
+Si $W_1$ et $W_2$ ne **co-occurrent jamais** (indépendants), alors :
+
+$$\mathbb{P}(W_1, W_2) = \mathbb{P}(w_1)\mathbb{P}(w_2) \quad \Rightarrow \quad I(W_1; W_2) = 0$$
+
+Mutual information is therefore an appropriate **measure** to study co-occurrence of terms:
+
+- **Great value** of $I(W_1; W_2)$ → interesting co-occurrence, significant
+- **Small value** of $I(W_1; W_2)$ → spurious co-occurrence (fortuitous)
+
+### Example: Associations with the term *"doctor"*
+
+On the **corpus AP** ($N = 15$ million words):
+
+**Interesting associations** (high value of $I$):
+
+| $I(x,y)$ | $f(x,y)$ | $f(x)$ | $x$ | $f(y)$ | $y$ |
+|---|---|---|---|---|---|
+| 11. 3 | 12 | 111 | Honorary | 621 | Doctor |
+| 11. 3 | 8 | 1105 | Doctors | 44 | Dentists |
+| 10.7 | 30 | 1105 | Doctors | 241 | Nurses |
+| 9.4 | 8 | 1105 | Doctors | 154 | Treatying |
+| 8.7 | 25 | 621 | Doctor | 1407 | Bills |
+
+**Spurious associations** (low $I$ value):
+
+| $I(x,y)$ | $f(x,y)$ | $f(x)$ | $x$ | $f(y)$ | $y$ |
+|---|---|---|---|---|---|
+| 0.96 | 6 | 621 | Doctor | 73785 | With |
+| 0.95 | 41 | 284690 | a | 1105 | Doctors |
+| 0.93 | 12 | 84716 | is | 1105 | Doctors |
+
+These spurious associations occur because the second term (*"with"*, *"a"*, *"is"*) is **very common** and co-occurrences with virtually all other terms, which artificially inflates counts without revealing any real semantic association.
+
+This example illustrates why the **deletion of empty words** is crucial before analyzing co-occurrences.
+
+---
+
+# Summary and Conclusion
+
+## Summary of key points
+
+### Text modelling
+
+- Text follows approximate **generative models** that can be used in RI
+- The **Model Bag of Words** is the foundation of most textual representations
+
+### Zipf Law
+
+- Zipf's law is a typical example of **power law** emerging from an entity-based generic model
+- It directly connects the **frequency** and the **range** of a term: $f(i) \cdot r(i) = K$
+- It predicts that **50% of the separate terms** appear only once
+- It justifies the **deletion of empty words** and too few terms
+
+### Law of Heap
+
+- Heap's law may be **derived from Zipf's law**
+- She describes the growth **sublinear** of the vocabulary: $M = k \cdot L^{\beta}$
+- It allows to estimate the future size of an index
+
+### Information Theory
+
+- Information Theory provides the tools for **modelling information exchange** via text
+- The**entropy** of the text is less than the maximum entropy, revealing a usable structure
+- ** mutual information** identifies significant co-occurrence between terms
+
+### Outlook
+
+- The text presents **short-range and long-range correlations** (short-range and long-range correlations)
+- The statistical analysis of the text generated the modern **TAL** (NLP) based on deep learning tools (Deep Learning)
+- These properties are close to what is modelled in **Neural Embeddings** (Neural Embeddings), such as **GloVe**
+
+The text is not just one medium among others — it is the **basic model** from which all RI systems were developed, and its statistical properties are found in many other areas.
+
+---
+
+## Review questions
+
+These questions generally require formal and mathematical responses**:
+
+- Describe the **word processing pipeline**
+- How does this pipeline **change according to languages**?
+- Describe the **Zipf law** (definition, mathematical formulation, implications)
+- What is its **practical meaning** for the RI?
+- What is Heap's **law** and how does it relate to Zipf?
+- How to **model textual communication** via information theory?

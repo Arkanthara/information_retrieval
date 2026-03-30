@@ -1,0 +1,539 @@
+---
+title: "Neural Embeddings"
+---
+
+# Motivation: Why Neural embeddings?
+
+## Limitations of previous approaches
+
+The classical techniques of representation in information retrieval (Information Retrieval) are based on **statistics** properties of terms, regardless of their real meaning.
+
+Three large families preceded neuronal embeddings:
+
+- **TF·IDF** : weighs each term by its frequency in the document and its inverse in the collection. It is a representation purely based on the **content** (Content-based).
+
+- **Probabilistic Retrieval**: estimates the likelihood that a term is relevant to a given query. It also remains rooted in the frequency of terms.
+
+- **Latent Semantic Indexation — ISL (Latent Semantic Indexing, LSI)**: factorizes the term-document matrix to extract **linear latent concepts**. It's a projection in a space of small size.
+
+In all these cases, the representation of a term is **calculated from its intrinsic properties** (frequency, global co-occurrence) without taking into account the **local context** in which it appears.
+
+## To context-based embeddings
+
+The central idea of neuronal embeddings is radically different:
+
+> The meaning of a term is **determined by the context** in which it appears.
+
+This intuition, derived from the distributional linguistics, is summarized by the maxim of J.R. Firth (1957): *"You will know a word by the company it keeps." *
+
+Intuition**: two words that appear systematically in the same contexts (e.g. "fast" and "velocity") probably share a close meaning. Their vector representation should therefore be similar.
+
+### Two large families of embeddings
+
+| Type | Base | Example model | Relationship captured |
+|------|------|-------------------|-------------------|
+| Content-based (Content-based) | Frequency of terms | TF·IDF, LSI | Linear correlation |
+| Context-based | Local co-occurrence | Word2Vec, Glove | Nonlinear relations |
+
+**To remember**: contextual embeddings use **machine learning** to learn to **prescribe** a term from its vicinity, allowing for the capture of complex semantic structures.
+
+---
+
+# Word2Vec
+
+## General principle
+
+Word2Vec is a family of models that learns vectorial representations of words by exploiting their context of occurrence in a text corpus.
+
+**Central idea**: terms that frequently co-appear in the same contexts receive close vector representations.
+
+### Progressive Intuition
+
+To understand what "use context" means, consider these levels of constraint:
+
+1. **Free choice** — "The person is ..." → Any word is possible.
+
+2. **Choice forced** — "The person is ... fast" → the lexical field is restricted.
+
+3. **Guided replacement** — "The cat plays with the **ball**" → *ball* can be replaced with *peluche*, but not with *nuage*.
+
+The more precise the context, the more the choice of the target term is forced. This is exactly what Word2Vec is trying to model.
+
+This framework is closely linked to the automatic processing of natural language (NLP), including morpho-syntactic analysis (part-of-speech tagging) and nominal syntagms (noun phrases).
+
+## Probabilistic formulation
+
+Or a fixed vocabulary. Two random variables are defined:
+
+- $W_T$: the term **target** (Target Word)
+- $W_C$: a term from **context** (Context Word)
+
+The objective of embedding is to estimate conditional distribution:
+
+$$\mathbb{P}(W_T \mid W_C)$$
+
+pour tous les termes du vocabulaire.
+
+💡 En d'autres termes : *étant donné un mot de contexte, quelle est la probabilité que le mot cible soit $w$ ?*
+
+---
+
+# Continuous Bag of Words (CBoW)
+
+## Idée principale
+
+Le modèle CBoW (Sac de Mots Continu) cherche à **prédire un terme cible** à partir de son contexte local.
+
+> **Direction** : contexte → terme cible
+
+Le principe opérationnel est le suivant :
+
+1. Définir une **fenêtre de contexte** (window size) de taille $m$ autour d'un mot cible.
+2. Créer des paires **(contexte, cible)** à partir des co-occurrences observées.
+3. Entraîner un modèle pour **apprendre $\mathbb{P}(W_T \mid W_C)$**.
+
+## Exemple détaillé
+
+Considérons la phrase célèbre :
+
+> *"All work and no play makes Jack a dull boy"*
+
+Avec une **fenêtre de taille 2** ($m = 2$) et le mot cible $W_T = \text{"play"}$ :
+
+- Le contexte gauche (2 mots avant) : *"and"*, *"no"*
+- Le contexte droit (2 mots après) : *"makes"*, *"Jack"*
+
+Les paires générées sont :
+
+```
+("play", "and")
+("play", "no")
+("play", "makes")
+("play", "Jack")
+```
+
+Chaque paire $(W_T, W_C)$ constitue un exemple d'apprentissage pour estimer $\mathbb{P}(W_T \mid W_C)$.
+
+💡 En pratique, on itère sur **tous les mots** du corpus comme cible potentielle, et on génère toutes les paires correspondantes.
+
+## Formalisation mathématique
+
+### Fonction de perte par terme
+
+Pour un terme cible $W_T$ donné, la perte (loss) est la **log-vraisemblance négative** sur tous ses mots de contexte :
+
+$$\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log\,\mathbb{P}(W_T \mid W_C)$$
+
+### Overall loss on the corpus
+
+Assuming the conditional independence of terms (i.i.d. hypothesis), the overall loss on $\mathcal{X}$-size corpus $N$ is:
+
+$$\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N} \sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta)$$
+
+### Optimisation
+
+L'objectif est de trouver les paramètres optimaux :
+
+$$\theta^* = \arg\min_{\theta}\; \mathcal{L}(\mathcal{X};\,\theta)$$
+
+Optimizer is a **Neural Network. The $\theta$ parameters are the **weight** of the network, learned by retropropagation of the gradient.
+
+To make learning tractable on large vocabularies, the **Negative Sampling** is used: instead of calculating the complete distribution over the entire vocabulary at each step, the correct target is compared to a few random negative examples.
+
+## Word2Vec Network Architecture (CBoW)
+
+The CBoW network consists of three layers:
+
+### Input Layer
+
+- One-hot representation of context words $W_{C_1}, W_{C_2}, \ldots, W_{C_m}$
+- Dimension: $N$ (vocabulary size)
+
+### Projection layer / hidden layer (Hidden Layer)
+
+- Context word encodings are **multiplied by the $W$** weight matrix ($N \times C$ dimension, where $C$ is the dimension of the embedding)
+- The hidden layer is the **sum** (or average) of projected context vectors
+- Resulting vector: $v_C$ of dimension $C$
+
+### Output Layer (Output Layer)
+
+- The hidden vector is multiplied by a second matrix $W'$ (dimension $C \times N$)
+- A function **softmax** produces a probability distribution on the vocabulary
+- The predicted term corresponds to the maximum value
+
+The parameters learned are $\theta = [W, W']$. The probability is approximated by:
+
+$$\mathbb{P}(W_T \mid W_C) \;\sim\; v_T^{\prime\,\top}\, v_C$$
+
+où $v_C$ est l'encodage du contexte via $W$, et $v_T'$ est la colonne correspondant à $W_T$ dans $W'$.
+
+## La fonction Softmax
+
+### Définition
+
+La fonction softmax transforme un vecteur de scores réels en distribution de probabilité :
+
+$$\mathbb{P}(W_T \mid W_C) = \frac{\exp\!\left(v_T^{\prime\,\top}\, v_C\right)}{\displaystyle\sum_{v_i} \exp\!\left(v_i^{\prime\,\top}\, v_C\right)}$$
+
+### Interpretation
+
+- ** Numerator**: exponentially amplifies high scores → selecting the most likely term.
+
+- **Denominator**: normalizes the entire vocabulary → ensures that the sum of probabilities is 1.
+
+Softmax is the **category generalization** of the binary (sigmoid) logistics function. It applies here to a classification problem at $N$ classes (one per word of vocabulary).
+
+Connecting with the **cross-entropy loss** (cross-entropy loss): minimizing $-\log\,\mathbb{P}(W_T \mid W_C)$ reduces the cross-entropy between the predicted distribution and the target distribution (one-hot).
+
+## Hierarchical Softmax
+
+### Problem
+
+The **calculation of the denominator** of the softmax requires a sum on all vocabulary, namely $O(N)$ operations at each learning stage. For a vocabulary of 100,000 words, this is prohibitive.
+
+### Solution: hierarchical tree
+
+The terms of the vocabulary present hierarchical dependencies (as illustrated for example in **WordNet**, lexical basis of English). Words can be arranged in a **binary tree** reflecting this structure.
+
+- Each word is a **sheet** of the tree.
+- The probability $\mathbb{P}(W_T \mid W_C)$ is calculated as a **product of probability** along the root path to the corresponding leaf.
+
+**Reduced complexity**: $O(\log N)$ instead of $O(N)$ to access the probability of a term.
+
+This trick makes the training of Word2Vec **practically feasible** on very large corpus.
+
+---
+
+# The Skip-gram model
+
+## Principle: Inversion of prediction
+
+The **Skip-gram** model is the **dual** from CBoW. It reverses the direction of prediction:
+
+| Model | Directorate | Objective |
+|--------|-----------|----------|
+| CBoW | Context → Target | $\mathbb{P}(W_T \mid W_C)$ |
+| Skip-gram | Target → Background | $\mathbb{P}(W_C \mid W_T)$ |
+
+> **Idea**: Given a target word $W_T$, predict the words of its context.
+
+## Architecture Skip-gram
+
+The Skip-gram network is structured as follows:
+
+- **Enter**: one-hot encoding of the **Target word** $W_T$ (PhMATH1PH dimension vector)
+
+- **Projection layer**: multiplication by the $W$ matrix → hidden $C$ vector
+
+- **Released**: For each position in the context window, a softmax score is calculated via $W'$, producing $m$ probability distributions on the vocabulary (one per context position)
+
+The Skip-gram generates **more learning pairs** than CBoW (a target word generates $2m$ examples), making it particularly effective on **small body** and for ** rare words**.
+
+In practice, the Skip-gram with Negative Sampling (SGNS) is one of the most used variants of Word2Vec.
+
+## Comparison CBoW vs Skip-gram
+
+```{mermaid}
+graph LR
+    subgraph CBoW
+        C1["w(t-2)"] --> H1["Sum"]
+        C2["w(t-1)"] --> H1
+        C3["w(t+1)"] --> H1
+        C4["w(t+2)"] --> H1
+        H1 --> T1["w(t) predicted"]
+    end
+
+    subgraph Skip-gram
+        S["w(t)"] --> P[Projection]
+        P --> O1["w(t-2)"]
+        P --> O2["w(t-1)"]
+        P --> O3["w(t+1)"]
+        P --> O4["w(t+2)"]
+    end
+```
+
+**To be retained**:
+
+- **CBoW**: quick to train, good for frequent words.
+
+- **Skip-gram**: slower but better quality for rare words and modest corpus.
+
+## Use of trained models
+
+Once Word2Vec is trained, the **weights learned** constitute the embeddings of the terms:
+
+- **Software libraries** available (gensim, fastText, etc.) to train its own models.
+
+- **Pre-trained models**: embeddingss learned about very large corpus (Google News, Wikipedia) are publicly available.
+
+### Application to documentary search
+
+To **represent a document** in the space of embedding:
+
+- The vector of each term of the document is recovered via the **correlation table** (lookup table).
+- The average **vector** of the terms: $\vec{d} = \frac{1}{|d|} \sum_{w \in d} \vec{v}_w$ is calculated
+
+### Similarity measurement
+
+The similarity between documents (or between query and document) is calculated from the Euclidean distance** in the space of embedding.
+
+It is crucial that the **similarity measure be consistent** with the construction of the embedding. Inadequate action would result in inconsistent results.
+
+---
+
+# GloVe : Global Vectors for Word Representation
+
+## Motivation and criticism of Word2Vec
+
+Word2Vec learns to predict local co-occurrences of terms, but ** ignores the overall density** of these co-occurrences in the corpus.
+
+Two words that co-appear twice are treated in the same way as two words that co-appear 2000 times, from the point of view of the structure of learning.
+
+> ** GloVe idea**: Co-occurrences **common** should have a greater weight in the construction of the embedding.
+
+## Probabilistic Intuition
+
+The probability of conditional co-occurrence is defined as:
+
+$$\mathbb{P}_{\text{cooc}}(w_k \mid w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$
+
+où $\text{card}\{(w_k, w_i)\}$ est le nombre de fois où $w_k$ et $w_i$ co-apparaissent dans une même fenêtre.
+
+### Exemple illustratif
+
+Prenons $w_1 = \text{"Poisson"}$ et $w_2 = \text{"Vache"}$ :
+
+| Mot $w_3$ | $\mathbb{P}(w_3 \mid w_1)$ | $\mathbb{P}(w_3 \mid w_2)$ | Ratio |
+|-----------|---------------------------|---------------------------|-------|
+| nager | haute | basse | **élevé** |
+| manger | haute | haute | ≈ 1 |
+| voler | basse | basse | ≈ 1 |
+
+💡 Le **ratio des probabilités** de co-occurrence discrimine mieux que les probabilités brutes. C'est ce ratio que GloVe cherche à capturer dans l'espace vectoriel.
+
+## Le modèle GloVe
+
+### Construction formelle
+
+On définit une fonction paramétrée $\phi_\theta$ telle que :
+
+$$\phi_\theta(w_i, w_k) = \exp(v_i^\top v_k) = \mathbb{P}_{\text{cooc}}(w_k \mid w_i)$$
+
+By switching to logarithm:
+
+$$v_i^\top v_k = \log\,\mathbb{P}_{\text{cooc}}(w_k \mid w_i) = \log\,\text{card}\{(w_k, w_i)\} - \log\,\text{card}\{(w_i)\}$$
+
+Le terme $\log\,\text{card}\{(w_i)\}$ ne dépend pas de $w_k$ : il joue le rôle d'un **biais** $b_i$.
+
+### Propriété remarquable : mesure de différence
+
+Pour deux termes $w_i$ et $w_j$, on peut mesurer leur "différence" vectorielle :
+
+$$\phi_\theta(v_i - v_j,\; w_k) = \frac{\exp(v_i^\top v_k)}{\exp(v_j^\top v_k)} = \frac{\mathbb{P}_{\text{cooc}}(w_k \mid w_i)}{\mathbb{P}_{\text{cooc}}(w_k \mid w_j)}$$
+
+The **difference** of the embedding vectors encodes the **ratio of co-occurrence** — which allows vector analogies of the type: *"roy" - "man" + "woman" 
+
+## Glove Loss Function
+
+### Objective
+
+Keep the $v_i^\top v_k$ scalar product as close as possible to **logarithm of the number of co-occurrences**.
+
+### Formula
+
+$$\mathcal{L}(\mathcal{X};\,\theta) = \sum_{w_i, w_k \in \mathcal{X}} \underbrace{\psi\!\left(\text{card}\{(w_k, w_i)\}\right)}_{\text{fenêtre de pondération}} \left(\underbrace{v_i^\top v_k}_{\text{plongement}} + b_i + b_k - \log\,\text{card}\{(w_k, w_i)\}\right)^2$$
+
+### La fonction de pondération $\psi$
+
+La fonction $\psi$ contrôle l'importance accordée aux différentes paires selon leur fréquence de co-occurrence :
+
+$$\psi(x) = \begin{cases} \left(\dfrac{x}{x_{\max}}\right)^\alpha & \text{si } x < x_{\max} \\ 1 & \text{sinon} \end{cases}$$
+
+with the conditions at the edges:
+
+- $\psi(0) = 0$: null co-occurrences do not contribute.
+- $\psi(\infty) = 1$: Very strong co-occurrences have a maximum unit weight.
+
+$x_{\max}$ is a threshold above which the weighting is capped. This prevents very frequent **co-occurrences** (often due to uninformed grammatical words) from dominate learning.
+
+In practice, $\alpha = 3/4$ and $x_{\max} = 100$ are commonly used values (Pennington et al. 2014).
+
+## Properties of embeddings GloVe
+
+2D visualizations (after reducing dimensionality) show coherent geometric structures:
+
+- **Gender relations**: the vectors "roy" → "roy", "homme" → "femme" are approximately **parallel**.
+
+- **Business-leading relations** : IBM → Rometty, Exxon → Tillerson, etc. form parallel structures.
+
+- **Postcodes and cities**: the model captures geographical correspondence.
+
+- **Compare levels**: "slow" → "slower" → "slowest" align regularly.
+
+**To be remembered**: GloVe encodes the semantic and syntactic **relations** in the form of regular geometrical transformations in vector space.
+
+---
+
+# Comparison of embedding models
+
+## Summary table
+
+| Diving | Type | Entity | Commentary | Similarity |
+|------------|------|--------|-------------|------------|
+| Boolean | Content | Term | binary representation | Logic operators |
+| TF·IDF | Content | Document | Base for LSI | Cosinus similarity |
+| BIR | Content | Term | $\mathbb{P}(t_i \mid R, q)$, see BM25/Okapi | Product (i.e.) |
+| LSI | Content | Document | Correlation of terms | Cosinus similarity |
+| Word2Vec | Background | Term | Prediction of the term in the sentence | Euclidian distance |
+| Glove | Background | Term | Weighted co-occurrence | Euclidian distance |
+
+## Why do neural models capture nonlinear relationships?
+
+The TF·IDF and LSI models are **linear** transformations of data (weighting, matrix factorization). They capture **correlations**.
+
+Word2Vec and GloVe use neural networks with **nonlinearities** (softmax, exponential) in their learning process. They can therefore encode complex **relations** between terms that are not reducible to a simple correlation.
+
+For example, the semantic relationship *"capitale de"* (Paris: France :: Berlin: Germany) is encoded as a regular vector translation — impossible to capture with LSI.
+
+## Basic differences between Word2Vec and GloVe
+
+| Criteria | Word2Vec | Glove |
+|---------|----------|-------|
+| Method of learning | Online (stochastic) | On global co-occurrence matrix |
+| Co-occurrence | Ignored in density | Explicitly weighed |
+| Complexity | $O(N \cdot C \cdot |\mathcal{X}|)$ | Depends on the number of non-zero pairs |
+| Interpretability | Less direct | Related to probability of co-occurrence |
+
+---
+
+# Practical use of embeddings
+
+## From training to application
+
+### Training
+
+- **Software libraries** allow you to train your own models on a specialized corpus (medical, legal, etc.).
+
+- Drive requires large corpus and significant computing power.
+
+### Pre-trained Models
+
+- Pre-entry vectors on massive corpus (Wikipedia, Common Crawl) are publicly available.
+
+- They are used directly as **lookup table: a word vector of the vocabulary.
+
+### Representation of documents
+
+To use embeddings in information retrieval:
+
+1. Each term of the document is replaced by its embedding vector.
+
+2. The document is represented by the **average** of these vectors.
+
+3. The similarity between query and document is calculated in this vector space.
+
+It is essential that the **similarity measure** used is **coherent** with the metric induced by the embedding model. For Word2Vec and GloVe, this is the **Euclidian distance** (or cosine in some variants).
+
+---
+
+# Bias and limits of embeddings
+
+## Societal Biais (Societal Biases)
+
+The embeddingss are taught about real texts, which reflect the **cultural and social issues** present in society.
+
+Studies have shown (Bolukbasi et al., 2016) that problematic analogies naturally emerge:
+
+> *"Man is computer programmer what woman is to housewife" *
+
+These unwanted associations are inherited from the **biased co-occurrences** in the training corpus.
+
+**debiasing** techniques were proposed to correct these associations, but the problem remains open.
+
+## Technical limitations
+
+- **External vocabulary (Out-of-Vocabulary, OOV)**: words not seen in training have no vector. **FastText** [Bojanowski et al., 2016] partially solves this problem by working at the level of **subwords** (subwords).
+
+- **Unresolved polysemia**: the same word with several meanings (e.g. *"bank"*: financial institution vs. river bank) receives a **only medium** vector. Contextual models like **BERT** [Devlin et al., 2018] solve this problem.
+
+---
+
+# Towards modern models
+
+## Extensions of Word2Vec and GloVe
+
+Static embeddingss (one vector per word) paved the way for more powerful architectures:
+
+- **FastText**: enriches vectors with information on sub-words (prefixes, suffixes), which improves the management of rare words and morphologically rich languages.
+
+- **BERT** (Bidirectional Encoder Representations from Transformers): generates embeddings **contextual** — the vector of a word changes according to the sentence in which it appears.
+
+- ** Machine Translation Models** (Machine Translation): use **Transformer** architectures (Vaswani et al., 2017) for sequential embeddingss.
+
+The border between the information retrieval (IR) and the modern NLP is increasingly blurred. Current dense semantic research techniques (Dense Retrieval) rely directly on BERT and its variants.
+
+## Modern IR: search for nearest neighbour
+
+> Recent information retrieval techniques represent queries and documents through dense vectors, and research becomes a **problem of nearer approximate neighbour** (Approximate Nearest Neighbor Search).
+
+This evolution illustrates how neuronal embeddings have profoundly transformed discipline.
+
+---
+
+# Review questions
+
+The following questions from the course require **formal and mathematical responses**:
+
+## Question 1: Non-linear relations
+
+**Why can Word2Vec and GloVe capture nonlinear relationships between terms? **
+
+Nonlinearity comes from the use of exponential functions (softmax, exp) in the learning process. Unlike LSI, which performs linear matrix factorization, Word2Vec optimizes likelihood via a network of neurons with softmax activation, and GloVe minimizes quadratic loss on co-occurrence logarithms. These formulations enable complex geometric relationships (translations, rotations) to be encoded that cannot be linearly represented.
+
+## Question 2: Basic differences
+
+**What are the fundamental differences in the construction of these models? **
+
+CBoW and Skip-gram learn by optimising a local **prediction** (context, target) in a stochastic way. GloVe, on the other hand, minimizes an overall loss on the whole ** co-occurrence matrix**, weighted by $\psi$. GloVe therefore explicitly incorporates the global frequency information of co-occurrences, while Word2Vec implicitly processes it.
+
+## Question 3: Use of embedding
+
+**How is the resulting embedding used? **
+
+The weights of the $W$ matrix (or $W'$) are used as the matching table. To represent a document, the average vectors of its terms are calculated. The search is then performed by calculating the Euclidian distance between the query vector and the document vectors.
+
+## Question 4: Dimensionality
+
+**What is the dimensionality involved? **
+
+- Vocabulary: $N$ words (typically $10^4$ to $10^6$)
+- embedding dimension: $C$ (typically 100 to 300)
+- $W$ matrix is $N \times C$ dimension
+- $W'$ matrix is $C \times N$ dimension
+- The product $v_T^{\prime\,\top} v_C$ is a scalar
+
+## Question 5: Risk of inappropriate relationships
+
+**What is the risk of recording inappropriate relationships between terms? **
+
+Co-occurrence reflects the biases present in the training corpus (gender bias, cultural bias, stereotypes). Undesirable associations can be learned and propagated in applications, with potentially important ethical consequences.
+
+---
+
+# Chapter summary
+
+**Key Points**:
+
+- Neuronal embeddings are **based on context**: the meaning of a term is defined by its co-occurrence.
+
+- **Word2Vec** (CBoW and Skip-gram) learns to **predict** terms from their context via a network of neurons.
+
+- **GloVe** uses the global **frequencies** co-occurrence to construct a more stable embedding.
+
+- These models capture **nonlinear relationships** that conventional approaches (TF·IDF, LSI) cannot represent.
+
+- The **similarity measure** used must be consistent with the embedding model (euclidean distance for Word2Vec and GloVe).
+
+- embeddings inherits the **societal bacteria** present in the training corpus.
+
+- They form the basis of modern models such as **FastText** and **BERT**, at the border between IR and NLP.

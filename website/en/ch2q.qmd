@@ -1,0 +1,545 @@
+---
+title: "Representation of information : Embeddings — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What does the acronym RSV mean in information retrieval (Information Retrieval)?
+
+- [ ] Random Selection Value
+- [x] Retrieval Status Value
+- [ ] Ranked Scoring Vector
+- [ ] Relevance Sampling Value
+
+> Explanation:
+> The RSV (Retrieval Status Value) is the relevance score assigned to each document against a query. It is on the basis of this score that documents are ordered from the list of results.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the Boolean Model, what is the basis for the representation of terms?
+
+- [ ] Frequency of appearance in documents
+- [ ] Probability of relevance
+- [x] Encodage binaire 1-hot (1-hot encoding)
+- [ ] Decomposition in singular values
+
+> Explanation:
+> The Boolean model uses a 1-hot encoding: the term $i$ is represented by a $M$-dimensional vector with a $1$ in the $i$ position and $0$ anywhere else. The terms and documents are found on tops of a $[0,1]^M$ hypercube.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the possible value of the RSV in the Boolean Model?
+
+- [ ] Any real in $\mathbb{R}$
+- [ ] A real in $[0, 1]$
+- [x] Only $0$ or $1$
+- [ ] A Positive Whole
+
+> Explanation:
+> This is the basic limit of the Boolean model: the correspondence is binary — a document corresponds to the query (RSV = 1) or does not match (RSV = 0). There is no sequencing in the relevant documents.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What formula defines the frequency of the standard terms (Term Frequency) $\text{tf}_{ij}$?
+
+- [ ] $\text{tf}_{ij} = f_{ij} \cdot N$
+- [ ] $\text{tf}_{ij} = \log(f_{ij} + 1)$
+- [x] $\text{tf}_{ij} = \dfrac{f_{ij}}{\max_k f_{kj}}$
+- [ ] $\text{tf}_{ij} = \dfrac{f_{ij}}{N}$
+
+> Explanation:
+> The standard TF divides the gross frequency of the term $i$ in the $j$ document by the frequency of the most common term in the same document. This guarantees $\max_i \text{tf}_{ij} = 1$ and allows you to compare documents of different lengths.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What does the Inverse Document Frequency measure?
+
+- [ ] Frequency of a term in a document
+- [ ] Average length of documents
+- [x] The discriminating power of a term in the collection
+- [ ] The total number of queries treated
+
+> Explanation:
+> The IDF is defined by $\text{idf}_i = \log(N / n_i)$. It measures the discriminant power of the term $i$: if the term appears in all documents ($n_i \approx N$), its IDF is close to $0$ (non-discriminatory). If the term is rare ($n_i \ll N$), its IDF is high.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### A term appears in all $N$ documents in the collection. What is the approximate value of its IDF?
+
+- [ ] $\log(N)$
+- [ ] $1$
+- [x] Close to $0$
+- [ ] $N$
+
+> Explanation:
+> $\text{idf}_i = \log(N/n_i)$. If $n_i = N$ then $\text{idf}_i = \log(1) = 0$. A term present in all documents is not discriminatory and has a TF·IDF weight zero.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: In the Bag of Words (BoW) template, the order of words in a document is taken into account.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> The Bag of Words model treats terms as independent and unordered entities. The structure of the document (order of words, paragraphs, title) is lost. Only the frequency of appearance is kept.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the formula of the TF·IDF weight of the term $i$ in the document $j$?
+
+- [ ] $w_{ij} = \text{tf}_{ij} + \text{idf}_i$
+- [x] $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$
+- [ ] $w_{ij} = \dfrac{\text{tf}_{ij}}{\text{idf}_i}$
+- [ ] $w_{ij} = \text{tf}_{ij}^{\text{idf}_i}$
+
+> Explanation:
+> TF·IDF weight is the product of standard frequency ($\text{tf}_{ij}$) and discriminant power ($\text{idf}_i$). A common term in the document AND rare in the collection will have a high weight.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the term-document matrix $W \in \mathbb{R}^{M \times N}$, how is the document $j$ represented?
+
+- [ ] By the $j$ line of $W$
+- [x] By the $j$ column of $W$, i.e. $d_j = W_{\cdot j} \in \mathbb{R}^M$
+- [ ] By the diagonal of $W$
+- [ ] By the product $W \cdot W^T$
+
+> Explanation:
+> $j$ is represented by the column vector $d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{Mj}]^T \in \mathbb{R}^M$. Symmetrically, the term $i$ is represented by the transposition of the line $i$: $t_i = W_{i\cdot}^T \in \mathbb{R}^N$.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is Cosinus similarity preferred at the Euclidian distance in RI?
+
+- [ ] It's faster to calculate
+- [ ] It takes into account the position of words
+- [x] It is invariant to the standard (length) of vectors
+- [ ] It only works with binary values
+
+> Explanation:
+> Cosinus similarity measures the angle between two vectors, regardless of their standard. Two identical documents but one twice as long obtain a cosine of 1. Euclidian distance would unfairly penalize longer documents.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the cosine similarity formula between $d_j$ and $q$?
+
+- [ ] $\dfrac{\|d_j - q\|}{\|d_j\| + \|q\|}$
+- [x] $\dfrac{d_j^T q}{\|d_j\| \|q\|}$
+- [ ] $\dfrac{d_j^T q}{\|d_j\| + \|q\|}$
+- [ ] $d_j^T q$
+
+> Explanation:
+> $\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) = \dfrac{\langle d_j, q \rangle}{\|d_j\| \|q\|} = \dfrac{\sum_i w_{ij} w_{iq}}{(\sum_i w_{ij}^2)^{1/2}(\sum_i w_{iq}^2)^{1/2}}$. It is between $-1$ and $1$ (in practice between $0$ and $1$ with positive weights).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What mathematical notion underlies cosinus similarity in vector model?
+
+- [ ] Distance from Manhattan
+- [ ] The standard of Frobenius
+- [x] The embodiment intersection extended to continuous embeddings
+- [ ] Decomposition into own values
+
+> Explanation:
+> In binary representation, $\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}| = \sum_i w_{ij} w_{iq} = \langle d_j, q \rangle$. Cosinus similarity is a standardized extension of this intersection, allowing the comparison of documents of different lengths.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the probabilistic model, what is the $R$ variable?
+
+- [ ] The ranking of the document in the list
+- [ ] Number of documents found
+- [x] A Bernoulli variable indicating whether the document is relevant
+- [ ] The reformulated query
+
+> Explanation:
+> $R$ is a binary random variable (Bernoulli): $R = \text{vrai}$ if the document is relevant, $R = \text{faux}$ otherwise. The objective is to estimate $P(R = \text{vrai} \mid d_j, q)$ to classify documents by decreasing relevance.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: In the BIR (Binary Independence Retrieval) model, the occurrences of the terms are assumed to be correlated.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> The name "Independence" refers precisely to the hypothesis of** independence** of the occurrences of the terms in the documents. This is a simplifying hypothesis rarely verified in practice, but which allows to factor the probability of the document.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the link between the IDF and the BIR model at initialization (without feedback)?
+
+- [ ] There is no connection
+- [ ] The IDF completely replaces the BIR
+- [x] At initialization, the BIR log-odds term is approximately equal to the IDF
+- [ ] The IDF is the square root of the BIR score
+
+> Explanation:
+> Without feedback, $P(t_i | \bar{R}, q) = n_i/N$, so $\log\frac{1 - P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} = \log\frac{N - n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. The BIR is thus reduced to an IDF initialisation weighting.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among the following are the parameters of the formula BM25? (several possible responses)
+
+- [x] $k_1$: TF saturation parameter
+- [x] $b$: length normalization parameter
+- [ ] $M$: vocabulary size
+- [x] $avdl$: average length of documents
+
+> Explanation:
+> BM25 introduces $k_1$ ( $M$ is a feature of the collection, not a parameter of BM25.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why does the model TF·IDF (BoW) fail against synonymy (Synonymy)?
+
+- [ ] Because he doesn't calculate the frequencies correctly
+- [ ] Because IDF always sucks for synonyms
+- [x] Because two synonym terms have orthogonal vectors in the TF·IDF space
+- [ ] Because the W matrix cannot contain synonyms
+
+> Explanation:
+> In the TF·IDF space, each term occupies a distinct dimension. Two synonyms (e.g., "car" and "automobile") have orthogonal vectors ($\langle t_i, t_j \rangle = 0$), while they should be close. A document containing "automobile" will not be found by a query on "car".
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental property of the $K$ Truncated SVD?
+
+- [ ] It maximizes the trace of the matrix
+- [x] It provides the best $K$ row approximation within the meaning of the Frobenius standard
+- [ ] It diagonalizes the term-document matrix
+- [ ] It minimizes the number of singular nonzero values
+
+> Explanation:
+> $W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rank}(A) = K} \|W - A\|_F^2$. It is the fundamental property of the truncated SVD, which justifies its use for compression and dimension reduction in the LSI.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the LSI (Latent Semantic Indexing), how is a $d_j$ document projected in the concept space?
+
+- [ ] $\tilde{d}_j = U_K d_j$
+- [ ] $\tilde{d}_j = V_K^T d_j$
+- [x] $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$
+- [ ] $\tilde{d}_j = U_K \Sigma_K d_j$
+
+> Explanation:
+> The LSI projection is $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$. First, $U_K^T$ is applied to project single left vectors into space, then $\Sigma_K^{-1}$ to normalize by the importance of each concept.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### An engineer deploys an RI system with a TF·IDF model. Users complain that searching for "car" does not find the documents referring to "automobile". Which technical solution is the most appropriate?
+
+- [ ] Increase the value of $k_1$ in BM25
+- [ ] Reduce vocabulary size $M$
+- [x] Apply LSI to project into a latent concept space
+- [ ] Use a Boolean model with the OR operator
+
+> Explanation:
+> The LSI precisely solves the synonymy problem by creating a space of latent concepts where semantically similar terms are found in similar directions. A Boolean model with OR would work for known synonyms, but is not a general and scalable solution.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — What is the main difference between the exact update strategy (Exact Update) and folding (Fold-in) in the LSI?
+
+- [ ] Fold-in recalculates the entire SVD, the exact non
+- [x] The exact enriches the conceptual space, the fold-in projects only into the existing space
+- [ ] Both methods are equivalent in quality
+- [ ] Fold-in uses $V_K$ while exact uses $U_K$
+
+> Explanation:
+> In the fold-in, new documents are projected on the existing basis ($\hat{D} = U_K^T D$) without changing the concept space. This is a quick approximation but the new concepts eventually brought by the new documents are ignored. The exact update partially recalculates SVD to incorporate these new concepts.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### In the TF·IDF geometry, what is the exact role of the $\text{idf}_i$ factor on document representation?
+
+- [ ] It normalizes the document vector to standard 1
+- [x] It staggers (scale) the $i$ dimension of space, transforming the canonical base $e_i$ into a discriminant base $\tau_i = \text{idf}_i \cdot e_i$
+- [ ] It replaces the raw frequency with a logarithmic frequency
+- [ ] It projects the document into a space of lower dimension
+
+> Explanation:
+> $j$ is written $d_j = \sum_i \text{tf}_{ij} \cdot \tau_i$ with $\tau_i = \text{idf}_i \cdot e_i$. The IDF is common to all documents and transforms the canonical base into a base weighted by the discriminating power of each term. The TF is the real coordinated document in this database.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among these assertions on the Principle of Ranking by Probability (Probability Ranking Principle, Robertson 1977), which is correct?
+
+- [ ] It recommends that documents be sorted alphabetically
+- [ ] It ensures that all relevant documents are found
+- [x] It states that classifying documents by decreasing probability of utility gives optimal efficiency
+- [ ] It applies only to Boolean models
+
+> Explanation:
+> Robertson (1977) states that if the system ranks documents in descending order of probability of utility $P(R \mid d_j, q)$, estimated as accurately as possible, then overall efficiency will be optimal based on available data. This principle underpins the entire probabilistic approach to RI.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: In the LSI, choose $K = M$ (preserving all singular values) solves synonymy problems.
+
+- [ ] True
+- [x] False
+
+> Wrong:
+> If $K = \min(M, N)$, the truncated SVD becomes the complete SVD and $W_K = W$: we find exactly the original TF·IDF space with all its problems (synonymy, polysemia). The dimension reduction ($K \ll M$) is precisely what forces the model to generalize and group closely related terms.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — An RI system returns too little or too many documents according to the exact wording of the query. What model is involved and what is its direct alternative?
+
+- [ ] LSI — alternative: BM25
+- [x] Boolean model — alternative: vector model with cosinus similarity
+- [ ] BM25 — alternative : TF·IDF standard
+- [ ] Vector model — alternative: Boolean model
+
+> Explanation:
+> This is the classic limit of the Boolean model: a too restrictive query returns nothing, too permissive returns everything, without nuance. The cosinus-similarity vector model produces a continuum of $\in [0,1]$ RSV, allowing an end-of-document ranking regardless of the exact formulation.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among the following proposals, which are advantages of the LSI compared to the standard TF·IDF ? (several possible responses)
+
+- [x] Synonymy Management (Synonymy)
+- [x] Decoration of dimensions of the representation space
+- [ ] Calculation faster than TF·IDF
+- [x] Grouping of semantically close terms in the space of concepts
+
+> Explanation:
+> The LSI corrects the two major weaknesses of the TF·IDF: synonymy (different terms, same meaning → close in LSI space) and partial polysemia via decorrelation. On the other hand, it is more costly to calculate (SVD) than the standard TF·IDF.
+
+```

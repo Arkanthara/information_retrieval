@@ -1,0 +1,339 @@
+---
+title: "Web Information Retrieval — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Level 1 — Fundamentals
+
+```{quizdown}
+### What is the founding principle of information retrieval on the Web compared to classic models?
+
+> Think about what web pages have in addition to their textual content.
+
+1. [ ] Use only the text content of the pages
+1. [x] Combine content analysis and link structure analysis
+    > Correct: The Web IR combines content-based models (e.g. VSR) and hyperlink-based models.
+1. [ ] Replace vector models with graphs
+1. [ ] Index only the most popular pages
+```
+
+```{quizdown}
+### Who developed the World Wide Web and in what year?
+
+> Think of the Swiss research institution in particle physics.
+
+1. [ ] Doug Engelbart, 1969
+1. [ ] Larry Page, 1998
+1. [x] Tim Berners-Lee, 1990
+    > Correct: Tim Berners-Lee developed the WWW at CERN in 1990, combining FTP and hypertext.
+1. [ ] Marc Andreessen, 1993
+```
+
+```{quizdown}
+### What web-based technologies has Tim Berners-Lee developed?
+
+> Think of protocol, address system and markup language.
+
+- [x] HTTP
+    > Correct: HyperText Transfer Protocol, Web communication protocol.
+- [x] URL
+    > Correct: Uniform Resource Locator, resource address system.
+- [x] HTML
+    > Correct: HyperText Markup Language, Web page markup language.
+- [ ] FTP
+    > Incorrect: FTP existed before the Web and was not created by Berners-Lee.
+- [ ] TCP/IP
+    > Incorrect: TCP/IP is the Internet infrastructure, developed well before the Web.
+```
+
+```{quizdown}
+### What is the Impact Factor of a scientific journal?
+
+> Think of the formula: quotations received / published articles, on a specific time window.
+
+1. [ ] The total number of articles published in the journal
+1. [ ] Percentage of articles accepted by the journal
+1. [x] The average number of citations received in years to published articles in y-1 or y-2
+    > Correct: The impact factor measures the influence of a review through the frequent citation of its recent articles.
+1. [ ] The journal's global ranking according to its field
+```
+
+```{quizdown}
+### Bibliographical Coupling measures the similarity between two documents. How?
+
+> Think of the temporal direction: both documents look to the past or to the future?
+
+1. [x] By the number of documents cited by both documents simultaneously
+    > Correct: BC(dA, dB) =
+1. [ ] By the number of documents quoting both documents simultaneously
+1. [ ] By the number of words in common in their summaries
+1. [ ] By the length of their respective bibliographies
+```
+
+```{quizdown}
+### What is co-citation, introduced by Small in 1973?
+
+> Compare with bibliographic coupling: Co-citation looks in the opposite direction.
+
+1. [ ] Number of common references between two documents
+1. [x] The number of documents that quote has both dA and dB
+    > Correct: Co-citing measures how many third party documents together mention dA and dB — it looks to the future (citings).
+1. [ ] The number of times a document quotes itself
+1. [ ] The intersection of the keyword lists of two documents
+```
+
+```{quizdown}
+### What is an "authority" in the context of linking analysis?
+
+> Think of the role she plays in the bipartite hubs-authorites graph.
+
+1. [ ] A page that points to many other pages
+1. [ ] A page belonging to a government domain (.gov)
+1. [x] A page very quoted by quality pages, recognized as reliable source on a topic
+    > Correct: an authority is a page to which many hubs point — it provides reference content.
+1. [ ] The page with the largest number of outgoing links
+```
+
+```{quizdown}
+### What is a "hub" in the HITS model?
+
+> The hub is the complement of the authority in the bipartite graph.
+
+1. [ ] A very quoted content page
+1. [x] An index page that points to many authorities
+    > Correct: a hub aggregates links to authorities — it is a quality thematic navigation page.
+1. [ ] The main server of a web domain
+1. [ ] One page belonging to the highly related Web component
+```
+
+---
+
+## Level 2 — Understanding
+
+```{quizdown}
+### In the "butterfly node" (Bow Tie) model of the Web, what component corresponds to the pages to which the heart points, but which do not point towards it?
+
+> Imagine the butterfly knot: the heart is in the center, with wings on each side.
+
+1. [ ] IN
+1. [x] OUT
+    > Correct: OUT contains pages accessible from the heart, but which do not allow you to return via links.
+1. [ ] Tendrils
+1. [ ] Disconnected
+```
+
+```{quizdown}
+### Why is the incoming (in-degree) alone insufficient as a measure of authority on the Web?
+
+> Compare with bibliometry: Is a Nobel Prize citation worth as much as a student's quote?
+
+- [x] It treats all links as equivalent, regardless of the quality of the source page
+    > Correct: a link of a low quality page counts as much as a link of a very authoritarian page.
+- [x] Many pages have a high degree of entry are general portals, not thematic authorities
+    > Correct: e.g. Yahoo or Google have a strong in-degree but are not authorities on a specific subject.
+- [ ] Incoming degree is impossible to calculate effectively
+- [ ] Incoming degree always favors recent pages
+```
+
+```{quizdown}
+### What is the main difference between bibliographic coupling and co-citation?
+
+> Think of the direction of the links considered in each case.
+
+1. [ ] Bibliographic coupling uses incoming links, co-citing outgoing links
+1. [ ] Bibliographic coupling is normalized, not co-citation
+1. [x] Bibliographic coupling compares outgoing (pass) references, co-citation compares incoming (future) quotes
+    > Correct: BC looks at what two documents quote in common; Co-citation looks at who quotes them together.
+1. [ ] Bibliographic linkage applies to the Web, co-citation to scientific articles only
+```
+
+```{quizdown}
+### What is the main difference between HITS and PageRank regarding the moment of calculation?
+
+> Think about the architecture of a search engine: what happens before and after the request?
+
+1. [ ] HITS is calculated offline; PageRank is calculated at request
+1. [x] HITS is calculated at the time of request; PageRank is pre-calculated all over the Web
+    > Correct: HITS builds a specific subgraph at each request; PageRank is calculated once for all web pages.
+1. [ ] Both are calculated at the time of request
+1. [ ] Both are pre-calculated offline
+```
+
+```{quizdown}
+### To which own vectors converge the autorite and hub scores in HITS?
+
+> The adjacency matrix S is central: reflect the S^T S and SS^T matrix products.
+
+1. [ ] a converging towards the main S own vector; h converging towards the main S^T own vector
+1. [x] a converges towards the main S^T S own vector; h converges towards the main SS^T own vector
+    > Correct: by writing a = S^T h and h = Sa, a = S^T S a and h = SS^T h.
+1. [ ] Both converge towards the same main S own vector
+1. [ ] a converge vers SS^T ; h converge vers S^T S
+```
+
+```{quizdown}
+### What is a PageRank attractor and why is it problematic?
+
+> Imagine a group of pages forming a firm cycle, to which other pages point.
+
+1. [ ] A page with a PageRank extremely high that monopolizes requests
+1. [ ] A Web server that slows the spread of PageRank
+1. [x] A group of pages forming a firm cycle that absorbs the entire PageRank without redistributing it
+    > Correct: PageRank enters the cycle and can no longer leave it, making the calculation incoherent for the rest of the graph.
+1. [ ] A page without incoming links that never receives PageRank
+```
+
+```{quizdown}
+### PageRank can be interpreted as the behavior of an "aleatory surfer". What models r[p] in this interpretation?
+
+> Think about the stationary distribution of a Markov chain.
+
+1. [ ] The number of times the page has been visited in total
+1. [ ] The loading speed of page p
+1. [x] The probability that the aleatory surfer is on page p at a moment gives
+    > Correct: r[p] is the probability of occupancy of the page p to the balance of the Markov chain — it is a measure of centrality.
+1. [ ] Number of outgoing links from page p
+```
+
+```{quizdown}
+### In the formalism of aleatory marches, why is walking a chain of Markov homogene in time?
+
+> Think about defining the probability of transition p {ij}.
+
+1. [ ] Because the graph does not change over time
+1. [ ] Because walking visits every knot the same number of times
+1. [x] Because the transition probability of vi a vj does not depend on time t, only on the structure of the graph
+    > Correct: p {ij} = 1/d i if (vi,vj) belongs to E, independent of t — the process is memoryless and timeless.
+1. [ ] Because the initial distribution is uniform
+```
+
+---
+
+## Level 3 — Mastery
+
+```{quizdown}
+### Put the construction steps of the S base assembly in HITS in the right order.
+
+> Think about how we move from root set R to enlarged set S.
+
+1. Execute a request on a classic engine to get root assembly R
+2. Initialize S with R
+3. Add to S all pages pointed by a page of R
+4. Add to S all pages that point to an R page
+5. Apply the iterative HITS algorithm to S
+```
+
+```{quizdown}
+### Put the complete PageRank algorithm (with teleportation) in the correct order.
+
+> Reflectis has the order: propagation, then teleportation, then normalization.
+
+1. Initialize r[p] = 1/
+2. Propagating PageRank: r[p] = sum on q->p of r[q]/deg+(q)
+3. Apply teleport: r[p] = alpha + (1-alpha) * r[p]
+4. Calculate normalizer c = 1 / sum r[p]
+5. Normalize: r[p] = c * r[p]
+6. Repeat until convergence
+```
+
+```{quizdown}
+### A search engine gets the following results for the "python" request: many pages on the snake, very little on the programming language. What property of HITS explains this phenomene and what solution proposes the algorithm?
+
+> Think about what happens when a request has several distinct meanings in the space of clean vectors.
+
+1. [ ] HITS cannot handle requests with one word — you need a longer request
+1. [ ] Subgraph S is too small and does not contain pages on programming
+1. [x] The main own vector covers a single meaning; non-main own vectors may cover the other meanings of the polysemic request
+    > Correct: For a polysemic request, HITS can produce biased results towards a single direction. Secondary own vectors (second, third...) can capture other meanings.
+1. [ ] PageRank is HITS preferred for polysemic requests because it covers the whole Web
+```
+
+```{quizdown}
+### A Web page is part of a group of 5 pages that point only to each other, but another 1000 pages point to this group. What happens with the Basic PageRank (without teleportation)?
+
+> Think of the flow of PageRank: can he enter and leave this group freely?
+
+1. [ ] PageRank of these 5 pages will be zero because they do not point to the outside
+1. [x] PageRank accumulates in this cycle and can no longer get out of it — these pages absorb the entire PageRank system
+    > Correct: He's a PageRank attractor. The flow enters the group via the 1000 incoming links, but cannot come out because no link points to the outsider.
+1. [ ] PageRank distributes uniformly to all web pages
+1. [ ] This does not affect the calculation because the normalizer automatically compensates
+```
+
+```{quizdown}
+### What is the correct matrix formulation of the complete PageRank with teleportation?
+
+> The final matrix combines uniform teleportation and normalized adjacence matrix.
+
+1. [ ] r = c * r * S
+1. [ ] r = c * (alpha * S + (1 - alpha) * 1*1^T)
+1. [x] r = c * r * (alpha * 1*1^T + (1 - alpha) * S)
+    > Correct: r is the main left-hand vector (Perron vector) of the alpha*1*1^T + (1-alpha)*S matrix.
+1. [ ] r = alpha + (1 - alpha) * r * S^T
+```
+
+```{quizdown}
+### To ensure the convergence of the aleatory step towards a single stationary distribution, what properties does the graph need to verify?
+
+> Perron-Frobenius' theory imposes two conditions on Markov's chain.
+
+- [x] The graph must be irreducible (connex: there is a path between any pair of knots)
+    > Correct: the irreducibility ensures that you can reach any node from any other node.
+- [x] The chain must be aperiodical (no integer k > 1 dividing the length of all cycles)
+    > Correct: the aperiodicite prevents the step from fully looping over cycles of fixed length.
+- [ ] The graph must be regular (the same for all knots)
+- [ ] The transition matrix must be symmetrical
+```
+
+```{quizdown}
+### Why are web links less reliable than bibliographic citations as an authorization signal?
+
+> Reflect on the motivations that drive someone to create a web link versus quoting an article.
+
+- [x] Many links are purely navigational and do not reflect a thematic relationship
+    > Correct: menus, navigation bars, footer links are not editorial recommendations.
+- [x] Firms do not point to their competitors, unlike researchers who cite opposite work
+    > Correct: in bibliometry, we even mention the work with which we agree.
+- [x] Web links are not subject to peer review contrary to scientific article references
+    > Correct: anyone can create a link for any reason.
+- [ ] Web links are unidirectional while quotations are bidirectional
+```
+
+```{quizdown}
+### In the aleatory surfer model, what is the role of the alpha teleport parameter?
+
+> Think of the problem that teleportation is censee solve in the Web graph.
+
+1. [ ] Accelerate the convergence of the algorithm by reducing the number of iterations
+1. [ ] Prioritise the recently updated pages
+1. [ ] Introduce a personnalization according to user preferences
+1. [x] Allow the surfer to leave the attractors (steady cycles) by jumping randomly to any page
+    > Correct: without teleportation, the surfer remains trapped in cycles without outgoing links. Alpha > 0 guarantees the irreducibility of the Markov chain.
+```
+
+```{quizdown}
+### We want to use HITS to find similar pages to "honda.com". What's the correct approach?
+
+> Recall: HITS can be used not only for a text request, but also from a given page.
+
+1. [ ] Calculate the PageRank from honda.com and return the pages with a similar PageRank
+1. [ ] Search "honda" in a classic engine and return the first 10 results
+1. [x] Take the pages that point to honda.com as root set, build S, execute HITS and return the best authorities
+    > Correct: the best authorities in the vicinity of links to honda.com are similar pages (e.g. toyota.com, ford.com...).
+1. [ ] Calculate the bibliographic coupling of honda.com with all other web pages
+```
+
+```{quizdown}
+### The P transition matrix of an aleatory step is defined as P = DS. What does matrix D represent?
+
+> Think about how to normalize the lines of the S-adjacence matrix to obtain probabilities.
+
+1. [ ] The graph's distance matrix
+1. [ ] The identite matrix multiplies by the graph diameter
+1. [x] The diagonal matrix of the inverses of the degrees: D = diag(1/d1, 1/d2, ..., 1/d
+    > Correct: multiply S by D a left divides each line i by d i, transforming the adjacences into transitional probabilities.
+1. [ ] The stationary distribution matrix pi
+```

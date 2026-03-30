@@ -1,0 +1,621 @@
+---
+title: "Information Retrieval : Introduction"
+---
+
+## Background
+
+### The explosion of digital data
+
+We live in an era of **mass production of digital data** (Digital Data Production). The volume of information created, captured, copied and consumed in the world is growing exponentially from year to year.
+
+To give a concrete measure of this reality:
+
+- In 2010, the world produced about **2 zettabytes** of data.
+- In 2025, this quantity exceeded **180 zettabytes**.
+
+A **zettabyte** (zetabyte) represents $2^{70}$ bytes, or **1 billion terabytes**. It is so large that it is difficult to intuitively design.
+
+This growth is not linear but **exponential**: the amount of data doubles every few years, making traditional information management methods insufficient.
+
+#### Why the explosion?
+
+Several factors explain this growth:
+
+- The democratization of **smartphones** and connected devices.
+- The development of **social networks** (Facebook, Instagram, TikTok, X...).
+- The digitisation of **public and private services** (health, education, banking...).
+- The development of the Internet of Things (IoT).
+- The generalization of **streaming** video and audio.
+
+To remember: the amount of digital data available far exceeds the human capacity to process them manually. This is the raison d'être of the Information Retrieval (Information Retrieval).
+
+---
+
+### A digital world
+
+#### Photography as an emblematic example
+
+Photography perfectly illustrates the transition to an entirely digital world.
+
+- In **1826**, the first photograph was taken: 0 billion photos per year.
+- In **1930**, with the democratization of the silver apparatus, about **1 billion** photos are taken each year.
+- In **2000**, at the peak of silver photography (Analog photos), this figure reached **86 billion**, before falling sharply with the arrival of digital technology.
+- In **2011**, the total (digital + analog photos) exceeds **380 billion** photos per year.
+
+This graph illustrates two important phenomena:
+
+1. The **Technological rupture**: Silver photography collapsed in the 2000s, replaced by digital.
+2. The** amplification effect**: by removing the marginal cost of shooting (no need for film), digital multiplies the volume of data produced.
+
+The same logic applies to all forms of content: texts, videos, messages, audio recordings. Digital lowers the cost of production and causes a **information avalanche** (avalanche information).
+
+---
+
+### A connected world
+
+#### What happens every minute on the Internet
+
+The figures illustrating online activity are dizzying. Every **minute** on the Internet includes:
+
+- **3.47 million** videos watched on YouTube.
+- **625 million** videos viewed on TikTok.
+- **3.5 billion** Snaps created.
+- **66,000** photos and videos shared on Instagram.
+- **350,000** tweets sent.
+- **231 million** e-mails sent.
+- **6.3 million** Google searches.
+- **44 million** people watching Facebook Live.
+
+These figures highlight the ubiquitous need for research and access to information** in our daily use. Research alone accounts for 21% of the time spent online.
+
+To be remembered: Global connectivity is constantly generating new content and access to information needs. Information Retrieval systems are at the heart of this infrastructure.
+
+---
+
+### A Changing World
+
+#### Continued growth of online content
+
+The digital world is not stabilizing: it is constantly evolving, and this evolution is accelerating.
+
+A striking example is **YouTube**:
+
+- In **2012**: 30 hours of video were uploaded each minute.
+- In **2024**: this figure is **500 hours per minute**.
+
+It is a multiplication by **15 in 10 years**, illustrating the exponential acceleration of content production.
+
+This poses constant challenges to Information Retrieval systems:
+
+- Algorithms must adapt to ever-increasing volumes.
+- The types of content are diverse (text, image, video, audio, structured data...).
+- Uses evolve (voice search, multimodal, contextual...).
+
+---
+
+## Motivation: user needs
+
+### Understanding user needs
+
+#### How people spend their time online (2012)
+
+In 2012, studies on Internet use revealed the following distribution of time spent online:
+
+- **22%**: Social Networking
+- **21%**: Research (Seaches)
+- **20%**: Reading Content
+- **19%**: e-mails and communication (Emails/Communication)
+- **13 %**: multimedia sites (Multi-media Sites)
+- **5%**: Online Shopping
+
+Thus, **nearly 41% of online time** is devoted to activities directly related to research and information consumption (research + content reading). Information Retrieval is therefore at the heart of digital usage.
+
+---
+
+### Major needs identified
+
+#### Making informed decisions
+
+**Decision Making is a fundamental need of users. Any decision—whether personal, professional or academic—requires access to relevant**, **reliable** and **up to date** information.
+
+Without structured access to information, decision-making is based on incomplete or biased data.
+
+---
+
+#### Manage information avalanche
+
+The information avalanche** (Information Avalanche) is one of the great challenges of our time. Being exposed to a massive volume of information does not mean being better informed: on the contrary, without suitable tools, it generates **cognitive overload** and **disinformation**.
+
+It is therefore necessary to implement **Advanced Information Management Processes, capable of:
+
+- Filter relevant information.
+- Organize and structure content.
+- Present information in an exploitable manner.
+
+---
+
+#### Access to large information depots
+
+Access to **large information repository** is the foundation of **Data Science**. Machine learning, statistical analysis or data visualisation algorithms are of value only if the underlying data are accessible, represented and comparable.
+
+To be remembered: Information Retrieval is a fundamental building block of Data Science because it makes data exploitable on a large scale.
+
+---
+
+### Bringing structure to raw data
+
+To meet these needs, it is essential to **structure raw data** (Raw Data). This involves three essential steps:
+
+#### 1. Appropriate Data Representation (Document Representation)
+
+A raw document (text, image, audio, video...) cannot be directly compared or analyzed by an algorithm. One ** formal representation** must be extracted:
+
+- For a text: a word frequency vector.
+- For an image: a color histogram, or a vector of visual characteristics.
+- For audio: spectral descriptors (MFCC, etc.).
+
+The quality of this representation directly determines the quality of the following analysis.
+
+#### 2. Appropriate Similarity Measurements
+
+Once the documents are represented, you must be able to compare them **. **Measurements of similarity** (or distance) adapted to the nature of the data are defined for this purpose.
+
+- Euclidean distance in a vector space.
+- Cosine distance for term vectors.
+- Distance from Hamming for binary data.
+
+The choice of similarity measurement is crucial: a bad measurement leads to inconsistent results, even with good representation.
+
+#### 3. Analysis process: search, learning, visualization
+
+Once represented and comparable, the data can be subjected to **analytical processes**:
+
+- **Data mining** (Mining): clustering, detection of abnormalities, frequent patterns.
+- **Learning**: classification, regression, walking.
+- **Visualization** (Visualization): reduction of dimensionality, similarity maps.
+
+---
+
+### The Information Management Pipeline
+
+The general information management process can be summarized as follows:
+
+```{mermaid}
+flowchart LR
+    A[Gross documents] --> B[Extraction of characteristics\nFeature Extraction]
+    B --> C[Features\nDocument Features]
+    C --> D[Appropriate mapping\nAppropriate Mapping]
+    D --> E[Representation space\nRepresentation Space]
+    E --> F[User Interaction\nUser Interaction]
+    F --> G[Decision-making process]
+    G --> H[Decision]
+```
+
+This pipeline is **universal**: it applies to texts, images, videos and any other type of digital data.
+
+---
+
+### Concrete examples
+
+#### Example 1: Text documents
+
+For a corpus of **text documents** (Text Documents), the pipeline works as follows:
+
+1. **Extraction of features**: The occurrences of each word are counted in each document. We obtain ** terms frequency vectors** (Word Occurrences / Term Frequency vectors).
+
+2. **Appropriate mapping**: a transformation (e.g. TF·IDF or dimension reduction) is applied to move from a hollow to a dense representation.
+
+3. **Representation space**: documents are projected into a vector space where similar documents are close to each other — visible in the form of a **word cloud** (Tag Cloud) or thematic map.
+
+4. **User interaction**: The user formulates a query, the system returns the most relevant documents.
+
+5. **Decision**: The user has access to the information they need.
+
+The notion of **word cloud** (Tag Cloud / Word Cloud) is a simple but effective visualization of the distribution of terms in a document or corpus.
+
+---
+
+#### Example 2: Images
+
+For a collection of**images** (Images), the same pipeline applies:
+
+1. **Extraction of characteristics**: **color histograms** (Color Histograms) are extracted for each image — a compact descriptor representing the colour distribution (red, green, blue).
+
+2. **Appropriate mapping**: Histograms are projected into a representation space where visually similar images are close.
+
+3. **Representative space**: The images are arranged in a 2D or 3D space according to their visual similarity.
+
+4. **User interaction**: the user can navigate in this space, select a reference image, and get the most similar images.
+
+5. **Decision**: result in the form of **photo collage** (Photo Collage) filtered according to the user's needs.
+
+Color histograms are global ** descriptors**: they capture the colorimetric palette of an image, but ignore the spatial position of the colours. More sophisticated descriptors (SIFT, CNN features) capture more local information.
+
+---
+
+#### Example 3: Other types of media
+
+Information Retrieval is not limited to text and images. It applies to:
+
+- **Audio and video**: transcriptions, spectral descriptors, temporal characteristics.
+- **Webpages**: hypertext structure, links, metadata.
+- **Messages** (e-mail, chat): text content, temporal and social metadata.
+- **Services and processes**: log systems, process states.
+- **People, businesses, communities**: social graphs, user profiles.
+- **Web 1.0** (static pages), **Web 2.0** (social networks), **Web 3.0** (Internet of Things / IoT), **Web 4.0** (metavers / verse).
+
+To be remembered: any object to which **digital characteristics** may be associated may be subject to a Information Retrieval. Discipline is therefore **universally applicable**.
+
+---
+
+## Distance in Information Retrieval
+
+### Distance: a central concept
+
+#### Why is distance fundamental?
+
+The concept of **distance** (or similarity) is at the heart of Information Retrieval. It answers a simple but fundamental question:
+
+> *To what extent do two documents deal with the same subject? *
+
+Distance is not only a technical tool: it is the **mathematical formalization** of the human intuition of resemblance between two contents.
+
+---
+
+#### The example of presidential speeches
+
+To illustrate the problem of distance measurement, consider two clouds of words from State of the Union Address:
+
+- **Speech by George W. Bush (January 29, 2002)** The most common words are *war, terror, terror, security,weapons, freedom, nation, people*.
+- **Speech by Barack Obama (25 January 2011)** The dominant words are *jobs, business, future, education, governance, work, people, nation*.
+
+These two speeches share common terms (*people, nation, country, jobs, work*), but their thematic content is **clearly different**: national security vs economy and education.
+
+Two fundamental questions arise:
+
+1. **How to measure this difference in a formal and quantitative way?
+2. **How to tolerate variations** in style, language, vocabulary while capturing similarity of meaning?
+
+These questions are not trivial. A "job security" document can simultaneously use the vocabulary of both speeches. A naive distance measurement (word count) is not enough to capture the semantic nuance.
+
+---
+
+### The omnipresence of distance
+
+#### Distance applications in data analysis
+
+The distance (or proximity / similarity measurement) is used in all major areas of data analysis (Data Science):
+
+##### Unsupervised Mining
+
+- **Clustering** (consolidation): group similar documents without prior labels.
+- **Due to anomaly** (Outlier Detection): identify documents that differ significantly from others.
+- **Imputation**: estimate missing values from nearest neighbours.
+
+In clustering, two documents are placed in the same group if their distance is less than a certain threshold. The result depends entirely on the measure chosen.
+
+---
+
+##### Supervised Learning
+
+- **Classification**: assign a category to a document based on distance to training examples (e.g. k-NN).
+- **Regression**: estimate a numerical value (e.g. relevance of a document) by interpolating from neighbours.
+- **Ranking** (ranking): order documents by decreasing relevance to a query.
+
+---
+
+##### Visualization
+
+- **Dimension Reduction** (Dimension Reduction): Project high-dimensional data in a 2D or 3D space by preserving the distance between points (e.g. t-SNE, UMAP, MDS).
+
+Visualization allows a user to **navigate intuitively** in a large documentary space, exploring thematic clusters.
+
+---
+
+#### The three roles of distance
+
+Distance plays three distinct but complementary roles in Information Retrieval:
+
+1. ** Characterize a document**: the characteristics (features) of a document form its numerical "summary" — what it is in itself.
+
+2. **Compare two documents**: distance is used to quantify the **similarity** between two documents — their relationship to each other.
+
+3. **Characterize a model of documents**: the distribution of distances in a collection allows to visualize the overall **structure** of the corpus — how the documents are organized between them.
+
+---
+
+## Definition and objective of Information Retrieval
+
+### What is Information Retrieval?
+
+#### Main motivation
+
+**Information Retrieval** (Information Retrieval, IR) has as its main motivation ** to respond to an informational need** (Information Need).
+
+An informational need arises when a user does not have the information they need to complete a task or make a decision. It then forms a **query** (Query) to access this information.
+
+The challenge is to match an imprecise query (formulated in natural language, often vague) with the most relevant documents of a large corpus.
+
+---
+
+#### Formal definition
+
+> The Information Retrieval consists of ** automatically emerging** information **relevant** from a **large collection of documents**, in response to a **query formulated in a flexible way** (loose query formalism).
+
+Let us decompose this definition:
+
+- **"Automatically emerge"**: The system must operate without human intervention for each query.
+- **"relevant information"**: relevance is relative to the user's need, not just the presence of keywords.
+- **"Large collection of documents"**: IR systems are designed to scale.
+- **"Loose query"**: the user does not need to know the internal structure of the collection or to use a formal language.
+
+---
+
+#### The general framework of an IR system
+
+A Information Retrieval system operates according to the following scheme:
+
+```{mermaid}
+flowchart TD
+    A[Information needs\nInformation Need] --> B[Query\nQuery]
+    B --> C[IR\nIR System]
+    D[Document Collection\nDocument Collection] --> C
+    C --> E[Relevant documents classified\nRanked Related Documents]
+    E --> F[User\nUser]
+    F -->|Feedback| C
+```
+
+The ** feedback** loop is important: the user can report what results are relevant, allowing the system to refine its results (Relevance Feedback).
+
+---
+
+## History of Information Retrieval
+
+### Historical Chronology
+
+Information Retrieval is a discipline that has more than 70 years of history. The main stages of its development include:
+
+#### Origins (1950–1960)
+
+- **1950** : **Calvin N. Moors** creates the term *Information Retrieval*. This is the official birth of discipline as an autonomous field of research.
+
+- **1959**: **Hans Peter Luhn** (IBM) describes the **statistical retrieval: the idea of using the word frequency to measure the relevance of a document.
+
+的 Luhn introduces the idea that the most common words in a document (excluding empty words) are the most representative of its content.
+
+- **1960**: **Maron and Kuhns** define the first **probabilistic model** of the IR: a document is relevant with some probability, depending on the query.
+
+#### The emergence of models and assessments (1960–1980)
+
+- **1966**: The **Cranfield project** defines the first **evaluation measures** in IR: precision (precision) and recall (recall). These measures remain fundamental today.
+
+The Cranfield project is the first to evaluate IR systems in a rigorous and comparative manner, laying the foundation for experimental IR research.
+
+- **1968** : **Gerard Salton** publishes his first book on the system **SMART** (System for the Mechanical Analysis and Retrieval of Text) — one of the first operational IR systems, based on the Vector Space Model.
+
+#### Marketing (1970-1990)
+
+- **1972** : **Lockheed** launches **DIALOG**, the first **commercial online service** to access bibliographic databases.
+
+- **At the end of the 1980s** the first IR systems were integrated into **software for PC**, making the literature search available to the general public.
+
+- ** Early 1990s**: Lower costs of hard drives lead to a **revolution of information storage**: large amounts of text can be stored on personal machines.
+
+#### The Internet Age (1990–2000)
+
+- **1992**: **Westlaw** deploys the first probabilistic IR system at **large scale** in the legal field.
+
+- **Middle of the 1990s**: emergence of **Multimedia Databases** — integration of image, sound and video searches.
+
+- **1994**: **Internet and Web explosion** — the volume of documents available is increasing dramatically, imposing new IR solutions.
+
+- **1995**: IR techniques become ** omnipresent** — the "Search" button is everywhere. Web search is becoming a daily activity for millions of users.
+
+#### The era of machine learning (2000 to present)
+
+- **Today**: **embeddings** from Machine Learning Embeddings are used for research. Models such as BERT, GPT or deep neuron networks capture the deep **semantic** of documents and queries.
+
+A *embedding* is a dense vector representation of a document or a query, automatically learned from large amounts of data. It captures not only words, but also their meaning in context.
+
+To be remembered: Information Retrieval has moved from a confidential academic discipline ( 1950s) to a pervasive technology (web search engines, recommendations, virtual assistants...). Models evolve, but fundamental questions — how to represent a document? How to measure relevance? — remain at the heart of the discipline.
+
+---
+
+## Content and objectives of the course
+
+### Educational objectives
+
+This course aims to gain an in-depth understanding of the foundations and modern techniques of Information Retrieval. Specific objectives are:
+
+- **Understand basic IR models**: Boolean model, vector, probabilistic, neuronal.
+- **Understand social recommendation** (Social Recommendation): collaborative filtering, recommendation systems.
+- **Include Quality Measures: precision, recall, F-measure, NDCG, MAP.
+- **To understand the specific properties of media** (Media Specification): text, image, audio.
+- **Explore indexing techniques** (Indexing): Inverted index, data structures for quick search.
+- **Discover data visualization** (Data Visualization): dimension reduction, interactive visualization.
+
+This course is part of the continuity of **Data Science and Automatic Learning** (Machine Learning). It assumes familiarity with the basic concepts of linear algebra, probability and statistics.
+
+---
+
+### Detailed course content
+
+#### Part 1: Vector embeddings (Embeddings)
+
+This central part of the course explores different ways of representing documents in a vector space.
+
+##### Divings (Sparse Embeddings)
+
+- **TF·IDF** (Term Frequency – Inverse Document Frequency): weighting terms according to their frequency in the document and their rarity in the collection.
+- **Vector Space Retrieval (Vector Space Retrieval) model: document representation and queries as vectors in a term space.
+- **LSI** (Latent Semantic Indexing): reduction of dimension by decomposition into singular values (SVD) to capture latent semantics.
+
+Hollow embeddingss are thus called because most vector coordinates are null (a document uses only a small subset of the total vocabulary).
+
+##### Probabilistic Retrieval
+
+- Models based on the **probability of relevance** of a document relative to a query.
+- **Model BM25** (Best Match 25): one of the most widely used variants in practice.
+- **Language Models for IR.
+
+##### Dense Embeddings
+
+- **Neural Embeddings: representations learned from deep neuron networks.
+- **Word2Vec**, **GloVe**, **FastText**: embeddings of words.
+- **BERT**, **Sentence-BERT**: embeddings of sentences and documents.
+
+dense embeddings capture complex semantic relationships that hollow methods cannot represent (synonyms, polysemia, context...).
+
+##### Learning to rank (Learning to Rank)
+
+- Supervised learning methods to order documents by relevance.
+- Approaches *pointwise*, *pairwise*, *listwise*.
+
+---
+
+#### Part 2: Indexing
+
+- **Inverted Index** (Inverted Index): a data structure that allows all documents containing a given term to be found quickly.
+- Techniques to make the search **scalable**: compression, partitioning, distributed calculation.
+
+Indexing is what makes it possible to search billions of documents in milliseconds.
+
+---
+
+#### Part 3: Evaluation of Information Retrieval
+
+- **Precision** (Precision): proportion of returned documents that are actually relevant.
+- **Recall** (Recall): proportion of relevant documents that have actually been returned.
+- **F-measure** (F-Measure): harmonic combination of precision and recall.
+- **NDCG** (Normalized Discounted Cumulative Gain): measure taking into account the position of relevant documents in the ranking.
+- **MAP** (Mean Average Precision): average precision on several queriess.
+
+The evaluation of an IR system in a rigorous manner is essential to compare different approaches and progress in discipline.
+
+---
+
+#### Part 4: Social Information Retrieval and Recommendation
+
+##### Information Retrieval on the Web (Web Information Retrieval)
+
+- The Web as a graph of related pages (hyperlinks).
+- **PageRank** and ranking algorithms based on graph structure.
+- Crawling, web indexing, spam detection.
+
+##### Recommendation Systems
+
+- **Collaborative Filtering: recommend to a user what similar users have liked.
+- **Content-Based Filtering: to recommend items similar to those that a user liked.
+- **Hybrid approaches**.
+
+##### Social Network Analysis
+
+- Community detection.
+- Centrality measures.
+- Dissemination of information in graphs.
+
+---
+
+#### Part 5: Media Specificity
+
+##### Text Properties (Text Properties)
+
+- Natural Language Processing (NLP).
+- Tokenization, Stemming, Lemmatization, Stopwords.
+- Statistical models of language.
+
+##### Visual Information Retrieval
+
+- Descriptors of local and global images.
+- Search by image (CBIR - Content-Based Image Retrieval).
+- Convolutive Neuron Networks (CNNs) for the extraction of visual characteristics.
+
+##### Information Retrieval Audio (Audio Information Retrieval)
+
+- Time and spectral descriptors.
+- Recognition of music, speech.
+- Acoustic prints (audio fingerprinting).
+
+---
+
+#### Part 6: Information Visualization
+
+- **Manifold Learning: t-SNE, UMAP, PCA.
+- Interactive visualization of large documentary spaces.
+- Exploration and navigation in document collections.
+
+The visualization of the information closes the loop of the IR pipeline: it allows the user to understand and explore the structure of the collection, and not only to respond to punctual queries.
+
+---
+
+## General references
+
+### Basic Bibliography
+
+The course is based on an authoritative set of references in the field. Here are the main ones:
+
+#### General works in IR
+
+- **Baeza-Yates & Ribeiro-Neto** — *Modern Information Retrieval: The Concepts and Technology behind Search* (2nd ed., 2011, Addison-Wesley). The classical reference, covering theoretical and practical foundations.
+
+- **Manning, Raghavan & Schütze** — *An Introduction to Information Retrieval* (Cambridge University Press, 2009). Available online, very complete on classic IR models.
+
+- **Croft, Metzler & Strohman** — *Search Engines: Information Retrieval in Practice* (Pearson, 2015). Focused on the practical implementation of search engines.
+
+- **Büttcher, Clarke & Cormack** — *Information Retrieval: Implementing and Evaluating Search Engines* (MIT Press, 2010). Focus on evaluation and implementation.
+
+#### Neuronal IR and embeddings
+
+- **Mitra & Craswell** — *An Introduction to Neural Information Retrieval* (NOW, 2018). Introduction to neuronal approaches.
+
+- **Tonellotto** — *Reading Notes on Neural Information Retrieval* (CoRR, 2022). Recent and accessible course notes.
+
+#### Treatment of natural language
+
+- **Jurafsky & Martin** — *Speech and Language Processing* (3rd ed., Stanford, 2026, available online). The essential reference for the NLP.
+
+#### Recommendation systems
+
+- **Aggarwal** — *Recommender Systems: The Textbook* (Springer, 2016). Comprehensive coverage of recommendation systems.
+
+#### Text Search
+
+- **Zhai & Massung** — *Text Data Management and Analysis* (Morgan Claypool, 2016). Unified approach to text search and IR.
+
+- **Berry & Kogan** (ed.) — *Text Mining: Applications and Theory* (Wiley, 2010).
+
+#### IR web
+
+- **Ceri et al.** — *Web Information Retrieval* (Springer, 2013). Specific to the Web context.
+
+#### Learning to rank
+
+- **Liu** — *Learning to Rank for Information Retrieval* (Springer, 2011). Reference on supervised approaches to ranking.
+
+#### IR algebra
+
+- **Dominich** — The Modern Algebra of Information Retrieval* (Springer, 2008). For formal mathematical foundations.
+
+- **Melucci** — *Introduction to Information Retrieval and Quantum Mechanics* (Springer, 2015). Unconventional approach based on quantum mechanics.
+
+Specific references to each chapter will be provided as the course progresses. Bibliographic suggestions are welcome.
+
+---
+
+## Executive summary
+
+### What to learn from this introduction
+
+**Key points in this introductory chapter:**
+
+Information Retrieval was born from a simple observation: the production of digital data is growing exponentially, and humans cannot handle this volume of information manually.
+
+In response to this **information avalanche**, three basic needs are emerging: making better decisions, managing information effectively, and accessing large data repositories to make science.
+
+To meet these needs, it is necessary to **structure the raw data**: to represent them formally, to define appropriate similarity measures, and to apply analytical processes (search, learning, visualization).
+
+**Distance** is the central concept of Information Retrieval: it allows you to compare documents, group them together, classify them by relevance, and visualize them.
+
+An IR system aims to ** automatically emerge the relevant information** from a large collection of documents, in response to a flexible query formulated by a user.
+
+This course will cover classical and modern IR models, from TF·IDF weighting to neuronal embeddings, indexing, evaluation, recommendation systems and data visualization.

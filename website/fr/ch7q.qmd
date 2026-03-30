@@ -1,0 +1,339 @@
+---
+title: "Web Information Retrieval — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Quel est le principe fondateur de la recherche d'information sur le Web par rapport aux modèles classiques ?
+
+> Pensez à ce que les pages Web possèdent en plus de leur contenu textuel.
+
+1. [ ] Utiliser uniquement le contenu textuel des pages
+1. [x] Combiner l'analyse du contenu et l'analyse de la structure des liens
+    > Correct : le Web IR combine les modèles basés sur le contenu (ex. VSR) et les modèles basés sur la structure des hyperliens.
+1. [ ] Remplacer les modèles vectoriels par des graphes
+1. [ ] Indexer uniquement les pages les plus populaires
+```
+
+```{quizdown}
+### Qui a développé le World Wide Web et en quelle année ?
+
+> Pensez à l'institution suisse de recherche en physique des particules.
+
+1. [ ] Doug Engelbart, 1969
+1. [ ] Larry Page, 1998
+1. [x] Tim Berners-Lee, 1990
+    > Correct : Tim Berners-Lee a développé le WWW au CERN en 1990, en combinant FTP et hypertexte.
+1. [ ] Marc Andreessen, 1993
+```
+
+```{quizdown}
+### Quelles technologies fondatrices du Web Tim Berners-Lee a-t-il développées ?
+
+> Pensez au protocole, au système d'adressage et au langage de balisage.
+
+- [x] HTTP
+    > Correct : HyperText Transfer Protocol, protocole de communication du Web.
+- [x] URL
+    > Correct : Uniform Resource Locator, système d'adressage des ressources.
+- [x] HTML
+    > Correct : HyperText Markup Language, langage de balisage des pages Web.
+- [ ] FTP
+    > Incorrect : FTP existait avant le Web et n'a pas été créé par Berners-Lee.
+- [ ] TCP/IP
+    > Incorrect : TCP/IP est l'infrastructure Internet, développée bien avant le Web.
+```
+
+```{quizdown}
+### Qu'est-ce que le facteur d'impact (Impact Factor) d'une revue scientifique ?
+
+> Pensez à la formule : citations reçues / articles publiés, sur une fenêtre temporelle précise.
+
+1. [ ] Le nombre total d'articles publiés dans la revue
+1. [ ] Le pourcentage d'articles acceptés par la revue
+1. [x] Le nombre moyen de citations recues en annee y vers des articles publies en y-1 ou y-2
+    > Correct : le facteur d'impact mesure l'influence d'une revue via la frequence de citation de ses articles recents.
+1. [ ] Le classement mondial de la revue selon son domaine
+```
+
+```{quizdown}
+### Le couplage bibliographique (Bibliographic Coupling) mesure la similarite entre deux documents. Comment ?
+
+> Pensez a la direction temporelle : les deux documents regardent vers le passe ou vers l'avenir ?
+
+1. [x] Par le nombre de documents cites par les deux documents simultanément
+    > Correct : BC(dA, dB) = |bib(dA) inter bib(dB)| — intersection des bibliographies sortantes.
+1. [ ] Par le nombre de documents qui citent les deux documents simultanement
+1. [ ] Par le nombre de mots en commun dans leurs resumes
+1. [ ] Par la longueur de leurs bibliographies respectives
+```
+
+```{quizdown}
+### Qu'est-ce que la co-citation, introduite par Small en 1973 ?
+
+> Comparez avec le couplage bibliographique : la co-citation regarde dans la direction opposee.
+
+1. [ ] Le nombre de references communes entre deux documents
+1. [x] Le nombre de documents qui citent a la fois dA et dB
+    > Correct : la co-citation mesure combien de documents tiers mentionnent ensemble dA et dB — elle regarde vers l'avenir (les citants).
+1. [ ] Le nombre de fois ou un document se cite lui-meme
+1. [ ] L'intersection des listes de mots-cles de deux documents
+```
+
+```{quizdown}
+### Qu'est-ce qu'une "autorite" (authority) dans le contexte de l'analyse de liens ?
+
+> Pensez au role qu'elle joue dans le graphe bipartite hubs-autorites.
+
+1. [ ] Une page qui pointe vers de nombreuses autres pages
+1. [ ] Une page appartenant a un domaine gouvernemental (.gov)
+1. [x] Une page tres citee par des pages de qualite, reconnue comme source fiable sur un sujet
+    > Correct : une autorite est une page vers laquelle de nombreux hubs pointent — elle fournit du contenu de reference.
+1. [ ] La page avec le plus grand nombre de liens sortants
+```
+
+```{quizdown}
+### Qu'est-ce qu'un "hub" dans le modele HITS ?
+
+> Le hub est le complementaire de l'autorite dans le graphe bipartite.
+
+1. [ ] Une page de contenu tres citee
+1. [x] Une page d'index qui pointe vers de nombreuses autorites
+    > Correct : un hub agregge des liens vers des autorites — c'est une page de navigation thematique de qualite.
+1. [ ] Le serveur principal d'un domaine Web
+1. [ ] Une page appartenant a la composante fortement connexe du Web
+```
+
+---
+
+## Niveau 2 — Comprehension
+
+```{quizdown}
+### Dans le modele en "noeud papillon" (Bow Tie) du Web, quelle composante correspond aux pages vers lesquelles le coeur pointe, mais qui ne pointent pas vers lui ?
+
+> Imaginez le noeud papillon : le coeur est au centre, avec des ailes de chaque cote.
+
+1. [ ] IN
+1. [x] OUT
+    > Correct : OUT contient les pages accessibles depuis le coeur, mais qui ne permettent pas d'y revenir via des liens.
+1. [ ] Tendrils
+1. [ ] Disconnected
+```
+
+```{quizdown}
+### Pourquoi le degre entrant (in-degree) seul est-il insuffisant comme mesure d'autorite sur le Web ?
+
+> Comparez avec la bibliometrie : une citation d'un prix Nobel vaut-elle autant qu'une citation d'un etudiant ?
+
+- [x] Il traite tous les liens comme equivalents, quelle que soit la qualite de la page source
+    > Correct : un lien d'une page de faible qualite compte autant qu'un lien d'une page tres autoritaire.
+- [x] De nombreuses pages a fort degre entrant sont des portails generaux, pas des autorites thematiques
+    > Correct : ex. Yahoo ou Google ont un fort in-degree mais ne sont pas des autorites sur un sujet specifique.
+- [ ] Le degre entrant est impossible a calculer efficacement
+- [ ] Le degre entrant favorise toujours les pages recentes
+```
+
+```{quizdown}
+### Quelle est la difference principale entre le couplage bibliographique et la co-citation ?
+
+> Pensez a la direction des liens consideres dans chaque cas.
+
+1. [ ] Le couplage bibliographique utilise les liens entrants, la co-citation les liens sortants
+1. [ ] Le couplage bibliographique est normalise, pas la co-citation
+1. [x] Le couplage bibliographique compare les references sortantes (passe), la co-citation compare les citants entrants (avenir)
+    > Correct : BC regarde ce que deux documents citent en commun ; la co-citation regarde qui les cite ensemble.
+1. [ ] Le couplage bibliographique s'applique au Web, la co-citation aux articles scientifiques uniquement
+```
+
+```{quizdown}
+### Quelle est la principale difference entre HITS et PageRank concernant le moment du calcul ?
+
+> Pensez a l'architecture d'un moteur de recherche : que se passe-t-il avant et apres la requete ?
+
+1. [ ] HITS est calcule hors ligne ; PageRank est calcule au moment de la requete
+1. [x] HITS est calcule au moment de la requete ; PageRank est pre-calcule sur tout le Web
+    > Correct : HITS construit un sous-graphe specifique a chaque requete ; PageRank est calcule une fois pour toutes les pages du Web.
+1. [ ] Les deux sont calcules au moment de la requete
+1. [ ] Les deux sont pre-calcules hors ligne
+```
+
+```{quizdown}
+### Vers quels vecteurs propres convergent les scores d'autorite et de hub dans HITS ?
+
+> La matrice d'adjacence S est centrale : reflechissez aux produits matriciels S^T S et SS^T.
+
+1. [ ] a converge vers le vecteur propre principal de S ; h converge vers le vecteur propre principal de S^T
+1. [x] a converge vers le vecteur propre principal de S^T S ; h converge vers le vecteur propre principal de SS^T
+    > Correct : en ecrivant a = S^T h et h = Sa, on obtient a = S^T S a et h = SS^T h.
+1. [ ] Les deux convergent vers le meme vecteur propre principal de S
+1. [ ] a converge vers SS^T ; h converge vers S^T S
+```
+
+```{quizdown}
+### Qu'est-ce qu'un "attracteur PageRank" (PageRank sink) et pourquoi est-il problematique ?
+
+> Imaginez un groupe de pages formant un cycle ferme, vers lequel d'autres pages pointent.
+
+1. [ ] Une page avec un PageRank extremement eleve qui monopolise les requetes
+1. [ ] Un serveur Web qui ralentit la propagation du PageRank
+1. [x] Un groupe de pages formant un cycle ferme qui absorbe tout le PageRank sans en redistribuer
+    > Correct : le PageRank entre dans le cycle et ne peut plus en sortir, rendant le calcul incoherent pour le reste du graphe.
+1. [ ] Une page sans liens entrants qui ne recoit jamais de PageRank
+```
+
+```{quizdown}
+### PageRank peut etre interprete comme le comportement d'un "surfeur aleatoire". Que modelise r[p] dans cette interpretation ?
+
+> Pensez a la distribution stationnaire d'une chaine de Markov.
+
+1. [ ] Le nombre de fois que la page p a ete visitee au total
+1. [ ] La vitesse de chargement de la page p
+1. [x] La probabilite que le surfeur aleatoire se trouve sur la page p a un instant donne
+    > Correct : r[p] est la probabilite d'occupation de la page p a l'equilibre de la chaine de Markov — c'est une mesure de centralite.
+1. [ ] Le nombre de liens sortants de la page p
+```
+
+```{quizdown}
+### Dans le formalisme des marches aleatoires, pourquoi la marche est-elle une chaine de Markov homogene en temps ?
+
+> Pensez a la definition de la probabilite de transition p_{ij}.
+
+1. [ ] Parce que le graphe ne change pas au fil du temps
+1. [ ] Parce que la marche visite chaque noeud le meme nombre de fois
+1. [x] Parce que la probabilite de transition de vi a vj ne depend pas du temps t, seulement de la structure du graphe
+    > Correct : p_{ij} = 1/d_i si (vi,vj) appartient a E, independamment de t — le processus est sans memoire et invariant dans le temps.
+1. [ ] Parce que la distribution initiale est uniforme
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Remets les etapes de construction de l'ensemble de base S dans HITS dans le bon ordre.
+
+> Pense a comment on passe de l'ensemble racine R a l'ensemble elargi S.
+
+1. Executer une requete sur un moteur classique pour obtenir l'ensemble racine R
+2. Initialiser S avec R
+3. Ajouter a S toutes les pages pointees par une page de R
+4. Ajouter a S toutes les pages qui pointent vers une page de R
+5. Appliquer l'algorithme iteratif HITS sur S
+```
+
+```{quizdown}
+### Remets les etapes de l'algorithme PageRank complet (avec teleportation) dans le bon ordre.
+
+> Reflechis a l'ordre : propagation, puis teleportation, puis normalisation.
+
+1. Initialiser r[p] = 1/|S| pour toutes les pages
+2. Propager le PageRank : r[p] = somme sur q->p de r[q]/deg+(q)
+3. Appliquer la teleportation : r[p] = alpha + (1-alpha) * r[p]
+4. Calculer le normalisateur c = 1 / somme r[p]
+5. Normaliser : r[p] = c * r[p]
+6. Repeter jusqu'a convergence
+```
+
+```{quizdown}
+### Un moteur de recherche obtient les resultats suivants pour la requete "python" : beaucoup de pages sur le serpent, tres peu sur le langage de programmation. Quelle propriete de HITS explique ce phenomene et quelle solution propose l'algorithme ?
+
+> Pensez a ce qui se passe quand une requete a plusieurs sens distincts dans l'espace des vecteurs propres.
+
+1. [ ] HITS ne peut pas traiter les requetes d'un seul mot — il faut une requete plus longue
+1. [ ] Le sous-graphe S est trop petit et ne contient pas de pages sur la programmation
+1. [x] Le vecteur propre principal couvre un seul sens ; les vecteurs propres non-principaux peuvent couvrir les autres sens de la requete polysemique
+    > Correct : pour une requete polysemique, HITS peut produire des resultats biaises vers un seul sens. Les vecteurs propres secondaires (deuxieme, troisieme...) peuvent capturer les autres significations.
+1. [ ] PageRank est preferable a HITS pour les requetes polysemiques car il couvre tout le Web
+```
+
+```{quizdown}
+### Une page Web fait partie d'un groupe de 5 pages qui ne pointent qu'entre elles, mais 1000 autres pages pointent vers ce groupe. Que se passe-t-il avec le PageRank de base (sans teleportation) ?
+
+> Pensez au flux de PageRank : peut-il entrer et sortir librement de ce groupe ?
+
+1. [ ] Le PageRank de ces 5 pages sera nul car elles ne pointent pas vers l'exterieur
+1. [x] Le PageRank s'accumule dans ce cycle et ne peut plus en sortir — ces pages absorbent tout le PageRank du systeme
+    > Correct : c'est un attracteur PageRank. Le flux entre dans le groupe via les 1000 liens entrants, mais ne peut pas ressortir car aucun lien ne pointe vers l'exterieur.
+1. [ ] Le PageRank se distribue uniformement a toutes les pages du Web
+1. [ ] Cela n'affecte pas le calcul car le normalisateur compense automatiquement
+```
+
+```{quizdown}
+### Quelle est la formulation matricielle correcte du PageRank complet avec teleportation ?
+
+> La matrice finale combine la teleportation uniforme et la matrice d'adjacence normalisee.
+
+1. [ ] r = c * r * S
+1. [ ] r = c * (alpha * S + (1 - alpha) * 1*1^T)
+1. [x] r = c * r * (alpha * 1*1^T + (1 - alpha) * S)
+    > Correct : r est le vecteur propre gauche principal (vecteur de Perron) de la matrice alpha*1*1^T + (1-alpha)*S.
+1. [ ] r = alpha + (1 - alpha) * r * S^T
+```
+
+```{quizdown}
+### Pour garantir la convergence de la marche aleatoire vers une distribution stationnaire unique, quelles proprietes le graphe doit-il verifier ?
+
+> Le theoreme de Perron-Frobenius impose deux conditions sur la chaine de Markov.
+
+- [x] Le graphe doit etre irreductible (connexe : il existe un chemin entre toute paire de noeuds)
+    > Correct : l'irreductibilite garantit qu'on peut atteindre n'importe quel noeud depuis n'importe quel autre noeud.
+- [x] La chaine doit etre aperiodique (pas d'entier k > 1 divisant la longueur de tous les cycles)
+    > Correct : l'aperiodicite empeche la marche de boucler indefiniment sur des cycles de longueur fixe.
+- [ ] Le graphe doit etre regulier (meme degre pour tous les noeuds)
+- [ ] La matrice de transition doit etre symetrique
+```
+
+```{quizdown}
+### Pourquoi les liens Web sont-ils moins fiables que les citations bibliographiques comme signal d'autorite ?
+
+> Reflechissez aux motivations qui poussent quelqu'un a creer un lien Web versus a citer un article.
+
+- [x] De nombreux liens sont purement navigationaux et ne refletent pas une relation thematique
+    > Correct : menus, barres de navigation, liens de pied de page ne sont pas des recommandations editoriales.
+- [x] Les entreprises ne pointent pas vers leurs concurrents, contrairement aux chercheurs qui citent les travaux opposes
+    > Correct : en bibliometrie, on cite meme les travaux avec lesquels on est en desaccord.
+- [x] Les liens Web ne sont pas soumis a une revision par les pairs contrairement aux references d'articles scientifiques
+    > Correct : n'importe qui peut creer un lien pour n'importe quelle raison.
+- [ ] Les liens Web sont unidirectionnels alors que les citations sont bidirectionnelles
+```
+
+```{quizdown}
+### Dans le modele du surfeur aleatoire, quel est le role du parametre de teleportation alpha ?
+
+> Pensez au probleme que la teleportation est censee resoudre dans le graphe Web.
+
+1. [ ] Accelerer la convergence de l'algorithme en reduisant le nombre d'iterations
+1. [ ] Privilegier les pages recemment mises a jour
+1. [ ] Introduire une personalisation selon les preferences de l'utilisateur
+1. [x] Permettre au surfeur de quitter les attracteurs (cycles fermes) en sautant aleatoirement vers une page quelconque
+    > Correct : sans teleportation, le surfeur reste piege dans des cycles sans liens sortants. Alpha > 0 garantit l'irreductibilite de la chaine de Markov.
+```
+
+```{quizdown}
+### On veut utiliser HITS pour trouver des pages similaires a "honda.com". Quelle est l'approche correcte ?
+
+> Rappel : HITS peut etre utilise non seulement pour une requete textuelle, mais aussi a partir d'une page donnee.
+
+1. [ ] Calculer le PageRank de honda.com et retourner les pages avec un PageRank similaire
+1. [ ] Rechercher "honda" dans un moteur classique et retourner les 10 premiers resultats
+1. [x] Prendre les pages qui pointent vers honda.com comme ensemble racine, construire S, executer HITS et retourner les meilleures autorites
+    > Correct : les meilleures autorites dans le voisinage de liens de honda.com sont des pages similaires (ex. toyota.com, ford.com...).
+1. [ ] Calculer le couplage bibliographique de honda.com avec toutes les autres pages du Web
+```
+
+```{quizdown}
+### La matrice de transition P d'une marche aleatoire est definie comme P = DS. Que represente la matrice D ?
+
+> Pensez a comment normaliser les lignes de la matrice d'adjacence S pour obtenir des probabilites.
+
+1. [ ] La matrice des distances entre noeuds du graphe
+1. [ ] La matrice identite multipliee par le diametre du graphe
+1. [x] La matrice diagonale des inverses des degres : D = diag(1/d1, 1/d2, ..., 1/d|V|)
+    > Correct : multiplier S par D a gauche divise chaque ligne i par d_i, transformant les adjacences en probabilites de transition.
+1. [ ] La matrice de distribution stationnaire pi
+```

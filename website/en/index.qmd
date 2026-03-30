@@ -1,0 +1,25 @@
+---
+title: "Information Retrieval"
+subtitle: "Course notes"
+---
+
+## Welcome
+
+This site brings together the course notes of the module **Information Retrieval** (*Information Retrieval*) of the Master in Computer Sciences.
+
+## Course content
+
+| Chapter | Subject | Pages |
+|----------|-------|-------|
+| 1 | Introduction to Information Retrieval | [Details][ch1.qmd] · [Synthesis](ch1r.qmd) |
+| 2 | Embeddings (TF·IDF, Probabilistic Models, LSI) | [Details][ch2.qmd] · [Synthesis](ch2r.qmd) |
+| 3 | European Embeddings (Word2Vec, GloVe) | [Details][ch3.qmd] · [Synthesis](ch3r.qmd) |
+| 6 | Evaluation in Information Retrieval | [Details][ch6.qmd] · [Synthesis](ch6r.qmd) |
+
+## Objectives
+
+- Understanding basic RI models
+- Understanding document and term bindings
+- Understanding models of social recommendation
+- Understanding quality measures
+- Have an overview of data indexing and visualization

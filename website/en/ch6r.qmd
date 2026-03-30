@@ -1,0 +1,144 @@
+---
+title: "Information Retrieval Textual — Revision"
+---
+
+# Model Bag of Words
+
+**Principle**: terms = independent, unordered entities, multiplicity
+
+| Advantage | Disadvantage |
+|---|---|
+| Simple, generic (text, images...) | Loss of grammatical structure |
+| No need for full TAL | Unmanaged Synonymy / Polysaemia |
+| Light, computable | Order of words ignored |
+
+**Term** = generic entity (word, visual pattern, acoustic pattern...)
+
+---
+
+# Text Processing Pipeline
+
+```{mermaid}
+flowchart LR
+    A[Gross document] --> B[Tokenization]
+    B --> C[Stopwords removal]
+    C --> D[Stemming / Lemmatization]
+    D --> E[Index / Thesaurus]
+```
+
+| Step | Role | Example |
+|---|---|---|
+| **Tokenization** | Bytes → tokens | separators: spaces, punctuation |
+| **Stopwords** | Delete non-discriminatory terms | *"the"*, *"a"*, *"of"* |
+| **Stemming** | Root of the word (truncated) | *committed* → *commit* |
+| **Lammatization** | Basic language form | *"are"*, *"is"* → *"be"* |
+| **SOUNDEX** | Phonetic key 4 characters | *Herman* → **H655** |
+
+**Stemming vs Lemmatization**: Stemming = faster but less accurate; lemmatization = linguistically correct
+
+---
+
+# Zipf's Law
+
+**Class definition** $r(i)$: position in list sorted by decreasing frequency
+
+$$\boxed{f(i) \cdot r(i) = K \approx \text{cst}} \quad \Longleftrightarrow \quad f(i) = \frac{KL}{r(i)}, \quad K \approx 0.1$$
+
+**Loi de puissance** (power law) avec $c = -1$ → **droite en log-log**
+
+$$\log f(i) = \log(KL) - \log(r(i))$$
+
+## Prediction of the number of terms
+
+$$s_n = r_n - r_{n+1} = \frac{KL}{n(n+1)} \qquad \frac{s_n}{M} = \frac{1}{n(n+1)}$$
+
+| n (occurrences) | Fraction prédite | Fraction réelle (TREC) |
+|---|---|---|
+| 1 (hapax) | **0.500** | 0.402 |
+| 2 | 0.167 | 0.132 |
+| 5 | 0.033 | 0.032 |
+
+⚠️ **Moitié des termes distincts n'apparaissent qu'une seule fois** (hapax legomena)
+
+## Correction de Mandelbrot
+
+$$f(i) = P(r(i) + \rho)^{-B}, \quad P=10^{5.4},\ \rho=100,\ B=1.15$$
+
+Improves fit to extreme ranks
+
+## Practical consequences
+
+- Stopwords removal → greatly reduces storage
+- Rare terms → unreliable statistics
+
+---
+
+# Heap's Law
+
+$$\boxed{M = k \cdot L^{\beta}}, \quad k \approx 10\text{–}100,\quad \beta \approx 0.4\text{–}0.6$$
+
+- $M$ = taille du vocabulaire, $L$ = longueur du corpus (tokens)
+- $\beta \approx 0.5$ → $M \propto \sqrt{L}$ (croissance **sous-linéaire**)
+- Dérivable depuis la loi de Zipf
+
+⚠️ Vocabulaire non borné (entités nommées, fautes…)
+
+---
+
+# Vocabulaire d'Index selon Luhn
+
+- **Seuil supérieur** (Upper Cut-Off) → élimine les stopwords (trop fréquents)
+- **Seuil inférieur** (Lower Cut-Off) → élimine les hapax (trop rares)
+- **Termes significatifs** = zone intermédiaire à haute valeur discriminante
+
+---
+
+# Théorie de l'Information
+
+## Entropie
+
+$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i \quad \text{(max si équiprobable)}$$
+
+| Vocabulary M | Real entropy | Max entropy |
+|---|---|---|
+| 100 000 | 9.5 bits | 13.3 bits |
+| 500,000 | 10.9 bits | 15.6 bits |
+| 1 000 000 | 11.4 bits | 16.6 bits |
+
+## Mutual Information
+
+$$I(W_1;W_2) = \sum_{w_1,w_2} \mathbb{P}(w_1,w_2)\log\frac{\mathbb{P}(w_1,w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$
+
+| Valeur | Interprétation |
+|---|---|
+| Grande | Co-occurrence **significative** |
+| Proche de 0 | Co-occurrence **spurieuse** (termes fréquents) |
+
+⚠️ Pièges : termes très fréquents (*"a"*, *"is"*, *"with"*) → IM artificiellement élevée → stopwords à supprimer
+
+---
+
+# Relations entre Concepts
+
+```{mermaid}
+flowchart TD
+    Z[Zipf Law] --> H[Law of Heap]
+    Z --> L[Luhn Cutoffs]
+    Z --> M[Mandelbrot correction]
+    M --> IT[Ideal info carrier\nInfo Theory]
+    L --> S[Stopwords removal]
+    L --> R[Hapax suppression]
+```
+
+---
+
+# Formules à Retenir
+
+| Formule | Nom | Variables |
+|---|---|---|
+| $f(i) \cdot r(i) = K$ | Zipf | $f$ = fréquence, $r$ = rang |
+| $f(i) = KL/r(i)$, $K\approx0.1$ | Zipf développée | $L$ = longueur corpus |
+| $s_n/M = 1/n(n+1)$ | Fraction hapax | $s_n$ = termes à $n$ occurrences |
+| $M = k \cdot L^\beta$ | Heap | $M$ = vocab, $\beta \in [0.4, 0.6]$ |
+| $I_H = -\sum p_i \log p_i$ | Entropie Shannon | $p_i$ = proba du terme $i$ |
+| $f(i) = P(r+\rho)^{-B}$ | Mandelbrot | $P, \rho, B$ = constantes empiriques |

@@ -1,0 +1,809 @@
+---
+title: "Evaluation in Information Retrieval"
+---
+
+# Recalls on Information Retrieval
+
+## The main motivation of the RI
+
+The primary objective of the **Information Retrieval** (Information Retrieval — IR) is to satisfy a need for information** (Information Need).
+
+The aim is to allow a user to find relevant documents from a large collection, based on an informal query.
+
+However, this is not always the only goal. The IR also covers:
+
+- **Data Management: organize, structure, maintain collections
+- **Data Filtering: Eliminating Unrelevant Information by User Profile
+
+The notion of *need information* is central: it is subjective, contextual, and often difficult to formalize.
+
+## The main challenge of the RI
+
+Information Retrieval aims to:
+
+> * Automatically emerge the relevant ** information** from a **wide collection** of documents using a formalism of query **lowly binding** (initially based on text alone). *
+
+This challenge differs from traditional data management approaches:
+
+### Differences with Database Search
+
+| Aspect | Database | Information Retrieval |
+|---|---|---|
+| Formalism of query | Strict (ex. SQL) | Soft (natural language) |
+| Structure | Manual construction | Automatic |
+| Navigation | Directory path | Free Query |
+| Classification | Manual | Automatic |
+
+The RI does not replace databases — it completes them** for uses where the formal structure is impossible or insufficient.
+
+## The main tasks of the RI
+
+The RI encompasses four broad sets of tasks:
+
+### Data Recovery (Data Retrieval)
+
+This is the classic task: the user submits a query and the system returns an ordered list of relevant documents.
+
+It is on this task that conventional assessment measures (precision, recall) are mainly developed.
+
+### Answer to questions (Question Answering)
+
+The system must include a question in natural language and provide an accurate answer, not just a document.
+
+Example: *"Who invented the Web?"* → expected answer: *"Tim Berners-Lee"*, not a list of web pages.
+
+### Content-based Interaction
+
+Systems that allow the user to interact with a collection via its content (images, sounds, videos) rather than keywords.
+
+Example: Search for images by visual similarity.
+
+### Data Management
+
+Organization and intelligent maintenance of a collection of documents: automatic classification, duplicate detection, corpus structuring.
+
+---
+
+# Relevance models
+
+## The central concept of relevance (Relevance)
+
+Relevance is the fundamental concept around which the entire RI evaluation is articulated.
+
+A document is relevant if it ** responds to the need for information** expressed by the user's query.
+
+The relevance is **subjective**: two users can judge differently the relevance of the same document for the same query.
+
+It also depends on the context and the user's interaction with the system.
+
+## Relevance and similarity
+
+The RI models seek to estimate relevance through different approaches:
+
+### Relevance as similarity (Similarity)
+
+Relevance is modelled as a **distance** or **similarity** between the representation of the query and that of the document:
+
+$$\Delta(\text{Rep}(q), \text{Rep}(d))$$
+
+- Le modèle **espace vectoriel** (Vector Space Model — Salton et al., 1975) en est l'exemple le plus célèbre.
+- La **mesure cosinus** est fréquemment utilisée.
+- La similarité est une valeur **continue** → nécessite un seuil pour décider de la pertinence.
+
+### Pertinence comme probabilité (Probability of Relevance)
+
+$$P(R \mid q, d) \in \{0, 1\}$$
+
+- Model **Probabilistic classic** (Robertson & Sparck Jones, 1976)
+- Models **generative** (language model approach — Ponte & Croft, 1998; Lafferty & Zhai, 2001)
+- Model **probabilistic distribution** (Wong & Yao, 1989)
+
+### Relevance as Inference (Probabilistic Inference)
+
+$$P(d \to q) \text{ ou } P(q \to d)$$
+
+- Modèle de **réseau d'inférence** (Turtle & Croft, 1991)
+- Modèle de **concept probabiliste** (Wong & Yao, 1995)
+
+## Pertinence binaire vs continue
+
+| Type | Description | Exemple |
+|---|---|---|
+| Continue | Score réel dans [0, 1] | Mesure cosinus |
+| Binaire | Pertinent / Non pertinent | Jugement humain |
+
+💡 En pratique, les systèmes calculent des scores continus, mais l'évaluation repose sur des jugements **binaires** (pertinent / non-pertinent), avec parfois une classe neutre utilisée dans le **retour de pertinence** (Relevance Feedback).
+
+La conversion d'un score continu en décision binaire nécessite un **seuil** (Threshold) — le choix de ce seuil est un problème central.
+
+---
+
+# Évaluation en Recherche d'Information
+
+## Pourquoi évaluer ?
+
+L'évaluation est indispensable pour plusieurs raisons fondamentales.
+
+### Comparer les systèmes
+
+Il existe de nombreux systèmes de RI différents. L'évaluation permet de :
+
+- Identifier le **meilleur système** pour une tâche donnée
+- **Évaluer des composants** individuellement (indexation, modèle de pondération, mécanisme de requête...)
+- **Comprendre les problèmes** et faire progresser la recherche
+
+### Relever les défis
+
+Les enjeux de l'évaluation sont multiples :
+
+- Définir des tâches **pertinentes** et **réalistes**
+- Choisir les mesures les plus **représentatives** du comportement réel du système
+
+💡 Une bonne évaluation est celle qui permet de prédire les performances réelles d'un système dans des conditions d'utilisation authentiques.
+
+## Que faut-il évaluer ?
+
+L'évaluation dépend fortement de la **tâche** que le système est censé accomplir.
+
+### Validité du modèle
+
+Est-ce que le modèle sous-jacent capture correctement la pertinence ?
+
+### Utilité pour l'utilisateur
+
+Le système rend-il effectivement service à l'utilisateur dans sa tâche ?
+
+### Évaluation selon la tâche
+
+#### Réponse aux questions (Question Answering)
+
+> Ma question est-elle **comprise** et **répondue correctement** ?
+
+Cette évaluation nécessite des compétences en ingénierie des connaissances, linguistique et intelligence artificielle.
+
+#### Gestion de données (Data Management)
+
+> Mon système est-il **utile** pour maintenir mes données organisées ?
+
+Relève plutôt de l'IHM (Interaction Homme-Machine) et du génie logiciel.
+
+#### Interaction fondée sur le contenu (CB Interaction)
+
+> Mon système est-il **utilisable** par l'utilisateur ?
+
+#### Récupération de données (Data Retrieval) ← tâche centrale
+
+> **Toutes** les données pertinentes (et **seulement** celles-ci) sont-elles récupérées ?
+
+🧠 À retenir : C'est pour la tâche de **récupération de données** que les mesures quantitatives classiques (précision, rappel, F-mesure, etc.) ont été développées et sont le plus largement utilisées.
+
+---
+
+# Outils d'évaluation
+
+## La vérité terrain (Ground Truth)
+
+Pour évaluer un système, il faut disposer d'une **vérité terrain**, c'est-à-dire un ensemble de données de référence.
+
+La construction de la vérité terrain suit ces étapes :
+
+1. Définir un **ensemble de requêtes** représentatives
+2. Pour chaque requête, collecter des **jugements de pertinence** (relevance judgments) : un ensemble de documents étiquetés comme pertinents ou non
+3. Ces jugements sont fournis par **plusieurs utilisateurs** pour réduire la subjectivité
+
+⚠️ La qualité des jugements de pertinence est critique : des jugements erronés ou inconsistants faussent toute l'évaluation.
+
+## Le système à évaluer (System Under Test)
+
+Une fois la vérité terrain établie, le système est évalué comme suit :
+
+1. **Exécuter les requêtes** de la vérité terrain sur le système
+2. **Récupérer les résultats** sous forme de listes ordonnées (ranked lists)
+3. **Marquer** les documents pertinents et non pertinents dans ces listes
+
+On obtient ainsi :
+
+- Les **rangs des documents pertinents** dans la liste de résultats
+- Les **rangs des documents non pertinents**
+
+## Définir la frontière récupéré / non récupéré
+
+Il faut aussi décider d'une **limite** qui sépare les documents récupérés de ceux qui ne le sont pas. Plusieurs stratégies existent :
+
+- Fixer un **nombre de documents inspectés** (ex. top-10, top-100)
+- Fixer un **seuil de similarité** en dessous duquel un document n'est pas retourné
+- Utiliser une **décision interne** au système (ex. classifieur binaire)
+
+Alternativement, on peut **évaluer sur toutes les positions** possibles et tracer une courbe de performance complète.
+
+---
+
+# Les Mesures de Base : Précision et Rappel
+
+## La table de contingence
+
+Avant de définir précision et rappel, il faut introduire la **table de contingence** (Confusion Matrix) qui organise les 4 situations possibles pour chaque document :
+
+|  | Récupéré | Non récupéré |
+|---|---|---|
+| **Pertinent** | Vrai Positif (TP) | Faux Négatif (FN) |
+| **Non Pertinent** | Faux Positif (FP) | Vrai Négatif (TN) |
+
+- **TP (True Positive)** : document pertinent ET récupéré → ✅ bonne récupération
+- **FN (False Negative)** : document pertinent mais NON récupéré → ❌ raté
+- **FP (False Positive)** : document non pertinent mais récupéré → ❌ pollution
+- **TN (True Negative)** : document non pertinent ET non récupéré → ✅ bonne exclusion
+
+💡 On visualise cela comme deux ensembles qui se chevauchent partiellement : l'ensemble des documents pertinents et l'ensemble des documents récupérés.
+
+## Le Rappel (Recall)
+
+### Définition
+
+$$R = \text{Recall} = \frac{\text{nombre de documents pertinents récupérés}}{\text{nombre total de documents pertinents}} = \frac{TP}{TP + FN}$$
+
+### Interpretation
+
+The recall measures the **system's ability not to lack relevant documents**.
+
+A recall of 1 (100%) means that all relevant documents were recovered (FN = 0).
+
+Let's imagine a collection with 100 relevant documents. If the system finds 80, the recall is 0.80.
+
+A high recall can be obtained trivially by recovering **all** documents from the collection — but then the precision is catastrophic.
+
+## Precision (Precision)
+
+### Definition
+
+$$P = \text{Precision} = \frac{\text{nombre de documents pertinents récupérés}}{\text{nombre total de documents récupérés}} = \frac{TP}{TP + FP}$$
+
+### Interprétation
+
+La précision mesure la **capacité du système à ne retourner que des documents pertinents**.
+
+Une précision de 1 (100%) signifie que tous les documents récupérés sont pertinents (FP = 0).
+
+💡 Si le système retourne 50 documents dont 40 sont pertinents, la précision est de 0,80.
+
+⚠️ Une précision élevée peut être trivialement obtenue en ne récupérant **aucun** document — mais alors le rappel est nul.
+
+## Le compromis fondamental Précision–Rappel
+
+🧠 À retenir : **Précision et rappel sont en tension**.
+
+Il est facile d'atteindre l'un ou l'autre en sacrifiant l'autre :
+
+- **Tout récupérer** → rappel = 1, précision ≈ densité de pertinents dans la collection
+- **Ne rien récupérer** → précision indéfinie, rappel = 0
+- **Ne récupérer que 1 document très sûr** → précision peut être = 1, rappel très faible
+
+Un bon système doit **équilibrer** les deux.
+
+## Les quatre configurations de P et R
+
+### Configuration 1 : Basse précision, bas rappel
+
+L'ensemble des documents récupérés est petit et ne contient aucun document pertinent. Le système est inefficace.
+
+### Configuration 2 : Haute précision, bas rappel
+
+L'ensemble des documents récupérés est petit mais contient uniquement des pertinents. Le système est trop restrictif.
+
+### Configuration 3 : Bas précision, haut rappel
+
+L'ensemble des documents récupérés est grand et englobe presque tous les pertinents, mais aussi beaucoup de non-pertinents.
+
+### Configuration 4 : Haute précision, haut rappel
+
+L'ensemble des documents récupérés est bien calibré : il contient la quasi-totalité des documents pertinents avec peu de bruit. C'est l'**idéal**.
+
+---
+
+# La Courbe Précision–Rappel
+
+## Pourquoi une courbe ?
+
+Une seule valeur de précision ou de rappel ne suffit pas pour caractériser un système.
+
+La **courbe P–R** (Precision–Recall curve) représente l'évolution de la précision en fonction du rappel, en faisant varier le seuil de décision (ou le nombre de documents retournés).
+
+Elle permet de visualiser le **comportement global** du système pour toutes les valeurs de seuil possibles.
+
+💡 Un système idéal aurait une courbe P–R qui longe le coin supérieur gauche puis le bord supérieur du graphique (Précision = 1 pour tout niveau de Rappel).
+
+## Construction d'une courbe P–R
+
+### Données nécessaires
+
+- Une liste ordonnée de résultats produite par le système
+- Les jugements de pertinence pour chaque document
+
+### Procédure
+
+Pour chaque position $k$ dans la liste (en parcourant les documents du plus pertinent au moins pertinent) :
+
+1. Calculer la précision $P@k = \frac{\text{TP jusqu'à k}}{k}$
+2. Calculer le rappel $R@k = \frac{\text{TP jusqu'à k}}{\text{total de pertinents}}$
+3. Porter le point $(R@k, P@k)$ sur le graphique
+
+### Exemple numérique
+
+Supposons une collection avec 4 documents pertinents (Doc 1, 4, 5, 6). Le système retourne la liste ordonnée suivante :
+
+| Position | Doc | Pertinent ? | Précision | Rappel |
+|---|---|---|---|---|
+| 1 | D4 | ✅ R | 1/1 = 1,00 | 1/4 = 0,25 |
+| 2 | D1 | ✅ R | 2/2 = 1,00 | 2/4 = 0,50 |
+| 3 | D3 | ❌ NR | 2/3 = 0,67 | 2/4 = 0,50 |
+| 4 | D6 | ✅ R | 3/4 = 0,75 | 3/4 = 0,75 |
+| 5 | D2 | ❌ NR | 3/5 = 0,60 | 3/4 = 0,75 |
+| 6 | D5 | ✅ R | 4/6 = 0,67 | 4/4 = 1,00 |
+
+💡 On voit que la précision **diminue en général** quand le rappel augmente — c'est le comportement typique d'un système de RI.
+
+## Interprétation de la courbe P–R
+```{mermaid}
+graph LR
+    A[Low Recall\nPrecision high] --> B[Average Recall] --> C[High Recall\nPrecision low]
+```
+
+- Un système **idéal** maintient une précision de 1 quel que soit le rappel.
+- Un système **médiocre** voit sa précision chuter rapidement dès que le rappel augmente.
+- La courbe d'un **bon système** est au-dessus de celle d'un mauvais système sur tout l'axe des rappels.
+
+🧠 À retenir : Plus la courbe est **proche du coin supérieur droit**, meilleur est le système.
+
+## Pourquoi mesurer le rappel est difficile
+
+Dans la pratique, on ne connaît jamais exhaustivement l'ensemble de tous les documents pertinents d'une collection.
+
+### Le problème des documents non jugés
+
+- La collection entière n'est souvent pas jugée (trop coûteux)
+- Les estimations de TP, TN, FP, FN sont donc approximatives
+- Des documents pertinents peuvent exister en dehors des documents jugés
+
+La solution standard est l'**échantillonnage** (sampling) et le **pooling** (voir section Benchmark).
+
+⚠️ En pratique, **seule la précision est mesurable de manière fiable**. Le rappel reste une estimation.
+
+---
+
+# Interpolation et Moyennage des Courbes P–R
+
+## Pourquoi interpoler ?
+
+Lorsqu'on veut comparer deux systèmes ou calculer une courbe moyenne sur plusieurs requêtes, les points de la courbe P–R ne correspondent pas aux mêmes valeurs de rappel.
+
+On utilise alors des **niveaux de rappel standard** : $0, 0.1, 0.2, \ldots, 1.0$.
+
+## La précision interpolée
+
+La **précision interpolée** (Interpolated Precision) au $j$-ième niveau de rappel est définie comme :
+
+$$\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$$
+
+In other words, the maximum ** of precision observed for any recall greater than or equal to $R_j$ is taken up to the next standard $R_{j+1}$ level.
+
+This definition ensures that the interpolated curve is **non-croising monotone** and allows consistent comparisons.
+
+## P–R curves averaged
+
+To evaluate a system on a set of queries, a **average P–R curve** is calculated:
+
+1. For each query $q$, construct the interpolated P–R curve at standard levels
+2. For each standard recall level, ** average** precision on all queries
+3. The resulting curve is the **average P–R curve**
+
+This approach is more **robust** as less sensitive to atypical queries (specific queries).
+
+## Micro-mediumning and Macro-mediumning
+
+When evaluating a system on several categories or queriess, two mediuming strategies exist.
+
+### Micro-mediating
+
+- **Merge** Contingency tables of all categories/queries in **one global table**
+- Then calculate P and R on this unique table
+
+Properties :
+
+- Gives ** equal importance to each document**
+- **Favours the most frequent categories** (large classes dominate calculation)
+
+### Macro-mediating
+
+- P and R** are calculated separately for each category/query**
+- **Average** of scores obtained
+
+Properties :
+
+- Gives ** equal importance to each category**
+- Rare categories have as much weight as frequent categories
+
+### Which strategy to choose?
+
+| Objective | Recommended strategy |
+|---|---|
+| Evaluate overall performance across the corpus | Micro-medium |
+| Assessing in a balanced way between categories | Macro-meaning |
+| Compare systems on unbalanced classes | Macro-meaning |
+
+Both approaches can yield very different results on unbalanced data. It is often wise to **report both**.
+
+---
+
+# Synthetic measures
+
+## The Medium Average Precision (MAP)
+
+### Definition
+
+The average **precision** (Mean Average Precision — MAP) is the**area under the interpolated P–R curve**:
+
+$$\text{mAP} = \frac{1}{11} \sum_{j=0,0.1,\ldots,1.0} \hat{P}(R_j)$$
+
+C'est la moyenne des précisions aux 11 niveaux de rappel standard : $0, 0.1, 0.2, \ldots, 1.0$.
+
+### Interprétation
+
+- mAP = 1 → courbe P–R parfaite (précision = 1 à tous les niveaux de rappel)
+- mAP proche de 0 → système très peu performant
+- mAP est un **scalaire unique** qui résume toute la courbe P–R
+
+💡 La mAP est la mesure la plus utilisée pour comparer des systèmes de RI en recherche, notamment dans les compétitions TREC.
+
+⚠️ La mAP suppose que tous les niveaux de rappel ont la même importance — ce qui n'est pas toujours le cas en pratique (l'utilisateur regarde souvent seulement les premiers résultats).
+
+## La R-Précision (R-Precision)
+
+### Définition
+
+La **R-Précision** est la précision à la position $R$ dans la liste de résultats, où $R$ est le **nombre total de documents pertinents** pour cette requête :
+
+$$R\text{-Precision} = \frac{TP_{N_{\text{Rel}}}}{N_{\text{Rel}}}$$
+
+where $N_{\text{Rel}}$ is the total number of relevant documents, and $TP_{N_{\text{Rel}}}$ is the number of relevant documents among the first $N_{\text{Rel}}$ results.
+
+### Example
+
+Suppose a query with $N_{\text{Rel}} = 7$ relevant documents. The system returns an ordered list. We look at the first 7 results and count the relevant ones.
+
+If of the first 7 results, 4 are relevant:
+
+$$R\text{-Precision} = \frac{4}{7} \approx 0.57$$
+
+### Propriétés
+
+- Pour un système parfait (tous les pertinents en tête de liste) : $R\text{-Precision} = 1$
+- La R-Précision est un **point unique** sur la courbe P–R
+- Elle est facile à calculer et à interpréter
+- Souvent appelée **First-Tier** dans le contexte MPEG-7
+
+## Le Taux de Dégradation (Fallout Rate)
+
+### Motivation
+
+La précision et le rappel présentent des limites :
+
+- La **densité de documents pertinents** dans la collection n'est pas prise en compte
+- Le rappel est **indéfini** s'il n'y a aucun document pertinent ($TP + FN = 0$)
+- La précision est **indéfinie** si aucun document n'est récupéré ($TP + FP = 0$)
+
+### Définition
+
+Le **taux de dégradation** (Fallout) mesure la proportion de documents non pertinents qui ont été récupérés par rapport à l'ensemble des documents non pertinents :
+
+$$\text{Fallout} = \frac{\text{Non pertinents récupérés}}{\text{Non pertinents dans la collection}} = \frac{FP}{TN + FP}$$
+
+This is the analogy of recall, but for **not relevant** documents. A good system has a weak Fallout.
+
+## Generality
+
+### Definition
+
+Introduced by [Rijsbergen, 1979], **generality** (Generality) measures the density of relevant documents in the collection:
+
+$$G = \frac{TP + FN}{TP + FP + FN + TN} = \frac{TP + FN}{N}$$
+
+### Relation entre P, R et Fallout
+
+Connaissant $G$, on peut exprimer la précision en fonction du rappel et du Fallout :
+
+$$P = \frac{R \cdot G}{(R \cdot G) + \text{Fallout} \cdot (1 - G)}$$
+
+This relationship shows that the precision depends not only on the quality of the system (Recall, Fallout) but also on the **characteristics of the collection** (G). A system returning the same results will have a different precision on collections of different generality.
+
+## The F-Measure (F-Measure) and the E-Measure (E-Measure)
+
+### Motivation
+
+To combine precision and recall in **one value**, [Rijsbergen, 1979] proposed F-measure, based on the **weighted harmonic average**.
+
+### Definition
+
+$$E = \frac{(1 + \beta^2)}{\frac{\beta^2}{R} + \frac{1}{P}} = \frac{(1 + \beta^2) \cdot P \cdot R}{\beta^2 \cdot P + R} = \frac{1}{\alpha \cdot \frac{1}{P} + (1 - \alpha) \cdot \frac{1}{R}}$$
+
+Le paramètre $\beta$ (ou $\alpha$) contrôle l'**importance relative** de la précision et du rappel.
+
+### Cas particulier : F₁ (β = 1)
+
+Quand $\beta = 1$ (soit $\alpha = 0.5$), précision et rappel ont la **même importance** :
+
+$$F_1 = \frac{2}{\frac{1}{R} + \frac{1}{P}} = \frac{2 \cdot P \cdot R}{P + R}$$
+
+This is the most widely used measure. Its maximum value is 1 (precision and recall = 1).
+
+### Influence of parameter β
+
+| Value of | Effect |
+|---|---|
+| $\beta = 1$ | Precision and recall also important |
+| $\beta > 1$ | **Precision** greater |
+| $\beta < 1$ | **Recall** more important |
+
+F-measure is the **harmonic average** of P and R. The harmonic mean is particularly sensitive to low values — if one of the two measurements is low, the F-measure will be low.
+
+Do not confuse: $E = F$ is **high** when $P$ and $R$ are **both high**.
+
+## Bull's Eye Percentage (BEP)
+
+### Background
+
+Defined in standard **MPEG-7** for the evaluation of the form search (shape matching).
+
+### Definition
+
+For a query corresponding to $Q$ relevant documents in the collection, the BEP is the percentage of correct matches among the **2Q first** recovered documents:
+
+$$BEP = \frac{TP_{2Q}}{Q}$$
+
+### Comparaison avec la R-Précision
+
+| Mesure | Fenêtre d'évaluation | Caractère |
+|---|---|---|
+| R-Précision (First-Tier) | Q premiers résultats | Plus strict |
+| Bull's Eye (Second-Tier) | 2Q premiers résultats | Plus optimiste |
+
+💡 Le BEP est plus indulgent car il regarde dans une fenêtre deux fois plus grande que le nombre de documents pertinents.
+
+---
+
+# La Courbe ROC (Receiver Operating Characteristic)
+
+## Introduction au contexte
+
+La courbe ROC est un outil d'évaluation général pour les **problèmes de classification binaire** (two-class classification problem).
+
+Dans le contexte de la RI :
+
+- La **classe positive** correspond aux documents pertinents
+- La **classe négative** correspond aux documents non pertinents
+- Le système produit un **score continu** (similarité)
+- Un **seuil T** transforme ce score en décision binaire (récupéré / non récupéré)
+
+💡 En faisant varier T, on obtient différents compromis entre taux de vrais positifs et taux de faux positifs.
+
+## Les taux fondamentaux
+
+### Sensibilité (Sensitivity) = Taux de Vrais Positifs (True Positive Rate — TPR)
+
+Probabilité qu'un document **réellement pertinent** soit **classé comme pertinent** par le système :
+
+$$\text{Sensitivity} = TPR = \frac{TP}{TP + FN} \quad (= \text{Recall !})$$
+
+Sensitivity is identical to **recall**. This is the same measure expressed in a different vocabulary (medical/clinical vs. RI).
+
+The **False Negative Rate (FNR) is the additional rate:
+
+$$FNR = 1 - TPR$$
+
+### Spécificité (Specificity) = Taux de Vrais Négatifs (True Negative Rate — TNR)
+
+Probabilité qu'un document **non pertinent** soit **classé comme non pertinent** :
+
+$$\text{Specificity} = TNR = \frac{TN}{TN + FP}$$
+
+The **False Positive Rate (FPR) is the additional rate:
+
+$$FPR = 1 - TNR = \frac{FP}{TN + FP} \quad (= \text{Fallout !})$$
+
+💡 Le FPR est identique au **taux de dégradation** (Fallout) défini précédemment.
+
+## Construction de la courbe ROC
+
+La courbe ROC se construit en **faisant varier le seuil T** :
+
+1. Pour chaque valeur du seuil T, calculer TPR et FPR
+2. Porter chaque point $(FPR, TPR)$ sur le graphique
+3. La courbe résultante est la **courbe ROC**
+
+L'axe horizontal représente $1 - \text{Spécificité}$ (FPR) et l'axe vertical représente la Sensibilité (TPR).
+
+## Interprétation de la courbe ROC
+```{mermaid}
+graph TD
+    A[Curve close to the y-axis of the upper corner] --> B[Excellent system]
+    C[Near curve of diagonal] --> D[Non-information system]
+    E[Diagonal curve] --> F[System worse than chance]
+```
+
+| Position de la courbe | Qualité du système |
+|---|---|
+| Très proche du coin supérieur gauche | Excellent |
+| Au-dessus de la diagonale, modérément | Bon |
+| Sur la diagonale ($y = x$) | Non informatif (aléatoire) |
+| Sous la diagonale | Pire que le hasard |
+
+💡 L'**aire sous la courbe ROC** (AUC — Area Under the Curve) est une mesure synthétique : AUC = 1 pour un système parfait, AUC = 0.5 pour un système aléatoire.
+
+## Différences entre la courbe P–R et la courbe ROC
+
+| Aspect | Courbe P–R | Courbe ROC |
+|---|---|---|
+| Axe X | Rappel (TPR) | FPR (Fallout) |
+| Axe Y | Précision | Sensibilité (TPR) |
+| Sensibilité au déséquilibre | Forte | Faible |
+| Usage privilégié | RI classique | Classification, médecine |
+
+⚠️ Sur des collections fortement déséquilibrées (très peu de pertinents), la courbe ROC peut donner une **vision optimiste** de la performance. La courbe P–R est alors plus appropriée.
+
+---
+
+# Terminologie Complémentaire
+
+## Autres mesures dérivées
+
+Les notions de TP, FP, FN, TN permettent de définir un large spectre de mesures complémentaires :
+
+### Exactitude (Accuracy) ou Taux de pertinence
+
+$$\text{Relevance} = \text{Accuracy} = \frac{TP + TN}{N}$$
+
+Overall proportion of correct decisions (well classified documents).
+
+### Error Rate
+
+$$\text{Error} = \frac{FP + FN}{N} = 1 - \text{Accuracy}$$
+
+Proportion de documents mal classifiés.
+
+### Silence (Silence)
+
+$$\text{Silence} = 1 - \text{Recall}$$
+
+Proportion of relevant documents missed. High silence means many relevant documents not found.
+
+### Noise (Noise) = Pollution rate of recovery
+
+$$\text{Noise} = \frac{FP}{TP + FP} = 1 - \text{Precision}$$
+
+Proportion de documents non pertinents dans les résultats récupérés.
+
+### Recouvrement (Overlap) = Taux de correspondance
+
+$$\text{Overlap} = \frac{TP}{FN + TP + FP}$$
+
+Proportion of relevant documents recovered relative to the union of relevant and recovered documents.
+
+The recovery is close to the ** measure of Jaccard** used in similar sets.
+
+---
+
+# Evaluation in Practice: Benchmarks
+
+## What is a benchmark?
+
+A **benchmark** (or test bench) is a standardized environment that allows the comparison of IR systems in a reproducible and objective manner.
+
+A full benchmark includes:
+
+- An open data set** (Open Dataset): the collection of documents
+- **queries and their judgements** (Queries and Judgments): queries with relevant associated documents
+- **Assessment measures** defined and standardised
+- A **reference system** (Baseline) to locate performance
+
+## TREC (Text Retrieval Conference)
+
+**TREC** is the benchmark for the textual RI, organized by the National Institute of Standards and Technology (NIST) since 1992.
+
+- Official website: [PHURLARAW1PH
+- Organizes annual ** evaluation campaigns** on different tasks
+- Provides collections of documents, queries (topics) and judgements of relevance
+- Use **pooling** technique for judgments (see below)
+
+TREC played a key role in the development of the modern RI by allowing equitable comparisons between systems around the world.
+
+## Other major benchmarks
+
+| Name | Area |
+|---|---|
+| **CLEF** (Cross-Language Evaluation Forum) | Multilingual RI |
+| **INEX** (Initiative for the Evaluation of XML retrieval) | Structured RI XML |
+| **ISMIR** (International Society for Music Information Retrieval) | Musical RI |
+| **NLP Corpora** | Treatment of natural language |
+| **LeToR** (Learning to Rank) | Learning to rank |
+
+## Pooling technique
+
+Since it is impossible to judge all documents in a large collection for each query, TREC uses the **pooling** technique:
+
+1. Several systems participate in the evaluation
+2. For each query, the first **N results** (e.g. top-100) of each system are collected
+3. **Merge** these results (pool)
+4. Human judges evaluate pool documents only
+
+Pooling is an approximation: relevant documents not included in the pool are assumed to be irrelevant. This may **underestimate** performance, especially for systems that did not participate in the pool construction.
+
+---
+
+# Synthesis: Evaluation in Information Retrieval
+
+## General formal framework
+
+The RI assessment is based on a **binary classification model**:
+
+- Two classes: ** relevant** and ** not relevant**
+- Four possible cases: TP, FN, FP, TN
+- Several measurements derived from this contingency table
+
+## Essential measures
+
+| Measure | Formula | What it measures |
+|---|---|---|
+| Precision | $TP / (TP + FP)$ | Quality of returned results |
+| Recall | $TP / (TP + FN)$ | Complete recovery |
+| F1 | $2PR/(P+R)$ | Balanced P–R Compromise |
+| mAP | Average precision at 11 levels | Overall performance on the P–R curve |
+| R-Precision | $TP_R / R$ | Precision at R position |
+| Fallout | $FP / (TN + FP)$ | False positives among non-relevants |
+| AUC-ROC | Area under the ROC curve | Overall classification performance |
+
+## Critical points to be noted
+
+precision and recall are **fundamental** but insufficient alone.
+
+Measures must often be used jointly** for a full assessment.
+
+There is no single perfect measure** — choice depends on the context of use and priorities (e.g. is it more serious to miss a relevant document or return non-relevant ones?).
+
+In practice, only the precision is reliably measurable**. recall requires knowledge of all relevant, which is rarely possible → Approximate evaluation by pooling.
+
+The evaluation is contextualized: the measures for **data recovery** are not the same as for **response to questions** or**content-based interaction**.
+
+---
+
+# Training questions
+
+The following questions are used to test the mastery of the concepts in this chapter:
+
+**On basic measures:**
+
+- How to build evaluation measures for the IR?
+- Identify the most commonly used measures and define them.
+- What is the difference between precision and recall? Why is it important to combine the two?
+
+**On the P–R curves:**
+
+- How to draw a P–R curve from a list of results?
+- How to interpret a P–R curve? What is an ideal curve?
+- How do we interpolate a P–R curve at standard recall levels?
+- How are P–R curves averaged on several queriess?
+
+**On medium-sized strategies:**
+
+- What is the difference between micro-meaning and macro-meaning?
+- Why is this choice important?
+
+**On the ROC curve:**
+
+- What is the ROC curve? How to build it?
+- What is the relationship between sensitivity and recall?
+- How to interpret the position of a ROC curve relative to the diagonal?
+
+**On benchmarks:**
+
+- How to propose an evaluation benchmark?
+- What are the essential components of a benchmark?
+- What is pooling and why is it used?

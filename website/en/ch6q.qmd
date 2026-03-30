@@ -1,0 +1,388 @@
+---
+
+---
+Title: "Information Retrieval Textuelle — Quiz"
+filters:
+  - quizdown
+---
+
+## Level 1 — Fundamentals
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is the Bag of Words model?
+- [ ] A model that keeps the order of words in a document
+- [x] A model that represents a document as an unordered set of terms with their frequencies
+- [ ] A model that analyzes the grammar and syntax of a text
+- [ ] A model based on neural networks
+> Explanation:
+> In the BoW model, terms are independent and unordered entities, appearing with multiplicities (frequencies). The grammatical structure and the order of words are lost.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Which of these terms is typically considered an empty word (stopword) in English?
+- [ ] retrieval
+- [ ] information
+- [x] the
+- [ ] algorithm
+> Explanation:
+> "the" is a non-discriminatory word: it appears in almost all documents and does not help distinguish their content. His IDF (Inverse Document Frequency) is very high.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What does racination (Stemming) do?
+- [ ] Translates a word to its correct conjugate shape
+- [ ] Identifies named entities in text
+- [x] Truncate a word to bring it back to its approximate root
+- [ ] Convert a word to phonetic code
+> Explanation:
+> Stemming removes suffixes to bring words back to a common truncated form. Example: committed → commit. Porter's algorithm is the most famous (5 steps).
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is the main difference between stemming and lemmatization?
+- [ ] Stemming is slower than lemmatization
+- [ ] Lemmatization truncates words, stemming corrects them grammatically
+- [x] Lemmatization produces a linguistically correct form; Stemming produces a potentially incorrect truncated root
+- [ ] There is no practical difference
+> Explanation:
+> Lemmatization brings back to the basic form (lemma): "are", "is" → "be". Stemming is faster but can produce non-word shapes. Example of stemming error: paste 
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is SOUNDEX's role in word processing?
+- [ ] Sort terms by decreasing frequency
+- [ ] Delete empty words from a document
+- [x] Convert a token to a 4 character phonetic key to group spell variants
+- [ ] Calculate the similarity between two documents
+> Explanation:
+> SOUNDEX encodes each token in a letter form + 3 digits (e.g. Herman → H655). This allows to group variants like Chebichef and Chebysheff.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### According to Zipf's law, what relationship exists between the f(i) frequency of a term and its r(i) rank?
+- [ ] f(i) is proportional to r(i)
+- [x] f(i) is inversely proportional to r(i)
+- [ ] f(i) is proportional to the square of r(i)
+- [ ] f(i) does not depend on r(i)
+> Explanation:
+> Zipf's law states that f(i) · r(i) = K (constant), i.e. f(i) / 1/r(i). Rank 1 is twice as common as row 2, three times as common as row 3, etc.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is a legomenon hapax in a textual corpus?
+- [ ] A term appearing in all documents
+- [ ] A very high frequency term
+- [x] A term appearing only once in the corpus
+- [ ] A term composed of two words
+> Explanation:
+> Hapax legomena are unique terms of occurrence. According to Zipf's law, they represent about half of all the distinct terms of a corpus: s1/M = 1/(1×2) = 0.5.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Heap's law describes...
+- [ ] The relationship between frequency and rank of terms
+- [x] The growth of vocabulary by corpus size
+- [ ] Distribution of document lengths
+- [ ] The probability of co-occurrence of two terms
+> Explanation:
+> Heap's law is M = k · L^β with β -0.4–0.6. It predicts a sublinear growth of vocabulary: if the quadruple corpus, the vocabulary only doubles about.
+```
+
+---
+
+## Level 2 — Understanding
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### An RI system uses Zipf's law to decide which terms to index. What strategy does he apply according to Luhn?
+- [ ] Index only the most common terms
+- [ ] Index only hapax
+- [x] Define an upper threshold (removes too frequent) and a lower threshold (removes too rare) to keep only significant terms
+- [ ] Index all terms without exception
+> Explanation:
+> Luhn proposes two row cuts: the very common (stopwords) and very rare (hapax) terms are ruled out. Significant terms are in the intermediate zone with high discriminant value.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### On a log-log (log frequency vs log rank), how does Zipf's law appear?
+- [ ] As a growing exponential curve
+- [ ] Like a parable
+- [x] Like a negative slope line
+- [ ] Like a sinusoidal curve
+> Explanation:
+> log f(i) = log(KL) - log(r(i)) is the equation of a slope line -1. This is the visual signature of a power law in log-log representation.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is the theoretical fraction of terms appearing exactly twice in a corpus, according to Zipf?
+- [ ] 1/2
+- [x] 1/6
+- [ ] 1/4
+- [ ] 1/12
+> Explanation:
+> The formula is sn/M = 1/n(n+1). For n=2: 1/(2×3) = 1/6 的 0.167. This corresponds well to empirical observations on the TREC corpus (~0.132).
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Why does Mandelbrot's correction improve Zipf's law?
+- [ ] It simplifies frequency calculation
+- [x] It corrects deviations to extreme ranks (very common and very rare) by adding the parameters ρ and B
+- [ ] It applies only to non-Latin languages
+- [ ] It completely replaces Zipf's law
+> Explanation:
+> The pure Zipf law deviates from the extremes. Mandelbrot proposes f(i) = P(r(i)+ρ)^(-B) with ρ=100, B=1.15, which improves the adjustment especially for high rows (infrequent terms).
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What fundamental property of the distribution of terms justifies the term "heavy-tailed" distribution?
+- [ ] The majority of the total frequency is concentrated in rare terms
+- [x] The vast majority of distinct terms are rare, and the total probabilistic mass is in the tail (infrequent terms)
+- [ ] All terms have approximately the same frequency
+- [ ] The most common terms represent half the vocabulary
+> Explanation:
+> The distribution is asymmetric: some very common terms dominate occurrences, but the number of distinct terms is massively made up of rare terms. That's the definition of a heavy tail.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### In the context of mutual information, why are associations with words such as "a", "is", "with" considered spurious?
+- [ ] Because these words have a low frequency in the corpus
+- [ ] Because they never appear with other terms
+- [x] Because their very high frequency makes them co-occur with all the terms, artificially inflating the counting of co-occurrences without revealing semantic association
+- [ ] Because mutual information cannot measure them
+> Explanation:
+> Mutual information I(W1;W2) Co-occurring stopwords massively by chance, which explains their low IM value despite high counts.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### A corpus goes from 1 million to 4 million tokens. With β = 0.5 in Heap's law, how does the vocabulary evolve approximately?
+- [ ] It quadruples
+- [x] It doubles
+- [ ] It remains stable
+- [ ] It triples
+> Explanation:
+> M This is precisely the sense of sublinear growth predicted by Heap.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is the interpretation of Zipf's "Principle of Less Effort"?
+- [ ] Authors write texts as short as possible
+- [x] Zipf's law emerges from a balance between the speaker (who wants a small vocabulary) and the listener (who wants a great vocabulary)
+- [ ] Readers only read the most common words
+- [ ] IR systems must minimize the number of operations
+> Explanation:
+> Zipf speculates that the distribution results from a compromise: the transmitter wants to simplify (small vocabulary), the receiver wants precision (large vocabulary). Li (1992) showed that a random strike is sufficient to reproduce this distribution.
+```
+
+---
+
+## Level 3 — Mastery
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Practical case: you build a search engine on a corpus of 10 million tokens. You see 80,000 different terms. Using Heap law with k=10, estimate β.
+- [ ] β 
+- [x] β 
+- [ ] β 
+- [ ] β- 1.2
+> Explanation:
+> M = k · L^β → 80000 = 10 · (107)^β → 8000 = (107)^β → β = log (8000)/log(107) Empirical value is consistent with β-[0.4, 0.6].
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### An engineer applies Porter's steamer to the word "European" and does not get "Europe". What behavior is illustrated?
+- [ ] A bug in the algorithm
+- [ ] Aggressive behaviour (eager stemming)
+- [x] A conservative behavior that avoids semantic confusion
+- [ ] A Lemmatization Error
+> Explanation:
+> Porter's steamer can be conservative: he prefers not to reduce European → Europe to avoid losing a semantic distinction. Conversely, aggressive stemming can confuse paste and past.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### True or False: Heap's law can be mathematically derived from Zipf's law.
+- [x] True
+- [ ] False
+> Explanation:
+> Right. Assuming that documents are generated by sampling terms according to a zip distribution, one can derive that vocabulary grows as a law of power of the size of the corpus, which is exactly the law of Heap.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### True or False: Shannon's entropy of a real text vocabulary is equal to the maximum possible entropy for that vocabulary.
+- [ ] True
+- [x] False
+> Explanation:
+> Wrong. Maximum entropy is reached if all terms are equiprobable. The distribution of terms follows Zipf (very uneven), so the actual entropy is much less than the maximum entropy. Example: for M=100 000, actual entropy 
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### You analyze co-occurrences and find I(x,y) = 11.3 for the pair (Honorary, Doctor) with f(x,y)=12, f(x)=111, f(y)=621. What to conclude?
+- [ ] This combination is spurious because co-occurrence frequency is too low
+- [x] This association is significant: despite an absolute low frequency, the two co-occurring terms far more than expected by chance
+- [ ] Mutual information is too high, sign of an error in calculation
+- [ ] This pair should be removed from the index
+> Explanation:
+> A high IM value means that P(x,y) P(x)P(y): co-occurrence is non-random. Honorary and Doctor form a real semantic association (Honorary Doctor = Doctor honoris causa), even if their individual frequencies are modest.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### What is the theoretical basis for the distribution of Zipf-Mandelbrot as the "optimal" distribution of language?
+- [ ] It minimizes index size
+- [ ] It maximizes the number of distinct terms
+- [x] It minimizes the average number of letters per term for a fixed entropy (ideal information carrier)
+- [ ] It maximizes the precision of research queries
+> Explanation:
+> Mandelbrot has shown that p* r = P(r+ρ)^(-B) is the solution to the optimization problem: to minimize Human language would therefore be an optimal solution to this communication problem.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### True or False: Tokenization is the same for all natural languages, since it is enough to separate words by spaces.
+- [ ] True
+- [x] False
+> Explanation:
+> Wrong. Spaces work for English and French, but German requires a decomposition of compound words (Suchprogramm), and Asian languages (Chinese, Japanese) do not use spaces between words and have different reading directions.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### A corpus contains K=0.1 and L=1,000,000 tokens. How many distinct terms (M) are there according to Zipf?
+- [ ] 1 000
+- [ ] 10 000
+- [x] 100 000
+- [ ] 1 000 000
+> Explanation:
+> Based on Zipf: M = r1 = KL = 0.1 × 1,000,000 = 100,000. The size of the vocabulary is therefore approximately KL, which directly links Zipf's law to the estimation of the number of distinct terms.
+```
+
+```{quizdown}
+---
+primaryColor: "#3b82f6"
+shuffleQuestions: false
+shuffleAnswers: true
+---
+### Practical case: an RI system calculates I(W1,W2) between the term "doctors" and the term "a" and obtains I=0.95. What action should he take?
+- [ ] Index the pair (doctors, a) as a priority compound term
+- [ ] Increase the weight of "a" in queries containing "doctors"
+- [x] Ignore this association: "a" is probably a stopword whose high frequency creates an accidental co-occurrence with all the terms
+- [ ] Consider "a" synonymous with "doctors"
+> Explanation:
+> Despite a positive IM value, "a" is an extremely common stopword (f=284,690 in the course example) that co-occurring mechanically with everything. This combination is therefore spurious and should be filtered by deleting empty words.
+```
+
+```

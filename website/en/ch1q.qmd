@@ -1,0 +1,493 @@
+---
+title: "Information Retrieval : Introduction — Quiz"
+filters:
+  - quizdown
+---
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What does the acronym IR mean?
+
+- [ ] Internet Ranking
+- [x] Information Retrieval
+- [ ] Indexed Repository
+- [ ] Intelligent Reasoning
+
+> Explanation:
+> IR means **Information Retrieval**, term created by Calvin N. Moors in 1950.
+> It refers to the discipline of automatically finding relevant information in large collections of documents.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Who invented the term "Information Retrieval" and in what year?
+
+- [ ] Gerard Salton, 1968
+- [ ] Hans Peter Luhn, 1959
+- [x] Calvin N. Moors, 1950
+- [ ] Maron and Kuhns, 1960
+
+> Explanation:
+> **Calvin N. Moors** coined the term *Information Retrieval* in **1950**, marking the official birth of the discipline.
+> Luhn (1959) described statistical recovery, Maron and Kuhns (1960) defined the probabilistic model.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is a zettabyte (zetabyte)?
+
+- [ ] $2^{10}$ bytes
+- [ ] 1 million terabytes
+- [x] $2^{70}$ bytes, or 1 billion terabytes
+- [ ] $2^{50}$ bytes
+
+> Explanation:
+> One **zettabyte** = $2^{70}$ bytes = **1 billion terabytes**.
+> This is the unit used to measure the global production of digital data, which exceeded 180 zettabytes in 2025.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What proportion of online time was spent on research (Searches) in 2012?
+
+- [ ] 5 %
+- [ ] 13%
+- [ ] 19%
+- [x] 21 %
+
+> Explanation:
+> In 2012, **21%** of online time was spent on research.
+> By combining research (21%) and content reading (20%), we reach **41%** of online time directly related to access to information activities.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Which of these elements is NOT a direct application of distance measurement in IR?
+
+- [ ] Document clustering
+- [ ] Classification by k-NN
+- [ ] Reduction of dimensionality
+- [x] File Compression
+
+> Explanation:
+> **File compression** is not an IR distance measurement application.
+> On the other hand, clustering, k-NN classification and dimensionality reduction are all based on measurements of distance or similarity between documents.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### The growth in the volume of global digital data is of the following nature:
+
+- [ ] Linear
+- [ ] Logarithmic
+- [x] exponential
+- [ ] Constant
+
+> Explanation:
+> Growth is **exponential**: from 2 zettabytes in 2010 to over 180 in 2025.
+> This acceleration is due to the multiplication of data sources (smartphones, IoT, social networks, streaming...).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: The Cranfield (1966) project defined the first evaluation measures in IR.
+
+- [x] True
+- [ ] False
+
+> Explanation:
+> **Real.** The Cranfield project introduced the measures of **precision** (Precision) and **recall** (Recall) in 1966, which remain fundamental in IR today.
+> This is the first project to evaluate IR systems in a rigorous and comparative manner.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: Dense Embedding places the majority of its coordinates at zero.
+
+- [ ] True
+- [x] False
+
+> Explanation:
+> **False.** The **embeddings hollow** (Sparse Embeddings) have the majority of their coordinates at zero (a document uses only a small subset of the total vocabulary).
+> The **denses** (Dense Embeddings) have all their non-zero coordinates and are learned by neural networks.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the order of the steps in the information management pipeline?
+
+- [x] Raw documents → Extracting features → Mapping → Representation space → User interaction → Decision
+- [ ] Decision → Raw documents → Mapping → User interaction
+- [ ] User interaction → Raw documents → Extraction → Decision
+- [ ] Mapping → Raw documents → Extraction → Representation
+
+> Explanation:
+> The pipeline always follows this order:
+> ** raw documents** (Raw Documents) → **Extraction of features** (Feature Extraction) → **Mapping** → **Representation space** → **User interaction** → **Decision**.
+> This is the core of the information management process.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the fundamental difference between hollow embeddeding (Sparse) and dense embeddeding (Dense)?
+
+- [ ] Hollow embeddings are more recent than dense
+- [ ] Dense embeddings use raw word counts
+- [x] Hollow eddings have most of their coordinates at zero, denses are learned and fully filled
+- [ ] There is no background difference, only size
+
+> Explanation:
+> - **Creuse** (Spare): large vector with mostly zeros (e.g. TF·IDF on 50,000 words vocabulary).
+> - **Dense**: a small, fully-filled vector, learned by a network of neurons (e.g. BERT, Word2Vec).
+> The dense embeddings capture the **semantic**, the hollows capture the **presence of terms**.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is the evaluation of an IR system indispensable?
+
+- [ ] To reduce index size
+- [ ] To increase indexing speed
+- [x] To objectively compare different systems and validate their effectiveness
+- [ ] To automatically generate queries
+
+> Explanation:
+> The rigorous evaluation allows for **comparing IR** systems on reference collections with pre-established judgements of relevance.
+> Without evaluation (such as the one introduced by the Cranfield project), it is impossible to know whether one system is better than another.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among these elements, which are measurements of distance or similarity used in IR? (several possible responses)
+
+- [x] Cosinus distance (Cosine Distance)
+- [x] Euclidian distance (Euclidean Distance)
+- [ ] Shannon entropy
+- [x] Distance from Hamming (Hamming Distance)
+
+> Explanation:
+> - **Distance cosinus**: widely used for term vectors (measures the angle between two vectors).
+> - **Euclidian distance**: measures the classical geometric distance.
+> - **Distance from Hamming**: used for binary vectors.
+> - Shannon's**entropy** is a measure of uncertainty in information theory, not a measure of distance between documents.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why is it said that the query in IR is "soft" (Loose Query)?
+
+- [ ] Because it's always short
+- [x] Because the user can express it in natural language without knowing the internal structure of the collection
+- [ ] Because it only returns one result
+- [ ] Because she always uses a Boolean operator
+
+> Explanation:
+> A **loose query** (Loose Query Formalism) means that the user does not need to know the formal language, structure or metadata of the collection.
+> Type "meteo Paris tomorrow" in a search engine is a loose query: informal, ambiguous, but understood by the IR system.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### What is the difference between "characterizing a document" and "comparing two documents" with distance?
+
+- [ ] There is no difference
+- [ ] Characterize compares two documents, compares a single
+- [x] Characterize summarizes a single document via its features; compare the similarity between two documents
+- [ ] Compare only for visualization
+
+> Explanation:
+> - **Characterize a document**: **features** form his individual numerical summary (what he is in himself).
+> - **Compare two documents**: **distance** quantifies their relationship (how similar they are).
+> - **Characterize a model**: the distribution of distances reveals the overall structure of the corpus.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### True or False: The relevance of an IR document is an absolute property, independent of the user.
+
+- [ ] True
+- [x] False
+
+> Explanation:
+> **Failure.** Relevance is **relating to the information needs of the user** (Information Need).
+> The same document can be very relevant to one user and totally irrelevant to another, depending on their context and need.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — An IR system returns 10 documents of which 7 are relevant. The collection contains a total of 20 relevant documents. What is the precision (Precision) of this system?
+
+- [ ] 20 %
+- [ ] 35 %
+- [x] 70 %
+- [ ] 50 %
+
+> Explanation:
+> **Precision** = Relevant returned documents / Returned documents = **7 / 10 = 70%**.
+> The **recall** would be 7 / 20 = 35%.
+> These two measurements are often in tension: increasing the recall (return more documents) tends to decrease the precision.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — You have to build a research system in a library of 10 million scientific articles. Which component is INDISPENSABLE so that the search is possible in less than a second?
+
+- [ ] A dense, high-dimensional edding
+- [ ] A Language Model
+- [x] Un index inversé (Inverted Index)
+- [ ] A clustering algorithm
+
+> Explanation:
+> The Inverted Index (**Inverted Index) is the data structure that makes it possible to search large-scale in real time.
+> It combines with each term the list of documents that contain it, allowing you to instantly find the relevant documents without browsing the entire collection.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### A researcher compares two political discourses and observes that they share the words "people", "nation", "country" but diverge on "terrorist/security" vs "jobs/education". Which IR approach best captures this thematic difference?
+
+- [ ] Boolean Search for Common Words
+- [ ] Gross count of common words
+- [x] Vector model with TF·IDF weight
+- [ ] Alphabetical sorting of words
+
+> Explanation:
+> The **vectorial model with TF·IDF** (Term Frequency – Inverse Document Frequency) weighs words according to their frequency in the document AND their rarity in the collection.
+> Very common words everywhere ("people", "nation") receive low weight; the discriminant words ("terrorist", "jobs") receive a high weight, thus capturing the thematic difference.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Practical case — A system returns documents sorted by cosine distance from query. The closest document has a cosine distance of 0.95. What does this value mean?
+
+- [ ] Both vectors are orthogonal (no similarity)
+- [ ] Both vectors are opposite
+- [x] Both vectors are very similar (low angle, strong similarity)
+- [ ] The distance is invalid because it exceeds 0.5
+
+> Explanation:
+> **similarity cosinus** measures the angle cosine between two vectors.
+> - Value close to **1** → low angle → documents **very similar**.
+> - Value close to **0** → 90° angle → documents **orthogonal** (without relation).
+> - Value close to **-1** → documents ** opposite**.
+> Thus, a score of 0.95 indicates a **very strong similarity** between the document and the query.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Why does Web 2.0 (social networks) pose specific challenges for the IR compared to Web 1.0 (static pages)?
+
+- [ ] Pages are longer
+- [ ] Less data
+- [x] Content is generated by users, evolves in real time and includes complex social relationships
+- [ ] Search engines cannot index social networks
+
+> Explanation:
+> The **Web 2.0** generates **dynamics**, **unstructured**, **ephemers** (tweets, stories...) and integrates **social graphs** (which follows which, like what).
+> The IR on Web 2.0 must manage: the freshness of information, social authority (influencers), noise, and a wide variety of formats (short text, images, videos, emojis...).
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Scenario analysis — An IR system has a precision (Precision) of 90% but a recall (Recall) of 10%. What's the main problem?
+
+- [ ] The system returns too many irrelevant documents
+- [x] The system lacks the vast majority of relevant documents
+- [ ] The system is too slow
+- [ ] Index is poorly constructed
+
+> Explanation:
+> A **recall of 10%** means that the system finds only 10% of the relevant existing documents — in ** only 90%**.
+> Despite a high precision (what it returns is correct), the system is ** too restrictive**: it filters too aggressively and misses most of the relevant information.
+> The **F-measure** (harmonic average precision + recall) would be very low here, revealing this imbalance.
+
+```
+
+```{quizdown}
+
+---
+primaryColor: '#4a90d9'
+shuffleQuestions: false
+shuffleAnswers: true
+locale: en
+---
+
+### Among these claims on Neural Embeddings, which one is INCORRECTE?
+
+- [ ] They capture semantic relationships between words (synonyms, context)
+- [ ] BERT is an example of dense contextual embedding
+- [x] They are still less efficient than TF·IDF for semantic research
+- [ ] Word2Vec is an example of embedding words
+
+> Explanation:
+> The incorrect claim is that the neuronal eddings would still be less effective** than TF·IDF.
+> In reality, neuronal eddings (BERT, Sentence-BERT...) **overtake** generally TF·IDF for semantic research because they capture meaning in context, synonyms and paraphrases — which TF·IDF, based on the exact presence of words, cannot do.
+
+```

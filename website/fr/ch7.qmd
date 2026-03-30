@@ -1,0 +1,719 @@
+---
+title: "Recherche d'Information sur le Web (Web Information Retrieval)"
+---
+
+# Motivation
+
+Les modèles de recherche d'information classiques exploitent principalement le **contenu** des documents pour calculer leur pertinence par rapport à une requête. Sur le Web, cependant, chaque page est connectée à d'autres pages via des **hyperliens (hyperlinks)**, ce qui constitue une source d'information supplémentaire considérable.
+
+L'idée fondatrice de la recherche d'information sur le Web est donc de combiner deux types d'analyses :
+
+- L'analyse du **contenu** des pages (modèles classiques comme le VSR)
+- L'analyse de la **structure des liens** entre les pages
+
+::: {.callout-tip title="Intuition"}
+Si une page est citée par de nombreuses autres pages de qualité, c'est probablement parce qu'elle est elle-même de qualité. Ce raisonnement, emprunté à la bibliométrie, est au cœur des modèles de Web IR.
+:::
+
+L'objectif est donc de construire et analyser des modèles qui exploitent la **structure des relations entre documents**, afin de former un modèle global combinant approches basées sur le contenu et approches basées sur la structure.
+
+---
+
+# Le World Wide Web
+
+## Histoire du Web
+
+Le **World Wide Web (WWW)** a été développé par **Tim Berners-Lee** en 1990 au CERN, dans le but d'organiser les documents de recherche disponibles sur Internet. Sa création résulte de la combinaison de deux idées :
+
+- Les **fichiers disponibles par FTP** (File Transfer Protocol)
+- Le concept d'**hypertexte** pour lier les documents entre eux
+
+Tim Berners-Lee a également développé les technologies fondatrices :
+
+- Le protocole réseau **HTTP** (HyperText Transfer Protocol)
+- Le système d'adressage **URL** (Uniform Resource Locator)
+- Le langage de balisage **HTML** (HyperText Markup Language)
+- Le premier **serveur web**
+
+### Pré-histoire du WWW
+
+Le Web ne surgit pas du néant. Plusieurs inventions l'ont précédé et rendu possible :
+
+- **Ted Nelson** développe le concept d'**hypertexte** en 1965
+- **Doug Engelbart** invente la souris et construit la première implémentation concrète de l'hypertexte à la fin des années 1960 au SRI (Stanford Research Institute)
+- **ARPANET**, l'ancêtre d'Internet, est développé au début des années 1970
+- Les briques technologiques de base étaient donc en place dans les années 1970, mais c'est la **révolution du PC** et la **démocratisation des réseaux** qui ont rendu le Web possible et pratique
+
+## Histoire des navigateurs Web
+
+Les **navigateurs Web (web browsers)** sont les outils permettant aux utilisateurs de parcourir le Web.
+
+- Les premiers navigateurs apparaissent en **1992** : *Erwise*, *ViolaWWW*
+- En **1993**, **Marc Andreessen** et **Eric Bina** au NCSA (UIUC) développent le navigateur **Mosaic** et le distribuent largement
+- Andreessen s'associe à **James Clark** (professeur à Stanford et fondateur de Silicon Graphics) pour fonder *Mosaic Communications Inc.* en **1994**, qui deviendra **Netscape**
+- **Microsoft** obtient une licence du code original de Mosaic auprès d'UIUC pour construire **Internet Explorer** en 1995
+
+## Histoire des moteurs de recherche
+
+### Les débuts de la recherche de fichiers (fin des années 1980)
+
+Avant le Web, de nombreux fichiers étaient accessibles par **FTP anonyme**. Les premiers outils de recherche visaient ces ressources :
+
+- En **1990**, **Alan Emtage** de l'Université McGill développe **Archie** (contraction de "archives") : il assemblait des listes de fichiers disponibles sur des serveurs FTP et permettait des recherches par expressions régulières sur les noms de fichiers
+- En **1993**, **Veronica** et **Jughead** sont développés pour chercher dans les noms de fichiers texte disponibles via les serveurs **Gopher**
+
+### Les premiers moteurs de recherche Web (1993–1995)
+
+- **1993** : Des robots Web (*spiders*) commencent à collecter des URLs
+  - *Wanderer*
+  - *ALIWEB* (Archie-Like Index of the WEB)
+  - *WWW Worm* (indexait les URLs et titres pour la recherche par regex)
+- **1994** : **David Filo** et **Jerry Yang**, étudiants à Stanford, commencent à collecter manuellement des sites Web populaires dans une hiérarchie thématique : **Yahoo!**
+- **Début 1994** : **Brian Pinkerton** développe **WebCrawler** comme projet de cours à l'Université de Washington (deviendra plus tard partie d'Excite et AOL)
+- Quelques mois plus tard, **Fuzzy Maudlin** (CMU) développe **Lycos** — premier à utiliser un vrai système de RI (projet DARPA Tipster) et à indexer un grand ensemble de pages
+
+### La seconde génération (1995–2000)
+
+- **Fin 1995** : **DEC** développe **Altavista** — exploite une ferme de machines Alpha pour traiter rapidement de nombreuses requêtes. Supporte les opérateurs booléens, les phrases, et les requêtes de "reverse pointer" (liens entrants)
+- **1998** : **Larry Page** et **Sergey Brin**, doctorants à Stanford, fondent **Google**. L'avancée majeure est l'utilisation de l'**analyse de liens** pour classer les résultats partiellement selon leur **autorité**
+
+### Les champions nationaux et la diversification
+
+Plusieurs grandes nations ont poussé l'émergence de moteurs nationaux :
+
+- **Baidu** (Chine)
+- **Yandex** (Russie)
+- **Quaero** (Europe)
+
+Aujourd'hui coexistent de nombreux moteurs : Bing, DuckDuckGo, etc., chacun avec son propre positionnement.
+
+## Les taxonomies du Web
+
+### L'approche manuelle (Yahoo! / Open Directory Project)
+
+Deux initiatives importantes ont cherché à organiser le Web de façon **hiérarchique** et **manuelle** :
+
+- **Yahoo!** : utilise des éditeurs humains pour assembler un grand répertoire de pages Web organisé hiérarchiquement par thèmes
+- **Open Directory Project (ODP / DMOZ)** : approche similaire basée sur le travail distribué de **bénévoles** ("net-citizens provide the collective brain"). Utilisé par la plupart des autres moteurs de recherche, initié par Netscape
+
+::: {.callout-warning title="Limites de l'approche manuelle"}
+La classification manuelle est :
+
+- Laborieuse (coût humain élevé)
+- Subjective (dépend des éditeurs)
+- Sujette aux erreurs
+
+Elle ne passe pas à l'échelle de la croissance exponentielle du Web.
+:::
+
+### L'approche automatique
+
+Pour pallier les limites du traitement manuel, des méthodes automatiques ont été développées :
+
+- **Classification hiérarchique automatique** : par exemple le *Hierarchical Agglomerative Clustering* (HAC) → apprentissage non supervisé
+- **Graphes de connaissances** (*knowledge graphs*) : représentations sémantiques structurées
+- **Catégorisation de textes** (*text categorization*) : méthodes permettant de classer automatiquement des documents
+- **Méthodes récentes** basées sur l'apprentissage automatique et profond (ML/DL)
+
+---
+
+# Le WWW comme un graphe
+
+## Structure en graphe du Web
+
+Le Web peut être formellement modélisé comme un **graphe orienté** :
+
+- Les **nœuds** représentent les pages Web
+- Les **arêtes orientées** représentent les hyperliens (un lien de la page A vers la page B = une arête A → B)
+
+### Le modèle "nœud papillon" (Bow Tie Model)
+
+Une étude empirique de la structure du Web (Broder et al., 2000) a mis en évidence une structure globale dite en **"nœud papillon" (bow tie)**. Le Web se décompose en grandes composantes :
+
+- **Central Core** (Composante fortement connexe) : ~56 millions de pages — toutes reliées entre elles par des chemins dirigés dans les deux sens
+- **IN** : ~44 millions de pages qui pointent vers le cœur, mais vers lesquelles le cœur ne pointe pas
+- **OUT** : ~44 millions de pages vers lesquelles le cœur pointe, mais qui ne pointent pas vers le cœur
+- **Tendrils and tubes** : ~44 millions de pages — des "vrilles" connectées soit à IN soit à OUT, mais pas au cœur
+- **Disconnected components** : ~17 millions de pages — complètement déconnectées du reste
+
+::: {.callout-note title="À retenir"}
+Cette structure révèle que le Web n'est pas un graphe homogène. Seulement environ 26% des pages forment la composante fortement connexe (Strong CC), mais 91% sont dans la composante faiblement connexe (Weak CC).
+:::
+
+### Propriétés statistiques du graphe Web
+
+- **Grande composante connexe** : composante faiblement connexe (Weak CC) ≈ 91% ; composante fortement connexe (Strong CC) ≈ 26%
+- **Diamètre** de la Strong CC > 28 (550 pour le WWW complet)
+- **Lois de puissance** (*power laws*) : pour les liens entrants, les liens sortants, la longueur des pages, la taille des composantes connexes
+- Pour deux sommets u et v pris au hasard : P(chemin(u,v)) ≈ 0,24
+- Si un chemin dirigé existe, sa longueur moyenne est **16**
+- Longueur moyenne du chemin non-orienté : **6** (phénomène des "six degrés de séparation")
+
+## Structure d'un système de Web IR
+
+Le modèle du Web en tant que système de RI repose sur la définition suivante :
+
+::: {.callout-important title="Définition — Modèle du Web"}
+**Le Web est une large collection volatile de documents hétérogènes hyperliens, non fiables.**
+:::
+
+Un système de Web IR comporte typiquement :
+
+- Un **spider/crawler** (araignée) qui parcourt le Web pour collecter documents et liens
+- Une **base de données de sources URL** (Source URL DB)
+- Un système d'**indexation** (indexer) qui construit la collection
+- Un **moteur de recherche** (search engine) qui traite les requêtes
+- Un module de **tri par pertinence** (relevance sorting) et d'**affichage des résultats**
+- Un mécanisme de **retour de pertinence** (relevance feedback) de l'utilisateur
+
+---
+
+# Analyse des citations (Citation Analysis)
+
+## Du lien hypertexte à la citation bibliographique
+
+Les hyperliens du Web créent des relations entre documents, de façon analogue aux **citations bibliographiques** dans la littérature scientifique. Cette analogie est fondamentale : elle a inspiré les premières méthodes de Web IR.
+
+Un corpus de documents avec leurs références peut être vu comme un graphe :
+
+$$G = (\text{documents}, \text{références})$$
+
+La structure de ce graphe, indépendamment du contenu, fournit des informations précieuses sur la **similarité** entre documents et la **structure de l'information**.
+
+## Le facteur d'impact (Impact Factor)
+
+**Définition** : Développé par **Garfield en 1972**, le facteur d'impact mesure l'importance (qualité, influence) d'une revue scientifique.
+
+C'est une mesure de la fréquence à laquelle les articles d'une revue sont cités par d'autres scientifiques.
+
+**Calcul** : Le facteur d'impact d'une revue J en année y est le **nombre moyen de citations** (issues de documents indexés publiés en année y) vers un article publié dans J en année y-1 ou y-2.
+
+Il est calculé et publié annuellement par l'**Institute for Scientific Information (ISI)**.
+
+::: {.callout-warning title="Limite du facteur d'impact"}
+Le facteur d'impact **ne tient pas compte de la qualité** de l'article citant. Une citation d'un article médiocre compte autant qu'une citation d'un article de référence.
+:::
+
+## Couplage bibliographique (Bibliographic Coupling)
+
+**Définition** : Mesure de similarité entre documents introduite par **Kessler en 1963**.
+
+Le **couplage bibliographique** de deux documents $d_A$ et $d_B$ est le nombre de documents **cités par les deux** $d_A$ **et** $d_B$.
+
+Formellement, c'est la **taille de l'intersection** de leurs bibliographies :
+
+$$\text{BC}(d_A, d_B) = |bib(d_A) \cap bib(d_B)|$$
+
+::: {.callout-tip title="Intuition"}
+Deux articles qui citent beaucoup les mêmes travaux traitent probablement du même sujet ou d'un sujet connexe. Le couplage bibliographique mesure la similarité "par les sources communes".
+:::
+
+**Question de normalisation** : Faut-il normaliser par la taille des bibliographies ? L'**indice de Jaccard** est une option :
+
+$$J(d_A, d_B) = \frac{|bib(d_A) \cap bib(d_B)|}{|bib(d_A) \cup bib(d_B)|}$$
+
+## Co-citation
+
+**Définition** : Mesure de similarité alternative introduite par **Small en 1973**.
+
+La **co-citation** de deux documents $d_A$ et $d_B$ est le nombre de documents qui **citent à la fois** $d_A$ **et** $d_B$.
+
+::: {.callout-tip title="Intuition"}
+Là où le couplage bibliographique regarde vers le passé (sources communes), la co-citation regarde vers l'avenir : si beaucoup d'auteurs citent ensemble $d_A$ et $d_B$, c'est que la communauté les considère comme liés.
+:::
+
+**Différence clé avec le couplage bibliographique** :
+
+| Méthode | Direction | Description |
+|---|---|---|
+| Couplage bibliographique | Vers le passé | Intersection des références sortantes |
+| Co-citation | Vers l'avenir | Intersection des citations entrantes |
+
+**Question de normalisation** : Faut-il normaliser par le nombre total de documents citant $d_A$ ou $d_B$ ?
+
+---
+
+# Analyse de liens (Link Analysis)
+
+## Citations vs liens Web
+
+Les liens Web présentent des différences importantes par rapport aux citations bibliographiques :
+
+- **Beaucoup de liens sont navigationaux** (menus, barres de navigation) — ils ne reflètent pas une relation thématique
+- **De nombreuses pages à fort degré entrant sont des portails** (ex. : Yahoo, Google), pas nécessairement des pages de contenu
+- **Tous les liens ne sont pas des recommandations** — un lien peut exister pour de nombreuses raisons non éditoriales
+- Les sites d'entreprises **ne pointent pas vers leurs concurrents**, contrairement aux académiques qui citent les travaux opposés
+- Dans les citations académiques, la **revue par les pairs** garantit que les références sont pertinentes
+
+::: {.callout-warning title="Attention"}
+Ces différences impliquent que les modèles d'analyse de citations ne peuvent pas être appliqués tels quels au Web. Des adaptations spécifiques sont nécessaires.
+:::
+
+## Autorités et hubs
+
+### Définitions
+
+Deux types de pages jouent des rôles complémentaires dans le Web :
+
+::: {.callout-note title="À retenir — Autorité (Authority)"}
+Une **autorité** est une page reconnue comme fournissant des informations significatives, fiables et utiles sur un sujet. Elle est **beaucoup citée** par des pages de qualité.
+:::
+
+::: {.callout-note title="À retenir — Hub"}
+Un **hub** est une page d'index qui fournit de nombreux liens utiles vers des pages de contenu (autorités thématiques). C'est une page qui **cite beaucoup** d'autorités.
+:::
+
+Ensemble, hubs et autorités forment un **graphe bipartite** :
+
+- Les hubs pointent vers les autorités
+- Les autorités sont pointées par les hubs
+
+### Le degré entrant comme mesure d'autorité
+
+Le **degré entrant** (*in-degree*) — nombre de liens pointant vers une page — est la mesure d'autorité la plus simple. Cependant :
+
+- Il traite **tous les liens comme équivalents**
+- Les liens provenant de pages elles-mêmes autoritaires devraient compter davantage
+
+::: {.callout-tip title="Intuition"}
+Une recommandation d'un expert vaut plus qu'une recommandation d'un inconnu. De même, un lien provenant d'une page autoritaire devrait avoir plus de poids.
+:::
+
+---
+
+# L'algorithme HITS
+
+## Présentation générale
+
+**HITS** (*Hyperlink-Induced Topic Search*) est un algorithme développé par **Jon Kleinberg en 1999**. Il tente de déterminer computationnellement les hubs et autorités sur un sujet particulier, par analyse d'un sous-graphe pertinent du Web.
+
+HITS repose sur deux faits mutuellement récursifs :
+
+- Les **hubs pointent vers beaucoup d'autorités**
+- Les **autorités sont pointées par beaucoup de hubs**
+
+Cette récursivité est la clé de l'algorithme : les scores se renforcent mutuellement.
+
+## Construction du sous-graphe de base (Base Subgraph)
+
+HITS opère sur un sous-graphe local construit autour d'une requête, et non sur l'ensemble du Web.
+
+### L'ensemble racine R (Root Set)
+
+Pour une requête donnée, on commence par récupérer un ensemble de pages pertinentes via un moteur classique (ex. VSR) : c'est l'**ensemble racine R**.
+
+### L'ensemble de base S (Base Set)
+
+On augmente R pour former S :
+
+1. Initialiser S ← R
+2. Ajouter à S toutes les pages **pointées par** une page de R
+3. Ajouter à S toutes les pages **pointant vers** une page de R
+
+Cette augmentation enrichit la **connectivité** du sous-graphe et permet d'y trouver des autorités qui ne figuraient pas dans R.
+
+### Heuristiques pour limiter le coût
+
+- Limiter le nombre de pages racines aux **top t** pages récupérées
+- Limiter les pages "back-pointer" à un ensemble aléatoire d'au plus **b pages**
+- Éliminer les liens entre deux pages du **même hôte** (liens purement navigationaux)
+- N'autoriser qu'un maximum de **m pages** d'un même hôte comme pointeurs vers une page individuelle (éviter les liens non-éditoriaux)
+
+::: {.callout-warning title="Limitation importante"}
+Dans l'ensemble de base S, les nœuds avec le plus fort degré entrant ne sont pas nécessairement des autorités — ce peuvent être des pages généralement populaires (ex. Amazon). Les vraies autorités sont pointées par des hubs, c'est-à-dire des pages qui elles-mêmes pointent vers de nombreuses autorités.
+:::
+
+## L'algorithme itératif HITS
+
+Pour chaque page $p \in S$, on maintient deux scores :
+
+- **Score d'autorité** : $a[p]$
+- **Score de hub** : $h[p]$
+
+Les mises à jour sont mutuellement récursives :
+
+$$a[p] = \sum_{q : q \to p} h[q] \quad \text{(les hubs alimentent les autorités)}$$
+
+$$h[p] = \sum_{q : p \to q} a[q] \quad \text{(les autorités alimentent les hubs)}$$
+
+```
+procédure HITS(S) :
+    Initialiser a[p] = h[p] = 1/|S| pour tout p ∈ S
+    répéter
+        pour tout p ∈ S :
+            a[p] = Σ_{q: q→p} h[q]    // les hubs alimentent les autorités
+            h[p] = Σ_{q: p→q} a[q]    // les autorités alimentent les hubs
+        Normaliser : Σ_p a[p] = 1  et  Σ_p h[p] = 1
+    jusqu'à convergence (a et h stables)
+```
+
+::: {.callout-tip title="Intuition"}
+L'algorithme fait converger simultanément les deux scores. Une page qui est citée par des hubs de qualité gagne en autorité. Une page qui pointe vers des autorités de qualité gagne en score de hub. Les deux se renforcent mutuellement.
+:::
+
+## Formulation matricielle et convergence
+
+Définissons la **matrice d'adjacence S** du sous-graphe :
+
+$$S_{ij} = 1 \text{ si } i \to j, \quad \forall i, j \in S$$
+
+Alors :
+
+- Le **vecteur d'autorité a** converge vers le **vecteur propre principal** de $S^T S$
+- Le **vecteur de hub h** converge vers le **vecteur propre principal** de $S S^T$
+
+**Preuve** : En écrivant $a = S^T h$ et $h = S a$, on obtient :
+
+$$a = S^T S \, a \quad \text{et} \quad h = S S^T \, h$$
+
+::: {.callout-note title="À retenir"}
+HITS converge vers un point fixe. En pratique, environ **20 itérations** suffisent pour obtenir des résultats stables.
+:::
+
+## Exemples de résultats (résultats historiques)
+
+Résultats illustratifs pour des requêtes classiques :
+
+- Autorités pour la requête **"Java"** : java.sun.com, FAQ comp.lang.java
+- Autorités pour la requête **"search engine"** : yahoo.com, excite.com, lycos.com, altavista.com
+- Autorités pour la requête **"Gates"** : microsoft.com, roadahead.com
+
+::: {.callout-important title="Observation clé"}
+Dans la plupart des cas, les autorités finales **n'étaient pas dans l'ensemble racine initial**. Elles ont été amenées par les pages liées et reverse-liées, et HITS a ensuite calculé leur fort score d'autorité.
+:::
+
+## Similarité par la structure de liens
+
+HITS peut également être utilisé pour trouver des **pages similaires** à une page donnée p :
+
+1. Soit R l'ensemble racine = t pages qui pointent vers p
+2. Construire l'ensemble de base S à partir de R
+3. Exécuter HITS sur S
+4. Retourner les meilleures autorités de S comme pages similaires à p
+
+::: {.callout-tip title="Exemple concret"}
+Pour p = honda.com, HITS retourne comme pages similaires : toyota.com, ford.com, bmwusa.com, saturncars.com, nissanmotors.com, audi.com, volvocars.com. HITS trouve des autorités dans le "voisinage de liens" de p.
+:::
+
+## HITS et les requêtes polysémiques (Clustering)
+
+Pour une requête **polysémique** (plusieurs sens), le vecteur propre principal peut ne couvrir qu'une seule des significations.
+
+::: {.callout-tip title="Exemple — requête 'jaguar'"}
+- **Vecteur propre principal** → jeu vidéo Atari
+- **Deuxième vecteur propre** → équipe de football NFL
+- **Troisième vecteur propre** → marque automobile
+
+Les vecteurs propres non-principaux peuvent contenir des hubs et autorités pour les autres sens de la requête.
+:::
+
+---
+
+# PageRank
+
+## Présentation générale
+
+**PageRank** est une méthode d'analyse de liens alternative, utilisée par **Google** (Page & Brin, 1998). Elle diffère de HITS sur plusieurs points fondamentaux :
+
+| Caractéristique | HITS | PageRank |
+|---|---|---|
+| Distinction hub/autorité | Oui | Non |
+| Portée | Sous-graphe local (par requête) | Tout le Web |
+| Cible | Autorité + hub | Autorité uniquement |
+| Moment de calcul | À la requête | Pré-calculé |
+
+## Le modèle de base
+
+La simple mesure du **degré entrant** (nombre de citations) ne tient pas compte de l'autorité de la source.
+
+PageRank associe à chaque page $p$ une valeur $r[p]$ (le PageRank) et le propage le long des liens.
+
+**Équation initiale de PageRank** :
+
+$$r[p] = c \sum_{q : q \to p} \frac{1}{\deg^+(q)} r[q]$$
+
+où :
+
+- $\deg^+(q)$ est le **nombre de liens sortants** (degré sortant) de la page q
+- $c$ est une constante de normalisation telle que $\sum_p r[p] = 1$
+
+::: {.callout-tip title="Intuition — Modèle de flux"}
+Chaque page q **distribue équitablement** son PageRank entre toutes les pages vers lesquelles elle pointe. Plus une page reçoit de PageRank de pages qui en ont elles-mêmes beaucoup, plus son propre PageRank est élevé.
+:::
+
+## L'algorithme de base (BasePageRank)
+
+```
+procédure BasePageRank(S) :
+    Initialisation : r[p] = 1/|S| pour tout p ∈ S
+    répéter
+        pour p ∈ S :
+            r[p] = Σ_{q: q→p} (1/deg+(q)) * r[q]    // Propagation
+        c = 1 / Σ_{p∈S} r[p]                          // Normalisation
+        pour p ∈ S :
+            r[p] = c * r[p]                            // Normaliser
+    jusqu'à convergence (point fixe pour r)
+```
+
+## Formulation matricielle
+
+Soit $S$ la matrice d'adjacence du graphe (orienté) du Web :
+
+$$S_{ij} = 1 \text{ si } i \to j, \quad \forall i, j$$
+
+Alors (r est un vecteur ligne) :
+
+$$r = c \, r \, S$$
+
+::: {.callout-note title="À retenir — Convergence mathématique"}
+Le vecteur r converge vers le **vecteur propre gauche principal (vecteur de Perron)** de S.
+
+Les étapes de l'algorithme forment une **itération du quotient de Rayleigh**.
+
+La convergence est garantie sous certaines conditions par le **théorème de Perron-Frobenius**.
+:::
+
+## Problème de la formulation de base : les attracteurs PageRank
+
+Un groupe de pages qui ne pointent qu'entre elles, mais vers lesquelles pointent d'autres pages, agit comme un **"attracteur de PageRank"** : il absorbe tout le PageRank du système.
+
+Le PageRank s'écoule dans le cycle et **ne peut plus en sortir**.
+
+::: {.callout-warning title="Problème critique"}
+La formulation de base est défaillante sur des graphes réels contenant des cycles fermés. Ces "puits" de PageRank font diverger ou déséquilibrer le calcul.
+:::
+
+## La téléportation (Teleport)
+
+Pour résoudre le problème des attracteurs, on introduit une **"source"** $t$ qui remplit en continu le PageRank de chaque page $p$ d'une quantité fixe $0 < t[p] = \alpha < 1$.
+
+$\alpha$ est appelé le **paramètre de téléportation**.
+
+La nouvelle équation de PageRank devient :
+
+$$r[p] = c \left( \alpha + (1 - \alpha) \sum_{q : q \to p} \frac{1}{\deg^+(q)} r[q] \right)$$
+
+avec $c = \frac{1}{\sum_{p \in S} r[p]}$
+
+## L'algorithme PageRank complet
+
+```
+procédure PageRank(S) :
+    Initialisation : r[p] = 1/|S| pour tout p ∈ S
+    Téléportation : α > 0
+    répéter
+        pour p ∈ S :
+            r[p] = Σ_{q: q→p} (1/deg+(q)) * r[q]    // Propagation
+            r[p] = α + (1 - α) * r[p]                // Téléportation
+        c = 1 / Σ_{p∈S} r[p]                          // Normalisation
+        pour p ∈ S :
+            r[p] = c * r[p]                            // Normaliser
+    jusqu'à convergence (point fixe pour r)
+```
+
+## Formulation matricielle du PageRank complet
+
+On peut écrire :
+
+$$r = c \left( \alpha \mathbf{1} + (1 - \alpha) r S \right)$$
+
+Puisque $\|r\|_1 = 1$, on obtient :
+
+$$r = c \, r \left( \alpha \mathbf{1}\mathbf{1}^T + (1 - \alpha) S \right)$$
+
+Ainsi, **r est le vecteur propre gauche principal** de la matrice $\alpha \mathbf{1}\mathbf{1}^T + (1 - \alpha) S$.
+
+::: {.callout-note title="À retenir — Rôle de la téléportation"}
+La matrice $\alpha \mathbf{1}\mathbf{1}^T + (1-\alpha)S$ est **irréductible et apériodique** (sous conditions raisonnables), ce qui garantit l'existence et l'unicité du vecteur de Perron et donc la convergence de l'algorithme.
+:::
+
+## Convergence en pratique
+
+- Les premières expériences sur Google portaient sur **322 millions de liens**
+- L'algorithme PageRank convergeait (avec une tolérance faible) en environ **52 itérations**
+- Le nombre d'itérations nécessaires est empiriquement en **O(log|M|)** (où M est le nombre de liens)
+- Le calcul est donc **très efficace** compte tenu de la taille du problème
+
+## Résultats précoces de PageRank
+
+La recherche simple par titre de page combinée au PageRank a montré sa supériorité :
+
+- **Altavista** (pour "university") : retournait un ensemble aléatoire de pages avec "university" dans le titre (tendance à préférer les URLs courtes)
+- **Google primitif** (pour "university") : retournait les pages d'accueil des universités les plus importantes
+
+Le classement Google complet intégrait plusieurs composantes :
+
+- Composante de **similarité vectorielle** (contenu)
+- Composante de **proximité de mots-clés** (contenu)
+- Composante de **poids des balises HTML** (préférence aux titres, etc.)
+- Composante **PageRank** (structure)
+
+::: {.callout-warning title="Secret commercial"}
+Les détails des fonctions de classement commerciales actuelles sont des **secrets de fabrication**.
+:::
+
+## Personnalisation du PageRank
+
+Le PageRank peut être **biaisé (personnalisé)** en changeant la distribution de téléportation t pour la rendre non uniforme :
+
+- Restreindre les "sauts aléatoires" à un ensemble de pages spécifiées comme pertinentes
+- Exemple : $t[p] = 0$ sauf pour la page d'accueil personnelle de l'utilisateur, pour laquelle $t = \alpha$
+
+::: {.callout-tip title="Intuition — Personnalisation"}
+Cela crée un biais vers les pages proches dans le graphe Web de la page de l'utilisateur — une forme de recommandation personnalisée basée sur la structure du réseau.
+:::
+
+## PageRank et le crawling (Spidering)
+
+PageRank peut également servir à **diriger un spider** vers les pages importantes :
+
+1. Calculer le PageRank en utilisant l'ensemble actuel de pages crawlées
+2. Ordonner la **file d'attente de crawl** du spider selon le PageRank estimé courant
+
+Cela permet au crawler de privilégier les pages importantes, même lorsque le crawl est encore incomplet.
+
+---
+
+# Intermezzo : Marches aléatoires (Random Walks)
+
+## Définition et construction
+
+Une **marche aléatoire (random walk)** est un processus se déplaçant aléatoirement sur un graphe.
+
+**Donnée** : un graphe connexe $G = (V, E)$ avec matrice d'adjacence S.
+
+**Construction de la marche** $W = \{w_0, w_1, \ldots\}$ :
+
+- **Initialisation** : choisir un sommet initial $v_i \in V$ → $w_0 = v_i$
+- **Induction** : se déplacer le long d'une arête $(v_j, v_k) \in E$ depuis $w_t = v_j$ pour atteindre $v_k = w_{t+1}$
+- **Fin** : jusqu'à $t = T$ (horizon) ou jusqu'à l'atteinte d'un état stable
+
+## Formalisme probabiliste
+
+Si $d_i = \deg(v_i)$ est le degré de $v_i$, la **probabilité de transition** de $v_i$ à $v_j$ est :
+
+$$p_{ij} = P(w_{t+1} = v_j \mid w_t = v_i) = \begin{cases} \frac{1}{d_i} & \text{si } (v_i, v_j) \in E \\ 0 & \text{sinon} \end{cases}$$
+
+::: {.callout-note title="À retenir — Chaîne de Markov"}
+La marche aléatoire est un processus **sans mémoire** : la probabilité de transition de $v_i$ à $v_j$ ne dépend pas de comment on est arrivé en $v_i$. C'est donc une **chaîne de Markov**.
+
+De plus, $p_{j|i}$ ne dépend pas du temps $t$ → la marche est une **chaîne de Markov homogène en temps**.
+:::
+
+## La matrice stochastique de transition
+
+La matrice de transition $P = (p_{ij})$ est une **matrice stochastique** (ou de Markov) :
+
+- $p_{ij} \geq 0$ (non-négativité)
+- $\sum_j p_{ij} = \sum_{j=1}^{d_i} \frac{1}{d_i} = 1$ (les lignes somment à 1)
+
+En définissant $D = \text{diag}\left(\frac{1}{d_1}, \frac{1}{d_2}, \ldots, \frac{1}{d_{|V|}}\right)$ :
+
+$$P = DS$$
+
+## Distribution de la marche
+
+Soit $w_t$ la distribution de probabilité de $w_t$ :
+
+$$w_t[i] = P(w_t = v_i), \quad \forall v_i \in V$$
+
+La mise à jour de la distribution (r en vecteur ligne) :
+
+$$w_{t+1} = w_t P$$
+
+En partant d'une distribution initiale $w_0$ :
+
+$$w_t = w_0 P^t, \quad \forall t \geq 0$$
+
+## Distribution stationnaire
+
+Puisque G est connexe, la chaîne de Markov est **irréductible** (pour toute paire de nœuds dans V, il existe un chemin dans G).
+
+Le **théorème de Perron-Frobenius** implique l'existence d'un unique vecteur $\pi$ comme vecteur propre gauche positif de P avec valeur propre dominante $\lambda = 1$ :
+
+$$\pi = \pi P$$
+
+C'est le **point fixe** de $w_{t+1} = w_t P$, avec :
+
+$$\pi[i] \geq 0 \quad \forall i \quad \text{et} \quad \sum_i \pi[i] = 1$$
+
+## Propriétés complémentaires
+
+**Convergence** : La marche converge vers la distribution stationnaire $\pi$ si le graphe est **irréductible** et **apériodique** (il n'existe pas d'entier $k > 1$ qui divise la longueur de tous les cycles du graphe).
+
+- La vitesse de convergence est caractérisée par le **temps de mélange** (*mixing time*)
+
+**Temps d'atteinte** (*hitting time*) $H_{ij}$ : Nombre espéré de pas pour atteindre $v_j$ en partant de $v_i$.
+
+- $H$ n'est en général pas symétrique → le **temps de navette** (*commute time*) est $H_{ij} + H_{ji}$
+
+**Temps de couverture** (*cover time*) : Nombre espéré de pas pour visiter tous les nœuds du graphe.
+
+---
+
+# PageRank comme marche aléatoire
+
+## Le modèle du surfeur aléatoire (Random Surfer Model)
+
+PageRank peut être interprété comme modélisant un **"surfeur aléatoire"** — une personne naviguant sur le Web selon une marche aléatoire.
+
+Ce surfeur :
+
+- Part d'une page aléatoire
+- À chaque étape :
+  - Avec probabilité $t[p]$ : **saute aléatoirement** vers la page p (téléportation)
+  - Sinon : **suit aléatoirement un lien** sur la page courante
+- Ne jamais utilise le bouton "Précédent"
+
+::: {.callout-note title="À retenir — Interprétation probabiliste"}
+$r[p]$ modélise la **probabilité que ce surfeur aléatoire se trouve sur la page p** à un instant donné (chaîne de Markov à l'équilibre).
+
+$r[p]$ est donc une mesure de **centralité du graphe** (*graph centrality measure*) pour la page p dans le graphe orienté du WWW.
+:::
+
+::: {.callout-important title="Rôle de la téléportation"}
+Les sauts de téléportation sont nécessaires pour empêcher le surfeur aléatoire de rester **"piégé"** dans des attracteurs Web (pages sans liens sortants, cycles fermés).
+
+Sans téléportation, certaines régions du graphe Web absorberaient tout le PageRank, rendant le calcul non représentatif.
+:::
+
+---
+
+# Résumé et conclusion
+
+## Récapitulatif des concepts clés
+
+Ce chapitre couvre l'ensemble des fondements de la recherche d'information sur le Web :
+
+- La **recherche d'information précède Internet** via la recherche bibliographique
+- La **bibliométrie** est un modèle de base pour la RI sur un graphe de documents (analyse des citations)
+- L'algorithme **HITS** est un modèle opérant sur un sous-graphe local lié à la requête — il distingue hubs et autorités via une analyse spectrale
+- **PageRank** permet de pondérer les pages grâce à leur connectivité dans le graphe Web — il opère sur l'ensemble du Web
+- Des **algorithmes itératifs liés aux marches aléatoires** sont utilisés pour le calcul de PageRank
+- PageRank est une **mesure de centralité de graphe** utilisée dans de nombreux domaines au-delà du Web
+- Les **modèles basés sur la structure** informent sur l'importance relative des pages — ils doivent être **complétés par des modèles basés sur le contenu**
+
+## Connexions avec d'autres domaines
+
+::: {.callout-note title="À retenir — Interdisciplinarité"}
+Dans ce chapitre, la Recherche d'Information rencontre :
+
+- La **théorie des graphes** : structure du Web, composantes connexes, marches
+- La **théorie spectrale des graphes** : vecteurs propres de matrices d'adjacence
+- Les **processus de Markov** : chaînes de Markov, distribution stationnaire
+- L'**analyse de réseaux sociaux** (*Social Network Analysis*) : ces techniques seront réutilisées dans ce contexte
+:::
+
+---
+
+# Questions d'examen
+
+Les questions suivantes (principalement formelles / mathématiques) résument les points essentiels à maîtriser :
+
+- **Quel est le principe global** de l'exploitation de la structure du graphe pour la RI ?
+- **Décrire l'algorithme HITS** : construction du sous-graphe de base, itérations
+- **Quelle est sa formulation matricielle** ? Vers quels vecteurs propres convergent a et h ?
+- **Qu'est-ce que l'autorité ? Le hubness ?**
+- **Comment calculer le PageRank ?** Décrire l'algorithme et ses étapes
+- **Qu'est-ce que la téléportation ?** Quel problème résout-elle ?
+- **Quelle est la formulation matricielle** de l'équation PageRank ?
