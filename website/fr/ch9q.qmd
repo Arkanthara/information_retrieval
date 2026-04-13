@@ -1,0 +1,321 @@
+---
+title: "Factorisation Matricielle et Modèles de Rang Faible — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Que représente l'entrée $r_{ij}$ dans la matrice de notes $R$ ?
+
+> Pense à la signification des indices $i$ et $j$ dans le contexte des systèmes de recommandation.
+
+1. [ ] La similarité entre l'utilisateur $i$ et l'utilisateur $j$
+1. [x] La note donnée par l'utilisateur $i$ à l'article $j$
+    > Correct : $r_{ij}$ est la note de l'utilisateur $i$ pour l'article $j$. Le symbole ? indique que cette note n'est pas encore connue.
+1. [ ] La probabilité que l'utilisateur $i$ apprécie l'article $j$
+1. [ ] La caractéristique $i$ de l'article $j$
+```
+
+```{quizdown}
+### A quoi sert la matrice binaire $B$ dans un système de recommandation ?
+
+> Pense au problème des notes manquantes.
+
+1. [ ] A stocker les notes normalisées entre 0 et 1
+1. [ ] A encoder la similarité entre utilisateurs
+1. [x] A indiquer quelles notes sont disponibles (observees) dans $R$
+    > Correct : $b_{ij} = 1$ si l'utilisateur $i$ a note l'article $j$, $0$ sinon. C'est un masque sur la matrice $R$.
+1. [ ] A definir le rang de la matrice $R$
+```
+
+```{quizdown}
+### Dans le modele de regression lineaire pour la recommandation, que mesure $u_i[k]$ ?
+
+> Pense a la decomposition en $K$ caracteristiques latentes.
+
+1. [ ] Le degre auquel l'article $i$ possede la caracteristique $k$
+1. [x] La sensibilite de l'utilisateur $i$ a la caracteristique $k$
+    > Correct : $u_i[k]$ est le parametre de preference de l'utilisateur $i$ pour la caracteristique $k$ (ex. son gout pour l'action dans un systeme de films).
+1. [ ] La valeur singuliere d'indice $k$ de la matrice $R$
+1. [ ] Le biais global du systeme
+```
+
+```{quizdown}
+### Laquelle de ces formules est correcte pour la prediction d'une note dans le modele homogeneise ?
+
+> Apres homogeneisation, le biais est integre dans le vecteur utilisateur augmente.
+
+1. [ ] $\hat{r}_{ij} = u_i^T u_j$
+1. [ ] $\hat{r}_{ij} = \sigma_i v_j$
+1. [x] $\hat{r}_{ij} = \tilde{u}_i^T \tilde{v}_j$
+    > Correct : apres homogeneisation, la note predite est le produit scalaire entre le vecteur utilisateur augmente et le vecteur article augmente.
+1. [ ] $\hat{r}_{ij} = \|u_i - v_j\|_2$
+```
+
+```{quizdown}
+### Qu'est-ce que la decomposition en valeurs singulieres (SVD) d'une matrice $R$ ?
+
+> Pense aux trois matrices du theoreme fondamental.
+
+1. [ ] Une factorisation $R = LU$ avec $L$ triangulaire inferieure et $U$ triangulaire superieure
+1. [x] Une factorisation $R = U\Sigma V^T$ avec $U$, $V$ orthogonales et $\Sigma$ diagonale
+    > Correct : c'est le theoreme fondamental. $\Sigma$ contient les valeurs singulieres sur la diagonale, ordonnees de facon decroissante.
+1. [ ] Une factorisation $R = WH$ avec $W, H \geq 0$
+1. [ ] Une decomposition en elements propres de $R$
+```
+
+```{quizdown}
+### Que sont les valeurs singulieres d'une matrice ?
+
+> Pense a la diagonale de $\Sigma$ dans la SVD.
+
+1. [x] Les elements diagonaux de $\Sigma$, ordonnes de maniere decroissante, tous positifs ou nuls
+    > Correct : les valeurs singulieres $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$ mesurent l'"energie" portee par chaque dimension latente.
+1. [ ] Les valeurs propres de la matrice $R$
+1. [ ] Les normes des colonnes de $U$
+1. [ ] Les coefficients de la regression lineaire
+```
+
+```{quizdown}
+### Quelle est la definition de la norme de Frobenius d'une matrice $A$ ?
+
+> Pense a la racine carree de la somme de tous les carres des entrees.
+
+1. [ ] $\|A\|_F = \max_{i,j} |A_{ij}|$
+1. [ ] $\|A\|_F = \sqrt{\text{Tr}(A)}$
+1. [x] $\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2} = \sqrt{\text{Tr}(A^T A)}$
+    > Correct : la norme de Frobenius est egale a la racine carree de la somme des carres de toutes les entrees, ce qui equivaut aussi a la racine carree de la somme des carres des valeurs singulieres.
+1. [ ] $\|A\|_F = \sigma_1$, la plus grande valeur singuliere
+```
+
+```{quizdown}
+### Qu'est-ce que la factorisation NMF (Non-negative Matrix Factorization) ?
+
+> La contrainte principale distingue la NMF de la SVD.
+
+1. [ ] Une decomposition exacte d'une matrice en produit de matrices orthogonales
+1. [ ] Une methode qui maximise la variance expliquee par chaque composante
+1. [x] Une decomposition approchee $R \approx WH$ avec la contrainte $W_{ij} \geq 0$ et $H_{ij} \geq 0$
+    > Correct : la NMF impose que toutes les entrees de $W$ et $H$ soient non-negatives, ce qui facilite l'interpretation des composantes latentes.
+1. [ ] Une generalisation de la SVD qui autorise des matrices non carrees
+```
+
+---
+
+## Niveau 2 — Comprehension
+
+```{quizdown}
+### Pourquoi ajouter un terme de regularisation $\lambda_u \|u_i\|_2^2$ dans la fonction de cout ?
+
+> Pense au probleme classique de l'apprentissage automatique qui survient quand le modele s'adapte trop aux donnees d'entrainement.
+
+1. [ ] Pour accelerer la convergence de la descente de gradient
+1. [x] Pour penaliser les grandes valeurs des parametres et eviter le sur-apprentissage (overfitting)
+    > Correct : sans regularisation, le modele pourrait apprendre des preferences extremes pour chaque utilisateur qui s'ajustent parfaitement aux notes observees mais generalisent mal.
+1. [ ] Pour garantir que les notes predites restent dans $]0,1]$
+1. [ ] Pour forcer les vecteurs $u_i$ a etre orthogonaux
+```
+
+```{quizdown}
+### Quelles affirmations sur le theoreme d'Eckart-Young sont correctes ?
+
+> Pense a ce que signifie "meilleure approximation" et dans quel sens elle est optimale.
+
+- [x] $R_K$ est la matrice de rang au plus $K$ la plus proche de $R$ au sens de la norme de Frobenius
+    > Correct : c'est precisement l'enonce du theoreme d'Eckart-Young.
+- [ ] $R_K$ est l'unique matrice de rang $K$ qui minimise la norme spectrale
+- [x] L'erreur de la troncature a $K$ valeurs singulieres est $\sum_{k=K+1}^N \sigma_k^2$
+    > Correct : les valeurs singulieres de rang superieur a $K$ contribuent entierement a l'erreur residuelle.
+- [ ] $R_K$ minimise aussi la norme $L_1$ des erreurs
+```
+
+```{quizdown}
+### Dans la SVD $R = U\Sigma V^T$, que calcule $R^T R$ ?
+
+> Reflechis a ce que signifie le produit de $R^T$ par $R$ en termes de similarite.
+
+1. [ ] La matrice de similarite entre utilisateurs
+1. [x] La matrice de similarite entre articles : $R^T R = V\Sigma^2 V^T$
+    > Correct : $R^T R$ a pour taille $N \times N$ et encode la similarite entre les $N$ articles. L'entree $(j,j')$ est le produit scalaire entre les colonnes $j$ et $j'$ de $R$, soit la similarite de co-notation.
+1. [ ] La matrice diagonale des valeurs singulieres
+1. [ ] La decomposition de Cholesky de $R$
+```
+
+```{quizdown}
+### Pourquoi l'optimisation conjointe des vecteurs utilisateurs et articles est-elle non-convexe ?
+
+> Pense a la forme du produit $\tilde{u}_i^T \tilde{v}_j$ en tant que fonction des deux ensembles de variables.
+
+1. [ ] Parce que la matrice $R$ est creuse (sparse)
+1. [ ] Parce que le terme de regularisation est quadratique
+1. [x] Parce que la fonction de cout contient des produits bilineaires $\tilde{u}_i^T \tilde{v}_j$ entre les deux ensembles de variables a optimiser simultanement
+    > Correct : separement en $u$ ou en $v$ le probleme est convexe (quadratique), mais conjointement le produit cree une non-convexite qui conduit a des minima locaux.
+1. [ ] Parce que les valeurs singulieres peuvent etre nulles
+```
+
+```{quizdown}
+### Quelle est l'interpretation geometrique de la SVD $R = U\Sigma V^T$ en tant qu'application lineaire ?
+
+> Pense a la decomposition $\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}$.
+
+1. [ ] $R$ projette tous les vecteurs sur un sous-espace de dimension $K$
+1. [ ] $R$ est une rotation pure de l'espace $\mathbb{R}^N$ vers $\mathbb{R}^M$
+1. [x] $R$ est une composition : changement de base (V), redimensionnement par les valeurs singulieres, puis changement de base (U)
+    > Correct : $\varphi_V^{-1}$ change la base des articles, $\varphi_\Sigma$ redimensionne les coordonnees, et $\varphi_U$ exprime le resultat dans la base des utilisateurs.
+1. [ ] $R$ diagonalise automatiquement toute matrice carree
+```
+
+```{quizdown}
+### Pourquoi la NMF est-elle souvent preferee a la SVD pour l'interpretabilite des composantes ?
+
+> Pense a la contrainte de non-negativite et a ses consequences sur les bases latentes.
+
+1. [ ] Parce que la NMF converge toujours vers la solution globale optimale
+1. [ ] Parce que la NMF produit des matrices orthogonales plus faciles a interpreter
+1. [x] Parce que la contrainte de non-negativite force les composantes a etre des "parties additives" du tout, sans annulations mutuelles
+    > Correct : avec la SVD, les composantes peuvent se soustraire (valeurs negatives), ce qui produit des "fantomes" globaux difficiles a interpreter. Avec la NMF, chaque composante contribue positivement, comme des parties locales d'un visage (yeux, nez, bouche).
+1. [ ] Parce que la NMF minimise la norme de Frobenius de maniere exacte et unique
+```
+
+```{quizdown}
+### Qu'implique la propriete $\text{Tr}(AB) = \text{Tr}(BA)$ pour la trace de $A^T A$ ?
+
+> Pense a l'expression de la norme de Frobenius via la trace, et ce que l'invariance orthogonale implique.
+
+1. [ ] Que $A^T A$ et $AA^T$ ont les memes valeurs propres non nulles, mais pas forcement les memes dimensions
+1. [x] Que $\text{Tr}(A^T A) = \text{Tr}(AA^T)$, et que cette quantite est egale a la somme des carres des valeurs singulieres
+    > Correct : par cyclicite de la trace et en utilisant la SVD, on obtient $\text{Tr}(A^T A) = \text{Tr}(\Sigma^T \Sigma) = \sum_i \sigma_i^2 = \|A\|_F^2$.
+1. [ ] Que la trace est toujours nulle pour les matrices antisymetriques
+1. [ ] Que $A^T A = AA^T$ pour toute matrice $A$
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Remets les etapes de la minimisation alternee dans le bon ordre.
+
+> Pense a l'algorithme qui optimise successivement les deux ensembles de parametres.
+
+1. Initialiser les vecteurs utilisateurs aleatoirement ou depuis les donnees
+2. Optimiser les vecteurs articles en fixant les vecteurs utilisateurs
+3. Optimiser les vecteurs utilisateurs en fixant les vecteurs articles
+4. Verifier la convergence et recommencer si necessaire
+```
+
+```{quizdown}
+### Remets les operations elementaires de la SVD dans l'ordre correct pour calculer $R e_j$.
+
+> Rappel : $\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}$.
+
+1. Appliquer $\varphi_V^{-1}$ : calculer $v_j = V^T e_j$ (changement de base vers la base articles)
+2. Appliquer $\varphi_\Sigma$ : calculer $v'_j = \Sigma v_j$ (redimensionnement par les valeurs singulieres)
+3. Appliquer $\varphi_U$ : lire les coordonnees $r_{ij} = u_i^T v'_j$ dans la base utilisateurs
+```
+
+```{quizdown}
+### Un nouveau film vient d'etre ajoute a une plateforme de streaming. Aucun utilisateur ne l'a encore note. Quel probleme cela pose-t-il pour un systeme de recommandation base sur la SVD ?
+
+> Reflechis a la structure de la matrice $R$ et a ce que la SVD necessite pour fonctionner.
+
+1. [ ] La SVD ne peut pas traiter de matrices rectangulaires
+1. [ ] Le film aura forcement un vecteur latent nul, ce qui est mathematiquement invalide
+1. [x] Il n'y a aucune donnee pour estimer le vecteur latent du film : c'est le probleme du demarrage a froid (cold start)
+    > Correct : sans aucune observation $r_{ij}$ pour ce film, ni la SVD ni la NMF ne peuvent produire un vecteur latent fiable. Des strategies specifiques (profil de contenu, questionnaire initial) sont necessaires.
+1. [ ] Le graphe biparti devient non-connexe, rendant la SVD indefinie
+```
+
+```{quizdown}
+### On dispose d'une matrice $R \in \mathbb{R}^{1000 \times 500}$. On calcule sa SVD et on observe que les 10 premieres valeurs singulieres representent 95% de $\|R\|_F^2$. Quelle est la bonne conclusion ?
+
+> Pense a ce que la norme de Frobenius et les valeurs singulieres mesurent.
+
+1. [ ] La matrice $R$ est exactement de rang 10
+1. [ ] On ne peut pas approximer $R$ avec moins de 500 composantes
+1. [x] Une approximation de rang 10 capture 95% de l'"energie" de $R$, ce qui justifie une representation tres comprimee
+    > Correct : puisque $\|R\|_F^2 = \sum_i \sigma_i^2$ et que $\sum_{i=1}^{10} \sigma_i^2 = 0.95 \|R\|_F^2$, l'erreur de troncature a $K=10$ est seulement 5% de l'energie totale. La structure de $R$ est bien capturee par 10 dimensions latentes.
+1. [ ] Il faut choisir $K = 50$ pour avoir une bonne approximation
+```
+
+```{quizdown}
+### Quelles propositions sont vraies concernant la troncature SVD a $K$ composantes ?
+
+> Reflechis a la fois au theoreme d'Eckart-Young et a la formule de l'erreur residuelle.
+
+- [x] $R_K$ est la meilleure approximation de rang $K$ de $R$ au sens de la norme de Frobenius
+    > Correct : c'est precisement le theoreme d'Eckart-Young.
+- [x] Le rang de $R_K = \sum_{k=1}^K \sigma_k u_k v_k^T$ est exactement $K$ si tous les $\sigma_k > 0$
+    > Correct : chaque terme $\sigma_k u_k v_k^T$ est de rang 1, et les vecteurs $u_k$ etant orthogonaux, la somme est de rang exactement $K$.
+- [ ] La troncature a $K$ composantes preserve exactement toutes les notes observees dans $R$
+    > Incorrect : $R_K$ est une approximation, pas une reconstruction exacte (sauf si $K = \text{rang}(R)$).
+- [ ] Augmenter $K$ au-dela du rang de $R$ ameliore encore l'approximation
+    > Incorrect : une fois $K = \text{rang}(R)$ atteint, l'approximation est exacte et augmenter $K$ n'apporte rien.
+```
+
+```{quizdown}
+### Lors de la mise a jour du gradient pour un utilisateur $i$, pourquoi la somme porte-t-elle uniquement sur les articles avec $b_{ij} = 1$ ?
+
+> Pense au probleme original de recommendation et a la nature des donnees disponibles.
+
+1. [ ] Pour accelerer le calcul en reduisant le nombre de termes
+1. [ ] Parce que les articles non notes ont $r_{ij} = 0$ ce qui ne contribue pas a l'erreur
+1. [x] Parce que les notes inconnues (marquees ?) ne doivent pas influencer l'apprentissage : on ne peut calculer une erreur de prediction que la ou une vraie valeur existe
+    > Correct : inclure les entrees inconnues biaiserait le modele. On n'optimise que sur les paires (utilisateur, article) effectivement observees.
+1. [ ] Parce que les articles non notes ont forcement $v_j = 0$
+```
+
+```{quizdown}
+### Quel est l'impact sur la SVD si le graphe biparti utilisateurs-articles n'est pas connexe ?
+
+> Pense a la structure bloc-diagonale qui apparait en cas de deconnexion.
+
+1. [ ] La SVD ne peut plus etre calculee numeriquement
+1. [ ] Les valeurs singulieres deviennent toutes egales
+1. [x] La matrice $R$ peut etre reordonnee en blocs independants, et l'information ne se propage pas entre les composantes connexes
+    > Correct : un graphe non connexe signifie qu'il existe des groupes d'utilisateurs et d'articles completement isoles les uns des autres. La SVD se decompose alors en SVD independantes par bloc, sans transfert d'information entre eux.
+1. [ ] Les matrices $U$ et $V$ ne sont plus orthogonales
+```
+
+```{quizdown}
+### Un ingenieur compare deux modeles de recommandation : un SVD a $K=50$ et une NMF a $K=50$. Lequel devrait-il choisir dans chaque scenario ?
+
+> Pense aux forces et faiblesses respectives de SVD et NMF.
+
+- [x] SVD si l'objectif est de minimiser l'erreur de reconstruction au sens de Frobenius
+    > Correct : le theoreme d'Eckart-Young garantit que la SVD tronquee est optimale au sens de Frobenius. La NMF ne dispose pas de cette garantie d'optimalite globale.
+- [x] NMF si l'objectif est d'obtenir des profils utilisateurs interpretables et positifs
+    > Correct : la contrainte de non-negativite de la NMF produit des composantes qui s'interpretent comme des "profils" purs et additifs, sans valeurs negatives difficiles a expliquer.
+- [ ] SVD si on a besoin que tous les parametres du modele soient non-negatifs
+    > Incorrect : c'est la NMF qui garantit la non-negativite, pas la SVD.
+- [ ] NMF si on veut garantir une solution unique et globalement optimale
+    > Incorrect : le probleme NMF est non-convexe et n'admet pas de solution unique garantie. C'est la SVD qui est unique (sous conventions de signe).
+```
+
+```{quizdown}
+### Quelle est la complexite algorithmique de la SVD par des methodes classiques (Jacobi, puissance iteree) ?
+
+> Pense a l'ordre de grandeur en fonction de la dimension $N$ d'une matrice carree $N \times N$.
+
+1. [ ] $\mathcal{O}(N)$
+1. [ ] $\mathcal{O}(N^2)$
+1. [x] $\mathcal{O}(N^3)$
+    > Correct : les algorithmes classiques de calcul de SVD ont une complexite cubique en la dimension, ce qui les rend couteux pour de tres grandes matrices comme celles rencontrees dans les systemes de recommandation industriels.
+1. [ ] $\mathcal{O}(N \log N)$
+```
+
+```{quizdown}
+### Dans le modele de recommandation, que represente le produit $RR^T$ ?
+
+> Pense a la taille de cette matrice et a ce que signifie multiplier $R$ par sa transposee.
+
+1. [ ] La matrice de similarite entre articles, de taille $N \times N$
+1. [x] La matrice de similarite entre utilisateurs, de taille $M \times M$, egale a $U\Sigma^2 U^T$
+    > Correct : $RR^T \in \mathbb{R}^{M \times M}$. L'entree $(i, i')$ est le produit scalaire entre les lignes $i$ et $i'$ de $R$, mesurant a quel point les deux utilisateurs ont note les memes articles de facon similaire.
+1. [ ] La matrice diagonale $\Sigma^2$
+1. [ ] Le projecteur orthogonal sur l'espace des colonnes de $R$
+```
