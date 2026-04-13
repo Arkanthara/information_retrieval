@@ -1,0 +1,570 @@
+---
+title: "Factorisation Matricielle et Modèles de Rang Faible (Low Rank Models)"
+---
+
+# Systèmes de recommandation : mise en contexte
+
+## Le problème fondamental
+
+Un système de recommandation cherche à **prédire** la note qu'un utilisateur attribuerait à un article qu'il n'a pas encore évalué.
+
+L'idée centrale est simple : si deux utilisateurs ont des goûts similaires sur les articles qu'ils ont tous deux notés, on peut inférer qu'ils apprécieront les mêmes articles inconnus.
+
+::: {.callout-note title="À retenir"}
+L'objectif est de passer d'une matrice **incomplète** de notes observées à une matrice **complète** de notes estimées, afin de recommander les articles les plus pertinents pour chaque utilisateur.
+:::
+
+## Formalisation matricielle
+
+### La matrice de notes (Rating Matrix)
+
+On considère **M utilisateurs** et **N articles**. La matrice de notes est :
+
+$$\mathbf{R} = (r_{ij})_{ij} \in \mathbb{R}^{M \times N}, \quad r_{ij} \in ]0, 1] \cup \{?\}$$
+
+Chaque entrée $r_{ij}$ représente la note de l'utilisateur $i$ pour l'article $j$.
+
+Le symbole `?` indique que l'utilisateur $i$ n'a **pas encore noté** l'article $j$ — c'est précisément ce que l'on cherche à prédire.
+
+### La matrice binaire d'observation
+
+On introduit une matrice binaire $\mathbf{B}$ pour coder les observations disponibles :
+
+$$\mathbf{B} = (b_{ij})_{ij} \in \{0, 1\}^{M \times N}, \quad b_{ij} = \begin{cases} 1 & \text{si l'utilisateur } i \text{ note l'article } j \\ 0 & \text{sinon} \end{cases}$$
+
+::: {.callout-tip title="Intuition"}
+La matrice $\mathbf{B}$ joue le rôle d'un **masque** : elle indique quelles entrées de $\mathbf{R}$ sont connues et lesquelles sont manquantes. En pratique, dans un service de streaming avec des millions d'utilisateurs et de films, cette matrice est **extrêmement creuse** (sparse) — la grande majorité des entrées est inconnue.
+:::
+
+## Vue par graphe biparti (Bipartite Graph View)
+
+La matrice $\mathbf{B}$ peut s'interpréter comme la **matrice d'adjacence** d'un graphe biparti binaire dont les poids sont donnés par $\mathbf{R}$ :
+
+- Un ensemble de nœuds représente les **utilisateurs** ($M$ nœuds)
+- Un autre ensemble représente les **articles** ($N$ nœuds)
+- Une arête existe entre l'utilisateur $i$ et l'article $j$ si et seulement si $b_{ij} = 1$, avec un poids $r_{ij}$
+
+::: {.callout-tip title="Intuition"}
+Cette vue graphe permet de comprendre la **propagation d'information** : deux utilisateurs qui partagent des articles notés en commun sont "proches" dans le graphe. La décomposition matricielle que l'on construira revient à identifier les **variables latentes** qui structurent ce graphe.
+:::
+
+---
+
+# Modélisation par régression linéaire
+
+## Hypothèse fondamentale : les variables latentes
+
+### Pourquoi des variables latentes ?
+
+L'hypothèse centrale est que les notes ne sont pas arbitraires : elles découlent de **caractéristiques sous-jacentes** (latentes) des articles et des préférences des utilisateurs.
+
+Par exemple, pour des films :
+
+- Genre : Action, Aventure, Romance, Horreur, …
+- Réalisateur, époque, rythme narratif, …
+
+On postule qu'un utilisateur note bien un film parce que le film possède des caractéristiques qui correspondent à ses goûts personnels.
+
+### Représentation vectorielle des articles
+
+On note $v_j[k]$ le **degré** auquel l'article $j$ possède la caractéristique $k$.
+
+**Exemple concret** pour $K = 4$ caractéristiques [Action, Aventure, Romance, Horreur] :
+
+- *"La guerre des robots tueurs"* : $v_j = [10, 8, 0, 5]^T$
+- *"Romance à Bastions"* : $v_j = [0, 3, 10, 1]^T$
+
+### Représentation vectorielle des utilisateurs
+
+De façon symétrique, on note $u_i[k]$ la **sensibilité** de l'utilisateur $i$ à la caractéristique $k$.
+
+Un utilisateur qui adore l'action aura $u_i[\text{Action}]$ élevé, tandis qu'un amateur de romance aura $u_i[\text{Romance}]$ élevé.
+
+## Modèle de régression linéaire
+
+### Formulation scalaire
+
+L'hypothèse de linéarité — *"plus un film est action, plus un fan d'action l'aimera"* — conduit à la formule de prédiction :
+
+$$r_{ij} = \sum_{k=1}^{K} u_i[k] \cdot v_j[k] + u_i[0]$$
+
+- $u_i[0]$ est un **biais dépendant de l'utilisateur** (intercept), qui capture le fait que certains utilisateurs notent systématiquement plus haut ou plus bas que la moyenne.
+- $K$ est le nombre de caractéristiques choisies.
+
+### Homogénéisation (Homogenization)
+
+On peut intégrer le biais dans le vecteur en ajoutant une caractéristique artificielle $v_j[0] = 1$ pour tous les articles, et en absorbant $u_i[0]$ dans le vecteur utilisateur augmenté $\tilde{u}_i$ :
+
+$$r_{ij} = (\tilde{u}_i)^T \tilde{v}_j$$
+
+Cette astuce classique d'**homogénéisation** permet d'écrire le modèle comme un simple produit scalaire, sans terme de biais séparé.
+
+::: {.callout-tip title="Intuition"}
+Le produit scalaire $u_i^T v_j$ mesure l'**alignement** entre les préférences de l'utilisateur et les caractéristiques de l'article. Plus cet alignement est fort, plus la note prédite est élevée. C'est exactement l'idée de la **similitude cosinus** que l'on retrouve en recherche d'information.
+:::
+
+---
+
+# Estimation des paramètres
+
+## Problème d'optimisation pour les utilisateurs
+
+### Objectif
+
+Étant donné les vecteurs d'articles $\{\tilde{v}_j\}_j$, on cherche les vecteurs utilisateurs $\{\tilde{u}_i\}_i$ qui minimisent l'erreur de prédiction sur les notes observées.
+
+Pour un seul utilisateur $i$ :
+
+$$\tilde{u}_i = \arg\min_{\tilde{u} \in \mathbb{R}^{K+1}} \frac{1}{2 \sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( \tilde{u}^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u\|_2^2 \right]$$
+
+### Termes de l'objectif
+
+- **Terme d'erreur quadratique** : somme sur les articles effectivement notés par l'utilisateur $i$, de l'écart au carré entre la prédiction $\tilde{u}^T \tilde{v}_j$ et la vraie note $r_{ij}$.
+- **Terme de régularisation** $\lambda_u \|u\|_2^2$ : pénalise les grandes valeurs des paramètres pour éviter le sur-apprentissage (overfitting). $\lambda_u \in \mathbb{R}^+$ est un hyperparamètre.
+- **Normalisation** par $\sum_j b_{ij}$ : divise par le nombre d'articles notés par l'utilisateur, pour ne pas pénaliser les utilisateurs très actifs.
+
+::: {.callout-warning title="Point important"}
+La somme porte uniquement sur $j : b_{ij} = 1$, c'est-à-dire sur les articles **effectivement notés**. Les entrées inconnues n'entrent pas dans le calcul de la perte — c'est ce qui distingue ce problème d'une simple régression classique.
+:::
+
+### Estimation globale de tous les utilisateurs
+
+On minimise simultanément pour tous les utilisateurs :
+
+$$\mathcal{L}_u(\tilde{u}_1, \ldots, \tilde{u}_M) = \frac{1}{2} \sum_{i=1}^{M} \frac{1}{\sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u_i\|_2^2 \right]$$
+
+La prédiction pour une paire $(i,j)$ observée est alors : $\hat{r}_{ij} = (\tilde{u}_i)^T \tilde{v}_j$.
+
+## Descente de gradient pour les utilisateurs
+
+### Calcul du gradient
+
+La dérivée partielle de $\mathcal{L}_u$ par rapport à $\tilde{u}_i[k]$ (pour $k \neq 0$) est :
+
+$$\frac{\partial \mathcal{L}_u}{\partial \tilde{u}_i[k]} = \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) \tilde{v}_j[k] + \lambda_u u_i[k]$$
+
+### Règle de mise à jour (Update Rule)
+
+$$u_i[k] \leftarrow u_i[k] - \alpha \left[ \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) v_j[k] + \lambda_u u_i[k] \right]$$
+
+où $\alpha$ est le **taux d'apprentissage** (learning rate).
+
+### Cas particulier : biais (intercept, $k = 0$)
+
+Pour le biais $\tilde{u}_i[0]$, la caractéristique artificielle $\tilde{v}_j[0] = 1$ pour tout $j$, donc il n'y a pas de terme de régularisation sur le biais :
+
+$$\tilde{u}_i[0] \leftarrow \tilde{u}_i[0] - \alpha \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right)$$
+
+## Estimation des articles : problème symétrique
+
+### Objectif pour les articles
+
+Si les vecteurs utilisateurs $\{\tilde{u}_i\}_i$ sont connus (par exemple initialisés depuis des réponses à des items typiques — cf. *cold start*), on peut estimer les vecteurs d'articles en résolvant :
+
+$$\mathcal{L}_v(\tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{j=1}^{N} \frac{1}{\sum_j b_{ij}} \left[ \sum_{i : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_v \sum_j \|v_j\|_2^2 \right]$$
+
+avec $\lambda_v \in \mathbb{R}^+$.
+
+Le gradient pour les vecteurs d'articles s'obtient de façon **symétrique** à celui des utilisateurs (exercice : adapter la formule précédente).
+
+::: {.callout-tip title="Intuition"}
+Le problème est parfaitement symétrique : estimer les préférences utilisateurs revient à une régression sur les articles connus, et estimer les caractéristiques des articles revient à une régression sur les utilisateurs connus. Cette symétrie est au cœur de l'optimisation alternée.
+:::
+
+## Optimisation conjointe (Joint Optimization)
+
+### Fonction de coût globale
+
+En pratique, ni les vecteurs utilisateurs ni les vecteurs d'articles ne sont connus a priori. On optimise donc conjointement :
+
+$$\mathcal{L}(\tilde{u}_1, \ldots, \tilde{u}_M, \tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{i,j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \sum_i \|u_i\|_2^2 + \lambda_v \sum_j \|v_j\|_2^2$$
+
+### Minimisation alternée (Alternate Minimization)
+
+Ce problème est **non-convexe** conjointement en $u$ et $v$, mais il est **convexe** séparément en chacun d'eux à l'autre fixé. On utilise donc l'algorithme de **minimisation alternée** :
+
+```
+1. Initialiser u_1, ..., u_M aléatoirement ou depuis les données
+2. Tant que non convergé :
+   a. Résoudre pour v_1, ..., v_N avec u_1, ..., u_M fixés
+   b. Résoudre pour u_1, ..., u_M avec v_1, ..., v_N fixés
+```
+
+::: {.callout-note title="À retenir"}
+La minimisation alternée converge vers un **minimum local** (pas nécessairement global) car le problème global est non-convexe. L'initialisation joue un rôle important pour la qualité de la solution finale. En pratique, cette approche donne de très bons résultats sur les données réelles.
+:::
+
+---
+
+# Formulation en rang faible (Low Rank Formulation)
+
+## Du modèle de régression à la décomposition matricielle
+
+### Vue matricielle du modèle
+
+Le modèle $r_{ij} = (u_i)^T v_j$ peut s'écrire sous forme matricielle compacte.
+
+On définit :
+
+- La matrice utilisateurs $U \in \mathbb{R}^{M \times K}$ dont chaque **ligne** $u_i^T$ est le vecteur de préférences de l'utilisateur $i$
+- La matrice articles $V \in \mathbb{R}^{N \times K}$ dont chaque **colonne** $v_j$ est le vecteur de caractéristiques de l'article $j$
+
+Alors la matrice de notes complète se décompose comme :
+
+$$\mathbf{R} \approx U V^T$$
+
+::: {.callout-tip title="Intuition"}
+La matrice $R \in \mathbb{R}^{M \times N}$ est approchée par le produit de deux matrices de rang $K \ll \min(M, N)$. Au lieu de stocker $M \times N$ valeurs, on ne stocke que $(M + N) \times K$ paramètres. C'est toute l'économie des **modèles de rang faible**.
+:::
+
+### Rang de l'approximation
+
+Le produit $UV^T$ est de rang au plus $K$. En choisissant $K$ petit devant $M$ et $N$, on obtient une **approximation de rang faible** (low-rank approximation) de la matrice $R$.
+
+Les $K$ dimensions latentes capturent les $K$ principaux "thèmes" ou "facteurs" qui expliquent les notes observées.
+
+---
+
+# Théorie des modèles de rang faible
+
+## La Décomposition en Valeurs Singulières (SVD)
+
+### Théorème fondamental
+
+::: {.callout-important title="Théorème : Décomposition en Valeurs Singulières (Singular Value Decomposition)"}
+Pour toute matrice $\mathbf{R} \in \mathbb{R}^{M \times N}$, il existe :
+
+- $\mathbf{U} \in \mathbb{R}^{M \times M}$ orthogonale
+- $\mathbf{\Sigma} \in \mathbb{R}^{M \times N}$ diagonale (avec remplissage de zéros)
+- $\mathbf{V} \in \mathbb{R}^{N \times N}$ orthogonale
+
+tels que :
+
+$$\mathbf{R} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$
+
+Cette décomposition est **exacte** et **unique** (sous certaines conventions de signe).
+:::
+
+**Conventions** :
+
+- On suppose généralement $M \geq N$ sans perte de généralité.
+- Les valeurs singulières $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_N \geq 0$ sont ordonnées décroissantes sur la diagonale de $\Sigma$.
+- Les colonnes de $U$ (resp. $V$) sont les **vecteurs singuliers gauches** (resp. droits).
+
+### Produit scalaire et trace matricielle
+
+#### Rappel sur le produit matriciel
+
+Pour des matrices $A \in \mathbb{R}^{N \times P}$ et $B \in \mathbb{R}^{P \times Q}$, le produit $C = AB$ a pour terme général :
+
+$$C_{ij} = (AB)_{ij} = \sum_k A_{ik} B_{kj}$$
+
+C'est le produit scalaire entre la ligne $i$ de $A$ et la colonne $j$ de $B$.
+
+**Interprétation alternative** : $AB = \sum_{k} A_{:k} B_{k:}$, soit une somme de produits externes (matrices de rang 1).
+
+#### La trace matricielle (Matrix Trace)
+
+Pour $A \in \mathbb{R}^{N \times N}$ :
+
+$$\text{Tr}(A) = \sum_i A_{ii}$$
+
+**Propriétés importantes** :
+
+- $\text{Tr}(A^T) = \text{Tr}(A)$
+- $\text{Tr}(AB) = \text{Tr}(BA)$ pour $A, B \in \mathbb{R}^{N \times N}$
+- La trace est **invariante par transformation orthogonale** : si $B = UAU^T$, alors $\text{Tr}(B) = \text{Tr}(A)$
+
+**Lien avec la norme de Frobenius** :
+
+$$\text{Tr}(A^T A) = \sum_{i,j} A_{ij}^2 = \|A\|_F^2$$
+
+La trace de $A^T A$ est la somme de tous les carrés des entrées de $A$.
+
+#### Décomposition orthogonale et trace
+
+Avec $R = U\Sigma V^T$ :
+
+$$\text{Tr}(RR^T) = \text{Tr}(U\Sigma\Sigma^T U^T) = \text{Tr}(\Sigma\Sigma^T) = \sum_i \sigma_i^2$$
+
+(par invariance de la trace par transformation orthogonale)
+
+De même : $\text{Tr}(R^T R) = \sum_i \sigma_i^2$.
+
+::: {.callout-important title="Importance de la norme de Frobenius"}
+La **norme de Frobenius** (Frobenius norm) d'une matrice est définie par :
+
+$$\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2} = \sqrt{\text{Tr}(A^T A)} = \sqrt{\sum_i \sigma_i^2}$$
+
+Les valeurs singulières **concentrent toute l'information** de la matrice. C'est le principe fondateur des modèles de rang faible.
+:::
+
+## Découpage de la SVD en rang 1 (Matrix Slicing)
+
+### Décomposition en somme de matrices de rang 1
+
+En appliquant la propriété $AB^T = \sum_i A_{:i} B_{:i}^T$, on peut écrire :
+
+$$\mathbf{R} = (\mathbf{U}\mathbf{\Sigma})\mathbf{V}^T = \sum_{i=1}^{N} \sigma_i (\mathbf{u}_i \mathbf{v}_i^T)$$
+
+où $\mathbf{u}_i = U_{:i}$ est la $i$-ème colonne de $U$ et $\mathbf{v}_i = V_{:i}$ est la $i$-ème colonne de $V$.
+
+::: {.callout-tip title="Intuition"}
+Chaque terme $\sigma_i (\mathbf{u}_i \mathbf{v}_i^T)$ est une matrice de **rang 1** — le produit externe d'un vecteur utilisateur et d'un vecteur article — pondérée par la valeur singulière $\sigma_i$. La SVD décompose donc $R$ en une somme ordonnée de "thèmes" de rang 1, du plus important au moins important.
+:::
+
+### Justification de la troncature
+
+**Propriété clé** : puisque $\mathbf{U}$ est orthogonale, ses colonnes vérifient $\mathbf{u}_i^T \mathbf{u}_j = \delta_{ij}$. Donc :
+
+$$\text{rang}\left(\sum_{k=1}^{K} \sigma_k \mathbf{u}_k \mathbf{v}_k^T\right) = K$$
+
+et l'erreur de la troncature à $K$ termes vaut :
+
+$$\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2$$
+
+Cela **justifie de tronquer les dimensions associées aux petites valeurs singulières** : elles contribuent peu à la norme de Frobenius totale, c'est-à-dire peu à l'"énergie" de la matrice.
+
+## Théorème d'Eckart-Young
+
+::: {.callout-important title="Théorème d'Eckart-Young (Best Low-Rank Approximation)"}
+La troncature à $K$ valeurs singulières $\mathbf{R}_K = \mathbf{U}_K \mathbf{\Sigma}_K \mathbf{V}_K^T$ est **la meilleure approximation de rang $K$** de $\mathbf{R}$ au sens de la norme de Frobenius :
+
+$$\mathbf{R}_K = \arg\min_{B,\ \text{rang}(B) \leq K} \|\mathbf{R} - B\|_F^2$$
+
+L'erreur minimale correspondante est :
+
+$$\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2$$
+:::
+
+**Interprétation géométrique** : $\mathbf{R}_K$ est la **projection orthogonale** de $\mathbf{R}$ sur la variété des matrices de rang $K$.
+
+::: {.callout-tip title="Intuition"}
+Choisir $K$ revient à décider combien de "thèmes latents" on veut retenir pour représenter les données. Un $K$ petit donne une représentation compressée mais approximative ; un $K$ grand donne une représentation plus précise mais plus coûteuse.
+:::
+
+---
+
+# Interprétation géométrique de la SVD
+
+## Les bases orthonormées latentes
+
+### Structure des bases
+
+La matrice $\mathbf{U} = [\mathbf{u}_1 \cdots \mathbf{u}_M]$ étant orthogonale, ses colonnes forment une **base orthonormée** de $\mathbb{R}^M$ :
+
+$$\mathcal{B}_U = \{\mathbf{u}_1, \ldots, \mathbf{u}_M\}$$
+
+De même, $\mathcal{B}_V = \{\mathbf{v}_1, \ldots, \mathbf{v}_N\}$ est une base orthonormée de $\mathbb{R}^N$.
+
+### R comme application linéaire
+
+De $\mathbf{R} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$, on tire :
+
+$$\mathbf{R}\mathbf{V} = \mathbf{U}\mathbf{\Sigma} \quad \Rightarrow \quad \mathbf{R}\mathbf{v}_i = \sigma_i \mathbf{u}_i$$
+
+La matrice $\mathbf{R}$ agit comme un **changement de base suivi d'un redimensionnement** : elle transforme le $i$-ème vecteur de base des articles en le $i$-ème vecteur de base des utilisateurs, mis à l'échelle par $\sigma_i$.
+
+## Décomposition en transformations élémentaires
+
+On peut décomposer $\varphi_R$ (l'application induite par $R$) en trois opérations successives :
+
+$$\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}$$
+
+**Détail des opérations** :
+
+- $\varphi_V^{-1} : e_j \mapsto v_j = V^T e_j$ — **changement de base** de la base canonique $\{e_1, \ldots, e_N\}$ vers $\mathcal{B}_V$
+- $\varphi_\Sigma : v_j \mapsto v'_j = \Sigma v_j$ — **redimensionnement** des coordonnées par les valeurs singulières
+- $\varphi_U : v'_j \mapsto r_{ij} = u_i^T v'_j$ — **changement de base** vers $\mathcal{B}_U$ et lecture des coordonnées utilisateur
+
+### Cas de la troncature à $K$ dimensions
+
+Après troncature :
+
+$$\mathbf{R}_K = (\mathbf{U}_K \text{Id}_K) \mathbf{\Sigma}_K (\mathbf{V}_K \text{Id}_K)^T$$
+
+$$\varphi_{R_K} = \varphi_{U_K} \circ \varphi_{\Sigma_K} \circ \varphi_{V_K}^{-1}$$
+
+Dans l'**espace latent** (latent space), la transformation agit simplement comme un **redimensionnement de $K$ caractéristiques** via $\Sigma_K$. C'est là toute la puissance de la représentation compressée.
+
+::: {.callout-note title="À retenir"}
+La SVD identifie les **directions de variance maximale** dans les données. Les premières valeurs singulières (les plus grandes) capturent les structures les plus importantes. Tronquer revient à ne garder que l'essentiel de l'information.
+:::
+
+---
+
+# Propagation d'information
+
+## Matrices de similarité
+
+### Similarité entre articles (Item Similarity)
+
+En calculant $\mathbf{R}^T \mathbf{R}$ :
+
+$$\mathbf{R}^T \mathbf{R} = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T) = \mathbf{V}\mathbf{\Sigma}^T \mathbf{U}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{V}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{V}^T$$
+
+La matrice $\mathbf{R}^T\mathbf{R} \in \mathbb{R}^{N \times N}$ encode la **similarité entre articles** : deux articles sont similaires si des utilisateurs semblables les ont bien notés.
+
+### Similarité entre utilisateurs (User Similarity)
+
+De façon symétrique :
+
+$$\mathbf{R}\mathbf{R}^T = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T = \mathbf{U}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{U}^T$$
+
+La matrice $\mathbf{R}\mathbf{R}^T \in \mathbb{R}^{M \times M}$ encode la **similarité entre utilisateurs** : deux utilisateurs sont similaires s'ils ont noté les mêmes articles de façon similaire.
+
+::: {.callout-tip title="Intuition"}
+Ces deux matrices de Gram sont au cœur du **filtrage collaboratif** (Collaborative Filtering) : pour recommander à un utilisateur, on cherche ses voisins similaires et on regarde ce qu'ils ont aimé. La SVD fournit une façon compacte et optimale de calculer ces similarités.
+:::
+
+## Condition de connexité du graphe
+
+::: {.callout-important title="Point crucial : graphe connecté"}
+La propagation d'information via la matrice $R$ n'est possible que si le **graphe biparti est connexe** (connected). Si le graphe a plusieurs composantes connexes, la décomposition se fragmente en blocs indépendants et l'information ne peut pas se propager d'une composante à l'autre.
+:::
+
+**Exercice** : Montrer que si le graphe a plus d'une composante connexe, la matrice $R$ est déconnectée (i.e., peut être mise sous forme bloc-diagonale après permutation), et inversement.
+
+## Limites du modèle linéaire
+
+Les correspondances linéaires "utilisateur → latent" ($U$, $\varphi_U$) et "article → latent" ($V$, $\varphi_V$) peuvent être **trop restrictives** pour capturer des préférences complexes.
+
+Par exemple, un utilisateur peut aimer à la fois les films d'action *et* les comédies romantiques, ce qui n'est pas bien capturé par un vecteur de préférences linéaire.
+
+**Solutions** : on doit alors recourir à des **modèles non-linéaires** :
+
+- pLSA (probabilistic Latent Semantic Analysis)
+- Auto-encodeurs variationnels (VAEs)
+- Réseaux de neurones profonds
+
+---
+
+# Applications de la SVD
+
+## Application aux systèmes de recommandation
+
+La matrice $\mathbf{R} \in \mathbb{R}^{N \times M}$ des notes se décompose comme $R = AX$ où :
+
+- $A = U_K \Sigma_K \in \mathbb{R}^{N \times K}$ : chaque ligne $a_i$ représente un **utilisateur** dans l'espace des $K$ caractéristiques latentes
+- $X = V_K^T \in \mathbb{R}^{K \times M}$ : chaque colonne $x_j$ représente un **article** avec ses $K$ caractéristiques latentes
+
+La note prédite est le produit scalaire $\hat{r}_{ij} = a_i^T x_j$.
+
+## Application à l'analyse sémantique latente (LSA/LSI)
+
+La SVD est également utilisée en **analyse sémantique latente** (Latent Semantic Analysis/Indexing) pour l'indexation de documents :
+
+- $W \in \mathbb{R}^{N \times M}$ : matrice terme-document (fréquences de termes)
+- $W = U\Sigma V^T$
+
+Chaque document $d_j$ (colonne de $W$) se représente dans l'espace des **concepts** :
+
+$$d_j = U\Sigma V^T e_j = U\Sigma v_j$$
+
+Le projecteur vers l'espace conceptuel est $A = U_K \Sigma_K$, permettant de projeter documents et requêtes dans cet espace réduit.
+
+---
+
+# Factorisation en Matrices Non-négatives (NMF)
+
+## Motivation
+
+### Limites de la SVD pour l'interprétabilité
+
+La SVD fournit une décomposition **exacte et optimale** au sens de Frobenius, mais elle présente des inconvénients pratiques :
+
+- Les matrices $U$ et $V$ peuvent avoir des entrées **négatives**, ce qui est difficile à interpréter (une "préférence négative" pour un genre de film n'est pas intuitive).
+- La computation est coûteuse : $\mathcal{O}(N^3)$ pour l'algorithme de Jacobi ou de la puissance.
+- Les bases ne sont pas "parties" d'un tout, ce qui complique l'interprétation.
+
+## Formulation de la NMF
+
+### Définition
+
+La **Factorisation en Matrices Non-négatives** (Non-negative Matrix Factorization, NMF) cherche une décomposition :
+
+$$\mathbf{R} \approx \mathbf{W}\mathbf{H} \quad \text{avec} \quad W_{ij} \geq 0 \quad \text{et} \quad H_{ij} \geq 0$$
+
+La contrainte de non-négativité facilite l'interprétation : chaque composante contribue **positivement** à la reconstruction.
+
+### Problème d'optimisation
+
+$$\mathbf{W}, \mathbf{H} = \arg\min_{\substack{A \geq 0,\ A \in \mathbb{R}^{M \times K} \\ B \geq 0,\ B \in \mathbb{R}^{K \times N}}} \|\mathbf{R} - AB\|_F$$
+
+::: {.callout-tip title="Intuition"}
+Avec la NMF, chaque article est une **combinaison additive** de $K$ "parties" élémentaires non-négatives. Par exemple, pour des images de visages, les composantes NMF correspondent à des parties reconnaissables (yeux, nez, bouche), tandis que les composantes PCA/SVD sont des "fantômes" globaux sans signification locale.
+:::
+
+## NMF versus SVD : illustration sur des visages
+
+L'illustration classique compare les bases extraites par PCA (SVD) et NMF sur un jeu d'images de visages :
+
+- **PCA** : les composantes sont des "visages fantômes" globaux, avec des valeurs positives et négatives entremêlées — difficiles à interpréter.
+- **NMF** : les composantes correspondent à des **parties locales** du visage (yeux, nez, menton, sourcils) — intuitives et interprétables.
+
+::: {.callout-note title="À retenir"}
+Le choix entre SVD et NMF dépend de l'application :
+
+- SVD est préférable quand on veut l'**optimalité mathématique** (meilleure approximation de Frobenius).
+- NMF est préférable quand on veut l'**interprétabilité** des composantes latentes.
+:::
+
+## Complétion de matrice (Matrix Completion)
+
+### Stratégie pratique
+
+Pour appliquer la NMF à la prédiction de notes manquantes :
+
+1. **Considérer les notes inconnues comme valant 0** : on forme ainsi une matrice $\tilde{R}$ complète.
+2. **Résoudre la NMF** sur $\tilde{R}$ : on obtient $WH \approx \tilde{R}$.
+3. **Utiliser $WH$** comme matrice des notes estimées : les entrées inconnues (que l'on avait mises à 0) sont remplacées par les prédictions $(\hat{r}_{ij} = (WH)_{ij})$.
+
+### Normalisation par la moyenne (Mean Normalization)
+
+Pour éviter les biais liés aux différentes échelles de notation entre utilisateurs, on applique une **normalisation par la moyenne** :
+
+1. Calculer la note moyenne de chaque utilisateur sur les articles qu'il a notés.
+2. Centrer la matrice $R$ autour de ces moyennes.
+3. Résoudre la NMF sur la matrice centrée.
+4. Ajouter la moyenne de l'utilisateur à la prédiction finale.
+
+::: {.callout-warning title="Point important : problème du démarrage à froid (Cold Start)"}
+Un problème fondamental des systèmes de recommandation basés sur la décomposition matricielle est le **problème du démarrage à froid** (cold start) : un nouvel utilisateur (ou un nouvel article) n'a aucune donnée associée dans la matrice. La SVD ou la NMF ne peuvent pas produire de recommandations pertinentes. Des stratégies spécifiques (profil démographique, réponses à des items typiques) sont nécessaires pour initialiser le vecteur latent d'un nouveau venu.
+:::
+
+---
+
+# Synthèse : pourquoi les modèles de rang faible ?
+
+## Le principe général
+
+Les modèles de rang faible reposent sur l'idée que les données observées, bien que présentées dans un espace de haute dimension ($M \times N$), sont en réalité gouvernées par un petit nombre $K$ de **variables latentes**.
+
+La SVD permet d'identifier ces variables de façon optimale, et la NMF les identifie de façon interprétable.
+
+## Récapitulatif des outils mathématiques clés
+
+| Outil | Rôle | Propriété clé |
+|---|---|---|
+| SVD | Décomposition exacte $R = U\Sigma V^T$ | Meilleure approx. rang $K$ au sens de Frobenius |
+| Valeurs singulières $\sigma_i$ | Mesurent l'importance des dimensions | $\|R - R_K\|_F^2 = \sum_{k>K} \sigma_k^2$ |
+| Norme de Frobenius | Mesure l'erreur d'approximation | $\|A\|_F^2 = \text{Tr}(A^T A) = \sum \sigma_i^2$ |
+| NMF | Décomposition approchée $R \approx WH$ | Contrainte de non-négativité |
+| Minimisation alternée | Optimisation conjointe $u$, $v$ | Convergence locale garantie |
+
+## Applications au-delà de la recommandation
+
+- **Compression d'images** : la SVD tronquée représente une image avec beaucoup moins de données
+- **Recherche d'information (LSA/LSI)** : indexation sémantique latente de documents
+- **Réduction de dimension** : similaire à l'ACP (Analyse en Composantes Principales / PCA)
+- **Débruitage** : tronquer les petites valeurs singulières élimine le bruit
+
+::: {.callout-note title="À retenir"}
+**Conclusion générale** :
+
+- La matrice de notes $R$ est stockée de façon incomplète.
+- La décomposition latente (SVD ou NMF) permet de **prédire** les notes manquantes.
+- Ce n'est possible que si le graphe biparti sous-jacent est **connexe** (problème du cold start).
+- La théorie du rang faible trouve des applications très larges en apprentissage automatique, traitement du signal et recherche d'information.
+- Les modèles linéaires ont des limites → les modèles non-linéaires (pLSA, réseaux de neurones, VAEs) en sont le prolongement naturel.
+:::
