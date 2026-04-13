@@ -1,570 +1,715 @@
 ---
-title: "Factorisation Matricielle et Modèles de Rang Faible (Low Rank Models)"
+title: "Exploitation du Retour Utilisateur"
 ---
 
-# Systèmes de recommandation : mise en contexte
+# Introduction : Pourquoi exploiter le retour utilisateur ?
 
-## Le problème fondamental
+Dans un système de recherche d'information (Information Retrieval, IR), la requête initiale formulée par l'utilisateur est souvent imparfaite. Elle peut être trop vague, ambiguë, incomplète ou mal adaptée à la représentation interne des documents. Le **retour utilisateur** (User Feedback) constitue un mécanisme permettant au système de s'améliorer de manière itérative, en s'appuyant sur les réactions explicites ou implicites de l'utilisateur face aux résultats retournés.
 
-Un système de recommandation cherche à **prédire** la note qu'un utilisateur attribuerait à un article qu'il n'a pas encore évalué.
+Ce chapitre explore deux grandes familles de techniques :
 
-L'idée centrale est simple : si deux utilisateurs ont des goûts similaires sur les articles qu'ils ont tous deux notés, on peut inférer qu'ils apprécieront les mêmes articles inconnus.
+- Le **retour de pertinence actif** (Active Relevance Feedback), où l'utilisateur évalue explicitement les résultats.
+- Le **filtrage collaboratif passif** (Passive Collaborative Filtering), où les comportements agrégés de multiples utilisateurs permettent de prédire les préférences individuelles.
+
+---
+
+# Retour de Pertinence (Relevance Feedback)
+
+## Utilité pour l'utilisateur
+
+Le retour de pertinence (Relevance Feedback, RF) aide l'utilisateur à plusieurs niveaux dans son processus de recherche.
+
+### Aide à la formulation de la requête
+
+L'utilisateur ne sait pas toujours précisément comment exprimer son besoin d'information. Le RF lui permet de démarrer avec une description simple, puis de raffiner progressivement.
+
+- **Description initiale** : l'utilisateur fournit une requête simple (positive).
+- **Évaluation des résultats** : l'utilisateur identifie parmi les résultats retournés ceux qui correspondent à son besoin (*correspondances positives*) et ceux qui ne correspondent pas (*correspondances négatives*).
+- Le système génère alors un **nouvel ensemble de résultats** mieux ciblé.
+
+::: {.callout-tip title="Intuition"}
+Imaginez chercher des recettes de cuisine : vous tapez "recette rapide". Après avoir marqué comme pertinentes des recettes de pâtes et comme non pertinentes des recettes de viande longue à préparer, le système comprend mieux ce que vous entendez par "rapide" et "adapté à vos goûts".
+:::
+
+### Aide à la gestion de la polysémie (Polysemy)
+
+La polysémie désigne le fait qu'un même mot peut avoir plusieurs sens. La requête est alors **ambiguë**.
+
+- Exemple : le mot "mercure" peut désigner la planète, le métal ou le dieu romain.
+- Grâce au RF, les documents du bon sens sont marqués positifs, les autres négatifs.
+- Cela permet au système de **désambiguïser** la requête automatiquement.
+- La **présentation des résultats** joue ici un rôle clé (traité dans un chapitre ultérieur sur la visualisation).
+
+### Aide à la gestion de la synonymie (Synonymy)
+
+La synonymie désigne le fait que plusieurs mots différents peuvent exprimer le même concept. La requête est alors **incomplète**.
+
+- Exemple : chercher "automobile" sans avoir pensé à "voiture", "véhicule", "auto".
+- Le RF permet d'**ajouter de nouvelles descriptions** issues des documents pertinents.
+- Cette expansion ne repose pas uniquement sur les résultats déjà retournés : le système peut également puiser dans un thésaurus.
 
 ::: {.callout-note title="À retenir"}
-L'objectif est de passer d'une matrice **incomplète** de notes observées à une matrice **complète** de notes estimées, afin de recommander les articles les plus pertinents pour chaque utilisateur.
-:::
-
-## Formalisation matricielle
-
-### La matrice de notes (Rating Matrix)
-
-On considère **M utilisateurs** et **N articles**. La matrice de notes est :
-
-$$\mathbf{R} = (r_{ij})_{ij} \in \mathbb{R}^{M \times N}, \quad r_{ij} \in ]0, 1] \cup \{?\}$$
-
-Chaque entrée $r_{ij}$ représente la note de l'utilisateur $i$ pour l'article $j$.
-
-Le symbole `?` indique que l'utilisateur $i$ n'a **pas encore noté** l'article $j$ — c'est précisément ce que l'on cherche à prédire.
-
-### La matrice binaire d'observation
-
-On introduit une matrice binaire $\mathbf{B}$ pour coder les observations disponibles :
-
-$$\mathbf{B} = (b_{ij})_{ij} \in \{0, 1\}^{M \times N}, \quad b_{ij} = \begin{cases} 1 & \text{si l'utilisateur } i \text{ note l'article } j \\ 0 & \text{sinon} \end{cases}$$
-
-::: {.callout-tip title="Intuition"}
-La matrice $\mathbf{B}$ joue le rôle d'un **masque** : elle indique quelles entrées de $\mathbf{R}$ sont connues et lesquelles sont manquantes. En pratique, dans un service de streaming avec des millions d'utilisateurs et de films, cette matrice est **extrêmement creuse** (sparse) — la grande majorité des entrées est inconnue.
-:::
-
-## Vue par graphe biparti (Bipartite Graph View)
-
-La matrice $\mathbf{B}$ peut s'interpréter comme la **matrice d'adjacence** d'un graphe biparti binaire dont les poids sont donnés par $\mathbf{R}$ :
-
-- Un ensemble de nœuds représente les **utilisateurs** ($M$ nœuds)
-- Un autre ensemble représente les **articles** ($N$ nœuds)
-- Une arête existe entre l'utilisateur $i$ et l'article $j$ si et seulement si $b_{ij} = 1$, avec un poids $r_{ij}$
-
-::: {.callout-tip title="Intuition"}
-Cette vue graphe permet de comprendre la **propagation d'information** : deux utilisateurs qui partagent des articles notés en commun sont "proches" dans le graphe. La décomposition matricielle que l'on construira revient à identifier les **variables latentes** qui structurent ce graphe.
+Le retour de pertinence aide simultanément à préciser une requête trop vague (polysémie), à l'élargir si elle est trop restrictive (synonymie), et à la reformuler si elle était mal exprimée dès le départ.
 :::
 
 ---
 
-# Modélisation par régression linéaire
+## Approches du Retour de Pertinence
 
-## Hypothèse fondamentale : les variables latentes
+Il existe deux grandes familles d'approches pour implémenter le retour de pertinence.
 
-### Pourquoi des variables latentes ?
+### La boucle de retour de pertinence (Relevance Feedback Loop)
 
-L'hypothèse centrale est que les notes ne sont pas arbitraires : elles découlent de **caractéristiques sous-jacentes** (latentes) des articles et des préférences des utilisateurs.
+La boucle RF est le mécanisme fondamental : le système retourne des résultats, l'utilisateur les évalue, et le système se réajuste. Il existe deux variantes selon qui effectue la sélection des documents pertinents :
 
-Par exemple, pour des films :
+**Pseudo-RF (Pseudo-Relevance Feedback)**
 
-- Genre : Action, Aventure, Romance, Horreur, …
-- Réalisateur, époque, rythme narratif, …
+- Le **système lui-même** sélectionne automatiquement les documents supposés pertinents (typiquement les `k` premiers résultats du classement).
+- Aucune intervention de l'utilisateur n'est requise.
+- Simple à mettre en œuvre, mais fragile si les premiers résultats sont mauvais.
 
-On postule qu'un utilisateur note bien un film parce que le film possède des caractéristiques qui correspondent à ses goûts personnels.
+**RF manuel (Manual RF)**
 
-### Représentation vectorielle des articles
+- C'est **l'utilisateur** qui indique explicitement quels documents sont pertinents ou non.
+- Plus précis, mais demande un effort supplémentaire à l'utilisateur.
 
-On note $v_j[k]$ le **degré** auquel l'article $j$ possède la caractéristique $k$.
+### Modification de la requête (Query Modification)
 
-**Exemple concret** pour $K = 4$ caractéristiques [Action, Aventure, Romance, Horreur] :
+Une fois les documents pertinents identifiés, le système modifie la requête de deux façons complémentaires :
 
-- *"La guerre des robots tueurs"* : $v_j = [10, 8, 0, 5]^T$
-- *"Romance à Bastions"* : $v_j = [0, 3, 10, 1]^T$
+1. **Extraction de termes** : extraire les termes caractéristiques des documents pertinents et les ajouter à la requête.
+2. **Re-pondération des termes** : ajuster les poids des termes existants selon les jugements de pertinence.
 
-### Représentation vectorielle des utilisateurs
+### Expansion de la requête (Query Expansion)
 
-De façon symétrique, on note $u_i[k]$ la **sensibilité** de l'utilisateur $i$ à la caractéristique $k$.
-
-Un utilisateur qui adore l'action aura $u_i[\text{Action}]$ élevé, tandis qu'un amateur de romance aura $u_i[\text{Romance}]$ élevé.
-
-## Modèle de régression linéaire
-
-### Formulation scalaire
-
-L'hypothèse de linéarité — *"plus un film est action, plus un fan d'action l'aimera"* — conduit à la formule de prédiction :
-
-$$r_{ij} = \sum_{k=1}^{K} u_i[k] \cdot v_j[k] + u_i[0]$$
-
-- $u_i[0]$ est un **biais dépendant de l'utilisateur** (intercept), qui capture le fait que certains utilisateurs notent systématiquement plus haut ou plus bas que la moyenne.
-- $K$ est le nombre de caractéristiques choisies.
-
-### Homogénéisation (Homogenization)
-
-On peut intégrer le biais dans le vecteur en ajoutant une caractéristique artificielle $v_j[0] = 1$ pour tous les articles, et en absorbant $u_i[0]$ dans le vecteur utilisateur augmenté $\tilde{u}_i$ :
-
-$$r_{ij} = (\tilde{u}_i)^T \tilde{v}_j$$
-
-Cette astuce classique d'**homogénéisation** permet d'écrire le modèle comme un simple produit scalaire, sans terme de biais séparé.
-
-::: {.callout-tip title="Intuition"}
-Le produit scalaire $u_i^T v_j$ mesure l'**alignement** entre les préférences de l'utilisateur et les caractéristiques de l'article. Plus cet alignement est fort, plus la note prédite est élevée. C'est exactement l'idée de la **similitude cosinus** que l'on retrouve en recherche d'information.
-:::
+L'utilisateur (ou le système) sélectionne des termes issus d'une liste externe (thésaurus, ontologie) et les ajoute à la requête. Cette technique est traitée en détail dans le chapitre sur les opérations de requête.
 
 ---
 
-# Estimation des paramètres
+## Objectif pour le système IR
 
-## Problème d'optimisation pour les utilisateurs
+L'objectif fondamental du retour de pertinence pour un système IR est le suivant :
 
-### Objectif
-
-Étant donné les vecteurs d'articles $\{\tilde{v}_j\}_j$, on cherche les vecteurs utilisateurs $\{\tilde{u}_i\}_i$ qui minimisent l'erreur de prédiction sur les notes observées.
-
-Pour un seul utilisateur $i$ :
-
-$$\tilde{u}_i = \arg\min_{\tilde{u} \in \mathbb{R}^{K+1}} \frac{1}{2 \sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( \tilde{u}^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u\|_2^2 \right]$$
-
-### Termes de l'objectif
-
-- **Terme d'erreur quadratique** : somme sur les articles effectivement notés par l'utilisateur $i$, de l'écart au carré entre la prédiction $\tilde{u}^T \tilde{v}_j$ et la vraie note $r_{ij}$.
-- **Terme de régularisation** $\lambda_u \|u\|_2^2$ : pénalise les grandes valeurs des paramètres pour éviter le sur-apprentissage (overfitting). $\lambda_u \in \mathbb{R}^+$ est un hyperparamètre.
-- **Normalisation** par $\sum_j b_{ij}$ : divise par le nombre d'articles notés par l'utilisateur, pour ne pas pénaliser les utilisateurs très actifs.
-
-::: {.callout-warning title="Point important"}
-La somme porte uniquement sur $j : b_{ij} = 1$, c'est-à-dire sur les articles **effectivement notés**. Les entrées inconnues n'entrent pas dans le calcul de la perte — c'est ce qui distingue ce problème d'une simple régression classique.
+::: {.callout-important title="Objectif central du RF"}
+Utiliser le retour de pertinence pour **adapter la mesure de similarité** à la **perception de l'utilisateur**.
 :::
 
-### Estimation globale de tous les utilisateurs
+Le schéma général de la boucle RF dans un système IR peut être représenté ainsi :
 
-On minimise simultanément pour tous les utilisateurs :
-
-$$\mathcal{L}_u(\tilde{u}_1, \ldots, \tilde{u}_M) = \frac{1}{2} \sum_{i=1}^{M} \frac{1}{\sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u_i\|_2^2 \right]$$
-
-La prédiction pour une paire $(i,j)$ observée est alors : $\hat{r}_{ij} = (\tilde{u}_i)^T \tilde{v}_j$.
-
-## Descente de gradient pour les utilisateurs
-
-### Calcul du gradient
-
-La dérivée partielle de $\mathcal{L}_u$ par rapport à $\tilde{u}_i[k]$ (pour $k \neq 0$) est :
-
-$$\frac{\partial \mathcal{L}_u}{\partial \tilde{u}_i[k]} = \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) \tilde{v}_j[k] + \lambda_u u_i[k]$$
-
-### Règle de mise à jour (Update Rule)
-
-$$u_i[k] \leftarrow u_i[k] - \alpha \left[ \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) v_j[k] + \lambda_u u_i[k] \right]$$
-
-où $\alpha$ est le **taux d'apprentissage** (learning rate).
-
-### Cas particulier : biais (intercept, $k = 0$)
-
-Pour le biais $\tilde{u}_i[0]$, la caractéristique artificielle $\tilde{v}_j[0] = 1$ pour tout $j$, donc il n'y a pas de terme de régularisation sur le biais :
-
-$$\tilde{u}_i[0] \leftarrow \tilde{u}_i[0] - \alpha \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right)$$
-
-## Estimation des articles : problème symétrique
-
-### Objectif pour les articles
-
-Si les vecteurs utilisateurs $\{\tilde{u}_i\}_i$ sont connus (par exemple initialisés depuis des réponses à des items typiques — cf. *cold start*), on peut estimer les vecteurs d'articles en résolvant :
-
-$$\mathcal{L}_v(\tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{j=1}^{N} \frac{1}{\sum_j b_{ij}} \left[ \sum_{i : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_v \sum_j \|v_j\|_2^2 \right]$$
-
-avec $\lambda_v \in \mathbb{R}^+$.
-
-Le gradient pour les vecteurs d'articles s'obtient de façon **symétrique** à celui des utilisateurs (exercice : adapter la formule précédente).
-
-::: {.callout-tip title="Intuition"}
-Le problème est parfaitement symétrique : estimer les préférences utilisateurs revient à une régression sur les articles connus, et estimer les caractéristiques des articles revient à une régression sur les utilisateurs connus. Cette symétrie est au cœur de l'optimisation alternée.
-:::
-
-## Optimisation conjointe (Joint Optimization)
-
-### Fonction de coût globale
-
-En pratique, ni les vecteurs utilisateurs ni les vecteurs d'articles ne sont connus a priori. On optimise donc conjointement :
-
-$$\mathcal{L}(\tilde{u}_1, \ldots, \tilde{u}_M, \tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{i,j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \sum_i \|u_i\|_2^2 + \lambda_v \sum_j \|v_j\|_2^2$$
-
-### Minimisation alternée (Alternate Minimization)
-
-Ce problème est **non-convexe** conjointement en $u$ et $v$, mais il est **convexe** séparément en chacun d'eux à l'autre fixé. On utilise donc l'algorithme de **minimisation alternée** :
-
-```
-1. Initialiser u_1, ..., u_M aléatoirement ou depuis les données
-2. Tant que non convergé :
-   a. Résoudre pour v_1, ..., v_N avec u_1, ..., u_M fixés
-   b. Résoudre pour u_1, ..., u_M avec v_1, ..., v_N fixés
+```{mermaid}
+flowchart LR
+    U([Utilisateur]) --> QF[Formulation\nde la requête]
+    QF --> QO[Opérations\nde requête]
+    QO --> PQ([Requête\ntraitée])
+    PQ --> SE[Moteur\nde recherche]
+    CI([Index\ncollection]) --> SE
+    DF([Caractéristiques\ndes données]) --> CI
+    DC([Collection\nde données]) --> DF
+    SE --> RS[Tri par\npertinence]
+    RS --> RL([Liste\nclassée])
+    RL --> FR[Récupération\ndes résultats]
+    FR --> DC
+    RL --> RD[Affichage\ndes résultats]
+    RD --> U
+    U --> RFA[Acquisition\ndu retour de\npertinence]
+    RFA -- Adaptation --> SE
 ```
 
-::: {.callout-note title="À retenir"}
-La minimisation alternée converge vers un **minimum local** (pas nécessairement global) car le problème global est non-convexe. L'initialisation joue un rôle important pour la qualité de la solution finale. En pratique, cette approche donne de très bons résultats sur les données réelles.
-:::
+La flèche d'**adaptation** est au cœur du mécanisme : les jugements de l'utilisateur ne modifient pas seulement la requête, ils adaptent le moteur de recherche lui-même.
 
 ---
 
-# Formulation en rang faible (Low Rank Formulation)
+## Principes d'implémentation du RF
 
-## Du modèle de régression à la décomposition matricielle
+Voici les étapes clés de l'implémentation d'un système de retour de pertinence.
 
-### Vue matricielle du modèle
+### Collecte des jugements
 
-Le modèle $r_{ij} = (u_i)^T v_j$ peut s'écrire sous forme matricielle compacte.
+Le système accepte trois types d'évaluation de la part de l'utilisateur :
 
-On définit :
+- **Positif** : le document est pertinent.
+- **Négatif** : le document n'est pas pertinent.
+- **Neutre** : pas de jugement (document ignoré).
 
-- La matrice utilisateurs $U \in \mathbb{R}^{M \times K}$ dont chaque **ligne** $u_i^T$ est le vecteur de préférences de l'utilisateur $i$
-- La matrice articles $V \in \mathbb{R}^{N \times K}$ dont chaque **colonne** $v_j$ est le vecteur de caractéristiques de l'article $j$
+### Modification de la fonction de décision
 
-Alors la matrice de notes complète se décompose comme :
+Les jugements sont utilisés pour modifier la **fonction de décision de pertinence**, selon plusieurs approches :
 
-$$\mathbf{R} \approx U V^T$$
+- **Schéma de pondération des caractéristiques** (Feature Weighting Scheme) : par exemple, la formule de Rocchio ou le Perceptron (détaillés ci-après).
+- **Amélioration d'un classifieur probabiliste** (Probabilistic Classifier) : par exemple, le modèle Naïf de Bayes (Naïve Bayes).
+- **Classification par apprentissage automatique** (Machine Learning Classification) : par exemple, les K-méthodes (K-means, K-NN).
+
+### Re-classement et convergence
+
+Après modification de la fonction de décision :
+
+1. Les données sont **re-classées** selon la nouvelle fonction.
+2. La boucle **recommence jusqu'à convergence**.
+
+La convergence peut être atteinte selon trois scénarios :
+
+| Situation | Interprétation |
+|-----------|---------------|
+| Seulement du feedback positif | Le concept recherché a été trouvé |
+| Plus aucun feedback | L'item spécifique a été trouvé |
+| Seulement du feedback négatif | Le concept/item n'est pas présent dans la collection |
+
+---
+
+# Retour de Pertinence dans le Modèle Vectoriel (VIR)
+
+## Principe général
+
+Dans le **Modèle Vectoriel de Recherche d'Information** (Vector Information Retrieval, VIR), les documents et les requêtes sont représentés comme des vecteurs dans un espace de termes. Le RF consiste alors à effectuer des **opérations vectorielles** pour aligner le vecteur requête avec les vecteurs des documents pertinents.
 
 ::: {.callout-tip title="Intuition"}
-La matrice $R \in \mathbb{R}^{M \times N}$ est approchée par le produit de deux matrices de rang $K \ll \min(M, N)$. Au lieu de stocker $M \times N$ valeurs, on ne stocke que $(M + N) \times K$ paramètres. C'est toute l'économie des **modèles de rang faible**.
+Imaginez que chaque document est un point dans un espace multidimensionnel. La requête est également un point. Le RF déplace ce point de requête vers les documents jugés pertinents et l'éloigne des documents non pertinents.
 :::
 
-### Rang de l'approximation
+## Idée naïve : ajout des documents pertinents
 
-Le produit $UV^T$ est de rang au plus $K$. En choisissant $K$ petit devant $M$ et $N$, on obtient une **approximation de rang faible** (low-rank approximation) de la matrice $R$.
+L'approche la plus simple consiste à **ajouter directement les vecteurs des documents pertinents** à la requête :
 
-Les $K$ dimensions latentes capturent les $K$ principaux "thèmes" ou "facteurs" qui expliquent les notes observées.
+$$
+q' = \alpha \cdot q + \beta \cdot \frac{1}{|R|} \sum_{j \in R} d_j \quad \text{(avec } \alpha + \beta = 1\text{)}
+$$
 
----
+Où :
 
-# Théorie des modèles de rang faible
+- $q$ est le vecteur requête initial.
+- $R$ est l'ensemble des documents jugés pertinents.
+- $d_j$ est le vecteur du document $j$.
+- $\alpha$ et $\beta$ sont des paramètres de pondération.
 
-## La Décomposition en Valeurs Singulières (SVD)
+Cette formule déplace le vecteur requête vers le **centroïde** (barycentre) des documents pertinents.
 
-### Théorème fondamental
-
-::: {.callout-important title="Théorème : Décomposition en Valeurs Singulières (Singular Value Decomposition)"}
-Pour toute matrice $\mathbf{R} \in \mathbb{R}^{M \times N}$, il existe :
-
-- $\mathbf{U} \in \mathbb{R}^{M \times M}$ orthogonale
-- $\mathbf{\Sigma} \in \mathbb{R}^{M \times N}$ diagonale (avec remplissage de zéros)
-- $\mathbf{V} \in \mathbb{R}^{N \times N}$ orthogonale
-
-tels que :
-
-$$\mathbf{R} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$
-
-Cette décomposition est **exacte** et **unique** (sous certaines conventions de signe).
-:::
-
-**Conventions** :
-
-- On suppose généralement $M \geq N$ sans perte de généralité.
-- Les valeurs singulières $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_N \geq 0$ sont ordonnées décroissantes sur la diagonale de $\Sigma$.
-- Les colonnes de $U$ (resp. $V$) sont les **vecteurs singuliers gauches** (resp. droits).
-
-### Produit scalaire et trace matricielle
-
-#### Rappel sur le produit matriciel
-
-Pour des matrices $A \in \mathbb{R}^{N \times P}$ et $B \in \mathbb{R}^{P \times Q}$, le produit $C = AB$ a pour terme général :
-
-$$C_{ij} = (AB)_{ij} = \sum_k A_{ik} B_{kj}$$
-
-C'est le produit scalaire entre la ligne $i$ de $A$ et la colonne $j$ de $B$.
-
-**Interprétation alternative** : $AB = \sum_{k} A_{:k} B_{k:}$, soit une somme de produits externes (matrices de rang 1).
-
-#### La trace matricielle (Matrix Trace)
-
-Pour $A \in \mathbb{R}^{N \times N}$ :
-
-$$\text{Tr}(A) = \sum_i A_{ii}$$
-
-**Propriétés importantes** :
-
-- $\text{Tr}(A^T) = \text{Tr}(A)$
-- $\text{Tr}(AB) = \text{Tr}(BA)$ pour $A, B \in \mathbb{R}^{N \times N}$
-- La trace est **invariante par transformation orthogonale** : si $B = UAU^T$, alors $\text{Tr}(B) = \text{Tr}(A)$
-
-**Lien avec la norme de Frobenius** :
-
-$$\text{Tr}(A^T A) = \sum_{i,j} A_{ij}^2 = \|A\|_F^2$$
-
-La trace de $A^T A$ est la somme de tous les carrés des entrées de $A$.
-
-#### Décomposition orthogonale et trace
-
-Avec $R = U\Sigma V^T$ :
-
-$$\text{Tr}(RR^T) = \text{Tr}(U\Sigma\Sigma^T U^T) = \text{Tr}(\Sigma\Sigma^T) = \sum_i \sigma_i^2$$
-
-(par invariance de la trace par transformation orthogonale)
-
-De même : $\text{Tr}(R^T R) = \sum_i \sigma_i^2$.
-
-::: {.callout-important title="Importance de la norme de Frobenius"}
-La **norme de Frobenius** (Frobenius norm) d'une matrice est définie par :
-
-$$\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2} = \sqrt{\text{Tr}(A^T A)} = \sqrt{\sum_i \sigma_i^2}$$
-
-Les valeurs singulières **concentrent toute l'information** de la matrice. C'est le principe fondateur des modèles de rang faible.
-:::
-
-## Découpage de la SVD en rang 1 (Matrix Slicing)
-
-### Décomposition en somme de matrices de rang 1
-
-En appliquant la propriété $AB^T = \sum_i A_{:i} B_{:i}^T$, on peut écrire :
-
-$$\mathbf{R} = (\mathbf{U}\mathbf{\Sigma})\mathbf{V}^T = \sum_{i=1}^{N} \sigma_i (\mathbf{u}_i \mathbf{v}_i^T)$$
-
-où $\mathbf{u}_i = U_{:i}$ est la $i$-ème colonne de $U$ et $\mathbf{v}_i = V_{:i}$ est la $i$-ème colonne de $V$.
-
-::: {.callout-tip title="Intuition"}
-Chaque terme $\sigma_i (\mathbf{u}_i \mathbf{v}_i^T)$ est une matrice de **rang 1** — le produit externe d'un vecteur utilisateur et d'un vecteur article — pondérée par la valeur singulière $\sigma_i$. La SVD décompose donc $R$ en une somme ordonnée de "thèmes" de rang 1, du plus important au moins important.
-:::
-
-### Justification de la troncature
-
-**Propriété clé** : puisque $\mathbf{U}$ est orthogonale, ses colonnes vérifient $\mathbf{u}_i^T \mathbf{u}_j = \delta_{ij}$. Donc :
-
-$$\text{rang}\left(\sum_{k=1}^{K} \sigma_k \mathbf{u}_k \mathbf{v}_k^T\right) = K$$
-
-et l'erreur de la troncature à $K$ termes vaut :
-
-$$\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2$$
-
-Cela **justifie de tronquer les dimensions associées aux petites valeurs singulières** : elles contribuent peu à la norme de Frobenius totale, c'est-à-dire peu à l'"énergie" de la matrice.
-
-## Théorème d'Eckart-Young
-
-::: {.callout-important title="Théorème d'Eckart-Young (Best Low-Rank Approximation)"}
-La troncature à $K$ valeurs singulières $\mathbf{R}_K = \mathbf{U}_K \mathbf{\Sigma}_K \mathbf{V}_K^T$ est **la meilleure approximation de rang $K$** de $\mathbf{R}$ au sens de la norme de Frobenius :
-
-$$\mathbf{R}_K = \arg\min_{B,\ \text{rang}(B) \leq K} \|\mathbf{R} - B\|_F^2$$
-
-L'erreur minimale correspondante est :
-
-$$\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2$$
-:::
-
-**Interprétation géométrique** : $\mathbf{R}_K$ est la **projection orthogonale** de $\mathbf{R}$ sur la variété des matrices de rang $K$.
-
-::: {.callout-tip title="Intuition"}
-Choisir $K$ revient à décider combien de "thèmes latents" on veut retenir pour représenter les données. Un $K$ petit donne une représentation compressée mais approximative ; un $K$ grand donne une représentation plus précise mais plus coûteuse.
+::: {.callout-warning title="Limitation de l'approche naïve"}
+Cette formule ne prend en compte que les documents pertinents. Elle ne permet pas de s'éloigner des documents non pertinents, ce qui est pourtant crucial pour améliorer la précision.
 :::
 
 ---
 
-# Interprétation géométrique de la SVD
+## Formule de Rocchio
 
-## Les bases orthonormées latentes
+La **formule de Rocchio** [Rocchio, 1971] est l'extension classique qui intègre également les documents **non pertinents** ($\bar{R}$) :
 
-### Structure des bases
+$$
+q' = \alpha \cdot q + \beta \cdot \frac{1}{|R|} \sum_{d_j \in R} d_j - \gamma \cdot \frac{1}{|\bar{R}|} \sum_{d_j \in \bar{R}} d_j
+$$
 
-La matrice $\mathbf{U} = [\mathbf{u}_1 \cdots \mathbf{u}_M]$ étant orthogonale, ses colonnes forment une **base orthonormée** de $\mathbb{R}^M$ :
+::: {.callout-important title="La formule de Rocchio"}
+- Le terme $+\beta \cdot \frac{1}{|R|} \sum_{d_j \in R} d_j$ **attire** le vecteur requête vers les documents pertinents.
+- Le terme $-\gamma \cdot \frac{1}{|\bar{R}|} \sum_{d_j \in \bar{R}} d_j$ **repousse** le vecteur requête des documents non pertinents.
+:::
 
-$$\mathcal{B}_U = \{\mathbf{u}_1, \ldots, \mathbf{u}_M\}$$
+Cette formule est possible **grâce à la structure vectorielle** de VIR : on peut soustraire des vecteurs, ce qui n'est pas possible dans tous les modèles IR.
 
-De même, $\mathcal{B}_V = \{\mathbf{v}_1, \ldots, \mathbf{v}_N\}$ est une base orthonormée de $\mathbb{R}^N$.
+---
 
-### R comme application linéaire
+## Paramètres de la formule de Rocchio
 
-De $\mathbf{R} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$, on tire :
+Les paramètres $\alpha$, $\beta$ et $\gamma$ contrôlent l'importance relative de chaque source d'information.
 
-$$\mathbf{R}\mathbf{V} = \mathbf{U}\mathbf{\Sigma} \quad \Rightarrow \quad \mathbf{R}\mathbf{v}_i = \sigma_i \mathbf{u}_i$$
+### Valeurs recommandées
 
-La matrice $\mathbf{R}$ agit comme un **changement de base suivi d'un redimensionnement** : elle transforme le $i$-ème vecteur de base des articles en le $i$-ème vecteur de base des utilisateurs, mis à l'échelle par $\sigma_i$.
+| Paramètre | Rôle | Valeur typique |
+|-----------|------|---------------|
+| $\alpha$ | Poids de la requête originale | $1$ (préserver la requête initiale) |
+| $\beta$ | Poids du feedback positif | $0.75$ |
+| $\gamma$ | Poids du feedback négatif | $0.25$ |
 
-## Décomposition en transformations élémentaires
+::: {.callout-note title="Règle $\beta > \gamma$"}
+On impose $\beta > \gamma$ pour **atténuer l'influence du feedback négatif**. En effet, le feedback négatif est souvent moins fiable et moins discriminant que le feedback positif. La normalisation $\beta + \gamma = 1$ est parfois appliquée.
+:::
 
-On peut décomposer $\varphi_R$ (l'application induite par $R$) en trois opérations successives :
+### Recommandations pratiques supplémentaires
 
-$$\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}$$
+- **Travailler uniquement sur les termes communs** à la requête et aux documents évalués.
+- **Supprimer les termes avec un poids négatif** après la mise à jour, pour préserver la cohérence mathématique du modèle vectoriel (les vecteurs TF-IDF sont à valeurs positives).
 
-**Détail des opérations** :
+::: {.callout-tip title="Intuition géométrique"}
+Dans l'espace vectoriel, le nouveau vecteur requête $q'$ est une combinaison linéaire de :
 
-- $\varphi_V^{-1} : e_j \mapsto v_j = V^T e_j$ — **changement de base** de la base canonique $\{e_1, \ldots, e_N\}$ vers $\mathcal{B}_V$
-- $\varphi_\Sigma : v_j \mapsto v'_j = \Sigma v_j$ — **redimensionnement** des coordonnées par les valeurs singulières
-- $\varphi_U : v'_j \mapsto r_{ij} = u_i^T v'_j$ — **changement de base** vers $\mathcal{B}_U$ et lecture des coordonnées utilisateur
+- $q$ (où on était),
+- le centroïde des pertinents (où on veut aller),
+- le centroïde des non pertinents (d'où on veut s'éloigner).
 
-### Cas de la troncature à $K$ dimensions
-
-Après troncature :
-
-$$\mathbf{R}_K = (\mathbf{U}_K \text{Id}_K) \mathbf{\Sigma}_K (\mathbf{V}_K \text{Id}_K)^T$$
-
-$$\varphi_{R_K} = \varphi_{U_K} \circ \varphi_{\Sigma_K} \circ \varphi_{V_K}^{-1}$$
-
-Dans l'**espace latent** (latent space), la transformation agit simplement comme un **redimensionnement de $K$ caractéristiques** via $\Sigma_K$. C'est là toute la puissance de la représentation compressée.
-
-::: {.callout-note title="À retenir"}
-La SVD identifie les **directions de variance maximale** dans les données. Les premières valeurs singulières (les plus grandes) capturent les structures les plus importantes. Tronquer revient à ne garder que l'essentiel de l'information.
+Le résultat est un vecteur orienté vers la "zone de pertinence" de l'espace.
 :::
 
 ---
 
-# Propagation d'information
+# Lien avec l'Entraînement du Perceptron (Perceptron Training)
 
-## Matrices de similarité
+## Le modèle Perceptron
 
-### Similarité entre articles (Item Similarity)
+Le **Perceptron** est l'un des modèles fondateurs de l'apprentissage automatique (Machine Learning). Il s'agit d'un classifieur linéaire binaire dont la décision est :
 
-En calculant $\mathbf{R}^T \mathbf{R}$ :
+$$
+\text{Décision} = \text{signe}(W \cdot x)
+$$
 
-$$\mathbf{R}^T \mathbf{R} = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T) = \mathbf{V}\mathbf{\Sigma}^T \mathbf{U}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{V}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{V}^T$$
+Où $W$ est le vecteur de poids (weight vector) et $x$ est le vecteur du document à classer.
 
-La matrice $\mathbf{R}^T\mathbf{R} \in \mathbb{R}^{N \times N}$ encode la **similarité entre articles** : deux articles sont similaires si des utilisateurs semblables les ont bien notés.
+### Règle d'entraînement
 
-### Similarité entre utilisateurs (User Similarity)
+La mise à jour du vecteur de poids lors de l'entraînement suit la règle :
 
-De façon symétrique :
+$$
+W_{\text{new}} = W_{\text{old}} + \alpha \cdot (\text{label} - \text{décision}) \cdot x \quad \forall x
+$$
 
-$$\mathbf{R}\mathbf{R}^T = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T = \mathbf{U}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{U}^T$$
+Où le **label** (étiquette) vaut :
 
-La matrice $\mathbf{R}\mathbf{R}^T \in \mathbb{R}^{M \times M}$ encode la **similarité entre utilisateurs** : deux utilisateurs sont similaires s'ils ont noté les mêmes articles de façon similaire.
+$$
+\text{label} = \begin{cases} +1 & \text{si } x \in R \text{ (pertinent)} \\ -1 & \text{si } x \in \bar{R} \text{ (non pertinent)} \end{cases}
+$$
 
-::: {.callout-tip title="Intuition"}
-Ces deux matrices de Gram sont au cœur du **filtrage collaboratif** (Collaborative Filtering) : pour recommander à un utilisateur, on cherche ses voisins similaires et on regarde ce qu'ils ont aimé. La SVD fournit une façon compacte et optimale de calculer ces similarités.
+## Analogie avec Rocchio
+
+La formule de Rocchio et l'entraînement du Perceptron sont structurellement très similaires : dans les deux cas, on **déplace un vecteur** (requête ou poids) en ajoutant les exemples positifs et en soustrayant les exemples négatifs.
+
+::: {.callout-note title="Différence fondamentale"}
+Le Perceptron converge après plusieurs **itérations sur l'ensemble des données** (dépendant de la séparabilité linéaire des données), tandis que Rocchio effectue une mise à jour en **une seule passe** sur les documents jugés.
 :::
 
-## Condition de connexité du graphe
+## Condition de bon fonctionnement
 
-::: {.callout-important title="Point crucial : graphe connecté"}
-La propagation d'information via la matrice $R$ n'est possible que si le **graphe biparti est connexe** (connected). Si le graphe a plusieurs composantes connexes, la décomposition se fragmente en blocs indépendants et l'information ne peut pas se propager d'une composante à l'autre.
-:::
+Le Perceptron (et par analogie Rocchio) fonctionne mieux lorsque :
 
-**Exercice** : Montrer que si le graphe a plus d'une composante connexe, la matrice $R$ est déconnectée (i.e., peut être mise sous forme bloc-diagonale après permutation), et inversement.
+$$
+|R| \approx |\bar{R}|
+$$
 
-## Limites du modèle linéaire
-
-Les correspondances linéaires "utilisateur → latent" ($U$, $\varphi_U$) et "article → latent" ($V$, $\varphi_V$) peuvent être **trop restrictives** pour capturer des préférences complexes.
-
-Par exemple, un utilisateur peut aimer à la fois les films d'action *et* les comédies romantiques, ce qui n'est pas bien capturé par un vecteur de préférences linéaire.
-
-**Solutions** : on doit alors recourir à des **modèles non-linéaires** :
-
-- pLSA (probabilistic Latent Semantic Analysis)
-- Auto-encodeurs variationnels (VAEs)
-- Réseaux de neurones profonds
+C'est-à-dire lorsque le nombre de documents pertinents est approximativement égal au nombre de documents non pertinents jugés. Un déséquilibre important peut biaiser la direction du vecteur mis à jour.
 
 ---
 
-# Applications de la SVD
+# Retour de Pertinence Probabiliste (BIR)
 
-## Application aux systèmes de recommandation
+## Rappel du modèle BIR
 
-La matrice $\mathbf{R} \in \mathbb{R}^{N \times M}$ des notes se décompose comme $R = AX$ où :
+Le **Modèle Binaire Indépendant de Recherche** (Binary Independence Retrieval, BIR) est un modèle probabiliste qui estime la probabilité qu'un document soit pertinent pour une requête donnée. Son mécanisme de retour de pertinence est **intégré nativement** dans le modèle.
 
-- $A = U_K \Sigma_K \in \mathbb{R}^{N \times K}$ : chaque ligne $a_i$ représente un **utilisateur** dans l'espace des $K$ caractéristiques latentes
-- $X = V_K^T \in \mathbb{R}^{K \times M}$ : chaque colonne $x_j$ représente un **article** avec ses $K$ caractéristiques latentes
+Le principe central du BIR est le suivant :
 
-La note prédite est le produit scalaire $\hat{r}_{ij} = a_i^T x_j$.
+::: {.callout-important title="Principe du BIR"}
+L'utilisateur spécifie son besoin d'information à travers une **boucle de feedback** : à chaque itération, il juge des documents comme pertinents ou non, et ces jugements permettent au système de mieux estimer l'ensemble idéal $R$.
+:::
 
-## Application à l'analyse sémantique latente (LSA/LSI)
+```{mermaid}
+flowchart TD
+    Q([Requête q]) --> SR[Réponse\ndu système]
+    SR --> RS([Ensemble\nde résultats])
+    RS --> UJ[Jugement\nutilisateur]
+    UJ --> SAT{Satisfaction ?}
+    SAT -- Oui --> QR([Résultat\nfinal])
+    SAT -- Non --> ASR[Réponse\nadaptée]
+    ASR --> RS
+    UJ -. Feedback .-> ASR
+```
 
-La SVD est également utilisée en **analyse sémantique latente** (Latent Semantic Analysis/Indexing) pour l'indexation de documents :
-
-- $W \in \mathbb{R}^{N \times M}$ : matrice terme-document (fréquences de termes)
-- $W = U\Sigma V^T$
-
-Chaque document $d_j$ (colonne de $W$) se représente dans l'espace des **concepts** :
-
-$$d_j = U\Sigma V^T e_j = U\Sigma v_j$$
-
-Le projecteur vers l'espace conceptuel est $A = U_K \Sigma_K$, permettant de projeter documents et requêtes dans cet espace réduit.
+Le schéma ci-dessus illustre que la boucle RF du BIR converge lorsque l'utilisateur est satisfait (c'est-à-dire lorsque l'ensemble retourné correspond à l'ensemble idéal $R$).
 
 ---
 
-# Factorisation en Matrices Non-négatives (NMF)
+## Initialisation du BIR (sans feedback)
 
-## Motivation
+Au moment de la première requête, aucun document n'a encore été jugé. Les probabilités doivent être **initialisées** à partir de la collection entière.
 
-### Limites de la SVD pour l'interprétabilité
+### Estimation de $P(t_i | q, \bar{R})$
 
-La SVD fournit une décomposition **exacte et optimale** au sens de Frobenius, mais elle présente des inconvénients pratiques :
+La probabilité qu'un terme $t_i$ apparaisse dans un document **non pertinent** est estimée par sa fréquence dans la collection :
 
-- Les matrices $U$ et $V$ peuvent avoir des entrées **négatives**, ce qui est difficile à interpréter (une "préférence négative" pour un genre de film n'est pas intuitive).
-- La computation est coûteuse : $\mathcal{O}(N^3)$ pour l'algorithme de Jacobi ou de la puissance.
-- Les bases ne sont pas "parties" d'un tout, ce qui complique l'interprétation.
+$$
+P(t_i | q, \bar{R}) = \frac{n_i}{N}
+$$
 
-## Formulation de la NMF
+Où $n_i$ est le nombre de documents contenant $t_i$ et $N$ est la taille totale de la collection.
 
-### Définition
+::: {.callout-tip title="Lien avec l'IDF"}
+On peut montrer que ce rapport est lié à l'IDF (Inverse Document Frequency) :
 
-La **Factorisation en Matrices Non-négatives** (Non-negative Matrix Factorization, NMF) cherche une décomposition :
+$$
+\log \frac{1 - P(t_i | q, \bar{R})}{P(t_i | q, \bar{R})} = \log \frac{N - n_i}{n_i} \approx \log \frac{N}{n_i} = idf_i
+$$
 
-$$\mathbf{R} \approx \mathbf{W}\mathbf{H} \quad \text{avec} \quad W_{ij} \geq 0 \quad \text{et} \quad H_{ij} \geq 0$$
-
-La contrainte de non-négativité facilite l'interprétation : chaque composante contribue **positivement** à la reconstruction.
-
-### Problème d'optimisation
-
-$$\mathbf{W}, \mathbf{H} = \arg\min_{\substack{A \geq 0,\ A \in \mathbb{R}^{M \times K} \\ B \geq 0,\ B \in \mathbb{R}^{K \times N}}} \|\mathbf{R} - AB\|_F$$
-
-::: {.callout-tip title="Intuition"}
-Avec la NMF, chaque article est une **combinaison additive** de $K$ "parties" élémentaires non-négatives. Par exemple, pour des images de visages, les composantes NMF correspondent à des parties reconnaissables (yeux, nez, bouche), tandis que les composantes PCA/SVD sont des "fantômes" globaux sans signification locale.
+Cela explique pourquoi l'IDF est une approximation naturelle de l'initialisation probabiliste.
 :::
 
-## NMF versus SVD : illustration sur des visages
+### Estimation de $P(t_i | q, R)$
 
-L'illustration classique compare les bases extraites par PCA (SVD) et NMF sur un jeu d'images de visages :
+En l'absence de jugements, on suppose que tous les termes ont la même probabilité d'apparaître dans les documents pertinents :
 
-- **PCA** : les composantes sont des "visages fantômes" globaux, avec des valeurs positives et négatives entremêlées — difficiles à interpréter.
-- **NMF** : les composantes correspondent à des **parties locales** du visage (yeux, nez, menton, sourcils) — intuitives et interprétables.
+$$
+P(t_i | q, R) = 0.5
+$$
 
-::: {.callout-note title="À retenir"}
-Le choix entre SVD et NMF dépend de l'application :
+Cette valeur neutre reflète l'incertitude totale à l'initialisation.
 
-- SVD est préférable quand on veut l'**optimalité mathématique** (meilleure approximation de Frobenius).
-- NMF est préférable quand on veut l'**interprétabilité** des composantes latentes.
-:::
+---
 
-## Complétion de matrice (Matrix Completion)
+## Mise à jour par RF dans le BIR
 
-### Stratégie pratique
+### Notations
 
-Pour appliquer la NMF à la prédiction de notes manquantes :
+Après une première phase de récupération, on dispose d'un sous-ensemble $S$ des $r$ premiers documents retournés. On note :
 
-1. **Considérer les notes inconnues comme valant 0** : on forme ainsi une matrice $\tilde{R}$ complète.
-2. **Résoudre la NMF** sur $\tilde{R}$ : on obtient $WH \approx \tilde{R}$.
-3. **Utiliser $WH$** comme matrice des notes estimées : les entrées inconnues (que l'on avait mises à 0) sont remplacées par les prédictions $(\hat{r}_{ij} = (WH)_{ij})$.
+- $S_i$ : les documents de $S$ qui contiennent le terme $t_i$.
+- $r_i = |S_i|$ : le nombre de documents parmi les $r$ premiers qui contiennent $t_i$.
 
-### Normalisation par la moyenne (Mean Normalization)
+### Nouvelles estimations
 
-Pour éviter les biais liés aux différentes échelles de notation entre utilisateurs, on applique une **normalisation par la moyenne** :
+On peut alors mettre à jour les probabilités :
 
-1. Calculer la note moyenne de chaque utilisateur sur les articles qu'il a notés.
-2. Centrer la matrice $R$ autour de ces moyennes.
-3. Résoudre la NMF sur la matrice centrée.
-4. Ajouter la moyenne de l'utilisateur à la prédiction finale.
+$$
+P(t_i | q, R) = p_i = \frac{r_i}{r}
+$$
 
-::: {.callout-warning title="Point important : problème du démarrage à froid (Cold Start)"}
-Un problème fondamental des systèmes de recommandation basés sur la décomposition matricielle est le **problème du démarrage à froid** (cold start) : un nouvel utilisateur (ou un nouvel article) n'a aucune donnée associée dans la matrice. La SVD ou la NMF ne peuvent pas produire de recommandations pertinentes. Des stratégies spécifiques (profil démographique, réponses à des items typiques) sont nécessaires pour initialiser le vecteur latent d'un nouveau venu.
+$$
+P(t_i | q, \bar{R}) = q_i = \frac{n_i - r_i}{N - r}
+$$
+
+Ces estimations sont directement dérivées des fréquences observées dans les documents retournés.
+
+### Combinaison avec la connaissance a priori (Prior de Bayes)
+
+Pour éviter les estimations instables lorsque $r_i$ est très petit, on peut combiner la nouvelle estimation avec la probabilité initiale (prior) via un **lissage bayésien** :
+
+$$
+p_i^{(t+1)} = \frac{r_i + \lambda \cdot p_i^{(t)}}{r + \lambda}
+$$
+
+Où :
+
+- $p_i^{(0)} = 0.5$ (initialisation uniforme),
+- $\lambda$ est le **poids du prior** qui contrôle l'influence de la connaissance initiale.
+
+::: {.callout-tip title="Intuition du lissage"}
+Quand $\lambda$ est grand, le système reste proche de l'initialisation et change lentement (comportement conservateur). Quand $\lambda$ est petit, les nouvelles observations dominent rapidement (comportement réactif). Le bon réglage dépend de la fiabilité des jugements et du nombre de documents évalués.
 :::
 
 ---
 
-# Synthèse : pourquoi les modèles de rang faible ?
+# Alternatives au RF Classique
 
-## Le principe général
+## Inférence par Réseaux Bayésiens
 
-Les modèles de rang faible reposent sur l'idée que les données observées, bien que présentées dans un espace de haute dimension ($M \times N$), sont en réalité gouvernées par un petit nombre $K$ de **variables latentes**.
+Les réseaux bayésiens (Bayesian Networks) permettent de modéliser des relations de dépendance complexes entre termes, documents et requêtes. Bien que théoriquement puissants, ils ne sont pas développés ici en raison de leur complexité algorithmique.
 
-La SVD permet d'identifier ces variables de façon optimale, et la NMF les identifie de façon interprétable.
+## Approches par Apprentissage Automatique (Machine Learning)
 
-## Récapitulatif des outils mathématiques clés
+Les classifieurs issus du Machine Learning représentent une alternative plus générale :
 
-| Outil | Rôle | Propriété clé |
-|---|---|---|
-| SVD | Décomposition exacte $R = U\Sigma V^T$ | Meilleure approx. rang $K$ au sens de Frobenius |
-| Valeurs singulières $\sigma_i$ | Mesurent l'importance des dimensions | $\|R - R_K\|_F^2 = \sum_{k>K} \sigma_k^2$ |
-| Norme de Frobenius | Mesure l'erreur d'approximation | $\|A\|_F^2 = \text{Tr}(A^T A) = \sum \sigma_i^2$ |
-| NMF | Décomposition approchée $R \approx WH$ | Contrainte de non-négativité |
-| Minimisation alternée | Optimisation conjointe $u$, $v$ | Convergence locale garantie |
+**Classifieurs linéaires**
 
-## Applications au-delà de la recommandation
+- Exemples : Régression logistique, SVM linéaire.
+- Séparent l'espace de documents en deux demi-espaces (pertinent / non pertinent).
 
-- **Compression d'images** : la SVD tronquée représente une image avec beaucoup moins de données
-- **Recherche d'information (LSA/LSI)** : indexation sémantique latente de documents
-- **Réduction de dimension** : similaire à l'ACP (Analyse en Composantes Principales / PCA)
-- **Débruitage** : tronquer les petites valeurs singulières élimine le bruit
+**Classifieurs à noyau (Kernel-based)**
 
-::: {.callout-note title="À retenir"}
-**Conclusion générale** :
+- Exemples : SVM à noyau gaussien.
+- Permettent des frontières de décision non linéaires.
+- Plus expressifs que les approches vectorielles.
 
-- La matrice de notes $R$ est stockée de façon incomplète.
-- La décomposition latente (SVD ou NMF) permet de **prédire** les notes manquantes.
-- Ce n'est possible que si le graphe biparti sous-jacent est **connexe** (problème du cold start).
-- La théorie du rang faible trouve des applications très larges en apprentissage automatique, traitement du signal et recherche d'information.
-- Les modèles linéaires ont des limites → les modèles non-linéaires (pLSA, réseaux de neurones, VAEs) en sont le prolongement naturel.
+::: {.callout-warning title="Limites des approches ML pour le RF"}
+Malgré leur puissance potentielle, les classifieurs ML souffrent de deux problèmes majeurs dans le contexte du RF :
+
+1. **Volume de données d'entraînement** : ils nécessitent un grand nombre de jugements, ce que l'utilisateur ne peut généralement pas fournir en session interactive.
+2. **Cohérence du feedback** : ils supposent que les jugements sont stables et cohérents, ce qui n'est pas toujours le cas dans la pratique.
+:::
+
+---
+
+## Résumé du RF
+
+::: {.callout-note title="À retenir — Synthèse du RF"}
+Le RF est une partie **efficace** du mécanisme de requête, permettant de formuler des requêtes complexes de manière progressive. Son efficacité dépend de deux facteurs principaux :
+
+1. **Le nombre d'items jugés** : plus l'utilisateur évalue de documents, plus la mise à jour est précise.
+2. **La cohérence du feedback** : des jugements contradictoires dégradent les performances.
+
+En connaissant le mécanisme RF, on peut améliorer son efficacité en :
+- Marquant les documents pertinents **discriminants** (qui apportent le plus d'information).
+- Utilisant le **feedback négatif** de manière ciblée.
+:::
+
+---
+
+## Le RF en pratique
+
+Le retour de pertinence explicite est **peu utilisé** dans les systèmes grand public. La raison principale est que les utilisateurs préfèrent une **performance médiocre mais consistante** plutôt qu'une performance variable et complexe.
+
+Les alternatives pratiques incluent :
+
+- Le **"Requête de documents similaires"** (Similar Documents Query), comme le bouton "Pages similaires" de Google.
+- L'exploitation **implicite** du comportement de l'utilisateur (clics, temps de lecture, etc.), qui sera abordée dans la section suivante.
+
+---
+
+# Filtrage Collaboratif (Collaborative Filtering)
+
+## Principe fondamental
+
+Le **Filtrage Collaboratif** (Collaborative Filtering, CF) repose sur une idée simple mais puissante :
+
+::: {.callout-important title="Principe du Filtrage Collaboratif"}
+Si l'utilisateur A évalue l'item I au niveau L, alors l'utilisateur B devrait évaluer cet item I à un niveau proche de L, **proportionnellement à la similarité des profils** de A et B.
+:::
+
+Contrairement au RF actif, le CF exploite un **feedback passif** : les évaluations passées de nombreux utilisateurs sont accumulées et propagées pour prédire les préférences de chaque utilisateur individuel.
+
+Conséquences importantes :
+
+- Le CF crée une **proximité entre utilisateurs** (User Grouping / Profiling) plutôt qu'entre utilisateurs et contenu.
+- Le CF est **basé sur les utilisateurs**, non sur le contenu des items.
+- Le CF est **non content-based** : il ne nécessite pas d'analyser le contenu des documents/items.
+
+---
+
+## Terminologie et équivalences
+
+Le Filtrage Collaboratif est connu sous plusieurs noms équivalents :
+
+| Terme | Contexte |
+|-------|---------|
+| Filtrage collaboratif (Collaborative Filtering) | Terme technique général |
+| Filtrage social (Social Filtering) | Insistance sur la dimension communautaire |
+| Systèmes de recommandation (Recommender Systems) | Applications pratiques |
+
+### Applications pratiques célèbres
+
+- **GroupLens** : système pionnier développé par P. Resnick à l'Université du Michigan.
+- **MovieLens** : application aux recommandations de films.
+- **WebMuseum** : application aux peintures artistiques.
+- **Google** : CF non personnalisé (utilisation des liens entrants — voir IR Web).
+- **Amazon, CDNow** : applications au commerce électronique ("Les clients ayant acheté cet article ont aussi acheté...").
+
+---
+
+## Stratégie du CF
+
+### Objectif formel
+
+Pour un **utilisateur actif** $u_a$, l'objectif est de prédire la note (rating) $\hat{r}_{aj}$ qu'il attribuerait à chaque item $d_j$ qu'il n'a pas encore évalué.
+
+Cette prédiction est une fonction de deux quantités :
+
+- $w_{ak}$ : le **poids de similarité** (Similarity Weight) entre l'utilisateur actif $u_a$ et un autre utilisateur $u_k$.
+- $r_{kj}$ : la **note réelle** (Actual Rating) de l'utilisateur $u_k$ sur l'item $d_j$.
+
+### Modèle général
+
+Le modèle CF se décompose en deux étapes :
+
+1. **Estimation de $w_{ak}$** : calculer la similarité entre $u_a$ et $u_k$ à partir de leurs évaluations communes.
+2. **Calcul de $\hat{r}_{aj}$** : la prédiction est une modification de la note moyenne de $u_a$, pondérée par les déviations des autres utilisateurs par rapport à leurs propres moyennes.
+
+---
+
+## Corrélation inter-utilisateurs
+
+### Corrélation de Pearson (Pearson Correlation)
+
+La similarité entre deux utilisateurs $u_a$ et $u_k$ est mesurée par la **corrélation de Pearson** sur les $m$ items qu'ils ont tous les deux évalués :
+
+$$
+C_{ak} = \frac{\text{cov}(r_a, r_k)}{\sigma_a \cdot \sigma_k}
+$$
+
+Où :
+
+- $\text{cov}(r_a, r_k)$ est la **covariance** des notes de $u_a$ et $u_k$ sur leurs items communs.
+- $\sigma_a$ et $\sigma_k$ sont les **écarts-types** de leurs notes respectives.
+
+### Formules détaillées
+
+La covariance est calculée comme suit :
+
+$$
+\text{cov}(r_a, r_k) = \frac{\sum_{j=1}^{m} (r_{aj} - \bar{r}_a)(r_{kj} - \bar{r}_k)}{m}
+$$
+
+Les moyennes et écarts-types individuels sont :
+
+$$
+\bar{r}_k = \frac{1}{m} \sum_{j=1}^{m} r_{kj}
+\qquad
+\sigma_k = \sqrt{\frac{\sum_{j=1}^{m} (r_{kj} - \bar{r}_k)^2}{m}}
+$$
+
+::: {.callout-tip title="Intuition de la corrélation de Pearson"}
+La corrélation de Pearson mesure à quel point deux utilisateurs ont les **mêmes tendances de notation** : est-ce qu'ils attribuent de bonnes notes aux mêmes items et de mauvaises notes aux mêmes items ? En centrant les notes par rapport aux moyennes, on neutralise les biais individuels (un utilisateur sévère qui donne toujours des notes basses, un utilisateur généreux qui donne toujours des notes hautes).
+:::
+
+La valeur de $C_{ak}$ est dans $[-1, 1]$ :
+
+- $C_{ak} \approx +1$ : les deux utilisateurs ont des goûts très similaires.
+- $C_{ak} \approx -1$ : les deux utilisateurs ont des goûts opposés.
+- $C_{ak} \approx 0$ : aucune corrélation détectable.
+
+---
+
+## Pondération de la significativité (Significance Weighting)
+
+### Problème : fiabilité de la corrélation
+
+La corrélation de Pearson n'est **fiable** que si les deux utilisateurs ont évalué suffisamment d'items en commun (i.e., si $m$ est assez grand). Avec peu d'items communs, la corrélation peut être forte par hasard, ce qui donne un poids excessif à un voisin peu représentatif.
+
+### Solution : pondération de la significativité
+
+On introduit un facteur de pondération $s_{ak}$ qui atténue la corrélation lorsque $m$ est faible :
+
+$$
+w_{ak} = s_{ak} \cdot C_{ak}
+$$
+
+Avec :
+
+$$
+s_{ak} = \begin{cases} 1 & \text{si } m > M \\ \frac{m}{M} & \text{si } m \leq M \end{cases} \quad \text{(par exemple, } M = 50\text{)}
+$$
+
+::: {.callout-note title="Interprétation"}
+Si deux utilisateurs ont évalué plus de 50 items en commun, on fait totalement confiance à la corrélation ($s_{ak} = 1$). En dessous, on réduit proportionnellement le poids. Avec seulement 10 items communs sur $M = 50$, le poids est réduit à $10/50 = 0.2$.
+:::
+
+---
+
+## Prédiction de la note (Predicted Rating)
+
+### Formule de prédiction
+
+Pour prédire la note $\hat{r}_{aj}$ de l'utilisateur actif $u_a$ sur l'item $d_j$, on sélectionne les $K$ utilisateurs les plus proches (voisins, Neighbors) selon leur poids de similarité $w_{ak}$ :
+
+$$
+\hat{r}_{aj} = \bar{r}_a + \frac{\sum_{k=1}^{K} w_{ak}(r_{kj} - \bar{r}_k)}{\sum_{k=1}^{K} w_{ak}}
+$$
+
+### Décomposition de la formule
+
+- $\bar{r}_a$ : la note **moyenne** de l'utilisateur actif $u_a$ sur tous ses items évalués.
+- $r_{kj} - \bar{r}_k$ : la **déviation** de la note de l'utilisateur $u_k$ sur l'item $d_j$ par rapport à sa propre moyenne.
+- $w_{ak}(r_{kj} - \bar{r}_k)$ : contribution pondérée de l'utilisateur $u_k$.
+- La normalisation par $\sum w_{ak}$ garantit que le résultat reste dans une plage cohérente.
+
+::: {.callout-tip title="Intuition de la formule"}
+On part de la note moyenne de $u_a$ comme point de référence, puis on l'ajuste en fonction de ce que les utilisateurs similaires ont pensé de cet item **par rapport à leur propre comportement moyen**. Si un utilisateur similaire a aimé cet item plus que d'habitude, $u_a$ devrait aussi l'aimer plus que d'habitude.
+:::
+
+### Sélection du paramètre $K$
+
+Le nombre de voisins $K$ peut être :
+
+- **Fixé à l'avance** (par exemple, $K = 20$ voisins les plus proches).
+- **Déterminé dynamiquement** par un seuil sur les poids de similarité (on inclut tous les utilisateurs avec $w_{ak} > \theta$).
+
+---
+
+# Analyse du Filtrage Collaboratif
+
+## Avantages du CF
+
+- Crée une **proximité entre utilisateurs** qui peut refléter des goûts complexes difficiles à modéliser par le contenu.
+- Ne nécessite pas d'analyser le contenu des items (applicable à n'importe quel type d'item).
+- Bénéficie d'une **amélioration naturelle** avec le nombre d'utilisateurs et d'évaluations.
+
+## Limitations du CF
+
+Le CF souffre de plusieurs problèmes structurels importants.
+
+### Démarrage à froid (Cold Start)
+
+- Pour calculer les $w_{ak}$, il faut que les utilisateurs aient évalué des items. Un **nouvel utilisateur** sans historique ne peut pas être comparé aux autres.
+- De même, pour calculer la note moyenne $\bar{r}_a$, il faut une utilisation initiale du système.
+- **Conséquence** : le système est peu utile pour les nouveaux arrivants.
+
+### Premier évaluateur (First Rater)
+
+- Le CF ne peut **pas recommander un item qui n'a jamais été évalué** par personne.
+- Les items nouveaux ou rares (outliers) ne bénéficient d'aucune recommandation CF.
+
+### Dispersion (Sparsity)
+
+- Lorsque le catalogue d'items est très large, la **matrice utilisateurs × items est creuse** (sparse) : la plupart des cases sont vides.
+- Il est alors difficile de trouver des pairs d'utilisateurs ayant évalué suffisamment d'items en commun.
+- **Conséquence** : les corrélations sont peu fiables et les prédictions peu précises.
+- Ce problème nécessite un nombre approprié d'utilisateurs actifs.
+
+### Biais de popularité (Popularity Bias)
+
+- Le CF tend à recommander des items **populaires** (évalués par beaucoup d'utilisateurs).
+- Il ne peut pas recommander des items à un utilisateur avec des goûts très atypiques ($m = 0$ pour tous ses voisins potentiels).
+- Les niches et les items rares sont systématiquement sous-représentés.
+
+::: {.callout-warning title="Résumé des limitations du CF"}
+| Problème | Description |
+|----------|-------------|
+| Cold Start | Nouveau utilisateur sans historique |
+| First Rater | Item jamais évalué |
+| Sparsity | Trop peu d'évaluations communes |
+| Popularity Bias | Favorise les items populaires |
+:::
+
+---
+
+## Complément par approche basée sur le contenu
+
+### Approche contenu (Content-Based)
+
+Pour pallier les limitations du CF, on peut combiner avec une approche **basée sur le contenu** (Content-Based). Dans cette approche, on modélise directement le contenu des items et on identifie les co-occurrences dans les préférences.
+
+- Outils utilisés : apprentissage automatique (Machine Learning), classification (Classification), regroupement (Clustering).
+- Un **profil utilisateur typique** est modélisé comme un **classifieur** : "cet utilisateur aime les items qui possèdent telles caractéristiques".
+
+### Avantages de l'approche contenu par rapport au CF pur
+
+- **Pas de Cold Start ni de Sparsity** : la recommandation repose sur les caractéristiques de l'item, indépendamment du nombre d'évaluations.
+- **Pas de biais de popularité** : un item peut être recommandé indépendamment du nombre d'utilisateurs l'ayant évalué.
+- **Explicabilité** : on peut identifier quelles caractéristiques justifient la recommandation (par sélection de features ou extraction de règles).
+
+### Limitations héritées de l'IR et du ML
+
+L'approche content-based hérite cependant des problèmes classiques :
+
+- **Choix des caractéristiques** : quelles features utiliser pour représenter les items ?
+- **Volume de données d'entraînement** : l'apprentissage d'un bon classifieur requiert de nombreux exemples.
+- **Sur-apprentissage et généralisation** (Overfitting and Generalization) : le modèle peut s'adapter trop précisément aux données d'entraînement et mal généraliser aux nouveaux items.
+
+::: {.callout-tip title="Systèmes hybrides"}
+En pratique, les systèmes de recommandation modernes combinent les deux approches (**systèmes hybrides**) pour bénéficier des avantages de chacune et compenser leurs limitations respectives. Par exemple, utiliser le contenu pour les nouveaux items (Cold Start) et le CF pour les utilisateurs ayant suffisamment d'historique.
+:::
+
+---
+
+# Synthèse Générale
+
+## Retour de pertinence actif (Active Relevance Feedback)
+
+Le RF actif est utilisé pour aider l'utilisateur à **construire des requêtes complexes** de manière incrémentale.
+
+Points clés :
+
+- Le système accepte des évaluations positives, négatives et neutres pour modifier la **fonction de décision de pertinence**.
+- La **formule de Rocchio** dans VIR peut être rapprochée de l'entraînement du Perceptron et analysée en termes probabilistes dans le modèle BIR.
+- Le **BIR dispose d'un mécanisme RF intégré** via la mise à jour des probabilités $P(t_i | q, R)$ et $P(t_i | q, \bar{R})$.
+
+## Feedback passif et filtrage collaboratif (Passive Feedback)
+
+Le feedback passif est propagé via le CF pour **prédire le comportement d'un utilisateur** à partir de l'historique des autres.
+
+Points clés :
+
+- Uniquement basé sur les **utilisateurs**, pas sur le contenu des items.
+- Repose sur la **corrélation de Pearson** pour mesurer la similarité inter-utilisateurs.
+- La prédiction est une **déviation pondérée** par rapport à la note moyenne de l'utilisateur actif.
+- Peut être complété par des approches **basées sur le contenu** (ML) pour combler les limitations structurelles.
+
+::: {.callout-note title="À retenir — Vue d'ensemble du retour utilisateur"}
+| Approche | Type | Mécanisme | Basé sur |
+|----------|------|-----------|---------|
+| RF actif (Rocchio) | Actif | Modification de la requête vectorielle | Contenu + jugements |
+| RF probabiliste (BIR) | Actif | Mise à jour des probabilités $p_i$, $q_i$ | Contenu + jugements |
+| Filtrage collaboratif | Passif | Prédiction par similarité inter-utilisateurs | Utilisateurs uniquement |
+| Content-based | Passif | Classification par caractéristiques | Contenu uniquement |
 :::

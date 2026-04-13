@@ -83,6 +83,22 @@ website:
                 href: ch7r.qmd
               - text: "Quiz"
                 href: ch7q.qmd
+          - section: "Feedback"
+            contents:
+              - text: "Détails"
+                href: ch8.qmd
+              - text: "Synthèse"
+                href: ch8r.qmd
+              - text: "Quiz"
+                href: ch8q.qmd
+          - section: "Low Rank Model"
+            contents:
+              - text: "Détails"
+                href: ch9.qmd
+              - text: "Synthèse"
+                href: ch9r.qmd
+              - text: "Quiz"
+                href: ch9q.qmd
       - section: "Examen"
         contents:
           - section: "chapitre 1"
