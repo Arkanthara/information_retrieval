@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ch6q – Information Retrieval</title>
+<title>Factorisation Matricielle et Modèles de Rang Faible (Low Rank Models) – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4029,6 +4029,145 @@ vertical-align: -.125em;
   }
 }</script>
 
+  <script>/*
+ * Polyfill service v3.111.0
+ * Disable minification (remove `.min` from URL path) for more info
+*/
+
+(function(self, undefined) {!function(t){"use strict";function e(t){switch(typeof t){case"undefined":return"undefined";case"boolean":return"boolean";case"number":return"number";case"string":return"string";default:return null===t?"null":"object"}}function r(t){return Object.prototype.toString.call(t).replace(/^\[object *|\]$/g,"")}function n(t){return"function"==typeof t}function o(t){if(null===t||t===B)throw TypeError();return Object(t)}function i(t){return t>>0}function f(t){return t>>>0}function u(e){if(!("TYPED_ARRAY_POLYFILL_NO_ARRAY_ACCESSORS"in t)){if(e.length>N)throw RangeError("Array too large for polyfill");var r;for(r=0;r<e.length;r+=1)!function n(t){try{Object.defineProperty(e,t,{get:function(){return e._getter(t)},set:function(r){e._setter(t,r)},enumerable:!0,configurable:!1})}catch(r){}}(r)}}function a(t,e){var r=32-e;return t<<r>>r}function h(t,e){var r=32-e;return t<<r>>>r}function y(t){return[255&t]}function s(t){return a(t[0],8)}function l(t){return[255&t]}function p(t){return h(t[0],8)}function c(t){return t=x(Number(t)),[t<0?0:t>255?255:255&t]}function b(t){return[255&t,t>>8&255]}function g(t){return a(t[1]<<8|t[0],16)}function E(t){return[255&t,t>>8&255]}function v(t){return h(t[1]<<8|t[0],16)}function _(t){return[255&t,t>>8&255,t>>16&255,t>>24&255]}function O(t){return a(t[3]<<24|t[2]<<16|t[1]<<8|t[0],32)}function d(t){return[255&t,t>>8&255,t>>16&255,t>>24&255]}function j(t){return h(t[3]<<24|t[2]<<16|t[1]<<8|t[0],32)}function P(t,e,r){function n(t){var e=m(t),r=t-e;return r<.5?e:r>.5?e+1:e%2?e+1:e}var o,i,f,u=(1<<e-1)-1;if(t!==t)i=(1<<e)-1,f=F(2,r-1),o=0;else if(t===Infinity||t===-Infinity)i=(1<<e)-1,f=0,o=t<0?1:0;else if(0===t)i=0,f=0,o=1/t==-Infinity?1:0;else if(o=t<0,(t=M(t))>=F(2,1-u)){i=Y(m(I(t)/S),1023);var a=t/F(2,i);a<1&&(i-=1,a*=2),a>=2&&(i+=1,a/=2);var h=F(2,r);f=n(a*h)-h,i+=u,f/h>=1&&(i+=1,f=0),i>2*u&&(i=(1<<e)-1,f=0)}else i=0,f=n(t/F(2,1-u-r));var y,s=[];for(y=r;y;y-=1)s.push(f%2?1:0),f=m(f/2);for(y=e;y;y-=1)s.push(i%2?1:0),i=m(i/2);s.push(o?1:0),s.reverse();for(var l=s.join(""),p=[];l.length;)p.unshift(parseInt(l.substring(0,8),2)),l=l.substring(8);return p}function T(t,e,r){var n,o,i,f,u,a,h,y,s=[];for(n=0;n<t.length;++n)for(i=t[n],o=8;o;o-=1)s.push(i%2?1:0),i>>=1;return s.reverse(),f=s.join(""),u=(1<<e-1)-1,a=parseInt(f.substring(0,1),2)?-1:1,h=parseInt(f.substring(1,1+e),2),y=parseInt(f.substring(1+e),2),h===(1<<e)-1?0!==y?NaN:a*Infinity:h>0?a*F(2,h-u)*(1+y/F(2,r)):0!==y?a*F(2,-(u-1))*(y/F(2,r)):a<0?-0:0}function w(t){return T(t,11,52)}function A(t){return P(t,11,52)}function L(t){return T(t,8,23)}function R(t){return P(t,8,23)}var B=void 0,N=1e5,S=Math.LN2,M=Math.abs,m=Math.floor,I=Math.log,U=Math.max,Y=Math.min,F=Math.pow,x=Math.round;!function(){var t=Object.defineProperty,e=!function(){try{return Object.defineProperty({},"x",{})}catch(t){return!1}}();t&&!e||(Object.defineProperty=function(e,r,n){if(t)try{return t(e,r,n)}catch(o){}if(e!==Object(e))throw TypeError("Object.defineProperty called on non-object");return Object.prototype.__defineGetter__&&"get"in n&&Object.prototype.__defineGetter__.call(e,r,n.get),Object.prototype.__defineSetter__&&"set"in n&&Object.prototype.__defineSetter__.call(e,r,n.set),"value"in n&&(e[r]=n.value),e})}(),function(){function a(t){if((t=i(t))<0)throw RangeError("ArrayBuffer size is not a small enough positive integer.");Object.defineProperty(this,"byteLength",{value:t}),Object.defineProperty(this,"_bytes",{value:Array(t)});for(var e=0;e<t;e+=1)this._bytes[e]=0}function h(){if(!arguments.length||"object"!=typeof arguments[0])return function(t){if((t=i(t))<0)throw RangeError("length is not a small enough positive integer.");Object.defineProperty(this,"length",{value:t}),Object.defineProperty(this,"byteLength",{value:t*this.BYTES_PER_ELEMENT}),Object.defineProperty(this,"buffer",{value:new a(this.byteLength)}),Object.defineProperty(this,"byteOffset",{value:0})}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&arguments[0]instanceof h)return function(t){if(this.constructor!==t.constructor)throw TypeError();var e=t.length*this.BYTES_PER_ELEMENT;Object.defineProperty(this,"buffer",{value:new a(e)}),Object.defineProperty(this,"byteLength",{value:e}),Object.defineProperty(this,"byteOffset",{value:0}),Object.defineProperty(this,"length",{value:t.length});for(var r=0;r<this.length;r+=1)this._setter(r,t._getter(r))}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&!(arguments[0]instanceof h)&&!(arguments[0]instanceof a||"ArrayBuffer"===r(arguments[0])))return function(t){var e=t.length*this.BYTES_PER_ELEMENT;Object.defineProperty(this,"buffer",{value:new a(e)}),Object.defineProperty(this,"byteLength",{value:e}),Object.defineProperty(this,"byteOffset",{value:0}),Object.defineProperty(this,"length",{value:t.length});for(var r=0;r<this.length;r+=1){var n=t[r];this._setter(r,Number(n))}}.apply(this,arguments);if(arguments.length>=1&&"object"===e(arguments[0])&&(arguments[0]instanceof a||"ArrayBuffer"===r(arguments[0])))return function(t,e,r){if((e=f(e))>t.byteLength)throw RangeError("byteOffset out of range");if(e%this.BYTES_PER_ELEMENT)throw RangeError("buffer length minus the byteOffset is not a multiple of the element size.");if(r===B){var n=t.byteLength-e;if(n%this.BYTES_PER_ELEMENT)throw RangeError("length of buffer minus byteOffset not a multiple of the element size");r=n/this.BYTES_PER_ELEMENT}else r=f(r),n=r*this.BYTES_PER_ELEMENT;if(e+n>t.byteLength)throw RangeError("byteOffset and length reference an area beyond the end of the buffer");Object.defineProperty(this,"buffer",{value:t}),Object.defineProperty(this,"byteLength",{value:n}),Object.defineProperty(this,"byteOffset",{value:e}),Object.defineProperty(this,"length",{value:r})}.apply(this,arguments);throw TypeError()}function P(t,e,r){var n=function(){Object.defineProperty(this,"constructor",{value:n}),h.apply(this,arguments),u(this)};"__proto__"in n?n.__proto__=h:(n.from=h.from,n.of=h.of),n.BYTES_PER_ELEMENT=t;var o=function(){};return o.prototype=T,n.prototype=new o,Object.defineProperty(n.prototype,"BYTES_PER_ELEMENT",{value:t}),Object.defineProperty(n.prototype,"_pack",{value:e}),Object.defineProperty(n.prototype,"_unpack",{value:r}),n}t.ArrayBuffer=t.ArrayBuffer||a,Object.defineProperty(h,"from",{value:function(t){return new this(t)}}),Object.defineProperty(h,"of",{value:function(){return new this(arguments)}});var T={};h.prototype=T,Object.defineProperty(h.prototype,"_getter",{value:function(t){if(arguments.length<1)throw SyntaxError("Not enough arguments");if((t=f(t))>=this.length)return B;var e,r,n=[];for(e=0,r=this.byteOffset+t*this.BYTES_PER_ELEMENT;e<this.BYTES_PER_ELEMENT;e+=1,r+=1)n.push(this.buffer._bytes[r]);return this._unpack(n)}}),Object.defineProperty(h.prototype,"get",{value:h.prototype._getter}),Object.defineProperty(h.prototype,"_setter",{value:function(t,e){if(arguments.length<2)throw SyntaxError("Not enough arguments");if(!((t=f(t))>=this.length)){var r,n,o=this._pack(e);for(r=0,n=this.byteOffset+t*this.BYTES_PER_ELEMENT;r<this.BYTES_PER_ELEMENT;r+=1,n+=1)this.buffer._bytes[n]=o[r]}}}),Object.defineProperty(h.prototype,"constructor",{value:h}),Object.defineProperty(h.prototype,"copyWithin",{value:function(t,e){var r=arguments[2],n=o(this),u=n.length,a=f(u);a=U(a,0);var h,y=i(t);h=y<0?U(a+y,0):Y(y,a);var s,l=i(e);s=l<0?U(a+l,0):Y(l,a);var p;p=r===B?a:i(r);var c;c=p<0?U(a+p,0):Y(p,a);var b,g=Y(c-s,a-h);for(s<h&&h<s+g?(b=-1,s=s+g-1,h=h+g-1):b=1;g>0;)n._setter(h,n._getter(s)),s+=b,h+=b,g-=1;return n}}),Object.defineProperty(h.prototype,"every",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)if(!t.call(o,e._getter(i),i,e))return!1;return!0}}),Object.defineProperty(h.prototype,"fill",{value:function(t){var e=arguments[1],r=arguments[2],n=o(this),u=n.length,a=f(u);a=U(a,0);var h,y=i(e);h=y<0?U(a+y,0):Y(y,a);var s;s=r===B?a:i(r);var l;for(l=s<0?U(a+s,0):Y(s,a);h<l;)n._setter(h,t),h+=1;return n}}),Object.defineProperty(h.prototype,"filter",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=[],i=arguments[1],u=0;u<r;u++){var a=e._getter(u);t.call(i,a,u,e)&&o.push(a)}return new this.constructor(o)}}),Object.defineProperty(h.prototype,"find",{value:function(t){var e=o(this),r=e.length,i=f(r);if(!n(t))throw TypeError();for(var u=arguments.length>1?arguments[1]:B,a=0;a<i;){var h=e._getter(a),y=t.call(u,h,a,e);if(Boolean(y))return h;++a}return B}}),Object.defineProperty(h.prototype,"findIndex",{value:function(t){var e=o(this),r=e.length,i=f(r);if(!n(t))throw TypeError();for(var u=arguments.length>1?arguments[1]:B,a=0;a<i;){var h=e._getter(a),y=t.call(u,h,a,e);if(Boolean(y))return a;++a}return-1}}),Object.defineProperty(h.prototype,"forEach",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)t.call(o,e._getter(i),i,e)}}),Object.defineProperty(h.prototype,"indexOf",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(0===r)return-1;var n=0;if(arguments.length>0&&(n=Number(arguments[1]),n!==n?n=0:0!==n&&n!==1/0&&n!==-1/0&&(n=(n>0||-1)*m(M(n)))),n>=r)return-1;for(var o=n>=0?n:U(r-M(n),0);o<r;o++)if(e._getter(o)===t)return o;return-1}}),Object.defineProperty(h.prototype,"join",{value:function(t){if(this===B||null===this)throw TypeError();for(var e=Object(this),r=f(e.length),n=Array(r),o=0;o<r;++o)n[o]=e._getter(o);return n.join(t===B?",":t)}}),Object.defineProperty(h.prototype,"lastIndexOf",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(0===r)return-1;var n=r;arguments.length>1&&(n=Number(arguments[1]),n!==n?n=0:0!==n&&n!==1/0&&n!==-1/0&&(n=(n>0||-1)*m(M(n))));for(var o=n>=0?Y(n,r-1):r-M(n);o>=0;o--)if(e._getter(o)===t)return o;return-1}}),Object.defineProperty(h.prototype,"map",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();var o=[];o.length=r;for(var i=arguments[1],u=0;u<r;u++)o[u]=t.call(i,e._getter(u),u,e);return new this.constructor(o)}}),Object.defineProperty(h.prototype,"reduce",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();if(0===r&&1===arguments.length)throw TypeError();var o,i=0;for(o=arguments.length>=2?arguments[1]:e._getter(i++);i<r;)o=t.call(B,o,e._getter(i),i,e),i++;return o}}),Object.defineProperty(h.prototype,"reduceRight",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();if(0===r&&1===arguments.length)throw TypeError();var o,i=r-1;for(o=arguments.length>=2?arguments[1]:e._getter(i--);i>=0;)o=t.call(B,o,e._getter(i),i,e),i--;return o}}),Object.defineProperty(h.prototype,"reverse",{value:function(){if(this===B||null===this)throw TypeError();for(var t=Object(this),e=f(t.length),r=m(e/2),n=0,o=e-1;n<r;++n,--o){var i=t._getter(n);t._setter(n,t._getter(o)),t._setter(o,i)}return t}}),Object.defineProperty(h.prototype,"set",{value:function(t,e){if(arguments.length<1)throw SyntaxError("Not enough arguments");var r,n,o,i,u,a,h,y,s,l;if("object"==typeof arguments[0]&&arguments[0].constructor===this.constructor){if(r=arguments[0],(o=f(arguments[1]))+r.length>this.length)throw RangeError("Offset plus length of array is out of range");if(y=this.byteOffset+o*this.BYTES_PER_ELEMENT,s=r.length*this.BYTES_PER_ELEMENT,r.buffer===this.buffer){for(l=[],u=0,a=r.byteOffset;u<s;u+=1,a+=1)l[u]=r.buffer._bytes[a];for(u=0,h=y;u<s;u+=1,h+=1)this.buffer._bytes[h]=l[u]}else for(u=0,a=r.byteOffset,h=y;u<s;u+=1,a+=1,h+=1)this.buffer._bytes[h]=r.buffer._bytes[a]}else{if("object"!=typeof arguments[0]||"undefined"==typeof arguments[0].length)throw TypeError("Unexpected argument type(s)");if(n=arguments[0],i=f(n.length),(o=f(arguments[1]))+i>this.length)throw RangeError("Offset plus length of array is out of range");for(u=0;u<i;u+=1)a=n[u],this._setter(o+u,Number(a))}}}),Object.defineProperty(h.prototype,"slice",{value:function(t,e){for(var r=o(this),n=r.length,u=f(n),a=i(t),h=a<0?U(u+a,0):Y(a,u),y=e===B?u:i(e),s=y<0?U(u+y,0):Y(y,u),l=s-h,p=r.constructor,c=new p(l),b=0;h<s;){var g=r._getter(h);c._setter(b,g),++h,++b}return c}}),Object.defineProperty(h.prototype,"some",{value:function(t){if(this===B||null===this)throw TypeError();var e=Object(this),r=f(e.length);if(!n(t))throw TypeError();for(var o=arguments[1],i=0;i<r;i++)if(t.call(o,e._getter(i),i,e))return!0;return!1}}),Object.defineProperty(h.prototype,"sort",{value:function(t){function e(e,r){return e!==e&&r!==r?0:e!==e?1:r!==r?-1:t!==B?t(e,r):e<r?-1:e>r?1:0}if(this===B||null===this)throw TypeError();for(var r=Object(this),n=f(r.length),o=Array(n),i=0;i<n;++i)o[i]=r._getter(i);for(o.sort(e),i=0;i<n;++i)r._setter(i,o[i]);return r}}),Object.defineProperty(h.prototype,"subarray",{value:function(t,e){function r(t,e,r){return t<e?e:t>r?r:t}t=i(t),e=i(e),arguments.length<1&&(t=0),arguments.length<2&&(e=this.length),t<0&&(t=this.length+t),e<0&&(e=this.length+e),t=r(t,0,this.length),e=r(e,0,this.length);var n=e-t;return n<0&&(n=0),new this.constructor(this.buffer,this.byteOffset+t*this.BYTES_PER_ELEMENT,n)}});var N=P(1,y,s),S=P(1,l,p),I=P(1,c,p),F=P(2,b,g),x=P(2,E,v),k=P(4,_,O),C=P(4,d,j),z=P(4,R,L),D=P(8,A,w);t.Int8Array=t.Int8Array||N,t.Uint8Array=t.Uint8Array||S,t.Uint8ClampedArray=t.Uint8ClampedArray||I,t.Int16Array=t.Int16Array||F,t.Uint16Array=t.Uint16Array||x,t.Int32Array=t.Int32Array||k,t.Uint32Array=t.Uint32Array||C,t.Float32Array=t.Float32Array||z,t.Float64Array=t.Float64Array||D}(),function(){function e(t,e){return n(t.get)?t.get(e):t[e]}function o(t,e,n){if(!(t instanceof ArrayBuffer||"ArrayBuffer"===r(t)))throw TypeError();if((e=f(e))>t.byteLength)throw RangeError("byteOffset out of range");if(n=n===B?t.byteLength-e:f(n),e+n>t.byteLength)throw RangeError("byteOffset and length reference an area beyond the end of the buffer");Object.defineProperty(this,"buffer",{value:t}),Object.defineProperty(this,"byteLength",{value:n}),Object.defineProperty(this,"byteOffset",{value:e})}function i(t){return function r(n,o){if((n=f(n))+t.BYTES_PER_ELEMENT>this.byteLength)throw RangeError("Array index out of range");n+=this.byteOffset;for(var i=new Uint8Array(this.buffer,n,t.BYTES_PER_ELEMENT),u=[],h=0;h<t.BYTES_PER_ELEMENT;h+=1)u.push(e(i,h));return Boolean(o)===Boolean(a)&&u.reverse(),e(new t(new Uint8Array(u).buffer),0)}}function u(t){return function r(n,o,i){if((n=f(n))+t.BYTES_PER_ELEMENT>this.byteLength)throw RangeError("Array index out of range");var u,h,y=new t([o]),s=new Uint8Array(y.buffer),l=[];for(u=0;u<t.BYTES_PER_ELEMENT;u+=1)l.push(e(s,u));Boolean(i)===Boolean(a)&&l.reverse(),h=new Uint8Array(this.buffer,n,t.BYTES_PER_ELEMENT),h.set(l)}}var a=function(){var t=new Uint16Array([4660]);return 18===e(new Uint8Array(t.buffer),0)}();Object.defineProperty(o.prototype,"getUint8",{value:i(Uint8Array)}),Object.defineProperty(o.prototype,"getInt8",{value:i(Int8Array)}),Object.defineProperty(o.prototype,"getUint16",{value:i(Uint16Array)}),Object.defineProperty(o.prototype,"getInt16",{value:i(Int16Array)}),Object.defineProperty(o.prototype,"getUint32",{value:i(Uint32Array)}),Object.defineProperty(o.prototype,"getInt32",{value:i(Int32Array)}),Object.defineProperty(o.prototype,"getFloat32",{value:i(Float32Array)}),Object.defineProperty(o.prototype,"getFloat64",{value:i(Float64Array)}),Object.defineProperty(o.prototype,"setUint8",{value:u(Uint8Array)}),Object.defineProperty(o.prototype,"setInt8",{value:u(Int8Array)}),Object.defineProperty(o.prototype,"setUint16",{value:u(Uint16Array)}),Object.defineProperty(o.prototype,"setInt16",{value:u(Int16Array)}),Object.defineProperty(o.prototype,"setUint32",{value:u(Uint32Array)}),Object.defineProperty(o.prototype,"setInt32",{value:u(Int32Array)}),Object.defineProperty(o.prototype,"setFloat32",{value:u(Float32Array)}),Object.defineProperty(o.prototype,"setFloat64",{value:u(Float64Array)}),t.DataView=t.DataView||o}()}(self);if (!("defineProperty"in Object&&function(){try{var e={}
+return Object.defineProperty(e,"test",{value:42}),!0}catch(t){return!1}}()
+)) {!function(e){var t=Object.prototype.hasOwnProperty.call(Object.prototype,"__defineGetter__"),r="A property cannot both have accessors and be writable or have a value";Object.defineProperty=function n(o,i,f){if(e&&(o===window||o===document||o===Element.prototype||o instanceof Element))return e(o,i,f);if(null===o||!(o instanceof Object||"object"==typeof o))throw new TypeError("Object.defineProperty called on non-object");if(!(f instanceof Object))throw new TypeError("Property description must be an object");var c=String(i),a="value"in f||"writable"in f,p="get"in f&&typeof f.get,s="set"in f&&typeof f.set;if(p){if(p===undefined)return o;if("function"!==p)throw new TypeError("Getter must be a function");if(!t)throw new TypeError("Getters & setters cannot be defined on this javascript engine");if(a)throw new TypeError(r);Object.__defineGetter__.call(o,c,f.get)}else o[c]=f.value;if(s){if(s===undefined)return o;if("function"!==s)throw new TypeError("Setter must be a function");if(!t)throw new TypeError("Getters & setters cannot be defined on this javascript engine");if(a)throw new TypeError(r);Object.__defineSetter__.call(o,c,f.set)}return"value"in f&&(o[c]=f.value),o}}(Object.defineProperty);}if (!("name"in Function.prototype
+)) {!function(){var n=/^\s*function\s+([^(\s]*)\s*/,t=Function,e=t.prototype,r=e.constructor,o=function(o){var c,u;return o===t||o===r?u="Function":o!==e&&(c=(""+o).match(n),u=c&&c[1]),u||""};Object.defineProperty(e,"name",{get:function c(){var n=this,t=o(n);return n!==e&&Object.defineProperty(n,"name",{value:t,configurable:!0}),t},configurable:!0})}();}if (!("EPSILON"in Number
+)) {Object.defineProperty(Number,"EPSILON",{enumerable:!1,configurable:!1,writable:!1,value:Math.pow(2,-52)});}if (!("MAX_SAFE_INTEGER"in Number
+)) {Object.defineProperty(Number,"MAX_SAFE_INTEGER",{enumerable:!1,configurable:!1,writable:!1,value:Math.pow(2,53)-1});}if (!("MIN_SAFE_INTEGER"in Number
+)) {Object.defineProperty(Number,"MIN_SAFE_INTEGER",{enumerable:!1,configurable:!1,writable:!1,value:-(Math.pow(2,53)-1)});}function ArrayCreate(r){if(1/r==-Infinity&&(r=0),r>Math.pow(2,32)-1)throw new RangeError("Invalid array length");var n=[];return n.length=r,n}function Call(t,l){var n=arguments.length>2?arguments[2]:[];if(!1===IsCallable(t))throw new TypeError(Object.prototype.toString.call(t)+"is not a function.");return t.apply(l,n)}function CreateDataProperty(e,r,t){var a={value:t,writable:!0,enumerable:!0,configurable:!0};try{return Object.defineProperty(e,r,a),!0}catch(n){return!1}}function CreateDataPropertyOrThrow(t,r,o){var e=CreateDataProperty(t,r,o);if(!e)throw new TypeError("Cannot assign value `"+Object.prototype.toString.call(o)+"` to property `"+Object.prototype.toString.call(r)+"` on object `"+Object.prototype.toString.call(t)+"`");return e}function CreateMethodProperty(e,r,t){var a={value:t,writable:!0,enumerable:!1,configurable:!0};Object.defineProperty(e,r,a)}if (!("acosh"in Math
+)) {CreateMethodProperty(Math,"acosh",function t(a){return isNaN(a)?NaN:a<1?NaN:1===a?0:a===Infinity?Infinity:Math.log(a+Math.sqrt(a*a-1))});}if (!("asinh"in Math
+)) {CreateMethodProperty(Math,"asinh",function n(i){return isNaN(i)?NaN:0===i&&1/i===Infinity?0:0===i&&1/i==-Infinity?-0:i===Infinity?Infinity:i===-Infinity?-Infinity:Math.log(i+Math.sqrt(i*i+1))});}if (!("atanh"in Math
+)) {CreateMethodProperty(Math,"atanh",function n(t){return isNaN(t)?NaN:t<-1?NaN:t>1?NaN:-1===t?-Infinity:1===t?Infinity:0===t&&1/t===Infinity?0:0===t&&1/t==-Infinity?-0:Math.log((1+t)/(1-t))/2});}if (!("cbrt"in Math
+)) {CreateMethodProperty(Math,"cbrt",function n(t){if(isNaN(t))return NaN;if(0===t&&1/t===Infinity)return 0;if(0===t&&1/t==-Infinity)return-0;if(t===Infinity)return Infinity;if(t===-Infinity)return-Infinity;var i=Math.pow(Math.abs(t),1/3);return t<0?-i:i});}if (!("cosh"in Math
+)) {CreateMethodProperty(Math,"cosh",function n(t){if(isNaN(t))return NaN;if(0===t&&1/t===Infinity)return 1;if(0===t&&1/t==-Infinity)return 1;if(t===Infinity)return Infinity;if(t===-Infinity)return Infinity;if((t=Math.abs(t))>709){var i=Math.exp(.5*t);return i/2*i}return((i=Math.exp(t))+1/i)/2});}if (!("expm1"in Math
+)) {CreateMethodProperty(Math,"expm1",function n(i){return isNaN(i)?NaN:0===i&&1/i===Infinity?0:0===i&&1/i==-Infinity?-0:i===Infinity?Infinity:i===-Infinity?-1:i>-1e-6&&i<1e-6?i+i*i/2:Math.exp(i)-1});}if (!("fround"in Math
+)) {CreateMethodProperty(Math,"fround",function(n){return isNaN(n)?NaN:1/n==+Infinity||1/n==-Infinity||n===+Infinity||n===-Infinity?n:new Float32Array([n])[0]});}if (!("hypot"in Math
+)) {CreateMethodProperty(Math,"hypot",function t(n,r){if(0===arguments.length)return 0;for(var i=0,e=0,a=0;a<arguments.length;++a){if(arguments[a]===Infinity)return Infinity;if(arguments[a]===-Infinity)return Infinity;var f=Math.abs(Number(arguments[a]));f>e&&(i*=Math.pow(e/f,2),e=f),0===f&&0===e||(i+=Math.pow(f/e,2))}return e*Math.sqrt(i)});}if (!("log10"in Math
+)) {CreateMethodProperty(Math,"log10",function t(e){return Math.log(e)/Math.LN10});}if (!("log1p"in Math
+)) {CreateMethodProperty(Math,"log1p",function r(t){if(-1<(t=Number(t))&&t<1){for(var o=t,e=2;e<=300;e++)o+=Math.pow(-1,e-1)*Math.pow(t,e)/e;return o}return Math.log(1+t)});}if (!("log2"in Math
+)) {CreateMethodProperty(Math,"log2",function t(e){return Math.log(e)/Math.LN2});}if (!("sign"in Math
+)) {CreateMethodProperty(Math,"sign",function i(n){return n=Number(n),isNaN(n)?NaN:1/n==-Infinity?-0:1/n===Infinity?0:n<0?-1:n>0?1:void 0});}if (!("sinh"in Math
+)) {CreateMethodProperty(Math,"sinh",function r(t){var a=t<0?-1:1,e=Math.abs(t);if(e<22){if(e<Math.pow(2,-28))return t;var h=Math.exp(e)-1;return e<1?a*(2*h-h*h/(h+1))/2:a*(h+h/(h+1))/2}if(e<709.7822265625)return a*Math.exp(e)/2;var n=Math.exp(.5*e);return(h=a*n/2)*n});}if (!("tanh"in Math
+)) {CreateMethodProperty(Math,"tanh",function t(n){var e;return n===Infinity?1:n===-Infinity?-1:((e=Math.exp(2*n))-1)/(e+1)});}if (!("trunc"in Math
+)) {CreateMethodProperty(Math,"trunc",function t(r){return r<0?Math.ceil(r):Math.floor(r)});}if (!("freeze"in Object
+)) {CreateMethodProperty(Object,"freeze",function e(r){return r});}if (!("getPrototypeOf"in Object
+)) {CreateMethodProperty(Object,"getPrototypeOf",function t(o){if(o!==Object(o))throw new TypeError("Object.getPrototypeOf called on non-object");var e=o.__proto__;return e||null===e?e:"function"==typeof o.constructor&&o instanceof o.constructor?o.constructor.prototype:o instanceof Object?Object.prototype:null});}if (!("keys"in Object&&function(){return 2===Object.keys(arguments).length}(1,2)&&function(){try{return Object.keys(""),!0}catch(t){return!1}}()
+)) {CreateMethodProperty(Object,"keys",function(){"use strict";function t(){var t;try{t=Object.create({})}catch(r){return!0}return o.call(t,"__proto__")}function r(t){var r=n.call(t),e="[object Arguments]"===r;return e||(e="[object Array]"!==r&&null!==t&&"object"==typeof t&&"number"==typeof t.length&&t.length>=0&&"[object Function]"===n.call(t.callee)),e}var e=Object.prototype.hasOwnProperty,n=Object.prototype.toString,o=Object.prototype.propertyIsEnumerable,c=!o.call({toString:null},"toString"),l=o.call(function(){},"prototype"),i=["toString","toLocaleString","valueOf","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","constructor"],u=function(t){var r=t.constructor;return r&&r.prototype===t},a={$console:!0,$external:!0,$frame:!0,$frameElement:!0,$frames:!0,$innerHeight:!0,$innerWidth:!0,$outerHeight:!0,$outerWidth:!0,$pageXOffset:!0,$pageYOffset:!0,$parent:!0,$scrollLeft:!0,$scrollTop:!0,$scrollX:!0,$scrollY:!0,$self:!0,$webkitIndexedDB:!0,$webkitStorageInfo:!0,$window:!0},f=function(){if("undefined"==typeof window)return!1;for(var t in window)try{if(!a["$"+t]&&e.call(window,t)&&null!==window[t]&&"object"==typeof window[t])try{u(window[t])}catch(r){return!0}}catch(r){return!0}return!1}(),p=function(t){if("undefined"==typeof window||!f)return u(t);try{return u(t)}catch(r){return!1}};return function s(o){var u="[object Function]"===n.call(o),a=r(o),f="[object String]"===n.call(o),s=[];if(o===undefined||null===o)throw new TypeError("Cannot convert undefined or null to object");var y=l&&u;if(f&&o.length>0&&!e.call(o,0))for(var h=0;h<o.length;++h)s.push(String(h));if(a&&o.length>0)for(var g=0;g<o.length;++g)s.push(String(g));else for(var w in o)t()&&"__proto__"===w||y&&"prototype"===w||!e.call(o,w)||s.push(String(w));if(c)for(var d=p(o),$=0;$<i.length;++$)d&&"constructor"===i[$]||!e.call(o,i[$])||s.push(i[$]);return s}}());}function Get(n,t){return n[t]}function HasOwnProperty(r,t){return Object.prototype.hasOwnProperty.call(r,t)}function HasProperty(n,r){return r in n}function IsArray(r){return"[object Array]"===Object.prototype.toString.call(r)}if (!("isArray"in Array
+)) {CreateMethodProperty(Array,"isArray",function r(e){return IsArray(e)});}function IsCallable(n){return"function"==typeof n}if (!("bind"in Function.prototype
+)) {CreateMethodProperty(Function.prototype,"bind",function t(n){var r=Array,o=Object,e=r.prototype,l=function g(){},p=e.slice,a=e.concat,i=e.push,c=Math.max,u=this;if(!IsCallable(u))throw new TypeError("Function.prototype.bind called on incompatible "+u);for(var y,h=p.call(arguments,1),s=function(){if(this instanceof y){var t=u.apply(this,a.call(h,p.call(arguments)));return o(t)===t?t:this}return u.apply(n,a.call(h,p.call(arguments)))},f=c(0,u.length-h.length),b=[],d=0;d<f;d++)i.call(b,"$"+d);return y=Function("binder","return function ("+b.join(",")+"){ return binder.apply(this, arguments); }")(s),u.prototype&&(l.prototype=u.prototype,y.prototype=new l,l.prototype=null),y});}function RequireObjectCoercible(e){if(null===e||e===undefined)throw TypeError(Object.prototype.toString.call(e)+" is not coercible to Object.");return e}function SameValueNonNumber(e,n){return e===n}function ToBoolean(o){return Boolean(o)}function ToNumber(r){return Number(r)}function ToObject(e){if(null===e||e===undefined)throw TypeError();return Object(e)}function GetV(t,e){return ToObject(t)[e]}function GetMethod(e,n){var r=GetV(e,n);if(null===r||r===undefined)return undefined;if(!1===IsCallable(r))throw new TypeError("Method not callable: "+n);return r}function ToUint32(n){var i=Number(n);return isNaN(i)||1/i===Infinity||1/i==-Infinity||i===Infinity||i===-Infinity?0:(i<0?-1:1)*Math.floor(Math.abs(i))>>>0}if (!("clz32"in Math
+)) {CreateMethodProperty(Math,"clz32",function t(r){var e=ToUint32(r);return e?32-e.toString(2).length:32});}if (!("imul"in Math
+)) {CreateMethodProperty(Math,"imul",function t(r,e){var n=ToUint32(r),o=ToUint32(e),i=n>>>16&65535,a=65535&n,u=o>>>16&65535,h=65535&o;return a*h+(i*h+a*u<<16>>>0)|0});}function Type(e){switch(typeof e){case"undefined":return"undefined";case"boolean":return"boolean";case"number":return"number";case"string":return"string";case"symbol":return"symbol";default:return null===e?"null":"Symbol"in self&&(e instanceof self.Symbol||e.constructor===self.Symbol)?"symbol":"object"}}if (!("isFinite"in Number
+)) {!function(){var e=self;CreateMethodProperty(Number,"isFinite",function i(n){return"number"===Type(n)&&e.isFinite(n)})}();}if (!("isNaN"in Number
+)) {!function(){var e=self;CreateMethodProperty(Number,"isNaN",function r(n){return"number"===Type(n)&&!!e.isNaN(n)})}();}if (!("isExtensible"in Object
+)) {!function(e){CreateMethodProperty(Object,"isExtensible",function t(n){return"object"===Type(n)&&(!e||e(n))})}(Object.isExtensible);}if (!("seal"in Object&&function(){try{return Object.seal("1"),!0}catch(t){return!1}}()
+)) {!function(e){CreateMethodProperty(Object,"seal",function t(c){return"object"===Type(c)?c:e?e(c):c})}(Object.seal);}if (!("flags"in RegExp.prototype
+)) {Object.defineProperty(RegExp.prototype,"flags",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!==Type(e))throw new TypeError("Method called on incompatible type: must be an object.");var o="";return ToBoolean(Get(e,"global"))&&(o+="g"),ToBoolean(Get(e,"ignoreCase"))&&(o+="i"),ToBoolean(Get(e,"multiline"))&&(o+="m"),ToBoolean(Get(e,"unicode"))&&(o+="u"),ToBoolean(Get(e,"sticky"))&&(o+="y"),o}});}function CreateIterResultObject(e,r){if("boolean"!==Type(r))throw new Error;var t={};return CreateDataProperty(t,"value",e),CreateDataProperty(t,"done",r),t}function GetPrototypeFromConstructor(t,o){var r=Get(t,"prototype");return"object"!==Type(r)&&(r=o),r}function IsConstructor(t){return"object"===Type(t)&&("function"==typeof t&&!!t.prototype)}function IsRegExp(e){if("object"!==Type(e))return!1;var n="Symbol"in self&&"match"in self.Symbol?Get(e,self.Symbol.match):undefined;if(n!==undefined)return ToBoolean(n);try{var t=e.lastIndex;return e.lastIndex=0,RegExp.prototype.exec.call(e),!0}catch(l){}finally{e.lastIndex=t}return!1}function IteratorClose(r,t){if("object"!==Type(r["[[Iterator]]"]))throw new Error(Object.prototype.toString.call(r["[[Iterator]]"])+"is not an Object.");var e=r["[[Iterator]]"],o=GetMethod(e,"return");if(o===undefined)return t;try{var n=Call(o,e)}catch(c){var a=c}if(t)return t;if(a)throw a;if("object"!==Type(n))throw new TypeError("Iterator's return method returned a non-object.");return t}function IteratorComplete(t){if("object"!==Type(t))throw new Error(Object.prototype.toString.call(t)+"is not an Object.");return ToBoolean(Get(t,"done"))}function IteratorNext(t){if(arguments.length<2)var e=Call(t["[[NextMethod]]"],t["[[Iterator]]"]);else e=Call(t["[[NextMethod]]"],t["[[Iterator]]"],[arguments[1]]);if("object"!==Type(e))throw new TypeError("bad iterator");return e}function IteratorStep(t){var r=IteratorNext(t);return!0!==IteratorComplete(r)&&r}function IteratorValue(t){if("object"!==Type(t))throw new Error(Object.prototype.toString.call(t)+"is not an Object.");return Get(t,"value")}function OrdinaryToPrimitive(r,t){if("string"===t)var e=["toString","valueOf"];else e=["valueOf","toString"];for(var i=0;i<e.length;++i){var n=e[i],a=Get(r,n);if(IsCallable(a)){var o=Call(a,r);if("object"!==Type(o))return o}}throw new TypeError("Cannot convert to primitive.")}function SameValue(e,a){return Type(e)===Type(a)&&("number"===Type(e)?!(!isNaN(e)||!isNaN(a))||(0!==e||0!==a||1/e==1/a)&&e===a:SameValueNonNumber(e,a))}if (!("is"in Object
+)) {CreateMethodProperty(Object,"is",function e(t,r){return SameValue(t,r)});}function SameValueZero(n,e){return Type(n)===Type(e)&&("number"===Type(n)?!(!isNaN(n)||!isNaN(e))||(1/n===Infinity&&1/e==-Infinity||(1/n==-Infinity&&1/e===Infinity||n===e)):SameValueNonNumber(n,e))}function ToInteger(n){if("symbol"===Type(n))throw new TypeError("Cannot convert a Symbol value to a number");var t=Number(n);return isNaN(t)?0:1/t===Infinity||1/t==-Infinity||t===Infinity||t===-Infinity?t:(t<0?-1:1)*Math.floor(Math.abs(t))}if (!("copyWithin"in Array.prototype&&function(){try{var t=function n(){}
+t.prototype[0]="foo"
+var o=new t
+o[1]=1,o[2]=2,o.length=3
+var r=Array.prototype.copyWithin.call(o,1,0)
+return!(!r[0]||Object.prototype.hasOwnProperty.call(r,"0")||!Object.prototype.hasOwnProperty.call(r,"1")||"foo"!==r[0]||"foo"!==r[1]||1!==r[2]||3!==r.length)}catch(e){return!1}}()
+)) {CreateMethodProperty(Array.prototype,"copyWithin",function t(r,e){"use strict";var a=arguments[2];if(null===this||this===undefined)throw new TypeError("Cannot call method on "+this);var n=Object(this),i=ToInteger(n.length);i<=0&&(i=0),i=i===Infinity?Math.pow(2,53)-1:Math.min(i,Math.pow(2,53)-1),i=Math.max(i,0);var h,o=ToInteger(r);h=o<0?Math.max(i+o,0):Math.min(o,i);var M,m=ToInteger(e);M=m<0?Math.max(i+m,0):Math.min(m,i);var v;v=a===undefined?i:ToInteger(a);var p;p=v<0?Math.max(i+v,0):Math.min(v,i);var s,d=Math.min(p-M,i-h);for(M<h&&h<M+d?(s=-1,M=M+d-1,h=h+d-1):s=1;d>0;){var f=String(M),g=String(h);if(HasProperty(n,f)){var l=n[f];n[g]=l}else delete n[g];M+=s,h+=s,d-=1}return n});}if (!("isInteger"in Number
+)) {CreateMethodProperty(Number,"isInteger",function e(n){return"number"===Type(n)&&(!isNaN(n)&&n!==Infinity&&n!==-Infinity&&ToInteger(n)===n)});}if (!("isSafeInteger"in Number
+)) {CreateMethodProperty(Number,"isSafeInteger",function e(r){if("number"!==Type(r))return!1;if(isNaN(r)||r===Infinity||r===-Infinity)return!1;var t=ToInteger(r);return t===r&&Math.abs(t)<=Math.pow(2,53)-1});}function ToLength(n){var t=ToInteger(n);return t<=0?0:Math.min(t,Math.pow(2,53)-1)}function ToPrimitive(e){var t=arguments.length>1?arguments[1]:undefined;if("object"===Type(e)){if(arguments.length<2)var i="default";else t===String?i="string":t===Number&&(i="number");var r="function"==typeof self.Symbol&&"symbol"==typeof self.Symbol.toPrimitive?GetMethod(e,self.Symbol.toPrimitive):undefined;if(r!==undefined){var n=Call(r,e,[i]);if("object"!==Type(n))return n;throw new TypeError("Cannot convert exotic object to primitive.")}return"default"===i&&(i="number"),OrdinaryToPrimitive(e,i)}return e}function ToString(t){switch(Type(t)){case"symbol":throw new TypeError("Cannot convert a Symbol value to a string");case"object":return ToString(ToPrimitive(t,String));default:return String(t)}}if (!("fill"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"fill",function t(e){for(var r=arguments[1],n=arguments[2],o=ToObject(this),a=ToLength(Get(o,"length")),h=ToInteger(r),i=h<0?Math.max(a+h,0):Math.min(h,a),g=n===undefined?a:ToInteger(n),M=g<0?Math.max(a+g,0):Math.min(g,a);i<M;){o[ToString(i)]=e,i+=1}return o});}if (!("find"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"find",function e(r){var t=ToObject(this),n=ToLength(Get(t,"length"));if(!1===IsCallable(r))throw new TypeError(r+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,a=0;a<n;){var i=ToString(a),f=Get(t,i);if(ToBoolean(Call(r,o,[f,a,t])))return f;a+=1}return undefined});}if (!("findIndex"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"findIndex",function e(r){var t=ToObject(this),n=ToLength(Get(t,"length"));if(!1===IsCallable(r))throw new TypeError(r+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,a=0;a<n;){var i=ToString(a),l=Get(t,i);if(ToBoolean(Call(r,o,[l,a,t])))return a;a+=1}return-1});}if (!("forEach"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"forEach",function r(t){var e=ToObject(this),n=e instanceof String?e.split(""):e,o=ToLength(Get(e,"length"));if(!1===IsCallable(t))throw new TypeError(t+" is not a function");for(var a=arguments.length>1?arguments[1]:undefined,i=0;i<o;){var f=ToString(i);if(HasProperty(n,f)){var l=Get(n,f);Call(t,a,[l,i,e])}i+=1}return undefined});}if (!("includes"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"includes",function e(r){"use strict";var t=ToObject(this),o=ToLength(Get(t,"length"));if(0===o)return!1;var n=ToInteger(arguments[1]);if(n>=0)var a=n;else(a=o+n)<0&&(a=0);for(;a<o;){var i=Get(t,ToString(a));if(SameValueZero(r,i))return!0;a+=1}return!1});}if (!("indexOf"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"indexOf",function r(t){var e=ToObject(this),n=ToLength(Get(e,"length"));if(0===n)return-1;var i=ToInteger(arguments[1]);if(i>=n)return-1;if(i>=0)var o=1/i==-Infinity?0:i;else(o=n+i)<0&&(o=0);for(;o<n;){if(HasProperty(e,ToString(o))){if(t===Get(e,ToString(o)))return o}o+=1}return-1});}if (!("getOwnPropertyNames"in Object&&function(){try{return Object.getOwnPropertyNames(1),!0}catch(t){return!1}}()
+)) {!function(){var t={}.toString,e="".split,r=[].concat,o=Object.prototype.hasOwnProperty,c=Object.getOwnPropertyNames||Object.keys,n="object"==typeof self?c(self):[];CreateMethodProperty(Object,"getOwnPropertyNames",function l(a){var p=ToObject(a);if("[object Window]"===t.call(p))try{return c(p)}catch(j){return r.call([],n)}p="[object String]"==t.call(p)?e.call(p,""):Object(p);for(var i=c(p),s=["length","prototype"],O=0;O<s.length;O++){var b=s[O];o.call(p,b)&&!i.includes(b)&&i.push(b)}if(i.includes("__proto__")){var f=i.indexOf("__proto__");i.splice(f,1)}return i})}();}if (!("endsWith"in String.prototype
+)) {CreateMethodProperty(String.prototype,"endsWith",function e(t){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(t))throw new TypeError("First argument to String.prototype.endsWith must not be a regular expression");var o=ToString(t),s=i.length,g=r===undefined?s:ToInteger(r),h=Math.min(Math.max(g,0),s),u=o.length,a=h-u;return!(a<0)&&i.substr(a,u)===o});}if (!("includes"in String.prototype
+)) {CreateMethodProperty(String.prototype,"includes",function e(t){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(t))throw new TypeError("First argument to String.prototype.includes must not be a regular expression");var o=ToString(t),g=ToInteger(r),a=i.length,p=Math.min(Math.max(g,0),a);return-1!==String.prototype.indexOf.call(i,o,p)});}if (!("repeat"in String.prototype
+)) {CreateMethodProperty(String.prototype,"repeat",function r(e){"use strict";var t=RequireObjectCoercible(this),n=ToString(t),o=ToInteger(e);if(o<0)throw new RangeError("Invalid count value");if(o===Infinity)throw new RangeError("Invalid count value");return 0===o?"":new Array(o+1).join(n)});}if (!("startsWith"in String.prototype
+)) {CreateMethodProperty(String.prototype,"startsWith",function t(e){"use strict";var r=arguments.length>1?arguments[1]:undefined,n=RequireObjectCoercible(this),i=ToString(n);if(IsRegExp(e))throw new TypeError("First argument to String.prototype.startsWith must not be a regular expression");var o=ToString(e),s=ToInteger(r),a=i.length,g=Math.min(Math.max(s,0),a);return!(o.length+g>a)&&0===i.substr(g).indexOf(e)});}function ToPropertyKey(r){var i=ToPrimitive(r,String);return"symbol"===Type(i)?i:ToString(i)}if (!("getOwnPropertyDescriptor"in Object&&"function"==typeof Object.getOwnPropertyDescriptor&&function(){try{return"3"===Object.getOwnPropertyDescriptor("13.7",1).value}catch(t){return!1}}()
+)) {!function(){var e=Object.getOwnPropertyDescriptor,t=function(){try{return 1===Object.defineProperty(document.createElement("div"),"one",{get:function(){return 1}}).one}catch(e){return!1}},r={}.toString,n="".split;CreateMethodProperty(Object,"getOwnPropertyDescriptor",function c(o,i){var a=ToObject(o);a=("string"===Type(a)||a instanceof String)&&"[object String]"==r.call(o)?n.call(o,""):Object(o);var u=ToPropertyKey(i);if(t)try{return e(a,u)}catch(l){}if(HasOwnProperty(a,u))return{enumerable:!0,configurable:!0,writable:!0,value:a[u]}})}();}if (!("assign"in Object
+)) {CreateMethodProperty(Object,"assign",function e(t,r){var n=ToObject(t);if(1===arguments.length)return n;var o,c,a,l,i=Array.prototype.slice.call(arguments,1);for(o=0;o<i.length;o++){var p=i[o];for(p===undefined||null===p?a=[]:(l="[object String]"===Object.prototype.toString.call(p)?String(p).split(""):ToObject(p),a=Object.keys(l)),c=0;c<a.length;c++){var b,y=a[c];try{var g=Object.getOwnPropertyDescriptor(l,y);b=g!==undefined&&!0===g.enumerable}catch(u){b=Object.prototype.propertyIsEnumerable.call(l,y)}if(b){var j=Get(l,y);n[y]=j}}}return n});}if (!("defineProperties"in Object
+)) {CreateMethodProperty(Object,"defineProperties",function e(r,t){if("object"!==Type(r))throw new TypeError("Object.defineProperties called on non-object");for(var o=ToObject(t),n=Object.keys(o),c=[],i=0;i<n.length;i++){var b=n[i],f=Object.getOwnPropertyDescriptor(o,b);if(f!==undefined&&f.enumerable){var p=Get(o,b),a=p;c.push([b,a])}}for(var j=0;j<c.length;j++){var d=c[j][0];a=c[j][1],Object.defineProperty(r,d,a)}return r});}if (!("create"in Object
+)) {!function(){function e(){}if({__proto__:null}instanceof Object)t=function(){var e=document.createElement("iframe");e.style.display="none";var o=document.body||document.documentElement;o.appendChild(e),e.src="javascript:";var n=e.contentWindow.Object.prototype;o.removeChild(e),e=null,delete n.constructor,delete n.hasOwnProperty,delete n.propertyIsEnumerable,delete n.isPrototypeOf,delete n.toLocaleString,delete n.toString,delete n.valueOf;var r=function l(){};return r.prototype=n,t=function(){return new r},new r};else var t=function(){return{__proto__:null}};CreateMethodProperty(Object,"create",function o(n,r){if("object"!==Type(n)&&"null"!==Type(n))throw new TypeError("Object prototype may only be an Object or null");if("null"===Type(n))var l=t();else e.prototype=n,l=new e,l.__proto__=n,l.constructor.prototype=n,l.__proto__=n;return 1 in arguments?Object.defineProperties(l,r):l})}();}function OrdinaryCreateFromConstructor(r,e){var t=arguments[2]||{},o=GetPrototypeFromConstructor(r,e),a=Object.create(o);for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&Object.defineProperty(a,n,{configurable:!0,enumerable:!1,writable:!0,value:t[n]});return a}function Construct(r){var t=arguments.length>2?arguments[2]:r,o=arguments.length>1?arguments[1]:[];if(!IsConstructor(r))throw new TypeError("F must be a constructor.");if(!IsConstructor(t))throw new TypeError("newTarget must be a constructor.");if(t===r)return new(Function.prototype.bind.apply(r,[null].concat(o)));var n=OrdinaryCreateFromConstructor(t,Object.prototype);return Call(r,n,o)}if (!("of"in Array
+)) {CreateMethodProperty(Array,"of",function r(){var r=arguments.length,t=arguments,e=this;if(IsConstructor(e))var a=Construct(e,[r]);else a=ArrayCreate(r);for(var o=0;o<r;){var n=t[o],h=ToString(o);CreateDataPropertyOrThrow(a,h,n),o+=1}return a.length=r,a});}function ArraySpeciesCreate(e,r){if(0===r&&1/r==-Infinity&&(r=0),!1===IsArray(e))return ArrayCreate(r);var n=Get(e,"constructor");if("object"===Type(n)&&null===(n="Symbol"in self&&"species"in self.Symbol?Get(n,self.Symbol.species):undefined)&&(n=undefined),n===undefined)return ArrayCreate(r);if(!IsConstructor(n))throw new TypeError("C must be a constructor");return Construct(n,[r])}if (!("filter"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"filter",function r(e){var t=ToObject(this),o=ToLength(Get(t,"length"));if(!1===IsCallable(e))throw new TypeError(e+" is not a function");for(var a=arguments.length>1?arguments[1]:undefined,n=ArraySpeciesCreate(t,0),i=0,l=0;i<o;){var f=ToString(i);if(HasProperty(t,f)){var h=Get(t,f);ToBoolean(Call(e,a,[h,i,t]))&&(CreateDataPropertyOrThrow(n,ToString(l),h),l+=1)}i+=1}return n});}if (!("map"in Array.prototype
+)) {CreateMethodProperty(Array.prototype,"map",function r(e){var t=ToObject(this),a=ToLength(Get(t,"length"));if(!1===IsCallable(e))throw new TypeError(e+" is not a function");for(var o=arguments.length>1?arguments[1]:undefined,n=ArraySpeciesCreate(t,a),i=0;i<a;){var p=ToString(i);if(HasProperty(t,p)){var h=Get(t,p),l=Call(e,o,[h,i,t]);CreateDataPropertyOrThrow(n,p,l)}i+=1}return n});}if (!("sort"in Array.prototype&&function(){var r={length:3,0:2,1:1,2:3}
+return Array.prototype.sort.call(r,function(r,t){return r-t})===r}()
+)) {"use strict";var origSort=Array.prototype.sort;CreateMethodProperty(Array.prototype,"sort",function r(t){if(t!==undefined&&!1===IsCallable(t))throw new TypeError("The comparison function must be either a function or undefined");if(t===undefined)origSort.call(this);else{var e=Array.prototype.map.call(this,function(r,t){return{item:r,index:t}});origSort.call(e,function(r,e){var i=t.call(undefined,r.item,e.item);return 0===i?r.index-e.index:i});for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&e[i].item!==this[i]&&(this[i]=e[i].item)}return this});}if (!("setPrototypeOf"in Object
+)) {!function(){if(!Object.setPrototypeOf){var t,e,o=Object.getOwnPropertyNames,r=Object.getOwnPropertyDescriptor,n=Object.create,c=Object.defineProperty,_=Object.getPrototypeOf,f=Object.prototype,p=function(t,e){return o(e).forEach(function(o){c(t,o,r(e,o))}),t},O=function i(t,e){return p(n(e),t)};try{t=r(f,"__proto__").set,t.call({},null),e=function a(e,o){return t.call(e,o),e}}catch(u){t={__proto__:null},t instanceof Object?e=O:(t.__proto__=f,e=t instanceof Object?function o(t,e){return t.__proto__=e,t}:function r(t,e){return _(t)?(t.__proto__=e,t):O(t,e)})}CreateMethodProperty(Object,"setPrototypeOf",e)}}();}if (!("Symbol"in self&&0===self.Symbol.length
+)) {!function(e,r,n){"use strict";function t(e){if("symbol"===Type(e))return e;throw TypeError(e+" is not a symbol")}var u,o=function(){try{var r={};return e.defineProperty(r,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!r.t}catch(n){return!1}}(),i=0,a=""+Math.random(),c="__symbol:",l=c.length,f="__symbol@@"+a,s={},v="defineProperty",y="defineProperties",b="getOwnPropertyNames",p="getOwnPropertyDescriptor",h="propertyIsEnumerable",m=e.prototype,d=m.hasOwnProperty,g=m[h],w=m.toString,S=Array.prototype.concat,P=e.getOwnPropertyNames?e.getOwnPropertyNames(self):[],O=e[b],j=function $(e){if("[object Window]"===w.call(e))try{return O(e)}catch(r){return S.call([],P)}return O(e)},E=e[p],N=e.create,T=e.keys,_=e.freeze||e,k=e[v],F=e[y],I=E(e,b),x=function(e,r,n){if(!d.call(e,f))try{k(e,f,{enumerable:!1,configurable:!1,writable:!1,value:{}})}catch(t){e[f]={}}e[f]["@@"+r]=n},z=function(e,r){var n=N(e);return j(r).forEach(function(e){q.call(r,e)&&L(n,e,r[e])}),n},A=function(e){var r=N(e);return r.enumerable=!1,r},D=function ee(){},M=function(e){return e!=f&&!d.call(H,e)},W=function(e){return e!=f&&d.call(H,e)},q=function re(e){var r=""+e;return W(r)?d.call(this,r)&&this[f]&&this[f]["@@"+r]:g.call(this,e)},B=function(r){var n={enumerable:!1,configurable:!0,get:D,set:function(e){u(this,r,{enumerable:!1,configurable:!0,writable:!0,value:e}),x(this,r,!0)}};try{k(m,r,n)}catch(o){m[r]=n.value}H[r]=k(e(r),"constructor",J);var t=E(G.prototype,"description");return t&&k(H[r],"description",t),_(H[r])},C=function(e){var r=t(e);if(Y){var n=V(r);if(""!==n)return n.slice(1,-1)}if(s[r]!==undefined)return s[r];var u=r.toString(),o=u.lastIndexOf("0.");return u=u.slice(10,o),""===u?undefined:u},G=function ne(){var r=arguments[0];if(this instanceof ne)throw new TypeError("Symbol is not a constructor");var n=c.concat(r||"",a,++i);r===undefined||null!==r&&!isNaN(r)&&""!==String(r)||(s[n]=String(r));var t=B(n);return o||e.defineProperty(t,"description",{configurable:!0,enumerable:!1,value:C(t)}),t},H=N(null),J={value:G},K=function(e){return H[e]},L=function te(e,r,n){var t=""+r;return W(t)?(u(e,t,n.enumerable?A(n):n),x(e,t,!!n.enumerable)):k(e,r,n),e},Q=function(e){return function(r){return d.call(e,f)&&d.call(e[f],"@@"+r)}},R=function ue(e){return j(e).filter(e===m?Q(e):W).map(K)};I.value=L,k(e,v,I),I.value=R,k(e,"getOwnPropertySymbols",I),I.value=function oe(e){return j(e).filter(M)},k(e,b,I),I.value=function ie(e,r){var n=R(r);return n.length?T(r).concat(n).forEach(function(n){q.call(r,n)&&L(e,n,r[n])}):F(e,r),e},k(e,y,I),I.value=q,k(m,h,I),I.value=G,k(n,"Symbol",I),I.value=function(e){var r=c.concat(c,e,a);return r in m?H[r]:B(r)},k(G,"for",I),I.value=function(e){if(M(e))throw new TypeError(e+" is not a symbol");return d.call(H,e)?e.slice(2*l,-a.length):void 0},k(G,"keyFor",I),I.value=function ae(e,r){var n=E(e,r);return n&&W(r)&&(n.enumerable=q.call(e,r)),n},k(e,p,I),I.value=function ce(e,r){return 1===arguments.length||void 0===r?N(e):z(e,r)},k(e,"create",I);var U=null===function(){return this}.call(null);if(I.value=U?function(){var e=w.call(this);return"[object String]"===e&&W(this)?"[object Symbol]":e}:function(){if(this===window)return"[object Null]";var e=w.call(this);return"[object String]"===e&&W(this)?"[object Symbol]":e},k(m,"toString",I),u=function(e,r,n){var t=E(m,r);delete m[r],k(e,r,n),e!==m&&k(m,r,t)},function(){try{var r={};return e.defineProperty(r,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!r.t}catch(n){return!1}}()){var V;try{V=Function("s","var v = s.valueOf(); return { [v]() {} }[v].name;")}catch(Z){}var X=function(){},Y=V&&"inferred"===X.name?V:null;e.defineProperty(n.Symbol.prototype,"description",{configurable:!0,enumerable:!1,get:function(){return C(this)}})}}(Object,0,self);}if (!("Symbol"in self&&"hasInstance"in self.Symbol
+)) {Object.defineProperty(Symbol,"hasInstance",{value:Symbol("hasInstance")});}if (!("Symbol"in self&&"isConcatSpreadable"in self.Symbol
+)) {Object.defineProperty(Symbol,"isConcatSpreadable",{value:Symbol("isConcatSpreadable")});}if (!("Symbol"in self&&"iterator"in self.Symbol
+)) {Object.defineProperty(self.Symbol,"iterator",{value:self.Symbol("iterator")});}function GetIterator(t){var e=arguments.length>1?arguments[1]:GetMethod(t,Symbol.iterator),r=Call(e,t);if("object"!==Type(r))throw new TypeError("bad iterator");var o=GetV(r,"next"),a=Object.create(null);return a["[[Iterator]]"]=r,a["[[NextMethod]]"]=o,a["[[Done]]"]=!1,a}if (!("Symbol"in self&&"match"in self.Symbol
+)) {Object.defineProperty(Symbol,"match",{value:Symbol("match")});}if (!("Symbol"in self&&"replace"in self.Symbol
+)) {Object.defineProperty(Symbol,"replace",{value:Symbol("replace")});}if (!("Symbol"in self&&"search"in self.Symbol
+)) {Object.defineProperty(Symbol,"search",{value:Symbol("search")});}if (!("Symbol"in self&&"species"in self.Symbol
+)) {Object.defineProperty(Symbol,"species",{value:Symbol("species")});}if (!("Map"in self&&function(t){try{var n=new t.Map([[1,1],[2,2]])
+return 0===t.Map.length&&2===n.size&&"Symbol"in t&&"iterator"in t.Symbol&&"function"==typeof n[t.Symbol.iterator]}catch(e){return!1}}(self)
+)) {!function(e){function t(e,t){if("object"!==Type(e))throw new TypeError("createMapIterator called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("createMapIterator called on incompatible receiver "+Object.prototype.toString.call(e));var r=Object.create(u);return Object.defineProperty(r,"[[Map]]",{configurable:!0,enumerable:!1,writable:!0,value:e}),Object.defineProperty(r,"[[MapNextIndex]]",{configurable:!0,enumerable:!1,writable:!0,value:0}),Object.defineProperty(r,"[[MapIterationKind]]",{configurable:!0,enumerable:!1,writable:!0,value:t}),r}var r=function(){try{var e={};return Object.defineProperty(e,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!e.t}catch(t){return!1}}(),o=0,a=Symbol("meta_"+(1e8*Math.random()+"").replace(".","")),n=function(e){if("object"==typeof e?null!==e:"function"==typeof e){if(!Object.isExtensible(e))return!1;if(!Object.prototype.hasOwnProperty.call(e,a)){var t=typeof e+"-"+ ++o;Object.defineProperty(e,a,{configurable:!1,enumerable:!1,writable:!1,value:t})}return e[a]}return""+e},i=function(e,t){var r=n(t);if(!1===r)return p(e,t);var o=e._table[r];return o!==undefined&&o},p=function(e,t){for(var r=0;r<e._keys.length;r++){var o=e._keys[r];if(o!==c&&SameValueZero(o,t))return r}return!1},l=function(e,t,r){var o=n(t);return!1!==o&&(!1===r?delete e._table[o]:e._table[o]=r,!0)},c=Symbol("undef"),y=function f(){if(!(this instanceof f))throw new TypeError('Constructor Map requires "new"');var e=OrdinaryCreateFromConstructor(this,f.prototype,{_table:{},_keys:[],_values:[],_size:0,_es6Map:!0});r||Object.defineProperty(e,"size",{configurable:!0,enumerable:!1,writable:!0,value:0});var t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var o=e.set;if(!IsCallable(o))throw new TypeError("Map.prototype.set is not a function");try{for(var a=GetIterator(t);;){var n=IteratorStep(a);if(!1===n)return e;var i=IteratorValue(n);if("object"!==Type(i))try{throw new TypeError("Iterator value "+i+" is not an entry object")}catch(u){return IteratorClose(a,u)}try{var p=i[0],l=i[1];o.call(e,p,l)}catch(s){return IteratorClose(a,s)}}}catch(s){if(Array.isArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var c,y=t.length;for(c=0;c<y;c++)o.call(e,t[c][0],t[c][1])}}return e};Object.defineProperty(y,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),r?Object.defineProperty(y,Symbol.species,{configurable:!0,enumerable:!1,get:function(){return this},set:undefined}):CreateMethodProperty(y,Symbol.species,y),CreateMethodProperty(y.prototype,"clear",function b(){var e=this;if("object"!==Type(e))throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._keys,o=0;o<t.length;o++)e._keys[o]=c,e._values[o]=c;return this._size=0,r||(this.size=this._size),this._table={},undefined}),CreateMethodProperty(y.prototype,"constructor",y),CreateMethodProperty(y.prototype,"delete",function(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(t));var o=i(t,e);if(!1!==o){var a=t._keys[o];if(a!==c&&SameValueZero(a,e))return this._keys[o]=c,this._values[o]=c,this._size=--this._size,r||(this.size=this._size),l(this,e,!1),!0}return!1}),CreateMethodProperty(y.prototype,"entries",function h(){return t(this,"key+value")}),CreateMethodProperty(y.prototype,"forEach",function(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!IsCallable(e))throw new TypeError(Object.prototype.toString.call(e)+" is not a function.");if(arguments[1])var r=arguments[1];for(var o=t._keys,a=0;a<o.length;a++)t._keys[a]!==c&&t._values[a]!==c&&e.call(r,t._values[a],t._keys[a],t);return undefined}),CreateMethodProperty(y.prototype,"get",function d(e){var t=this;if("object"!==Type(t))throw new TypeError("Method Map.prototype.get called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.get called on incompatible receiver "+Object.prototype.toString.call(t));var r=i(t,e);if(!1!==r){var o=t._keys[r];if(o!==c&&SameValueZero(o,e))return t._values[r]}return undefined}),CreateMethodProperty(y.prototype,"has",function v(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Map.prototype.has called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Map)throw new TypeError("Method Map.prototype.has called on incompatible receiver "+Object.prototype.toString.call(t));var r=i(t,e);if(!1!==r){var o=t._keys[r];if(o!==c&&SameValueZero(o,e))return!0}return!1}),CreateMethodProperty(y.prototype,"keys",function M(){return t(this,"key")}),CreateMethodProperty(y.prototype,"set",function w(e,t){var o=this;if("object"!==Type(o))throw new TypeError("Method Map.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));if(!0!==o._es6Map)throw new TypeError("Method Map.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));var a=i(o,e);if(!1!==a)o._values[a]=t;else{-0===e&&(e=0);var n={"[[Key]]":e,"[[Value]]":t};o._keys.push(n["[[Key]]"]),o._values.push(n["[[Value]]"]),l(o,e,o._keys.length-1),++o._size,r||(o.size=o._size)}return o}),r&&Object.defineProperty(y.prototype,"size",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!==Type(e))throw new TypeError("Method Map.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Map)throw new TypeError("Method Map.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));return this._size},set:undefined}),CreateMethodProperty(y.prototype,"values",function j(){return t(this,"value")}),CreateMethodProperty(y.prototype,Symbol.iterator,y.prototype.entries),"name"in y||Object.defineProperty(y,"name",{configurable:!0,enumerable:!1,writable:!1,value:"Map"});var u={};Object.defineProperty(u,"isMapIterator",{configurable:!1,enumerable:!1,writable:!1,value:!0}),CreateMethodProperty(u,"next",function _(){var e=this;if("object"!==Type(e))throw new TypeError("Method %MapIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));if(!e.isMapIterator)throw new TypeError("Method %MapIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));var t=e["[[Map]]"],r=e["[[MapNextIndex]]"],o=e["[[MapIterationKind]]"];if(t===undefined)return CreateIterResultObject(undefined,!0);if(!t._es6Map)throw new Error(Object.prototype.toString.call(t)+" has a [[MapData]] internal slot.");for(var a=t._keys,n=a.length;r<n;){var i=Object.create(null);if(i["[[Key]]"]=t._keys[r],i["[[Value]]"]=t._values[r],r+=1,e["[[MapNextIndex]]"]=r,i["[[Key]]"]!==c){if("key"===o)var p=i["[[Key]]"];else if("value"===o)p=i["[[Value]]"];else{if("key+value"!==o)throw new Error;p=[i["[[Key]]"],i["[[Value]]"]]}return CreateIterResultObject(p,!1)}}return e["[[Map]]"]=undefined,CreateIterResultObject(undefined,!0)}),CreateMethodProperty(u,Symbol.iterator,function g(){return this});try{CreateMethodProperty(e,"Map",y)}catch(s){e.Map=y}}(self);}if (!("Set"in self&&function(){try{var e=new self.Set([1,2])
+return 0===self.Set.length&&2===e.size&&"Symbol"in self&&"iterator"in self.Symbol&&"function"==typeof e[self.Symbol.iterator]}catch(t){return!1}}()
+)) {!function(e){function t(e,t){if("object"!=typeof e)throw new TypeError("createSetIterator called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("createSetIterator called on incompatible receiver "+Object.prototype.toString.call(e));var r=Object.create(i);return Object.defineProperty(r,"[[IteratedSet]]",{configurable:!0,enumerable:!1,writable:!0,value:e}),Object.defineProperty(r,"[[SetNextIndex]]",{configurable:!0,enumerable:!1,writable:!0,value:0}),Object.defineProperty(r,"[[SetIterationKind]]",{configurable:!0,enumerable:!1,writable:!0,value:t}),r}var r=function(){try{var e={};return Object.defineProperty(e,"t",{configurable:!0,enumerable:!1,get:function(){return!0},set:undefined}),!!e.t}catch(t){return!1}}(),o=Symbol("undef"),n=function c(){if(!(this instanceof c))throw new TypeError('Constructor Set requires "new"');var e=OrdinaryCreateFromConstructor(this,c.prototype,{_values:[],_size:0,_es6Set:!0});r||Object.defineProperty(e,"size",{configurable:!0,enumerable:!1,writable:!0,value:0});var t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var o=e.add;if(!IsCallable(o))throw new TypeError("Set.prototype.add is not a function");try{for(var n=GetIterator(t);;){var a=IteratorStep(n);if(!1===a)return e;var i=IteratorValue(a);try{o.call(e,i)}catch(y){return IteratorClose(n,y)}}}catch(y){if(!Array.isArray(t)&&"[object Arguments]"!==Object.prototype.toString.call(t)&&!t.callee)throw y;var l,p=t.length;for(l=0;l<p;l++)o.call(e,t[l])}return e};Object.defineProperty(n,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),r?Object.defineProperty(n,Symbol.species,{configurable:!0,enumerable:!1,get:function(){return this},set:undefined}):CreateMethodProperty(n,Symbol.species,n),CreateMethodProperty(n.prototype,"add",function p(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.add called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.add called on incompatible receiver "+Object.prototype.toString.call(t));for(var n=t._values,a=0;a<n.length;a++){var i=n[a];if(i!==o&&SameValueZero(i,e))return t}return 0===e&&1/e==-Infinity&&(e=0),t._values.push(e),this._size=++this._size,r||(this.size=this._size),t}),CreateMethodProperty(n.prototype,"clear",function y(){var e=this;if("object"!=typeof e)throw new TypeError("Method Set.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("Method Set.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._values,n=0;n<t.length;n++)t[n]=o;return this._size=0,r||(this.size=this._size),undefined}),CreateMethodProperty(n.prototype,"constructor",n),CreateMethodProperty(n.prototype,"delete",function(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(t));for(var n=t._values,a=0;a<n.length;a++){var i=n[a];if(i!==o&&SameValueZero(i,e))return n[a]=o,this._size=--this._size,r||(this.size=this._size),!0}return!1}),CreateMethodProperty(n.prototype,"entries",function u(){return t(this,"key+value")}),CreateMethodProperty(n.prototype,"forEach",function f(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!IsCallable(e))throw new TypeError(Object.prototype.toString.call(e)+" is not a function.");if(arguments[1])var r=arguments[1];for(var n=t._values,a=0;a<n.length;a++){var i=n[a];i!==o&&e.call(r,i,i,t)}return undefined}),CreateMethodProperty(n.prototype,"has",function d(e){var t=this;if("object"!=typeof t)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));if(!0!==t._es6Set)throw new TypeError("Method Set.prototype.forEach called on incompatible receiver "+Object.prototype.toString.call(t));for(var r=t._values,n=0;n<r.length;n++){var a=r[n];if(a!==o&&SameValueZero(a,e))return!0}return!1});var a=function h(){return t(this,"value")};CreateMethodProperty(n.prototype,"values",a),CreateMethodProperty(n.prototype,"keys",a),r&&Object.defineProperty(n.prototype,"size",{configurable:!0,enumerable:!1,get:function(){var e=this;if("object"!=typeof e)throw new TypeError("Method Set.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));if(!0!==e._es6Set)throw new TypeError("Method Set.prototype.size called on incompatible receiver "+Object.prototype.toString.call(e));for(var t=e._values,r=0,n=0;n<t.length;n++){t[n]!==o&&(r+=1)}return r},set:undefined}),CreateMethodProperty(n.prototype,Symbol.iterator,a),"name"in n||Object.defineProperty(n,"name",{configurable:!0,enumerable:!1,writable:!1,value:"Set"});var i={};Object.defineProperty(i,"isSetIterator",{configurable:!1,enumerable:!1,writable:!1,value:!0}),CreateMethodProperty(i,"next",function b(){var e=this;if("object"!=typeof e)throw new TypeError("Method %SetIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));if(!e.isSetIterator)throw new TypeError("Method %SetIteratorPrototype%.next called on incompatible receiver "+Object.prototype.toString.call(e));var t=e["[[IteratedSet]]"],r=e["[[SetNextIndex]]"],n=e["[[SetIterationKind]]"];if(t===undefined)return CreateIterResultObject(undefined,!0);if(!t._es6Set)throw new Error(Object.prototype.toString.call(t)+" does not have [[SetData]] internal slot.");for(var a=t._values,i=a.length;r<i;){var l=a[r];if(r+=1,e["[[SetNextIndex]]"]=r,l!==o)return"key+value"===n?CreateIterResultObject([l,l],!1):CreateIterResultObject(l,!1)}return e["[[IteratedSet]]"]=undefined,CreateIterResultObject(undefined,!0)}),CreateMethodProperty(i,Symbol.iterator,function s(){return this});try{CreateMethodProperty(e,"Set",n)}catch(l){e.Set=n}}(self);}if (!("from"in Array&&function(){try{return Array.from({length:-Infinity}),"a"===Array.from(new self.Set(["a"]))[0]&&"a"===Array.from(new self.Map([["a","one"]]))[0][0]}catch(r){return!1}}()
+)) {!function(){function r(r){return"string"==typeof r||"object"==typeof r&&"[object String]"===t.call(r)}var t=Object.prototype.toString,e=String.prototype.match;CreateMethodProperty(Array,"from",function o(t){var o=this,a=arguments.length>1?arguments[1]:undefined;if(a===undefined)var n=!1;else{if(!1===IsCallable(a))throw new TypeError(Object.prototype.toString.call(a)+" is not a function.");var i=arguments.length>2?arguments[2]:undefined;if(i!==undefined)var l=i;else l=undefined;n=!0}var u=GetMethod(t,Symbol.iterator);if(u!==undefined){if(IsConstructor(o))var f=Construct(o);else f=ArrayCreate(0);for(var c=GetIterator(t,u),s=0;;){if(s>=Math.pow(2,53)-1){var h=new TypeError("Iteration count can not be greater than or equal 9007199254740991.");return IteratorClose(c,h)}var y=ToString(s),C=IteratorStep(c);if(!1===C)return f.length=s,f;var g=IteratorValue(C);if(n)try{var p=Call(a,l,[g,s])}catch(b){return IteratorClose(c,b)}else p=g;try{CreateDataPropertyOrThrow(f,y,p)}catch(b){return IteratorClose(c,b)}s+=1}}if(r(t))var v=e.call(t,/[\uD800-\uDBFF][\uDC00-\uDFFF]?|[^\uD800-\uDFFF]|./g)||[];else v=ToObject(t);var d=ToLength(Get(v,"length"));for(f=IsConstructor(o)?Construct(o,[d]):ArrayCreate(d),s=0;s<d;){y=ToString(s);var I=Get(v,y);p=!0===n?Call(a,l,[I,s]):I,CreateDataPropertyOrThrow(f,y,p),s+=1}return f.length=d,f})}();}if (!("Symbol"in self&&"split"in self.Symbol
+)) {Object.defineProperty(Symbol,"split",{value:Symbol("split")});}if (!("Symbol"in self&&"toPrimitive"in self.Symbol
+)) {Object.defineProperty(Symbol,"toPrimitive",{value:Symbol("toPrimitive")});}if (!("Symbol"in self&&"toStringTag"in self.Symbol
+)) {Object.defineProperty(Symbol,"toStringTag",{value:Symbol("toStringTag")});}if (!("Promise"in self
+)) {!function(){"use strict";function n(){return tn[q][B]||D}function t(n){return n&&"object"==typeof n}function e(n){return"function"==typeof n}function r(n,t){return n instanceof t}function o(n){return r(n,A)}function i(n,t,e){if(!t(n))throw a(e)}function u(){try{return b.apply(R,arguments)}catch(n){return Y.e=n,Y}}function c(n,t){return b=n,R=t,u}function f(n,t){function e(){for(var e=0;e<o;)t(r[e],r[e+1]),r[e++]=T,r[e++]=T;o=0,r.length>n&&(r.length=n)}var r=L(n),o=0;return function(n,t){r[o++]=n,r[o++]=t,2===o&&tn.nextTick(e)}}function s(n,t){var o,i,u,f,s=0;if(!n)throw a(N);var l=n[tn[q][z]];if(e(l))i=l.call(n);else{if(!e(n.next)){if(r(n,L)){for(o=n.length;s<o;)t(n[s],s++);return s}throw a(N)}i=n}for(;!(u=i.next()).done;)if((f=c(t)(u.value,s++))===Y)throw e(i[G])&&i[G](),f.e;return s}function a(n){return new TypeError(n)}function l(n){return(n?"":Q)+(new A).stack}function h(n,t){var e="on"+n.toLowerCase(),r=F[e];E&&E.listeners(n).length?n===X?E.emit(n,t._v,t):E.emit(n,t):r?r({reason:t._v,promise:t}):tn[n](t._v,t)}function v(n){return n&&n._s}function _(n){if(v(n))return new n(Z);var t,r,o;return t=new n(function(n,e){if(t)throw a();r=n,o=e}),i(r,e),i(o,e),t}function d(n,t){var e=!1;return function(r){e||(e=!0,I&&(n[M]=l(!0)),t===U?g(n,r):y(n,t,r))}}function p(n,t,r,o){return e(r)&&(t._onFulfilled=r),e(o)&&(n[J]&&h(W,n),t._onRejected=o),I&&(t._p=n),n[n._c++]=t,n._s!==$&&rn(n,t),t}function m(n){if(n._umark)return!0;n._umark=!0;for(var t,e=0,r=n._c;e<r;)if(t=n[e++],t._onRejected||m(t))return!0}function w(n,t){function e(n){return r.push(n.replace(/^\s+|\s+$/g,""))}var r=[];return I&&(t[M]&&e(t[M]),function o(n){n&&K in n&&(o(n._next),e(n[K]+""),o(n._p))}(t)),(n&&n.stack?n.stack:n)+("\n"+r.join("\n")).replace(nn,"")}function j(n,t){return n(t)}function y(n,t,e){var r=0,i=n._c;if(n._s===$)for(n._s=t,n._v=e,t===O&&(I&&o(e)&&(e.longStack=w(e,n)),on(n));r<i;)rn(n,n[r++]);return n}function g(n,r){if(r===n&&r)return y(n,O,a(V)),n;if(r!==S&&(e(r)||t(r))){var o=c(k)(r);if(o===Y)return y(n,O,o.e),n;e(o)?(I&&v(r)&&(n._next=r),v(r)?x(n,r,o):tn.nextTick(function(){x(n,r,o)})):y(n,U,r)}else y(n,U,r);return n}function k(n){return n.then}function x(n,t,e){var r=c(e,t)(function(e){t&&(t=S,g(n,e))},function(e){t&&(t=S,y(n,O,e))});r===Y&&t&&(y(n,O,r.e),t=S)}var T,b,R,S=null,C="object"==typeof self,F=self,P=F.Promise,E=F.process,H=F.console,I=!0,L=Array,A=Error,O=1,U=2,$=3,q="Symbol",z="iterator",B="species",D=q+"("+B+")",G="return",J="_uh",K="_pt",M="_st",N="Invalid argument",Q="\nFrom previous ",V="Chaining cycle detected for promise",W="rejectionHandled",X="unhandledRejection",Y={e:S},Z=function(){},nn=/^.+\/node_modules\/yaku\/.+\n?/gm,tn=function(n){var r,o=this;if(!t(o)||o._s!==T)throw a("Invalid this");if(o._s=$,I&&(o[K]=l()),n!==Z){if(!e(n))throw a(N);r=c(n)(d(o,U),d(o,O)),r===Y&&y(o,O,r.e)}};tn["default"]=tn,function en(n,t){for(var e in t)n[e]=t[e]}(tn.prototype,{then:function(n,t){if(this._s===undefined)throw a();return p(this,_(tn.speciesConstructor(this,tn)),n,t)},"catch":function(n){return this.then(T,n)},"finally":function(n){return this.then(function(t){return tn.resolve(n()).then(function(){return t})},function(t){return tn.resolve(n()).then(function(){throw t})})},_c:0,_p:S}),tn.resolve=function(n){return v(n)?n:g(_(this),n)},tn.reject=function(n){return y(_(this),O,n)},tn.race=function(n){var t=this,e=_(t),r=function(n){y(e,U,n)},o=function(n){y(e,O,n)},i=c(s)(n,function(n){t.resolve(n).then(r,o)});return i===Y?t.reject(i.e):e},tn.all=function(n){function t(n){y(o,O,n)}var e,r=this,o=_(r),i=[];return(e=c(s)(n,function(n,u){r.resolve(n).then(function(n){i[u]=n,--e||y(o,U,i)},t)}))===Y?r.reject(e.e):(e||y(o,U,[]),o)},tn.Symbol=F[q]||{},c(function(){Object.defineProperty(tn,n(),{get:function(){return this}})})(),tn.speciesConstructor=function(t,e){var r=t.constructor;return r?r[n()]||e:e},tn.unhandledRejection=function(n,t){H&&H.error("Uncaught (in promise)",I?t.longStack:w(n,t))},tn.rejectionHandled=Z,tn.enableLongStackTrace=function(){I=!0},tn.nextTick=C?function(n){P?new P(function(n){n()}).then(n):setTimeout(n)}:E.nextTick,tn._s=1;var rn=f(999,function(n,t){var e,r;return(r=n._s!==O?t._onFulfilled:t._onRejected)===T?void y(t,n._s,n._v):(e=c(j)(r,n._v))===Y?void y(t,O,e.e):void g(t,e)}),on=f(9,function(n){m(n)||(n[J]=1,h(X,n))});F.Promise=tn}();}if (!("Symbol"in self&&"unscopables"in self.Symbol
+)) {Object.defineProperty(Symbol,"unscopables",{value:Symbol("unscopables")});}if (!((function(){try{if("WeakMap"in self&&0===self.WeakMap.length){var e={},t=new self.WeakMap([[e,"test"]])
+return"test"===t.get(e)&&!1===t["delete"](0)}return!1}catch(a){return!1}})()
+)) {!function(e){var t=Symbol("undef"),r=function a(){if(!(this instanceof a))throw new TypeError('Constructor WeakMap requires "new"');var e=OrdinaryCreateFromConstructor(this,a.prototype,{_keys:[],_values:[],_es6WeakMap:!0}),t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var r=Get(e,"set");if(!IsCallable(r))throw new TypeError("WeakMap.prototype.set is not a function");try{for(var o=GetIterator(t);;){var p=IteratorStep(o);if(!1===p)return e;var n=IteratorValue(p);if("object"!==Type(n))try{throw new TypeError("Iterator value "+n+" is not an entry object")}catch(s){return IteratorClose(o,s)}try{var i=Get(n,"0"),l=Get(n,"1");Call(r,e,[i,l])}catch(u){return IteratorClose(o,u)}}}catch(u){if(Array.isArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var y,c=t.length;for(y=0;y<c;y++)i=t[y][0],l=t[y][1],Call(r,e,[i,l])}}return e};Object.defineProperty(r,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),CreateMethodProperty(r.prototype,"constructor",r),CreateMethodProperty(r.prototype,"delete",function(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakMap.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.clear called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return this._keys[a]=t,this._values[a]=t,this._size=--this._size,!0;return!1}),CreateMethodProperty(r.prototype,"get",function p(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakMap.prototype.get called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.get called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return undefined;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return r._values[a];return undefined}),CreateMethodProperty(r.prototype,"has",function n(e){var r=this;if("object"!=typeof r)throw new TypeError("Method WeakMap.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakMap)throw new TypeError("Method WeakMap.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._keys;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++)if(r._keys[a]!==t&&SameValue(r._keys[a],e))return!0;return!1}),CreateMethodProperty(r.prototype,"set",function i(e,r){var o=this;if("object"!==Type(o))throw new TypeError("Method WeakMap.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));if(!0!==o._es6WeakMap)throw new TypeError("Method WeakMap.prototype.set called on incompatible receiver "+Object.prototype.toString.call(o));var a=o._keys;if("object"!==Type(e))throw new TypeError("Invalid value used as weak map key");for(var p=0;p<a.length;p++)if(o._keys[p]!==t&&SameValue(o._keys[p],e))return o._values[p]=r,o;var n={"[[Key]]":e,"[[Value]]":r};return o._keys.push(n["[[Key]]"]),o._values.push(n["[[Value]]"]),o}),Object.defineProperty(r.prototype,Symbol.toStringTag,{configurable:!0,enumerable:!1,writable:!1,value:"WeakMap"}),"name"in r||Object.defineProperty(r,"name",{configurable:!0,enumerable:!1,writable:!1,value:"WeakMap"});try{CreateMethodProperty(e,"WeakMap",r)}catch(o){e.WeakMap=r}}(self);}if (!((function(e){try{if(Object.prototype.hasOwnProperty.call(e,"WeakSet")&&0===e.WeakSet.length){var t={},r=new e.WeakSet([t])
+return r.has(t)&&!1===r["delete"](0)}return!1}catch(a){return!1}})(self)
+)) {!function(e){var t=Symbol("undef"),r=function a(){if(!(this instanceof a))throw new TypeError('Constructor WeakSet requires "new"');var e=OrdinaryCreateFromConstructor(this,a.prototype,{_values:[],_size:0,_es6WeakSet:!0}),t=arguments.length>0?arguments[0]:undefined;if(null===t||t===undefined)return e;var r=Get(e,"add");if(!IsCallable(r))throw new TypeError("WeakSet.prototype.add is not a function");try{for(var o=GetIterator(t);;){var n=IteratorStep(o);if(!1===n)return e;var l=IteratorValue(n);try{Call(r,e,[l])}catch(c){return IteratorClose(o,c)}}}catch(c){if(IsArray(t)||"[object Arguments]"===Object.prototype.toString.call(t)||t.callee){var p,i=t.length;for(p=0;p<i;p++)Call(r,e,[t[p]])}}return e};Object.defineProperty(r,"prototype",{configurable:!1,enumerable:!1,writable:!1,value:{}}),CreateMethodProperty(r.prototype,"add",function n(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.add called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.add called on incompatible receiver "+Object.prototype.toString.call(r));if("object"!==Type(e))throw new TypeError("Invalid value used in weak set");for(var o=r._values,a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return r}return r._values.push(e),r}),CreateMethodProperty(r.prototype,"constructor",r),CreateMethodProperty(r.prototype,"delete",function(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.delete called on incompatible receiver "+Object.prototype.toString.call(r));if("object"!==Type(e))return!1;for(var o=r._values,a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return o[a]=t,!0}return!1}),CreateMethodProperty(r.prototype,"has",function l(e){var r=this;if("object"!==Type(r))throw new TypeError("Method WeakSet.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));if(!0!==r._es6WeakSet)throw new TypeError("Method WeakSet.prototype.has called on incompatible receiver "+Object.prototype.toString.call(r));var o=r._values;if("object"!==Type(e))return!1;for(var a=0;a<o.length;a++){var n=o[a];if(n!==t&&SameValueZero(n,e))return!0}return!1}),"name"in r||Object.defineProperty(r,"name",{configurable:!0,enumerable:!1,writable:!1,value:"WeakSet"});try{CreateMethodProperty(e,"WeakSet",r)}catch(o){e.WeakSet=r}}(self);}function TrimString(e,u){var r=RequireObjectCoercible(e),t=ToString(r),n=/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]+/.source;if("start"===u)var p=String.prototype.replace.call(t,new RegExp("^"+n,"g"),"");else p="end"===u?String.prototype.replace.call(t,new RegExp(n+"$","g"),""):String.prototype.replace.call(t,new RegExp("^"+n+"|"+n+"$","g"),"");return p}if (!("trim"in String.prototype&&function(){var r="​᠎"
+return!"\t\n\x0B\f\r                　\u2028\u2029\ufeff".trim()&&r.trim()===r}()
+)) {CreateMethodProperty(String.prototype,"trim",function t(){"use strict";var t=this;return TrimString(t,"start+end")});}if (!("parseFloat"in Number&&1/parseFloat("\t\n\x0B\f\r                　\u2028\u2029\ufeff-0")==-Infinity
+)) {!function(r,t){var a=function o(t){var a=String(t).trim(),e=r(a);return 0===e&&"-"==a.charAt(0)?-0:e};try{CreateMethodProperty(t,"parseFloat",a)}catch(e){t.parseFloat=a}CreateMethodProperty(Number,"parseFloat",t.parseFloat)}(parseFloat,this);}if (!("parseInt"in Number&&8===Number.parseInt("08")
+)) {!function(t,r){var e=function a(r,e){var n=String(r).trim();return t(n,e>>>0||(/^[-+]?0[xX]/.test(n)?16:10))};try{CreateMethodProperty(r,"parseInt",e)}catch(n){r.parseInt=e}CreateMethodProperty(Number,"parseInt",r.parseInt)}(parseInt,this);}function UTF16Decode(e,n){return 1024*(e-55296)+(n-56320)+65536}if (!("codePointAt"in String.prototype
+)) {CreateMethodProperty(String.prototype,"codePointAt",function e(t){var r=RequireObjectCoercible(this),o=ToString(r),n=ToInteger(t),i=o.length;if(n<0||n>=i)return undefined;var c=String.prototype.charCodeAt.call(o,n);if(c<55296||c>56319||n+1===i)return c;var a=String.prototype.charCodeAt.call(o,n+1);return a<56320||a>57343?c:UTF16Decode(c,a)});}function UTF16Encoding(n){return n<=65535?n:[Math.floor((n-65536)/1024)+55296,(n-65536)%1024+56320]}if (!("fromCodePoint"in String&&1===String.fromCodePoint.length
+)) {CreateMethodProperty(String,"fromCodePoint",function r(o){for(var t=[],e=arguments,n=arguments.length,a=[],i=0;i<n;){a=[];var l=e[i],p=ToNumber(l);if(!1===SameValue(p,ToInteger(p)))throw new RangeError("Invalid code point "+Object.prototype.toString.call(p));if(p<0||p>1114111)throw new RangeError("Invalid code point "+Object.prototype.toString.call(p));var c=UTF16Encoding(p);IsArray(c)?a=a.concat(c):a.push(c),i+=1,t.push(String.fromCharCode.apply(null,a))}return 0===n?"":t.join("")});}var Iterator=function(){var e=function(){return this.length=0,this},t=function(e){if("function"!=typeof e)throw new TypeError(e+" is not a function");return e},_=function(e,n){if(!(this instanceof _))return new _(e,n);Object.defineProperties(this,{__list__:{writable:!0,value:e},__context__:{writable:!0,value:n},__nextIndex__:{writable:!0,value:0}}),n&&(t(n.on),n.on("_add",this._onAdd.bind(this)),n.on("_delete",this._onDelete.bind(this)),n.on("_clear",this._onClear.bind(this)))};return Object.defineProperties(_.prototype,Object.assign({constructor:{value:_,configurable:!0,enumerable:!1,writable:!0},_next:{value:function(){var e;if(this.__list__)return this.__redo__&&(e=this.__redo__.shift())!==undefined?e:this.__nextIndex__<this.__list__.length?this.__nextIndex__++:void this._unBind()},configurable:!0,enumerable:!1,writable:!0},next:{value:function(){return this._createResult(this._next())},configurable:!0,enumerable:!1,writable:!0},_createResult:{value:function(e){return e===undefined?{done:!0,value:undefined}:{done:!1,value:this._resolve(e)}},configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(e){return this.__list__[e]},configurable:!0,enumerable:!1,writable:!0},_unBind:{value:function(){this.__list__=null,delete this.__redo__,this.__context__&&(this.__context__.off("_add",this._onAdd.bind(this)),this.__context__.off("_delete",this._onDelete.bind(this)),this.__context__.off("_clear",this._onClear.bind(this)),this.__context__=null)},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object Iterator]"},configurable:!0,enumerable:!1,writable:!0}},{_onAdd:{value:function(e){if(!(e>=this.__nextIndex__)){if(++this.__nextIndex__,!this.__redo__)return void Object.defineProperty(this,"__redo__",{value:[e],configurable:!0,enumerable:!1,writable:!1});this.__redo__.forEach(function(t,_){t>=e&&(this.__redo__[_]=++t)},this),this.__redo__.push(e)}},configurable:!0,enumerable:!1,writable:!0},_onDelete:{value:function(e){var t;e>=this.__nextIndex__||(--this.__nextIndex__,this.__redo__&&(t=this.__redo__.indexOf(e),-1!==t&&this.__redo__.splice(t,1),this.__redo__.forEach(function(t,_){t>e&&(this.__redo__[_]=--t)},this)))},configurable:!0,enumerable:!1,writable:!0},_onClear:{value:function(){this.__redo__&&e.call(this.__redo__),this.__nextIndex__=0},configurable:!0,enumerable:!1,writable:!0}})),Object.defineProperty(_.prototype,Symbol.iterator,{value:function(){return this},configurable:!0,enumerable:!1,writable:!0}),Object.defineProperty(_.prototype,Symbol.toStringTag,{value:"Iterator",configurable:!1,enumerable:!1,writable:!0}),_}();var ArrayIterator=function(){var e=function(t,r){if(!(this instanceof e))return new e(t,r);Iterator.call(this,t),r=r?String.prototype.includes.call(r,"key+value")?"key+value":String.prototype.includes.call(r,"key")?"key":"value":"value",Object.defineProperty(this,"__kind__",{value:r,configurable:!1,enumerable:!1,writable:!1})};return Object.setPrototypeOf&&Object.setPrototypeOf(e,Iterator.prototype),e.prototype=Object.create(Iterator.prototype,{constructor:{value:e,configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(e){return"value"===this.__kind__?this.__list__[e]:"key+value"===this.__kind__?[e,this.__list__[e]]:e},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object Array Iterator]"},configurable:!0,enumerable:!1,writable:!0}}),e}();if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype.entries
+)) {CreateMethodProperty(Array.prototype,"entries",function r(){var r=ToObject(this);return new ArrayIterator(r,"key+value")});}if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype.keys
+)) {CreateMethodProperty(Array.prototype,"keys",function r(){var r=ToObject(this);return new ArrayIterator(r,"key")});}if (!("values"in Array.prototype
+)) {"Symbol"in self&&"iterator"in Symbol&&"function"==typeof Array.prototype[Symbol.iterator]?CreateMethodProperty(Array.prototype,"values",Array.prototype[Symbol.iterator]):CreateMethodProperty(Array.prototype,"values",function r(){var r=ToObject(this);return new ArrayIterator(r,"value")});}if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype[self.Symbol.iterator]
+)) {CreateMethodProperty(Array.prototype,Symbol.iterator,Array.prototype.values);}var StringIterator=function(){var t=function(e){if(!(this instanceof t))return new t(e);e=String(e),Iterator.call(this,e),Object.defineProperty(this,"__length__",{value:e.length,configurable:!1,enumerable:!1,writable:!1})};return Object.setPrototypeOf&&Object.setPrototypeOf(t,Iterator),t.prototype=Object.create(Iterator.prototype,{constructor:{value:t,configurable:!0,enumerable:!1,writable:!0},_next:{value:function(){if(this.__list__)return this.__nextIndex__<this.__length__?this.__nextIndex__++:void this._unBind()},configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(t){var e,r=this.__list__[t];return this.__nextIndex__===this.__length__?r:(e=r.charCodeAt(0),e>=55296&&e<=56319?r+this.__list__[this.__nextIndex__++]:r)},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object String Iterator]"},configurable:!0,enumerable:!1,writable:!0}}),t}();if (!("Symbol"in self&&"iterator"in self.Symbol&&!!String.prototype[self.Symbol.iterator]
+)) {CreateMethodProperty(String.prototype,Symbol.iterator,function(){var r=RequireObjectCoercible(this),t=ToString(r);return new StringIterator(t)});}})('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});</script>
+  
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -4238,7 +4377,7 @@ vertical-align: -.125em;
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch6.html">Information Textuelle</a></li><li class="breadcrumb-item"><a href="./ch6q.html">Quiz</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Factorisation Matricielle et Modèles de Rang Faible (Low Rank Models)</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4414,13 +4553,13 @@ vertical-align: -.125em;
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
  <span class="menu-text">Information Textuelle</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch6.html" class="sidebar-item-text sidebar-link">
@@ -4435,7 +4574,7 @@ vertical-align: -.125em;
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch6q.html" class="sidebar-item-text sidebar-link active">
+  <a href="./ch6q.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quiz</span></a>
   </div>
 </li>
@@ -4497,9 +4636,127 @@ vertical-align: -.125em;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#niveau-1-fondamentaux" id="toc-niveau-1-fondamentaux" class="nav-link active" data-scroll-target="#niveau-1-fondamentaux">🟢 Niveau 1 — Fondamentaux</a></li>
-  <li><a href="#niveau-2-compréhension" id="toc-niveau-2-compréhension" class="nav-link" data-scroll-target="#niveau-2-compréhension">🟡 Niveau 2 — Compréhension</a></li>
-  <li><a href="#niveau-3-maîtrise" id="toc-niveau-3-maîtrise" class="nav-link" data-scroll-target="#niveau-3-maîtrise">🔴 Niveau 3 — Maîtrise</a></li>
+  <li><a href="#systèmes-de-recommandation-mise-en-contexte" id="toc-systèmes-de-recommandation-mise-en-contexte" class="nav-link active" data-scroll-target="#systèmes-de-recommandation-mise-en-contexte">Systèmes de recommandation : mise en contexte</a>
+  <ul class="collapse">
+  <li><a href="#le-problème-fondamental" id="toc-le-problème-fondamental" class="nav-link" data-scroll-target="#le-problème-fondamental">Le problème fondamental</a></li>
+  <li><a href="#formalisation-matricielle" id="toc-formalisation-matricielle" class="nav-link" data-scroll-target="#formalisation-matricielle">Formalisation matricielle</a>
+  <ul class="collapse">
+  <li><a href="#la-matrice-de-notes-rating-matrix" id="toc-la-matrice-de-notes-rating-matrix" class="nav-link" data-scroll-target="#la-matrice-de-notes-rating-matrix">La matrice de notes (Rating Matrix)</a></li>
+  <li><a href="#la-matrice-binaire-dobservation" id="toc-la-matrice-binaire-dobservation" class="nav-link" data-scroll-target="#la-matrice-binaire-dobservation">La matrice binaire d’observation</a></li>
+  </ul></li>
+  <li><a href="#vue-par-graphe-biparti-bipartite-graph-view" id="toc-vue-par-graphe-biparti-bipartite-graph-view" class="nav-link" data-scroll-target="#vue-par-graphe-biparti-bipartite-graph-view">Vue par graphe biparti (Bipartite Graph View)</a></li>
+  </ul></li>
+  <li><a href="#modélisation-par-régression-linéaire" id="toc-modélisation-par-régression-linéaire" class="nav-link" data-scroll-target="#modélisation-par-régression-linéaire">Modélisation par régression linéaire</a>
+  <ul class="collapse">
+  <li><a href="#hypothèse-fondamentale-les-variables-latentes" id="toc-hypothèse-fondamentale-les-variables-latentes" class="nav-link" data-scroll-target="#hypothèse-fondamentale-les-variables-latentes">Hypothèse fondamentale : les variables latentes</a>
+  <ul class="collapse">
+  <li><a href="#pourquoi-des-variables-latentes" id="toc-pourquoi-des-variables-latentes" class="nav-link" data-scroll-target="#pourquoi-des-variables-latentes">Pourquoi des variables latentes ?</a></li>
+  <li><a href="#représentation-vectorielle-des-articles" id="toc-représentation-vectorielle-des-articles" class="nav-link" data-scroll-target="#représentation-vectorielle-des-articles">Représentation vectorielle des articles</a></li>
+  <li><a href="#représentation-vectorielle-des-utilisateurs" id="toc-représentation-vectorielle-des-utilisateurs" class="nav-link" data-scroll-target="#représentation-vectorielle-des-utilisateurs">Représentation vectorielle des utilisateurs</a></li>
+  </ul></li>
+  <li><a href="#modèle-de-régression-linéaire" id="toc-modèle-de-régression-linéaire" class="nav-link" data-scroll-target="#modèle-de-régression-linéaire">Modèle de régression linéaire</a>
+  <ul class="collapse">
+  <li><a href="#formulation-scalaire" id="toc-formulation-scalaire" class="nav-link" data-scroll-target="#formulation-scalaire">Formulation scalaire</a></li>
+  <li><a href="#homogénéisation-homogenization" id="toc-homogénéisation-homogenization" class="nav-link" data-scroll-target="#homogénéisation-homogenization">Homogénéisation (Homogenization)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#estimation-des-paramètres" id="toc-estimation-des-paramètres" class="nav-link" data-scroll-target="#estimation-des-paramètres">Estimation des paramètres</a>
+  <ul class="collapse">
+  <li><a href="#problème-doptimisation-pour-les-utilisateurs" id="toc-problème-doptimisation-pour-les-utilisateurs" class="nav-link" data-scroll-target="#problème-doptimisation-pour-les-utilisateurs">Problème d’optimisation pour les utilisateurs</a>
+  <ul class="collapse">
+  <li><a href="#objectif" id="toc-objectif" class="nav-link" data-scroll-target="#objectif">Objectif</a></li>
+  <li><a href="#termes-de-lobjectif" id="toc-termes-de-lobjectif" class="nav-link" data-scroll-target="#termes-de-lobjectif">Termes de l’objectif</a></li>
+  <li><a href="#estimation-globale-de-tous-les-utilisateurs" id="toc-estimation-globale-de-tous-les-utilisateurs" class="nav-link" data-scroll-target="#estimation-globale-de-tous-les-utilisateurs">Estimation globale de tous les utilisateurs</a></li>
+  </ul></li>
+  <li><a href="#descente-de-gradient-pour-les-utilisateurs" id="toc-descente-de-gradient-pour-les-utilisateurs" class="nav-link" data-scroll-target="#descente-de-gradient-pour-les-utilisateurs">Descente de gradient pour les utilisateurs</a>
+  <ul class="collapse">
+  <li><a href="#calcul-du-gradient" id="toc-calcul-du-gradient" class="nav-link" data-scroll-target="#calcul-du-gradient">Calcul du gradient</a></li>
+  <li><a href="#règle-de-mise-à-jour-update-rule" id="toc-règle-de-mise-à-jour-update-rule" class="nav-link" data-scroll-target="#règle-de-mise-à-jour-update-rule">Règle de mise à jour (Update Rule)</a></li>
+  <li><a href="#cas-particulier-biais-intercept-k-0" id="toc-cas-particulier-biais-intercept-k-0" class="nav-link" data-scroll-target="#cas-particulier-biais-intercept-k-0">Cas particulier : biais (intercept, <span class="math inline">\(k = 0\)</span>)</a></li>
+  </ul></li>
+  <li><a href="#estimation-des-articles-problème-symétrique" id="toc-estimation-des-articles-problème-symétrique" class="nav-link" data-scroll-target="#estimation-des-articles-problème-symétrique">Estimation des articles : problème symétrique</a>
+  <ul class="collapse">
+  <li><a href="#objectif-pour-les-articles" id="toc-objectif-pour-les-articles" class="nav-link" data-scroll-target="#objectif-pour-les-articles">Objectif pour les articles</a></li>
+  </ul></li>
+  <li><a href="#optimisation-conjointe-joint-optimization" id="toc-optimisation-conjointe-joint-optimization" class="nav-link" data-scroll-target="#optimisation-conjointe-joint-optimization">Optimisation conjointe (Joint Optimization)</a>
+  <ul class="collapse">
+  <li><a href="#fonction-de-coût-globale" id="toc-fonction-de-coût-globale" class="nav-link" data-scroll-target="#fonction-de-coût-globale">Fonction de coût globale</a></li>
+  <li><a href="#minimisation-alternée-alternate-minimization" id="toc-minimisation-alternée-alternate-minimization" class="nav-link" data-scroll-target="#minimisation-alternée-alternate-minimization">Minimisation alternée (Alternate Minimization)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#formulation-en-rang-faible-low-rank-formulation" id="toc-formulation-en-rang-faible-low-rank-formulation" class="nav-link" data-scroll-target="#formulation-en-rang-faible-low-rank-formulation">Formulation en rang faible (Low Rank Formulation)</a>
+  <ul class="collapse">
+  <li><a href="#du-modèle-de-régression-à-la-décomposition-matricielle" id="toc-du-modèle-de-régression-à-la-décomposition-matricielle" class="nav-link" data-scroll-target="#du-modèle-de-régression-à-la-décomposition-matricielle">Du modèle de régression à la décomposition matricielle</a>
+  <ul class="collapse">
+  <li><a href="#vue-matricielle-du-modèle" id="toc-vue-matricielle-du-modèle" class="nav-link" data-scroll-target="#vue-matricielle-du-modèle">Vue matricielle du modèle</a></li>
+  <li><a href="#rang-de-lapproximation" id="toc-rang-de-lapproximation" class="nav-link" data-scroll-target="#rang-de-lapproximation">Rang de l’approximation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#théorie-des-modèles-de-rang-faible" id="toc-théorie-des-modèles-de-rang-faible" class="nav-link" data-scroll-target="#théorie-des-modèles-de-rang-faible">Théorie des modèles de rang faible</a>
+  <ul class="collapse">
+  <li><a href="#la-décomposition-en-valeurs-singulières-svd" id="toc-la-décomposition-en-valeurs-singulières-svd" class="nav-link" data-scroll-target="#la-décomposition-en-valeurs-singulières-svd">La Décomposition en Valeurs Singulières (SVD)</a>
+  <ul class="collapse">
+  <li><a href="#théorème-fondamental" id="toc-théorème-fondamental" class="nav-link" data-scroll-target="#théorème-fondamental">Théorème fondamental</a></li>
+  <li><a href="#produit-scalaire-et-trace-matricielle" id="toc-produit-scalaire-et-trace-matricielle" class="nav-link" data-scroll-target="#produit-scalaire-et-trace-matricielle">Produit scalaire et trace matricielle</a></li>
+  </ul></li>
+  <li><a href="#découpage-de-la-svd-en-rang-1-matrix-slicing" id="toc-découpage-de-la-svd-en-rang-1-matrix-slicing" class="nav-link" data-scroll-target="#découpage-de-la-svd-en-rang-1-matrix-slicing">Découpage de la SVD en rang 1 (Matrix Slicing)</a>
+  <ul class="collapse">
+  <li><a href="#décomposition-en-somme-de-matrices-de-rang-1" id="toc-décomposition-en-somme-de-matrices-de-rang-1" class="nav-link" data-scroll-target="#décomposition-en-somme-de-matrices-de-rang-1">Décomposition en somme de matrices de rang 1</a></li>
+  <li><a href="#justification-de-la-troncature" id="toc-justification-de-la-troncature" class="nav-link" data-scroll-target="#justification-de-la-troncature">Justification de la troncature</a></li>
+  </ul></li>
+  <li><a href="#théorème-deckart-young" id="toc-théorème-deckart-young" class="nav-link" data-scroll-target="#théorème-deckart-young">Théorème d’Eckart-Young</a></li>
+  </ul></li>
+  <li><a href="#interprétation-géométrique-de-la-svd" id="toc-interprétation-géométrique-de-la-svd" class="nav-link" data-scroll-target="#interprétation-géométrique-de-la-svd">Interprétation géométrique de la SVD</a>
+  <ul class="collapse">
+  <li><a href="#les-bases-orthonormées-latentes" id="toc-les-bases-orthonormées-latentes" class="nav-link" data-scroll-target="#les-bases-orthonormées-latentes">Les bases orthonormées latentes</a>
+  <ul class="collapse">
+  <li><a href="#structure-des-bases" id="toc-structure-des-bases" class="nav-link" data-scroll-target="#structure-des-bases">Structure des bases</a></li>
+  <li><a href="#r-comme-application-linéaire" id="toc-r-comme-application-linéaire" class="nav-link" data-scroll-target="#r-comme-application-linéaire">R comme application linéaire</a></li>
+  </ul></li>
+  <li><a href="#décomposition-en-transformations-élémentaires" id="toc-décomposition-en-transformations-élémentaires" class="nav-link" data-scroll-target="#décomposition-en-transformations-élémentaires">Décomposition en transformations élémentaires</a>
+  <ul class="collapse">
+  <li><a href="#cas-de-la-troncature-à-k-dimensions" id="toc-cas-de-la-troncature-à-k-dimensions" class="nav-link" data-scroll-target="#cas-de-la-troncature-à-k-dimensions">Cas de la troncature à <span class="math inline">\(K\)</span> dimensions</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#propagation-dinformation" id="toc-propagation-dinformation" class="nav-link" data-scroll-target="#propagation-dinformation">Propagation d’information</a>
+  <ul class="collapse">
+  <li><a href="#matrices-de-similarité" id="toc-matrices-de-similarité" class="nav-link" data-scroll-target="#matrices-de-similarité">Matrices de similarité</a>
+  <ul class="collapse">
+  <li><a href="#similarité-entre-articles-item-similarity" id="toc-similarité-entre-articles-item-similarity" class="nav-link" data-scroll-target="#similarité-entre-articles-item-similarity">Similarité entre articles (Item Similarity)</a></li>
+  <li><a href="#similarité-entre-utilisateurs-user-similarity" id="toc-similarité-entre-utilisateurs-user-similarity" class="nav-link" data-scroll-target="#similarité-entre-utilisateurs-user-similarity">Similarité entre utilisateurs (User Similarity)</a></li>
+  </ul></li>
+  <li><a href="#condition-de-connexité-du-graphe" id="toc-condition-de-connexité-du-graphe" class="nav-link" data-scroll-target="#condition-de-connexité-du-graphe">Condition de connexité du graphe</a></li>
+  <li><a href="#limites-du-modèle-linéaire" id="toc-limites-du-modèle-linéaire" class="nav-link" data-scroll-target="#limites-du-modèle-linéaire">Limites du modèle linéaire</a></li>
+  </ul></li>
+  <li><a href="#applications-de-la-svd" id="toc-applications-de-la-svd" class="nav-link" data-scroll-target="#applications-de-la-svd">Applications de la SVD</a>
+  <ul class="collapse">
+  <li><a href="#application-aux-systèmes-de-recommandation" id="toc-application-aux-systèmes-de-recommandation" class="nav-link" data-scroll-target="#application-aux-systèmes-de-recommandation">Application aux systèmes de recommandation</a></li>
+  <li><a href="#application-à-lanalyse-sémantique-latente-lsalsi" id="toc-application-à-lanalyse-sémantique-latente-lsalsi" class="nav-link" data-scroll-target="#application-à-lanalyse-sémantique-latente-lsalsi">Application à l’analyse sémantique latente (LSA/LSI)</a></li>
+  </ul></li>
+  <li><a href="#factorisation-en-matrices-non-négatives-nmf" id="toc-factorisation-en-matrices-non-négatives-nmf" class="nav-link" data-scroll-target="#factorisation-en-matrices-non-négatives-nmf">Factorisation en Matrices Non-négatives (NMF)</a>
+  <ul class="collapse">
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a>
+  <ul class="collapse">
+  <li><a href="#limites-de-la-svd-pour-linterprétabilité" id="toc-limites-de-la-svd-pour-linterprétabilité" class="nav-link" data-scroll-target="#limites-de-la-svd-pour-linterprétabilité">Limites de la SVD pour l’interprétabilité</a></li>
+  </ul></li>
+  <li><a href="#formulation-de-la-nmf" id="toc-formulation-de-la-nmf" class="nav-link" data-scroll-target="#formulation-de-la-nmf">Formulation de la NMF</a>
+  <ul class="collapse">
+  <li><a href="#définition" id="toc-définition" class="nav-link" data-scroll-target="#définition">Définition</a></li>
+  <li><a href="#problème-doptimisation" id="toc-problème-doptimisation" class="nav-link" data-scroll-target="#problème-doptimisation">Problème d’optimisation</a></li>
+  </ul></li>
+  <li><a href="#nmf-versus-svd-illustration-sur-des-visages" id="toc-nmf-versus-svd-illustration-sur-des-visages" class="nav-link" data-scroll-target="#nmf-versus-svd-illustration-sur-des-visages">NMF versus SVD : illustration sur des visages</a></li>
+  <li><a href="#complétion-de-matrice-matrix-completion" id="toc-complétion-de-matrice-matrix-completion" class="nav-link" data-scroll-target="#complétion-de-matrice-matrix-completion">Complétion de matrice (Matrix Completion)</a>
+  <ul class="collapse">
+  <li><a href="#stratégie-pratique" id="toc-stratégie-pratique" class="nav-link" data-scroll-target="#stratégie-pratique">Stratégie pratique</a></li>
+  <li><a href="#normalisation-par-la-moyenne-mean-normalization" id="toc-normalisation-par-la-moyenne-mean-normalization" class="nav-link" data-scroll-target="#normalisation-par-la-moyenne-mean-normalization">Normalisation par la moyenne (Mean Normalization)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#synthèse-pourquoi-les-modèles-de-rang-faible" id="toc-synthèse-pourquoi-les-modèles-de-rang-faible" class="nav-link" data-scroll-target="#synthèse-pourquoi-les-modèles-de-rang-faible">Synthèse : pourquoi les modèles de rang faible ?</a>
+  <ul class="collapse">
+  <li><a href="#le-principe-général" id="toc-le-principe-général" class="nav-link" data-scroll-target="#le-principe-général">Le principe général</a></li>
+  <li><a href="#récapitulatif-des-outils-mathématiques-clés" id="toc-récapitulatif-des-outils-mathématiques-clés" class="nav-link" data-scroll-target="#récapitulatif-des-outils-mathématiques-clés">Récapitulatif des outils mathématiques clés</a></li>
+  <li><a href="#applications-au-delà-de-la-recommandation" id="toc-applications-au-delà-de-la-recommandation" class="nav-link" data-scroll-target="#applications-au-delà-de-la-recommandation">Applications au-delà de la recommandation</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -4507,9 +4764,9 @@ vertical-align: -.125em;
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch6.html">Information Textuelle</a></li><li class="breadcrumb-item"><a href="./ch6q.html">Quiz</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Recherche d’Information Textuelle — Quiz</h1>
+<h1 class="title">Factorisation Matricielle et Modèles de Rang Faible (Low Rank Models)</h1>
 </div>
 
 
@@ -4526,366 +4783,750 @@ vertical-align: -.125em;
 </header>
 
 
-<hr>
-<section id="niveau-1-fondamentaux" class="level2">
-<h2 class="anchored" data-anchor-id="niveau-1-fondamentaux">🟢 Niveau 1 — Fondamentaux</h2>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Qu&#39;est-ce que le modèle Sac de Mots (Bag of Words) ?
-- [ ] Un modèle qui conserve l&#39;ordre des mots dans un document
-- [x] Un modèle qui représente un document comme un ensemble non ordonné de termes avec leurs fréquences
-- [ ] Un modèle qui analyse la grammaire et la syntaxe d&#39;un texte
-- [ ] Un modèle basé sur des réseaux de neurones
-&gt; Explication :
-&gt; Dans le modèle BoW, les termes sont des entités indépendantes et non ordonnées, apparaissant avec des multiplicités (fréquences). La structure grammaticale et l&#39;ordre des mots sont perdus.
+<section id="systèmes-de-recommandation-mise-en-contexte" class="level1">
+<h1>Systèmes de recommandation : mise en contexte</h1>
+<section id="le-problème-fondamental" class="level2">
+<h2 class="anchored" data-anchor-id="le-problème-fondamental">Le problème fondamental</h2>
+<p>Un système de recommandation cherche à <strong>prédire</strong> la note qu’un utilisateur attribuerait à un article qu’il n’a pas encore évalué.</p>
+<p>L’idée centrale est simple : si deux utilisateurs ont des goûts similaires sur les articles qu’ils ont tous deux notés, on peut inférer qu’ils apprécieront les mêmes articles inconnus.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Lequel de ces termes est typiquement considéré comme un mot vide (stopword) en anglais ?
-- [ ] retrieval
-- [ ] information
-- [x] the
-- [ ] algorithm
-&gt; Explication :
-&gt; &quot;the&quot; est un mot non discriminant : il apparaît dans presque tous les documents et n&#39;aide pas à distinguer leur contenu. Son IDF (Inverse Document Frequency) est très élevé.
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Que fait la racinisation (Stemming) ?
-- [ ] Traduit un mot vers sa forme conjuguée correcte
-- [ ] Identifie les entités nommées dans un texte
-- [x] Tronque un mot pour le ramener à sa racine approximative
-- [ ] Convertit un mot en code phonétique
-&gt; Explication :
-&gt; Le stemming supprime les suffixes pour ramener les mots à une forme tronquée commune. Exemple : committed → commit. L&#39;algorithme de Porter est le plus célèbre (5 étapes).
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quelle est la différence principale entre stemming et lemmatisation (lemmatization) ?
-- [ ] Le stemming est plus lent que la lemmatisation
-- [ ] La lemmatisation tronque les mots, le stemming les corrige grammaticalement
-- [x] La lemmatisation produit une forme linguistiquement correcte ; le stemming produit une racine tronquée potentiellement incorrecte
-- [ ] Il n&#39;y a aucune différence pratique
-&gt; Explication :
-&gt; La lemmatisation ramène à la forme de base (lemme) : &quot;are&quot;, &quot;is&quot; → &quot;be&quot;. Le stemming est plus rapide mais peut produire des formes non-mots. Exemple d&#39;erreur de stemming : paste ↔ past.
+<div class="callout-body-container callout-body">
+<p>L’objectif est de passer d’une matrice <strong>incomplète</strong> de notes observées à une matrice <strong>complète</strong> de notes estimées, afin de recommander les articles les plus pertinents pour chaque utilisateur.</p>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quel est le rôle de SOUNDEX dans le traitement du texte ?
-- [ ] Trier les termes par fréquence décroissante
-- [ ] Supprimer les mots vides d&#39;un document
-- [x] Convertir un token en une clé phonétique de 4 caractères pour regrouper les variantes orthographiques
-- [ ] Calculer la similarité cosinus entre deux documents
-&gt; Explication :
-&gt; SOUNDEX encode chaque token en une forme lettre + 3 chiffres (ex. : Herman → H655). Cela permet de regrouper des variantes comme Tchebichef et Chebysheff.
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Selon la loi de Zipf, quelle relation existe entre la fréquence f(i) d&#39;un terme et son rang r(i) ?
-- [ ] f(i) est proportionnel à r(i)
-- [x] f(i) est inversement proportionnel à r(i)
-- [ ] f(i) est proportionnel au carré de r(i)
-- [ ] f(i) ne dépend pas de r(i)
-&gt; Explication :
-&gt; La loi de Zipf stipule que f(i) · r(i) = K (constante), soit f(i) ∝ 1/r(i). Le terme de rang 1 est deux fois plus fréquent que celui de rang 2, trois fois plus que celui de rang 3, etc.
+</section>
+<section id="formalisation-matricielle" class="level2">
+<h2 class="anchored" data-anchor-id="formalisation-matricielle">Formalisation matricielle</h2>
+<section id="la-matrice-de-notes-rating-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="la-matrice-de-notes-rating-matrix">La matrice de notes (Rating Matrix)</h3>
+<p>On considère <strong>M utilisateurs</strong> et <strong>N articles</strong>. La matrice de notes est :</p>
+<p><span class="math display">\[\mathbf{R} = (r_{ij})_{ij} \in \mathbb{R}^{M \times N}, \quad r_{ij} \in ]0, 1] \cup \{?\}\]</span></p>
+<p>Chaque entrée <span class="math inline">\(r_{ij}\)</span> représente la note de l’utilisateur <span class="math inline">\(i\)</span> pour l’article <span class="math inline">\(j\)</span>.</p>
+<p>Le symbole <code>?</code> indique que l’utilisateur <span class="math inline">\(i\)</span> n’a <strong>pas encore noté</strong> l’article <span class="math inline">\(j\)</span> — c’est précisément ce que l’on cherche à prédire.</p>
+</section>
+<section id="la-matrice-binaire-dobservation" class="level3">
+<h3 class="anchored" data-anchor-id="la-matrice-binaire-dobservation">La matrice binaire d’observation</h3>
+<p>On introduit une matrice binaire <span class="math inline">\(\mathbf{B}\)</span> pour coder les observations disponibles :</p>
+<p><span class="math display">\[\mathbf{B} = (b_{ij})_{ij} \in \{0, 1\}^{M \times N}, \quad b_{ij} = \begin{cases} 1 &amp; \text{si l&#39;utilisateur } i \text{ note l&#39;article } j \\ 0 &amp; \text{sinon} \end{cases}\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Qu&#39;est-ce qu&#39;un hapax legomenon dans un corpus textuel ?
-- [ ] Un terme apparaissant dans tous les documents
-- [ ] Un terme de très haute fréquence
-- [x] Un terme n&#39;apparaissant qu&#39;une seule fois dans le corpus
-- [ ] Un terme composé de deux mots
-&gt; Explication :
-&gt; Les hapax legomena sont des termes d&#39;occurrence unique. D&#39;après la loi de Zipf, ils représentent environ la moitié de tous les termes distincts d&#39;un corpus : s₁/M = 1/(1×2) = 0.5.
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### La loi de Heap (Heap&#39;s Law) décrit...
-- [ ] La relation entre fréquence et rang des termes
-- [x] La croissance du vocabulaire en fonction de la taille du corpus
-- [ ] La distribution des longueurs de documents
-- [ ] La probabilité de co-occurrence de deux termes
-&gt; Explication :
-&gt; La loi de Heap est M = k · L^β avec β ≈ 0.4–0.6. Elle prédit une croissance sous-linéaire du vocabulaire : si le corpus quadruple, le vocabulaire ne double qu&#39;environ.
+</div>
+<div class="callout-body-container callout-body">
+<p>La matrice <span class="math inline">\(\mathbf{B}\)</span> joue le rôle d’un <strong>masque</strong> : elle indique quelles entrées de <span class="math inline">\(\mathbf{R}\)</span> sont connues et lesquelles sont manquantes. En pratique, dans un service de streaming avec des millions d’utilisateurs et de films, cette matrice est <strong>extrêmement creuse</strong> (sparse) — la grande majorité des entrées est inconnue.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="vue-par-graphe-biparti-bipartite-graph-view" class="level2">
+<h2 class="anchored" data-anchor-id="vue-par-graphe-biparti-bipartite-graph-view">Vue par graphe biparti (Bipartite Graph View)</h2>
+<p>La matrice <span class="math inline">\(\mathbf{B}\)</span> peut s’interpréter comme la <strong>matrice d’adjacence</strong> d’un graphe biparti binaire dont les poids sont donnés par <span class="math inline">\(\mathbf{R}\)</span> :</p>
+<ul>
+<li>Un ensemble de nœuds représente les <strong>utilisateurs</strong> (<span class="math inline">\(M\)</span> nœuds)</li>
+<li>Un autre ensemble représente les <strong>articles</strong> (<span class="math inline">\(N\)</span> nœuds)</li>
+<li>Une arête existe entre l’utilisateur <span class="math inline">\(i\)</span> et l’article <span class="math inline">\(j\)</span> si et seulement si <span class="math inline">\(b_{ij} = 1\)</span>, avec un poids <span class="math inline">\(r_{ij}\)</span></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cette vue graphe permet de comprendre la <strong>propagation d’information</strong> : deux utilisateurs qui partagent des articles notés en commun sont “proches” dans le graphe. La décomposition matricielle que l’on construira revient à identifier les <strong>variables latentes</strong> qui structurent ce graphe.</p>
+</div>
 </div>
 <hr>
 </section>
-<section id="niveau-2-compréhension" class="level2">
-<h2 class="anchored" data-anchor-id="niveau-2-compréhension">🟡 Niveau 2 — Compréhension</h2>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Un système de RI utilise la loi de Zipf pour décider quels termes indexer. Quelle stratégie applique-t-il selon Luhn ?
-- [ ] Indexer uniquement les termes les plus fréquents
-- [ ] Indexer uniquement les hapax
-- [x] Définir un seuil supérieur (supprime les trop fréquents) et un seuil inférieur (supprime les trop rares) pour ne garder que les termes significatifs
-- [ ] Indexer tous les termes sans exception
-&gt; Explication :
-&gt; Luhn propose deux coupures de rang : les termes très fréquents (stopwords) et très rares (hapax) sont écartés. Les termes significatifs se situent dans la zone intermédiaire à haute valeur discriminante.
+</section>
+<section id="modélisation-par-régression-linéaire" class="level1">
+<h1>Modélisation par régression linéaire</h1>
+<section id="hypothèse-fondamentale-les-variables-latentes" class="level2">
+<h2 class="anchored" data-anchor-id="hypothèse-fondamentale-les-variables-latentes">Hypothèse fondamentale : les variables latentes</h2>
+<section id="pourquoi-des-variables-latentes" class="level3">
+<h3 class="anchored" data-anchor-id="pourquoi-des-variables-latentes">Pourquoi des variables latentes ?</h3>
+<p>L’hypothèse centrale est que les notes ne sont pas arbitraires : elles découlent de <strong>caractéristiques sous-jacentes</strong> (latentes) des articles et des préférences des utilisateurs.</p>
+<p>Par exemple, pour des films :</p>
+<ul>
+<li>Genre : Action, Aventure, Romance, Horreur, …</li>
+<li>Réalisateur, époque, rythme narratif, …</li>
+</ul>
+<p>On postule qu’un utilisateur note bien un film parce que le film possède des caractéristiques qui correspondent à ses goûts personnels.</p>
+</section>
+<section id="représentation-vectorielle-des-articles" class="level3">
+<h3 class="anchored" data-anchor-id="représentation-vectorielle-des-articles">Représentation vectorielle des articles</h3>
+<p>On note <span class="math inline">\(v_j[k]\)</span> le <strong>degré</strong> auquel l’article <span class="math inline">\(j\)</span> possède la caractéristique <span class="math inline">\(k\)</span>.</p>
+<p><strong>Exemple concret</strong> pour <span class="math inline">\(K = 4\)</span> caractéristiques [Action, Aventure, Romance, Horreur] :</p>
+<ul>
+<li><em>“La guerre des robots tueurs”</em> : <span class="math inline">\(v_j = [10, 8, 0, 5]^T\)</span></li>
+<li><em>“Romance à Bastions”</em> : <span class="math inline">\(v_j = [0, 3, 10, 1]^T\)</span></li>
+</ul>
+</section>
+<section id="représentation-vectorielle-des-utilisateurs" class="level3">
+<h3 class="anchored" data-anchor-id="représentation-vectorielle-des-utilisateurs">Représentation vectorielle des utilisateurs</h3>
+<p>De façon symétrique, on note <span class="math inline">\(u_i[k]\)</span> la <strong>sensibilité</strong> de l’utilisateur <span class="math inline">\(i\)</span> à la caractéristique <span class="math inline">\(k\)</span>.</p>
+<p>Un utilisateur qui adore l’action aura <span class="math inline">\(u_i[\text{Action}]\)</span> élevé, tandis qu’un amateur de romance aura <span class="math inline">\(u_i[\text{Romance}]\)</span> élevé.</p>
+</section>
+</section>
+<section id="modèle-de-régression-linéaire" class="level2">
+<h2 class="anchored" data-anchor-id="modèle-de-régression-linéaire">Modèle de régression linéaire</h2>
+<section id="formulation-scalaire" class="level3">
+<h3 class="anchored" data-anchor-id="formulation-scalaire">Formulation scalaire</h3>
+<p>L’hypothèse de linéarité — <em>“plus un film est action, plus un fan d’action l’aimera”</em> — conduit à la formule de prédiction :</p>
+<p><span class="math display">\[r_{ij} = \sum_{k=1}^{K} u_i[k] \cdot v_j[k] + u_i[0]\]</span></p>
+<ul>
+<li><span class="math inline">\(u_i[0]\)</span> est un <strong>biais dépendant de l’utilisateur</strong> (intercept), qui capture le fait que certains utilisateurs notent systématiquement plus haut ou plus bas que la moyenne.</li>
+<li><span class="math inline">\(K\)</span> est le nombre de caractéristiques choisies.</li>
+</ul>
+</section>
+<section id="homogénéisation-homogenization" class="level3">
+<h3 class="anchored" data-anchor-id="homogénéisation-homogenization">Homogénéisation (Homogenization)</h3>
+<p>On peut intégrer le biais dans le vecteur en ajoutant une caractéristique artificielle <span class="math inline">\(v_j[0] = 1\)</span> pour tous les articles, et en absorbant <span class="math inline">\(u_i[0]\)</span> dans le vecteur utilisateur augmenté <span class="math inline">\(\tilde{u}_i\)</span> :</p>
+<p><span class="math display">\[r_{ij} = (\tilde{u}_i)^T \tilde{v}_j\]</span></p>
+<p>Cette astuce classique d’<strong>homogénéisation</strong> permet d’écrire le modèle comme un simple produit scalaire, sans terme de biais séparé.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Sur un graphique log-log (log fréquence vs log rang), comment apparaît la loi de Zipf ?
-- [ ] Comme une courbe exponentielle croissante
-- [ ] Comme une parabole
-- [x] Comme une droite de pente négative
-- [ ] Comme une courbe sinusoïdale
-&gt; Explication :
-&gt; log f(i) = log(KL) - log(r(i)) est l&#39;équation d&#39;une droite de pente -1. C&#39;est la signature visuelle d&#39;une loi de puissance en représentation log-log.
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quelle est la fraction théorique de termes apparaissant exactement 2 fois dans un corpus, selon Zipf ?
-- [ ] 1/2
-- [x] 1/6
-- [ ] 1/4
-- [ ] 1/12
-&gt; Explication :
-&gt; La formule est sₙ/M = 1/n(n+1). Pour n=2 : 1/(2×3) = 1/6 ≈ 0.167. Cela correspond bien aux observations empiriques sur le corpus TREC (~0.132).
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Pourquoi la correction de Mandelbrot améliore-t-elle la loi de Zipf ?
-- [ ] Elle simplifie le calcul de la fréquence
-- [x] Elle corrige les déviations aux rangs extrêmes (très fréquents et très rares) en ajoutant les paramètres ρ et B
-- [ ] Elle s&#39;applique uniquement aux langues non latines
-- [ ] Elle remplace entièrement la loi de Zipf
-&gt; Explication :
-&gt; La loi de Zipf pure dévie aux extrêmes. Mandelbrot propose f(i) = P(r(i)+ρ)^(-B) avec ρ=100, B=1.15, ce qui améliore l&#39;ajustement notamment pour les hauts rangs (termes peu fréquents).
+<div class="callout-body-container callout-body">
+<p>Le produit scalaire <span class="math inline">\(u_i^T v_j\)</span> mesure l’<strong>alignement</strong> entre les préférences de l’utilisateur et les caractéristiques de l’article. Plus cet alignement est fort, plus la note prédite est élevée. C’est exactement l’idée de la <strong>similitude cosinus</strong> que l’on retrouve en recherche d’information.</p>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quelle propriété fondamentale de la distribution des termes justifie qu&#39;on parle de distribution &quot;à queue lourde&quot; (heavy-tailed) ?
-- [ ] La majorité de la fréquence totale est concentrée dans les termes rares
-- [x] La grande majorité des termes distincts est rare, et la masse probabiliste totale se trouve dans la queue (termes peu fréquents)
-- [ ] Tous les termes ont approximativement la même fréquence
-- [ ] Les termes les plus fréquents représentent la moitié du vocabulaire
-&gt; Explication :
-&gt; La distribution est asymétrique : quelques termes très fréquents dominent les occurrences, mais le nombre de termes distincts est massivement constitué de termes rares. C&#39;est la définition d&#39;une queue lourde.
-</div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Dans le contexte de l&#39;information mutuelle (Mutual Information), pourquoi les associations avec des mots comme &quot;a&quot;, &quot;is&quot;, &quot;with&quot; sont-elles considérées comme spurieuses ?
-- [ ] Parce que ces mots ont une faible fréquence dans le corpus
-- [ ] Parce qu&#39;ils n&#39;apparaissent jamais avec d&#39;autres termes
-- [x] Parce que leur très haute fréquence les fait co-occurrencer avec tous les termes, gonflant artificiellement le comptage de co-occurrences sans révéler d&#39;association sémantique
-- [ ] Parce que l&#39;information mutuelle ne peut pas les mesurer
-&gt; Explication :
-&gt; L&#39;information mutuelle I(W₁;W₂) ≈ 0 si P(W₁,W₂) ≈ P(W₁)P(W₂). Les stopwords co-occurrent massivement par chance, ce qui explique leur faible valeur d&#39;IM malgré des comptages élevés.
-</div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Un corpus passe de 1 million à 4 millions de tokens. Avec β = 0.5 dans la loi de Heap, comment évolue approximativement le vocabulaire ?
-- [ ] Il quadruple
-- [x] Il double
-- [ ] Il reste stable
-- [ ] Il triple
-&gt; Explication :
-&gt; M ∝ L^0.5 = √L. Si L est multiplié par 4, M est multiplié par √4 = 2. C&#39;est précisément le sens de la croissance sous-linéaire prédite par Heap.
-</div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quelle est l&#39;interprétation du &quot;Principe du Moindre Effort&quot; (Principle of Least Effort) de Zipf ?
-- [ ] Les auteurs écrivent des textes aussi courts que possible
-- [x] La loi de Zipf émerge d&#39;un équilibre entre le locuteur (qui veut un petit vocabulaire) et l&#39;auditeur (qui veut un grand vocabulaire)
-- [ ] Les lecteurs ne lisent que les mots les plus fréquents
-- [ ] Les systèmes de RI doivent minimiser le nombre d&#39;opérations
-&gt; Explication :
-&gt; Zipf spécule que la distribution résulte d&#39;un compromis : l&#39;émetteur veut simplifier (petit vocabulaire), le récepteur veut de la précision (grand vocabulaire). Li (1992) a montré qu&#39;une frappe aléatoire suffit à reproduire cette distribution.
 </div>
 <hr>
 </section>
-<section id="niveau-3-maîtrise" class="level2">
-<h2 class="anchored" data-anchor-id="niveau-3-maîtrise">🔴 Niveau 3 — Maîtrise</h2>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Cas pratique : vous construisez un moteur de recherche sur un corpus de 10 millions de tokens. Vous observez 80 000 termes distincts. En utilisant la loi de Heap avec k=10, estimez β.
-- [ ] β ≈ 0.3
-- [x] β ≈ 0.9 (≈ log(8000)/log(10 000 000))
-- [ ] β ≈ 0.5
-- [ ] β ≈ 1.2
-&gt; Explication :
-&gt; M = k · L^β → 80000 = 10 · (10⁷)^β → 8000 = (10⁷)^β → β = log(8000)/log(10⁷) ≈ 3.9/7 ≈ 0.56. La valeur empirique est cohérente avec β ∈ [0.4, 0.6].
+</section>
+</section>
+<section id="estimation-des-paramètres" class="level1">
+<h1>Estimation des paramètres</h1>
+<section id="problème-doptimisation-pour-les-utilisateurs" class="level2">
+<h2 class="anchored" data-anchor-id="problème-doptimisation-pour-les-utilisateurs">Problème d’optimisation pour les utilisateurs</h2>
+<section id="objectif" class="level3">
+<h3 class="anchored" data-anchor-id="objectif">Objectif</h3>
+<p>Étant donné les vecteurs d’articles <span class="math inline">\(\{\tilde{v}_j\}_j\)</span>, on cherche les vecteurs utilisateurs <span class="math inline">\(\{\tilde{u}_i\}_i\)</span> qui minimisent l’erreur de prédiction sur les notes observées.</p>
+<p>Pour un seul utilisateur <span class="math inline">\(i\)</span> :</p>
+<p><span class="math display">\[\tilde{u}_i = \arg\min_{\tilde{u} \in \mathbb{R}^{K+1}} \frac{1}{2 \sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( \tilde{u}^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u\|_2^2 \right]\]</span></p>
+</section>
+<section id="termes-de-lobjectif" class="level3">
+<h3 class="anchored" data-anchor-id="termes-de-lobjectif">Termes de l’objectif</h3>
+<ul>
+<li><strong>Terme d’erreur quadratique</strong> : somme sur les articles effectivement notés par l’utilisateur <span class="math inline">\(i\)</span>, de l’écart au carré entre la prédiction <span class="math inline">\(\tilde{u}^T \tilde{v}_j\)</span> et la vraie note <span class="math inline">\(r_{ij}\)</span>.</li>
+<li><strong>Terme de régularisation</strong> <span class="math inline">\(\lambda_u \|u\|_2^2\)</span> : pénalise les grandes valeurs des paramètres pour éviter le sur-apprentissage (overfitting). <span class="math inline">\(\lambda_u \in \mathbb{R}^+\)</span> est un hyperparamètre.</li>
+<li><strong>Normalisation</strong> par <span class="math inline">\(\sum_j b_{ij}\)</span> : divise par le nombre d’articles notés par l’utilisateur, pour ne pas pénaliser les utilisateurs très actifs.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Point important">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Un ingénieur applique le stemmer de Porter au mot &quot;European&quot; et n&#39;obtient pas &quot;Europe&quot;. Quel comportement est illustré ?
-- [ ] Un bug dans l&#39;algorithme
-- [ ] Un comportement agressif (eager stemming)
-- [x] Un comportement conservateur (cautious stemming) qui évite les confusions sémantiques
-- [ ] Une erreur de lemmatisation
-&gt; Explication :
-&gt; Le stemmer de Porter peut être conservateur : il préfère ne pas réduire European → Europe pour éviter de perdre une distinction sémantique. À l&#39;inverse, un stemming agressif peut confondre paste et past.
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Point important
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Vrai ou Faux : La loi de Heap peut être mathématiquement dérivée de la loi de Zipf.
-- [x] Vrai
-- [ ] Faux
-&gt; Explication :
-&gt; Vrai. En supposant que les documents sont générés en échantillonnant des termes selon une distribution zipfienne, on peut dériver que le vocabulaire croît comme une loi de puissance de la taille du corpus, ce qui est exactement la loi de Heap.
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Vrai ou Faux : L&#39;entropie de Shannon d&#39;un vocabulaire textuel réel est égale à l&#39;entropie maximale possible pour ce vocabulaire.
-- [ ] Vrai
-- [x] Faux
-&gt; Explication :
-&gt; Faux. L&#39;entropie maximale est atteinte si tous les termes sont équiprobables. Or la distribution des termes suit Zipf (très inégale), donc l&#39;entropie réelle est bien inférieure à l&#39;entropie maximale. Exemple : pour M=100 000, entropie réelle ≈ 9.5 bits vs 13.3 bits max.
+<div class="callout-body-container callout-body">
+<p>La somme porte uniquement sur <span class="math inline">\(j : b_{ij} = 1\)</span>, c’est-à-dire sur les articles <strong>effectivement notés</strong>. Les entrées inconnues n’entrent pas dans le calcul de la perte — c’est ce qui distingue ce problème d’une simple régression classique.</p>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Vous analysez des co-occurrences et trouvez I(x,y) = 11.3 pour la paire (Honorary, Doctor) avec f(x,y)=12, f(x)=111, f(y)=621. Que conclure ?
-- [ ] Cette association est spurieuse car la fréquence de co-occurrence est trop faible
-- [x] Cette association est significative : malgré une faible fréquence absolue, les deux termes co-occurrent bien plus que prévu par le hasard
-- [ ] L&#39;information mutuelle est trop élevée, signe d&#39;une erreur de calcul
-- [ ] Cette paire doit être supprimée de l&#39;index
-&gt; Explication :
-&gt; Une haute valeur d&#39;IM signifie que P(x,y) ≫ P(x)P(y) : la co-occurrence est non-aléatoire. Honorary et Doctor forment une association sémantique réelle (Honorary Doctor = docteur honoris causa), même si leurs fréquences individuelles sont modestes.
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Quel est le fondement théorique qui justifie la distribution de Zipf-Mandelbrot comme distribution &quot;optimale&quot; du langage ?
-- [ ] Elle minimise la taille de l&#39;index
-- [ ] Elle maximise le nombre de termes distincts
-- [x] Elle minimise le nombre moyen de lettres par terme pour une entropie fixée (porteur d&#39;information idéal)
-- [ ] Elle maximise la précision des requêtes de recherche
-&gt; Explication :
-&gt; Mandelbrot a montré que p*_r = P(r+ρ)^(-B) est la solution au problème d&#39;optimisation : minimiser Σ p_r l_r (longueur moyenne des termes) sous contrainte d&#39;entropie fixée I_H(T) = h. Le langage humain serait donc une solution optimale à ce problème de communication.
+</section>
+<section id="estimation-globale-de-tous-les-utilisateurs" class="level3">
+<h3 class="anchored" data-anchor-id="estimation-globale-de-tous-les-utilisateurs">Estimation globale de tous les utilisateurs</h3>
+<p>On minimise simultanément pour tous les utilisateurs :</p>
+<p><span class="math display">\[\mathcal{L}_u(\tilde{u}_1, \ldots, \tilde{u}_M) = \frac{1}{2} \sum_{i=1}^{M} \frac{1}{\sum_j b_{ij}} \left[ \sum_{j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u_i\|_2^2 \right]\]</span></p>
+<p>La prédiction pour une paire <span class="math inline">\((i,j)\)</span> observée est alors : <span class="math inline">\(\hat{r}_{ij} = (\tilde{u}_i)^T \tilde{v}_j\)</span>.</p>
+</section>
+</section>
+<section id="descente-de-gradient-pour-les-utilisateurs" class="level2">
+<h2 class="anchored" data-anchor-id="descente-de-gradient-pour-les-utilisateurs">Descente de gradient pour les utilisateurs</h2>
+<section id="calcul-du-gradient" class="level3">
+<h3 class="anchored" data-anchor-id="calcul-du-gradient">Calcul du gradient</h3>
+<p>La dérivée partielle de <span class="math inline">\(\mathcal{L}_u\)</span> par rapport à <span class="math inline">\(\tilde{u}_i[k]\)</span> (pour <span class="math inline">\(k \neq 0\)</span>) est :</p>
+<p><span class="math display">\[\frac{\partial \mathcal{L}_u}{\partial \tilde{u}_i[k]} = \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) \tilde{v}_j[k] + \lambda_u u_i[k]\]</span></p>
+</section>
+<section id="règle-de-mise-à-jour-update-rule" class="level3">
+<h3 class="anchored" data-anchor-id="règle-de-mise-à-jour-update-rule">Règle de mise à jour (Update Rule)</h3>
+<p><span class="math display">\[u_i[k] \leftarrow u_i[k] - \alpha \left[ \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) v_j[k] + \lambda_u u_i[k] \right]\]</span></p>
+<p>où <span class="math inline">\(\alpha\)</span> est le <strong>taux d’apprentissage</strong> (learning rate).</p>
+</section>
+<section id="cas-particulier-biais-intercept-k-0" class="level3">
+<h3 class="anchored" data-anchor-id="cas-particulier-biais-intercept-k-0">Cas particulier : biais (intercept, <span class="math inline">\(k = 0\)</span>)</h3>
+<p>Pour le biais <span class="math inline">\(\tilde{u}_i[0]\)</span>, la caractéristique artificielle <span class="math inline">\(\tilde{v}_j[0] = 1\)</span> pour tout <span class="math inline">\(j\)</span>, donc il n’y a pas de terme de régularisation sur le biais :</p>
+<p><span class="math display">\[\tilde{u}_i[0] \leftarrow \tilde{u}_i[0] - \alpha \frac{1}{\sum_j b_{ij}} \sum_{j : b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right)\]</span></p>
+</section>
+</section>
+<section id="estimation-des-articles-problème-symétrique" class="level2">
+<h2 class="anchored" data-anchor-id="estimation-des-articles-problème-symétrique">Estimation des articles : problème symétrique</h2>
+<section id="objectif-pour-les-articles" class="level3">
+<h3 class="anchored" data-anchor-id="objectif-pour-les-articles">Objectif pour les articles</h3>
+<p>Si les vecteurs utilisateurs <span class="math inline">\(\{\tilde{u}_i\}_i\)</span> sont connus (par exemple initialisés depuis des réponses à des items typiques — cf. <em>cold start</em>), on peut estimer les vecteurs d’articles en résolvant :</p>
+<p><span class="math display">\[\mathcal{L}_v(\tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{j=1}^{N} \frac{1}{\sum_j b_{ij}} \left[ \sum_{i : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_v \sum_j \|v_j\|_2^2 \right]\]</span></p>
+<p>avec <span class="math inline">\(\lambda_v \in \mathbb{R}^+\)</span>.</p>
+<p>Le gradient pour les vecteurs d’articles s’obtient de façon <strong>symétrique</strong> à celui des utilisateurs (exercice : adapter la formule précédente).</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Vrai ou Faux : La tokenisation est identique pour toutes les langues naturelles, puisqu&#39;il suffit de séparer les mots par des espaces.
-- [ ] Vrai
-- [x] Faux
-&gt; Explication :
-&gt; Faux. Les espaces fonctionnent pour le français et l&#39;anglais, mais l&#39;allemand nécessite une décomposition des mots composés (Suchprogramm), et les langues asiatiques (chinois, japonais) n&#39;utilisent pas d&#39;espaces entre les mots et ont des directions de lecture différentes.
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Un corpus contient K=0.1 et L=1 000 000 tokens. Combien y a-t-il approximativement de termes distincts (M) selon Zipf ?
-- [ ] 1 000
-- [ ] 10 000
-- [x] 100 000
-- [ ] 1 000 000
-&gt; Explication :
-&gt; D&#39;après Zipf : M = r₁ = KL = 0.1 × 1 000 000 = 100 000. La taille du vocabulaire est donc approximativement KL, ce qui lie directement la loi de Zipf à l&#39;estimation du nombre de termes distincts.
 </div>
-<div class="quizdown">
----
-primaryColor: &quot;#3b82f6&quot;
-shuffleQuestions: false
-shuffleAnswers: true
----
-### Cas pratique : un système de RI calcule I(W1,W2) entre le terme &quot;doctors&quot; et le terme &quot;a&quot; et obtient I=0.95. Quelle action doit-il prendre ?
-- [ ] Indexer la paire (doctors, a) comme terme composé prioritaire
-- [ ] Augmenter le poids de &quot;a&quot; dans les requêtes contenant &quot;doctors&quot;
-- [x] Ignorer cette association : &quot;a&quot; est probablement un stopword dont la haute fréquence crée une co-occurrence fortuite avec tous les termes
-- [ ] Considérer &quot;a&quot; comme synonyme de &quot;doctors&quot;
-&gt; Explication :
-&gt; Malgré une valeur d&#39;IM positive, &quot;a&quot; est un stopword extrêmement fréquent (f=284 690 dans l&#39;exemple du cours) qui co-occurrent mécaniquement avec tout. Cette association est donc spurieuse et doit être filtrée via la suppression des mots vides.
+<div class="callout-body-container callout-body">
+<p>Le problème est parfaitement symétrique : estimer les préférences utilisateurs revient à une régression sur les articles connus, et estimer les caractéristiques des articles revient à une régression sur les utilisateurs connus. Cette symétrie est au cœur de l’optimisation alternée.</p>
 </div>
-<p>```</p>
+</div>
+</section>
+</section>
+<section id="optimisation-conjointe-joint-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="optimisation-conjointe-joint-optimization">Optimisation conjointe (Joint Optimization)</h2>
+<section id="fonction-de-coût-globale" class="level3">
+<h3 class="anchored" data-anchor-id="fonction-de-coût-globale">Fonction de coût globale</h3>
+<p>En pratique, ni les vecteurs utilisateurs ni les vecteurs d’articles ne sont connus a priori. On optimise donc conjointement :</p>
+<p><span class="math display">\[\mathcal{L}(\tilde{u}_1, \ldots, \tilde{u}_M, \tilde{v}_1, \ldots, \tilde{v}_N) = \frac{1}{2} \sum_{i,j : b_{ij}=1} \left( (\tilde{u}_i)^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \sum_i \|u_i\|_2^2 + \lambda_v \sum_j \|v_j\|_2^2\]</span></p>
+</section>
+<section id="minimisation-alternée-alternate-minimization" class="level3">
+<h3 class="anchored" data-anchor-id="minimisation-alternée-alternate-minimization">Minimisation alternée (Alternate Minimization)</h3>
+<p>Ce problème est <strong>non-convexe</strong> conjointement en <span class="math inline">\(u\)</span> et <span class="math inline">\(v\)</span>, mais il est <strong>convexe</strong> séparément en chacun d’eux à l’autre fixé. On utilise donc l’algorithme de <strong>minimisation alternée</strong> :</p>
+<pre><code>1. Initialiser u_1, ..., u_M aléatoirement ou depuis les données
+2. Tant que non convergé :
+   a. Résoudre pour v_1, ..., v_N avec u_1, ..., u_M fixés
+   b. Résoudre pour u_1, ..., u_M avec v_1, ..., v_N fixés</code></pre>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La minimisation alternée converge vers un <strong>minimum local</strong> (pas nécessairement global) car le problème global est non-convexe. L’initialisation joue un rôle important pour la qualité de la solution finale. En pratique, cette approche donne de très bons résultats sur les données réelles.</p>
+</div>
+</div>
 <hr>
-<p><em>Quiz généré à partir du cours sur la Recherche d’Information Textuelle.</em> <em>Couvre : modèle BoW, pipeline de traitement, loi de Zipf, loi de Heap, théorie de l’information, information mutuelle.</em></p>
+</section>
+</section>
+</section>
+<section id="formulation-en-rang-faible-low-rank-formulation" class="level1">
+<h1>Formulation en rang faible (Low Rank Formulation)</h1>
+<section id="du-modèle-de-régression-à-la-décomposition-matricielle" class="level2">
+<h2 class="anchored" data-anchor-id="du-modèle-de-régression-à-la-décomposition-matricielle">Du modèle de régression à la décomposition matricielle</h2>
+<section id="vue-matricielle-du-modèle" class="level3">
+<h3 class="anchored" data-anchor-id="vue-matricielle-du-modèle">Vue matricielle du modèle</h3>
+<p>Le modèle <span class="math inline">\(r_{ij} = (u_i)^T v_j\)</span> peut s’écrire sous forme matricielle compacte.</p>
+<p>On définit :</p>
+<ul>
+<li>La matrice utilisateurs <span class="math inline">\(U \in \mathbb{R}^{M \times K}\)</span> dont chaque <strong>ligne</strong> <span class="math inline">\(u_i^T\)</span> est le vecteur de préférences de l’utilisateur <span class="math inline">\(i\)</span></li>
+<li>La matrice articles <span class="math inline">\(V \in \mathbb{R}^{N \times K}\)</span> dont chaque <strong>colonne</strong> <span class="math inline">\(v_j\)</span> est le vecteur de caractéristiques de l’article <span class="math inline">\(j\)</span></li>
+</ul>
+<p>Alors la matrice de notes complète se décompose comme :</p>
+<p><span class="math display">\[\mathbf{R} \approx U V^T\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La matrice <span class="math inline">\(R \in \mathbb{R}^{M \times N}\)</span> est approchée par le produit de deux matrices de rang <span class="math inline">\(K \ll \min(M, N)\)</span>. Au lieu de stocker <span class="math inline">\(M \times N\)</span> valeurs, on ne stocke que <span class="math inline">\((M + N) \times K\)</span> paramètres. C’est toute l’économie des <strong>modèles de rang faible</strong>.</p>
+</div>
+</div>
+</section>
+<section id="rang-de-lapproximation" class="level3">
+<h3 class="anchored" data-anchor-id="rang-de-lapproximation">Rang de l’approximation</h3>
+<p>Le produit <span class="math inline">\(UV^T\)</span> est de rang au plus <span class="math inline">\(K\)</span>. En choisissant <span class="math inline">\(K\)</span> petit devant <span class="math inline">\(M\)</span> et <span class="math inline">\(N\)</span>, on obtient une <strong>approximation de rang faible</strong> (low-rank approximation) de la matrice <span class="math inline">\(R\)</span>.</p>
+<p>Les <span class="math inline">\(K\)</span> dimensions latentes capturent les <span class="math inline">\(K\)</span> principaux “thèmes” ou “facteurs” qui expliquent les notes observées.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="théorie-des-modèles-de-rang-faible" class="level1">
+<h1>Théorie des modèles de rang faible</h1>
+<section id="la-décomposition-en-valeurs-singulières-svd" class="level2">
+<h2 class="anchored" data-anchor-id="la-décomposition-en-valeurs-singulières-svd">La Décomposition en Valeurs Singulières (SVD)</h2>
+<section id="théorème-fondamental" class="level3">
+<h3 class="anchored" data-anchor-id="théorème-fondamental">Théorème fondamental</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Théorème : Décomposition en Valeurs Singulières (Singular Value Decomposition)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Théorème : Décomposition en Valeurs Singulières (Singular Value Decomposition)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour toute matrice <span class="math inline">\(\mathbf{R} \in \mathbb{R}^{M \times N}\)</span>, il existe :</p>
+<ul>
+<li><span class="math inline">\(\mathbf{U} \in \mathbb{R}^{M \times M}\)</span> orthogonale</li>
+<li><span class="math inline">\(\mathbf{\Sigma} \in \mathbb{R}^{M \times N}\)</span> diagonale (avec remplissage de zéros)</li>
+<li><span class="math inline">\(\mathbf{V} \in \mathbb{R}^{N \times N}\)</span> orthogonale</li>
+</ul>
+<p>tels que :</p>
+<p><span class="math display">\[\mathbf{R} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T\]</span></p>
+<p>Cette décomposition est <strong>exacte</strong> et <strong>unique</strong> (sous certaines conventions de signe).</p>
+</div>
+</div>
+<p><strong>Conventions</strong> :</p>
+<ul>
+<li>On suppose généralement <span class="math inline">\(M \geq N\)</span> sans perte de généralité.</li>
+<li>Les valeurs singulières <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_N \geq 0\)</span> sont ordonnées décroissantes sur la diagonale de <span class="math inline">\(\Sigma\)</span>.</li>
+<li>Les colonnes de <span class="math inline">\(U\)</span> (resp. <span class="math inline">\(V\)</span>) sont les <strong>vecteurs singuliers gauches</strong> (resp. droits).</li>
+</ul>
+</section>
+<section id="produit-scalaire-et-trace-matricielle" class="level3">
+<h3 class="anchored" data-anchor-id="produit-scalaire-et-trace-matricielle">Produit scalaire et trace matricielle</h3>
+<section id="rappel-sur-le-produit-matriciel" class="level4">
+<h4 class="anchored" data-anchor-id="rappel-sur-le-produit-matriciel">Rappel sur le produit matriciel</h4>
+<p>Pour des matrices <span class="math inline">\(A \in \mathbb{R}^{N \times P}\)</span> et <span class="math inline">\(B \in \mathbb{R}^{P \times Q}\)</span>, le produit <span class="math inline">\(C = AB\)</span> a pour terme général :</p>
+<p><span class="math display">\[C_{ij} = (AB)_{ij} = \sum_k A_{ik} B_{kj}\]</span></p>
+<p>C’est le produit scalaire entre la ligne <span class="math inline">\(i\)</span> de <span class="math inline">\(A\)</span> et la colonne <span class="math inline">\(j\)</span> de <span class="math inline">\(B\)</span>.</p>
+<p><strong>Interprétation alternative</strong> : <span class="math inline">\(AB = \sum_{k} A_{:k} B_{k:}\)</span>, soit une somme de produits externes (matrices de rang 1).</p>
+</section>
+<section id="la-trace-matricielle-matrix-trace" class="level4">
+<h4 class="anchored" data-anchor-id="la-trace-matricielle-matrix-trace">La trace matricielle (Matrix Trace)</h4>
+<p>Pour <span class="math inline">\(A \in \mathbb{R}^{N \times N}\)</span> :</p>
+<p><span class="math display">\[\text{Tr}(A) = \sum_i A_{ii}\]</span></p>
+<p><strong>Propriétés importantes</strong> :</p>
+<ul>
+<li><span class="math inline">\(\text{Tr}(A^T) = \text{Tr}(A)\)</span></li>
+<li><span class="math inline">\(\text{Tr}(AB) = \text{Tr}(BA)\)</span> pour <span class="math inline">\(A, B \in \mathbb{R}^{N \times N}\)</span></li>
+<li>La trace est <strong>invariante par transformation orthogonale</strong> : si <span class="math inline">\(B = UAU^T\)</span>, alors <span class="math inline">\(\text{Tr}(B) = \text{Tr}(A)\)</span></li>
+</ul>
+<p><strong>Lien avec la norme de Frobenius</strong> :</p>
+<p><span class="math display">\[\text{Tr}(A^T A) = \sum_{i,j} A_{ij}^2 = \|A\|_F^2\]</span></p>
+<p>La trace de <span class="math inline">\(A^T A\)</span> est la somme de tous les carrés des entrées de <span class="math inline">\(A\)</span>.</p>
+</section>
+<section id="décomposition-orthogonale-et-trace" class="level4">
+<h4 class="anchored" data-anchor-id="décomposition-orthogonale-et-trace">Décomposition orthogonale et trace</h4>
+<p>Avec <span class="math inline">\(R = U\Sigma V^T\)</span> :</p>
+<p><span class="math display">\[\text{Tr}(RR^T) = \text{Tr}(U\Sigma\Sigma^T U^T) = \text{Tr}(\Sigma\Sigma^T) = \sum_i \sigma_i^2\]</span></p>
+<p>(par invariance de la trace par transformation orthogonale)</p>
+<p>De même : <span class="math inline">\(\text{Tr}(R^T R) = \sum_i \sigma_i^2\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Importance de la norme de Frobenius">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Importance de la norme de Frobenius
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La <strong>norme de Frobenius</strong> (Frobenius norm) d’une matrice est définie par :</p>
+<p><span class="math display">\[\|A\|_F = \sqrt{\sum_{i,j} A_{ij}^2} = \sqrt{\text{Tr}(A^T A)} = \sqrt{\sum_i \sigma_i^2}\]</span></p>
+<p>Les valeurs singulières <strong>concentrent toute l’information</strong> de la matrice. C’est le principe fondateur des modèles de rang faible.</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="découpage-de-la-svd-en-rang-1-matrix-slicing" class="level2">
+<h2 class="anchored" data-anchor-id="découpage-de-la-svd-en-rang-1-matrix-slicing">Découpage de la SVD en rang 1 (Matrix Slicing)</h2>
+<section id="décomposition-en-somme-de-matrices-de-rang-1" class="level3">
+<h3 class="anchored" data-anchor-id="décomposition-en-somme-de-matrices-de-rang-1">Décomposition en somme de matrices de rang 1</h3>
+<p>En appliquant la propriété <span class="math inline">\(AB^T = \sum_i A_{:i} B_{:i}^T\)</span>, on peut écrire :</p>
+<p><span class="math display">\[\mathbf{R} = (\mathbf{U}\mathbf{\Sigma})\mathbf{V}^T = \sum_{i=1}^{N} \sigma_i (\mathbf{u}_i \mathbf{v}_i^T)\]</span></p>
+<p>où <span class="math inline">\(\mathbf{u}_i = U_{:i}\)</span> est la <span class="math inline">\(i\)</span>-ème colonne de <span class="math inline">\(U\)</span> et <span class="math inline">\(\mathbf{v}_i = V_{:i}\)</span> est la <span class="math inline">\(i\)</span>-ème colonne de <span class="math inline">\(V\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Chaque terme <span class="math inline">\(\sigma_i (\mathbf{u}_i \mathbf{v}_i^T)\)</span> est une matrice de <strong>rang 1</strong> — le produit externe d’un vecteur utilisateur et d’un vecteur article — pondérée par la valeur singulière <span class="math inline">\(\sigma_i\)</span>. La SVD décompose donc <span class="math inline">\(R\)</span> en une somme ordonnée de “thèmes” de rang 1, du plus important au moins important.</p>
+</div>
+</div>
+</section>
+<section id="justification-de-la-troncature" class="level3">
+<h3 class="anchored" data-anchor-id="justification-de-la-troncature">Justification de la troncature</h3>
+<p><strong>Propriété clé</strong> : puisque <span class="math inline">\(\mathbf{U}\)</span> est orthogonale, ses colonnes vérifient <span class="math inline">\(\mathbf{u}_i^T \mathbf{u}_j = \delta_{ij}\)</span>. Donc :</p>
+<p><span class="math display">\[\text{rang}\left(\sum_{k=1}^{K} \sigma_k \mathbf{u}_k \mathbf{v}_k^T\right) = K\]</span></p>
+<p>et l’erreur de la troncature à <span class="math inline">\(K\)</span> termes vaut :</p>
+<p><span class="math display">\[\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2\]</span></p>
+<p>Cela <strong>justifie de tronquer les dimensions associées aux petites valeurs singulières</strong> : elles contribuent peu à la norme de Frobenius totale, c’est-à-dire peu à l’“énergie” de la matrice.</p>
+</section>
+</section>
+<section id="théorème-deckart-young" class="level2">
+<h2 class="anchored" data-anchor-id="théorème-deckart-young">Théorème d’Eckart-Young</h2>
+<div class="callout callout-style-default callout-important callout-titled" title="Théorème d&#39;Eckart-Young (Best Low-Rank Approximation)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Théorème d’Eckart-Young (Best Low-Rank Approximation)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La troncature à <span class="math inline">\(K\)</span> valeurs singulières <span class="math inline">\(\mathbf{R}_K = \mathbf{U}_K \mathbf{\Sigma}_K \mathbf{V}_K^T\)</span> est <strong>la meilleure approximation de rang <span class="math inline">\(K\)</span></strong> de <span class="math inline">\(\mathbf{R}\)</span> au sens de la norme de Frobenius :</p>
+<p><span class="math display">\[\mathbf{R}_K = \arg\min_{B,\ \text{rang}(B) \leq K} \|\mathbf{R} - B\|_F^2\]</span></p>
+<p>L’erreur minimale correspondante est :</p>
+<p><span class="math display">\[\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N} \sigma_k^2\]</span></p>
+</div>
+</div>
+<p><strong>Interprétation géométrique</strong> : <span class="math inline">\(\mathbf{R}_K\)</span> est la <strong>projection orthogonale</strong> de <span class="math inline">\(\mathbf{R}\)</span> sur la variété des matrices de rang <span class="math inline">\(K\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Choisir <span class="math inline">\(K\)</span> revient à décider combien de “thèmes latents” on veut retenir pour représenter les données. Un <span class="math inline">\(K\)</span> petit donne une représentation compressée mais approximative ; un <span class="math inline">\(K\)</span> grand donne une représentation plus précise mais plus coûteuse.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="interprétation-géométrique-de-la-svd" class="level1">
+<h1>Interprétation géométrique de la SVD</h1>
+<section id="les-bases-orthonormées-latentes" class="level2">
+<h2 class="anchored" data-anchor-id="les-bases-orthonormées-latentes">Les bases orthonormées latentes</h2>
+<section id="structure-des-bases" class="level3">
+<h3 class="anchored" data-anchor-id="structure-des-bases">Structure des bases</h3>
+<p>La matrice <span class="math inline">\(\mathbf{U} = [\mathbf{u}_1 \cdots \mathbf{u}_M]\)</span> étant orthogonale, ses colonnes forment une <strong>base orthonormée</strong> de <span class="math inline">\(\mathbb{R}^M\)</span> :</p>
+<p><span class="math display">\[\mathcal{B}_U = \{\mathbf{u}_1, \ldots, \mathbf{u}_M\}\]</span></p>
+<p>De même, <span class="math inline">\(\mathcal{B}_V = \{\mathbf{v}_1, \ldots, \mathbf{v}_N\}\)</span> est une base orthonormée de <span class="math inline">\(\mathbb{R}^N\)</span>.</p>
+</section>
+<section id="r-comme-application-linéaire" class="level3">
+<h3 class="anchored" data-anchor-id="r-comme-application-linéaire">R comme application linéaire</h3>
+<p>De <span class="math inline">\(\mathbf{R} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T\)</span>, on tire :</p>
+<p><span class="math display">\[\mathbf{R}\mathbf{V} = \mathbf{U}\mathbf{\Sigma} \quad \Rightarrow \quad \mathbf{R}\mathbf{v}_i = \sigma_i \mathbf{u}_i\]</span></p>
+<p>La matrice <span class="math inline">\(\mathbf{R}\)</span> agit comme un <strong>changement de base suivi d’un redimensionnement</strong> : elle transforme le <span class="math inline">\(i\)</span>-ème vecteur de base des articles en le <span class="math inline">\(i\)</span>-ème vecteur de base des utilisateurs, mis à l’échelle par <span class="math inline">\(\sigma_i\)</span>.</p>
+</section>
+</section>
+<section id="décomposition-en-transformations-élémentaires" class="level2">
+<h2 class="anchored" data-anchor-id="décomposition-en-transformations-élémentaires">Décomposition en transformations élémentaires</h2>
+<p>On peut décomposer <span class="math inline">\(\varphi_R\)</span> (l’application induite par <span class="math inline">\(R\)</span>) en trois opérations successives :</p>
+<p><span class="math display">\[\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}\]</span></p>
+<p><strong>Détail des opérations</strong> :</p>
+<ul>
+<li><span class="math inline">\(\varphi_V^{-1} : e_j \mapsto v_j = V^T e_j\)</span> — <strong>changement de base</strong> de la base canonique <span class="math inline">\(\{e_1, \ldots, e_N\}\)</span> vers <span class="math inline">\(\mathcal{B}_V\)</span></li>
+<li><span class="math inline">\(\varphi_\Sigma : v_j \mapsto v&#39;_j = \Sigma v_j\)</span> — <strong>redimensionnement</strong> des coordonnées par les valeurs singulières</li>
+<li><span class="math inline">\(\varphi_U : v&#39;_j \mapsto r_{ij} = u_i^T v&#39;_j\)</span> — <strong>changement de base</strong> vers <span class="math inline">\(\mathcal{B}_U\)</span> et lecture des coordonnées utilisateur</li>
+</ul>
+<section id="cas-de-la-troncature-à-k-dimensions" class="level3">
+<h3 class="anchored" data-anchor-id="cas-de-la-troncature-à-k-dimensions">Cas de la troncature à <span class="math inline">\(K\)</span> dimensions</h3>
+<p>Après troncature :</p>
+<p><span class="math display">\[\mathbf{R}_K = (\mathbf{U}_K \text{Id}_K) \mathbf{\Sigma}_K (\mathbf{V}_K \text{Id}_K)^T\]</span></p>
+<p><span class="math display">\[\varphi_{R_K} = \varphi_{U_K} \circ \varphi_{\Sigma_K} \circ \varphi_{V_K}^{-1}\]</span></p>
+<p>Dans l’<strong>espace latent</strong> (latent space), la transformation agit simplement comme un <strong>redimensionnement de <span class="math inline">\(K\)</span> caractéristiques</strong> via <span class="math inline">\(\Sigma_K\)</span>. C’est là toute la puissance de la représentation compressée.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La SVD identifie les <strong>directions de variance maximale</strong> dans les données. Les premières valeurs singulières (les plus grandes) capturent les structures les plus importantes. Tronquer revient à ne garder que l’essentiel de l’information.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="propagation-dinformation" class="level1">
+<h1>Propagation d’information</h1>
+<section id="matrices-de-similarité" class="level2">
+<h2 class="anchored" data-anchor-id="matrices-de-similarité">Matrices de similarité</h2>
+<section id="similarité-entre-articles-item-similarity" class="level3">
+<h3 class="anchored" data-anchor-id="similarité-entre-articles-item-similarity">Similarité entre articles (Item Similarity)</h3>
+<p>En calculant <span class="math inline">\(\mathbf{R}^T \mathbf{R}\)</span> :</p>
+<p><span class="math display">\[\mathbf{R}^T \mathbf{R} = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T) = \mathbf{V}\mathbf{\Sigma}^T \mathbf{U}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{V}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{V}^T\]</span></p>
+<p>La matrice <span class="math inline">\(\mathbf{R}^T\mathbf{R} \in \mathbb{R}^{N \times N}\)</span> encode la <strong>similarité entre articles</strong> : deux articles sont similaires si des utilisateurs semblables les ont bien notés.</p>
+</section>
+<section id="similarité-entre-utilisateurs-user-similarity" class="level3">
+<h3 class="anchored" data-anchor-id="similarité-entre-utilisateurs-user-similarity">Similarité entre utilisateurs (User Similarity)</h3>
+<p>De façon symétrique :</p>
+<p><span class="math display">\[\mathbf{R}\mathbf{R}^T = (\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T)^T = \mathbf{U}\mathbf{\Sigma}\mathbf{\Sigma}\mathbf{U}^T\]</span></p>
+<p>La matrice <span class="math inline">\(\mathbf{R}\mathbf{R}^T \in \mathbb{R}^{M \times M}\)</span> encode la <strong>similarité entre utilisateurs</strong> : deux utilisateurs sont similaires s’ils ont noté les mêmes articles de façon similaire.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ces deux matrices de Gram sont au cœur du <strong>filtrage collaboratif</strong> (Collaborative Filtering) : pour recommander à un utilisateur, on cherche ses voisins similaires et on regarde ce qu’ils ont aimé. La SVD fournit une façon compacte et optimale de calculer ces similarités.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="condition-de-connexité-du-graphe" class="level2">
+<h2 class="anchored" data-anchor-id="condition-de-connexité-du-graphe">Condition de connexité du graphe</h2>
+<div class="callout callout-style-default callout-important callout-titled" title="Point crucial : graphe connecté">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Point crucial : graphe connecté
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La propagation d’information via la matrice <span class="math inline">\(R\)</span> n’est possible que si le <strong>graphe biparti est connexe</strong> (connected). Si le graphe a plusieurs composantes connexes, la décomposition se fragmente en blocs indépendants et l’information ne peut pas se propager d’une composante à l’autre.</p>
+</div>
+</div>
+<p><strong>Exercice</strong> : Montrer que si le graphe a plus d’une composante connexe, la matrice <span class="math inline">\(R\)</span> est déconnectée (i.e., peut être mise sous forme bloc-diagonale après permutation), et inversement.</p>
+</section>
+<section id="limites-du-modèle-linéaire" class="level2">
+<h2 class="anchored" data-anchor-id="limites-du-modèle-linéaire">Limites du modèle linéaire</h2>
+<p>Les correspondances linéaires “utilisateur → latent” (<span class="math inline">\(U\)</span>, <span class="math inline">\(\varphi_U\)</span>) et “article → latent” (<span class="math inline">\(V\)</span>, <span class="math inline">\(\varphi_V\)</span>) peuvent être <strong>trop restrictives</strong> pour capturer des préférences complexes.</p>
+<p>Par exemple, un utilisateur peut aimer à la fois les films d’action <em>et</em> les comédies romantiques, ce qui n’est pas bien capturé par un vecteur de préférences linéaire.</p>
+<p><strong>Solutions</strong> : on doit alors recourir à des <strong>modèles non-linéaires</strong> :</p>
+<ul>
+<li>pLSA (probabilistic Latent Semantic Analysis)</li>
+<li>Auto-encodeurs variationnels (VAEs)</li>
+<li>Réseaux de neurones profonds</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="applications-de-la-svd" class="level1">
+<h1>Applications de la SVD</h1>
+<section id="application-aux-systèmes-de-recommandation" class="level2">
+<h2 class="anchored" data-anchor-id="application-aux-systèmes-de-recommandation">Application aux systèmes de recommandation</h2>
+<p>La matrice <span class="math inline">\(\mathbf{R} \in \mathbb{R}^{N \times M}\)</span> des notes se décompose comme <span class="math inline">\(R = AX\)</span> où :</p>
+<ul>
+<li><span class="math inline">\(A = U_K \Sigma_K \in \mathbb{R}^{N \times K}\)</span> : chaque ligne <span class="math inline">\(a_i\)</span> représente un <strong>utilisateur</strong> dans l’espace des <span class="math inline">\(K\)</span> caractéristiques latentes</li>
+<li><span class="math inline">\(X = V_K^T \in \mathbb{R}^{K \times M}\)</span> : chaque colonne <span class="math inline">\(x_j\)</span> représente un <strong>article</strong> avec ses <span class="math inline">\(K\)</span> caractéristiques latentes</li>
+</ul>
+<p>La note prédite est le produit scalaire <span class="math inline">\(\hat{r}_{ij} = a_i^T x_j\)</span>.</p>
+</section>
+<section id="application-à-lanalyse-sémantique-latente-lsalsi" class="level2">
+<h2 class="anchored" data-anchor-id="application-à-lanalyse-sémantique-latente-lsalsi">Application à l’analyse sémantique latente (LSA/LSI)</h2>
+<p>La SVD est également utilisée en <strong>analyse sémantique latente</strong> (Latent Semantic Analysis/Indexing) pour l’indexation de documents :</p>
+<ul>
+<li><span class="math inline">\(W \in \mathbb{R}^{N \times M}\)</span> : matrice terme-document (fréquences de termes)</li>
+<li><span class="math inline">\(W = U\Sigma V^T\)</span></li>
+</ul>
+<p>Chaque document <span class="math inline">\(d_j\)</span> (colonne de <span class="math inline">\(W\)</span>) se représente dans l’espace des <strong>concepts</strong> :</p>
+<p><span class="math display">\[d_j = U\Sigma V^T e_j = U\Sigma v_j\]</span></p>
+<p>Le projecteur vers l’espace conceptuel est <span class="math inline">\(A = U_K \Sigma_K\)</span>, permettant de projeter documents et requêtes dans cet espace réduit.</p>
+<hr>
+</section>
+</section>
+<section id="factorisation-en-matrices-non-négatives-nmf" class="level1">
+<h1>Factorisation en Matrices Non-négatives (NMF)</h1>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<section id="limites-de-la-svd-pour-linterprétabilité" class="level3">
+<h3 class="anchored" data-anchor-id="limites-de-la-svd-pour-linterprétabilité">Limites de la SVD pour l’interprétabilité</h3>
+<p>La SVD fournit une décomposition <strong>exacte et optimale</strong> au sens de Frobenius, mais elle présente des inconvénients pratiques :</p>
+<ul>
+<li>Les matrices <span class="math inline">\(U\)</span> et <span class="math inline">\(V\)</span> peuvent avoir des entrées <strong>négatives</strong>, ce qui est difficile à interpréter (une “préférence négative” pour un genre de film n’est pas intuitive).</li>
+<li>La computation est coûteuse : <span class="math inline">\(\mathcal{O}(N^3)\)</span> pour l’algorithme de Jacobi ou de la puissance.</li>
+<li>Les bases ne sont pas “parties” d’un tout, ce qui complique l’interprétation.</li>
+</ul>
+</section>
+</section>
+<section id="formulation-de-la-nmf" class="level2">
+<h2 class="anchored" data-anchor-id="formulation-de-la-nmf">Formulation de la NMF</h2>
+<section id="définition" class="level3">
+<h3 class="anchored" data-anchor-id="définition">Définition</h3>
+<p>La <strong>Factorisation en Matrices Non-négatives</strong> (Non-negative Matrix Factorization, NMF) cherche une décomposition :</p>
+<p><span class="math display">\[\mathbf{R} \approx \mathbf{W}\mathbf{H} \quad \text{avec} \quad W_{ij} \geq 0 \quad \text{et} \quad H_{ij} \geq 0\]</span></p>
+<p>La contrainte de non-négativité facilite l’interprétation : chaque composante contribue <strong>positivement</strong> à la reconstruction.</p>
+</section>
+<section id="problème-doptimisation" class="level3">
+<h3 class="anchored" data-anchor-id="problème-doptimisation">Problème d’optimisation</h3>
+<p><span class="math display">\[\mathbf{W}, \mathbf{H} = \arg\min_{\substack{A \geq 0,\ A \in \mathbb{R}^{M \times K} \\ B \geq 0,\ B \in \mathbb{R}^{K \times N}}} \|\mathbf{R} - AB\|_F\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Intuition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Avec la NMF, chaque article est une <strong>combinaison additive</strong> de <span class="math inline">\(K\)</span> “parties” élémentaires non-négatives. Par exemple, pour des images de visages, les composantes NMF correspondent à des parties reconnaissables (yeux, nez, bouche), tandis que les composantes PCA/SVD sont des “fantômes” globaux sans signification locale.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="nmf-versus-svd-illustration-sur-des-visages" class="level2">
+<h2 class="anchored" data-anchor-id="nmf-versus-svd-illustration-sur-des-visages">NMF versus SVD : illustration sur des visages</h2>
+<p>L’illustration classique compare les bases extraites par PCA (SVD) et NMF sur un jeu d’images de visages :</p>
+<ul>
+<li><strong>PCA</strong> : les composantes sont des “visages fantômes” globaux, avec des valeurs positives et négatives entremêlées — difficiles à interpréter.</li>
+<li><strong>NMF</strong> : les composantes correspondent à des <strong>parties locales</strong> du visage (yeux, nez, menton, sourcils) — intuitives et interprétables.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le choix entre SVD et NMF dépend de l’application :</p>
+<ul>
+<li>SVD est préférable quand on veut l’<strong>optimalité mathématique</strong> (meilleure approximation de Frobenius).</li>
+<li>NMF est préférable quand on veut l’<strong>interprétabilité</strong> des composantes latentes.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="complétion-de-matrice-matrix-completion" class="level2">
+<h2 class="anchored" data-anchor-id="complétion-de-matrice-matrix-completion">Complétion de matrice (Matrix Completion)</h2>
+<section id="stratégie-pratique" class="level3">
+<h3 class="anchored" data-anchor-id="stratégie-pratique">Stratégie pratique</h3>
+<p>Pour appliquer la NMF à la prédiction de notes manquantes :</p>
+<ol type="1">
+<li><strong>Considérer les notes inconnues comme valant 0</strong> : on forme ainsi une matrice <span class="math inline">\(\tilde{R}\)</span> complète.</li>
+<li><strong>Résoudre la NMF</strong> sur <span class="math inline">\(\tilde{R}\)</span> : on obtient <span class="math inline">\(WH \approx \tilde{R}\)</span>.</li>
+<li><strong>Utiliser <span class="math inline">\(WH\)</span></strong> comme matrice des notes estimées : les entrées inconnues (que l’on avait mises à 0) sont remplacées par les prédictions <span class="math inline">\((\hat{r}_{ij} = (WH)_{ij})\)</span>.</li>
+</ol>
+</section>
+<section id="normalisation-par-la-moyenne-mean-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="normalisation-par-la-moyenne-mean-normalization">Normalisation par la moyenne (Mean Normalization)</h3>
+<p>Pour éviter les biais liés aux différentes échelles de notation entre utilisateurs, on applique une <strong>normalisation par la moyenne</strong> :</p>
+<ol type="1">
+<li>Calculer la note moyenne de chaque utilisateur sur les articles qu’il a notés.</li>
+<li>Centrer la matrice <span class="math inline">\(R\)</span> autour de ces moyennes.</li>
+<li>Résoudre la NMF sur la matrice centrée.</li>
+<li>Ajouter la moyenne de l’utilisateur à la prédiction finale.</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled" title="Point important : problème du démarrage à froid (Cold Start)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Point important : problème du démarrage à froid (Cold Start)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Un problème fondamental des systèmes de recommandation basés sur la décomposition matricielle est le <strong>problème du démarrage à froid</strong> (cold start) : un nouvel utilisateur (ou un nouvel article) n’a aucune donnée associée dans la matrice. La SVD ou la NMF ne peuvent pas produire de recommandations pertinentes. Des stratégies spécifiques (profil démographique, réponses à des items typiques) sont nécessaires pour initialiser le vecteur latent d’un nouveau venu.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="synthèse-pourquoi-les-modèles-de-rang-faible" class="level1">
+<h1>Synthèse : pourquoi les modèles de rang faible ?</h1>
+<section id="le-principe-général" class="level2">
+<h2 class="anchored" data-anchor-id="le-principe-général">Le principe général</h2>
+<p>Les modèles de rang faible reposent sur l’idée que les données observées, bien que présentées dans un espace de haute dimension (<span class="math inline">\(M \times N\)</span>), sont en réalité gouvernées par un petit nombre <span class="math inline">\(K\)</span> de <strong>variables latentes</strong>.</p>
+<p>La SVD permet d’identifier ces variables de façon optimale, et la NMF les identifie de façon interprétable.</p>
+</section>
+<section id="récapitulatif-des-outils-mathématiques-clés" class="level2">
+<h2 class="anchored" data-anchor-id="récapitulatif-des-outils-mathématiques-clés">Récapitulatif des outils mathématiques clés</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outil</th>
+<th>Rôle</th>
+<th>Propriété clé</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SVD</td>
+<td>Décomposition exacte <span class="math inline">\(R = U\Sigma V^T\)</span></td>
+<td>Meilleure approx. rang <span class="math inline">\(K\)</span> au sens de Frobenius</td>
+</tr>
+<tr class="even">
+<td>Valeurs singulières <span class="math inline">\(\sigma_i\)</span></td>
+<td>Mesurent l’importance des dimensions</td>
+<td><span class="math inline">\(\|R - R_K\|_F^2 = \sum_{k&gt;K} \sigma_k^2\)</span></td>
+</tr>
+<tr class="odd">
+<td>Norme de Frobenius</td>
+<td>Mesure l’erreur d’approximation</td>
+<td><span class="math inline">\(\|A\|_F^2 = \text{Tr}(A^T A) = \sum \sigma_i^2\)</span></td>
+</tr>
+<tr class="even">
+<td>NMF</td>
+<td>Décomposition approchée <span class="math inline">\(R \approx WH\)</span></td>
+<td>Contrainte de non-négativité</td>
+</tr>
+<tr class="odd">
+<td>Minimisation alternée</td>
+<td>Optimisation conjointe <span class="math inline">\(u\)</span>, <span class="math inline">\(v\)</span></td>
+<td>Convergence locale garantie</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="applications-au-delà-de-la-recommandation" class="level2">
+<h2 class="anchored" data-anchor-id="applications-au-delà-de-la-recommandation">Applications au-delà de la recommandation</h2>
+<ul>
+<li><strong>Compression d’images</strong> : la SVD tronquée représente une image avec beaucoup moins de données</li>
+<li><strong>Recherche d’information (LSA/LSI)</strong> : indexation sémantique latente de documents</li>
+<li><strong>Réduction de dimension</strong> : similaire à l’ACP (Analyse en Composantes Principales / PCA)</li>
+<li><strong>Débruitage</strong> : tronquer les petites valeurs singulières élimine le bruit</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Conclusion générale</strong> :</p>
+<ul>
+<li>La matrice de notes <span class="math inline">\(R\)</span> est stockée de façon incomplète.</li>
+<li>La décomposition latente (SVD ou NMF) permet de <strong>prédire</strong> les notes manquantes.</li>
+<li>Ce n’est possible que si le graphe biparti sous-jacent est <strong>connexe</strong> (problème du cold start).</li>
+<li>La théorie du rang faible trouve des applications très larges en apprentissage automatique, traitement du signal et recherche d’information.</li>
+<li>Les modèles linéaires ont des limites → les modèles non-linéaires (pLSA, réseaux de neurones, VAEs) en sont le prolongement naturel.</li>
+</ul>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
