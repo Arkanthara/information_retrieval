@@ -2131,6 +2131,210 @@
     ]
   },
   {
+    "objectID": "ch9r.html",
+    "href": "ch9r.html",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "",
+    "text": "Matrice\nTaille\nContenu\n\n\n\n\n\\(R = (r_{ij})\\)\n\\(M \\times N\\)\nNotes utilisateurs→articles, \\(r_{ij} \\in ]0,1] \\cup \\{?\\}\\)\n\n\n\\(B = (b_{ij})\\)\n\\(M \\times N\\)\nMasque binaire : \\(b_{ij}=1\\) si noté, \\(0\\) sinon\n\n\n\n\\(B\\) = matrice d’adjacence d’un graphe biparti pondéré par \\(R\\).",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#matrices-fondamentales",
+    "href": "ch9r.html#matrices-fondamentales",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "",
+    "text": "Matrice\nTaille\nContenu\n\n\n\n\n\\(R = (r_{ij})\\)\n\\(M \\times N\\)\nNotes utilisateurs→articles, \\(r_{ij} \\in ]0,1] \\cup \\{?\\}\\)\n\n\n\\(B = (b_{ij})\\)\n\\(M \\times N\\)\nMasque binaire : \\(b_{ij}=1\\) si noté, \\(0\\) sinon\n\n\n\n\\(B\\) = matrice d’adjacence d’un graphe biparti pondéré par \\(R\\).",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#hypothèse-clé",
+    "href": "ch9r.html#hypothèse-clé",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Hypothèse clé",
+    "text": "Hypothèse clé\n\\[r_{ij} = \\sum_{k=1}^{K} u_i[k]\\, v_j[k] + u_i[0] = \\tilde{u}_i^T \\tilde{v}_j\\]\n\n\\(u_i[k]\\) : sensibilité de l’utilisateur \\(i\\) à la caractéristique \\(k\\)\n\\(v_j[k]\\) : degré de l’article \\(j\\) dans la caractéristique \\(k\\)\n\\(u_i[0]\\) : biais utilisateur (intercept), absorbé par homogénéisation\n\n\n\n\n\n\n\nTipHomogénéisation\n\n\n\nOn pose \\(\\tilde{v}_j[0] = 1\\) pour tout \\(j\\) → biais intégré dans le produit scalaire.",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#fonctions-de-coût",
+    "href": "ch9r.html#fonctions-de-coût",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Fonctions de coût",
+    "text": "Fonctions de coût\nUtilisateurs (articles \\(v_j\\) fixés) :\n\\[\\mathcal{L}_u = \\frac{1}{2}\\sum_{i=1}^M \\frac{1}{\\sum_j b_{ij}} \\left[\\sum_{j:b_{ij}=1} \\!\\!\\!\\left(\\tilde{u}_i^T\\tilde{v}_j - r_{ij}\\right)^2 + \\lambda_u\\|u_i\\|_2^2\\right]\\]\nArticles (utilisateurs \\(u_i\\) fixés) : formule symétrique avec \\(\\lambda_v\\).\nConjoint : somme des deux termes d’erreur + régularisations \\(\\lambda_u\\), \\(\\lambda_v\\).",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#descente-de-gradient-update-rule",
+    "href": "ch9r.html#descente-de-gradient-update-rule",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Descente de gradient (update rule)",
+    "text": "Descente de gradient (update rule)\n\\[u_i[k] \\leftarrow u_i[k] - \\alpha\\left[\\frac{1}{\\sum_j b_{ij}}\\sum_{j:b_{ij}=1}\\!\\!\\!\\left(\\tilde{u}_i^T\\tilde{v}_j - r_{ij}\\right)v_j[k] + \\lambda_u u_i[k]\\right]\\]\n\n\n\n\n\n\nWarningPièges\n\n\n\n\nLa somme porte uniquement sur \\(b_{ij}=1\\)\nLe biais \\(k=0\\) : pas de régularisation, \\(v_j[0]=1\\)\nProblème conjoint non-convexe → minimum local seulement",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#minimisation-alternée-alternate-minimization",
+    "href": "ch9r.html#minimisation-alternée-alternate-minimization",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Minimisation alternée (Alternate Minimization)",
+    "text": "Minimisation alternée (Alternate Minimization)\n1. Initialiser u_1,...,u_M\n2. Tant que non convergé :\n   a. Fixer u → optimiser v\n   b. Fixer v → optimiser u",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#théorème-fondamental",
+    "href": "ch9r.html#théorème-fondamental",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Théorème fondamental",
+    "text": "Théorème fondamental\n\\[\\mathbf{R} = \\mathbf{U}\\mathbf{\\Sigma}\\mathbf{V}^T\\]\n\n\n\n\n\n\n\n\nMatrice\nTaille\nPropriété\n\n\n\n\n\\(U\\)\n\\(M\\times M\\)\nOrthogonale (\\(U^TU = I\\))\n\n\n\\(\\Sigma\\)\n\\(M\\times N\\)\nDiagonale, \\(\\sigma_1 \\geq \\sigma_2 \\geq \\cdots \\geq 0\\)\n\n\n\\(V\\)\n\\(N\\times N\\)\nOrthogonale (\\(V^TV = I\\))",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#découpage-en-rang-1-matrix-slicing",
+    "href": "ch9r.html#découpage-en-rang-1-matrix-slicing",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Découpage en rang 1 (Matrix Slicing)",
+    "text": "Découpage en rang 1 (Matrix Slicing)\n\\[\\mathbf{R} = \\sum_{i=1}^{N} \\sigma_i\\,(\\mathbf{u}_i\\mathbf{v}_i^T) \\qquad \\text{avec } \\mathbf{u}_i = U_{:i},\\ \\mathbf{v}_i = V_{:i}\\]\nChaque terme \\(\\sigma_i(\\mathbf{u}_i\\mathbf{v}_i^T)\\) est de rang 1.",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#troncature-à-k-composantes",
+    "href": "ch9r.html#troncature-à-k-composantes",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Troncature à \\(K\\) composantes",
+    "text": "Troncature à \\(K\\) composantes\n\\[\\mathbf{R}_K = \\sum_{k=1}^K \\sigma_k\\,\\mathbf{u}_k\\mathbf{v}_k^T = \\mathbf{U}_K\\mathbf{\\Sigma}_K\\mathbf{V}_K^T\\]\nErreur de troncature :\n\\[\\|\\mathbf{R} - \\mathbf{R}_K\\|_F^2 = \\sum_{k=K+1}^{N}\\sigma_k^2\\]",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#théorème-deckart-young",
+    "href": "ch9r.html#théorème-deckart-young",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Théorème d’Eckart-Young",
+    "text": "Théorème d’Eckart-Young\n\n\n\n\n\n\nImportantMeilleure approximation de rang K\n\n\n\n\\[\\mathbf{R}_K = \\arg\\min_{\\text{rang}(B)\\leq K}\\|\\mathbf{R}-B\\|_F^2\\]\n\\(\\mathbf{R}_K\\) est la projection orthogonale de \\(R\\) sur la variété des matrices de rang \\(K\\).",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#norme-de-frobenius-et-trace",
+    "href": "ch9r.html#norme-de-frobenius-et-trace",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Norme de Frobenius et trace",
+    "text": "Norme de Frobenius et trace\n\\[\\|A\\|_F^2 = \\sum_{i,j}A_{ij}^2 = \\text{Tr}(A^TA) = \\sum_i \\sigma_i^2\\]\nPropriétés de la trace :\n\n\\(\\text{Tr}(AB) = \\text{Tr}(BA)\\)\nInvariante par transformation orthogonale : \\(\\text{Tr}(UAU^T) = \\text{Tr}(A)\\)",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#svd-comme-composition-de-transformations",
+    "href": "ch9r.html#svd-comme-composition-de-transformations",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "SVD comme composition de transformations",
+    "text": "SVD comme composition de transformations\n\\[\\varphi_R = \\varphi_U \\circ \\varphi_\\Sigma \\circ \\varphi_V^{-1}\\]\n\n\n\n\n\n\n\nTransformation\nAction\n\n\n\n\n\\(\\varphi_V^{-1}\\) : \\(e_j \\mapsto v_j = V^T e_j\\)\nChangement de base → \\(\\mathcal{B}_V\\)\n\n\n\\(\\varphi_\\Sigma\\) : \\(v_j \\mapsto \\Sigma v_j\\)\nRedimensionnement par \\(\\sigma_i\\)\n\n\n\\(\\varphi_U\\) : \\(r_{ij} = u_i^T v_j\\)\nLecture dans la base \\(\\mathcal{B}_U\\)\n\n\n\nRelation clé : \\(\\mathbf{R}\\mathbf{v}_i = \\sigma_i\\mathbf{u}_i\\)",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#matrices-de-similarité",
+    "href": "ch9r.html#matrices-de-similarité",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Matrices de similarité",
+    "text": "Matrices de similarité\n\\[\\mathbf{R}^T\\mathbf{R} = \\mathbf{V}\\Sigma^2\\mathbf{V}^T \\quad \\rightarrow \\text{similarité articles (item similarity)}\\]\n\\[\\mathbf{R}\\mathbf{R}^T = \\mathbf{U}\\Sigma^2\\mathbf{U}^T \\quad \\rightarrow \\text{similarité utilisateurs (user similarity)}\\]",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#définition",
+    "href": "ch9r.html#définition",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Définition",
+    "text": "Définition\n\\[\\mathbf{R} \\approx \\mathbf{W}\\mathbf{H}, \\quad W_{ij} \\geq 0,\\ H_{ij} \\geq 0\\]\n\\[\\mathbf{W},\\mathbf{H} = \\arg\\min_{A\\geq0,\\, B\\geq0}\\|\\mathbf{R}-AB\\|_F\\]",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#svd-vs-nmf",
+    "href": "ch9r.html#svd-vs-nmf",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "SVD vs NMF",
+    "text": "SVD vs NMF\n\n\n\nCritère\nSVD\nNMF\n\n\n\n\nOptimalité\n✅ Exacte (Eckart-Young)\n❌ Approximative\n\n\nSigne\n± valeurs négatives\n✅ Non-négatif\n\n\nInterprétabilité\n❌ Fantômes globaux\n✅ Parties locales\n\n\nCoût\n\\(\\mathcal{O}(N^3)\\)\nItératif\n\n\nUnicité\n✅ Unique\n❌ Non unique",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch9r.html#complétion-de-matrice-matrix-completion",
+    "href": "ch9r.html#complétion-de-matrice-matrix-completion",
+    "title": "Factorisation Matricielle et Modèles de Rang Faible — Révision",
+    "section": "Complétion de matrice (Matrix Completion)",
+    "text": "Complétion de matrice (Matrix Completion)\n\nPoser \\(r_{ij} = 0\\) pour les notes inconnues → \\(\\tilde{R}\\)\nRésoudre NMF sur \\(\\tilde{R}\\)\n\\(\\hat{R} = WH\\) contient les notes estimées\nAppliquer la normalisation par la moyenne (mean normalization) : centrer \\(R\\) par utilisateur",
+    "crumbs": [
+      "Cours",
+      "Low Rank Model",
+      "Synthèse"
+    ]
+  },
+  {
+    "objectID": "ch3q.html",
+    "href": "ch3q.html",
+    "title": "Plongements Neuronaux (Neural Embeddings) — Quiz",
+    "section": "",
+    "text": "---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quel est le principe fondamental des plongements basés sur le contexte (Context-based Embeddings) ?\n\n- [ ] La signification d'un terme est déterminée par sa fréquence dans le corpus\n- [x] La signification d'un terme est déterminée par les termes qui l'entourent\n- [ ] La signification d'un terme est déterminée par sa longueur\n- [ ] La signification d'un terme est indépendante de son environnement textuel\n\n&gt; Explication :\n&gt; L'hypothèse distributionnelle stipule que les mots apparaissant dans des contextes similaires ont des significations proches. C'est le fondement de Word2Vec et GloVe.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la direction de prédiction du modèle CBoW (Continuous Bag of Words) ?\n\n- [ ] Terme cible → Termes de contexte\n- [x] Termes de contexte → Terme cible\n- [ ] Terme cible → Terme cible suivant\n- [ ] Corpus entier → Terme cible\n\n&gt; Explication :\n&gt; CBoW prédit le terme cible $W_T$ à partir des mots environnants $W_C$, c'est-à-dire qu'il estime $\\mathbb{P}(W_T \\mid W_C)$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la direction de prédiction du modèle Skip-gram ?\n\n- [ ] Termes de contexte → Terme cible\n- [x] Terme cible → Termes de contexte\n- [ ] Document entier → Terme cible\n- [ ] Terme précédent → Terme suivant\n\n&gt; Explication :\n&gt; Skip-gram est l'inverse de CBoW : il estime $\\mathbb{P}(W_C \\mid W_T)$, c'est-à-dire la probabilité des mots de contexte étant donné le mot cible.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans Word2Vec, que représentent les paramètres $\\theta = [W, W']$ ?\n\n- [ ] Les termes du vocabulaire et leurs fréquences\n- [ ] Les matrices de co-occurrence et de distance\n- [x] Les matrices de poids du réseau de neurones (couche d'entrée et couche de sortie)\n- [ ] Les vecteurs de requête et de document\n\n&gt; Explication :\n&gt; $W$ est la matrice de poids entre la couche d'entrée et la couche cachée, et $W'$ entre la couche cachée et la couche de sortie. Ce sont ces poids appris qui constituent le plongement.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle mesure de similarité est utilisée avec les plongements Word2Vec et GloVe ?\n\n- [ ] Similarité cosinus (Cosine similarity)\n- [ ] Produit scalaire normalisé\n- [x] Distance euclidienne (Euclidean distance)\n- [ ] Distance de Kullback-Leibler\n\n&gt; Explication :\n&gt; La mesure de similarité doit être cohérente avec la construction du plongement. Pour Word2Vec et GloVe, c'est la distance euclidienne dans l'espace vectoriel appris.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : LSI (Latent Semantic Indexing) est un plongement basé sur le contexte local des termes.\n\n- [ ] Vrai\n- [x] Faux\n\n&gt; Faux :\n&gt; LSI est un plongement basé sur le **contenu** (Content-based). Il factorise la matrice termes-documents globale pour extraire des concepts latents **linéaires**, sans tenir compte du contexte local d'occurrence des termes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Avec une fenêtre de contexte de taille $m = 2$ et le mot cible \"joue\" dans la phrase \"Le chat **joue** avec la balle\", combien de paires (cible, contexte) sont générées ?\n\n- [ ] 2\n- [ ] 3\n- [x] 4\n- [ ] 6\n\n&gt; Explication :\n&gt; Avec $m = 2$, on prend 2 mots avant (\"Le\", \"chat\") et 2 mots après (\"avec\", \"la\"), ce qui génère 4 paires : (\"joue\",\"Le\"), (\"joue\",\"chat\"), (\"joue\",\"avec\"), (\"joue\",\"la\").\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Pourquoi la fonction softmax standard est-elle problématique pour de grands vocabulaires dans Word2Vec ?\n\n- [ ] Elle ne converge pas pour les vocabulaires larges\n- [ ] Elle produit des probabilités négatives\n- [x] Son dénominateur nécessite une somme sur tout le vocabulaire, soit une complexité $O(N)$ par étape\n- [ ] Elle ne peut pas être différentiée\n\n&gt; Explication :\n&gt; $\\mathbb{P}(W_T \\mid W_C) = \\exp(v_T^{\\prime\\top} v_C) / \\sum_i \\exp(v_i^{\\prime\\top} v_C)$ exige le calcul de $N$ exponentielles à chaque étape. Pour $N = 10^5$ mots, cela est prohibitif.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### La softmax hiérarchique (Hierarchical Softmax) réduit la complexité de calcul de $O(N)$ à :\n\n- [ ] $O(1)$\n- [ ] $O(\\sqrt{N})$\n- [x] $O(\\log N)$\n- [ ] $O(N^2)$\n\n&gt; Explication :\n&gt; En organisant le vocabulaire dans un arbre binaire (comme WordNet), la probabilité d'un terme est calculée comme un produit de probabilités le long du chemin racine→feuille, ce qui donne $O(\\log N)$ opérations.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la différence fondamentale entre GloVe et Word2Vec concernant les co-occurrences ?\n\n- [ ] GloVe utilise une fenêtre de contexte plus grande\n- [ ] Word2Vec utilise des co-occurrences globales, GloVe des co-occurrences locales\n- [x] GloVe pondère explicitement les co-occurrences selon leur fréquence globale, Word2Vec les traite implicitement\n- [ ] GloVe ignore les co-occurrences nulles, Word2Vec les inclut toutes\n\n&gt; Explication :\n&gt; Word2Vec optimise une prédiction locale sans tenir compte de la densité des co-occurrences. GloVe minimise une perte globale pondérée par $\\psi(\\text{card}\\{(w_k,w_i)\\})$, donnant plus d'importance aux paires fréquentes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans GloVe, que capture géométriquement la différence de vecteurs $v_i - v_j$ ?\n\n- [ ] La fréquence relative des termes $w_i$ et $w_j$\n- [x] Le ratio des probabilités de co-occurrence $\\mathbb{P}(w_k \\mid w_i) / \\mathbb{P}(w_k \\mid w_j)$\n- [ ] La distance syntaxique entre $w_i$ et $w_j$\n- [ ] La somme des co-occurrences des deux termes\n\n&gt; Explication :\n&gt; $\\exp((v_i - v_j)^\\top v_k) = \\mathbb{P}_{\\text{cooc}}(w_k \\mid w_i) / \\mathbb{P}_{\\text{cooc}}(w_k \\mid w_j)$. C'est cette propriété qui permet les analogies vectorielles du type \"roi - homme + femme ≈ reine\".\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Dans le modèle CBoW, la probabilité $\\mathbb{P}(W_T \\mid W_C)$ est approximée par le produit scalaire $v_T^{\\prime\\top} v_C$.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. Les vecteurs $v_C$ (issu de $W$) et $v_T'$ (colonne de $W'$) sont tels que leur produit scalaire approxime le score non normalisé. La softmax normalise ensuite ce score en probabilité.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Pourquoi les plongements neuronaux (Word2Vec, GloVe) capturent-ils des relations **non-linéaires**, contrairement à LSI ?\n\n- [ ] Parce qu'ils utilisent plus de données\n- [ ] Parce que leur vocabulaire est plus grand\n- [x] Parce que leur apprentissage implique des fonctions non-linéaires (exponentielle, softmax) là où LSI effectue une factorisation matricielle linéaire\n- [ ] Parce qu'ils ignorent les mots grammaticaux\n\n&gt; Explication :\n&gt; LSI = décomposition en valeurs singulières (SVD) = transformation **linéaire**. Word2Vec/GloVe optimisent des fonctions faisant intervenir des exponentielles, permettant d'encoder des structures géométriques complexes (translations, rotations) impossibles à représenter linéairement.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Un modèle Word2Vec pré-entraîné (Pre-trained model) peut être utilisé directement pour représenter des documents en calculant la moyenne des vecteurs de leurs termes.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. Les modèles pré-entraînés fournissent une table de correspondance (lookup table). Le vecteur d'un document est calculé comme $\\vec{d} = \\frac{1}{|d|} \\sum_{w \\in d} \\vec{v}_w$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : On veut comparer deux systèmes de recherche d'information. Le premier utilise TF·IDF avec similarité cosinus. Le second utilise Word2Vec avec distance euclidienne. Pour la requête \"voiture rapide\", le second système retourne aussi des documents contenant \"automobile véloce\" sans que ces mots apparaissent dans la requête. Quelle propriété de Word2Vec explique ce comportement ?\n\n- [ ] Word2Vec pondère les termes rares plus fortement\n- [ ] Word2Vec indexe les synonymes explicitement dans son vocabulaire\n- [x] Les synonymes et termes sémantiquement proches ont des vecteurs proches dans l'espace de plongement car ils apparaissent dans des contextes similaires\n- [ ] Word2Vec utilise une fenêtre de contexte infinie\n\n&gt; Explication :\n&gt; \"voiture\" et \"automobile\", \"rapide\" et \"véloce\" co-apparaissent dans des contextes similaires dans le corpus d'entraînement. Leurs vecteurs sont donc proches dans l'espace de plongement, permettant une recherche sémantique au-delà de la correspondance exacte des termes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans la fonction de perte de GloVe, à quoi sert la fonction de pondération $\\psi(x)$ avec $\\psi(0) = 0$ et $\\psi(\\infty) = 1$ ?\n\n- [ ] À normaliser les vecteurs pour qu'ils aient une norme unitaire\n- [x] À ignorer les paires de co-occurrence nulles et à plafonner l'influence des paires très fréquentes (souvent des mots grammaticaux peu informatifs)\n- [ ] À accélérer la convergence du gradient\n- [ ] À réduire la dimension du plongement automatiquement\n\n&gt; Explication :\n&gt; $\\psi(0) = 0$ : les co-occurrences nulles ne contribuent pas à la perte. $\\psi(\\infty) = 1$ : les très fortes co-occurrences (souvent dues à des mots fonctionnels comme \"le\", \"de\") sont plafonnées pour ne pas dominer l'apprentissage.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : Un système de recherche d'information utilise des plongements Word2Vec entraînés sur des articles de presse américains des années 1990. Il associe systématiquement des noms de métiers techniques à des profils masculins. Quelle est la cause principale de ce problème et quelle est la solution proposée par la littérature ?\n\n- [ ] Cause : vocabulaire trop petit. Solution : augmenter la taille du vocabulaire\n- [ ] Cause : fenêtre de contexte trop petite. Solution : augmenter la fenêtre\n- [x] Cause : biais sociétaux (societal biases) présents dans le corpus d'entraînement. Solution : techniques de débiaisage (debiasing) des plongements\n- [ ] Cause : dimension de plongement trop faible. Solution : augmenter la dimension\n\n&gt; Explication :\n&gt; Les co-occurrences dans les corpus historiques reflètent des stéréotypes culturels. Bolukbasi et al. (2016) ont montré des associations comme \"homme : programmeur :: femme : femme au foyer\". Des techniques de débiaisage post-entraînement ont été proposées pour corriger ces associations.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la limite fondamentale des plongements statiques (Word2Vec, GloVe) face à la polysémie, et quel modèle y répond ?\n\n- [ ] Limite : ils ne gèrent pas les mots rares. Solution : TF·IDF\n- [x] Limite : un mot polysémique reçoit un unique vecteur moyen indépendamment du sens. Solution : BERT qui génère des plongements contextuels\n- [ ] Limite : ils sont trop lents à calculer. Solution : softmax hiérarchique\n- [ ] Limite : ils ne gèrent pas les langues non-anglaises. Solution : GloVe multilingue\n\n&gt; Explication :\n&gt; \"banque\" (établissement financier) et \"banque\" (rive d'un fleuve) partagent un unique vecteur dans Word2Vec/GloVe. BERT (Bidirectional Encoder Representations from Transformers) génère un vecteur différent pour chaque occurrence selon son contexte phrastique.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : On entraîne un modèle Skip-gram sur un corpus médical spécialisé. Après entraînement, on observe que $\\|v_{\\text{aspirine}} - v_{\\text{ibuprofène}}\\|$ est très faible. Quelle interprétation linguistique peut-on donner à ce résultat ?\n\n- [ ] Les deux médicaments sont identiques chimiquement\n- [ ] Le corpus contenait peu d'occurrences de ces termes\n- [x] Les deux termes apparaissent fréquemment dans des contextes similaires (mêmes symptômes traités, même posologie, etc.), indiquant une proximité sémantique dans le domaine médical\n- [ ] La fenêtre de contexte était trop grande\n\n&gt; Explication :\n&gt; Une distance euclidienne faible signifie que les vecteurs sont proches, donc que les termes co-apparaissent dans des contextes similaires. Dans un corpus médical, aspirine et ibuprofène sont souvent utilisés dans les mêmes contextes (anti-inflammatoires, douleurs, fièvre), d'où leur proximité vectorielle.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Parmi les affirmations suivantes sur la relation entre Word2Vec et la recherche d'information moderne, laquelle est correcte ?\n\n- [ ] Word2Vec a remplacé définitivement TF·IDF dans tous les systèmes\n- [ ] Les plongements neuronaux sont uniquement utilisés pour la classification de textes\n- [x] Les plongements denses constituent la base du Dense Retrieval moderne, où la recherche documentaire devient un problème de plus proche voisin approximatif (Approximate Nearest Neighbor)\n- [ ] GloVe est suffisant pour tous les besoins de recherche sémantique sans nécessiter de modèles plus récents\n\n&gt; Explication :\n&gt; Les techniques modernes de recherche (bi-encodeurs basés sur BERT, etc.) encodent requêtes et documents en vecteurs denses, puis effectuent une recherche du plus proche voisin approximatif (ANN). Word2Vec/GloVe sont les précurseurs directs de cette approche.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Soit la phrase \"Le médecin soigne le patient\" avec une fenêtre $m = 1$. En CBoW, quelles paires (contexte → cible) sont générées pour le mot \"soigne\" ?\n\n- [ ] (\"médecin\", \"soigne\") et (\"soigne\", \"le\")\n- [x] (\"Le\", \"médecin\"), (\"médecin\", \"soigne\"), (\"soigne\", \"le\"), (\"le\", \"patient\") — et pour \"soigne\" spécifiquement : (\"médecin\", \"soigne\") et (\"le\", \"soigne\")\n- [ ] Toutes les combinaisons de mots de la phrase\n- [ ] Uniquement (\"médecin\", \"le\") car ils encadrent \"soigne\"\n\n&gt; Explication :\n&gt; Pour le mot cible \"soigne\" avec $m=1$ : les contextes sont \"médecin\" (gauche) et \"le\" (droite). Les paires générées sont (\"soigne\",\"médecin\") et (\"soigne\",\"le\"), qui serviront à entraîner $\\mathbb{P}(W_T = \\text{\"soigne\"} \\mid W_C)$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Dans GloVe, le terme $b_i$ (biais associé à $w_i$) dans la formule $v_i^\\top v_k + b_i + b_k - \\log\\,\\text{card}\\{(w_k,w_i)\\}$ provient du fait que $\\log\\,\\text{card}\\{(w_i)\\}$ ne dépend pas de $w_k$.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. On développe : $v_i^\\top v_k = \\log\\,\\text{card}\\{(w_k, w_i)\\} - \\log\\,\\text{card}\\{(w_i)\\}$. Le terme $\\log\\,\\text{card}\\{(w_i)\\}$ est constant pour un $w_i$ fixé, indépendamment de $w_k$ : il constitue donc un **biais** $b_i$ absorbé dans les paramètres du modèle.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quel modèle est le mieux adapté pour traiter des mots rares ou des néologismes (mots hors vocabulaire, Out-of-Vocabulary) ?\n\n- [ ] Word2Vec CBoW\n- [ ] Word2Vec Skip-gram\n- [ ] GloVe\n- [x] FastText, qui décompose les mots en sous-mots (subwords) et peut représenter tout mot jamais vu à l'entraînement\n\n&gt; Explication :\n&gt; FastText (Bojanowski et al., 2016) enrichit les vecteurs de mots avec des informations sur les n-grammes de caractères. Pour un mot inconnu, son vecteur est construit à partir de ses sous-composantes, permettant une généralisation aux mots hors vocabulaire.",
+    "crumbs": [
+      "Cours",
+      "Embeddings Neuronaux",
+      "Quiz"
+    ]
+  },
+  {
     "objectID": "ch4r.html",
     "href": "ch4r.html",
     "title": "Évaluation en Recherche d’Information — Révision",
@@ -2260,18 +2464,6 @@
       "Cours",
       "Évaluation",
       "Synthèse"
-    ]
-  },
-  {
-    "objectID": "ch3q.html",
-    "href": "ch3q.html",
-    "title": "Plongements Neuronaux (Neural Embeddings) — Quiz",
-    "section": "",
-    "text": "---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quel est le principe fondamental des plongements basés sur le contexte (Context-based Embeddings) ?\n\n- [ ] La signification d'un terme est déterminée par sa fréquence dans le corpus\n- [x] La signification d'un terme est déterminée par les termes qui l'entourent\n- [ ] La signification d'un terme est déterminée par sa longueur\n- [ ] La signification d'un terme est indépendante de son environnement textuel\n\n&gt; Explication :\n&gt; L'hypothèse distributionnelle stipule que les mots apparaissant dans des contextes similaires ont des significations proches. C'est le fondement de Word2Vec et GloVe.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la direction de prédiction du modèle CBoW (Continuous Bag of Words) ?\n\n- [ ] Terme cible → Termes de contexte\n- [x] Termes de contexte → Terme cible\n- [ ] Terme cible → Terme cible suivant\n- [ ] Corpus entier → Terme cible\n\n&gt; Explication :\n&gt; CBoW prédit le terme cible $W_T$ à partir des mots environnants $W_C$, c'est-à-dire qu'il estime $\\mathbb{P}(W_T \\mid W_C)$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la direction de prédiction du modèle Skip-gram ?\n\n- [ ] Termes de contexte → Terme cible\n- [x] Terme cible → Termes de contexte\n- [ ] Document entier → Terme cible\n- [ ] Terme précédent → Terme suivant\n\n&gt; Explication :\n&gt; Skip-gram est l'inverse de CBoW : il estime $\\mathbb{P}(W_C \\mid W_T)$, c'est-à-dire la probabilité des mots de contexte étant donné le mot cible.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans Word2Vec, que représentent les paramètres $\\theta = [W, W']$ ?\n\n- [ ] Les termes du vocabulaire et leurs fréquences\n- [ ] Les matrices de co-occurrence et de distance\n- [x] Les matrices de poids du réseau de neurones (couche d'entrée et couche de sortie)\n- [ ] Les vecteurs de requête et de document\n\n&gt; Explication :\n&gt; $W$ est la matrice de poids entre la couche d'entrée et la couche cachée, et $W'$ entre la couche cachée et la couche de sortie. Ce sont ces poids appris qui constituent le plongement.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle mesure de similarité est utilisée avec les plongements Word2Vec et GloVe ?\n\n- [ ] Similarité cosinus (Cosine similarity)\n- [ ] Produit scalaire normalisé\n- [x] Distance euclidienne (Euclidean distance)\n- [ ] Distance de Kullback-Leibler\n\n&gt; Explication :\n&gt; La mesure de similarité doit être cohérente avec la construction du plongement. Pour Word2Vec et GloVe, c'est la distance euclidienne dans l'espace vectoriel appris.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : LSI (Latent Semantic Indexing) est un plongement basé sur le contexte local des termes.\n\n- [ ] Vrai\n- [x] Faux\n\n&gt; Faux :\n&gt; LSI est un plongement basé sur le **contenu** (Content-based). Il factorise la matrice termes-documents globale pour extraire des concepts latents **linéaires**, sans tenir compte du contexte local d'occurrence des termes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Avec une fenêtre de contexte de taille $m = 2$ et le mot cible \"joue\" dans la phrase \"Le chat **joue** avec la balle\", combien de paires (cible, contexte) sont générées ?\n\n- [ ] 2\n- [ ] 3\n- [x] 4\n- [ ] 6\n\n&gt; Explication :\n&gt; Avec $m = 2$, on prend 2 mots avant (\"Le\", \"chat\") et 2 mots après (\"avec\", \"la\"), ce qui génère 4 paires : (\"joue\",\"Le\"), (\"joue\",\"chat\"), (\"joue\",\"avec\"), (\"joue\",\"la\").\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Pourquoi la fonction softmax standard est-elle problématique pour de grands vocabulaires dans Word2Vec ?\n\n- [ ] Elle ne converge pas pour les vocabulaires larges\n- [ ] Elle produit des probabilités négatives\n- [x] Son dénominateur nécessite une somme sur tout le vocabulaire, soit une complexité $O(N)$ par étape\n- [ ] Elle ne peut pas être différentiée\n\n&gt; Explication :\n&gt; $\\mathbb{P}(W_T \\mid W_C) = \\exp(v_T^{\\prime\\top} v_C) / \\sum_i \\exp(v_i^{\\prime\\top} v_C)$ exige le calcul de $N$ exponentielles à chaque étape. Pour $N = 10^5$ mots, cela est prohibitif.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### La softmax hiérarchique (Hierarchical Softmax) réduit la complexité de calcul de $O(N)$ à :\n\n- [ ] $O(1)$\n- [ ] $O(\\sqrt{N})$\n- [x] $O(\\log N)$\n- [ ] $O(N^2)$\n\n&gt; Explication :\n&gt; En organisant le vocabulaire dans un arbre binaire (comme WordNet), la probabilité d'un terme est calculée comme un produit de probabilités le long du chemin racine→feuille, ce qui donne $O(\\log N)$ opérations.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la différence fondamentale entre GloVe et Word2Vec concernant les co-occurrences ?\n\n- [ ] GloVe utilise une fenêtre de contexte plus grande\n- [ ] Word2Vec utilise des co-occurrences globales, GloVe des co-occurrences locales\n- [x] GloVe pondère explicitement les co-occurrences selon leur fréquence globale, Word2Vec les traite implicitement\n- [ ] GloVe ignore les co-occurrences nulles, Word2Vec les inclut toutes\n\n&gt; Explication :\n&gt; Word2Vec optimise une prédiction locale sans tenir compte de la densité des co-occurrences. GloVe minimise une perte globale pondérée par $\\psi(\\text{card}\\{(w_k,w_i)\\})$, donnant plus d'importance aux paires fréquentes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans GloVe, que capture géométriquement la différence de vecteurs $v_i - v_j$ ?\n\n- [ ] La fréquence relative des termes $w_i$ et $w_j$\n- [x] Le ratio des probabilités de co-occurrence $\\mathbb{P}(w_k \\mid w_i) / \\mathbb{P}(w_k \\mid w_j)$\n- [ ] La distance syntaxique entre $w_i$ et $w_j$\n- [ ] La somme des co-occurrences des deux termes\n\n&gt; Explication :\n&gt; $\\exp((v_i - v_j)^\\top v_k) = \\mathbb{P}_{\\text{cooc}}(w_k \\mid w_i) / \\mathbb{P}_{\\text{cooc}}(w_k \\mid w_j)$. C'est cette propriété qui permet les analogies vectorielles du type \"roi - homme + femme ≈ reine\".\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Dans le modèle CBoW, la probabilité $\\mathbb{P}(W_T \\mid W_C)$ est approximée par le produit scalaire $v_T^{\\prime\\top} v_C$.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. Les vecteurs $v_C$ (issu de $W$) et $v_T'$ (colonne de $W'$) sont tels que leur produit scalaire approxime le score non normalisé. La softmax normalise ensuite ce score en probabilité.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Pourquoi les plongements neuronaux (Word2Vec, GloVe) capturent-ils des relations **non-linéaires**, contrairement à LSI ?\n\n- [ ] Parce qu'ils utilisent plus de données\n- [ ] Parce que leur vocabulaire est plus grand\n- [x] Parce que leur apprentissage implique des fonctions non-linéaires (exponentielle, softmax) là où LSI effectue une factorisation matricielle linéaire\n- [ ] Parce qu'ils ignorent les mots grammaticaux\n\n&gt; Explication :\n&gt; LSI = décomposition en valeurs singulières (SVD) = transformation **linéaire**. Word2Vec/GloVe optimisent des fonctions faisant intervenir des exponentielles, permettant d'encoder des structures géométriques complexes (translations, rotations) impossibles à représenter linéairement.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Un modèle Word2Vec pré-entraîné (Pre-trained model) peut être utilisé directement pour représenter des documents en calculant la moyenne des vecteurs de leurs termes.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. Les modèles pré-entraînés fournissent une table de correspondance (lookup table). Le vecteur d'un document est calculé comme $\\vec{d} = \\frac{1}{|d|} \\sum_{w \\in d} \\vec{v}_w$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : On veut comparer deux systèmes de recherche d'information. Le premier utilise TF·IDF avec similarité cosinus. Le second utilise Word2Vec avec distance euclidienne. Pour la requête \"voiture rapide\", le second système retourne aussi des documents contenant \"automobile véloce\" sans que ces mots apparaissent dans la requête. Quelle propriété de Word2Vec explique ce comportement ?\n\n- [ ] Word2Vec pondère les termes rares plus fortement\n- [ ] Word2Vec indexe les synonymes explicitement dans son vocabulaire\n- [x] Les synonymes et termes sémantiquement proches ont des vecteurs proches dans l'espace de plongement car ils apparaissent dans des contextes similaires\n- [ ] Word2Vec utilise une fenêtre de contexte infinie\n\n&gt; Explication :\n&gt; \"voiture\" et \"automobile\", \"rapide\" et \"véloce\" co-apparaissent dans des contextes similaires dans le corpus d'entraînement. Leurs vecteurs sont donc proches dans l'espace de plongement, permettant une recherche sémantique au-delà de la correspondance exacte des termes.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Dans la fonction de perte de GloVe, à quoi sert la fonction de pondération $\\psi(x)$ avec $\\psi(0) = 0$ et $\\psi(\\infty) = 1$ ?\n\n- [ ] À normaliser les vecteurs pour qu'ils aient une norme unitaire\n- [x] À ignorer les paires de co-occurrence nulles et à plafonner l'influence des paires très fréquentes (souvent des mots grammaticaux peu informatifs)\n- [ ] À accélérer la convergence du gradient\n- [ ] À réduire la dimension du plongement automatiquement\n\n&gt; Explication :\n&gt; $\\psi(0) = 0$ : les co-occurrences nulles ne contribuent pas à la perte. $\\psi(\\infty) = 1$ : les très fortes co-occurrences (souvent dues à des mots fonctionnels comme \"le\", \"de\") sont plafonnées pour ne pas dominer l'apprentissage.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : Un système de recherche d'information utilise des plongements Word2Vec entraînés sur des articles de presse américains des années 1990. Il associe systématiquement des noms de métiers techniques à des profils masculins. Quelle est la cause principale de ce problème et quelle est la solution proposée par la littérature ?\n\n- [ ] Cause : vocabulaire trop petit. Solution : augmenter la taille du vocabulaire\n- [ ] Cause : fenêtre de contexte trop petite. Solution : augmenter la fenêtre\n- [x] Cause : biais sociétaux (societal biases) présents dans le corpus d'entraînement. Solution : techniques de débiaisage (debiasing) des plongements\n- [ ] Cause : dimension de plongement trop faible. Solution : augmenter la dimension\n\n&gt; Explication :\n&gt; Les co-occurrences dans les corpus historiques reflètent des stéréotypes culturels. Bolukbasi et al. (2016) ont montré des associations comme \"homme : programmeur :: femme : femme au foyer\". Des techniques de débiaisage post-entraînement ont été proposées pour corriger ces associations.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quelle est la limite fondamentale des plongements statiques (Word2Vec, GloVe) face à la polysémie, et quel modèle y répond ?\n\n- [ ] Limite : ils ne gèrent pas les mots rares. Solution : TF·IDF\n- [x] Limite : un mot polysémique reçoit un unique vecteur moyen indépendamment du sens. Solution : BERT qui génère des plongements contextuels\n- [ ] Limite : ils sont trop lents à calculer. Solution : softmax hiérarchique\n- [ ] Limite : ils ne gèrent pas les langues non-anglaises. Solution : GloVe multilingue\n\n&gt; Explication :\n&gt; \"banque\" (établissement financier) et \"banque\" (rive d'un fleuve) partagent un unique vecteur dans Word2Vec/GloVe. BERT (Bidirectional Encoder Representations from Transformers) génère un vecteur différent pour chaque occurrence selon son contexte phrastique.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Cas pratique : On entraîne un modèle Skip-gram sur un corpus médical spécialisé. Après entraînement, on observe que $\\|v_{\\text{aspirine}} - v_{\\text{ibuprofène}}\\|$ est très faible. Quelle interprétation linguistique peut-on donner à ce résultat ?\n\n- [ ] Les deux médicaments sont identiques chimiquement\n- [ ] Le corpus contenait peu d'occurrences de ces termes\n- [x] Les deux termes apparaissent fréquemment dans des contextes similaires (mêmes symptômes traités, même posologie, etc.), indiquant une proximité sémantique dans le domaine médical\n- [ ] La fenêtre de contexte était trop grande\n\n&gt; Explication :\n&gt; Une distance euclidienne faible signifie que les vecteurs sont proches, donc que les termes co-apparaissent dans des contextes similaires. Dans un corpus médical, aspirine et ibuprofène sont souvent utilisés dans les mêmes contextes (anti-inflammatoires, douleurs, fièvre), d'où leur proximité vectorielle.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Parmi les affirmations suivantes sur la relation entre Word2Vec et la recherche d'information moderne, laquelle est correcte ?\n\n- [ ] Word2Vec a remplacé définitivement TF·IDF dans tous les systèmes\n- [ ] Les plongements neuronaux sont uniquement utilisés pour la classification de textes\n- [x] Les plongements denses constituent la base du Dense Retrieval moderne, où la recherche documentaire devient un problème de plus proche voisin approximatif (Approximate Nearest Neighbor)\n- [ ] GloVe est suffisant pour tous les besoins de recherche sémantique sans nécessiter de modèles plus récents\n\n&gt; Explication :\n&gt; Les techniques modernes de recherche (bi-encodeurs basés sur BERT, etc.) encodent requêtes et documents en vecteurs denses, puis effectuent une recherche du plus proche voisin approximatif (ANN). Word2Vec/GloVe sont les précurseurs directs de cette approche.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Soit la phrase \"Le médecin soigne le patient\" avec une fenêtre $m = 1$. En CBoW, quelles paires (contexte → cible) sont générées pour le mot \"soigne\" ?\n\n- [ ] (\"médecin\", \"soigne\") et (\"soigne\", \"le\")\n- [x] (\"Le\", \"médecin\"), (\"médecin\", \"soigne\"), (\"soigne\", \"le\"), (\"le\", \"patient\") — et pour \"soigne\" spécifiquement : (\"médecin\", \"soigne\") et (\"le\", \"soigne\")\n- [ ] Toutes les combinaisons de mots de la phrase\n- [ ] Uniquement (\"médecin\", \"le\") car ils encadrent \"soigne\"\n\n&gt; Explication :\n&gt; Pour le mot cible \"soigne\" avec $m=1$ : les contextes sont \"médecin\" (gauche) et \"le\" (droite). Les paires générées sont (\"soigne\",\"médecin\") et (\"soigne\",\"le\"), qui serviront à entraîner $\\mathbb{P}(W_T = \\text{\"soigne\"} \\mid W_C)$.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Vrai ou Faux : Dans GloVe, le terme $b_i$ (biais associé à $w_i$) dans la formule $v_i^\\top v_k + b_i + b_k - \\log\\,\\text{card}\\{(w_k,w_i)\\}$ provient du fait que $\\log\\,\\text{card}\\{(w_i)\\}$ ne dépend pas de $w_k$.\n\n- [x] Vrai\n- [ ] Faux\n\n&gt; Réponse :\n&gt; Oui. On développe : $v_i^\\top v_k = \\log\\,\\text{card}\\{(w_k, w_i)\\} - \\log\\,\\text{card}\\{(w_i)\\}$. Le terme $\\log\\,\\text{card}\\{(w_i)\\}$ est constant pour un $w_i$ fixé, indépendamment de $w_k$ : il constitue donc un **biais** $b_i$ absorbé dans les paramètres du modèle.\n\n\n\n\n---\nprimaryColor: \"#3b82f6\"\nshuffleQuestions: false\nshuffleAnswers: true\nlocale: fr\n---\n\n### Quel modèle est le mieux adapté pour traiter des mots rares ou des néologismes (mots hors vocabulaire, Out-of-Vocabulary) ?\n\n- [ ] Word2Vec CBoW\n- [ ] Word2Vec Skip-gram\n- [ ] GloVe\n- [x] FastText, qui décompose les mots en sous-mots (subwords) et peut représenter tout mot jamais vu à l'entraînement\n\n&gt; Explication :\n&gt; FastText (Bojanowski et al., 2016) enrichit les vecteurs de mots avec des informations sur les n-grammes de caractères. Pour un mot inconnu, son vecteur est construit à partir de ses sous-composantes, permettant une généralisation aux mots hors vocabulaire.",
-    "crumbs": [
-      "Cours",
-      "Embeddings Neuronaux",
-      "Quiz"
     ]
   },
   {
