@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Web Information Retrieval — Révision – Information Retrieval</title>
+<title>Exploitation du Retour Utilisateur — Révision – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4377,7 +4377,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch7.html">Web</a></li><li class="breadcrumb-item"><a href="./ch7r.html">Synthèse</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch8.html">Feedback</a></li><li class="breadcrumb-item"><a href="./ch8r.html">Synthèse</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4582,13 +4582,13 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
  <span class="menu-text">Web</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch7.html" class="sidebar-item-text sidebar-link">
@@ -4597,7 +4597,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch7r.html" class="sidebar-item-text sidebar-link active">
+  <a href="./ch7r.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Synthèse</span></a>
   </div>
 </li>
@@ -4611,13 +4611,13 @@ window.Quarto = {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
  <span class="menu-text">Feedback</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch8.html" class="sidebar-item-text sidebar-link">
@@ -4626,7 +4626,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ch8r.html" class="sidebar-item-text sidebar-link">
+  <a href="./ch8r.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Synthèse</span></a>
   </div>
 </li>
@@ -4694,38 +4694,36 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a></li>
-  <li><a href="#le-www-comme-graphe" id="toc-le-www-comme-graphe" class="nav-link" data-scroll-target="#le-www-comme-graphe">Le WWW comme graphe</a>
+  <li><a href="#vue-densemble" id="toc-vue-densemble" class="nav-link active" data-scroll-target="#vue-densemble">Vue d’ensemble</a></li>
+  <li><a href="#retour-de-pertinence-relevance-feedback-rf" id="toc-retour-de-pertinence-relevance-feedback-rf" class="nav-link" data-scroll-target="#retour-de-pertinence-relevance-feedback-rf">Retour de Pertinence (Relevance Feedback — RF)</a>
   <ul class="collapse">
-  <li><a href="#modèle-nœud-papillon-bow-tie-model" id="toc-modèle-nœud-papillon-bow-tie-model" class="nav-link" data-scroll-target="#modèle-nœud-papillon-bow-tie-model">Modèle “Nœud Papillon” (Bow Tie Model)</a></li>
+  <li><a href="#utilité-du-rf" id="toc-utilité-du-rf" class="nav-link" data-scroll-target="#utilité-du-rf">Utilité du RF</a></li>
+  <li><a href="#types-de-rf" id="toc-types-de-rf" class="nav-link" data-scroll-target="#types-de-rf">Types de RF</a></li>
+  <li><a href="#objectif-système" id="toc-objectif-système" class="nav-link" data-scroll-target="#objectif-système">Objectif système</a></li>
+  <li><a href="#implémentation" id="toc-implémentation" class="nav-link" data-scroll-target="#implémentation">Implémentation</a></li>
   </ul></li>
-  <li><a href="#analyse-des-citations-citation-analysis" id="toc-analyse-des-citations-citation-analysis" class="nav-link" data-scroll-target="#analyse-des-citations-citation-analysis">Analyse des citations (Citation Analysis)</a></li>
-  <li><a href="#citations-vs-liens-web" id="toc-citations-vs-liens-web" class="nav-link" data-scroll-target="#citations-vs-liens-web">Citations vs Liens Web</a></li>
-  <li><a href="#autorités-hubs-link-analysis" id="toc-autorités-hubs-link-analysis" class="nav-link" data-scroll-target="#autorités-hubs-link-analysis">Autorités &amp; Hubs (Link Analysis)</a></li>
-  <li><a href="#algorithme-hits" id="toc-algorithme-hits" class="nav-link" data-scroll-target="#algorithme-hits">Algorithme HITS</a>
+  <li><a href="#rf-dans-le-modèle-vectoriel-vir" id="toc-rf-dans-le-modèle-vectoriel-vir" class="nav-link" data-scroll-target="#rf-dans-le-modèle-vectoriel-vir">RF dans le Modèle Vectoriel (VIR)</a>
   <ul class="collapse">
-  <li><a href="#construction-du-sous-graphe" id="toc-construction-du-sous-graphe" class="nav-link" data-scroll-target="#construction-du-sous-graphe">Construction du sous-graphe</a></li>
-  <li><a href="#algorithme-itératif" id="toc-algorithme-itératif" class="nav-link" data-scroll-target="#algorithme-itératif">Algorithme itératif</a></li>
-  <li><a href="#formulation-matricielle" id="toc-formulation-matricielle" class="nav-link" data-scroll-target="#formulation-matricielle">Formulation matricielle</a></li>
+  <li><a href="#formule-naïve" id="toc-formule-naïve" class="nav-link" data-scroll-target="#formule-naïve">Formule naïve</a></li>
+  <li><a href="#formule-de-rocchio-1971" id="toc-formule-de-rocchio-1971" class="nav-link" data-scroll-target="#formule-de-rocchio-1971">Formule de Rocchio (1971)</a></li>
+  <li><a href="#lien-avec-le-perceptron" id="toc-lien-avec-le-perceptron" class="nav-link" data-scroll-target="#lien-avec-le-perceptron">Lien avec le Perceptron</a></li>
   </ul></li>
-  <li><a href="#pagerank" id="toc-pagerank" class="nav-link" data-scroll-target="#pagerank">PageRank</a>
+  <li><a href="#rf-probabiliste-bir" id="toc-rf-probabiliste-bir" class="nav-link" data-scroll-target="#rf-probabiliste-bir">RF Probabiliste (BIR)</a>
   <ul class="collapse">
-  <li><a href="#hits-vs-pagerank" id="toc-hits-vs-pagerank" class="nav-link" data-scroll-target="#hits-vs-pagerank">HITS vs PageRank</a></li>
-  <li><a href="#équation-de-base" id="toc-équation-de-base" class="nav-link" data-scroll-target="#équation-de-base">Équation de base</a></li>
-  <li><a href="#problème-attracteur-pagerank-pagerank-sink" id="toc-problème-attracteur-pagerank-pagerank-sink" class="nav-link" data-scroll-target="#problème-attracteur-pagerank-pagerank-sink">Problème : attracteur PageRank (PageRank Sink)</a></li>
-  <li><a href="#téléportation-teleport-paramètre-alpha" id="toc-téléportation-teleport-paramètre-alpha" class="nav-link" data-scroll-target="#téléportation-teleport-paramètre-alpha">Téléportation (Teleport) — paramètre <span class="math inline">\(\alpha\)</span></a></li>
-  <li><a href="#algorithme-pagerank-complet" id="toc-algorithme-pagerank-complet" class="nav-link" data-scroll-target="#algorithme-pagerank-complet">Algorithme PageRank complet</a></li>
-  <li><a href="#formulation-matricielle-1" id="toc-formulation-matricielle-1" class="nav-link" data-scroll-target="#formulation-matricielle-1">Formulation matricielle</a></li>
-  <li><a href="#personnalisation-spidering" id="toc-personnalisation-spidering" class="nav-link" data-scroll-target="#personnalisation-spidering">Personnalisation &amp; Spidering</a></li>
+  <li><a href="#initialisation-sans-feedback" id="toc-initialisation-sans-feedback" class="nav-link" data-scroll-target="#initialisation-sans-feedback">Initialisation (sans feedback)</a></li>
+  <li><a href="#mise-à-jour-après-retrieval" id="toc-mise-à-jour-après-retrieval" class="nav-link" data-scroll-target="#mise-à-jour-après-retrieval">Mise à jour après retrieval</a></li>
+  <li><a href="#lissage-bayésien-bayes-prior" id="toc-lissage-bayésien-bayes-prior" class="nav-link" data-scroll-target="#lissage-bayésien-bayes-prior">Lissage bayésien (Bayes Prior)</a></li>
   </ul></li>
-  <li><a href="#marches-aléatoires-random-walks" id="toc-marches-aléatoires-random-walks" class="nav-link" data-scroll-target="#marches-aléatoires-random-walks">Marches aléatoires (Random Walks)</a>
+  <li><a href="#filtrage-collaboratif-collaborative-filtering-cf" id="toc-filtrage-collaboratif-collaborative-filtering-cf" class="nav-link" data-scroll-target="#filtrage-collaboratif-collaborative-filtering-cf">Filtrage Collaboratif (Collaborative Filtering — CF)</a>
   <ul class="collapse">
-  <li><a href="#définitions-clés" id="toc-définitions-clés" class="nav-link" data-scroll-target="#définitions-clés">Définitions clés</a></li>
-  <li><a href="#formules-essentielles" id="toc-formules-essentielles" class="nav-link" data-scroll-target="#formules-essentielles">Formules essentielles</a></li>
+  <li><a href="#principe" id="toc-principe" class="nav-link" data-scroll-target="#principe">Principe</a></li>
+  <li><a href="#corrélation-de-pearson" id="toc-corrélation-de-pearson" class="nav-link" data-scroll-target="#corrélation-de-pearson">Corrélation de Pearson</a></li>
+  <li><a href="#pondération-de-significativité-significance-weighting" id="toc-pondération-de-significativité-significance-weighting" class="nav-link" data-scroll-target="#pondération-de-significativité-significance-weighting">Pondération de significativité (Significance Weighting)</a></li>
+  <li><a href="#prédiction-de-note-predicted-rating" id="toc-prédiction-de-note-predicted-rating" class="nav-link" data-scroll-target="#prédiction-de-note-predicted-rating">Prédiction de note (Predicted Rating)</a></li>
+  <li><a href="#limitations-du-cf" id="toc-limitations-du-cf" class="nav-link" data-scroll-target="#limitations-du-cf">Limitations du CF</a></li>
   </ul></li>
-  <li><a href="#pagerank-surfeur-aléatoire-random-surfer" id="toc-pagerank-surfeur-aléatoire-random-surfer" class="nav-link" data-scroll-target="#pagerank-surfeur-aléatoire-random-surfer">PageRank = Surfeur Aléatoire (Random Surfer)</a></li>
-  <li><a href="#relations-entre-concepts" id="toc-relations-entre-concepts" class="nav-link" data-scroll-target="#relations-entre-concepts">Relations entre concepts</a></li>
-  <li><a href="#points-critiques-pièges" id="toc-points-critiques-pièges" class="nav-link" data-scroll-target="#points-critiques-pièges">Points critiques / Pièges ⚠️</a></li>
+  <li><a href="#complément-approche-contenu-content-based" id="toc-complément-approche-contenu-content-based" class="nav-link" data-scroll-target="#complément-approche-contenu-content-based">Complément : Approche Contenu (Content-Based)</a></li>
+  <li><a href="#rf-en-pratique" id="toc-rf-en-pratique" class="nav-link" data-scroll-target="#rf-en-pratique">RF en pratique</a></li>
   </ul>
 </nav>
     </div>
@@ -4733,9 +4731,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch7.html">Web</a></li><li class="breadcrumb-item"><a href="./ch7r.html">Synthèse</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Cours</li><li class="breadcrumb-item"><a href="./ch8.html">Feedback</a></li><li class="breadcrumb-item"><a href="./ch8r.html">Synthèse</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Web Information Retrieval — Révision</h1>
+<h1 class="title">Exploitation du Retour Utilisateur — Révision</h1>
 </div>
 
 
@@ -4752,361 +4750,427 @@ window.Quarto = {
 </header>
 
 
-<section id="motivation" class="level1">
-<h1>Motivation</h1>
-<p><strong>Principe</strong> : combiner analyse du <strong>contenu</strong> + analyse de la <strong>structure des liens</strong> (hyperliens).</p>
+<section id="vue-densemble" class="level1">
+<h1>Vue d’ensemble</h1>
+<div class="callout callout-style-default callout-note callout-titled" title="Deux grandes familles">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Deux grandes familles
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 16%">
+<col style="width: 29%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Approche</th>
+<th>Type</th>
+<th>Mécanisme</th>
+<th>Basé sur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>RF actif (Rocchio)</td>
+<td>Actif</td>
+<td>Modification vecteur requête</td>
+<td>Contenu + jugements</td>
+</tr>
+<tr class="even">
+<td>RF probabiliste (BIR)</td>
+<td>Actif</td>
+<td>Mise à jour <span class="math inline">\(p_i\)</span>, <span class="math inline">\(q_i\)</span></td>
+<td>Contenu + jugements</td>
+</tr>
+<tr class="odd">
+<td>Filtrage collaboratif (CF)</td>
+<td>Passif</td>
+<td>Similarité inter-utilisateurs</td>
+<td>Utilisateurs uniquement</td>
+</tr>
+<tr class="even">
+<td>Content-based</td>
+<td>Passif</td>
+<td>Classification par features</td>
+<td>Contenu uniquement</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="retour-de-pertinence-relevance-feedback-rf" class="level1">
+<h1>Retour de Pertinence (Relevance Feedback — RF)</h1>
+<section id="utilité-du-rf" class="level2">
+<h2 class="anchored" data-anchor-id="utilité-du-rf">Utilité du RF</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 47%">
+<col style="width: 20%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problème résolu</th>
+<th>Cause</th>
+<th>Mécanisme</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Polysémie (Polysemy)</td>
+<td>Requête ambiguë</td>
+<td>Positifs = bon sens, négatifs = mauvais sens</td>
+</tr>
+<tr class="even">
+<td>Synonymie (Synonymy)</td>
+<td>Requête incomplète</td>
+<td>Ajout de nouveaux termes</td>
+</tr>
+<tr class="odd">
+<td>Reformulation</td>
+<td>Requête vague</td>
+<td>Évaluation itérative des résultats</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="types-de-rf" class="level2">
+<h2 class="anchored" data-anchor-id="types-de-rf">Types de RF</h2>
+<ul>
+<li><strong>Pseudo-RF</strong> : le <em>système</em> choisit les documents pertinents (top-<span class="math inline">\(k\)</span> automatique)</li>
+<li><strong>RF manuel</strong> : l’<em>utilisateur</em> juge explicitement les documents</li>
+<li><strong>Expansion de requête</strong> (Query Expansion) : ajout de termes depuis un thésaurus</li>
+</ul>
+</section>
+<section id="objectif-système" class="level2">
+<h2 class="anchored" data-anchor-id="objectif-système">Objectif système</h2>
 <blockquote class="blockquote">
-<p>Si une page est citée par de nombreuses pages de qualité → elle est probablement de qualité.</p>
+<p>Adapter la <strong>mesure de similarité</strong> à la <strong>perception de l’utilisateur</strong></p>
 </blockquote>
+</section>
+<section id="implémentation" class="level2">
+<h2 class="anchored" data-anchor-id="implémentation">Implémentation</h2>
+<ul>
+<li>Accepter jugements <strong>positifs / négatifs / neutres</strong></li>
+<li>Modifier la fonction de décision :
+<ul>
+<li>Pondération de features → Rocchio, Perceptron</li>
+<li>Classifieur probabiliste → Naïf de Bayes</li>
+<li>ML → K-méthodes</li>
+</ul></li>
+<li>Re-classer, puis itérer jusqu’à convergence</li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Convergence</th>
+<th>Interprétation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Seulement positifs</td>
+<td>Concept trouvé</td>
+</tr>
+<tr class="even">
+<td>Plus de feedback</td>
+<td>Item spécifique trouvé</td>
+</tr>
+<tr class="odd">
+<td>Seulement négatifs</td>
+<td>Concept absent de la collection</td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="le-www-comme-graphe" class="level1">
-<h1>Le WWW comme graphe</h1>
-<section id="modèle-nœud-papillon-bow-tie-model" class="level2">
-<h2 class="anchored" data-anchor-id="modèle-nœud-papillon-bow-tie-model">Modèle “Nœud Papillon” (Bow Tie Model)</h2>
+</section>
+<section id="rf-dans-le-modèle-vectoriel-vir" class="level1">
+<h1>RF dans le Modèle Vectoriel (VIR)</h1>
+<section id="formule-naïve" class="level2">
+<h2 class="anchored" data-anchor-id="formule-naïve">Formule naïve</h2>
+<p><span class="math display">\[
+q&#39; = \alpha q + \beta \frac{1}{|R|} \sum_{j \in R} d_j \quad (\alpha + \beta = 1)
+\]</span></p>
+<p>→ Déplace <span class="math inline">\(q\)</span> vers le centroïde des documents pertinents <span class="math inline">\(R\)</span>. <strong>Ne gère pas les négatifs.</strong></p>
+</section>
+<section id="formule-de-rocchio-1971" class="level2">
+<h2 class="anchored" data-anchor-id="formule-de-rocchio-1971">Formule de Rocchio (1971)</h2>
+<p><span class="math display">\[
+q&#39; = \alpha q + \beta \frac{1}{|R|} \sum_{d_j \in R} d_j - \gamma \frac{1}{|\bar{R}|} \sum_{d_j \in \bar{R}} d_j
+\]</span></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Paramètre</th>
+<th>Rôle</th>
+<th>Valeur typique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>Poids requête originale</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta\)</span></td>
+<td>Poids feedback positif</td>
+<td><span class="math inline">\(0.75\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\gamma\)</span></td>
+<td>Poids feedback négatif</td>
+<td><span class="math inline">\(0.25\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled" title="Règles importantes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Règles importantes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(\beta &gt; \gamma\)</span> : feedback négatif moins fiable → moins pondéré</li>
+<li><span class="math inline">\(\beta + \gamma = 1\)</span> : normalisation optionnelle</li>
+<li>Supprimer les termes à <strong>poids négatif</strong> (cohérence mathématique)</li>
+<li>Travailler sur les <strong>termes communs</strong> uniquement</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="lien-avec-le-perceptron" class="level2">
+<h2 class="anchored" data-anchor-id="lien-avec-le-perceptron">Lien avec le Perceptron</h2>
+<p><span class="math display">\[
+W_{\text{new}} = W_{\text{old}} + \alpha \cdot (\text{label} - \text{décision}) \cdot x
+\]</span></p>
+<ul>
+<li>label <span class="math inline">\(= +1\)</span> si pertinent, <span class="math inline">\(-1\)</span> si non pertinent</li>
+<li>Rocchio ≈ Perceptron à <strong>une seule passe</strong></li>
+<li>Perceptron converge sur <strong>toutes les données</strong> (dépend de la séparabilité)</li>
+<li>Meilleur si <span class="math inline">\(|R| \approx |\bar{R}|\)</span></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="rf-probabiliste-bir" class="level1">
+<h1>RF Probabiliste (BIR)</h1>
+<section id="initialisation-sans-feedback" class="level2">
+<h2 class="anchored" data-anchor-id="initialisation-sans-feedback">Initialisation (sans feedback)</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Probabilité</th>
+<th>Formule</th>
+<th>Remarque</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(P(t_i \| q, \bar{R})\)</span></td>
+<td><span class="math inline">\(n_i / N\)</span></td>
+<td>≈ IDF</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P(t_i \| q, R)\)</span></td>
+<td><span class="math inline">\(0.5\)</span></td>
+<td>Incertitude totale</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><span class="math inline">\(\log \frac{1 - P(t_i|q,\bar{R})}{P(t_i|q,\bar{R})} \approx \log \frac{N}{n_i} = idf_i\)</span></p>
+</blockquote>
+</section>
+<section id="mise-à-jour-après-retrieval" class="level2">
+<h2 class="anchored" data-anchor-id="mise-à-jour-après-retrieval">Mise à jour après retrieval</h2>
+<ul>
+<li><span class="math inline">\(S\)</span> = top <span class="math inline">\(r\)</span> documents retournés</li>
+<li><span class="math inline">\(S_i\)</span> = documents de <span class="math inline">\(S\)</span> contenant <span class="math inline">\(t_i\)</span>, <span class="math inline">\(r_i = |S_i|\)</span></li>
+</ul>
+<p><span class="math display">\[
+P(t_i|q,R) = p_i = \frac{r_i}{r} \qquad P(t_i|q,\bar{R}) = q_i = \frac{n_i - r_i}{N - r}
+\]</span></p>
+</section>
+<section id="lissage-bayésien-bayes-prior" class="level2">
+<h2 class="anchored" data-anchor-id="lissage-bayésien-bayes-prior">Lissage bayésien (Bayes Prior)</h2>
+<p><span class="math display">\[
+p_i^{(t+1)} = \frac{r_i + \lambda p_i^{(t)}}{r + \lambda} \quad (p_i^{(0)} = 0.5)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\lambda\)</span> grand → comportement conservateur</li>
+<li><span class="math inline">\(\lambda\)</span> petit → réactif aux nouvelles observations</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="À retenir — BIR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>À retenir — BIR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le BIR possède un <strong>mécanisme RF intégré</strong> : la boucle jugement → adaptation est au cœur du modèle probabiliste.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="filtrage-collaboratif-collaborative-filtering-cf" class="level1">
+<h1>Filtrage Collaboratif (Collaborative Filtering — CF)</h1>
+<section id="principe" class="level2">
+<h2 class="anchored" data-anchor-id="principe">Principe</h2>
+<blockquote class="blockquote">
+<p>Si A et B ont des goûts similaires, la note de A sur l’item I prédit la note de B sur I.</p>
+</blockquote>
+<ul>
+<li>Basé sur <strong>utilisateurs</strong>, pas sur le contenu</li>
+<li>Accumulation et propagation des jugements passifs</li>
+</ul>
+</section>
+<section id="corrélation-de-pearson" class="level2">
+<h2 class="anchored" data-anchor-id="corrélation-de-pearson">Corrélation de Pearson</h2>
+<p><span class="math display">\[
+C_{ak} = \frac{\text{cov}(r_a, r_k)}{\sigma_a \sigma_k}
+\]</span></p>
+<p><span class="math display">\[
+\text{cov}(r_a, r_k) = \frac{\sum_{j=1}^{m}(r_{aj}-\bar{r}_a)(r_{kj}-\bar{r}_k)}{m}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(m\)</span> = nombre d’items co-évalués par <span class="math inline">\(u_a\)</span> et <span class="math inline">\(u_k\)</span></li>
+<li><span class="math inline">\(C_{ak} \in [-1, 1]\)</span> : <span class="math inline">\(+1\)</span> = goûts identiques, <span class="math inline">\(-1\)</span> = goûts opposés</li>
+</ul>
+</section>
+<section id="pondération-de-significativité-significance-weighting" class="level2">
+<h2 class="anchored" data-anchor-id="pondération-de-significativité-significance-weighting">Pondération de significativité (Significance Weighting)</h2>
+<p><span class="math display">\[
+w_{ak} = s_{ak} \cdot C_{ak} \qquad s_{ak} = \begin{cases} 1 &amp; m &gt; M \\ m/M &amp; m \leq M \end{cases} \quad (M = 50)
+\]</span></p>
+<p>→ Atténue la corrélation si peu d’items communs</p>
+</section>
+<section id="prédiction-de-note-predicted-rating" class="level2">
+<h2 class="anchored" data-anchor-id="prédiction-de-note-predicted-rating">Prédiction de note (Predicted Rating)</h2>
+<p><span class="math display">\[
+\hat{r}_{aj} = \bar{r}_a + \frac{\sum_{k=1}^{K} w_{ak}(r_{kj} - \bar{r}_k)}{\sum_{k=1}^{K} w_{ak}}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(K\)</span> voisins les plus proches (fixe ou par seuil sur <span class="math inline">\(w_{ak}\)</span>)</li>
+<li><span class="math inline">\(r_{kj} - \bar{r}_k\)</span> = déviation de <span class="math inline">\(u_k\)</span> par rapport à sa propre moyenne</li>
+</ul>
+</section>
+<section id="limitations-du-cf" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-du-cf">Limitations du CF</h2>
+<div class="callout callout-style-default callout-warning callout-titled" title="4 problèmes structurels">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>4 problèmes structurels
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 43%">
+<col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Composante</th>
-<th>Pages</th>
+<th>Problème</th>
 <th>Description</th>
+<th>Cause</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Central Core (SCC)</td>
-<td>~56M</td>
-<td>Fortement connexe (chemins dans les 2 sens)</td>
+<td><strong>Cold Start</strong></td>
+<td>Nouvel utilisateur sans historique</td>
+<td>Pas de <span class="math inline">\(w_{ak}\)</span> calculable</td>
 </tr>
 <tr class="even">
-<td>IN</td>
-<td>~44M</td>
-<td>Pointent vers le cœur, pas l’inverse</td>
+<td><strong>First Rater</strong></td>
+<td>Item jamais évalué</td>
+<td>Impossible à recommander</td>
 </tr>
 <tr class="odd">
-<td>OUT</td>
-<td>~44M</td>
-<td>Le cœur pointe vers elles, pas l’inverse</td>
+<td><strong>Sparsity</strong></td>
+<td>Peu d’items co-évalués</td>
+<td>Matrice utilisateurs × items creuse</td>
 </tr>
 <tr class="even">
-<td>Tendrils &amp; Tubes</td>
-<td>~44M</td>
-<td>Connectées à IN ou OUT, pas au cœur</td>
-</tr>
-<tr class="odd">
-<td>Disconnected</td>
-<td>~17M</td>
-<td>Isolées</td>
+<td><strong>Popularity Bias</strong></td>
+<td>Favorise les items populaires</td>
+<td>Goûts atypiques = <span class="math inline">\(m=0\)</span></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Propriétés statistiques</strong> :</p>
-<ul>
-<li>Weak CC ≈ 91%, Strong CC ≈ 26%</li>
-<li>P(chemin(u,v)) ≈ 0,24 ; longueur moyenne dirigée = 16 ; non-dirigée = 6</li>
-<li>Nombreuses <strong>lois de puissance</strong> (in-links, out-links, longueur pages…)</li>
-</ul>
+</div>
+</div>
 <hr>
 </section>
 </section>
-<section id="analyse-des-citations-citation-analysis" class="level1">
-<h1>Analyse des citations (Citation Analysis)</h1>
-<p><span class="math display">\[G = (\text{documents},\ \text{références})\]</span></p>
+<section id="complément-approche-contenu-content-based" class="level1">
+<h1>Complément : Approche Contenu (Content-Based)</h1>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Mesure</th>
-<th>Auteur</th>
-<th>Définition</th>
+<th>Avantage vs CF</th>
+<th>Limitation héritée</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Facteur d’impact</strong> (Impact Factor)</td>
-<td>Garfield 1972</td>
-<td>Nb moyen de citations vers J en année y (articles de y−1 ou y−2)</td>
+<td>Pas de Cold Start</td>
+<td>Choix des features</td>
 </tr>
 <tr class="even">
-<td><strong>Couplage bibliographique</strong> (Bibliographic Coupling)</td>
-<td>Kessler 1963</td>
-<td><span class="math inline">\(\|bib(d_A) \cap bib(d_B)\|\)</span> — sources communes (passé)</td>
+<td>Pas de First Rater</td>
+<td>Volume de données d’entraînement</td>
 </tr>
 <tr class="odd">
-<td><strong>Co-citation</strong></td>
-<td>Small 1973</td>
-<td>Nb de docs citant à la fois <span class="math inline">\(d_A\)</span> et <span class="math inline">\(d_B\)</span> — citants communs (avenir)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Normalisation possible</strong> : indice de Jaccard <span class="math inline">\(J = \frac{|A \cap B|}{|A \cup B|}\)</span></p>
-<p>⚠️ <strong>Limite</strong> : le facteur d’impact ne tient pas compte de la qualité de l’article citant.</p>
-<hr>
-</section>
-<section id="citations-vs-liens-web" class="level1">
-<h1>Citations vs Liens Web</h1>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Citations académiques</th>
-<th>Liens Web</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Endorsement éditorial (peer-review)</td>
-<td>Souvent navigationaux</td>
+<td>Pas de Popularity Bias</td>
+<td>Sur-apprentissage (Overfitting)</td>
 </tr>
 <tr class="even">
-<td>Pas de conflit d’intérêts</td>
-<td>Pas de liens vers concurrents</td>
-</tr>
-<tr class="odd">
-<td>Pertinence garantie</td>
-<td>Portails ≠ pages de contenu</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="autorités-hubs-link-analysis" class="level1">
-<h1>Autorités &amp; Hubs (Link Analysis)</h1>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Concept</th>
-<th>Définition</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Autorité</strong> (Authority)</td>
-<td>Page très citée par des pages de qualité — fournit de l’information de référence</td>
-</tr>
-<tr class="even">
-<td><strong>Hub</strong></td>
-<td>Page d’index pointant vers de nombreuses autorités</td>
+<td>Décisions explicables</td>
+<td>Généralisation difficile</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>Ensemble : <strong>graphe bipartite</strong> Hubs → Autorités</li>
-<li>In-degree seul = mesure trop grossière (traite tous les liens comme égaux)</li>
+<li>Modèle : <strong>utilisateur ≈ classifieur</strong> sur les caractéristiques des items</li>
+<li>Outils : classification (Classification), regroupement (Clustering), ML</li>
 </ul>
 <hr>
 </section>
-<section id="algorithme-hits" class="level1">
-<h1>Algorithme HITS</h1>
-<p><strong>HITS</strong> (<em>Hyperlink-Induced Topic Search</em>) — Kleinberg 1999</p>
-<section id="construction-du-sous-graphe" class="level2">
-<h2 class="anchored" data-anchor-id="construction-du-sous-graphe">Construction du sous-graphe</h2>
+<section id="rf-en-pratique" class="level1">
+<h1>RF en pratique</h1>
+<ul>
+<li>Peu utilisé explicitement (performance consistante préférée à variable)</li>
+<li>Alternatives : requête “Documents similaires” (ex. Google)</li>
+<li>2 facteurs clés d’efficacité :
 <ol type="1">
-<li><strong>Ensemble racine R</strong> : top t pages renvoyées par un moteur classique (ex. VSR)</li>
-<li><strong>Ensemble de base S</strong> : S ← R + pages pointées par R + pages pointant vers R</li>
-</ol>
-<p><strong>Heuristiques</strong> : limiter back-pointers à b pages ; éliminer liens intra-hôte ; max m pages d’un même hôte.</p>
-</section>
-<section id="algorithme-itératif" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-itératif">Algorithme itératif</h2>
-<p><span class="math display">\[a[p] = \sum_{q \to p} h[q] \qquad \text{(hubs alimentent autorités)}\]</span></p>
-<p><span class="math display">\[h[p] = \sum_{p \to q} a[q] \qquad \text{(autorités alimentent hubs)}\]</span></p>
-<pre><code>Initialiser a[p] = h[p] = 1/|S|
-répéter
-    a[p] = Σ_{q→p} h[q]
-    h[p] = Σ_{p→q} a[q]
-    Normaliser : Σ a[p] = 1,  Σ h[p] = 1
-jusqu&#39;à convergence (~20 itérations)</code></pre>
-</section>
-<section id="formulation-matricielle" class="level2">
-<h2 class="anchored" data-anchor-id="formulation-matricielle">Formulation matricielle</h2>
-<p>Soit <span class="math inline">\(S\)</span> la matrice d’adjacence (<span class="math inline">\(S_{ij}=1\)</span> si <span class="math inline">\(i \to j\)</span>) :</p>
-<ul>
-<li><strong>a</strong> → vecteur propre principal de <span class="math inline">\(S^T S\)</span></li>
-<li><strong>h</strong> → vecteur propre principal de <span class="math inline">\(S S^T\)</span></li>
-</ul>
-<p><strong>Preuve</strong> : <span class="math inline">\(a = S^T h\)</span>, <span class="math inline">\(h = Sa\)</span> ⟹ <span class="math inline">\(a = S^T S\, a\)</span></p>
-<p>⚠️ <strong>Requête polysémique</strong> : le vecteur propre principal couvre un sens ; les vecteurs propres non-principaux couvrent les autres sens (<em>ex. “jaguar” : jeu vidéo / NFL / automobile</em>).</p>
-<hr>
-</section>
-</section>
-<section id="pagerank" class="level1">
-<h1>PageRank</h1>
-<section id="hits-vs-pagerank" class="level2">
-<h2 class="anchored" data-anchor-id="hits-vs-pagerank">HITS vs PageRank</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th></th>
-<th>HITS</th>
-<th>PageRank</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Hub/Autorité</td>
-<td>Oui</td>
-<td>Non (autorité seul)</td>
-</tr>
-<tr class="even">
-<td>Portée</td>
-<td>Sous-graphe local</td>
-<td>Tout le Web</td>
-</tr>
-<tr class="odd">
-<td>Calcul</td>
-<td>À la requête</td>
-<td>Pré-calculé</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="équation-de-base" class="level2">
-<h2 class="anchored" data-anchor-id="équation-de-base">Équation de base</h2>
-<p><span class="math display">\[r[p] = c \sum_{q \to p} \frac{r[q]}{\deg^+(q)}\]</span></p>
-<ul>
-<li><span class="math inline">\(\deg^+(q)\)</span> = nombre de liens sortants de q</li>
-<li><span class="math inline">\(c\)</span> = constante de normalisation (<span class="math inline">\(\sum_p r[p] = 1\)</span>)</li>
-<li>Chaque page q distribue <strong>équitablement</strong> son PR à ses voisins sortants</li>
-</ul>
-</section>
-<section id="problème-attracteur-pagerank-pagerank-sink" class="level2">
-<h2 class="anchored" data-anchor-id="problème-attracteur-pagerank-pagerank-sink">Problème : attracteur PageRank (PageRank Sink)</h2>
-<p>Un groupe de pages ne pointant qu’entre elles <strong>absorbe tout le PageRank</strong> → le flux entre dans le cycle et n’en sort plus.</p>
-</section>
-<section id="téléportation-teleport-paramètre-alpha" class="level2">
-<h2 class="anchored" data-anchor-id="téléportation-teleport-paramètre-alpha">Téléportation (Teleport) — paramètre <span class="math inline">\(\alpha\)</span></h2>
-<p><span class="math display">\[r[p] = c\!\left(\alpha + (1-\alpha)\sum_{q \to p} \frac{r[q]}{\deg^+(q)}\right)\]</span></p>
-<p><strong>Rôle</strong> : empêcher le surfeur aléatoire de rester piégé dans un attracteur.</p>
-</section>
-<section id="algorithme-pagerank-complet" class="level2">
-<h2 class="anchored" data-anchor-id="algorithme-pagerank-complet">Algorithme PageRank complet</h2>
-<pre><code>Initialiser r[p] = 1/|S|,  choisir α &gt; 0
-répéter
-    r[p] = Σ_{q→p} r[q]/deg+(q)    // Propagation
-    r[p] = α + (1−α)·r[p]           // Téléportation
-    c = 1 / Σ r[p]                   // Normalisation
-    r[p] = c·r[p]
-jusqu&#39;à convergence (~52 iter. pour 322M liens ; O(log|M|))</code></pre>
-</section>
-<section id="formulation-matricielle-1" class="level2">
-<h2 class="anchored" data-anchor-id="formulation-matricielle-1">Formulation matricielle</h2>
-<p><span class="math display">\[r = c\,r\!\left(\alpha\,\mathbf{1}\mathbf{1}^T + (1-\alpha)S\right)\]</span></p>
-<p>→ <strong>r</strong> est le <strong>vecteur propre gauche principal (vecteur de Perron)</strong> de <span class="math inline">\(\alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S\)</span></p>
-<p><strong>Garantie</strong> : cette matrice est irréductible &amp; apériodique → existence et unicité (Perron-Frobenius).</p>
-</section>
-<section id="personnalisation-spidering" class="level2">
-<h2 class="anchored" data-anchor-id="personnalisation-spidering">Personnalisation &amp; Spidering</h2>
-<ul>
-<li><strong>Personnalisation</strong> : téléport non-uniforme <span class="math inline">\(t[p]\)</span> → biais vers pages proches de l’utilisateur</li>
-<li><strong>Spidering</strong> : ordonner la file du crawler selon le PR estimé courant</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="marches-aléatoires-random-walks" class="level1">
-<h1>Marches aléatoires (Random Walks)</h1>
-<section id="définitions-clés" class="level2">
-<h2 class="anchored" data-anchor-id="définitions-clés">Définitions clés</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Terme</th>
-<th>Définition</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Marche aléatoire</strong> (Random Walk)</td>
-<td>Processus <span class="math inline">\(W=\{w_0,w_1,\ldots\}\)</span> sur <span class="math inline">\(G=(V,E)\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>Probabilité de transition</strong></td>
-<td><span class="math inline">\(p_{ij} = 1/d_i\)</span> si <span class="math inline">\((v_i,v_j)\in E\)</span>, sinon 0</td>
-</tr>
-<tr class="odd">
-<td><strong>Chaîne de Markov</strong></td>
-<td>Processus sans mémoire : <span class="math inline">\(P(w_{t+1}=v_j\mid w_t=v_i)\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>Matrice stochastique</strong></td>
-<td><span class="math inline">\(P=(p_{ij})\)</span> : lignes somment à 1, <span class="math inline">\(P=DS\)</span></td>
-</tr>
-<tr class="odd">
-<td><strong>Distribution stationnaire</strong></td>
-<td><span class="math inline">\(\pi = \pi P\)</span> (point fixe)</td>
-</tr>
-<tr class="even">
-<td><strong>Temps d’atteinte</strong> (Hitting time)</td>
-<td><span class="math inline">\(H_{ij}\)</span> = nb espéré de pas de <span class="math inline">\(v_i\)</span> à <span class="math inline">\(v_j\)</span></td>
-</tr>
-<tr class="odd">
-<td><strong>Temps de navette</strong> (Commute time)</td>
-<td><span class="math inline">\(H_{ij} + H_{ji}\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>Temps de couverture</strong> (Cover time)</td>
-<td>Nb espéré de pas pour visiter tous les nœuds</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="formules-essentielles" class="level2">
-<h2 class="anchored" data-anchor-id="formules-essentielles">Formules essentielles</h2>
-<p><span class="math display">\[w_{t+1} = w_t P \qquad \Rightarrow \qquad w_t = w_0 P^t\]</span></p>
-<p><span class="math display">\[P = DS \quad \text{où } D = \mathrm{diag}(1/d_1,\ldots,1/d_{|V|})\]</span></p>
-<p><strong>Convergence</strong> : requiert graphe <strong>irréductible</strong> (connexe) + <strong>apériodique</strong> (pas de k&gt;1 divisant tous les cycles).</p>
-<hr>
-</section>
-</section>
-<section id="pagerank-surfeur-aléatoire-random-surfer" class="level1">
-<h1>PageRank = Surfeur Aléatoire (Random Surfer)</h1>
-<ul>
-<li>Surfe aléatoirement ; avec prob. <span class="math inline">\(t[p]\)</span> : <strong>téléporte</strong> vers p</li>
-<li><span class="math inline">\(r[p]\)</span> = probabilité d’être sur p à l’équilibre = <strong>mesure de centralité</strong> du graphe Web</li>
-<li>Téléport nécessaire pour éviter les puits (pages sans liens sortants)</li>
-</ul>
-<hr>
-</section>
-<section id="relations-entre-concepts" class="level1">
-<h1>Relations entre concepts</h1>
-<pre><code>Bibliométrie  ──────────►  Analyse de citations
-                                    │
-                           ┌────────┴────────┐
-                        HITS              PageRank
-                    (sous-graphe)       (Web entier)
-                    hub + autorité       autorité seule
-                    calcul à la req.    pré-calculé
-                           │                 │
-                    Vecteurs propres   Marche aléatoire
-                    de S^T S, SS^T     + téléportation</code></pre>
-<hr>
-</section>
-<section id="points-critiques-pièges" class="level1">
-<h1>Points critiques / Pièges ⚠️</h1>
-<ul>
-<li><strong>HITS</strong> : les autorités finales <strong>ne sont souvent pas dans R</strong> (amenées par S)</li>
-<li><strong>In-degree</strong> seul ≠ autorité (portails populaires != pages de contenu)</li>
-<li><strong>PageRank de base</strong> : cycles fermés = attracteurs → toujours utiliser la téléportation</li>
-<li><strong>Téléportation</strong> <span class="math inline">\(\alpha\)</span> : doit être &gt; 0 pour garantir l’irréductibilité</li>
-<li><strong>Lois de puissance</strong> sur le Web : distribution très inégale des liens</li>
-<li><strong>Requête polysémique HITS</strong> : vecteur propre principal = 1 seul sens</li>
+<li><strong>Nombre d’items jugés</strong> (plus = mieux)</li>
+<li><strong>Cohérence du feedback</strong> (contradictions = dégradation)</li>
+</ol></li>
 </ul>
 
 
