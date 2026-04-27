@@ -1,0 +1,672 @@
+---
+title: "Recherche d'Information Audio (Audio Information Retrieval)"
+---
+
+## Introduction
+
+La recherche d'information audio (Audio Information Retrieval) est une branche de la recherche d'information multimédia qui s'intéresse à l'extraction, l'indexation et la recherche de contenu dans des signaux sonores. Elle englobe trois grandes catégories : la **parole** (speech), la **musique** (music) et les **sons** (sounds).
+
+Pour comprendre comment modéliser et indexer un signal audio, il est indispensable de partir des fondements physiques du son.
+
+---
+
+## Le Son : Fondements Physiques
+
+### Définition
+
+Le son correspond à des **ondes de pression** qui se propagent dans un milieu physique (air, eau, solide). Ces perturbations sont caractérisées par deux propriétés fondamentales : la **fréquence** et l'**intensité**.
+
+### Fréquence et Hauteur (Pitch)
+
+La fréquence d'un son mesure le nombre de vibrations par seconde. L'unité est le **Hertz (Hz)** :
+
+$$1 \text{ Hz} = 1 \text{ vibration/seconde}$$
+
+::: {.callout-tip title="Intuition"}
+Un son grave correspond à une fréquence basse (peu de vibrations par seconde), tandis qu'un son aigu correspond à une fréquence élevée. Le **pitch** (hauteur tonale) est la perception subjective associée à cette fréquence.
+:::
+
+Une onde à haute fréquence a une période courte (les cycles se succèdent rapidement), tandis qu'une onde à basse fréquence a une période longue.
+
+### Intensité et Échelle des Décibels
+
+L'intensité d'un son est définie comme la puissance acoustique par unité de surface :
+
+$$I = \frac{1}{\text{Aire}} \cdot \frac{\text{Énergie}}{\text{Temps}} = \frac{\text{Puissance}}{\text{Aire}} \quad \left[\frac{\text{W}}{\text{m}^2}\right]$$
+
+Le système auditif humain perçoit l'intensité sur une **échelle logarithmique**, ce qui justifie l'utilisation de l'échelle des **décibels (dB)** :
+
+| Niveau (dB) | Intensité (W/m²) | Exemple concret |
+|---|---|---|
+| 0 dB | $10^{-12}$ | Seuil d'audibilité |
+| 10 dB | $10^{-11}$ | Silence quasi-absolu |
+| 30 dB | $10^{-9}$ | Bibliothèque calme, chuchotement doux |
+| 50 dB | $10^{-7}$ | Bureau calme, pièce résidentielle |
+| 60 dB | $10^{-6}$ | Conversation normale, machine à coudre |
+| 70 dB | $10^{-5}$ | Circulation dense, restaurant bruyant |
+| 80 dB | $10^{-4}$ | Métro, alarme à 60 cm, usine |
+| 90 dB | $10^{-3}$ | Camion, outils électriques, tondeuse |
+| 100 dB | $10^{-2}$ | Tronçonneuse, marteau-piqueur |
+| 120 dB | $10^{0}$ | Concert rock au pied des enceintes |
+| 140 dB | $10^{2}$ | Coup de feu, avion à réaction |
+| 160 dB | $10^{4}$ | **Perforation immédiate du tympan** |
+
+La formule générale pour $x$ multiples de 10 dB est :
+
+$$x \times 10 \text{ dB} = 10^{-(12-x)} \text{ W/m}^2$$
+
+::: {.callout-important title="Seuils critiques"}
+- **0 dB** ($10^{-12}$ W/m²) : seuil d'audibilité — son le plus faible perceptible par l'oreille humaine.
+- **160 dB** ($10^{-4}$ W/m²) : perforation instantanée du tympan.
+:::
+
+---
+
+## Perception du Son
+
+### L'Oreille Humaine : Mécanisme
+
+La perception sonore suit un enchaînement de transductions successives :
+
+1. **Collecte des ondes aériennes** : le pavillon (auricule) capte les ondes de pression.
+2. **Conversion en ondes mécaniques** : la membrane tympanique vibre et transmet le mouvement aux osselets (marteau, enclume, étrier).
+3. **Conversion en ondes de compression** : les osselets transmettent les vibrations à la cochlée via la fenêtre ovale.
+4. **Conversion en signal électrique** : les cellules ciliées de la cochlée transforment les vibrations mécaniques en influx nerveux transmis au cerveau via le nerf cochléaire.
+
+::: {.callout-tip title="Intuition"}
+On peut voir l'oreille comme une chaîne de transducteurs : onde aérienne → onde mécanique → onde de compression → signal électrique. Chaque étape amplifie ou filtre le signal de manière spécifique.
+:::
+
+### Plages de Fréquences Audibles
+
+Différentes espèces perçoivent des plages de fréquences différentes :
+
+| Espèce | Plage de fréquences |
+|---|---|
+| Humain | 20 Hz – 20 000 Hz |
+| Chien | 50 Hz – 45 000 Hz |
+| Chat | 50 Hz – 85 000 Hz |
+| Chauve-souris | 50 Hz – 120 000 Hz |
+| Dauphin | jusqu'à 200 000 Hz |
+| Éléphant | à partir de 5 Hz (infrasons) |
+
+On distingue trois domaines :
+
+- **Infrasons** : en dessous de 20 Hz (inaudibles pour l'humain)
+- **Sons audibles** : 20 Hz – 20 000 Hz
+- **Ultrasons** : au-delà de 20 000 Hz
+
+### La Zone Audible en Pratique
+
+La perception humaine est doublement contrainte par la fréquence et l'intensité. La zone audible est délimitée par :
+
+- **Le seuil d'audibilité** (bas) : intensité minimale perceptible à une fréquence donnée.
+- **Le seuil de douleur** (haut) : vers 120 dB, la sensation devient douloureuse.
+- **La plage de fréquences de la parole** : environ 300 Hz – 3 400 Hz, zone dense en information linguistique.
+
+::: {.callout-note title="À retenir"}
+La parole humaine se concentre dans une bande fréquentielle relativement étroite (300–3400 Hz), ce qui a justifié historiquement les bandes passantes des systèmes téléphoniques analogiques.
+:::
+
+---
+
+## Catégories d'Information Audio
+
+### Taxonomie des Signaux Audio
+
+L'information audio se divise selon deux axes : l'**origine** (naturel vs artificiel) et le **contenu informationnel** (faible vs élevé).
+
+```{mermaid}
+graph TD
+    A[Information Audio] --> B[Naturel]
+    A --> C[Artificiel]
+    B --> D[Sons animaux]
+    B --> E[Vent, eau]
+    B --> F[Parole]
+    C --> G[Musique]
+    C --> H[Bruit urbain]
+    C --> I[Machines, moteurs]
+```
+
+- **Parole (Speech)** : contenu informationnel très élevé, origine humaine.
+- **Musique (Music)** : contenu informationnel élevé, structurée.
+- **Sons naturels** : vent, eau, animaux — contenu informationnel plus faible.
+- **Bruits artificiels** : circulation, machines — contenu informationnel faible à nul.
+
+### Sous-catégories de la Parole
+
+La parole est le type d'audio le plus riche sémantiquement :
+
+- **Parole masculine / féminine** : fréquences fondamentales différentes.
+- **Caractérisation signal-based** : extraction de traits bas niveau.
+- **Reconnaissance automatique de la parole (ASR — Automatic Speech Recognition)** : transcription automatique → accès au contenu textuel.
+- **Récupération par ASR** : une fois la parole transcrite, les techniques classiques de recherche textuelle s'appliquent.
+
+### Sous-catégories de la Musique
+
+La musique nécessite des approches spécifiques :
+
+- **Reconnaissance de genre** : Jazz, classique, rock, etc.
+- **Récupération d'extraits** (Excerpt Retrieval) : retrouver une portion d'un morceau.
+- **Requête par fredonnement** (Query by Humming) : chercher une pièce musicale en la fredonnant.
+- **Traduction MIDI** : conversion du signal audio en représentation symbolique.
+
+### Sons Généraux
+
+Les sons ambiants (voitures, eau, foule, animaux) sont souvent exploités en combinaison avec des images, en particulier pour l'indexation vidéo. Le son contextualise et enrichit l'interprétation du signal visuel.
+
+---
+
+## Pipeline d'Indexation Audio
+
+L'indexation d'un signal audio suit des voies différentes selon sa nature :
+
+```{mermaid}
+graph LR
+    A[Signal Audio] --> B[Parole]
+    A --> C[Musique]
+    A --> D[Son]
+    B --> E[ASR / Wordspotting]
+    B --> F[Traduction]
+    E --> G[Transcriptions, Info locuteur]
+    C --> H[Reconnaissance de genre]
+    C --> I[Classification]
+    I --> J[Score, MIDI]
+    D --> K[Traitement A/V]
+    K --> L[Visuel]
+```
+
+::: {.callout-note title="À retenir"}
+Le pipeline d'indexation diverge très tôt selon le type de contenu audio. La parole passe par la reconnaissance automatique, la musique par la classification et la transcription symbolique (MIDI), et les sons ambiants sont souvent traités conjointement avec le signal visuel.
+:::
+
+---
+
+## Modélisation de la Parole
+
+### Vue d'ensemble : Production et Perception
+
+La parole est unique parmi les signaux audio en ce qu'elle dispose à la fois d'un **modèle de production** (comment l'humain génère le son) et d'un **modèle de perception** (comment l'humain l'entend).
+
+::: {.callout-tip title="Intuition"}
+En vision par ordinateur, on ne dispose généralement que de modèles de perception (comment l'image est interprétée). En traitement de la parole, on peut aller plus loin en modélisant le mécanisme physiologique de production du son — ce qui offre des leviers supplémentaires pour la reconnaissance et la synthèse.
+:::
+
+### Production de la Parole : Appareil Phonatoire
+
+La production de la parole implique plusieurs structures anatomiques :
+
+- **Poumons / diaphragme** : source d'énergie (pression d'air).
+- **Trachée** : conduit l'air vers le larynx.
+- **Cordes vocales (larynx)** : vibrent pour produire le son voisé.
+- **Cavité pharyngée** : espace de résonance.
+- **Vélum (palais mou)** : redirige l'air vers la cavité nasale ou orale.
+- **Cavité buccale** : modulée par la langue, les lèvres, les dents, la mâchoire.
+- **Cavité nasale** : résonnance pour les sons nasaux.
+
+### Trois Scénarios de Production Sonore
+
+#### Sons Voisés (Voiced Sounds)
+
+Les cordes vocales vibrent régulièrement sous la pression du souffle. Le résultat est un son périodique et tonal — base des voyelles et de certaines consonnes.
+
+#### Sons Fricatifs (Fricative Sounds)
+
+Un passage d'air turbulent est créé par le rétrécissement du conduit vocal (exemple : le son `/s/`). Le signal résultant est aléatoire, non périodique.
+
+#### Sons Occlusifs / Plosifs (Plosive Sounds)
+
+La pression est accumulée derrière un barrage articulatoire (lèvres, langue), puis relâchée brusquement (exemple : le son `/p/`). Le processus est en trois étapes :
+
+1. **Accumulation de pression**
+2. **Relâchement brutal**
+3. **Retour à l'état initial**
+
+### Modélisation Mécanique de la Production
+
+Le conduit vocal peut être modélisé comme un **filtre linéaire** excité par une source :
+
+- **Source d'excitation** : les cordes vocales (son voisé) ou le bruit de turbulence (son non voisé).
+- **Filtre vocal** : le conduit vocal modifie spectralement le son produit.
+
+Ce modèle source-filtre est à la base de toute la modélisation formelle de la parole.
+
+---
+
+## Modélisation du Signal de Parole
+
+### Le Modèle Source-Filtre
+
+Soit $w(t)$ un signal de parole. Dans le domaine fréquentiel (via la **Transformée de Fourier à Court Terme**, STFT — Short-Time Fourier Transform), on a :
+
+$$|S(\omega)|^2 = |H(\omega)|^2 \cdot |E(\omega)|^2$$
+
+où :
+
+- $S(\omega)$ : spectre du signal de parole.
+- $H(\omega)$ : **fonction de transfert** du conduit vocal (filtre).
+- $E(\omega)$ : **excitation** (source glottique ou bruit).
+
+::: {.callout-tip title="Intuition"}
+Le conduit vocal agit comme un filtre : il amplifie certaines fréquences (les **formants**) et en atténue d'autres. L'excitation est la source brute, le conduit vocal lui donne sa couleur timbrée.
+:::
+
+### Le Pitch de la Parole
+
+Le **pitch** de la parole correspond à la **fréquence fondamentale des cordes vocales** (la composante d'excitation) :
+
+| Locuteur | Plage de pitch |
+|---|---|
+| Voix masculine | 80 – 140 Hz |
+| Voix féminine et enfantine | 200 – 250 Hz |
+
+Le pitch fait partie de la **prosodie** (Prosody), qui inclut également l'intonation et l'accentuation. La prosodie est cruciale pour l'interprétation sémantique et émotionnelle de la parole.
+
+::: {.callout-note title="À retenir"}
+La différence de pitch entre voix masculine et féminine permet une caractérisation automatique du locuteur. C'est l'une des features les plus simples et robustes en identification de locuteur.
+:::
+
+---
+
+## Coefficients de Prédiction Linéaire (LPC)
+
+### Principe
+
+Les **Coefficients de Prédiction Linéaire** (LPC — Linear Prediction Coefficients) reposent sur l'idée qu'un échantillon du signal de parole peut être **prédit** à partir des échantillons précédents :
+
+$$\hat{s}_n = -\sum_{i=1}^{p} a_i \, s_{n-i}$$
+
+où :
+
+- $\hat{s}_n$ : valeur prédite de l'échantillon courant.
+- $a_i$ : coefficients LPC (au nombre de $p$).
+- $s_{n-i}$ : échantillons passés.
+
+### Erreur de Prédiction
+
+L'erreur commise par ce modèle est :
+
+$$e_n = s_n - \hat{s}_n = \sum_{i=0}^{p} a_i \, s_{n-i}$$
+
+### Passage dans le Domaine en Z
+
+La transformée en Z de l'erreur donne :
+
+$$\sum_n e_n z^{-n} = \sum_{i=0}^{p} a_i z^{-i} \sum_n s_{n-i} z^{-n+i}$$
+
+ce qui se simplifie en :
+
+$$E(z) = S(z) \sum_{i=0}^{p} a_i z^{-i}$$
+
+### Lien avec le Modèle Source-Filtre
+
+En définissant le polynôme LPC :
+
+$$A_p(z) = 1 + \sum_{i=1}^{p} a_i z^{-i}$$
+
+on obtient :
+
+$$S(z) = \frac{E(z)}{A_p(z)}$$
+
+En comparant avec le modèle source-filtre $|S(\omega)|^2 = |H(\omega)|^2 \cdot |E(\omega)|^2$, on identifie :
+
+- $\frac{1}{A_p(z)}$ ↔ **fonction de transfert** du conduit vocal $H$.
+- $E(z)$ ↔ **excitation**.
+
+::: {.callout-important title="Point clé — LPC"}
+Les coefficients LPC encodent la forme spectrale du conduit vocal. Ils permettent de **séparer** la contribution du conduit vocal (l'enveloppe spectrale) de celle de l'excitation (le pitch). C'est un outil fondamental en compression de la parole et en reconnaissance automatique.
+:::
+
+---
+
+## Modèles de Perception de la Parole
+
+### La Courbe d'Audibilité
+
+La perception humaine est doublement limitée :
+
+- **En fréquence** : 20 Hz – 20 kHz.
+- **En intensité** : de 0 dB (seuil d'audibilité) à ~120 dB (seuil douloureux).
+
+Un point $(f, I)$ dans l'espace fréquence–intensité indique si la pression $P(t) = P_0 + P_e \sin(2\pi f t)$ est audible. L'intensité sonore est définie par rapport à une pression de référence :
+
+$$I = 20 \cdot \log_{10}\left(\frac{P_e^*}{P_{\text{ref}}}\right), \quad P_{\text{ref}} = 2 \times 10^{-10} \text{ bar}$$
+
+### L'Échelle Mel (Mel Scale)
+
+#### Motivation
+
+L'échelle Mel modélise la **perception subjective** des hauteurs tonales par l'être humain. La relation entre la hauteur perçue et la fréquence physique n'est pas linéaire : à hautes fréquences, l'oreille discrimine moins bien les différences.
+
+#### Définition
+
+Par convention, **1000 mel = 1000 Hz**. Si l'on double la fréquence à partir de 1000 Hz jusqu'à percevoir une hauteur double (2000 mel), on atteint environ 3000 Hz — non pas 2000 Hz.
+
+Formules d'approximation :
+
+$$m = \frac{1000}{\log(2)} \log\left(1 + \frac{f}{1000}\right) = 3322 \log\left(1 + \frac{f}{1000}\right)$$
+
+ou bien (variante commune) :
+
+$$m = 2595 \log\left(1 + \frac{f}{700}\right)$$
+
+ou encore :
+
+$$m = 1000 \log_2(1 + f)$$
+
+::: {.callout-tip title="Intuition"}
+L'échelle Mel comprime les hautes fréquences et étale les basses fréquences, reflétant fidèlement la sensibilité de l'oreille humaine. À 100 Hz, une variation de 10 Hz est clairement perceptible ; à 10 000 Hz, il faudrait une variation de plusieurs centaines de Hz pour percevoir la même différence de hauteur.
+:::
+
+### L'Échelle Bark (Bark Scale)
+
+#### Motivation
+
+L'échelle Bark modélise les **effets de masquage auditif** (masking effects). Lorsque deux fréquences sont jouées simultanément, la fréquence la plus haute peut **masquer** la perception de la plus basse si elles sont trop proches.
+
+#### Bande Critique
+
+Chaque fréquence possède une **bande critique** autour d'elle : si une autre fréquence tombe dans cette bande, un effet de masquage se produit. La formule de l'échelle Bark est :
+
+$$B = 13 \arctan(0.76f) + 3.5 \arctan\left(\frac{f}{7.5}\right)^2$$
+
+#### Application
+
+En échantillonnant les fréquences selon l'échelle Bark, on évite le masquage. Ce principe est exploité dans le **codage MPEG audio avec perte (lossy)**, notamment le MP3.
+
+::: {.callout-note title="À retenir"}
+Les échelles Mel et Bark sont toutes deux des transformations logarithmiques de la fréquence, mais elles servent des objectifs différents : Mel modélise la hauteur perçue, Bark modélise le masquage fréquentiel. Les deux sont fondamentales en traitement perceptuel de l'audio.
+:::
+
+---
+
+## Coefficients Cepstraux sur l'Échelle Mel (MFCC)
+
+### Le Cepstre (Cepstrum)
+
+Le **cepstre** est défini comme la **transformée de Fourier inverse du logarithme du spectre d'amplitude à court terme** :
+
+$$\text{Cepstre} = \mathcal{F}^{-1}\left[\log |S(\omega)|\right]$$
+
+Il permet de séparer les composantes liées au pitch (excitation rapide) de celles liées au conduit vocal (enveloppe spectrale lente).
+
+### Calcul des MFCC
+
+Le calcul des **Coefficients Cepstraux sur l'Échelle Mel** (MFCC — Mel Frequency Cepstral Coefficients) suit le pipeline suivant :
+
+```{mermaid}
+graph LR
+    A[Signal audio] --> B[Fenêtrage]
+    B --> C[FFT]
+    C --> D[Spectre d'amplitude]
+    D --> E[Banc de filtres Mel]
+    E --> F[Logarithme]
+    F --> G[DCT / FFT inverse]
+    G --> H[MFCC]
+```
+
+Étapes détaillées :
+
+1. **Compensation** : pré-accentuation du signal.
+2. **Fenêtrage (Windowing)** : découpage en trames courtes (~20–30 ms) avec recouvrement.
+3. **FFT** : calcul du spectre de puissance.
+4. **Banc de filtres Mel** : projection sur l'échelle Mel.
+5. **Logarithme** : transformation homomorphique.
+6. **DCT (ou FFT inverse)** : décomposition en coefficients cepstraux.
+
+::: {.callout-important title="Importance des MFCC"}
+Les MFCC sont les **features les plus utilisées** en reconnaissance automatique de la parole. Ils capturent l'enveloppe spectrale du conduit vocal de manière compacte (typiquement 12–13 coefficients par trame), tout en étant robustes aux variations de pitch.
+:::
+
+On utilise aussi fréquemment les **deltas** $\Delta$MFCC (dérivées temporelles des MFCC) pour capturer la dynamique temporelle du signal.
+
+---
+
+## Reconnaissance Automatique de la Parole (ASR)
+
+### Principe Général
+
+La **Reconnaissance Automatique de la Parole** (ASR — Automatic Speech Recognition) transcrit un signal audio en texte. Elle repose sur des **Modèles de Markov Cachés** (HMM — Hidden Markov Models), des automates à états finis probabilistes.
+
+### Architecture d'un Système ASR
+
+```{mermaid}
+graph LR
+    A[Signal audio] --> B[Extraction de features\nMFCC + ΔMFCC]
+    B --> C[Vecteurs acoustiques]
+    C --> D[HMMs phonémiques]
+    D --> E[Modèle de langage]
+    E --> F[Transcription texte]
+```
+
+### Modélisation au Niveau Phonémique
+
+La parole est modélisée au niveau des **phonèmes** (unités sonores de base) :
+
+- Chaque phonème est représenté par un HMM à plusieurs états.
+- Pour capturer le **contexte phonétique** (coarticulation), on utilise des **triphones** : le phonème central est conditionné par son phonème précédent et son phonème suivant.
+- Les HMM permettent aussi de modéliser la **grammaire** (modèle de langage).
+
+### Features Acoustiques
+
+Les vecteurs de features utilisés en entrée des HMM sont typiquement :
+
+- Les **MFCC** (12–13 coefficients).
+- Les **ΔMFCC** (dérivées premières).
+- L'**énergie** et ses dérivées.
+
+---
+
+## Repérage de Mots (Wordspotting)
+
+### Définition
+
+Le **Wordspotting** est une forme simplifiée de reconnaissance de la parole à **vocabulaire limité**. Au lieu de transcrire l'intégralité du discours, on entraîne le système à reconnaître un ensemble restreint de mots-clés.
+
+### Architecture
+
+```{mermaid}
+graph LR
+    A[Signal parole] --> B[Modèle 1\nMot-clé 1]
+    A --> C[Modèle 2\nMot-clé 2]
+    A --> D[Modèle n\nMot-clé n]
+    A --> E[Modèle Garbage\nTout le reste]
+    B & C & D & E --> F[argmax → Entité reconnue]
+```
+
+Un **état garbage** (garbage state) capture tout ce qui ne correspond à aucun mot-clé du vocabulaire.
+
+### Applications
+
+Le wordspotting est particulièrement adapté aux :
+
+- **Serveurs vocaux** : "Pour le service clients, dites 'service'."
+- **Commandes vocales** dans des environnements contrôlés.
+- Situations où la robustesse prime sur la complétude.
+
+::: {.callout-tip title="Intuition"}
+Le wordspotting est à l'ASR ce que la détection d'objet est à la reconnaissance d'image complète : moins ambitieux, mais plus rapide et plus fiable dans des contextes contrôlés.
+:::
+
+---
+
+## Traitement de la Musique
+
+### Objectif Principal
+
+L'objectif central du traitement de la musique est de **retrouver la partition** (score) à partir du signal audio — une tâche connue sous le nom de **transcription automatique de la musique** (Automatic Music Transcription).
+
+### Défis
+
+Cette tâche est particulièrement difficile pour plusieurs raisons :
+
+- **Synchronisation temporelle** : les notes sont synchronisées selon un tempo qui peut varier.
+- **Collision harmonique** : plusieurs notes jouées simultanément partagent des harmoniques, rendant leur séparation difficile.
+- **Diversité instrumentale** : chaque instrument a un timbre différent, et les techniques de jeu varient.
+
+### Pitch en Musique
+
+En musique, le **pitch** correspond à la **fréquence fondamentale** d'une note. L'extraction de pitch en contexte musical est une tâche d'**extraction multi-pitch** (Multi-Pitch Estimation) car plusieurs instruments jouent en même temps.
+
+Le résultat peut être visualisé sous forme d'un **pianoroll** : une représentation temps–fréquence où chaque note correspond à une barre horizontale.
+
+---
+
+## Le Standard MIDI
+
+### Définition
+
+**MIDI** (Musical Instrument Digital Interface) est un protocole numérique standardisé permettant de coder et transmettre des événements musicaux (notes, vélocité, changement d'instrument...) entre instruments électroniques et logiciels.
+
+### Structure d'un Message MIDI
+
+Un message MIDI est composé de codes hexadécimaux : `Sn xx yy`
+
+| Champ | Valeur | Signification |
+|---|---|---|
+| `S` | 8–E | Type de statut (Status) |
+| `n` | 0–F | Numéro de canal (channels 1–16) |
+| `xx` | 00–7F | Premier octet de données |
+| `yy` | 00–7F | Deuxième octet de données |
+
+### Exemple Concret
+
+Message : `90 3C 40`
+
+- `90` : Statut = **Note On**, Canal 1
+- `3C` : Numéro de note = $\$3C = 60$ (Do central / Middle C)
+- `40` : Vélocité = $\$40 = 64$ (intensité de frappe)
+
+::: {.callout-note title="À retenir"}
+MIDI ne code pas un son, mais un **événement musical** : "quelle note, sur quel instrument, à quelle intensité, à quel moment". Cette abstraction symbolique facilite la manipulation, la comparaison et la recherche de contenu musical.
+:::
+
+### MIDI et Recherche d'Information
+
+Le MIDI constitue une représentation symbolique intermédiaire précieuse :
+
+- Il permet d'appliquer des techniques d'**alignement de chaînes** (string matching) pour la recherche de similarité musicale.
+- Une requête fredonnée peut être convertie en MIDI puis comparée à une base de données de partitions MIDI.
+
+---
+
+## Codage MP3
+
+### Principe
+
+Le **MP3** (MPEG 1 Audio Layer 3) est un format de compression audio avec perte (lossy) exploitant les propriétés perceptuelles de l'ouïe humaine.
+
+### Pipeline de Codage
+
+Le codage MP3 suit le pipeline suivant :
+
+```{mermaid}
+graph TD
+    A[Signal audio brut] --> B[Modèle perceptuel\nBark scale, masquage]
+    B --> C[Banc de filtres]
+    B --> D[Codage stéréo joint]
+    C --> E[Multiplex bitstream]
+    D --> E
+    E --> F[Facteurs d'échelle]
+    F --> G[Quantificateur]
+    G --> H[Codage sans perte\nNoiseless Coding]
+    H --> I[Contrôle débit/distorsion]
+    I --> G
+    H --> E
+    E --> J[Stream MP3 codé]
+```
+
+Le modèle perceptuel (basé sur l'échelle Bark et le masquage) détermine **quelles fréquences peuvent être quantifiées grossièrement** sans que l'oreille humaine ne perçoive la différence.
+
+::: {.callout-tip title="Intuition"}
+Le MP3 exploite le masquage auditif : si un son fort est présent à une fréquence, les sons faibles proches en fréquence seront masqués et peuvent donc être supprimés ou grossièrement codés — économisant ainsi de l'espace de stockage sans perte perceptible.
+:::
+
+---
+
+## Recherche d'Information Musicale (MIR)
+
+### Organisation d'Archives Musicales : Islands of Music
+
+Le projet **Islands of Music** propose une organisation visuelle des archives musicales basée sur des **cartes auto-organisatrices** (Self-Organizing Maps, SOM). Les pièces musicales similaires sont regroupées en "îles" visuellement proches.
+
+Les caractéristiques utilisées incluent :
+
+- `maxflux` : variation maximale du flux spectral.
+- `bass` : énergie dans les basses fréquences.
+- `bpm` (beats per minute) : tempo.
+- `non-aggressive` : mesure d'agressivité sonore.
+- `low-freq-dom` : dominance des basses fréquences.
+
+::: {.callout-tip title="Intuition"}
+Une SOM projette un espace de features de haute dimension sur une carte 2D en préservant la topologie : deux morceaux proches dans l'espace des features seront représentés par des nœuds proches sur la carte. C'est une technique de réduction de dimension non supervisée.
+:::
+
+### Navigateur Musical Sony (Sony Music Browser)
+
+Le navigateur Sony CSL-MCM permet d'effectuer des **requêtes multi-critères** sur une base de données musicale :
+
+- Titre, artiste, genre.
+- BPM (tempo).
+- Énergie.
+- Qualité et tessiture vocale.
+- Similarité (Find by Similarity).
+
+### ThemeFinder
+
+**ThemeFinder** est un moteur de recherche musicale orienté **thème mélodique**, permettant de retrouver des œuvres classiques à partir d'une description mélodique abstraite :
+
+- **Pitch** : séquence de notes (ex. : `C E- G F#`).
+- **Intervalle** : séquences d'intervalles (ex. : `+m9 -P8 +M3`).
+- **Degré scalaire** : position dans la gamme.
+- **Contour** : forme mélodique (ascendant, descendant, unisson).
+- **Clé, mode, mesure**.
+
+---
+
+## Indexation Audio
+
+### Synthèse des Approches
+
+L'audio étant un signal séquentiel, l'indexation repose sur des **modèles de séquences** :
+
+#### Indexation de la Parole
+
+- **Via ASR** → texte dégradé. Les erreurs de reconnaissance (WER — Word Error Rate) et les mots hors vocabulaire (OOV — Out-Of-Vocabulary) nuisent à la qualité de l'index.
+- **Via Wordspotting** → contexte bien contrôlé, vocabulaire limité.
+
+#### Indexation de la Musique
+
+- **Query-by-Humming** : l'utilisateur fredonne un extrait → conversion en représentation symbolique → comparaison avec la base.
+- **Query-by-Example** : l'utilisateur fournit un extrait audio → similarité calculée par features acoustiques (MFCC, rythme...).
+- **Via traduction MIDI** → alignement de chaînes symboliques.
+
+Ressource de référence : [http://www.music-ir.org/](http://www.music-ir.org/)
+
+#### Son Ambiant et Vidéo
+
+Le son ambiant constitue un **indice fort pour l'indexation vidéo** : détection de scènes, segmentation thématique, identification de contextes (concert, sport, discussion...).
+
+::: {.callout-note title="À retenir"}
+L'audio est une source d'information séquentielle temporelle. Sa valeur pour la recherche d'information est maximale lorsqu'il est combiné à d'autres modalités (texte issu de l'ASR, images vidéo), permettant une indexation multimodale plus robuste.
+:::
+
+---
+
+## Références
+
+### Modélisation Audio Moderne
+
+- F. Roche, T. Hueber, S. Limier et L. Girin. *Autoencoders for music sound modeling: a comparison of linear, shallow, deep, recurrent and variational models*. arXiv 1806.04096.
+
+### Traitement de la Parole
+
+- L. Rabiner, B.-H. Juang. *Fundamentals of Speech Recognition*. Prentice Hall, 1993.
+- S. Furui. *Digital Speech Processing, Synthesis and Recognition*. Marcel Dekker Publ., 2001.
+
+### Ressources Web
+
+- P. Schäuble. *Multimedia Information Retrieval: Content-based Information Retrieval from Large Text and Audio Databases*. Kluwer Academic Publishers, 1997.
+- Music Information Retrieval : [http://www.music-ir.org/](http://www.music-ir.org/)
+- Islands of Music : [https://www.ofai.at/~elias.pampalk/music/](https://www.ofai.at/~elias.pampalk/music/)
+- ThemeFinder : [http://www.themefinder.org/](http://www.themefinder.org/)

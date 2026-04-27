@@ -1,0 +1,468 @@
+---
+title: "Recherche d'Information Visuelle"
+---
+
+## Introduction et Contexte
+
+### Objectifs de la recherche d'information visuelle
+
+La **recherche d'information visuelle** (Visual Information Retrieval) a pour ambition de permettre la gestion *automatique* du contenu visuel — images, vidéos, contenus multimédia — afin de le stocker et de le retrouver efficacement.
+
+Deux objectifs fondamentaux structurent ce domaine :
+
+- **Stocker pour retrouver** : indexer les documents visuels de manière à ce qu'une recherche ultérieure soit possible.
+- **Ne pas perdre d'information** : éviter le phénomène dit de « trou noir informationnel » (*information black hole*), c'est-à-dire la situation où un document existe dans la base mais ne peut jamais être retrouvé.
+
+### Motivations
+
+La recherche d'information visuelle est motivée par deux constats majeurs :
+
+1. **Faible compréhension automatique du contenu visuel** : contrairement au texte, une image n'est pas directement interprétable par une machine. Le sens d'une image — les objets qu'elle contient, les émotions qu'elle véhicule, le contexte dans lequel elle a été prise — n'est pas encodé de façon explicite dans les pixels.
+
+2. **Volume croissant à gérer** : le nombre d'images et de vidéos produites chaque jour est colossal (réseaux sociaux, surveillance, médical, satellite…). Une gestion manuelle est impossible à grande échelle.
+
+::: {.callout-important title="Le défi central"}
+L'enjeu est d'atteindre une **compréhension automatique et exhaustive du contenu visuel**, sans intervention humaine systématique.
+:::
+
+---
+
+## Le Processus de Gestion de l'Information
+
+### Vue d'ensemble du pipeline
+
+Le traitement de documents visuels suit un pipeline en plusieurs étapes, quel que soit le type de média (texte, image, audio…) :
+
+1. **Documents bruts** (*Raw documents*) : les données dans leur forme originale (photos, vidéos, fichiers audio…).
+2. **Extraction de caractéristiques** (*Feature extraction*) : transformer le document brut en une représentation numérique exploitable.
+3. **Caractéristiques du document** (*Document features*) : le vecteur numérique obtenu après extraction.
+4. **Projection appropriée** (*Appropriate mapping*) : projeter ces caractéristiques dans un espace de représentation qui respecte la similarité perceptive.
+5. **Espace de représentation** (*Representation space*) : un espace géométrique où les documents similaires sont proches les uns des autres.
+6. **Interaction utilisateur** (*User interaction*) : l'utilisateur formule une requête (exemple, clic, feedback…).
+7. **Processus de décision** (*Decision process*) : le système retourne les documents jugés les plus pertinents.
+
+::: {.callout-tip title="Intuition"}
+Imaginez une bibliothèque où, au lieu de classer les livres par titre ou auteur, on les classe selon leur *contenu réel*. Deux livres parlant du même sujet seraient physiquement proches dans l'espace. C'est exactement ce que cherche à faire la recherche d'information visuelle dans un espace mathématique.
+:::
+
+### Exemple avec le texte
+
+Pour des documents textuels, le pipeline se concrétise ainsi :
+
+- Les **documents** sont des fichiers de texte.
+- L'**extraction de caractéristiques** consiste à compter les occurrences des mots (*word occurrences*) — c'est le principe du sac de mots (Bag of Words).
+- La **projection** produit des nuages de termes (*word clouds*) ou des vecteurs TF-IDF.
+- L'**interaction** permet d'effectuer des requêtes textuelles classiques.
+
+### Exemple avec les images
+
+Pour des documents image :
+
+- Les **documents** sont des collections de photos.
+- L'**extraction de caractéristiques** produit des **histogrammes de couleurs** (*color histograms*) : distributions statistiques des couleurs présentes dans l'image.
+- La **projection** place les images dans un espace où les images visuellement similaires se regroupent.
+- L'**interaction** passe par une requête visuelle (*query*) — par exemple, une image exemple.
+
+---
+
+## Annotation des Médias
+
+### Le problème de l'annotation
+
+Une image contient une quantité d'information que les mots peuvent difficilement capturer dans sa totalité. Prenons une photo d'un insecte sur une fleur jaune. On pourrait la décrire comme :
+
+- « insecte sur une fleur jaune »
+- Le nom latin de la fleur et de l'insecte
+- « scène de campagne, beau temps »
+- « 1er prix du concours photo étudiant 2015 »
+- « la guêpe qui a fait peur à ma fille pendant nos vacances en Gruyère »
+
+Chacune de ces descriptions est valide mais *partielle* et *subjective*. L'inférence automatique ne peut pas résoudre toutes ces couches de sens.
+
+::: {.callout-warning title="Limite fondamentale"}
+**L'inférence ne peut pas tout résoudre.** Certaines informations (contexte personnel, intention artistique, valeur émotionnelle) ne peuvent être déduites automatiquement depuis les pixels. L'annotation textuelle reste complémentaire.
+:::
+
+### Standards d'annotation des médias
+
+Plusieurs formats standardisés permettent d'associer des métadonnées aux fichiers multimédias :
+
+- **IPTC** : format standard de description de photos (titre, auteur, droits, mots-clés…).
+- **Exif** : conteneur standard d'informations de prise de vue (ouverture, vitesse, GPS, date…).
+- **ID3-tag** : informations associées aux fichiers audio (artiste, album, piste…).
+- **NTFS** : échange de métadonnées sous Windows.
+- **JPSearch / MPEG-7** : standards orientés vers la recherche, décrivant le contenu visuel de façon structurée.
+- **Formats image avec en-têtes** : PNG, GIF, JPG, TIFF permettent tous l'insertion de commentaires textuels.
+
+Il existe également une catégorie d'**annotation sociale** (*social annotation*), basée sur les recommandations et tags des utilisateurs (approche collaborative/communautaire).
+
+::: {.callout-note title="À retenir"}
+L'approche optimale combine deux niveaux complémentaires : l'**annotation textuelle** (métadonnées, tags, descriptions) et la **recherche basée sur le contenu** (*content-based retrieval*). Ces deux approches se complètent plutôt qu'elles ne s'opposent.
+:::
+
+### MPEG-7 : description structurée des images fixes
+
+MPEG-7 est un standard ISO permettant de décrire le contenu multimédia de façon hiérarchique et structurée. Pour une image fixe, MPEG-7 organise la description en **régions spatiales** (*Spatial Regions*, SR1 à SR8) qui forment un arbre de décomposition :
+
+- Chaque région peut être décrite par sa **forme** (*shape*), son **histogramme de couleur** (*color histogram*) et une **annotation textuelle** (*textual annotation*).
+- La relation entre régions peut être : *pas d'espace, pas de chevauchement* (*no gap, no overlap*), ou *espace sans chevauchement* (*gap, no overlap*).
+
+Cette structuration permet des requêtes spatiales précises : « trouve une image contenant un visage en haut à droite avec un fond bleu ».
+
+---
+
+## Le Trou Noir Informationnel
+
+### Définition du problème
+
+Le **trou noir informationnel** (*information black hole*) désigne la situation où un document est bien présent dans la base de données, mais ne peut jamais être retrouvé lors d'une recherche.
+
+#### Exemple concret
+
+- **Indexation** : l'image est étiquetée « insecte sur une fleur jaune ».
+- **Recherche** : l'utilisateur cherche « insecte qui se nourrit » (*insect feeding*).
+- **Résultat** : l'image ne sera **jamais retournée**, même si elle représente exactement ce que l'utilisateur cherche.
+
+Le problème vient du fait que l'utilisateur doit *connaître le contexte d'indexation* (vocabulaire utilisé lors de l'étiquetage) pour formuler sa requête correctement.
+
+### Implications pour la représentation
+
+Pour éviter ce trou noir, la représentation des documents doit être :
+
+- **Exhaustive** (*context-free*) : capturer tous les aspects du contenu, indépendamment du contexte d'utilisation future.
+- **Automatique** : sans intervention humaine à chaque étape, pour passer à l'échelle.
+
+::: {.callout-tip title="Intuition"}
+Si vous cherchez « cheval » mais que l'image est indexée « mustang », vous ne trouverez rien. La représentation basée sur le *contenu visuel* (pixels, couleurs, formes) est insensible à ce problème de vocabulaire : deux images visuellement similaires seront proches dans l'espace, quelles que soient leurs étiquettes textuelles.
+:::
+
+---
+
+## Le Paradigme de la Recherche d'Information
+
+### Principes fondamentaux
+
+Le paradigme classique de la recherche d'information repose sur deux éléments :
+
+- **Une requête** (*query*) : l'expression du besoin informationnel de l'utilisateur.
+- **Un dépôt** (*repository*) : la source d'information dans laquelle chercher.
+
+L'objectif est d'**inférer les documents les plus pertinents** du dépôt en réponse à la requête.
+
+### Types de requêtes
+
+Trois types de requêtes sont classiquement distingués :
+
+1. **Requête descriptive** (*descriptive query*) : l'utilisateur décrit ce qu'il cherche en langage naturel structuré.
+2. **Requête texte libre** (*free text query*) : à la manière de Google, une phrase ou un ensemble de mots-clés.
+3. **Requête par exemple** (*example document query*) : l'utilisateur fournit un ou plusieurs documents comme exemples (bouton « Plus comme ceci… » / *More like this…*).
+
+### Requête par l'Exemple (Query-by-Example)
+
+La **Requête par l'Exemple** (QbE, *Query-by-Example*) est le type de requête le plus utilisé en recherche d'information visuelle. Son principe :
+
+> « Je veux un document qui ressemble à celui-ci. »
+
+- La **pertinence** (*relevance*) est traduite en terme de **similarité** (*similarity*).
+- La **similarité** est elle-même traduite en **proximité géométrique** dans l'espace de représentation.
+
+::: {.callout-note title="À retenir"}
+En recherche d'information visuelle, **pertinence ≈ similarité ≈ proximité dans l'espace de représentation**. Toute la difficulté consiste à choisir un espace où cette équivalence est valide sur le plan sémantique.
+:::
+
+### La notion de voisinage
+
+La recherche d'information nous enseigne qu'il n'est pas nécessaire d'avoir une compréhension absolue et complète des documents pour répondre à des requêtes. Il suffit de pouvoir **comparer deux documents**.
+
+Pour cela, on a besoin de :
+
+- **Mesures de distance** (*distance measurements*) appropriées, pour inférer la similarité.
+- Un **espace de caractéristiques** (*feature space*), basé sur les propriétés du document.
+- Une **notion de voisinage** (*vicinity*), définie par cette distance.
+
+> « Tout est une question d'inspection des voisinages. »
+
+::: {.callout-warning title="Condition de validité"}
+Cette approche n'est valide que si la **distance est sémantiquement pertinente** : deux documents proches dans l'espace de représentation doivent effectivement être similaires *du point de vue de l'utilisateur*.
+:::
+
+---
+
+## Modélisation pour la Recherche Visuelle
+
+### Le modèle de base
+
+La modélisation pour la recherche d'information visuelle s'appuie sur le paradigme QbE avec **retour de pertinence** (*Relevance Feedback*, RF) :
+
+> « Je veux un document qui ressemble à celui-ci **mais pas à celui-là**. »
+
+L'utilisateur fournit des exemples **positifs** (pertinents) et **négatifs** (non pertinents), et le système ajuste sa représentation en conséquence.
+
+On utilise les **outils classiques de la recherche d'information** :
+
+- Modèle **espace vectoriel** (*Vector Space Model*)
+- Modèles **probabilistes** (*Probabilistic Models*)
+
+Mais appliqués à des **abstractions du contenu visuel** plutôt qu'à du texte.
+
+### Recherche d'images basée sur le contenu
+
+La recherche d'images basée sur le contenu (*Content-Based Image Search*, CBIS) affronte le défi de la QbE visuelle :
+
+- **Image exemple pertinente** : « une image *comme* celle-ci… »
+- **Image exemple non pertinente** : « …mais *pas* comme celle-là. »
+
+On applique le principe **TF-IDF** (Term Frequency – Inverse Document Frequency), transposé au domaine visuel :
+
+- **TF** (fréquence) : « une fleur jaune… » — un élément *fréquent*, commun à beaucoup d'images.
+- **IDF** (rareté) : « …avec un insecte dessus » — un élément *rare* et donc plus discriminant.
+
+::: {.callout-tip title="Intuition"}
+En texte, le mot « le » est très fréquent et peu informatif (faible IDF). En visuel, une grande zone bleue (ciel) est fréquente et peu discriminante. À l'inverse, la présence d'un insecte précis sur une fleur est rare et très informative pour distinguer cette image d'autres.
+:::
+
+---
+
+## Caractérisation du Contenu Visuel
+
+### Le défi : modéliser le Système Visuel Humain
+
+Le cœur du problème est de **modéliser les capacités du Système Visuel Humain** (*Human Visual System*, HVS) :
+
+- Pourquoi deux images *différentes* « se ressemblent »-elles ?
+- Pourquoi deux images *similaires* « semblent-elles différentes » ?
+
+Cette modélisation se situe à deux niveaux :
+
+#### Niveau bas (*Low-level model*) — Propriétés physiques
+
+Ce sont les caractéristiques directement extractibles des pixels :
+
+- **Couleur** (*Color*)
+- **Texture** (*Texture*)
+- **Forme** (*Shape*)
+
+#### Niveau haut (*High-level model*) — Sémantique
+
+Ce sont des concepts de plus haut niveau, proches de la perception humaine :
+
+- **Objets** (*Objects*)
+- **Concepts** (*Concepts*)
+
+### L'Écart Sémantique (Semantic Gap)
+
+L'**écart sémantique** (*semantic gap*) est la différence d'interprétation entre un opérateur humain et un système automatisé. C'est l'un des défis fondamentaux de la recherche d'information visuelle.
+
+| Niveau | Texte | Visuel |
+|---|---|---|
+| Interprétation | Histoire | « Action » |
+| Segmentation sémantique | Paragraphe | Scène |
+| Groupe | Phrase | Objet |
+| Segmentation physique | Mot | Région homogène |
+| Entité physique | Caractère | Couleur, texture |
+
+Le tableau illustre le parallèle entre niveaux d'abstraction en traitement du texte et en traitement visuel.
+
+::: {.callout-important title="La tension fondamentale"}
+Plus on monte en niveau d'abstraction (vers les concepts), plus on est pertinent pour l'utilisateur. Mais plus on monte, moins la machine est précise. Plus on descend vers les propriétés physiques, plus la machine est précise, mais moins le résultat est semantiquement pertinent. C'est l'écart sémantique.
+:::
+
+### Le CAPTCHA : exploitation de l'écart sémantique
+
+Un exemple concret d'exploitation de l'écart sémantique est le **CAPTCHA** (*Completely Automated Public Turing test to tell Computers and Humans Apart*). Les CAPTCHAs demandent à l'utilisateur de reconnaître des caractères déformés ou de sélectionner des images contenant un objet particulier — tâches triviales pour un humain, difficiles pour une machine.
+
+---
+
+## Caractéristiques Visuelles de Bas Niveau
+
+### La Couleur
+
+#### Le modèle RGB
+
+Chaque pixel d'une image numérique est représenté par trois valeurs dans le modèle **RGB** (*Red, Green, Blue*) :
+
+- **Image** = 3 tableaux (R, G, B) de valeurs entre 0 et 255.
+- **Pixel** = triplet (R, G, B) représentant une couleur à une position donnée.
+
+Toute couleur est une combinaison de ces trois composantes primaires.
+
+#### Espaces colorimétriques
+
+Le modèle RGB est le plus courant, mais d'autres espaces sont utilisés en recherche visuelle :
+
+- **HSV** (*Hue, Saturation, Value*) : correspond mieux à la perception humaine des couleurs. La **distance L2 dans l'espace HSV** est souvent plus représentative de la similarité de couleur perçue que dans RGB.
+
+#### Représentation de la couleur
+
+Plusieurs représentations sont utilisées :
+
+- **Couleur dominante** (*Dominant color*) : la ou les couleurs les plus présentes dans l'image.
+- **Histogramme de couleur** (*Color histogram*) : distribution statistique des valeurs de couleur, indépendante de la position des pixels.
+
+::: {.callout-tip title="Intuition"}
+L'histogramme de couleur répond à la question : « Quelle proportion de pixels sont rouges ? Verts ? Bleus ? ». Deux images ayant le même histogramme de couleur auront un aspect colorimétrique similaire, même si les objets sont disposés différemment.
+:::
+
+#### Exemple : histogramme et similarité
+
+Considérons :
+
+- **Image 1 et Image 2** : deux images noir et gris avec des disposition inversées. Leurs histogrammes de couleur (niveaux de gris) sont **identiques** → distance nulle pour la couleur.
+- **Image 3 et Image 4** : une image vert-jaune unie et une image vert-jaune en damier. Leurs histogrammes sont aussi **identiques** → distance nulle, alors que les images semblent très différentes visuellement.
+
+::: {.callout-warning title="Limite de l'histogramme"}
+L'histogramme de couleur **ignore la position spatiale** des pixels. Deux images avec des objets très différemment disposés peuvent avoir un histogramme quasi-identique. C'est une limite fondamentale.
+:::
+
+### La Texture
+
+#### Définition
+
+La **texture** (*texture*) décrit les patterns réguliers ou irréguliers de variation d'intensité dans une image : rugosité, granulosité, régularité, direction préférentielle…
+
+#### Critères de caractérisation
+
+Les critères principaux pour décrire une texture sont :
+
+- **Orientation** (*orientation*) : direction préférentielle des motifs.
+- **Grossièreté** (*coarseness*) : taille des éléments répétés.
+- **Taille** (*size*) : échelle des structures.
+
+#### Modèles et techniques
+
+- **Matrices de co-occurrence** (*co-occurrence matrices*) : statistiques sur les paires de pixels voisins.
+- **Filtres de Gabor** (*Gabor filters*) : bancs de filtres orientés à différentes fréquences, modélisant la réponse du cortex visuel.
+- **Champs de Markov** (*Markov random fields*).
+- **Réseaux de neurones** (*neural nets*).
+
+#### Filtres de Gabor
+
+Un filtre de Gabor est une gaussienne modulée par une sinusoïde :
+
+$$g(x, y) = \left(\frac{1}{2\pi\sigma_x\sigma_y}\right)\exp\left(-\frac{1}{2}\left(\frac{x^2}{\sigma_x^2} + \frac{y^2}{\sigma_y^2}\right) + 2\pi j W x\right)$$
+
+En appliquant un **banc de filtres de Gabor** à différentes orientations et fréquences, on obtient une description globale de la texture d'une image (*Global Texture data*).
+
+::: {.callout-note title="À retenir"}
+Le filtre de Gabor est biologiquement motivé : il modélise le comportement des **cellules simples du cortex visuel primaire** (V1) des mammifères, qui sont sensibles à l'orientation et à la fréquence spatiale.
+:::
+
+### La Forme et la Segmentation
+
+#### Segmentation d'image
+
+La **segmentation** (*image segmentation*) consiste à partitionner l'image en régions homogènes, idéalement correspondant à des objets ou parties d'objets significatifs.
+
+Les contraintes imposées sur les régions sont :
+
+- **Homogénéité** : même couleur, même texture à l'intérieur d'une région.
+- **Connexité** : la région est d'un seul tenant.
+- **Contraintes de forme** : la forme globale doit être cohérente.
+
+#### Techniques de segmentation
+
+- **K-means** (*clustering*) : partitionner les pixels en $k$ groupes selon leur couleur/texture.
+- **Mean-shift** : algorithme de montée de gradient vers les modes de densité.
+- **Contours actifs (snakes)** : courbes déformables qui s'adaptent aux bords des objets.
+
+#### BlobWorld (Berkeley)
+
+**BlobWorld** est un système de recherche d'images basé sur la segmentation en régions (*blobs*). L'image est segmentée en zones homogènes, et la requête est formulée en sélectionnant des blobs de l'image exemple. Le système retrouve des images ayant des blobs similaires (en couleur, texture et position relative).
+
+---
+
+## Caractéristiques Locales et Représentations Avancées
+
+### Détection de points-clés (Keypoints)
+
+Plutôt que de décrire l'image globalement, on peut identifier des **points d'intérêt** (*interest points*, *keypoints*) — des endroits structurellement saillants dans l'image (coins, jonctions, bords prononcés). Ces points sont stables sous les transformations géométriques (rotation, changement d'échelle).
+
+La **détection de coins** (*corner detection*) est l'approche la plus simple : on détecte les endroits où l'intensité varie fortement dans plusieurs directions.
+
+### SIFT et SURF
+
+#### SIFT — Scale-Invariant Feature Transform (Lowe, 1999)
+
+SIFT est l'algorithme de référence pour l'extraction de caractéristiques locales invariantes. Son fonctionnement en quatre étapes :
+
+1. **Construction de l'espace d'échelle** (*scale space*) : on flou progressivement l'image (blur gaussien incrémental) pour créer une pyramide multi-échelle.
+2. **Détection des points-clés** : les keypoints sont les extrema locaux dans les images de différences gaussiennes (*Difference of Gaussians*, DoG) — des pixels plus grands ou plus petits que leurs 26 voisins dans la pyramide.
+3. **Calcul du gradient** : autour de chaque keypoint, on calcule le gradient des pixels à l'échelle de détection.
+4. **Création du descripteur** : 16 histogrammes de gradients (8 orientations chacun) → vecteur de **128 dimensions** par keypoint.
+
+::: {.callout-tip title="Intuition">}
+SIFT est robuste à la rotation, au changement d'échelle et partiellement à la variation d'illumination. Si vous prenez une photo d'un objet de deux angles différents, SIFT détectera les mêmes keypoints et produira des descripteurs similaires — permettant la mise en correspondance.
+:::
+
+#### SURF — Speeded-Up Robust Features (Bay et al., 2006)
+
+SURF est une version accélérée de SIFT utilisant des approximations par filtres de boîte (*box filters*) et des images intégrales. Il est nettement plus rapide tout en étant comparable en performance.
+
+### Compréhension par régions
+
+Dans l'approche basée sur les régions, les images sont comparées selon les **régions** (idéalement des objets ou concepts) qu'elles contiennent. Cela permet une recherche plus précise : on spécifie quels objets doivent être présents dans l'image résultat.
+
+Exemple d'application : la **détection d'objets** (*object detection*) et la **détection de visages** (*face detection*).
+
+### Sac de Mots Visuels (Bag of Visual Words)
+
+Le **Sac de Mots Visuels** (*Bag of Visual Words*, BoVW) est une approche qui transpose la méthode du sac de mots textuel au domaine visuel.
+
+#### Pipeline
+
+1. **Extraction de caractéristiques locales** : on extrait les descripteurs SIFT de tous les points-clés de toutes les images de la collection.
+2. **Groupement** (*clustering*) : les descripteurs similaires sont regroupés — par exemple, les descripteurs correspondant aux coins d'un objet particulier.
+3. **Quantification** (*quantization*) : chaque groupe de descripteurs similaires devient un **mot visuel** (*visual word*).
+4. **Dictionnaire visuel** (*visual dictionary*) : l'ensemble des mots visuels forme un vocabulaire.
+5. **Représentation de l'image** : une image est décrite par le vecteur de fréquences d'occurrence de chaque mot visuel — exactement comme un document textuel est représenté par son vecteur TF-IDF.
+
+::: {.callout-note title="À retenir">}
+Une fois les images représentées comme des vecteurs de mots visuels, on peut utiliser **toute la machinerie de la recherche d'information textuelle** : fichiers inversés, TF-IDF, modèles probabilistes, etc.
+:::
+
+---
+
+## Détection et Reconnaissance d'Objets
+
+### Apprentissage de Patterns
+
+L'approche moderne de la détection d'objets consiste à **entraîner une machine** à reconnaître des groupes de patterns spécifiques :
+
+- **Visages** : l'algorithme de Viola & Jones (2001) a été le premier détecteur de visages en temps réel. Il utilise des caractéristiques de Haar et un classifieur en cascade (AdaBoost).
+- **Objets génériques** : en entraînant sur de nombreux exemples d'un objet (voiture, tasse, livre…), un classifieur peut détecter cet objet dans de nouvelles images.
+
+Le résultat : **étiquetage automatique d'images** → permettant une recherche textuelle classique sur le contenu visuel.
+
+### Reconnaissance de Visages : Eigenfaces
+
+La technique des **Eigenfaces** extrait les caractéristiques spécifiques d'un visage en utilisant l'Analyse en Composantes Principales (ACP, *PCA*).
+
+- Les *eigenfaces* sont les vecteurs propres de la matrice de covariance d'un ensemble d'images de visages.
+- Chaque visage peut être représenté comme une combinaison linéaire de ces eigenfaces.
+- La comparaison de deux visages se fait dans cet espace réduit.
+
+### Reconnaissance de Chiffres Manuscrits
+
+La reconnaissance de chiffres manuscrits est un problème classique de classification visuelle :
+
+- **10 classes** (0 à 9), beaucoup d'exemples d'entraînement.
+- Chaque exemple est une image de **28×28 pixels** → **784 entrées** pour le réseau.
+- Un réseau de neurones avec de nombreux neurones cachés produit **10 neurones de sortie** (vecteur binaire).
+
+Ce problème, posé sur la base MNIST, a été déterminant dans l'essor des réseaux de neurones.
+
+---
+
+## Filtres Convolutifs et Réseaux de Neurones
+
+### L'idée des filtres locaux
+
+Les images sont formées d'un **dictionnaire de patches** (*dictionary of patches*) : des petits motifs de base (bords, coins, textures) qui se combinent pour former des objets, puis des scènes.
+
+L'idée clé : la **réponse d'un filtre** (*filter response*) — convoluer un patch d'image avec un filtre, et observer si la valeur obtenue est élevée (le patch *ressemble* au filtre).
+
+### Convolution
+
+La **convolution** consiste à faire glisser un filtre (noyau, *kernel*) sur toute l'image et à calculer le produit scalaire entre le filtre et chaque patch local.
+
+Exemple : un filtre vertical `[0,1,0 / 0,1,0 / 0,1,0]` convolutionné avec un patch donnera une valeur élevée si le patch contient une ligne verticale.

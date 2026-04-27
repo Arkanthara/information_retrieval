@@ -1,0 +1,890 @@
+---
+title: "Analyse des Réseaux Sociaux (Social Network Analysis)"
+---
+
+# Introduction aux Réseaux Sociaux
+
+## Un phénomène d'une ampleur sans précédent
+
+Les réseaux sociaux numériques ont radicalement transformé la façon dont l'information circule, dont les individus se connectent et dont les organisations fonctionnent. Comprendre leur structure et leur dynamique est devenu un enjeu majeur aussi bien scientifique que sociétal.
+
+Pour donner un ordre de grandeur : en **une seule minute** sur Internet en 2019, on dénombre plus de 41 millions de messages envoyés, 8 millions de textes envoyés via YouTube, et près de 2,1 millions de « snaps » créés. Ces chiffres illustrent le flux de données colossal que génèrent ces plateformes.
+
+### Évolution des usages : 2012 vs 2019
+
+L'explosion des réseaux sociaux entre 2012 et 2019 témoigne de l'émergence de services entièrement nouveaux. En 2012, les échanges étaient dominés par les e-mails et les téléchargements d'applications. En 2019, des plateformes comme Netflix, Instagram, TikTok ou Snapchat occupent une place centrale dans les usages numériques quotidiens.
+
+::: {.callout-note title="À retenir"}
+525 000 minutes s'écoulent en une année. Chaque minute d'activité sur Internet représente donc un fragment infime d'un flux global absolument gigantesque.
+:::
+
+## Une tendance massive et compétitive
+
+### Classement des plateformes
+
+Les plateformes les plus populaires au monde (données 2018) incluent, dans les premières positions :
+
+- **Facebook** et **YouTube**, avec plusieurs milliards d'utilisateurs actifs
+
+- **Instagram**, **WeChat**, **Twitter**, **LinkedIn**, **Snapchat**
+
+- Des acteurs régionaux très puissants comme **Weibo**, **Qzone** (Chine), **VK** et **Odnoklassniki** (Russie)
+
+::: {.callout-tip title="Intuition"}
+Le marché des réseaux sociaux est loin d'être monolithique : il reflète les réalités culturelles et politiques de chaque région. Facebook domine en Europe et en Amérique, tandis que QZone règne en Chine et VKontakte en Russie.
+:::
+
+### Messageries instantanées : une autre forme de réseau social
+
+Les applications de messagerie constituent une forme distincte mais tout aussi importante de réseau social. En 2019, **WhatsApp** est en tête avec 1,5 milliard d'utilisateurs actifs mensuels, suivi de **Facebook Messenger** (1,3 milliard), **WeChat** (1,058 milliard), et **QQ Mobile** (803 millions).
+
+Cette diversité de formes (réseaux de publication, messageries, forums, plateformes professionnelles) illustre la richesse du paysage des réseaux sociaux.
+
+## Un terrain de jeu fini
+
+### La limite naturelle de la croissance
+
+Bien que la croissance des réseaux sociaux ait été spectaculaire entre 2010 et 2021 (de 0,97 milliard à 3,02 milliards d'utilisateurs), cette progression est fondamentalement bornée : le nombre d'êtres humains sur Terre constitue un plafond absolu.
+
+Deux conséquences importantes en découlent :
+
+- **Taux de renouvellement décroissant** : il devient de plus en plus difficile d'acquérir de nouveaux utilisateurs
+
+- **Écosystème fermé** : les plateformes se disputent les mêmes utilisateurs dans un jeu à somme nulle
+
+::: {.callout-important title="Implication stratégique"}
+Lorsque le marché se sature, la compétition entre plateformes ne porte plus sur l'acquisition mais sur la **rétention** et l'**engagement** des utilisateurs existants. C'est pourquoi la compréhension de la structure du réseau devient un avantage concurrentiel décisif.
+:::
+
+## Défis identifiés dans les réseaux sociaux
+
+### Défis liés à la confiance
+
+Une étude de Chang, Liu et Shen (2017) publiée dans *Computers in Human Behavior* a modélisé les facteurs influençant la **confiance dans les services de réseaux sociaux (SNS)**. Ce modèle identifie plusieurs variables clés :
+
+- **Effort Expectancy (EE)** : l'effort perçu pour utiliser le service
+
+- **Social Influence (SI)** : l'influence de l'entourage
+
+- **Trust in SNS (TR)** : la confiance dans le service lui-même
+
+- **Privacy Concerns (PC)** : les préoccupations liées à la vie privée
+
+- **Perceived Risk (PR)** : le risque perçu par l'utilisateur
+
+- **Continuance Intention (CI)** : l'intention de continuer à utiliser le service
+
+Ces facteurs sont reliés par des hypothèses (H1 à H9) testées empiriquement, formant un cadre de recherche complet.
+
+### Défis liés à la structure
+
+Au-delà de la confiance, un second ensemble de défis concerne la **compréhension et la modélisation de la structure** du réseau :
+
+- **Diffusion** : comment un phénomène (message, contagion, rumeur) se propage-t-il à travers le réseau ? Comment prédire sa vitesse, le contrôler, voire l'arrêter ?
+
+- **Classement des nœuds (Node Ranking / Inverse Diffusion)** : où se trouvent les sources d'un phénomène ? Qui sont les autorités, les influenceurs, les points d'origine ?
+
+- **Prédiction de liens (Link Prediction)** : peut-on anticiper de nouvelles connexions entre nœuds ? C'est le fondement des systèmes de recommandation (amis, produits, contenus).
+
+---
+
+# Modèle de Réseau en Graphe
+
+## Formalisation mathématique d'un réseau
+
+Un réseau social peut être formellement modélisé comme un **graphe** $G = (V, E)$ où :
+
+- $V$ est l'ensemble des **nœuds** (nodes), représentant les entités (individus, pages, organisations)
+
+- $E$ est l'ensemble des **arêtes** (edges), représentant les relations entre entités
+
+- $W$ est un ensemble de **poids** (weights) associés aux arêtes, représentant la force ou l'intensité de chaque relation
+
+::: {.callout-tip title="Intuition"}
+Pensez à un graphe comme une carte routière : les villes sont les nœuds, les routes sont les arêtes, et la longueur (ou le temps de trajet) correspond aux poids.
+:::
+
+## Graphes orientés et non orientés
+
+La nature de la relation modélisée détermine si le graphe doit être **orienté** (directed) ou **non orienté** (undirected).
+
+### Relations symétriques → graphe non orienté
+
+Si la relation est réciproque par nature, le graphe est non orienté :
+
+- **Collègue de travail (Co-worker)** : si A est collègue de B, alors B est collègue de A
+
+- **Lien de parenté (Kinship)** : la relation familiale est symétrique
+
+- **Goûts partagés (Sharing tastes)** : apprécier la même musique est une propriété partagée
+
+### Relations asymétriques → graphe orienté
+
+Si la relation peut ne pas être réciproque, le graphe est orienté :
+
+- **Amitié (Friendship)** : A peut considérer B comme ami sans que B ne ressente la même chose
+
+- **Voisinage (Neighbor)** : peut être symétrique ou asymétrique selon le contexte
+
+::: {.callout-note title="À retenir"}
+Le choix entre graphe orienté et non orienté n'est pas anodin : il influe directement sur les mesures calculées (degré entrant vs sortant, accessibilité, etc.) et sur l'interprétation des résultats.
+:::
+
+## Structure de communication et structure d'action
+
+### Structure basée sur la communication (Communication-based structure)
+
+Dans ce modèle, les liens entre utilisateurs sont créés explicitement via des actes de communication :
+
+- **Liens explicites** : déclaration d'amitié, abonnement, suivi
+
+- **Liens implicites** : messagerie directe, partages, mentions
+
+- **Liens automatisés** : algorithmes de suggestion ("pourrait être ami avec", "susceptible d'être intéressé par")
+
+Les relations génèrent des données démographiques et **psychographiques** qui alimentent des systèmes de recommandation publicitaire (Ads) et de contenu payant.
+
+### Structure basée sur les actions (Action-based structure, implicite)
+
+Ici, les liens ne sont pas déclarés mais **inférés** à partir des comportements :
+
+- Un utilisateur qui **achète** un produit est implicitement relié à d'autres acheteurs du même produit
+
+- Un utilisateur qui **commente** ou **évalue** un contenu révèle ses préférences
+
+- Ces liens implicites alimentent une **catégorisation psychographique** qui cible l'utilisateur en publicités et services sponsorisés
+
+::: {.callout-tip title="Intuition"}
+La structure implicite est souvent plus révélatrice que la structure explicite : ce que les gens font parle plus fort que ce qu'ils déclarent.
+:::
+
+---
+
+# Propriétés d'un Réseau
+
+## Vue d'ensemble
+
+La théorie des graphes fournit un ensemble riche d'outils formels pour caractériser un réseau. Ces propriétés peuvent être interprétées selon le problème étudié.
+
+On distingue deux niveaux d'analyse :
+
+- **Niveau local** : analyse à l'échelle des nœuds, des paires, des triplets ou de petits groupes
+
+- **Niveau global** : analyse à l'échelle du graphe entier (chemins, composantes)
+
+---
+
+## Caractérisation locale (Local Characterization)
+
+### Niveau des nœuds (Node-level)
+
+#### Degré (Degree)
+
+Le **degré** d'un nœud $v$ est le nombre d'arêtes qui lui sont incidentes.
+
+Dans un graphe orienté, on distingue :
+
+- **Degré sortant (Outdegree)** : nombre d'arêtes partant de $v$ (nombre de personnes que $v$ suit)
+
+- **Degré entrant (Indegree)** : nombre d'arêtes arrivant en $v$ (nombre de personnes qui suivent $v$)
+
+#### Centralité (Centrality)
+
+La **centralité** est une mesure de l'importance d'un nœud dans le réseau. Elle est fondamentale dans l'analyse des réseaux sociaux. Plusieurs définitions existent :
+
+##### Centralité de degré (Degree Centrality)
+
+Mesure à quel point un nœud $v$ est bien connecté. Plus un nœud a de voisins directs, plus il est central au sens du degré.
+
+$$C_D(v) = \frac{\deg(v)}{|V| - 1}$$
+
+::: {.callout-tip title="Intuition"}
+Un utilisateur très populaire sur Twitter (beaucoup de followers) a une haute centralité de degré.
+:::
+
+##### Centralité de proximité (Closeness Centrality)
+
+Mesure à quelle distance moyenne $v$ se trouve de tous les autres nœuds du graphe. Un nœud central au sens de la proximité peut diffuser une information rapidement à l'ensemble du réseau.
+
+$$C_C(v) = \frac{|V| - 1}{\sum_{u \neq v} d(v, u)}$$
+
+où $d(v, u)$ est la distance géodésique (plus court chemin) entre $v$ et $u$.
+
+##### Centralité d'intermédiarité (Betweenness Centrality)
+
+Mesure combien de plus courts chemins entre deux nœuds quelconques passent par $v$. Un nœud à haute intermédiarité est un **pont** ou un **courtier** de l'information.
+
+$$C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}$$
+
+où $\sigma_{st}$ est le nombre total de plus courts chemins de $s$ à $t$ et $\sigma_{st}(v)$ est le nombre de ces chemins passant par $v$.
+
+::: {.callout-tip title="Intuition"}
+Dans un réseau de contacts professionnels, quelqu'un qui met en relation des personnes de milieux très différents (un chasseur de têtes, par exemple) a une haute centralité d'intermédiarité même s'il n'est pas personnellement très connecté.
+:::
+
+##### Centralité propre (Eigenvector Centrality)
+
+Mesure à quel point $v$ est connecté à des nœuds eux-mêmes centraux. L'idée est qu'avoir des connexions importantes vaut plus que d'en avoir de nombreuses mais peu influentes.
+
+::: {.callout-note title="À retenir"}
+**PageRank** (l'algorithme fondateur de Google) est une variante de la centralité propre, adaptée aux graphes orientés. Son coût de calcul est plus élevé que les mesures précédentes.
+:::
+
+---
+
+### Niveau dyadique (Dyadic level)
+
+L'**analyse dyadique** s'intéresse aux paires de nœuds et à la force de la relation qui les unit.
+
+#### Accessibilité (Reachability)
+
+La notion d'accessibilité (reachability) étend la connectivité directe : on dit que $u$ est **accessible** depuis $v$ s'il existe un chemin (de longueur quelconque) reliant $v$ à $u$.
+
+Deux notions dérivées importantes :
+
+- **Graphe d'accessibilité (Reachability graph)** : graphe indiquant, pour chaque paire $(v, u)$, si $u$ est accessible depuis $v$
+
+- **Fermeture transitive (Transitive Closure)** : matrice binaire $T$ telle que $T_{ij} = 1$ si et seulement si $j$ est accessible depuis $i$
+
+::: {.callout-tip title="Intuition"}
+La fermeture transitive répond à la question : "Peuvent-ils se parler, même en passant par des intermédiaires ?"
+:::
+
+---
+
+### Niveau n-adique (N-adic level)
+
+L'analyse n-adique porte sur des groupes de nœuds.
+
+#### Composante connexe (Connected Component)
+
+Une **composante connexe** est un sous-ensemble maximal de nœuds tels que chaque paire est reliée par un chemin.
+
+Dans les graphes orientés, on distingue :
+
+- **Composante fortement connexe (Strongly Connected Component, SCC)** : tout nœud est accessible depuis tout autre nœud
+
+- **Composante faiblement connexe (Weakly Connected Component)** : connexité en ignorant l'orientation des arêtes
+
+#### Clique
+
+Une **clique** est un sous-graphe complet : chaque paire de nœuds est directement reliée.
+
+#### n-Clique
+
+Une **n-clique** est une clique au sens relâché : la distance maximale entre deux membres peut être au plus $n$ (en passant par des nœuds extérieurs à la clique).
+
+Par exemple, dans un graphe à 6 nœuds, une 2-clique peut être $\{2, 3, 4, 5, 6\}$ ou $\{1, 2, 3, 4, 5\}$, où des nœuds intermédiaires (comme 6) ne font pas nécessairement partie du groupe.
+
+#### n-Clan
+
+Un **n-clan** est une n-clique dans laquelle tous les chemins internes de longueur $\leq n$ passent exclusivement par des nœuds appartenant à la clique. C'est une définition plus restrictive que la n-clique.
+
+Exemple : $\{2, 3, 4, 5, 6\}$.
+
+#### k-Core
+
+Un **k-core** est un sous-graphe maximal dans lequel chaque nœud possède un degré **au moins égal à $k$** à l'intérieur du sous-graphe.
+
+::: {.callout-note title="À retenir"}
+Le k-core est une mesure de la cohésion locale : plus $k$ est élevé, plus les membres du groupe sont densément interconnectés.
+:::
+
+---
+
+## Caractérisation globale (Global Characterization)
+
+### Distance géodésique (Geodesic Distance)
+
+La **distance géodésique** entre deux nœuds $u$ et $v$ est la longueur du plus court chemin (shortest path) les reliant. C'est la mesure fondamentale des graphes pour quantifier la "proximité" entre nœuds.
+
+Algorithmes de calcul :
+
+| Algorithme | Portée | Complexité |
+|---|---|---|
+| Multiplication matricielle (naïve) | Tous les couples | $O(\|V\|^3)$ |
+| Strassen | Tous les couples | Légèrement meilleur |
+| Dijkstra | Un seul nœud source | $O(\|V\|^2)$ (améliore avec files de priorité) |
+| Floyd-Warshall | Tous les couples | $O(\|V\|^3)$ |
+
+### Mesures géométriques dérivées
+
+À partir des distances géodésiques, on définit des propriétés globales du graphe :
+
+- **Excentricité (Eccentricity)** d'un nœud $v$ : longueur du plus long des plus courts chemins issus de $v$
+
+$$\text{ecc}(v) = \max_{u \in V} d(v, u)$$
+
+- **Centre du graphe** : nœud(s) ayant l'excentricité minimale
+
+- **Rayon (Radius)** : valeur minimale de l'excentricité sur tous les nœuds
+
+- **Diamètre (Diameter)** : valeur maximale de l'excentricité, i.e. la plus longue des plus courtes distances
+
+::: {.callout-tip title="Intuition"}
+Le diamètre donne une idée de la "taille effective" du graphe. Un réseau à faible diamètre est un réseau dans lequel l'information peut circuler rapidement entre n'importe quelles deux personnes.
+:::
+
+---
+
+## Réseau ego (Ego-network)
+
+Un **réseau ego** (ego-network) est le sous-réseau centré sur un individu particulier (appelé "ego") et composé de ses contacts directs (appelés "alters") ainsi que des liens entre eux.
+
+C'est le réseau social tel qu'il est vécu **de mon point de vue**.
+
+### Homophilie et diversité
+
+Un phénomène central dans les réseaux ego est l'**homophilie** : la tendance des individus à se lier à des personnes qui leur ressemblent. Les **liens forts** sont généralement homophiliques selon :
+
+- La classe sociale
+
+- L'âge et le sexe
+
+- La race
+
+- Les opinions politiques
+
+Cependant, la **diversité** du réseau ego est considérée comme une force sociale : un ego connecté à des groupes variés (amis, collègues, famille, équipiers sportifs) accède à une plus grande diversité d'informations et de ressources.
+
+::: {.callout-note title="À retenir"}
+Ce paradoxe — homophilie des liens forts, mais valeur de la diversité — est au cœur de la théorie des réseaux sociaux. Il est étudié notamment par Granovetter dans sa théorie des "liens faibles" (strength of weak ties).
+:::
+
+---
+
+# Types de Graphes
+
+## Graphe complet (Complete Graph)
+
+Un **graphe complet** $K_n$ est un graphe dans lequel toutes les paires de nœuds sont connectées. Il contient $\frac{n(n-1)}{2}$ arêtes.
+
+Il sert de **référence** pour calculer la **densité** d'un graphe quelconque :
+
+$$\text{densité} = \frac{|E|}{\frac{|V|(|V|-1)}{2}}$$
+
+## Arbre (Tree)
+
+Un **arbre** est un graphe connexe sans cycle. Il possède exactement $|V| - 1$ arêtes.
+
+::: {.callout-tip title="Intuition"}
+Les structures hiérarchiques (organigrammes, arbres de décision) sont naturellement modélisées par des arbres.
+:::
+
+## Graphe acyclique dirigé (DAG — Directed Acyclic Graph)
+
+Un **DAG** est une généralisation orientée de l'arbre : un graphe orienté sans cycle. Il est utilisé pour modéliser des dépendances (tâches, causalité, flux de travail).
+
+## Graphe chemin et graphe cycle
+
+- **Graphe chemin** : séquence linéaire de nœuds, sans branchement
+
+- **Graphe cycle** : les nœuds forment un anneau fermé
+
+---
+
+# Modèles de Graphes Aléatoires
+
+## Modèle d'Erdős-Rényi (1959)
+
+Le modèle **Erdős-Rényi** $G_{N,M}$ est le modèle de graphe aléatoire fondateur : chaque paire de nœuds est connectée indépendamment avec une probabilité $p$, de sorte que :
+
+$$M = p \cdot \binom{N}{2}$$
+
+### Propriétés statistiques
+
+- **Pas de connectivité garantie** : pour des valeurs faibles de $p$, le graphe est fragmenté en nombreuses petites composantes
+
+- **Formation d'une grande composante connexe (GCC)** : à partir d'un seuil critique $p^* = \frac{1}{N}$, une grande composante géante émerge. Ce phénomène est une **transition de phase** : au-dessus du seuil, la GCC grossit rapidement jusqu'à englober quasi tout le graphe
+
+::: {.callout-tip title="Intuition"}
+Imaginez ajouter progressivement des amitiés aléatoires dans une population. Au départ, vous avez de nombreux groupes isolés. À un moment précis, ces groupes fusionnent soudainement en une immense composante connectée — c'est la transition de phase.
+:::
+
+## Modèle « Petit Monde » (Small World — Watts & Strogatz, 1998)
+
+Ce modèle formalise l'expérience de **Stanley Milgram** (1967), qui avait montré empiriquement que toute personne aux États-Unis pouvait atteindre n'importe quelle autre en passant par environ 6 intermédiaires (« six degrés de séparation »).
+
+Le modèle Watts-Strogatz génère des graphes à :
+
+- **Petit diamètre** : les distances entre nœuds sont courtes
+
+- **Fort coefficient de clustering** : les voisins d'un nœud sont eux-mêmes souvent connectés entre eux
+
+Il est construit en partant d'un graphe circulaire régulier, puis en « recâblant » aléatoirement une fraction $\beta$ des arêtes.
+
+::: {.callout-note title="À retenir"}
+Les réseaux sociaux réels présentent cette propriété de « petit monde » : même dans un réseau de milliards de personnes, le nombre de sauts nécessaires pour connecter deux individus quelconques est étonnamment faible.
+:::
+
+## Graphes Sans Échelle (Scale-Free Graphs — Barabási & Albert, 1999)
+
+### Propriétés statistiques
+
+Les **graphes sans échelle** (scale-free graphs) se distinguent par une distribution des degrés suivant une **loi de puissance** (power law) :
+
+$$P(k) \sim k^{-\gamma}$$
+
+Cela signifie qu'il existe quelques nœuds très hautement connectés (les **hubs**), et une très grande majorité de nœuds faiblement connectés. Ces graphes ont également un **petit diamètre**.
+
+### Construction par attachement préférentiel
+
+Le modèle de Barabási-Albert génère des graphes sans échelle par **attachement préférentiel** (preferential attachment) : chaque nouveau nœud ajouté au graphe se connecte avec une probabilité proportionnelle au degré des nœuds existants.
+
+$$P(\text{connexion à } v) \propto \deg(v)$$
+
+::: {.callout-tip title="Intuition"}
+« Les riches s'enrichissent » : plus un nœud est déjà connecté, plus il attire de nouvelles connexions. C'est exactement ainsi que fonctionnent les influenceurs sur les réseaux sociaux — leur popularité initiale leur attire encore plus de followers.
+:::
+
+### Comparaison : aléatoire vs sans échelle
+
+| Propriété | Graphe aléatoire (ER) | Graphe sans échelle |
+|---|---|---|
+| Distribution des degrés | Poisson (clochée) | Loi de puissance |
+| Hubs | Absents | Présents |
+| Diamètre | Modéré | Faible |
+| Robustesse aux attaques ciblés | Bonne | Vulnérable (si hub attaqué) |
+| Robustesse aux pannes aléatoires | Fragile | Robuste |
+
+---
+
+# Coupure et Partitionnement de Graphe
+
+## Coupure de graphe (Graph Cut)
+
+Une **coupure d'arêtes** (edge-cut) $C$ est une partition de l'ensemble des nœuds $V$ en deux sous-ensembles $S$ et $V \setminus S$. La coupure est l'ensemble des arêtes reliant un nœud de $S$ à un nœud de $V \setminus S$.
+
+De façon analogue, une **coupure de sommets** (vertex-cut) utilise un sous-ensemble de nœuds (plutôt que d'arêtes) comme séparateur.
+
+## Problème de coupure minimale (Minimum Cut)
+
+Le problème consiste à trouver la coupure d'arêtes de **coût minimal** :
+
+> Quel est l'ensemble minimal d'arêtes dont la suppression augmente le nombre de composantes connexes ?
+
+Ce problème informe sur la **robustesse** du graphe : un graphe avec une coupure minimale de faible coût est fragile face aux pannes ou aux attaques.
+
+::: {.callout-important title="Complexité algorithmique"}
+Le problème de coupure minimale est **NP-difficile** dans le cas général. Des algorithmes d'approximation sont utilisés en pratique, dont l'algorithme de **coupure normalisée** (normalized cut) issu de la **théorie spectrale des graphes**.
+:::
+
+## Partitionnement spectral (Spectral Graph Partitioning)
+
+L'approche spectrale repose sur la décomposition du **Laplacien du graphe** $L = D - A$, où :
+
+- $A$ est la matrice d'adjacence du graphe
+
+- $D = \text{diag}(\deg(A))$ est la matrice diagonale des degrés
+
+### Algorithme de coupure normalisée (Normalized Cut)
+
+```
+Entrée  : matrice d'adjacence A
+Sortie  : vecteur indicateur de classe s
+
+1. Calculer D = diag(deg(A))
+2. Calculer L = D - A
+3. Résoudre pour le deuxième plus petit vecteur propre :
+     - Coupure minimale    : Lx = λx
+     - Coupure normalisée  : Lx = λDx
+4. Poser s = sign(x₂)
+```
+
+Le signe du deuxième vecteur propre (vecteur de Fiedler) indique l'appartenance de chaque nœud à l'une des deux partitions ($s = -1$ ou $s = +1$).
+
+::: {.callout-tip title="Intuition"}
+Le Laplacien capture la structure de connectivité du graphe. Ses vecteurs propres encodent des "fréquences" du graphe, analogues aux fréquences de Fourier pour les signaux — d'où le terme "théorie spectrale".
+:::
+
+## Modularité et détection de communautés
+
+La **modularité** (modularity) est une mesure de la qualité d'une partition d'un graphe en communautés : elle compare la densité interne des communautés à celle attendue dans un graphe aléatoire équivalent.
+
+### Algorithme de Louvain et algorithme de Leiden
+
+L'**algorithme de Louvain** est l'un des algorithmes les plus populaires pour la détection de communautés. Cependant, une étude de Traag, Waltman et van Eck (2019, *Scientific Reports*) a montré qu'il peut produire des communautés **arbitrairement mal connectées**, voire **déconnectées** dans certains cas.
+
+L'**algorithme de Leiden** a été introduit pour remédier à ce défaut. Il garantit des communautés **connectées** et converge vers une partition dans laquelle tous les sous-ensembles de toutes les communautés sont localement optimalement assignés. De plus, il est **plus rapide** que Louvain.
+
+---
+
+# Marches Aléatoires et Chaînes de Markov
+
+## Définition d'une marche aléatoire (Random Walk)
+
+Étant donné un graphe connexe $G = (V, E)$, une **marche aléatoire** (random walk) est une séquence $W = (w_0, w_1, \ldots)$ construite comme suit :
+
+- **Initialisation** : choisir un sommet initial $w_0 = v_i$
+
+- **Induction** : depuis le sommet courant $w_t = v_j$, se déplacer vers un voisin $v_k = w_{t+1}$ selon une **politique de déplacement** (par exemple, choisir uniformément parmi les voisins)
+
+- **Arrêt** : soit après $T$ pas (horizon fixé), soit lorsqu'un état absorbant est atteint
+
+## Formalisme de la marche aléatoire simple
+
+Pour une **marche aléatoire simple** (simple random walk), si $d_i$ est le degré du sommet $v_i$, la probabilité de passer de $v_i$ à $v_j$ est :
+
+$$p_{ij} = P(w_{t+1} = v_j \mid w_t = v_i) = \begin{cases} \frac{1}{d_i} & \text{si } (v_i, v_j) \in E \\ 0 & \text{sinon} \end{cases}$$
+
+::: {.callout-note title="À retenir"}
+Cette probabilité **ne dépend pas** de comment on est arrivé en $v_i$ — c'est la propriété **sans mémoire** (memoryless) fondamentale. La marche aléatoire est donc une **chaîne de Markov**.
+:::
+
+## Matrice stochastique (Stochastic Matrix)
+
+La matrice de transition $P = (p_{ij})$ est une **matrice stochastique** (stochastic matrix) :
+
+- $p_{ij} \geq 0$ pour tout $i, j$
+
+- $\sum_j p_{ij} = 1$ pour tout $i$ (la somme de chaque ligne vaut 1)
+
+On peut l'écrire matriciellement : si $D = \text{diag}(1/d_1, \ldots, 1/d_N)$ et $A$ est la matrice d'adjacence, alors :
+
+$$P = DA$$
+
+## Distribution de probabilité et évolution temporelle
+
+Soit $\varpi_t(i) = P(w_t = v_i)$ la distribution de probabilité sur les sommets à l'instant $t$.
+
+L'évolution de cette distribution suit :
+
+$$\varpi_{t+1} = \varpi_t P$$
+
+En partant de la distribution initiale $\varpi_0$ :
+
+$$\varpi_t = \varpi_0 P^t \quad \forall t \geq 0$$
+
+## Distribution stationnaire (Stationary Distribution)
+
+Puisque $G$ est connexe, la chaîne de Markov est **irréductible** : tout sommet est accessible depuis tout autre. Le **théorème de Perron-Frobenius** garantit alors l'existence d'un unique vecteur $\pi$ positif, vecteur propre gauche de $P$ pour la valeur propre dominante $\lambda = 1$ :
+
+$$\pi = \pi P$$
+
+La distribution stationnaire vérifie :
+
+- $\pi(i) \geq 0$ pour tout $i$
+
+- $\sum_i \pi(i) = 1$
+
+::: {.callout-tip title="Intuition"}
+La distribution stationnaire représente la proportion du temps qu'un marcheur aléatoire passe sur chaque nœud, à long terme. Dans un graphe non orienté, $\pi(i) \propto d_i$ : les nœuds très connectés sont visités plus fréquemment.
+:::
+
+---
+
+# Diffusion sur les Réseaux
+
+## Importance de la diffusion
+
+La **diffusion** (diffusion) sur un réseau est un processus fondamental pour :
+
+- **Comprendre le réseau lui-même** : la diffusion révèle la connectivité locale et globale, les centralités, les distances
+
+- **Modéliser des phénomènes réels** : propagation d'information, contagion épidémique, feux de forêt, rumeurs
+
+## Lien avec l'équation de la chaleur de Fourier
+
+La diffusion sur réseau est formellement analogue à la **théorie de la chaleur de Fourier**, qui décrit comment la température $T$ se propage dans un milieu continu :
+
+$$\frac{\partial T}{\partial t} = \alpha \Delta T$$
+
+Ici, le **Laplacien local** $\Delta$ est remplacé par le **Laplacien du graphe** $L$. Le niveau local $T$ peut être interprété comme la quantité d'information reçue par un nœud.
+
+Les connexions sont importantes :
+
+- La **marche aléatoire** = diffusion d'une seule particule
+
+- La **distribution stationnaire** = diffusion globale à l'équilibre
+
+- L'**état fixe de la diffusion** = vecteur propre dominant de $P$ (par Perron-Frobenius)
+
+- Ces résultats relient directement diffusion, **PageRank** et **partitionnement spectral**
+
+---
+
+## Modèle de diffusion inverse — Influence
+
+### Modèles classiques
+
+- **Independent Cascade Model** : chaque nœud infecté tente d'infecter ses voisins avec une probabilité fixe, une seule fois
+
+- **Linear Threshold Model** : un nœud devient actif lorsque l'influence cumulée de ses voisins actifs dépasse un seuil
+
+### PageRank comme diffusion inverse
+
+Dans le modèle de **diffusion inverse** (inverse diffusion), l'objectif est d'identifier les **sources** d'un phénomène plutôt que de prédire sa propagation. La probabilité qu'un nœud $j$ soit influencé par un nœud $i$ est :
+
+$$p_{j|i} = \frac{1 - \nu}{d_i} \delta_{i \to j} + \frac{\nu}{N}$$
+
+où $\nu$ est la probabilité de **téléportation** (teleport) — un saut vers un nœud aléatoire du réseau, indépendamment de la structure.
+
+Ce modèle minimise l'entropie de la distribution latente pour être représentatif dans le réseau, et est à la base du **modèle d'apprentissage de nœuds représentatifs** (skeleton learning model).
+
+::: {.callout-note title="À retenir"}
+Dans une étude sur un réseau social scolaire (Sun et al., 2013), l'influence calculée par ce modèle s'est révélée fortement corrélée au degré des nœuds : les individus les plus connectés sont aussi les plus influents.
+:::
+
+---
+
+## Modèles épidémiques (Epidemic Models)
+
+Les modèles de diffusion épidémique décrivent la propagation d'une "infection" (qui peut être une maladie, une information, une idée) dans une population de $N$ agents.
+
+### Modèle SI (Susceptible-Infected)
+
+Le modèle SI est le plus simple. Chaque agent est soit **susceptible** (S, sain) soit **infecté** (I, malade). La transition S → I est irréversible.
+
+$$\frac{dI(t)}{dt} = \beta \cdot k \cdot \frac{S(t)}{N} \cdot I(t)$$
+
+- $\beta$ : probabilité de transmission à chaque contact
+
+- $k$ : nombre moyen de contacts par unité de temps
+
+- $S(t)/N$ : proportion de la population encore susceptible
+
+#### Régimes d'évolution
+
+- **Régime exponentiel** (quand $I$ est petit) : $i(t) \approx i_0 e^{\beta k t}$
+
+- **Régime de saturation** (quand $I \to 1$) : la croissance ralentit, $di/dt \to 0$
+
+::: {.callout-tip title="Intuition"}
+Le modèle SI modélise parfaitement la **propagation d'une information virale** ou un **feu de forêt** : une fois infecté (informé), on ne l'oublie pas.
+:::
+
+### Modèle SIS (Susceptible-Infected-Susceptible)
+
+Le modèle SIS introduit un **taux de guérison** $\mu$ : un agent infecté peut redevenir susceptible.
+
+$$\frac{dI(t)}{dt} = \beta \cdot k \cdot \frac{S(t)}{N} \cdot I(t) - \mu I(t)$$
+
+Le **nombre de reproduction de base** (basic reproduction number) est :
+
+$$R_0 = \frac{\beta k}{\mu}$$
+
+- $R_0 > 1$ : la diffusion persiste, l'épidémie se maintient
+
+- $R_0 < 1$ : les agents guérissent plus vite qu'ils ne sont infectés, l'épidémie s'éteint
+
+::: {.callout-tip title="Intuition"}
+Le modèle SIS correspond à une **propagation d'information avec oubli** : on peut "oublier" une nouvelle et être de nouveau susceptible de la recevoir.
+:::
+
+### Modèle SIR (Susceptible-Infected-Removed)
+
+Le modèle SIR ajoute un état **Removed** (R) : les agents guéris acquièrent une **immunité permanente** et ne peuvent plus être infectés.
+
+$$\frac{ds}{dt} = -\beta \langle k \rangle i [1 - r - i]$$
+
+$$\frac{di}{dt} = -\mu i + \beta \langle k \rangle i [1 - r - i]$$
+
+$$\frac{dr}{dt} = \mu i$$
+
+Ce modèle correspond mieux à une **infection virale réelle** avec immunité acquise. La variante **SIRS** ajoute une immunité temporaire (retour vers S après un délai).
+
+### Comparaison des modèles
+
+| | **SI** | **SIS** | **SIR** |
+|---|---|---|---|
+| Régime exponentiel | $i_0 e^{\beta k t}$ | formule SIS | Pas de solution fermée |
+| État final ($t \to \infty$) | $i(\infty) = 1$ | $i(\infty) = 1 - \mu/(\beta k)$ | $i(\infty) = 0$ |
+| Seuil épidémique | Aucun | $R_0 = 1$ | $R_0 = 1$ |
+
+::: {.callout-note title="À retenir"}
+Le seuil épidémique $R_0 = 1$ est un concept fondamental en santé publique. En dessous de ce seuil, toute épidémie s'éteint d'elle-même. Les campagnes de vaccination visent précisément à faire passer $R_0$ en dessous de 1 dans la population non vaccinée.
+:::
+
+---
+
+# Ségrégation Spatiale
+
+## Modèle de Schelling (1971)
+
+Le **modèle de Schelling** (Schelling's model) est un modèle de simulation agent qui décrit comment des préférences individuelles modérées peuvent mener à une **ségrégation globale** très forte.
+
+### Hypothèses du modèle
+
+- **2 types d'agents** (par exemple, deux groupes démographiques distincts)
+
+- Chaque agent a une **préférence** pour que **une certaine proportion** de ses voisins lui ressemble (**homophilie**)
+
+- À chaque pas de temps, chaque agent insatisfait **se déplace** vers un emplacement où sa condition est remplie
+
+### Résultat surprenant
+
+Même avec des préférences de tolérance modérées (par exemple, "je veux au moins 30% de voisins similaires"), la simulation converge vers une **forte ségrégation** de l'espace, bien plus marquée que ce que les préférences individuelles ne laissaient présager.
+
+::: {.callout-tip title="Intuition"}
+Ce modèle illustre un phénomène de **propriété émergente** : un comportement collectif (ségrégation forte) résulte d'intentions individuelles qui ne la visaient pas. C'est un argument puissant en faveur de l'étude des systèmes complexes.
+:::
+
+---
+
+# Réseaux d'Association et de Collaboration
+
+## Réseaux d'association (Association Networks)
+
+Un **réseau d'association** est essentiellement un graphe **k-parti** entre groupes d'entités (potentiellement de types différents).
+
+Exemple classique : le graphe **utilisateur–produit** (user-item graph) dans un système de recommandation. Les arêtes représentent des interactions (achat, évaluation, visionnage). La **prédiction de liens** dans ce graphe est le fondement du **filtrage collaboratif** (collaborative filtering).
+
+::: {.callout-note title="À retenir"}
+Dans un graphe biparti utilisateur-produit, la recommandation revient à prédire quelles arêtes manquantes seraient les plus pertinentes — c'est un problème de prédiction de liens.
+:::
+
+## Réseaux de collaboration (Collaboration Networks) et Hypergraphes
+
+Lorsque des **groupes d'agents** interagissent collectivement, sans distinction individuelle au sein du groupe (par exemple, des co-auteurs d'un article, des membres d'une équipe projet), le modèle de graphe classique est insuffisant.
+
+### Hypergraphes
+
+Un **hypergraphe** (hypergraph) étend la notion de graphe en permettant à une **hyper-arête** (hyperedge) de connecter **plus de deux nœuds simultanément**. Chaque hyperedge représente une interaction de groupe.
+
+Les hypergraphes peuvent être représentés comme des **graphes bipartis** (hyperedges – vertices) pour les traiter avec les outils classiques.
+
+### Représentations visuelles
+
+Plusieurs représentations existent pour visualiser les hypergraphes :
+
+- **Diagramme d'Euler** : les hyperedges comme ensembles imbriqués ou superposés
+
+- **Représentation PaintSplash** : coloration des zones
+
+- **Représentation de Zykov** : nœuds fusionnés
+
+- **Représentation extra-node** : graphe biparti avec nœuds auxiliaires
+
+### Domaines de recherche ouverts
+
+Les hypergraphes constituent encore un **domaine de recherche actif**, notamment pour :
+
+- La **diffusion** sur hypergraphes
+
+- La **théorie spectrale** des hypergraphes
+
+---
+
+# Inférence de Confiance et Réputation
+
+## Transititivité des relations de confiance
+
+Un problème important dans les réseaux sociaux est l'**inférence de confiance** (trust inference) : comment estimer la confiance entre deux nœuds non directement reliés, à partir de chemins intermédiaires ?
+
+Le principe fondateur est :
+
+> **Si A fait confiance à B, et B fait confiance à C, alors A peut (dans une certaine mesure) faire confiance à C.**
+
+### Formalisation
+
+Soient :
+
+- $C_{A \to B}$ : la confiance de A envers B
+
+- $R_A$ : la réputation de A
+
+La confiance indirecte $C_{A \to C}$ et la réputation $R_C$ peuvent être estimées de différentes façons.
+
+**Modèle simple (multiplicatif)** :
+
+$$C_{A \to C} = C_{B \to C} \cdot C_{A \to B}$$
+
+$$R_C = \frac{C_{A \to C} + C_{B \to C}}{2}$$
+
+**Modèle avec réputation existante** :
+
+$$C_{A \to C} = \frac{R_C + C_{B \to C} \cdot C_{A \to B}}{2}$$
+
+$$R_C = \frac{C_{A \to C} + C_{B \to C}}{2}$$
+
+::: {.callout-tip title="Intuition"}
+Ce modèle est une généralisation du bouche-à-oreille : la confiance se propage le long des chemins du réseau, mais s'atténue à chaque intermédiaire.
+:::
+
+---
+
+# Outils et Ressources
+
+## Bibliothèques logicielles
+
+Pour implémenter et analyser des réseaux sociaux, les principaux outils sont :
+
+- **R** : bibliothèque `igraph` — très complète pour l'analyse de graphes et les visualisations
+
+- **Python** : bibliothèque `NetworkX` — standard de facto pour le prototypage et l'analyse en Python
+
+D'autres outils spécialisés existent (Gephi pour la visualisation, SNAP de Stanford pour les très grands graphes).
+
+## Données disponibles
+
+Des jeux de données publics pour expérimenter :
+
+- **SNAP datasets** (Stanford Network Analysis Platform) : graphes de réseaux sociaux réels à grande échelle
+
+- **Network Science book datasets** (Barabási, en ligne) : données associées au manuel de référence
+
+- **Socio-patterns data** : données de contacts physiques entre individus, mesurés par capteurs
+
+---
+
+# Synthèse
+
+## Ce qu'il faut retenir
+
+Les réseaux sociaux sont des structures omniprésentes qui sous-tendent toute forme d'interaction entre agents. Leur modélisation comme **graphes** (ou **hypergraphes**) ouvre l'accès à tout l'arsenal de la **théorie des graphes** pour en analyser la structure et la dynamique.
+
+Les grandes familles de questions en analyse de réseaux sociaux sont :
+
+**Structure statique :**
+
+- Centralité des nœuds (degré, proximité, intermédiarité, valeur propre)
+
+- Détection de communautés (partitionnement spectral, Louvain, Leiden)
+
+- Mesures globales (diamètre, rayon, composantes connexes)
+
+**Dynamique :**
+
+- Modèles de diffusion (SI, SIS, SIR, SIRS)
+
+- Marches aléatoires et distribution stationnaire
+
+- Ségrégation spatiale (Schelling)
+
+**Dynamique inverse :**
+
+- Identification des sources et des influenceurs
+
+- Inférence de confiance et réputation
+
+**Modèles générateurs :**
+
+- Erdős-Rényi (aléatoire)
+
+- Watts-Strogatz (petit monde)
+
+- Barabási-Albert (sans échelle, attachement préférentiel)
+
+::: {.callout-note title="À retenir"}
+L'analyse des réseaux sociaux est un domaine de recherche actif, à la croisée des mathématiques (théorie des graphes, algèbre linéaire, probabilités), de l'informatique (algorithmique, apprentissage automatique) et des sciences sociales (sociologie, économie comportementale).
+:::
+
+---
+
+## Bibliographie
+
+- **Barabási, A.-L.** — *Network Science*, 2016 (disponible en ligne)
+
+- **Easley, D. & Kleinberg, J.** — *Networks, Crowds, and Markets: Reasoning about a Highly Connected World*, 2010 (disponible en ligne)
+
+- **Hanneman, R.A. & Riddle, M.** — *Introduction to Social Network Methods*, 2005 (disponible en ligne)
+
+- **Raj P.M., K. et al.** — *Practical Social Network Analysis with Python*, Springer, 2018
+
+- **Kolaczyk, E.D. & Csárdi, G.** — *Statistical Analysis of Network Data with R*, Springer, 2014
+
+- **Newman, M.** — *Networks: An Introduction*, Oxford University Press, 2010
+
+- **Barabási, A.-L. & Frangos, J.** — *Linked: The New Science of Networks*, Basic Books, 2002
+
+- **Newman, M., Watts, D.J. & Barabási, A.-L.** — *The Structure and Dynamics of Networks*, Princeton University Press, 2006

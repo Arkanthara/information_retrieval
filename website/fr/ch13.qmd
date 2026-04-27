@@ -1,0 +1,631 @@
+---
+title: "Recherche de Cible et Processus de Décision Markovien"
+---
+
+# Introduction : Le Paradigme Agent-Environnement
+
+La recherche d'information interactive peut être formalisée comme un **processus dynamique** dans lequel un agent agit sur un environnement pour atteindre un objectif. Ce cadre général, appelé **boucle Action-Perception** (Action-Perception loop), est fondamental pour comprendre les systèmes intelligents de recherche.
+
+## La Boucle Action-Perception (Action-Perception Loop)
+
+Un agent évolue en interaction continue avec son environnement selon deux mécanismes :
+
+- **Perception** : l'agent observe l'état courant de l'environnement (état $s_t$), ainsi que les résultats de ses actions passées.
+- **Action** : l'agent agit sur l'environnement pour progresser vers un but.
+
+```{mermaid}
+flowchart LR
+    A[Agent] -->|Action| E[Environnement\nContexte]
+    E -->|Perception état s_t| A
+```
+
+::: {.callout-note title="À retenir"}
+Les processus dynamiques cherchent à **maximiser une fonction d'utilité** ou à **atteindre un objectif**. Cela nécessite un modèle de la forme :
+
+$$P(s_{t+1} \mid s_0, s_1, \ldots, s_t)$$
+
+qui décrit comment l'état évolue au fil du temps.
+:::
+
+---
+
+# Processus de Markov (Markov Process)
+
+## La Propriété de Markov (Markov Property)
+
+::: {.callout-important title="Définition — Propriété de Markov"}
+Un processus est dit **markovien** si chaque état constitue une représentation suffisante de son histoire. Formellement :
+
+$$P(s_{t+1} \mid s_0, s_1, \ldots, s_t) = P(s_{t+1} \mid s_t)$$
+:::
+
+Cette propriété a plusieurs implications importantes :
+
+- L'état $s_t$ **encode** toute l'histoire passée $h_t = (s_0, s_1, \ldots, s_t)$.
+- La probabilité de transition depuis $s_t$ ne dépend **pas de la trajectoire** qui y a mené.
+- Le **futur** en $(t+1)$ est indépendant du **passé** $(0, \ldots, t-1)$, conditionnellement au **présent** $s_t$.
+- Un état est une **statistique suffisante** pour modéliser le futur.
+
+::: {.callout-tip title="Intuition"}
+Imaginez que vous jouez aux échecs. La propriété de Markov signifie que la **position actuelle des pièces** contient toute l'information nécessaire pour jouer de manière optimale — l'histoire complète de la partie n'apporte rien de plus.
+:::
+
+## Processus de Markov (Markov Process — MP)
+
+Un **Processus de Markov** est un couple $(S, P)$ où :
+
+- $S$ est un **espace d'états discret** (fini ou dénombrable)
+- $P$ est la **dynamique de transition** : $P(s_{t+1} \mid s_t)$, satisfaisant la propriété de Markov
+
+::: {.callout-note title="Remarque"}
+Un Processus de Markov simple ne comporte **ni actions ni récompenses** (pas d'actions, pas de récompense). C'est la brique de base sur laquelle se construisent les modèles plus riches.
+:::
+
+### La Matrice de Transition (Transition Matrix)
+
+Pour un espace d'états **fini**, on peut représenter les probabilités de transition sous forme matricielle :
+
+$$A_{ij} = P(s_{t+1} = s_j \mid s_t = s_i)$$
+
+La matrice $A$ est une **matrice stochastique** : chaque ligne somme à 1.
+
+Un Processus de Markov génère une **chaîne de Markov** (Markov Chain).
+
+::: {.callout-tip title="Intuition — Marche aléatoire"}
+Un exemple classique est la **marche aléatoire dans un graphe** : les nœuds sont les états, les arêtes représentent les transitions possibles, et la matrice $A$ est la matrice d'adjacence normalisée.
+
+Application directe : l'algorithme **PageRank** de Google modélise la navigation sur le Web comme une chaîne de Markov.
+:::
+
+## Chaîne de Markov — Exemple
+
+Considérons un système à deux états $E$ et $A$ avec les transitions suivantes :
+
+- $P(E \to E) = 0.3$, $P(E \to A) = 0.7$
+- $P(A \to E) = 0.4$, $P(A \to A) = 0.6$
+
+La matrice de transition est :
+
+$$A = \begin{pmatrix} 0.3 & 0.7 \\ 0.4 & 0.6 \end{pmatrix}$$
+
+::: {.callout-tip title="Propriétés à analyser"}
+Pour une chaîne de Markov, on s'intéresse notamment à :
+
+- L'**ergodicité** (peut-on atteindre tous les états ?)
+- La **distribution stationnaire** $\pi$ telle que $\pi = \pi A$
+- La **convergence** vers cet équilibre
+:::
+
+---
+
+# Processus de Récompense de Markov (Markov Reward Process — MRP)
+
+## Définition
+
+On enrichit le Processus de Markov en introduisant un **signal de récompense** qui permet d'évaluer la qualité des états visités.
+
+::: {.callout-important title="Définition — MRP"}
+Un **Processus de Récompense de Markov** est un quadruplet $(S, P, R, \gamma)$ où :
+
+- $S$ : espace d'états discret (fini)
+- $P$ : dynamique de transition $P(s_{t+1} \mid s_t)$
+- $R$ : **fonction de récompense** $r_t = R(s_t)$
+- $\gamma \in (0, 1)$ : **facteur de décompte** (discount factor)
+
+Il n'y a toujours **pas d'actions** dans un MRP — l'agent suit passivement les dynamiques.
+:::
+
+### Exemple — Souris dans un Labyrinthe
+
+Imaginons une souris naviguant dans un labyrinthe :
+
+- $R(\text{sortie}) = +10$ : récompense positive pour atteindre la sortie
+- $R(\text{piège}) = -10$ : pénalité pour tomber dans un piège
+- $R(\text{couloir}) = 0$ : pas de récompense pour les états neutres
+
+::: {.callout-tip title="Intuition — Récompense différée"}
+La récompense peut être **différée** : une action prise maintenant peut n'apporter de bénéfice que plusieurs étapes plus tard. Le facteur $\gamma$ permet de modéliser l'importance relative des récompenses futures par rapport aux immédiates.
+:::
+
+## Le Retour (Return)
+
+::: {.callout-important title="Définition — Retour $G_t$"}
+Étant donné un MRP $(S, P, R, \gamma)$ et un horizon fini $T$, le **retour** $G_t$ est la somme actualisée des récompenses collectées à partir du temps $t$ :
+
+$$G_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \gamma^3 r_{t+3} + \cdots + \gamma^{T-t+1} r_T$$
+:::
+
+### Le Facteur de Décompte $\gamma$
+
+Le paramètre $\gamma \in (0, 1)$ contrôle l'importance accordée aux récompenses futures :
+
+- $\gamma \approx 0$ : l'agent est **myope**, seule la récompense immédiate compte
+- $\gamma \approx 1$ : **pas de décompte**, toutes les récompenses futures sont aussi importantes que la récompense immédiate
+- **Cas général** : les récompenses passées sont exponentiellement moins importantes, ce qui garantit la convergence pour les horizons infinis
+
+::: {.callout-note title="À retenir"}
+$T$ est le nombre de pas d'un **épisode** (une activation complète du processus). Si $T$ n'est pas fini, on parle de MRP à horizon infini ; le facteur $\gamma < 1$ garantit alors que $G_t$ reste borné.
+:::
+
+## La Fonction de Valeur d'État (State Value Function)
+
+::: {.callout-important title="Définition — $V(s)$"}
+La **fonction de valeur d'état** en $s$ est l'**espérance du retour** en arrivant à l'état $s$ :
+
+$$V(s) = \mathbb{E}[G_t \mid s_t = s] = \mathbb{E}[r_t + \gamma r_{t+1} + \cdots \mid s_t = s]$$
+:::
+
+C'est le **retour moyen** attendu quand on se trouve en $s_t$ en suivant les dynamiques de transition.
+
+::: {.callout-tip title="Intuition"}
+$V(s)$ répond à la question : "Combien vaut-il en moyenne d'être dans l'état $s$ ?" Un état avec une haute valeur est un état depuis lequel on peut espérer collecter beaucoup de récompenses à l'avenir.
+:::
+
+## L'Équation de Bellman pour un MRP
+
+### Dérivation
+
+La fonction de valeur satisfait une **équation de récurrence** fondamentale. En développant $G_t$ :
+
+$$V(s) = \mathbb{E}[r_t + \gamma G_{t+1} \mid s_t = s]$$
+
+$$= r_t + \gamma \mathbb{E}[G_{t+1} \mid s_t = s]$$
+
+$$= r_t + \gamma \sum_{s'} P(s' \mid s) \, \mathbb{E}[G_{t+1} \mid s_{t+1} = s']$$
+
+On obtient l'**équation de Bellman** pour un MRP :
+
+$$\boxed{V(s) = R(s) + \gamma \sum_{s'} P(s' \mid s) \, V(s')}$$
+
+Ou sous forme matricielle compacte :
+
+$$\mathbf{V} = \mathbf{R} + \gamma P \mathbf{V}$$
+
+avec $\mathbf{V} = [V(s_i)]_i$ et $\mathbf{R} = [R(s_i)]_i$.
+
+::: {.callout-tip title="Intuition — Rétropropagation de valeur"}
+L'équation de Bellman signifie que la valeur d'un état est égale à la **récompense immédiate** plus la **valeur espérée des états successeurs actualisée**. On peut ainsi **rétropropager** la valeur depuis les états terminaux vers les états initiaux, même en présence de récompenses différées.
+:::
+
+## Solution en Forme Fermée (Closed Form)
+
+Pour un MRP fini, l'équation de Bellman admet un **point fixe**. En résolvant $\mathbf{V} = \mathbf{R} + \gamma P \mathbf{V}$ :
+
+$$\mathbf{V} = (I - \gamma P)^{-1} \mathbf{R}$$
+
+Cette solution est cohérente avec la série géométrique infinie :
+
+$$1 + x + x^2 + x^3 + \cdots = \frac{1}{1-x}, \quad -1 < x < 1$$
+
+::: {.callout-warning title="Limitation computationnelle"}
+Bien que la forme fermée soit élégante, elle est **coûteuse en pratique** :
+
+- $P$ est une matrice $N \times N$
+- L'inversion de matrice coûte $\mathcal{O}(N^3)$
+
+Pour les grands espaces d'états, on recourt à des **algorithmes itératifs** (Programmation Dynamique) pour approcher $\mathbf{V}$.
+:::
+
+---
+
+# Processus de Décision de Markov (Markov Decision Process — MDP)
+
+## Définition
+
+On enrichit maintenant le MRP en introduisant la notion d'**actions** : l'agent peut maintenant **choisir** comment interagir avec l'environnement.
+
+::: {.callout-important title="Définition — MDP"}
+Un **Processus de Décision de Markov** est un quintuplet $(S, A, P, R, \gamma)$ où :
+
+- $S$ : espace d'états
+- $A$ : **ensemble des actions** disponibles
+- $P(s' \mid s, a)$ : probabilité de transiter de $s$ vers $s'$ en prenant l'action $a$ (modèle ou dynamiques)
+- $R(s, a) = \mathbb{E}[r_t \mid s, a]$ : **fonction de récompense** dépendant de l'état et de l'action
+- $\gamma \in (0, 1)$ : facteur de décompte
+:::
+
+::: {.callout-tip title="Intuition — Pourquoi les actions changent tout ?"}
+Dans un MRP, l'agent est passif : il suit les dynamiques sans choix. Dans un MDP, l'agent dispose d'un **pouvoir décisionnel** : il choisit l'action $a_t$ à chaque étape, ce qui détermine les transitions futures. L'objectif est d'apprendre quelle action prendre dans chaque état pour maximiser le retour cumulé.
+:::
+
+## Politique (Policy)
+
+Une **politique** $\pi$ est la stratégie de l'agent. Elle définit la distribution de probabilité sur les actions pour chaque état :
+
+$$\pi(a \mid s) = P(A_t = a \mid s_t = s)$$
+
+Une politique **déterministe** associe une action unique à chaque état : $\pi(s) = a$.
+
+## Fonctions de Valeur pour un MDP
+
+### Fonction de Valeur d'État $V_\pi(s)$
+
+::: {.callout-important title="Définition — $V_\pi(s)$"}
+La **fonction de valeur d'état** sous la politique $\pi$ est l'espérance du retour en partant de l'état $s$ et en suivant $\pi$ :
+
+$$V_\pi(s) = \mathbb{E}_\pi[G_t \mid s_t = s] = \mathbb{E}_\pi[r_t + \gamma r_{t+1} + \cdots \mid s_t = s]$$
+:::
+
+### Fonction de Valeur État-Action $Q_\pi(s, a)$
+
+::: {.callout-important title="Définition — $Q_\pi(s, a)$"}
+La **fonction de valeur état-action** (ou **Q-valeur**) sous la politique $\pi$ est l'espérance du retour en partant de l'état $s$, en prenant l'action $a$, puis en suivant $\pi$ :
+
+$$Q_\pi(s, a) = \mathbb{E}_\pi[G_t \mid s_t = s, a_t = a]$$
+
+Le **Q** signifie **qualité** : $Q(s, a)$ mesure la force de l'association état-action.
+:::
+
+### Relation entre $V_\pi$ et $Q_\pi$
+
+On peut exprimer la valeur d'état comme la moyenne des Q-valeurs pondérées par la politique :
+
+$$V_\pi(s) = \mathbb{E}_{a \sim \pi(\cdot \mid s)}[Q_\pi(s, a)] = \sum_a \pi(a, s) \, Q_\pi(s, a)$$
+
+## L'Équation de Bellman pour un MDP
+
+En généralisant l'équation de Bellman du MRP avec la politique $\pi$, on obtient :
+
+$$V_\pi(s) = \sum_a \pi(a, s) \sum_{s'} P(s' \mid s, a) [R(s, a) + \gamma V_\pi(s')]$$
+
+Pour la Q-valeur :
+
+$$Q_\pi(s, a) = \sum_{s'} P(s' \mid s, a) \left[R(s, a) + \gamma \sum_{a'} \pi(a', s') Q_\pi(s', a')\right]$$
+
+::: {.callout-note title="À retenir — Lien entre $Q_\pi$ et $V_\pi$"}
+On peut aussi écrire :
+
+$$Q_\pi(s, a) = R(s, a) + \gamma \sum_{s'} P(s' \mid s, a) \, V_\pi(s')$$
+
+**Interprétation** : l'action $a$ collecte la récompense $R(s,a)$, puis on suit la politique $\pi$ depuis les états successeurs.
+
+Cette équation est la **base des algorithmes d'optimisation de politique** : Monte Carlo Learning, Policy Iteration, Temporal Difference Learning.
+:::
+
+## Optimalité (Optimality)
+
+### Fonction de Valeur Optimale
+
+::: {.callout-important title="Définition — Optimalité"}
+On définit la **fonction de valeur optimale** :
+
+$$V^*(s) = \max_\pi V_\pi(s)$$
+
+et la **Q-valeur optimale** :
+
+$$Q^*(s, a) = \max_\pi Q_\pi(s, a)$$
+:::
+
+### Politique Optimale
+
+La **politique optimale** $\pi^*$ est celle qui maximise la valeur pour tous les états :
+
+$$\pi^* = \argmax_\pi V_\pi(s), \quad \forall s \in S$$
+
+Elle satisfait : $\forall \pi, \; V_{\pi^*}(s) \geq V_\pi(s), \; \forall s \in S$.
+
+::: {.callout-tip title="Intuition — Existence de la politique optimale"}
+Un résultat fondamental de la théorie des MDP garantit qu'il **existe toujours au moins une politique optimale** pour tout MDP fini. De plus, on peut toujours trouver une politique optimale **déterministe**, même si l'espace des politiques inclut les politiques stochastiques.
+:::
+
+## L'Équation de Bellman Optimale (Optimal Bellman Equation)
+
+En substituant $\pi^*$ dans les équations de Bellman :
+
+$$V^*(s) = \max_a \sum_{s'} P(s' \mid s, a) [R(s, a) + \gamma V^*(s')]$$
+
+$$Q^*(s, a) = \sum_{s'} P(s' \mid s, a) \left[R(s, a) + \gamma \max_{a'} Q^*(s', a')\right]$$
+
+::: {.callout-warning title="Non-linéarité — Conséquences algorithmiques"}
+Ces équations sont **non-linéaires** à cause de l'opérateur $\max$. On ne peut plus les résoudre directement par inversion de matrice. Elles mènent à deux grandes familles d'algorithmes :
+
+- **Value Iteration** : mise à jour itérative de $V^*(s)$
+- **Q-Learning** : mise à jour itérative de $Q^*(s, a)$
+:::
+
+### Code — Mise à Jour Q-Learning
+
+```python
+# Mise à jour avec l'équation de Bellman optimale
+q_table[current_state][action] = (
+    (1 - learning_rate) * q_table[current_state][action] +
+    learning_rate * (
+        reward_array[current_state][action] +
+        discount * max(q_table[next_state])
+    )
+)
+```
+
+---
+
+# Apprentissage par Renforcement (Reinforcement Learning — RL)
+
+::: {.callout-important title="Définition — RL"}
+L'**Apprentissage par Renforcement** consiste à **apprendre une politique** qui associe des actions à des états, de façon à **maximiser une récompense cumulée**.
+
+C'est la résolution pratique des optimisations définies dans le cadre MDP, lorsque le modèle de l'environnement (dynamiques $P$, récompenses $R$) n'est pas entièrement connu a priori.
+:::
+
+Le RL est la discipline qui résout concrètement les équations de Bellman optimales à travers l'expérience et l'exploration.
+
+---
+
+# Navigation et Recherche de Cible (Target Search)
+
+## Deux Paradigmes de Recherche
+
+### Requête par l'Exemple (Query by Example)
+
+Le paradigme classique de Recherche d'Information repose sur :
+
+- Des **jugements absolus** de pertinence $r_k$ : l'utilisateur évalue si un document est pertinent ou non
+- Des **jugements parfois difficiles** à formuler : "est-ce pertinent ?"
+- Le **problème de la page zéro** : d'où vient l'exemple de requête initial ?
+
+### Navigation : Recherche d'une Cible dans une Collection
+
+::: {.callout-important title="Définition — Recherche de Cible"}
+La **recherche de cible** (Target Search) repose sur des **jugements relatifs** :
+
+- L'utilisateur dit : *"cette image est la plus similaire à ce que je cherche"*
+- *"Ce que je cherche"* = l'**image mentale** de l'utilisateur (une cible interne)
+- L'objectif est d'**exploiter** les interactions tout en **limitant leur nombre**
+:::
+
+::: {.callout-tip title="Intuition — Jugements relatifs vs absolus"}
+Comparer deux images et choisir la plus proche d'un concept mental est **cognitivement plus naturel** pour un humain que d'attribuer une note de pertinence absolue. La recherche de cible tire parti de cette asymétrie.
+:::
+
+## Le Compromis Exploration / Exploitation (Exploration/Exploitation Tradeoff)
+
+Toute recherche (navigation) est un équilibre entre deux stratégies opposées.
+
+### Exploration (Prendre des risques)
+
+- **Principe** : découvrir de nouvelles connaissances en explorant de nouvelles zones de l'espace de recherche
+- **Avantage** : possibilité de trouver mieux que ce qu'on connaît déjà
+- **Inconvénient** : ne garantit pas un gain immédiat
+
+*Exemple* : tester de nouveaux restaurants dans l'espoir de découvrir une meilleure cuisine que celle des restaurants déjà connus.
+
+### Exploitation (Rester sûr)
+
+- **Principe** : utiliser les connaissances déjà acquises
+- **Avantage** : garantit un résultat acceptable basé sur l'expérience
+- **Inconvénient** : risque de passer à côté d'une meilleure option
+
+*Exemple* : aller systématiquement dans les restaurants dont on apprécie déjà la cuisine.
+
+::: {.callout-note title="À retenir — Le dilemme fondamental"}
+Ce compromis est **universel** en RL et en recherche d'information interactive. Trop d'exploration = perte de temps. Trop d'exploitation = risque de rater la cible. Un bon algorithme équilibre les deux de manière adaptative.
+:::
+
+---
+
+# Formalisation de la Recherche de Cible
+
+## Mise en Place (Setup)
+
+Considérons une **collection d'images** $\{D_1, \ldots, D_N\}$.
+
+À chaque **itération** $t$ :
+
+1. L'utilisateur voit une **sélection** $S_t$ de $N_D$ images
+2. L'utilisateur **clique** sur l'image la plus proche de la cible $C$ (action $A_t$ = 1 clic)
+3. Le système **recalcule** une nouvelle sélection $S_{t+1}$
+
+### Formalisation Bayésienne
+
+On souhaite estimer, à chaque étape, la **probabilité que chaque image soit la cible** :
+
+$$P(C = D_i \mid H_t), \quad \forall i = 1, \ldots, N$$
+
+où $H_t = \{S_1, A_1, \ldots, S_t, A_t\}$ est l'**historique** de l'interaction.
+
+L'objectif du système est de **choisir $S_t$** de façon à **minimiser le nombre d'itérations restantes**, c'est-à-dire à **maximiser le gain d'information** à chaque étape.
+
+## Développement Mathématique
+
+### Mise à Jour Bayésienne
+
+On développe $P(C = D_i \mid H_t)$ par la règle de Bayes :
+
+$$P(C = D_i \mid H_t) = P(C = D_i \mid S_t, A_t, H_{t-1})$$
+
+$$= \frac{P(A_t, S_t \mid C = D_i, H_{t-1}) \cdot P(C = D_i \mid H_{t-1})}{\sum_i P(A_t, S_t \mid C = D_i, H_{t-1}) \cdot P(C = D_i \mid H_{t-1})}$$
+
+### Hypothèse de Markov sur la Sélection
+
+$S_t$ est **indépendant** de $H_{t-1}$ : la sélection est uniquement calculée en fonction de l'état courant (propriété de Markov). On obtient :
+
+$$\boxed{P(C = D_i \mid H_t) = \frac{P(A_t \mid C = D_i, S_t, H_{t-1}) \cdot P(C = D_i \mid H_{t-1})}{\Xi}}$$
+
+où $\Xi$ est la constante de normalisation.
+
+::: {.callout-tip title="Intuition — Filtre Bayésien"}
+Cette équation est un **filtre Bayésien** : à chaque étape, on met à jour notre croyance sur quelle image est la cible, en multipliant la croyance précédente par la vraisemblance de l'action observée. C'est exactement la structure d'un MRP/MDP avec une politique d'interaction.
+:::
+
+## Modèle Utilisateur (User Model)
+
+### Décomposition
+
+La formule peut s'interpréter comme :
+
+$$P(C = D_i \mid H_t) = \frac{1}{\Xi} \underbrace{\left[P(A_t \mid C = D_i, S_t, H_{t-1})\right]}_{\text{modèle utilisateur}} \cdot \underbrace{P(C = D_i \mid H_{t-1})}_{\text{état précédent}}$$
+
+- L'**état précédent** représente la croyance avant l'interaction courante
+- La **mise à jour via interaction** $P(A_t \mid C = D_i, S_t, H_{t-1})$ est le **modèle utilisateur** : il modélise la probabilité que l'utilisateur clique sur $D_i$ sachant que la cible est $D_i$
+
+### Exemple de Modèle Utilisateur
+
+Un modèle naturel repose sur une **fonction de distance** $d$ entre images :
+
+$$P(A_t \mid C = D_i, S_t, H_{t-1}) = \frac{\exp(-d(D_A, D_i) / \sigma)}{\sum_{j \in S} \exp(-d(D_S, D_j) / \sigma)}$$
+
+- $D_A$ est l'image cliquée (action)
+- $\sigma$ est un paramètre d'échelle
+- $d$ est une **fonction de distance donnée**, basée sur des caractéristiques pertinentes (features) des images
+
+::: {.callout-note title="À retenir — Softmax sur les distances"}
+Cette formule est un **softmax** sur les distances inversées : l'utilisateur est modélisé comme cliquant sur l'image la plus proche de sa cible, avec une probabilité proportionnelle à la proximité. Plus $\sigma$ est petit, plus le comportement est déterministe.
+:::
+
+---
+
+# Sélection des Images (Image Selection)
+
+## Objectif : Minimiser le Nombre d'Interactions
+
+On définit $F[P(D_i = C)]$ comme le **nombre estimé de comparaisons** (étapes) restantes, sachant la distribution courante $P(D_i = C)$.
+
+On choisit $S_t$ qui **minimise** la somme :
+
+$$\sum_{a \in S_t} F[P(D_i = C \mid A_t = a)] \cdot P(A_t = a \mid S_t)$$
+
+avec :
+
+$$P(A_t = a \mid S_t) = \sum_{D \in S_t} P(A_t = a \mid S_t, C = D) \cdot P(D = C)$$
+
+Cette dernière expression intègre le **modèle utilisateur cohérent**.
+
+## Lien avec l'Entropie de la Collection
+
+::: {.callout-important title="Borne inférieure sur $F$"}
+On peut montrer que, sous interaction optimale :
+
+$$F[P(D_i = C)] \geq \frac{\text{Information totale}}{\text{Information par étape}} \propto -\sum_D P(D = C) \log P(D = C)$$
+
+Le membre de droite est l'**entropie de la collection** (Collection entropy).
+:::
+
+::: {.callout-tip title="Intuition — Entropie et incertitude"}
+L'entropie mesure l'**incertitude** sur la cible. Quand l'entropie est élevée, de nombreuses images sont candidates équiprobables et il faudra beaucoup d'interactions. L'objectif est de choisir $S_t$ de façon à **réduire l'entropie au maximum** à chaque étape.
+:::
+
+---
+
+# Procédure Pratique (Practical Setup)
+
+## Initialisation
+
+1. **Définir un modèle utilisateur** : choisir les caractéristiques (features) des documents et la fonction de similarité $d$
+2. **Distribution uniforme initiale** : $P(C = D_i) = 1/N$ pour tout $i$ (aucune connaissance a priori)
+
+## Boucle d'Interaction
+
+À chaque itération $t$ :
+
+1. **Définir $S_t$** par minimisation du critère d'information (gain d'information maximal)
+2. **Arrêter** si $S_t$ contient la cible (l'utilisateur la reconnaît)
+3. **Recueillir l'action** $A_t$ de l'utilisateur (clic sur une image)
+4. **Calculer** $P(A \mid S_t, C = D_i)$ pour chaque $D_i$ à partir du modèle utilisateur
+5. **Mettre à jour** la distribution $P(C = D_i)$ via la règle de Bayes :
+
+$$P(D_i = C \mid A) \propto P(A \mid S_t, C = D_i) \cdot P(C = D_i)$$
+
+6. La nouvelle distribution $P(C = D_i \mid A) \to P(C = D_i)$ devient le nouvel état (utilisateur cohérent)
+
+::: {.callout-note title="À retenir — Cohérence markovienne"}
+La mise à jour ne dépend que de **l'état courant** et de l'action observée, pas de l'historique complet. Cette propriété markovienne garantit l'efficacité de l'algorithme et sa convergence.
+:::
+
+```{mermaid}
+flowchart TD
+    A[Initialisation\nP uniforme] --> B[Choisir S_t\npar gain d'info max]
+    B --> C{Cible dans S_t?}
+    C -- Oui --> D[Fin — Cible trouvée]
+    C -- Non --> E[Utilisateur clique A_t]
+    E --> F[Calculer P A|S_t, C=Di\npour chaque Di]
+    F --> G[Mise à jour Bayésienne\nde P C=Di]
+    G --> B
+```
+
+---
+
+# Simulation
+
+La simulation illustre la convergence de l'algorithme sur une collection d'images dans un espace de features 2D ou 3D :
+
+1. **État initial** : distribution uniforme sur toute la collection (toutes les images sont équiprobables)
+2. **Première sélection** : le système choisit les images qui maximisent le gain d'information
+3. **Clic utilisateur** : après le clic, la distribution se concentre autour des images similaires à celle cliquée
+4. **Iterations suivantes** : la distribution se **resserre progressivement** autour de la cible réelle
+
+::: {.callout-tip title="Intuition — Convergence visuelle"}
+Dans les simulations visuelles, on observe la distribution $P(C = D_i)$ comme une **carte de chaleur** (heatmap) sur l'espace des features : les zones claires correspondent aux images les plus probables. Au fil des itérations, la zone claire se rétrécit et se déplace vers la cible (en rouge dans les simulations).
+:::
+
+---
+
+# Extension : Cible Mobile (Mobile Target)
+
+## Le Problème de l'Utilisateur Incohérent
+
+Dans le modèle de base, on suppose que l'utilisateur a une cible fixe et un comportement cohérent. En pratique, l'utilisateur peut :
+
+- **Apprendre** sur le contenu de la collection au fil de l'interaction (**sérendipité**)
+- **Changer d'image mentale** en découvrant de nouvelles images
+- **Modifier son comportement** et sa façon d'agir
+
+On parle alors du **problème de la cible mobile** (mobile target problem).
+
+## Modélisation de l'Incohérence
+
+On considère que $A_t = f(H_{t-1})$ : l'action dépend de tout l'historique passé.
+
+Pour tenir compte de cette dynamique :
+
+- **Évaluer la cohérence** au sein de l'historique $H_t$ par un système de **pondération / décroissance** (weighting / decay)
+- Les **interactions récentes** sont plus fiables que les anciennes : on applique une **décroissance exponentielle** sur les interactions passées
+- L'historique impacte le **modèle utilisateur**, notamment les features pertinentes
+
+### Réouverture de la Distribution
+
+Pour modéliser le changement de cible, on **"rouvre"** la distribution $P(C = D_i)$ en la redistribuant partiellement sur l'ensemble de la collection.
+
+Formellement, cela revient à **modifier la distribution complète** : au lieu de concentrer tout le poids sur les candidats actuels, on maintient une fraction d'incertitude sur l'ensemble de la collection pour permettre des changements de direction dans la recherche.
+
+::: {.callout-warning title="Défi — Cible mobile"}
+La cible mobile est un problème ouvert et difficile. L'équilibre entre **stabilité** (continuer dans la direction actuelle) et **flexibilité** (s'adapter aux changements de l'utilisateur) est délicat à calibrer. Les mécanismes de décroissance exponentielle constituent une approche pragmatique mais non optimale.
+:::
+
+---
+
+# Synthèse : MDP et Recherche de Cible
+
+## Correspondance Formelle
+
+Le cadre MDP s'applique naturellement à la recherche de cible :
+
+| Concept MDP | Recherche de Cible |
+|---|---|
+| État $s_t$ | Distribution $P(C = D_i \mid H_t)$ |
+| Action $a_t$ | Clic utilisateur $A_t$ |
+| Transition $P(s' \mid s, a)$ | Mise à jour Bayésienne |
+| Récompense $R(s, a)$ | Gain d'information / réduction d'entropie |
+| Politique $\pi$ | Stratégie de sélection de $S_t$ |
+
+## Ce Que Nous Avons Couvert
+
+- La **propriété de Markov** et les **processus de Markov** (MP, MRP, MDP)
+- L'**équation de Bellman** et sa généralisation aux MDP
+- L'**optimalité** et l'équation de Bellman optimale
+- La **recherche de cible** comme application du cadre MDP à la RI interactive
+- Le **modèle utilisateur** et la mise à jour Bayésienne
+- La **sélection d'images** par maximisation du gain d'information
+- L'extension au problème de **cible mobile**
+
+---
+
+# Références
+
+- **Ouvrage de référence** : Reinforcement Learning: An Introduction. Richard S. Sutton et Andrew G. Barto. Deuxième édition, MIT Press, 2018. [http://incompleteideas.net/book/the-book.html](http://incompleteideas.net/book/the-book.html)
+
+- **Cours complet RL** : David Silver, UCL + DeepMind.
+  - [https://www.davidsilver.uk/teaching/](https://www.davidsilver.uk/teaching/)
+  - [https://deepmind.com/learning-resources/-introduction-reinforcement-learning-david-silver](https://deepmind.com/learning-resources/-introduction-reinforcement-learning-david-silver)
+
+- **Implémentations** : OpenAI Baselines. [https://github.com/openai/baselines](https://github.com/openai/baselines)
+
+- **Démonstration MDP** : Lionel Blondé. [https://github.com/lionelblonde/mdp-toy](https://github.com/lionelblonde/mdp-toy)
