@@ -1,0 +1,333 @@
+---
+title: "Recherche d'Information Audio — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Que représente 1 Hertz (Hz) en acoustique ?
+
+> Pense à la définition physique de la fréquence d'une onde sonore.
+
+1. [ ] 1 décibel par seconde
+1. [x] 1 vibration par seconde
+    > Correct : 1 Hz correspond exactement à 1 cycle (vibration) par seconde. C'est l'unité de mesure de la fréquence.
+1. [ ] 1 watt par mètre carré
+1. [ ] 1 milliseconde de période
+```
+
+```{quizdown}
+### Pourquoi l'intensité sonore est-elle exprimée en décibels (dB) plutôt qu'en W/m² ?
+
+> Pense à la façon dont l'oreille humaine perçoit les variations d'intensité.
+
+1. [ ] Parce que les watts sont réservés à la puissance électrique
+1. [ ] Pour faciliter la comparaison internationale
+1. [x] Parce que le système auditif humain perçoit l'intensité sur une echelle logarithmique
+    > Correct : l'oreille humaine comprime les grandes variations d'intensite de manière logarithmique, ce qui justifie l'usage du décibel.
+1. [ ] Parce que la mesure en W/m² est impossible en pratique
+```
+
+```{quizdown}
+### Quel est le seuil d'audibilite humain en decibels ?
+
+> C'est la valeur de référence zéro de l'echelle des décibels.
+
+1. [ ] 10 dB
+1. [ ] -10 dB
+1. [x] 0 dB
+    > Correct : 0 dB correspond a une intensite de 10^-12 W/m², soit le son le plus faible perceptible par une oreille humaine en bonne santé.
+1. [ ] 20 dB
+```
+
+```{quizdown}
+### Quelles affirmations sur la plage de fréquences audibles sont correctes ?
+
+> Rappelle-toi des limites basse et haute de l'audition humaine, et des domaines adjacents.
+
+- [x] Les humains perçoivent entre environ 20 Hz et 20 000 Hz
+    > Correct : c'est la plage des sons audibles pour l'oreille humaine adulte.
+- [ ] Les infrasons sont au-dessus de 20 000 Hz
+    > Incorrect : les infrasons sont en dessous de 20 Hz. Au-dessus de 20 000 Hz se trouvent les ultrasons.
+- [x] Les ultrasons sont inaudibles pour l'humain mais perçus par certains animaux
+    > Correct : les dauphins perçoivent jusqu'a 200 kHz, les chauves-souris jusqu'a 120 kHz.
+- [ ] Les chiens ont une plage audible inférieure à celle des humains
+    > Incorrect : les chiens perçoivent jusqu'a 45 kHz, soit bien au-dessus des 20 kHz humains.
+```
+
+```{quizdown}
+### Quel organe assure la conversion des vibrations mécaniques en signal électrique dans l'oreille ?
+
+> Pense a la structure en spirale de l'oreille interne et a ses cellules spécialisées.
+
+1. [ ] Le tympan
+1. [ ] Les osselets (marteau, enclume, etrier)
+1. [x] La cochlée (via ses cellules ciliées)
+    > Correct : les cellules ciliées de la cochlée transforment les vibrations mécaniques en influx nerveux transmis au cerveau via le nerf cochleaire.
+1. [ ] Le vestibule
+```
+
+```{quizdown}
+### Quels types d'information audio ont le contenu informationnel le plus élevé ?
+
+> Pense aux types d'audio qui portent un message linguistique ou musical structuré.
+
+- [x] La parole (Speech)
+    > Correct : la parole est le signal audio au contenu sémantique le plus riche.
+- [x] La musique (Music)
+    > Correct : la musique est structurée et porte un contenu informationnel élevé.
+- [ ] Le bruit de vent
+    > Incorrect : le vent est un son naturel a faible contenu informationnel.
+- [ ] Le bruit de moteur
+    > Incorrect : le bruit de machine est artificiel mais peu informatif sémantiquement.
+```
+
+---
+
+## Niveau 2 — Comprehension
+
+```{quizdown}
+### Dans le modèle source-filtre de la parole, a quoi correspond H(w) ?
+
+> Le modèle décompose le signal de parole en deux composantes distinctes.
+
+1. [ ] L'excitation produite par les cordes vocales
+1. [x] La fonction de transfert du conduit vocal
+    > Correct : H(w) représente le filtre formé par le conduit vocal, qui façonne spectralement le son produit par l'excitation.
+1. [ ] La frequence fondamentale du locuteur
+1. [ ] Le spectre du signal de parole final
+```
+
+```{quizdown}
+### Quelle est la plage de pitch typique pour une voix masculine ?
+
+> Le pitch correspond a la fréquence fondamentale des cordes vocales.
+
+1. [ ] 20 – 80 Hz
+1. [x] 80 – 140 Hz
+    > Correct : la voix masculine a une fréquence fondamentale comprise entre 80 et 140 Hz, plus basse que la voix féminine.
+1. [ ] 200 – 250 Hz
+1. [ ] 300 – 400 Hz
+```
+
+```{quizdown}
+### Le pitch fait partie de la prosodie. Qu'inclut également la prosodie ?
+
+> La prosodie regroupe les caracteristiques suprasegmentales du discours.
+
+- [x] L'intonation
+    > Correct : l'intonation (variation de pitch sur une phrase) est un composant central de la prosodie.
+- [x] L'accentuation (stress)
+    > Correct : l'accentuation syllabique est une dimension prosodique.
+- [ ] Les coefficients LPC
+    > Incorrect : les LPC sont des paramètres spectraux du signal, pas des caracteristiques prosodiques.
+- [ ] Le taux d'erreur de reconnaissance (WER)
+    > Incorrect : le WER est une métrique d'evaluation des systèmes ASR, sans rapport avec la prosodie.
+```
+
+```{quizdown}
+### Quelle différence fondamentale distingue l'echelle Mel de l'echelle Bark ?
+
+> Les deux sont des transformations logarithmiques de la fréquence, mais elles modélisent des phénomènes perceptuels différents.
+
+1. [ ] Mel est lineaire, Bark est logarithmique
+1. [x] Mel modélise la hauteur perçue, Bark modélise le masquage fréquentiel
+    > Correct : l'echelle Mel reflète comment l'oreille discrimine les hauteurs tonales ; l'echelle Bark modélise les effets de masquage entre fréquences proches et est utilisée notamment dans le codage MP3.
+1. [ ] Bark est utilisée pour la parole, Mel pour la musique uniquement
+1. [ ] Il n'y a pas de différence : ce sont deux noms pour la même chose
+```
+
+```{quizdown}
+### Dans le calcul des MFCC, a quoi sert le banc de filtres Mel ?
+
+> Rappelle-toi de l'objectif des MFCC : reproduire la perception humaine des fréquences.
+
+1. [ ] A amplifier les hautes fréquences du signal
+1. [ ] A convertir le signal temporel en fréquentiel
+1. [x] A projeter le spectre sur l'echelle Mel pour imiter la perception humaine
+    > Correct : le banc de filtres Mel regroupe les fréquences selon la perception auditive humaine, comprimant les hautes fréquences et étalant les basses.
+1. [ ] A supprimer le bruit de fond du signal
+```
+
+```{quizdown}
+### Qu'est-ce que le Wordspotting (repérage de mots) par rapport a l'ASR complet ?
+
+> Pense aux differences de vocabulaire et de robustesse entre les deux approches.
+
+1. [ ] Le Wordspotting transcrit tout le discours avec un grand vocabulaire
+1. [x] Le Wordspotting reconnait un vocabulaire limite et ignore le reste via un etat garbage
+    > Correct : le Wordspotting se concentre sur un ensemble restreint de mots-cles et utilise un modele garbage pour capturer tout ce qui ne correspond a aucun mot-cle.
+1. [ ] Le Wordspotting est moins précis que l'ASR pour des vocabulaires réduits
+1. [ ] Le Wordspotting n'utilise pas de modèles HMM
+```
+
+```{quizdown}
+### Pourquoi la transcription musicale automatique (retrieval du score) est-elle difficile ?
+
+> Plusieurs obstacles physiques et musicaux rendent cette tache complexe.
+
+- [x] Les notes jouées simultanément partagent des harmoniques qui se superposent
+    > Correct : la collision harmonique entre plusieurs notes simultanées rend leur séparation très difficile.
+- [x] Le tempo peut varier, compliquant la synchronisation temporelle
+    > Correct : les variations de tempo (accelerando, ritardando) rendent l'alignement temporel difficile.
+- [x] La diversité des instruments produit des timbres très différents pour la même note
+    > Correct : un Do joué au piano sonne très différemment du même Do joué au violon.
+- [ ] Le format MIDI est trop large pour stocker des partitions complètes
+    > Incorrect : le MIDI est un format compact et très adapté au stockage de partitions symboliques.
+```
+
+```{quizdown}
+### Dans un message MIDI "90 3C 40", que représente "3C" ?
+
+> Décode le message hexadécimal : le premier octet est le statut, le deuxième la note, le troisième la vélocité.
+
+1. [ ] Le numéro de canal
+1. [ ] La vélocité de la note
+1. [x] Le numéro de la note (Do central = 60 en decimal)
+    > Correct : 3C en hexadecimal vaut 60 en decimal, ce qui correspond au Do central (Middle C) dans la notation MIDI.
+1. [ ] Le type de statut (Note On / Note Off)
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Remets les étapes du calcul des MFCC dans le bon ordre.
+
+> Pense au pipeline complet depuis le signal brut jusqu'aux coefficients cepstraux.
+
+1. Fenêtrage du signal audio (Windowing)
+2. Calcul de la FFT (spectre d'amplitude)
+3. Application du banc de filtres Mel
+4. Transformation logarithmique
+5. DCT ou transformée inverse (coefficients cepstraux)
+```
+
+```{quizdown}
+### Remets les étapes de la chaîne de transduction de l'oreille dans le bon ordre.
+
+> Suis le chemin du son depuis l'extérieur jusqu'au nerf auditif.
+
+1. Collecte des ondes aériennes par le pavillon
+2. Conversion en ondes mécaniques par le tympan et les osselets
+3. Conversion en ondes de compression dans la cochlée
+4. Conversion en signal electrique par les cellules ciliées
+5. Transmission au cerveau via le nerf cochleaire
+```
+
+```{quizdown}
+### Un ingénieur conçoit un système de recherche dans des archives de conférences enregistrées. Il veut retrouver des passages contenant un terme technique rare, absent du dictionnaire de son système ASR. Quel problème va-t-il rencontrer ?
+
+> Pense aux limitations connues des systèmes ASR en conditions réelles.
+
+1. [ ] Un problème de WER uniquement sur les mots courants
+1. [x] Un problème d'OOV (Out-Of-Vocabulary) : le terme rare ne sera pas transcrit correctement
+    > Correct : les termes absents du vocabulaire d'entrainement (OOV) ne peuvent pas être reconnus par l'ASR, ce qui crée des trous dans l'index et rend la recherche impossible sur ces termes.
+1. [ ] Un problème de masquage auditif (Bark scale)
+1. [ ] Un problème de pitch trop élevé pour être modélisé
+```
+
+```{quizdown}
+### Dans le modèle LPC, les coefficients a_i sont obtenus en minimisant l'erreur de prédiction. Que modélisent-ils physiquement ?
+
+> Rapproche le modèle LPC du modèle source-filtre et identifie ce que 1/A_p(z) représente.
+
+1. [ ] Le pitch du locuteur (fréquence fondamentale des cordes vocales)
+1. [ ] Le niveau d'intensité sonore du signal
+1. [x] La forme spectrale du conduit vocal (fonction de transfert du filtre vocal)
+    > Correct : 1/A_p(z) est proportionnel a la fonction de transfert H(w) du conduit vocal dans le modèle source-filtre. Les LPC encodent donc la forme du conduit vocal, pas le pitch.
+1. [ ] La durée des phonèmes dans l'enoncé
+```
+
+```{quizdown}
+### Un musicologue veut rechercher une mélodie classique dont il se souvient uniquement de la forme mélodique (montée, descente, même note). Quel outil est le mieux adapté ?
+
+> Pense aux systèmes de recherche musicale qui acceptent des descriptions mélodiques abstraites plutot qu'un enregistrement audio.
+
+1. [ ] Un système ASR appliqué a l'enregistrement de la mélodie
+1. [ ] Le navigateur Sony Music Browser via une requête par BPM
+1. [x] ThemeFinder, qui accepte une requête par contour mélodique
+    > Correct : ThemeFinder permet de rechercher des themes musicaux a partir de descriptions symboliques comme le contour mélodique (up, down, same), les intervalles ou les degrés scalaires.
+1. [ ] Islands of Music via une carte auto-organisatrice
+```
+
+```{quizdown}
+### Lequel de ces signaux audio est le plus adapte a une approche Wordspotting plutot qu'a un ASR complet ?
+
+> Pense aux contextes ou le vocabulaire pertinent est connu et restreint a l'avance.
+
+1. [ ] Une interview journalistique sur un sujet ouvert
+1. [ ] Un podcast scientifique avec un vocabulaire technique varié
+1. [x] Un serveur vocal interactif proposant un menu de 5 options
+    > Correct : le Wordspotting excelle dans les contextes a vocabulaire fermé et previsible, comme les serveurs vocaux ou seul un petit ensemble de mots-cles est attendu.
+1. [ ] Un enregistrement de cours magistral en amphi
+```
+
+```{quizdown}
+### Pourquoi le cepstre (Cepstrum) permet-il de séparer le pitch du conduit vocal ?
+
+> Rappelle-toi de la représentation logarithmique et de ce que la transformée inverse révèle.
+
+1. [ ] Parce qu'il supprime toutes les fréquences supérieures a 1000 Hz
+1. [ ] Parce qu'il applique le modèle Bark pour éliminer le masquage
+1. [x] Parce que dans le domaine cepstral, l'enveloppe spectrale (conduit vocal) et le pitch apparaissent a des quefrences differentes
+    > Correct : le cepstre (log-spectre inverse-FFT) sépare les composantes lentes (enveloppe spectrale = conduit vocal) des composantes rapides (harmoniques = pitch). On ne retient que les premiers coefficients pour capturer le conduit vocal.
+1. [ ] Parce que la DCT supprime automatiquement la composante d'excitation
+```
+
+```{quizdown}
+### Le MP3 est un format de compression audio avec perte (lossy). Sur quoi repose sa stratégie de réduction de données ?
+
+> Pense au modèle perceptuel utilise et au phénomène auditif qu'il exploite.
+
+- [x] Le masquage auditif modélisé par l'echelle Bark
+    > Correct : le MP3 exploite le fait que certains sons sont masqués par d'autres fréquences proches, permettant de les supprimer sans perte perceptible.
+- [x] La quantification plus grossière des fréquences masquées
+    > Correct : les composantes masquées peuvent être codées avec moins de bits car l'oreille ne les percevra pas de toute façon.
+- [ ] La suppression de tous les sons au-dessus de 10 000 Hz
+    > Incorrect : le MP3 ne coupe pas arbitrairement les hautes fréquences ; il utilise le masquage de manière selective.
+- [ ] L'utilisation du modèle LPC pour re-synthétiser le signal
+    > Incorrect : le LPC est utilisé en compression de la parole (vocoder), pas dans le pipeline MP3.
+```
+
+```{quizdown}
+### Dans le contexte de la recherche d'information audio, pourquoi le son ambiant est-il souvent traité conjointement avec le signal visuel ?
+
+> Pense a ce que le son seul ne peut pas toujours disambiguer, et a ce que l'image apporte.
+
+1. [ ] Parce que le son ambiant contient trop de bruit pour être traite seul
+1. [ ] Parce que les techniques ASR ne fonctionnent pas sur les sons ambiants
+1. [x] Parce que le son fournit un contexte qui enrichit et aide a segmenter le contenu visuel (et inversement)
+    > Correct : la combinaison audio-video (A/V) permet une indexation plus robuste. Par exemple, le son de klaxons aide a identifier une scène de rue, ou les applaudissements signalent une transition dans une video.
+1. [ ] Parce que le MIDI peut coder n'importe quel son ambiant
+```
+
+```{quizdown}
+### Vrai ou Faux : les triphones (triphones) utilisés en ASR modélisent chaque phonème indépendamment de son contexte.
+
+> Rappelle-toi de la raison pour laquelle les triphones ont été introduits en reconnaissance de la parole.
+
+1. [ ] Vrai
+1. [x] Faux
+    > Faux : les triphones modélisent chaque phonème en tenant compte de son contexte gauche et droit (phonème précédent et suivant), afin de capturer les effets de coarticulation.
+```
+
+```{quizdown}
+### Un chercheur compare deux systèmes d'indexation de parole : l'un basé sur ASR complet, l'autre sur Wordspotting. Quelles affirmations sont correctes ?
+
+> Pense aux forces et limites respectives de chaque approche.
+
+- [x] L'ASR produit un index textuel plus riche mais dégradé par les erreurs de reconnaissance (WER)
+    > Correct : l'ASR transcrit tout le discours, mais les erreurs de reconnaissance polluent l'index.
+- [x] Le Wordspotting est plus robuste sur un vocabulaire restreint et controle
+    > Correct : le Wordspotting est conçu pour des contextes a vocabulaire fermé, ou il est très fiable.
+- [ ] Le Wordspotting peut indexer n'importe quel mot sans entrainement préalable
+    > Incorrect : le Wordspotting nécessite d'entrainer un modèle pour chaque mot-cle du vocabulaire cible.
+- [ ] L'ASR est insensible au problème OOV grace aux triphones
+    > Incorrect : les triphones améliorent la modélisation du contexte phonétique mais ne résolvent pas le problème OOV.
+```

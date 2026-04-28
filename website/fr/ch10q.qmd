@@ -1,0 +1,340 @@
+---
+title: "Analyse des Réseaux Sociaux — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Quelle structure mathématique formalise un réseau social ?
+
+> Pense aux entités et aux relations entre elles.
+
+1. [ ] Une matrice de covariance
+1. [x] Un graphe G = (V, E)
+    > Correct : un réseau est modélisé par un graphe avec des noeuds V (entités) et des arêtes E (relations), éventuellement pondérées par des poids W.
+1. [ ] Un arbre de décision
+1. [ ] Une chaîne de Markov cachée
+```
+
+```{quizdown}
+### Une relation de type "collegue de travail" doit être modélisée par quel type de graphe ?
+
+> La symétrie de la relation est la clé.
+
+1. [x] Un graphe non orienté
+    > Correct : si A est collègue de B, alors B est collègue de A. La relation est symétrique, donc le graphe est non orienté.
+1. [ ] Un graphe orienté
+    > Incorrect : un graphe orienté est utilisé quand la relation peut être asymétrique, comme l'abonnement sur un réseau social.
+1. [ ] Un hypergraphe
+1. [ ] Un graphe biparti
+```
+
+```{quizdown}
+### Quels elements constituent un graphe G = (V, E, W) ?
+
+> Chaque lettre a une signification précise.
+
+- [x] V : ensemble des noeuds (entités)
+    > Correct : V représente les sommets, c'est-à-dire les entités du réseau.
+- [x] E : ensemble des arêtes (relations)
+    > Correct : E représente les liens entre entités.
+- [x] W : poids des arêtes (force des relations)
+    > Correct : W encode l'intensité ou la force de chaque relation.
+- [ ] W : nombre de noeuds du graphe
+    > Incorrect : W représente les poids des arêtes, pas la taille du graphe.
+```
+
+```{quizdown}
+### Qu'est-ce que le degré entrant (indegree) d'un noeud dans un graphe oriente ?
+
+> Dans un réseau de type "follower", qui représente ce degré ?
+
+1. [ ] Le nombre de noeuds auxquels ce noeud est directement relié, dans les deux sens
+1. [ ] Le nombre d'arêtes que ce noeud envoie
+1. [x] Le nombre d'arêtes reçues par ce noeud
+    > Correct : l'indegree est le nombre d'arêtes arrivant au noeud. Sur Twitter, c'est le nombre de followers.
+1. [ ] La somme des poids des arêtes incidentes
+```
+
+```{quizdown}
+### Qu'est-ce que l'homophilie dans un réseau social ?
+
+> Observe comment les individus forment naturellement leurs liens.
+
+1. [ ] La tendance d'un réseau à former des hubs très connectés
+1. [x] La tendance des individus à se lier à des personnes qui leur ressemblent
+    > Correct : l'homophilie désigne le fait que les liens forts se forment préférentiellement entre individus partageant des caractéristiques communes (âge, classe sociale, opinions).
+1. [ ] La propriété d'un graphe à avoir un petit diamètre
+1. [ ] La distribution en loi de puissance des degrés
+```
+
+```{quizdown}
+### Quelle propriete distingue un graphe sans echelle (scale-free) d'un graphe aleatoire d'Erdos-Renyi ?
+
+> Pense à la forme de la distribution des degrés.
+
+1. [ ] Le graphe sans échelle a un diamètre plus grand
+1. [ ] Le graphe sans échelle ne contient aucun cycle
+1. [x] La distribution des degrés suit une loi de puissance dans le graphe sans échelle
+    > Correct : P(k) ~ k^(-gamma). Cela implique l'existence de hubs très connectés, absents dans le modèle ER dont la distribution est de type Poisson.
+1. [ ] Le graphe sans échelle est toujours non orienté
+```
+
+---
+
+## Niveau 2 — Comprehension
+
+```{quizdown}
+### Un individu peu connu personnellement, mais qui met en relation des personnes de milieux tres differents, a quelle caracteristique de centralite elevee ?
+
+> Pense aux chemins dans le réseau, pas au nombre de connexions directes.
+
+1. [ ] Centralité de degré (degree centrality)
+1. [ ] Centralité de proximité (closeness centrality)
+1. [x] Centralité d'intermédiarité (betweenness centrality)
+    > Correct : la betweenness mesure combien de plus courts chemins passent par ce noeud. Un "courtier" ou "pont" entre communautés a une betweenness élevée même avec peu de connexions directes.
+1. [ ] Centralité propre (eigenvector centrality)
+```
+
+```{quizdown}
+### Quelle affirmation sur PageRank est correcte ?
+
+> PageRank est lié à la notion d'influence indirecte.
+
+1. [ ] PageRank est une variante de la centralité d'intermédiarité
+1. [ ] PageRank mesure uniquement le nombre de liens entrants
+1. [x] PageRank est une variante de la centralité propre adaptée aux graphes orientés
+    > Correct : PageRank valorise les connexions venant de noeuds eux-mêmes importants, comme la centralité propre, mais est conçu pour les graphes orientés tels que le Web.
+1. [ ] PageRank correspond à la distribution stationnaire d'un graphe non orienté
+```
+
+```{quizdown}
+### Dans le modele epidemique SIS, que signifie R0 < 1 ?
+
+> R0 est le nombre de reproduction de base.
+
+1. [ ] L'épidémie se propage de façon exponentielle
+1. [ ] Tous les agents finissent par être infectés
+1. [x] L'épidémie s'éteint car les agents guérissent plus vite qu'ils ne sont infectés
+    > Correct : R0 = beta*k / mu. Si R0 < 1, le taux de guérison dépasse le taux d'infection et le nombre d'infectés diminue jusqu'à zéro.
+1. [ ] Le réseau est disconnecté
+```
+
+```{quizdown}
+### Quelle difference fondamentale existe entre une n-clique et un n-clan ?
+
+> La différence porte sur la localisation des chemins internes.
+
+1. [ ] Un n-clan accepte des distances plus grandes qu'une n-clique
+1. [ ] Une n-clique exige que tous les noeuds soient dans le groupe, pas un n-clan
+1. [x] Dans un n-clan, tous les chemins internes de longueur au plus n passent uniquement par des noeuds du groupe
+    > Correct : la n-clique autorise des noeuds intermédiaires extérieurs au groupe. Le n-clan est plus restrictif : les chemins doivent rester à l'intérieur du groupe.
+1. [ ] Un n-clan et une n-clique sont deux noms pour la même notion
+```
+
+```{quizdown}
+### Qu'est-ce que la distribution stationnaire d'une marche aleatoire sur un graphe ?
+
+> Pense au comportement à long terme du marcheur.
+
+1. [ ] La distribution initiale choisie pour démarrer la marche
+1. [ ] La distribution uniforme sur tous les noeuds
+1. [x] La distribution limite vers laquelle converge la marche, telle que pi = pi * P
+    > Correct : la distribution stationnaire pi est le point fixe de l'opérateur de transition P. Par Perron-Frobenius, elle existe et est unique pour un graphe connexe.
+1. [ ] La distribution des degrés du graphe
+```
+
+```{quizdown}
+### Lequel de ces algorithmes garantit des communautes connexes, contrairement a l'algorithme de Louvain ?
+
+> Ce résultat a été publié en 2019.
+
+1. [ ] Floyd-Warshall
+1. [ ] Spectral Clustering
+1. [x] L'algorithme de Leiden
+    > Correct : Traag, Waltman et van Eck (2019) ont montré que Louvain peut produire des communautés déconnectées. L'algorithme de Leiden corrige ce défaut et est aussi plus rapide.
+1. [ ] L'algorithme de Dijkstra
+```
+
+```{quizdown}
+### Dans un graphe aleatoire d'Erdos-Renyi, que se passe-t-il lorsque la probabilite de connexion p depasse le seuil critique p* = 1/N ?
+
+> Ce phénomène est analogue à une transition physique.
+
+1. [ ] Le graphe devient complet
+1. [ ] Tous les noeuds deviennent des hubs
+1. [x] Une grande composante connexe géante (GCC) emerge soudainement
+    > Correct : c'est une transition de phase. En dessous du seuil, le graphe est fragmenté. Au-dessus, une GCC englobe rapidement la quasi-totalité des noeuds.
+1. [ ] Le diamètre du graphe augmente fortement
+```
+
+```{quizdown}
+### Quelle est la relation entre la marche aleatoire et la diffusion sur un reseau ?
+
+> Le Laplacien joue un rôle central dans les deux.
+
+- [x] La marche aléatoire correspond à la diffusion d'une seule particule
+    > Correct : chaque particule se déplace selon la politique de la marche aléatoire.
+- [x] La distribution stationnaire de la marche correspond à la diffusion globale à l'équilibre
+    > Correct : à long terme, la proportion du temps passé sur chaque noeud reflète l'équilibre de diffusion.
+- [x] La diffusion sur réseau est analogue à l'équation de la chaleur de Fourier via le Laplacien du graphe
+    > Correct : dT/dt = alpha * Delta_T, où Delta est remplacé par le Laplacien L = D - A.
+- [ ] La diffusion sur réseau est indépendante de la structure topologique du graphe
+    > Incorrect : la diffusion dépend entièrement de la structure du graphe via son Laplacien.
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Un chercheur veut identifier les individus les plus susceptibles d'avoir declenche une rumeur dans un reseau. Quel type d'analyse correspond a cet objectif ?
+
+> La rumeur s'est propagée depuis une source.
+
+1. [ ] Diffusion directe (modèle SI)
+1. [ ] Détection de communautés
+1. [x] Diffusion inverse (inverse diffusion) — identification des sources d'influence
+    > Correct : la diffusion inverse cherche à remonter aux sources d'un phénomène observé. C'est le problème dual de la diffusion directe.
+1. [ ] Calcul de la fermeture transitive
+```
+
+```{quizdown}
+### Un reseau de co-auteurs scientifiques, ou chaque article peut avoir plusieurs auteurs, necessite quel type de structure de graphe ?
+
+> Une arête classique ne relie que deux noeuds.
+
+1. [ ] Un graphe orienté pondéré
+1. [ ] Un graphe biparti simple
+1. [x] Un hypergraphe, representable comme un graphe biparti (hyperedges — vertices)
+    > Correct : lorsque des groupes d'agents interagissent collectivement sans distinction individuelle, le modèle de graphe classique est insuffisant. Un hypergraphe est nécessaire.
+1. [ ] Un graphe complet K_n
+```
+
+```{quizdown}
+### Un modele SIR est applique a la propagation d'une maladie avec immunite acquise. A t = infini, quelle est la proportion d'individus infectes ?
+
+> Pense à l'état R (Removed).
+
+1. [ ] 1 (toute la population est infectée)
+1. [ ] 1 - mu/(beta * k)
+1. [x] 0 (plus aucun individu n'est infecté)
+    > Correct : dans le modèle SIR, i(infini) = 0. Les infectés guérissent et passent dans l'état R (immunisé). L'épidémie s'éteint toujours, contrairement au modèle SI.
+1. [ ] Cela dépend uniquement du diamètre du réseau
+```
+
+```{quizdown}
+### Un noeud v a une excentricite de 3 dans un graphe. Que cela signifie-t-il ?
+
+> L'excentricité est définie à partir des distances géodésiques.
+
+1. [ ] v est à distance 3 de tous les autres noeuds
+1. [ ] v possède exactement 3 voisins directs
+1. [x] La plus longue des plus courtes distances depuis v vers un autre noeud est 3
+    > Correct : ecc(v) = max_{u in V} d(v, u). L'excentricité est la pire distance géodésique partant de v.
+1. [ ] Il existe un chemin de longueur 3 entre tout couple de noeuds
+```
+
+```{quizdown}
+### Remets les etapes de l'algorithme de partitionnement spectral (normalized cut) dans le bon ordre.
+
+> Chaque étape produit un résultat utilisé par la suivante.
+
+1. Calculer la matrice de degrés D = diag(deg(A))
+2. Calculer le Laplacien L = D - A
+3. Résoudre l'équation aux valeurs propres généralisées Lx = lambda * Dx
+4. Extraire le deuxième plus petit vecteur propre x2 (vecteur de Fiedler)
+5. Attribuer chaque noeud à une partition selon s = sign(x2)
+```
+
+```{quizdown}
+### Dans le modele de Schelling, des agents avec une preference moderee pour avoir 30 pourcent de voisins similaires convergent vers quel type de configuration ?
+
+> Ce résultat est contre-intuitif.
+
+1. [ ] Une configuration légèrement ségrégée reflétant exactement les préférences individuelles
+1. [ ] Une configuration parfaitement mélangée
+1. [x] Une forte ségrégation spatiale, bien au-delà de ce que les préférences individuelles laissent présager
+    > Correct : c'est une propriété émergente. Des préférences locales modérées produisent collectivement une ségrégation globale très marquée — illustration des systèmes complexes.
+1. [ ] Une configuration aléatoire sans structure
+```
+
+```{quizdown}
+### Remets les etapes de construction d'un graphe par attachement preferentiel (modele Barabasi-Albert) dans le bon ordre.
+
+> Ce mécanisme explique l'émergence des hubs.
+
+1. Partir d'un petit graphe initial connecté
+2. Ajouter un nouveau noeud au graphe
+3. Calculer la probabilité de connexion à chaque noeud existant proportionnellement à son degré
+4. Connecter le nouveau noeud aux noeuds sélectionnés
+5. Répéter jusqu'à atteindre la taille souhaitée du graphe
+```
+
+```{quizdown}
+### Quelle affirmation est FAUSSE concernant les graphes sans echelle (scale-free) ?
+
+> Attention aux propriétés de robustesse.
+
+1. [ ] Ils contiennent des hubs très connectés
+1. [ ] Ils ont un petit diamètre malgré leur taille
+1. [x] Ils sont robustes aux attaques ciblées sur leurs hubs
+    > Correct : c'est précisément une faiblesse des graphes sans échelle. Supprimer quelques hubs peut fragmenter le réseau. En revanche, ils résistent bien aux pannes aléatoires car la plupart des noeuds sont peu connectés.
+1. [ ] La distribution de leurs degrés suit une loi de puissance
+```
+
+```{quizdown}
+### Dans le cadre de l'inference de confiance, si C_{A->B} = 0.8 et C_{B->C} = 0.5, quelle est la confiance indirecte C_{A->C} selon le modele multiplicatif ?
+
+> Applique la formule directement.
+
+1. [ ] 0.8
+1. [ ] 0.65
+1. [x] 0.4
+    > Correct : C_{A->C} = C_{B->C} * C_{A->B} = 0.5 * 0.8 = 0.4. La confiance s'atténue à chaque intermédiaire.
+1. [ ] 1.3
+```
+
+```{quizdown}
+### Quelles affirmations sur le modele du petit monde (Watts-Strogatz) sont correctes ?
+
+> Ce modèle cherche à combiner deux propriétés souvent opposées.
+
+- [x] Il génère des graphes à petit diamètre
+    > Correct : le petit diamètre est l'une des deux propriétés fondamentales du modèle.
+- [x] Il modélise le phénomène des "six degrés de séparation" de Milgram
+    > Correct : l'expérience de Milgram (1967) a inspiré le modèle de Watts et Strogatz (1998).
+- [x] Il produit des graphes à fort coefficient de clustering
+    > Correct : les voisins d'un noeud sont eux-mêmes souvent connectés entre eux.
+- [ ] Il génère une distribution des degrés en loi de puissance
+    > Incorrect : la distribution en loi de puissance est caractéristique des graphes sans échelle (Barabási-Albert), pas du modèle petit monde.
+```
+
+```{quizdown}
+### Quelle mesure de centralite est la plus couteuse a calculer et pourquoi ?
+
+> Pense aux définitions et aux dépendances entre noeuds.
+
+1. [ ] La centralité de degré, car elle nécessite de parcourir toutes les arêtes
+1. [ ] La centralité de proximité, car elle nécessite de calculer toutes les distances
+1. [x] La centralité propre et PageRank, car ils nécessitent une décomposition spectrale ou des itérations sur tout le graphe
+    > Correct : la centralité propre requiert le calcul du vecteur propre dominant de la matrice d'adjacence, ce qui implique des itérations globales. PageRank est similaire. En comparaison, le degré se calcule en O(|V| + |E|).
+1. [ ] La centralité d'intermédiarité, car elle est aussi simple que le degré
+    > Incorrect : la betweenness est au contraire très coûteuse car elle repose sur le calcul de tous les plus courts chemins (O(|V|^3) naïvement).
+```
+
+```{quizdown}
+### Un analyste utilise la fermeture transitive d'un graphe. Que cherche-t-il a determiner ?
+
+> La transitivité porte sur les chemins indirects.
+
+1. [ ] La communauté d'appartenance de chaque noeud
+1. [ ] Les noeuds les plus centraux du réseau
+1. [x] Pour chaque paire de noeuds, s'ils peuvent communiquer en passant par des intermédiaires
+    > Correct : la fermeture transitive T est telle que T_{ij} = 1 si j est accessible depuis i par n'importe quel chemin. Elle répond à la question "peuvent-ils se parler, même indirectement ?"
+1. [ ] Les arêtes à supprimer pour minimiser le coût de la coupure
+```
