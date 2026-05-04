@@ -1,0 +1,327 @@
+---
+title: "Recherche de Cible et MDP — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Dans un Processus de Markov, la probabilité de transition vers l'état suivant depend uniquement de l'état courant.
+> Pense à ce que signifie "encoder l'historique" dans un seul état.
+1. [x] Vrai
+    > Correct : c'est exactement la propriété de Markov. P(s_{t+1} | s_0,...,s_t) = P(s_{t+1} | s_t). L'état courant est une statistique suffisante pour le futur.
+1. [ ] Faux
+    > Incorrect : la propriété de Markov affirme précisément que la connaissance de s_t est suffisante — l'historique complet n'apporte rien de plus.
+```
+
+```{quizdown}
+### Quels éléments composent un MDP (Markov Decision Process) ?
+> Un MDP enrichit le MRP en ajoutant une composante essentielle absente du MRP.
+- [x] Un espace d'états S
+    > Correct : S est présent dans tous les modèles markoviens.
+- [x] Un ensemble d'actions A
+    > Correct : A est la composante qui distingue le MDP du MRP — l'agent peut agir.
+- [x] Une fonction de récompense R(s, a)
+    > Correct : dans un MDP, la récompense depend aussi de l'action choisie.
+- [x] Un facteur de décompte gamma
+    > Correct : gamma contrôle l'importance des récompenses futures.
+- [ ] Une fonction de perte L(s)
+    > Incorrect : la fonction de perte est un concept d'apprentissage supervisé, pas de MDP.
+```
+
+```{quizdown}
+### Quelle est la différence fondamentale entre un MP et un MRP ?
+> L'un des deux modèles introduit quelque chose qui permet d'évaluer la qualité des états visités.
+1. [ ] Le MRP possède des actions, le MP non
+    > Incorrect : ni le MP ni le MRP ne possèdent d'actions. Les actions apparaissent dans le MDP.
+1. [x] Le MRP possède une fonction de récompense et un facteur de décompte, le MP non
+    > Correct : le MRP = (S, P, R, gamma). Il enrichit le MP (S, P) en ajoutant R et gamma, permettant d'évaluer les états.
+1. [ ] Le MRP possède un espace d'états discret, pas le MP
+    > Incorrect : les deux peuvent avoir un espace d'états discret.
+1. [ ] Le MP satisfait la propriété de Markov, le MRP non
+    > Incorrect : les deux satisfont la propriété de Markov. C'est leur point commun fondamental.
+```
+
+```{quizdown}
+### Que représente la matrice de transition A dans un Processus de Markov fini ?
+> Pense à ce que représente l'entrée A_{ij} en termes de probabilité.
+1. [ ] La récompense esperee en transitant de s_i vers s_j
+1. [x] La probabilité de transiter vers l'état s_j en étant dans l'état s_i
+    > Correct : A_{ij} = P(s_{t+1} = s_j | s_t = s_i). C'est une matrice stochastique dont chaque ligne somme à 1.
+1. [ ] La distance entre les états s_i et s_j
+1. [ ] La valeur de l'état s_j sachant qu'on vient de s_i
+```
+
+```{quizdown}
+### Un Processus de Markov simple (MP) inclut des actions et des récompenses.
+> Compare les tuples (S, P) et (S, A, P, R, gamma).
+1. [ ] Vrai
+1. [x] Faux
+    > Faux : un MP est simplement défini par (S, P). Il ne comporte ni actions ni récompenses. Ces éléments sont introduits respectivement dans le MRP (récompenses) et le MDP (actions).
+```
+
+```{quizdown}
+### Quelle propriété doit satisfaire chaque ligne de la matrice de transition A d'un Processus de Markov ?
+> Pense à ce que représentent les valeurs de chaque ligne en termes de probabilité.
+1. [ ] La somme de chaque ligne doit être égale à 0
+1. [ ] La somme de chaque ligne doit être inférieure à 1
+1. [x] La somme de chaque ligne doit être égale à 1
+    > Correct : A est une matrice stochastique. Chaque ligne représente une distribution de probabilité sur les états suivants possibles, donc la somme vaut nécessairement 1.
+1. [ ] Toutes les valeurs doivent être strictement positives
+    > Incorrect : certaines transitions peuvent avoir une probabilité nulle si elles sont impossibles.
+```
+
+---
+
+## Niveau 2 — Compréhension
+
+```{quizdown}
+### Dans le calcul du retour G_t, que se passe-t-il lorsque le facteur de décompte gamma est très proche de 0 ?
+> Imagine un agent qui ne se soucie que de ce qui se passe maintenant, sans regarder vers l'avenir.
+1. [x] L'agent est myope : seule la récompense immédiate r_t compte vraiment
+    > Correct : quand gamma tend vers 0, les termes gamma*r_{t+1}, gamma^2*r_{t+2}, etc. deviennent négligeables. L'agent optimise uniquement pour l'instant présent.
+1. [ ] L'agent donne plus de poids aux récompenses futures qu'aux récompenses immédiates
+    > Incorrect : c'est l'inverse. C'est gamma proche de 1 qui valorise les récompenses futures autant que les immédiates.
+1. [ ] Le retour G_t n'est plus défini
+    > Incorrect : G_t reste défini pour tout gamma dans (0, 1).
+1. [ ] L'agent ignore toutes les récompenses
+    > Incorrect : l'agent prend en compte la récompense immédiate r_t, c'est précisément son seul critère.
+```
+
+```{quizdown}
+### L'équation de Bellman pour un MRP exprime la valeur V(s) comme :
+> Pense à la décomposition récursive : récompense immediate + valeur future esperee.
+1. [ ] V(s) = R(s) + gamma * max_{s'} V(s')
+    > Incorrect : le max est utilisé dans l'équation de Bellman optimale (pour le MDP), pas pour le MRP où l'agent suit passivement les dynamiques.
+1. [x] V(s) = R(s) + gamma * sum_{s'} P(s' | s) * V(s')
+    > Correct : la valeur de s est la récompense immediate R(s) plus la valeur esperee actualisée des états suivants, pondérée par les probabilités de transition.
+1. [ ] V(s) = sum_{s'} P(s' | s) * R(s')
+    > Incorrect : cette formule oublie la récompense immediate et le facteur de décompte.
+1. [ ] V(s) = R(s) * gamma^t
+    > Incorrect : cette formule n'est pas récursive et ne tient pas compte des états futurs.
+```
+
+```{quizdown}
+### Quelle est la solution en forme fermée de l'équation de Bellman pour un MRP fini ?
+> L'équation matricielle V = R + gamma*P*V peut être résolue comme un système linéaire.
+1. [ ] V = (I + gamma*P)^{-1} * R
+    > Incorrect : le signe est incorrect. En isolant V dans V = R + gamma*P*V, on obtient (I - gamma*P)*V = R.
+1. [ ] V = P^{-1} * R
+    > Incorrect : cette formule omet le facteur de décompte gamma et la structure identité.
+1. [x] V = (I - gamma*P)^{-1} * R
+    > Correct : en isolant V dans V = R + gamma*P*V, on obtient (I - gamma*P)*V = R, soit V = (I - gamma*P)^{-1} * R.
+1. [ ] V = R / (1 - gamma)
+    > Incorrect : cette formule scalaire simplifiée ne s'applique pas en général. Elle serait valide uniquement si tous les états avaient la même récompense et si P était uniforme.
+```
+
+```{quizdown}
+### Pourquoi la forme fermée V = (I - gamma*P)^{-1} * R est-elle rarement utilisée en pratique pour de grands espaces d'états ?
+> Réfléchis à la complexité algorithmique de l'opération matricielle en jeu.
+1. [ ] Parce que la matrice P n'est pas toujours disponible
+1. [ ] Parce que gamma doit être exactement égal à 0.5 pour que la formule fonctionne
+1. [x] Parce que l'inversion de matrice a un coût O(N^3), prohibitif pour de grands N
+    > Correct : P est une matrice N x N et son inversion coute O(N^3). Pour des millions d'états, c'est computationnellement impossible. On recourt à des algorithmes itératifs (Programmation Dynamique).
+1. [ ] Parce que la matrice (I - gamma*P) n'est pas inversible
+    > Incorrect : pour gamma dans (0,1), la matrice (I - gamma*P) est toujours inversible car ses valeurs propres sont dans (0,1).
+```
+
+```{quizdown}
+### Quelle est la différence entre V_pi(s) et Q_pi(s, a) dans un MDP ?
+> Pense à ce que chacune mesure : la valeur d'un état seul, ou la valeur d'une paire état-action.
+1. [ ] V_pi(s) prend en compte les actions, Q_pi(s,a) non
+    > Incorrect : c'est l'inverse. Q_pi integre explicitement l'action a dans ses arguments.
+1. [x] V_pi(s) est la valeur esperee en suivant pi depuis s ; Q_pi(s,a) est la valeur esperee en prenant a depuis s puis en suivant pi
+    > Correct : V_pi(s) = E[G_t | s_t=s] sous pi. Q_pi(s,a) = E[G_t | s_t=s, a_t=a] sous pi. Q est plus precis : il fixe aussi la première action.
+1. [ ] Q_pi(s,a) est toujours supérieur à V_pi(s)
+    > Incorrect : la relation est V_pi(s) = somme_a pi(a,s)*Q_pi(s,a). V_pi est la moyenne pondérée des Q-valeurs, donc ni toujours supérieure ni inférieure.
+1. [ ] V_pi et Q_pi sont équivalents pour toute politique déterministe
+    > Incorrect : même pour une politique déterministe pi(s) = a*, on a V_pi(s) = Q_pi(s, a*) uniquement pour cette action, pas en général.
+```
+
+```{quizdown}
+### Remets dans l'ordre la hiérarchie des modèles markoviens, du plus simple au plus expressif.
+> Chaque modèle enrichit le précédent en ajoutant une nouvelle composante.
+1. Processus de Markov — MP (S, P)
+2. Processus de Récompense de Markov — MRP (S, P, R, gamma)
+3. Processus de Décision de Markov — MDP (S, A, P, R, gamma)
+```
+
+```{quizdown}
+### Quelle relation lie V_pi(s) et Q_pi(s, a) ?
+> V_pi est une synthèse de toutes les Q-valeurs possibles depuis s, pondérées par la politique.
+1. [ ] V_pi(s) = max_a Q_pi(s, a)
+    > Incorrect : cette formule correspond à la politique optimale, pas à une politique quelconque pi.
+1. [ ] V_pi(s) = Q_pi(s, pi(s)) uniquement pour les politiques stochastiques
+    > Incorrect : pour une politique déterministe pi(s)=a, on a bien V_pi(s) = Q_pi(s, a), mais la formule générale est la somme pondérée.
+1. [x] V_pi(s) = somme_a pi(a, s) * Q_pi(s, a)
+    > Correct : la valeur d'état est la moyenne des Q-valeurs pondérée par la probabilité de chaque action sous pi. C'est la définition de l'espérance sous pi.
+1. [ ] V_pi(s) = somme_{s'} P(s' | s) * Q_pi(s', pi(s'))
+    > Incorrect : cette formule mélange incorrectement les rôles de V et Q.
+```
+
+```{quizdown}
+### L'algorithme PageRank peut etre modélisé comme une application de quel concept ?
+> Pense à la navigation aléatoire sur le Web : des pages liées entre elles, avec des probabilités de suivi de liens.
+1. [ ] Processus de Décision de Markov (MDP)
+    > Incorrect : PageRank n'implique pas de choix d'actions par un agent.
+1. [ ] Processus de Récompense de Markov (MRP)
+    > Incorrect : PageRank ne modélise pas de récompense associée aux pages.
+1. [x] Processus de Markov (MP) — Chaine de Markov
+    > Correct : PageRank modélise la navigation aléatoire comme une chaîne de Markov sur le graphe du Web. La distribution stationnaire de cette chaîne donne le rang des pages.
+1. [ ] Apprentissage par renforcement (RL)
+    > Incorrect : PageRank ne fait pas apprendre une politique — il calcule une distribution stationnaire.
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Pourquoi les équations de Bellman optimales ne peuvent-elles pas etre résolues par simple inversion de matrice, contrairement aux équations de Bellman classiques ?
+> Compare la structure de V_pi(s) = somme... et V*(s) = max...
+1. [ ] Parce que la matrice P n'est pas carrée dans le cas optimal
+    > Incorrect : P reste une matrice N x N dans les deux cas.
+1. [ ] Parce que gamma doit etre égal à 1 pour les équations optimales
+    > Incorrect : gamma garde la meme contrainte (0,1) dans les deux cas.
+1. [x] Parce que l'opérateur max rend les équations non linéaires
+    > Correct : V*(s) = max_a [...] et Q*(s,a) = [...max_{a'}...] introduisent une non-linéarité que l'algèbre linéaire matricielle ne peut pas résoudre directement. On recourt à Value Iteration ou Q-Learning.
+1. [ ] Parce qu'il n'existe pas toujours de politique optimale
+    > Incorrect : un résultat fondamental garantit qu'il existe toujours au moins une politique optimale (déterministe) pour tout MDP fini.
+```
+
+```{quizdown}
+### Dans le contexte de la recherche de cible (Target Search), que mesure P(C = D_i | H_t) ?
+> H_t représente tout ce que le système a observé jusqu'à l'étape t.
+1. [ ] La similarité entre l'image D_i et la requete textuelle de l'utilisateur
+1. [x] La probabilité estimée que l'image D_i soit la cible recherchée par l'utilisateur, sachant l'historique des interactions
+    > Correct : P(C = D_i | H_t) est la croyance courante du système sur quelle image est la cible, mise à jour à chaque interaction selon la règle de Bayes.
+1. [ ] La récompense obtenue si l'image D_i est sélectionnée dans S_t
+1. [ ] Le rang de D_i dans la collection à l'étape t
+```
+
+```{quizdown}
+### Pourquoi utiliser des jugements relatifs ("cette image est la plus proche de ma cible") plutot que des jugements absolus de pertinence en recherche de cible ?
+> Pense à la difficulté cognitive de chaque type de jugement pour un utilisateur humain.
+- [x] Les jugements relatifs sont cognitivement plus naturels pour un humain
+    > Correct : comparer deux options est généralement plus facile que d'attribuer une note absolue de pertinence.
+- [x] Cela évite le problème de la page zéro (d'ou vient l'exemple initial)
+    > Correct : en recherche de cible, l'utilisateur a une image mentale interne — il n'a pas besoin de fournir un exemple de requete.
+- [ ] Les jugements relatifs sont toujours plus précis informationnellement
+    > Incorrect : un jugement absolu de pertinence peut contenir plus d'information qu'un simple choix entre deux options.
+- [ ] Les jugements absolus sont impossibles à collecter automatiquement
+    > Incorrect : les jugements absolus sont très utilisés (ex. : systèmes de notation étoiles). Le problème est leur difficulté cognitive et leur subjectivité, pas leur impossibilité.
+```
+
+```{quizdown}
+### Dans la formule du modèle utilisateur P(A_t | C = D_i, S_t, H_{t-1}), que se passe-t-il si le parametre sigma tend vers 0 ?
+> Sigma contrôle la "netteté" de la distribution softmax sur les distances.
+1. [x] Le comportement de l'utilisateur devient entièrement déterministe : il clique toujours sur l'image la plus proche
+    > Correct : quand sigma tend vers 0, le softmax se concentre sur le minimum de distance. L'utilisateur modélisé clique toujours sur l'image la plus proche de la cible, sans aléatoire.
+1. [ ] Toutes les images ont la meme probabilité d'etre cliquées
+    > Incorrect : c'est ce qui se passe quand sigma tend vers l'infini (comportement uniforme / aléatoire).
+1. [ ] Le modèle utilisateur n'est plus défini
+    > Incorrect : le softmax est défini pour tout sigma > 0. La limite en sigma -> 0 est un comportement déterministe.
+1. [ ] L'utilisateur ignore la distance entre les images
+    > Incorrect : l'utilisateur se fie entièrement à la distance, c'est exactement l'inverse.
+```
+
+```{quizdown}
+### Un agent de recherche de cible doit choisir une stratégie. Laquelle correspond à une stratégie d'exploitation pure ?
+> L'exploitation utilise ce qu'on sait déjà ; l'exploration cherche de nouvelles informations.
+1. [ ] Sélectionner des images dans des zones jamais explorées de l'espace des features
+    > Incorrect : explorer des zones inconnues est une stratégie d'exploration, pas d'exploitation.
+1. [x] Sélectionner les images ayant la probabilité P(C = D_i) la plus élevée selon la croyance courante
+    > Correct : choisir les images les plus probables selon le modèle actuel est de l'exploitation pure — on utilise uniquement la connaissance acquise sans chercher à la compléter.
+1. [ ] Sélectionner des images aléatoirement dans la collection
+    > Incorrect : la sélection aléatoire est une forme d'exploration maximale, pas d'exploitation.
+1. [ ] Alterner entre les images les plus probables et des images aléatoires
+    > Incorrect : cette stratégie combine exploration et exploitation, elle n'est pas purement exploitative.
+```
+
+```{quizdown}
+### Remets dans l'ordre les étapes de la boucle d'interaction en recherche de cible (Target Search).
+> Pense à la procédure complète : initialisation, sélection, interaction, mise à jour.
+1. Initialiser la distribution à P(C = D_i) = 1/N pour tout i
+2. Choisir S_t par maximisation du gain d'information
+3. L'utilisateur clique sur l'image la plus proche de sa cible
+4. Calculer P(A_t | S_t, C = D_i) pour chaque D_i via le modèle utilisateur
+5. Mettre à jour P(C = D_i) par la règle de Bayes
+```
+
+```{quizdown}
+### Quel critère guide la sélection des images S_t à chaque étape en recherche de cible ?
+> Pense à ce que le système cherche à maximiser à chaque interaction.
+1. [ ] Maximiser la similarité entre les images sélectionnées
+    > Incorrect : des images très similaires entre elles apporteraient peu d'information pour distinguer la cible.
+1. [ ] Minimiser la distance moyenne entre S_t et la dernière image cliquée
+    > Incorrect : cette heuristique ne prend pas en compte la distribution globale de probabilité sur la collection.
+1. [x] Minimiser le nombre esperé d'étapes restantes, ce qui equivaut à maximiser le gain d'information (réduire l'entropie de la collection)
+    > Correct : le critère est de choisir S_t minimisant la somme F[P(D_i=C | A_t=a)]*P(A_t=a | S_t). Cela est lié à la réduction de l'entropie — H = -somme P(D=C) log P(D=C).
+1. [ ] Sélectionner aléatoirement N_D images dans la collection
+    > Incorrect : une sélection aléatoire ne tient pas compte de la distribution P(C=D_i) et serait sous-optimale.
+```
+
+```{quizdown}
+### Quel problème particulier pose le scénario de la "cible mobile" (Mobile Target) par rapport au scénario standard de recherche de cible ?
+> Pense à ce qui se passe quand l'utilisateur découvre de nouvelles images au fil de l'interaction.
+1. [ ] Le nombre d'images dans la collection change à chaque étape
+    > Incorrect : la collection reste fixe. C'est l'image mentale de l'utilisateur qui change.
+1. [ ] Le système ne peut plus utiliser la règle de Bayes pour la mise à jour
+    > Incorrect : la règle de Bayes reste applicable, mais son utilisation doit etre adaptée pour tenir compte de l'incohérence.
+1. [x] L'utilisateur peut changer d'image mentale en cours d'interaction, rendant son comportement incohérent avec l'historique
+    > Correct : l'utilisateur apprend sur la collection (sérendipité) et peut modifier sa cible. Le modèle standard suppose une cible fixe et cohérente — cette hypothèse est violée.
+1. [ ] La propriété de Markov n'est plus satisfaite dans ce scénario
+    > Incorrect : la propriété de Markov peut encore etre utilisée mais on doit modéliser A_t = f(H_{t-1}) et introduire des mécanismes de décroissance pour gérer l'incohérence.
+```
+
+```{quizdown}
+### Quelle correspondance est correcte entre les composantes d'un MDP et la recherche de cible ?
+> Mets en relation chaque composante MDP avec son équivalent dans le système de recherche de cible.
+1. [ ] L'action a_t correspond à la collection d'images D_1, ..., D_N
+    > Incorrect : la collection est l'environnement, pas l'action. L'action est le clic de l'utilisateur.
+1. [ ] La récompense R(s, a) correspond à la distribution de probabilité P(C = D_i | H_t)
+    > Incorrect : P(C = D_i | H_t) correspond à l'état s_t, pas à la récompense.
+1. [x] L'état s_t correspond à la distribution P(C = D_i | H_t), l'action a_t au clic utilisateur A_t, et la récompense au gain d'information
+    > Correct : c'est la correspondance complète. L'état encode la croyance courante sur la cible. L'action est le clic. La récompense mesure la réduction d'incertitude (gain d'information, baisse d'entropie).
+1. [ ] La politique pi correspond au modèle utilisateur P(A_t | C = D_i, S_t)
+    > Incorrect : le modèle utilisateur est la fonction de vraisemblance, pas la politique. La politique correspond à la stratégie de sélection de S_t.
+```
+
+```{quizdown}
+### Un système de recherche de cible démarre avec P(C = D_i) = 1/N pour tout i. Que signifie cette initialisation ?
+> Pense à ce que cette distribution uniforme exprime sur la connaissance initiale du système.
+1. [ ] Le système sait que la cible est l'une des N/2 premières images
+    > Incorrect : la distribution uniforme ne donne aucun avantage à aucune image.
+1. [ ] Le système a identifié N candidats équiprobables parmi une collection plus grande
+    > Incorrect : la collection entière est considerée, pas un sous-ensemble.
+1. [x] Le système n'a aucune connaissance a priori sur la cible — toutes les images sont équiprobables
+    > Correct : P(C = D_i) = 1/N est la distribution uniforme sur la collection. C'est l'a priori non informatif maximal — le système part sans aucun biais ni connaissance préalable.
+1. [ ] Le système suppose que la cible est répartie uniformément dans l'espace des features
+    > Incorrect : cette initialisation concerne la distribution de probabilité sur les images de la collection, pas leur distribution spatiale dans l'espace des features.
+```
+
+```{quizdown}
+### Comment la mise à jour Bayésienne garantit-elle la propriété markovienne dans la boucle de recherche de cible ?
+> Pense au rôle de H_{t-1} dans la formule après l'hypothèse d'indépendance de S_t.
+1. [ ] En ignorant complètement l'historique H_{t-1} à chaque étape
+    > Incorrect : l'historique n'est pas ignoré — il est entièrement encodé dans la distribution P(C = D_i | H_{t-1}).
+1. [ ] En utilisant une décroissance exponentielle sur les actions passées
+    > Incorrect : la décroissance exponentielle est une technique pour le problème de cible mobile, pas pour la propriété markovienne standard.
+1. [x] Parce que S_t est indépendant de H_{t-1} : toute l'information pertinente du passé est déjà dans P(C = D_i | H_{t-1}), qui joue le rôle d'état markovien
+    > Correct : en posant que S_t ne dépend pas directement de H_{t-1} (mais seulement de la distribution courante), la formule de mise à jour ne requiert que l'état courant — exactement la propriété de Markov.
+1. [ ] Parce que la règle de Bayes est par définition markovienne
+    > Incorrect : la règle de Bayes est un outil probabiliste général. C'est l'hypothèse sur l'indépendance de S_t vis-à-vis de H_{t-1} qui confère la propriété markovienne.
+```
+
+```{quizdown}
+### Remets dans l'ordre les étapes menant de la propriété de Markov à l'algorithme Q-Learning.
+> Chaque étape enrichit le modèle précédent ou résout le problème posé par la complexité de l'étape précédente.
+1. Définir la propriété de Markov et le Processus de Markov (MP)
+2. Ajouter des récompenses — Processus de Récompense de Markov (MRP)
+3. Ajouter des actions — Processus de Décision de Markov (MDP)
+4. Definir les fonctions de valeur optimales V* et Q* via Bellman optimal
+5. Résoudre les équations non linéaires de façon itérative — Q-Learning
+```

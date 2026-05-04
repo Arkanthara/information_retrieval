@@ -1,0 +1,347 @@
+---
+title: "Recherche d'Information Visuelle — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Quel est l'objectif principal de la recherche d'information visuelle ?
+
+> Pense aux deux contraintes fondamentales : retrouver et ne rien perdre.
+
+1. [ ] Compresser les images pour réduire le stockage
+1. [x] Stocker des documents visuels pour les retrouver sans perte d'information
+    > Correct : l'objectif est de stocker pour retrouver, tout en évitant le trou noir informationnel.
+1. [ ] Convertir les images en descriptions textuelles
+1. [ ] Générer automatiquement des images à partir de texte
+```
+
+```{quizdown}
+### Qu'est-ce que le trou noir informationnel (information black hole) ?
+
+> Pense à ce qui se passe quand l'indexation et la requête utilisent des vocabulaires différents.
+
+1. [ ] Un document corrompu qui ne peut plus être lu
+1. [ ] Une image trop compressée pour être affichée
+1. [x] Un document présent dans la base mais impossible à retrouver lors d'une recherche
+    > Correct : le trou noir survient quand le vocabulaire d'indexation et celui de la requête ne correspondent pas.
+1. [ ] Une collection vide sans aucun document indexé
+```
+
+```{quizdown}
+### Dans le pipeline de gestion de l'information visuelle, dans quel ordre se succèdent les étapes ?
+
+> Pense au flux depuis les données brutes jusqu'à la décision finale.
+
+1. Documents bruts
+2. Extraction de caracteristiques
+3. Projection dans l'espace de representation
+4. Interaction utilisateur
+5. Processus de decision
+```
+
+```{quizdown}
+### Quel standard de description est specifiquement oriente vers la recherche dans les contenus multimedias ?
+
+> Pense aux standards listes dans le cours — l'un d'eux est explicitement concu pour la recherche.
+
+1. [ ] Exif
+1. [ ] IPTC
+1. [ ] ID3
+1. [x] MPEG-7
+    > Correct : MPEG-7 est un standard ISO oriente vers la description structuree du contenu multimedia pour la recherche.
+```
+
+```{quizdown}
+### Quels formats permettent d'inserer des metadonnees dans des fichiers multimedia ?
+
+> Plusieurs standards coexistent selon le type de media.
+
+- [x] IPTC
+    > Correct : IPTC est un standard de description de photos.
+- [x] Exif
+    > Correct : Exif stocke les parametres de prise de vue et peut contenir des metadonnees.
+- [ ] RGB
+    > Incorrect : RGB est un modele colorimetrique, pas un format de metadonnees.
+- [x] ID3
+    > Correct : ID3 est le standard de metadonnees pour les fichiers audio.
+- [ ] HSV
+    > Incorrect : HSV est un espace colorimetrique, pas un standard de metadonnees.
+```
+
+```{quizdown}
+### Qu'est-ce que le paradigme Requete par l'Exemple (Query-by-Example, QbE) ?
+
+> Pense a la formulation la plus naturelle d'une requete visuelle.
+
+1. [ ] L'utilisateur decrit l'image avec des mots-cles
+1. [x] L'utilisateur fournit une image exemple et cherche des images similaires
+    > Correct : QbE signifie "je veux quelque chose comme ceci", en fournissant un exemple visuel.
+1. [ ] Le systeme genere automatiquement des requetes
+1. [ ] L'utilisateur dessine une esquisse de l'image recherchee
+```
+
+---
+
+## Niveau 2 — Comprehension
+
+```{quizdown}
+### Pourquoi prefere-t-on la distance dans l'espace HSV plutot que dans l'espace RGB pour mesurer la similarite de couleur ?
+
+> Pense a la relation entre espace colorimetrique et perception humaine.
+
+1. [ ] HSV utilise moins de memoire que RGB
+1. [ ] HSV permet de stocker plus de couleurs distinctes
+1. [x] La distance en HSV correspond mieux a la similarite de couleur percue par l'humain
+    > Correct : l'espace HSV est plus proche de la perception humaine des couleurs que le modele RGB additif.
+1. [ ] RGB ne peut pas representer toutes les couleurs
+```
+
+```{quizdown}
+### Un histogramme de couleur est calcule sur deux images : l'une est un carre vert uni, l'autre est un damier vert et jaune. Que peut-on conclure ?
+
+> Reflechis a ce que l'histogramme capture et ce qu'il ignore.
+
+1. [ ] Les histogrammes sont tres differents car les images sont visuellement distinctes
+1. [x] Les histogrammes peuvent etre identiques car l'histogramme ignore la position spatiale des pixels
+    > Correct : l'histogramme ne tient pas compte de la localisation des pixels, seulement de leur frequence par couleur.
+1. [ ] Les histogrammes sont identiques uniquement si les images ont la meme taille
+1. [ ] Il est impossible de comparer ces deux images par histogramme
+```
+
+```{quizdown}
+### Quelles affirmations sur les filtres de Gabor sont correctes ?
+
+> Pense a leur definition mathematique et a leur inspiration biologique.
+
+- [x] Les filtres de Gabor sont biologiquement motives par le fonctionnement du cortex visuel primaire
+    > Correct : les cellules simples de V1 repondent a des orientations et frequences spatiales, comme les filtres de Gabor.
+- [x] Ils permettent de caracteriser la texture d'une image
+    > Correct : un banc de filtres de Gabor produit une description globale de la texture.
+- [ ] Ils sont uniquement utilises pour la detection de couleurs
+    > Incorrect : les filtres de Gabor capturent la texture, pas la couleur.
+- [x] Ils sont sensibles a l'orientation et a la frequence spatiale
+    > Correct : chaque filtre de Gabor est parametrise par une orientation et une frequence.
+```
+
+```{quizdown}
+### Qu'est-ce que l'ecart semantique (semantic gap) en recherche d'information visuelle ?
+
+> Pense a la difference de niveau d'interpretation entre une machine et un humain.
+
+1. [ ] La difference de taille entre deux images
+1. [ ] L'ecart entre la resolution de l'image originale et celle apres compression
+1. [x] La difference d'interpretation entre un operateur humain et un systeme automatise
+    > Correct : l'ecart semantique designe le fosse entre ce que la machine peut calculer (pixels, couleurs) et ce que l'humain comprend (objets, concepts, emotions).
+1. [ ] L'absence de metadonnees dans un fichier image
+```
+
+```{quizdown}
+### Dans le contexte du Sac de Mots Visuels (Bag of Visual Words), a quoi correspond un mot visuel ?
+
+> Pense par analogie avec le traitement de texte.
+
+1. [ ] Une etiquette textuelle associee a une image
+1. [ ] Un pixel particulier de l'image
+1. [x] Un groupe de descripteurs locaux similaires issus du clustering
+    > Correct : les descripteurs locaux similaires (ex. SIFT) sont regroupes par clustering, et chaque groupe forme un mot visuel.
+1. [ ] Une region segmentee de l'image
+```
+
+```{quizdown}
+### Quelles etapes constituent le pipeline du Sac de Mots Visuels (Bag of Visual Words) ?
+
+> Pense au processus complet depuis les images jusqu'a la representation finale.
+
+1. Extraction de descripteurs locaux (ex. SIFT)
+2. Clustering des descripteurs similaires
+3. Construction du dictionnaire visuel
+4. Representation de chaque image par vecteur de frequences d'occurrence
+```
+
+```{quizdown}
+### Dans l'algorithme SIFT, quelle est la dimension du vecteur descripteur produit pour chaque point-cle ?
+
+> Pense au nombre d'histogrammes et au nombre d'orientations par histogramme.
+
+1. [ ] 64 dimensions
+1. [ ] 256 dimensions
+1. [x] 128 dimensions
+    > Correct : SIFT produit 16 histogrammes de gradients avec 8 orientations chacun, soit 16 x 8 = 128 dimensions.
+1. [ ] 512 dimensions
+```
+
+```{quizdown}
+### Le retour de pertinence (relevance feedback) permet de traverser l'ecart semantique. Pourquoi ?
+
+> Pense au role de l'utilisateur dans le processus d'apprentissage de la representation.
+
+1. [ ] Il augmente automatiquement la resolution des images
+1. [ ] Il genere des annotations textuelles automatiques
+1. [x] Il utilise l'utilisateur comme oracle semantique pour adapter la representation aux perceptions humaines
+    > Correct : en indiquant ce qui est pertinent ou non, l'utilisateur guide le systeme vers une representation alignee sur la semantique percue.
+1. [ ] Il supprime les images non pertinentes de la collection
+```
+
+---
+
+## Niveau 3 — Maitrise
+
+```{quizdown}
+### Un systeme indexe une image sous le terme "chien qui joue". Un utilisateur recherche "animal domestique en mouvement" et ne trouve pas cette image. De quel probleme s'agit-il ?
+
+> Reflechis au concept lie a l'impossibilite de retrouver un document pourtant present.
+
+1. [ ] Un probleme de segmentation d'image
+1. [ ] Un ecart semantique entre bas niveau et haut niveau
+1. [x] Un trou noir informationnel cause par un vocabulaire d'indexation incompatible avec la requete
+    > Correct : le document est present mais introuvable car le vocabulaire d'indexation ne correspond pas au vocabulaire de la requete.
+1. [ ] Un probleme de compression des metadonnees
+```
+
+```{quizdown}
+### Un auto-encodeur est entraine sans goulot d'etranglement (bottleneck). Que se passe-t-il ?
+
+> Pense a ce que le reseau apprend quand aucune contrainte de compression n'est imposee.
+
+1. [x] Le reseau apprend a transmettre l'information telle quelle sans comprimer
+    > Correct : sans bottleneck, le reseau peut simplement "laisser passer" l'information, sans apprendre de representation utile.
+1. [ ] Le reseau apprend une representation tres compacte et semantique
+1. [ ] Le reseau echoue a converger
+1. [ ] Le reseau effectue automatiquement un debruitage
+```
+
+```{quizdown}
+### Quelles affirmations sur les Reseaux Generatifs Adversariaux (GAN) sont correctes ?
+
+> Pense aux deux composants du GAN et a leur role respectif.
+
+- [x] Le generateur produit de fausses images a partir d'un bruit aleatoire
+    > Correct : le generateur prend un vecteur de bruit en entree et produit une image synthetique.
+- [x] Le discriminateur tente de distinguer les images reelles des images generees
+    > Correct : le discriminateur est entraine a detecter les faux.
+- [ ] Les deux reseaux sont entraine separement et independamment
+    > Incorrect : les deux reseaux sont entraine conjointement dans un jeu adversarial.
+- [x] Les images generees peuvent potentiellement etre utilisees comme donnees d'entrainement supplementaires
+    > Correct : la generation de donnees synthetiques est une application reconnue des GAN.
+```
+
+```{quizdown}
+### Dans la recherche de cible (target search), quelle propriete permet de simplifier le calcul de la distribution de probabilite ?
+
+> Pense a la propriete qui relie l'etat courant a l'etat precedent uniquement via la selection courante.
+
+1. [ ] La loi des grands nombres
+1. [ ] Le theoreme central limite
+1. [x] La propriete de Markov : la selection courante est independante de tout l'historique passe
+    > Correct : supposer que S_t est independant de H_{t-1} (propriete de Markov) permet de ne calculer qu'en fonction de l'etat courant.
+1. [ ] L'independance conditionnelle entre toutes les images
+```
+
+```{quizdown}
+### Dans la recherche de cible, quel critere guide le choix optimal de la selection d'images a presenter ?
+
+> Pense a ce qu'on cherche a maximiser a chaque etape pour converger le plus vite.
+
+1. [ ] Presenter les images les plus proches de la requete initiale
+1. [ ] Presenter les images les plus populaires de la collection
+1. [x] Maximiser le gain d'information, lie a la minimisation de l'entropie de la collection
+    > Correct : on choisit la selection qui reduit le plus l'incertitude sur l'identite de la cible, c'est-a-dire qui maximise le gain d'information.
+1. [ ] Presenter les images les plus dissimilaires entre elles
+```
+
+```{quizdown}
+### Quel est le probleme de la cible mobile (mobile target) dans la recherche de cible ?
+
+> Pense a ce qui change par rapport au modele standard ou la cible est fixe.
+
+1. [ ] La cible se deplace physiquement dans l'espace de la collection
+1. [x] L'utilisateur modifie son image mentale pendant l'interaction, rendant son comportement incoherent
+    > Correct : la cible mobile modelise un utilisateur qui change d'objectif en cours de navigation, par decouverte (serendipite) ou changement de preference.
+1. [ ] Le systeme recalcule constamment les caracteristiques des images
+1. [ ] La collection est mise a jour en temps reel pendant la recherche
+```
+
+```{quizdown}
+### Comparons deux strategies de navigation. Un systeme explore uniquement des zones inconnues de l'espace de recherche. Quel est le risque ?
+
+> Pense au compromis exploration/exploitation.
+
+1. [ ] Le systeme converge trop vite vers une solution sous-optimale
+1. [x] Le systeme ne garantit pas d'amelioration immediate et peut tarder a trouver la cible
+    > Correct : une exploration pure ne tire pas parti des connaissances deja acquises et peut etre inefficace a court terme.
+1. [ ] Le systeme memorise toutes les images de la collection
+1. [ ] Le systeme ignore les preferences de l'utilisateur
+```
+
+```{quizdown}
+### Quelles techniques peuvent etre utilisees pour segmenter une image en regions homogenes ?
+
+> Pense aux methodes presentees dans le cours pour la segmentation.
+
+- [x] K-means
+    > Correct : K-means regroupe les pixels en k clusters selon leurs proprietes (couleur, texture).
+- [x] Mean-shift
+    > Correct : Mean-shift est un algorithme de montee de gradient vers les modes de densite.
+- [x] Contours actifs (snakes)
+    > Correct : les snakes sont des courbes deformables qui s'adaptent aux bords des objets.
+- [ ] SIFT
+    > Incorrect : SIFT extrait des descripteurs locaux autour de points-cles, ce n'est pas une technique de segmentation.
+- [ ] Filtre de Gabor
+    > Incorrect : les filtres de Gabor caracterisent la texture, ils ne segmentent pas l'image.
+```
+
+```{quizdown}
+### Dans un reseau de neurones convolutif (CNN), quel est le role de la couche de sous-echantillonnage (pooling) ?
+
+> Pense a ce que cette couche fait subir aux cartes de caracteristiques.
+
+1. [ ] Augmenter la resolution spatiale des cartes de caracteristiques
+1. [ ] Apprendre des filtres supposes capturer des motifs locaux
+1. [x] Reduire la dimension spatiale tout en conservant l'information essentielle
+    > Correct : le pooling (ex. max-pooling) reduit la taille des cartes de caracteristiques, limitant le nombre de parametres et conferant une certaine invariance spatiale.
+1. [ ] Normaliser les valeurs de pixels entre 0 et 1
+```
+
+```{quizdown}
+### En quoi le Sac de Mots Visuels (Bag of Visual Words) permet-il d'utiliser les outils classiques de la recherche d'information textuelle ?
+
+> Pense a la forme finale de la representation obtenue.
+
+1. [ ] Il convertit les images en descriptions textuelles lisibles
+1. [x] Il represente chaque image comme un vecteur de frequences d'occurrence de mots visuels, analogue a un vecteur TF-IDF
+    > Correct : une fois chaque image representee par ce vecteur, on peut appliquer TF-IDF, fichiers inverses et modeles probabilistes exactement comme pour du texte.
+1. [ ] Il extrait automatiquement les legendes des images
+1. [ ] Il compresse les images en sequences de tokens textuels
+```
+
+```{quizdown}
+### Quelles affirmations sur l'algorithme SIFT sont correctes ?
+
+> Pense aux proprietes de robustesse et au processus de construction du descripteur.
+
+- [x] SIFT est invariant au changement d'echelle
+    > Correct : c'est l'origine du nom Scale-Invariant Feature Transform.
+- [x] Le descripteur est un vecteur de 128 dimensions
+    > Correct : 16 histogrammes de gradients x 8 orientations = 128D.
+- [ ] SIFT detecte uniquement les regions colorees d'une image
+    > Incorrect : SIFT travaille sur les gradients d'intensite, pas specifiquement sur la couleur.
+- [x] SURF est une version acceleree de SIFT utilisant des filtres de boite
+    > Correct : SURF approxime les operateurs gaussiens par des filtres de boite et images integrales pour gagner en vitesse.
+```
+
+```{quizdown}
+### Remets dans l'ordre les etapes de la boucle d'interaction dans la recherche de cible bayesienne.
+
+> Pense au cycle complet depuis la selection jusqu'a la mise a jour de la distribution.
+
+1. Calculer la selection S_t par maximisation du gain d'information
+2. Presenter la selection a l'utilisateur
+3. L'utilisateur clique sur l'image la plus proche de la cible
+4. Calculer la vraisemblance du clic pour chaque image candidate
+5. Mettre a jour la distribution par la regle de Bayes
+```

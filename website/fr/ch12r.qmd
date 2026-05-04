@@ -1,0 +1,290 @@
+---
+title: "Recherche d'Information Visuelle — Révision"
+---
+
+## Pipeline de Gestion de l'Information
+
+| Étape | Description |
+|---|---|
+| Documents bruts | Images, vidéos, audio bruts |
+| Extraction de caractéristiques | Transformation numérique |
+| Projection (*mapping*) | Vers espace de représentation |
+| Interaction utilisateur | Requête, feedback |
+| Décision | Retour des documents pertinents |
+
+::: {.callout-important title="Objectifs fondamentaux"}
+- Stocker pour **retrouver** (pas de trou noir informationnel)
+- Compréhension **automatique** et **exhaustive** du contenu visuel
+:::
+
+---
+
+## Annotation des Médias
+
+**Standards** : IPTC, Exif, ID3, NTFS, MPEG-7, JPSearch
+
+**MPEG-7** : description hiérarchique en régions spatiales (SR1–SR8)
+→ Chaque région : forme + histogramme couleur + annotation textuelle
+
+**Approches complémentaires** :
+
+- Annotation textuelle (métadonnées, tags)
+- Recherche basée contenu (*content-based*)
+- Annotation sociale (*social annotation*)
+
+---
+
+## Concepts Fondamentaux
+
+### Trou Noir Informationnel (*Information Black Hole*)
+
+> Image indexée « insecte sur fleur » → introuvable avec « insecte qui se nourrit »
+
+**Solution** : représentation **exhaustive** (context-free) + **automatique**
+
+### Paradigme IR
+
+$$\text{Pertinence} \approx \text{Similarité} \approx \text{Proximité dans l'espace de représentation}$$
+
+- **QbE** (*Query-by-Example*) : « Je veux quelque chose *comme* ceci »
+- IR ne nécessite pas la compréhension absolue → juste **comparer 2 documents**
+
+### Écart Sémantique (*Semantic Gap*)
+
+| Niveau | Texte | Visuel |
+|---|---|---|
+| Interprétation | Histoire | « Action » |
+| Sémantique | Paragraphe | Scène |
+| Groupe | Phrase | Objet |
+| Physique | Mot | Région homogène |
+| Entité | Caractère | Couleur, texture |
+
+::: {.callout-warning title="Piège"}
+Plus on monte vers la sémantique → plus pertinent pour l'humain, moins précis pour la machine.
+:::
+
+---
+
+## Caractéristiques Visuelles de Bas Niveau
+
+### Couleur
+
+- **RGB** : pixel = triplet (R, G, B) ∈ [0, 255]³
+- **HSV** : meilleure correspondance à la perception humaine
+- **Histogramme de couleur** : distribution des couleurs, **indépendante de la position**
+
+::: {.callout-warning title="Piège — Histogramme"}
+Image damier ≡ Image unie (même histogramme) → histogramme **ignore la position spatiale**
+:::
+
+### Texture
+
+**Critères** : orientation, grossièreté (*coarseness*), taille
+
+**Modèles** :
+
+- Matrices de co-occurrence
+- Filtres de Gabor ← biologiquement motivés (cortex visuel V1)
+- Champs de Markov, réseaux de neurones
+
+**Filtre de Gabor** :
+
+$$g(x,y) = \left(\frac{1}{2\pi\sigma_x\sigma_y}\right)\exp\!\left(-\frac{1}{2}\!\left(\frac{x^2}{\sigma_x^2}+\frac{y^2}{\sigma_y^2}\right)+2\pi jWx\right)$$
+
+### Forme et Segmentation (*Shape & Segmentation*)
+
+**Contraintes** : homogénéité, connexité, forme cohérente
+
+**Techniques** :
+
+- K-means (*clustering*)
+- Mean-shift
+- Contours actifs (*snakes*)
+- BlobWorld (Berkeley) : recherche par blobs segmentés
+
+---
+
+## Caractéristiques Locales
+
+### Points-clés (*Keypoints*)
+
+- Points d'intérêt stables sous transformations géométriques
+- Détection de coins (*corner detection*)
+
+### SIFT (Lowe, 1999) — Scale-Invariant Feature Transform
+
+1. Construction espace d'échelle (blur gaussien progressif)
+2. Détection des extrema dans Difference of Gaussians (DoG)
+3. Calcul du gradient autour des keypoints
+4. **Descripteur : 16 histogrammes × 8 orientations = vecteur 128D**
+
+**SURF** (Bay, 2006) : version accélérée de SIFT (box filters + images intégrales)
+
+### Sac de Mots Visuels (*Bag of Visual Words*, BoVW)
+
+1. Extraire descripteurs locaux (SIFT…)
+2. Clustériser → **mots visuels** (*visual words*)
+3. Former un **dictionnaire visuel** (*visual dictionary*)
+4. Image → vecteur de fréquences d'occurrence
+
+::: {.callout-note title="À retenir"}
+BoVW permet d'utiliser toute la machinerie IR textuelle (TF-IDF, fichiers inversés…) sur des images.
+:::
+
+---
+
+## Détection et Apprentissage
+
+### TF-IDF visuel
+
+- **TF** : élément fréquent = « fleur jaune » (peu discriminant)
+- **IDF** : élément rare = « insecte dessus » (très discriminant)
+
+### Objets et Visages
+
+- **Viola & Jones (2001)** : détection visages temps réel (Haar + AdaBoost)
+- **Eigenfaces** : ACP sur images de visages → représentation compacte
+
+### Réseau convolutif (*CNN*)
+
+```
+Image → [Conv + Pooling] × n → Couche FC → Classe
+```
+
+- **Convolution** : filtre glissant + produit scalaire avec patch local
+- **Pooling** : réduction spatiale (max-pooling)
+- **FC** (*Fully Connected*) : classification finale
+
+::: {.callout-tip title="Intuition CNN"}
+Couches profondes = hiérarchie automatique : bords → formes → parties → objets
+:::
+
+---
+
+## Apprentissage Profond (*Deep Learning*)
+
+### Conditions de succès
+
+- Données massives (Web 2.0, ImageNet)
+- GPU / TPU
+- Grande mémoire
+
+### Auto-Encodeur (*Autoencoder*)
+
+```
+Entrée → Encodeur → [Bottleneck/Code] → Décodeur → Reconstruction
+```
+
+- Bottleneck force la **compression** → sélection de l'information importante
+- Usage : débruitage + encodage compact
+
+### GAN (*Generative Adversarial Network*)
+
+| Réseau | Rôle |
+|---|---|
+| Générateur | Produit de fausses images à partir de bruit |
+| Discriminateur | Distingue vrai/faux |
+
+- Entraînement adversarial → équilibre de Nash
+- **Risque** : Deepfakes (vidéo, audio)
+
+---
+
+## Retour de Pertinence (*Relevance Feedback*)
+
+- Utilisateur indique pertinent / non pertinent
+- Système met à jour la représentation
+- **Traversée de l'écart sémantique** grâce à l'utilisateur comme oracle
+
+---
+
+## Recherche de Cible (*Target Search*)
+
+### Setup
+
+- Collection $\{D_1,\ldots,D_N\}$, cible $C$ inconnue du système
+- À chaque itération $t$ : sélection $S_t$ → clic $A_t$ → mise à jour → $S_{t+1}$
+
+### Formalisation Bayésienne
+
+$$P(C=D_i \mid H_t) = \frac{P(A_t \mid C=D_i, S_t, H_{t-1}) \cdot P(C=D_i \mid H_{t-1})}{\Xi}$$
+
+**Propriété de Markov** : $S_t$ indépendant de $H_{t-1}$
+
+### Modèle Utilisateur (*User Model*)
+
+$$P(A_t \mid C=D_i, S_t, H_{t-1}) = \frac{\exp(-d(D_A, D_i)/\sigma)}{\sum_{j \in S}\exp(-d(D_S, D_j)/\sigma)}$$
+
+### Sélection Optimale
+
+Minimiser le nombre d'étapes restantes = **maximiser le gain d'information**
+
+$$F[P(D_i=C)] \propto -\sum_D P(D=C)\log P(D=C) \quad \text{(entropie de collection)}$$
+
+### Procédure pratique
+
+| Phase | Action |
+|---|---|
+| Init | $P(C=D_i)=1/N$ pour tout $i$ |
+| Sélection | $S_t$ maximisant le gain d'information |
+| Retour | Clic utilisateur $A_t$ |
+| Mise à jour | Bayes : $P(D_i=C\mid A) \propto P(A\mid S_t,C=D_i)\cdot P(C=D_i)$ |
+
+---
+
+## Compromis Exploration/Exploitation
+
+| Stratégie | Description | Risque |
+|---|---|---|
+| **Exploration** | Zones inconnues de l'espace | Pas d'amélioration garantie |
+| **Exploitation** | Connaissances acquises | Rate les meilleures options non vues |
+
+---
+
+## Extensions
+
+### Cible Mobile (*Mobile Target*)
+
+- Utilisateur **incohérent** : change d'image mentale en cours de recherche
+- Décroissance exponentielle sur l'historique (interactions récentes = plus fiables)
+- Ré-ouverture de $P(C=D_i)$ si changement détecté
+
+### Modèles avancés
+
+- **POMDP** : état partiellement observable (image mentale utilisateur)
+- **RL** (*Reinforcement Learning*) : apprentissage de politique de sélection
+
+---
+
+## Récapitulatif des Relations Clés
+
+```{mermaid}
+graph TD
+    A[Pixels] --> B[Caractéristiques bas niveau\nCouleur · Texture · Forme]
+    B --> C[Caractéristiques locales\nSIFT · SURF · BoVW]
+    C --> D[Apprentissage profond\nCNN · Autoencoder · GAN]
+    D --> E[Représentation sémantique]
+    E --> F[QbE · Retour de pertinence]
+    F --> G[Recherche de cible\nNavigation bayésienne]
+    H[Écart sémantique] -.->|à combler| F
+    I[Interaction utilisateur] -.->|traverse| H
+```
+
+---
+
+## Points Critiques à Retenir
+
+::: {.callout-warning title="Pièges fréquents"}
+- Histogramme de couleur ≠ invariant à la disposition spatiale
+- Distance RGB ≠ similarité perceptive humaine (préférer HSV)
+- SIFT : vecteur **128D** (pas 64, pas 256)
+- GAN : deux réseaux, entraînement **adversarial conjoint**
+- Trou noir : document présent mais **jamais retrouvable**
+:::
+
+::: {.callout-note title="Formules à maîtriser"}
+- Filtre de Gabor : gaussienne × sinusoïde
+- Mise à jour Bayes : $P(D_i=C\mid A) \propto P(A\mid S_t,C=D_i)\cdot P(C=D_i)$
+- Modèle utilisateur : softmax sur distances
+- Entropie de collection : $-\sum_D P(D=C)\log P(D=C)$
+:::

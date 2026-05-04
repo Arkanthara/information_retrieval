@@ -1,0 +1,229 @@
+---
+title: "Recherche de Cible et MDP — Révision"
+---
+
+# Hiérarchie des Modèles
+
+| Modèle | Tuple | Actions ? | Récompense ? |
+|---|---|---|---|
+| MP (Markov Process) | $(S, P)$ | ✗ | ✗ |
+| MRP (Markov Reward Process) | $(S, P, R, \gamma)$ | ✗ | ✓ |
+| MDP (Markov Decision Process) | $(S, A, P, R, \gamma)$ | ✓ | ✓ |
+
+---
+
+# Propriété de Markov (Markov Property)
+
+::: {.callout-important title="Définition"}
+$$P(s_{t+1} \mid s_0,\ldots,s_t) = P(s_{t+1} \mid s_t)$$
+:::
+
+- $s_t$ **encode** tout l'historique $h_t$
+- Le futur est **indépendant du passé**, conditionné au présent
+- $s_t$ = **statistique suffisante** pour modéliser le futur
+
+---
+
+# Processus de Markov (MP)
+
+- **Matrice de transition** : $A_{ij} = P(s_{t+1} = s_j \mid s_t = s_i)$
+- Matrice **stochastique** : chaque ligne somme à 1
+- Génère une **chaîne de Markov** (Markov Chain)
+- Application : **PageRank**
+
+---
+
+# MRP — Concepts Clés
+
+## Retour (Return)
+
+$$G_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \cdots + \gamma^{T-t+1} r_T$$
+
+| $\gamma$ | Comportement |
+|---|---|
+| $\approx 0$ | Myope — récompense immédiate uniquement |
+| $\approx 1$ | Pas de décompte — toutes récompenses équivalentes |
+| $\in (0,1)$ | Convergence garantie pour horizon infini |
+
+## Fonction de Valeur d'État (State Value Function)
+
+$$V(s) = \mathbb{E}[G_t \mid s_t = s]$$
+
+## Équation de Bellman (MRP)
+
+$$V(s) = R(s) + \gamma \sum_{s'} P(s' \mid s)\, V(s')$$
+
+Forme matricielle : $\mathbf{V} = \mathbf{R} + \gamma P\mathbf{V}$
+
+## Forme Fermée (Closed Form)
+
+$$\mathbf{V} = (I - \gamma P)^{-1}\mathbf{R}$$
+
+::: {.callout-warning title="Piège"}
+Coût $\mathcal{O}(N^3)$ → inutilisable pour grands $N$ → recourir à la **Programmation Dynamique**
+:::
+
+---
+
+# MDP — Concepts Clés
+
+## Composantes
+
+- $S$ : états · $A$ : actions · $P(s'\mid s,a)$ : transitions · $R(s,a)$ : récompense · $\gamma$ : décompte
+- **Politique** (Policy) : $\pi(a \mid s) = P(A_t = a \mid s_t = s)$
+
+## Fonctions de Valeur
+
+| Fonction | Formule | Signification |
+|---|---|---|
+| $V_\pi(s)$ | $\mathbb{E}_\pi[G_t \mid s_t = s]$ | Valeur d'un état sous $\pi$ |
+| $Q_\pi(s,a)$ | $\mathbb{E}_\pi[G_t \mid s_t=s, a_t=a]$ | Qualité d'une paire état-action |
+
+Relation : $V_\pi(s) = \sum_a \pi(a,s)\, Q_\pi(s,a)$
+
+## Équation de Bellman (MDP)
+
+$$V_\pi(s) = \sum_a \pi(a,s) \sum_{s'} P(s'\mid s,a)\bigl[R(s,a) + \gamma V_\pi(s')\bigr]$$
+
+$$Q_\pi(s,a) = R(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\, V_\pi(s')$$
+
+## Optimalité
+
+$$V^*(s) = \max_\pi V_\pi(s) \qquad Q^*(s,a) = \max_\pi Q_\pi(s,a)$$
+
+$$\pi^* = \arg\max_\pi V_\pi(s) \quad \forall s$$
+
+## Équation de Bellman Optimale
+
+$$V^*(s) = \max_a \sum_{s'} P(s'\mid s,a)\bigl[R(s,a) + \gamma V^*(s')\bigr]$$
+
+$$Q^*(s,a) = \sum_{s'} P(s'\mid s,a)\Bigl[R(s,a) + \gamma \max_{a'} Q^*(s',a')\Bigr]$$
+
+::: {.callout-warning title="Piège"}
+Équations **non-linéaires** ($\max$) → pas d'inversion directe → **Value Iteration** ou **Q-Learning**
+:::
+
+---
+
+# Apprentissage par Renforcement (Reinforcement Learning)
+
+> Apprendre une politique $\pi$ qui associe actions et états pour **maximiser la récompense cumulée**.
+
+Algorithmes issus de Bellman optimal :
+
+- **Value Iteration** → mise à jour de $V^*$
+- **Q-Learning** → mise à jour de $Q^*$
+- Autres : Monte Carlo, Policy Iteration, TD Learning
+
+---
+
+# Recherche de Cible (Target Search)
+
+## Comparaison des Paradigmes
+
+| | Query by Example | Target Search |
+|---|---|---|
+| Jugements | Absolus ($r_k$) | **Relatifs** ("le plus proche") |
+| Cible | Requête explicite | Image mentale de l'utilisateur |
+| Difficulté | Page zéro | Réduire les interactions |
+
+## Exploration / Exploitation
+
+| | Exploration | Exploitation |
+|---|---|---|
+| Principe | Découvrir de nouvelles zones | Utiliser les connaissances acquises |
+| Risque | Pas de gain immédiat | Manquer la vraie cible |
+
+---
+
+# Formalisation Bayésienne
+
+## Setup
+
+- Collection $\{D_1,\ldots,D_N\}$
+- À chaque tour $t$ : l'utilisateur voit $S_t$, clique sur l'image la plus proche de $C$
+- Historique : $H_t = \{S_1, A_1, \ldots, S_t, A_t\}$
+
+## Mise à Jour de la Croyance
+
+$$P(C = D_i \mid H_t) = \frac{P(A_t \mid C = D_i,\, S_t,\, H_{t-1}) \cdot P(C = D_i \mid H_{t-1})}{\Xi}$$
+
+| Terme | Rôle |
+|---|---|
+| $P(C=D_i \mid H_{t-1})$ | État précédent (prior) |
+| $P(A_t \mid C=D_i, S_t, H_{t-1})$ | Modèle utilisateur (vraisemblance) |
+| $\Xi$ | Normalisation |
+
+::: {.callout-note title="Clé"}
+$S_t$ indépendant de $H_{t-1}$ → propriété **markovienne** → seul l'état courant compte
+:::
+
+## Modèle Utilisateur (Softmax)
+
+$$P(A_t \mid C = D_i, S_t, H_{t-1}) = \frac{\exp(-d(D_A, D_i)/\sigma)}{\sum_{j \in S} \exp(-d(D_S, D_j)/\sigma)}$$
+
+- $d$ = fonction de distance sur les features
+- $\sigma$ = paramètre d'échelle
+
+---
+
+# Sélection des Images
+
+- Choisir $S_t$ qui **minimise** : $\displaystyle\sum_{a \in S_t} F[P(D_i=C \mid A_t=a)] \cdot P(A_t=a \mid S_t)$
+
+- Borne inférieure : $F[P(D_i=C)] \propto -\sum_D P(D=C)\log P(D=C)$ = **entropie de la collection**
+
+> Objectif = **maximiser le gain d'information** = **réduire l'entropie** à chaque étape
+
+---
+
+# Procédure Complète
+
+**Initialisation** : $P(C=D_i) = 1/N$ pour tout $i$
+
+**Boucle** (répéter jusqu'à succès) :
+
+1. Choisir $S_t$ par gain d'info maximal
+2. Si cible dans $S_t$ → **arrêt**
+3. Recueillir le clic $A_t$
+4. Calculer $P(A_t \mid S_t, C=D_i)$ via le modèle utilisateur
+5. Mettre à jour : $P(C=D_i) \leftarrow P(D_i=C \mid A_t) \propto P(A_t \mid S_t, C=D_i) \cdot P(C=D_i)$
+
+---
+
+# Extension — Cible Mobile (Mobile Target)
+
+::: {.callout-warning title="Piège — Utilisateur incohérent"}
+L'utilisateur peut **changer d'image mentale** (sérendipité) → la cible est mobile
+:::
+
+**Solutions** :
+
+- Considérer $A_t = f(H_{t-1})$
+- **Décroissance exponentielle** : interactions récentes plus fiables
+- **Réouverture** de $P(C=D_i)$ sur toute la collection lors d'un changement détecté
+
+---
+
+# Correspondance MDP ↔ Recherche de Cible
+
+| MDP | Recherche de Cible |
+|---|---|
+| État $s_t$ | Distribution $P(C=D_i \mid H_t)$ |
+| Action $a_t$ | Clic utilisateur $A_t$ |
+| Transition $P(s'\mid s,a)$ | Mise à jour Bayésienne |
+| Récompense $R(s,a)$ | Gain d'information / $-\Delta$ entropie |
+| Politique $\pi$ | Stratégie de sélection de $S_t$ |
+
+---
+
+# Formules à Retenir
+
+| Formule | Nom |
+|---|---|
+| $P(s_{t+1}\mid s_t)$ | Transition markovienne |
+| $G_t = \sum_{k=0}^{T} \gamma^k r_{t+k}$ | Retour actualisé |
+| $V(s) = R(s) + \gamma\sum_{s'} P(s'\mid s)V(s')$ | Bellman MRP |
+| $\mathbf{V} = (I-\gamma P)^{-1}\mathbf{R}$ | Forme fermée MRP |
+| $V_\pi(s) = \sum_a \pi(a,s)\sum_{s'} P[R + \gamma V_\pi(s')]$ | Bellman MDP |
+| $Q^*(s,a) = \sum_{s'} P[R + \gamma\max_{a'} Q^*(s',a')]$ | Bellman optimal |
