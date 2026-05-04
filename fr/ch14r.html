@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Recherche d’Information Visuelle – Information Retrieval</title>
+<title>Apprentissage pour le classement (Learning to Rank) — Révision – Information Retrieval</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -4377,7 +4377,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Recherche d’Information Visuelle</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Apprentissage pour le classement (Learning to Rank) — Révision</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -4694,70 +4694,28 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction-et-contexte" id="toc-introduction-et-contexte" class="nav-link active" data-scroll-target="#introduction-et-contexte">Introduction et Contexte</a>
+  <li><a href="#vue-densemble" id="toc-vue-densemble" class="nav-link active" data-scroll-target="#vue-densemble">Vue d’ensemble</a></li>
+  <li><a href="#modèle-rsv-et-bir" id="toc-modèle-rsv-et-bir" class="nav-link" data-scroll-target="#modèle-rsv-et-bir">Modèle RSV et BIR</a></li>
+  <li><a href="#approche-pointwise" id="toc-approche-pointwise" class="nav-link" data-scroll-target="#approche-pointwise">Approche Pointwise</a>
   <ul class="collapse">
-  <li><a href="#objectifs-de-la-recherche-dinformation-visuelle" id="toc-objectifs-de-la-recherche-dinformation-visuelle" class="nav-link" data-scroll-target="#objectifs-de-la-recherche-dinformation-visuelle">Objectifs de la recherche d’information visuelle</a></li>
-  <li><a href="#motivations" id="toc-motivations" class="nav-link" data-scroll-target="#motivations">Motivations</a></li>
+  <li><a href="#régression-logistique" id="toc-régression-logistique" class="nav-link" data-scroll-target="#régression-logistique">Régression logistique</a></li>
+  <li><a href="#problème-fondamental" id="toc-problème-fondamental" class="nav-link" data-scroll-target="#problème-fondamental">Problème fondamental</a></li>
   </ul></li>
-  <li><a href="#le-processus-de-gestion-de-linformation" id="toc-le-processus-de-gestion-de-linformation" class="nav-link" data-scroll-target="#le-processus-de-gestion-de-linformation">Le Processus de Gestion de l’Information</a>
+  <li><a href="#approche-pairwise" id="toc-approche-pairwise" class="nav-link" data-scroll-target="#approche-pairwise">Approche Pairwise</a>
   <ul class="collapse">
-  <li><a href="#vue-densemble-du-pipeline" id="toc-vue-densemble-du-pipeline" class="nav-link" data-scroll-target="#vue-densemble-du-pipeline">Vue d’ensemble du pipeline</a></li>
-  <li><a href="#exemple-avec-le-texte" id="toc-exemple-avec-le-texte" class="nav-link" data-scroll-target="#exemple-avec-le-texte">Exemple avec le texte</a></li>
-  <li><a href="#exemple-avec-les-images" id="toc-exemple-avec-les-images" class="nav-link" data-scroll-target="#exemple-avec-les-images">Exemple avec les images</a></li>
+  <li><a href="#svmrank" id="toc-svmrank" class="nav-link" data-scroll-target="#svmrank">SVMRank</a></li>
+  <li><a href="#rankboost" id="toc-rankboost" class="nav-link" data-scroll-target="#rankboost">RankBoost</a></li>
+  <li><a href="#limites-du-pairwise" id="toc-limites-du-pairwise" class="nav-link" data-scroll-target="#limites-du-pairwise">Limites du Pairwise</a></li>
   </ul></li>
-  <li><a href="#annotation-des-médias" id="toc-annotation-des-médias" class="nav-link" data-scroll-target="#annotation-des-médias">Annotation des Médias</a>
+  <li><a href="#approche-listwise" id="toc-approche-listwise" class="nav-link" data-scroll-target="#approche-listwise">Approche Listwise</a>
   <ul class="collapse">
-  <li><a href="#le-problème-de-lannotation" id="toc-le-problème-de-lannotation" class="nav-link" data-scroll-target="#le-problème-de-lannotation">Le problème de l’annotation</a></li>
-  <li><a href="#standards-dannotation-des-médias" id="toc-standards-dannotation-des-médias" class="nav-link" data-scroll-target="#standards-dannotation-des-médias">Standards d’annotation des médias</a></li>
-  <li><a href="#mpeg-7-description-structurée-des-images-fixes" id="toc-mpeg-7-description-structurée-des-images-fixes" class="nav-link" data-scroll-target="#mpeg-7-description-structurée-des-images-fixes">MPEG-7 : description structurée des images fixes</a></li>
+  <li><a href="#mesures-de-qualité-de-liste" id="toc-mesures-de-qualité-de-liste" class="nav-link" data-scroll-target="#mesures-de-qualité-de-liste">Mesures de qualité de liste</a></li>
+  <li><a href="#lambdamart" id="toc-lambdamart" class="nav-link" data-scroll-target="#lambdamart">LambdaMART</a></li>
+  <li><a href="#autres-méthodes-listwise" id="toc-autres-méthodes-listwise" class="nav-link" data-scroll-target="#autres-méthodes-listwise">Autres méthodes listwise</a></li>
   </ul></li>
-  <li><a href="#le-trou-noir-informationnel" id="toc-le-trou-noir-informationnel" class="nav-link" data-scroll-target="#le-trou-noir-informationnel">Le Trou Noir Informationnel</a>
-  <ul class="collapse">
-  <li><a href="#définition-du-problème" id="toc-définition-du-problème" class="nav-link" data-scroll-target="#définition-du-problème">Définition du problème</a></li>
-  <li><a href="#implications-pour-la-représentation" id="toc-implications-pour-la-représentation" class="nav-link" data-scroll-target="#implications-pour-la-représentation">Implications pour la représentation</a></li>
-  </ul></li>
-  <li><a href="#le-paradigme-de-la-recherche-dinformation" id="toc-le-paradigme-de-la-recherche-dinformation" class="nav-link" data-scroll-target="#le-paradigme-de-la-recherche-dinformation">Le Paradigme de la Recherche d’Information</a>
-  <ul class="collapse">
-  <li><a href="#principes-fondamentaux" id="toc-principes-fondamentaux" class="nav-link" data-scroll-target="#principes-fondamentaux">Principes fondamentaux</a></li>
-  <li><a href="#types-de-requêtes" id="toc-types-de-requêtes" class="nav-link" data-scroll-target="#types-de-requêtes">Types de requêtes</a></li>
-  <li><a href="#requête-par-lexemple-query-by-example" id="toc-requête-par-lexemple-query-by-example" class="nav-link" data-scroll-target="#requête-par-lexemple-query-by-example">Requête par l’Exemple (Query-by-Example)</a></li>
-  <li><a href="#la-notion-de-voisinage" id="toc-la-notion-de-voisinage" class="nav-link" data-scroll-target="#la-notion-de-voisinage">La notion de voisinage</a></li>
-  </ul></li>
-  <li><a href="#modélisation-pour-la-recherche-visuelle" id="toc-modélisation-pour-la-recherche-visuelle" class="nav-link" data-scroll-target="#modélisation-pour-la-recherche-visuelle">Modélisation pour la Recherche Visuelle</a>
-  <ul class="collapse">
-  <li><a href="#le-modèle-de-base" id="toc-le-modèle-de-base" class="nav-link" data-scroll-target="#le-modèle-de-base">Le modèle de base</a></li>
-  <li><a href="#recherche-dimages-basée-sur-le-contenu" id="toc-recherche-dimages-basée-sur-le-contenu" class="nav-link" data-scroll-target="#recherche-dimages-basée-sur-le-contenu">Recherche d’images basée sur le contenu</a></li>
-  </ul></li>
-  <li><a href="#caractérisation-du-contenu-visuel" id="toc-caractérisation-du-contenu-visuel" class="nav-link" data-scroll-target="#caractérisation-du-contenu-visuel">Caractérisation du Contenu Visuel</a>
-  <ul class="collapse">
-  <li><a href="#le-défi-modéliser-le-système-visuel-humain" id="toc-le-défi-modéliser-le-système-visuel-humain" class="nav-link" data-scroll-target="#le-défi-modéliser-le-système-visuel-humain">Le défi : modéliser le Système Visuel Humain</a></li>
-  <li><a href="#lécart-sémantique-semantic-gap" id="toc-lécart-sémantique-semantic-gap" class="nav-link" data-scroll-target="#lécart-sémantique-semantic-gap">L’Écart Sémantique (Semantic Gap)</a></li>
-  <li><a href="#le-captcha-exploitation-de-lécart-sémantique" id="toc-le-captcha-exploitation-de-lécart-sémantique" class="nav-link" data-scroll-target="#le-captcha-exploitation-de-lécart-sémantique">Le CAPTCHA : exploitation de l’écart sémantique</a></li>
-  </ul></li>
-  <li><a href="#caractéristiques-visuelles-de-bas-niveau" id="toc-caractéristiques-visuelles-de-bas-niveau" class="nav-link" data-scroll-target="#caractéristiques-visuelles-de-bas-niveau">Caractéristiques Visuelles de Bas Niveau</a>
-  <ul class="collapse">
-  <li><a href="#la-couleur" id="toc-la-couleur" class="nav-link" data-scroll-target="#la-couleur">La Couleur</a></li>
-  <li><a href="#la-texture" id="toc-la-texture" class="nav-link" data-scroll-target="#la-texture">La Texture</a></li>
-  <li><a href="#la-forme-et-la-segmentation" id="toc-la-forme-et-la-segmentation" class="nav-link" data-scroll-target="#la-forme-et-la-segmentation">La Forme et la Segmentation</a></li>
-  </ul></li>
-  <li><a href="#caractéristiques-locales-et-représentations-avancées" id="toc-caractéristiques-locales-et-représentations-avancées" class="nav-link" data-scroll-target="#caractéristiques-locales-et-représentations-avancées">Caractéristiques Locales et Représentations Avancées</a>
-  <ul class="collapse">
-  <li><a href="#détection-de-points-clés-keypoints" id="toc-détection-de-points-clés-keypoints" class="nav-link" data-scroll-target="#détection-de-points-clés-keypoints">Détection de points-clés (Keypoints)</a></li>
-  <li><a href="#sift-et-surf" id="toc-sift-et-surf" class="nav-link" data-scroll-target="#sift-et-surf">SIFT et SURF</a></li>
-  <li><a href="#compréhension-par-régions" id="toc-compréhension-par-régions" class="nav-link" data-scroll-target="#compréhension-par-régions">Compréhension par régions</a></li>
-  <li><a href="#sac-de-mots-visuels-bag-of-visual-words" id="toc-sac-de-mots-visuels-bag-of-visual-words" class="nav-link" data-scroll-target="#sac-de-mots-visuels-bag-of-visual-words">Sac de Mots Visuels (Bag of Visual Words)</a></li>
-  </ul></li>
-  <li><a href="#détection-et-reconnaissance-dobjets" id="toc-détection-et-reconnaissance-dobjets" class="nav-link" data-scroll-target="#détection-et-reconnaissance-dobjets">Détection et Reconnaissance d’Objets</a>
-  <ul class="collapse">
-  <li><a href="#apprentissage-de-patterns" id="toc-apprentissage-de-patterns" class="nav-link" data-scroll-target="#apprentissage-de-patterns">Apprentissage de Patterns</a></li>
-  <li><a href="#reconnaissance-de-visages-eigenfaces" id="toc-reconnaissance-de-visages-eigenfaces" class="nav-link" data-scroll-target="#reconnaissance-de-visages-eigenfaces">Reconnaissance de Visages : Eigenfaces</a></li>
-  <li><a href="#reconnaissance-de-chiffres-manuscrits" id="toc-reconnaissance-de-chiffres-manuscrits" class="nav-link" data-scroll-target="#reconnaissance-de-chiffres-manuscrits">Reconnaissance de Chiffres Manuscrits</a></li>
-  </ul></li>
-  <li><a href="#filtres-convolutifs-et-réseaux-de-neurones" id="toc-filtres-convolutifs-et-réseaux-de-neurones" class="nav-link" data-scroll-target="#filtres-convolutifs-et-réseaux-de-neurones">Filtres Convolutifs et Réseaux de Neurones</a>
-  <ul class="collapse">
-  <li><a href="#lidée-des-filtres-locaux" id="toc-lidée-des-filtres-locaux" class="nav-link" data-scroll-target="#lidée-des-filtres-locaux">L’idée des filtres locaux</a></li>
-  <li><a href="#convolution" id="toc-convolution" class="nav-link" data-scroll-target="#convolution">Convolution</a></li>
-  </ul></li>
+  <li><a href="#méthodes-deep-learning" id="toc-méthodes-deep-learning" class="nav-link" data-scroll-target="#méthodes-deep-learning">Méthodes Deep Learning</a></li>
+  <li><a href="#letor-benchmark" id="toc-letor-benchmark" class="nav-link" data-scroll-target="#letor-benchmark">LETOR (benchmark)</a></li>
+  <li><a href="#formules-à-retenir" id="toc-formules-à-retenir" class="nav-link" data-scroll-target="#formules-à-retenir">Formules à retenir</a></li>
   </ul>
 </nav>
     </div>
@@ -4767,7 +4725,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Recherche d’Information Visuelle</h1>
+<h1 class="title">Apprentissage pour le classement (Learning to Rank) — Révision</h1>
 </div>
 
 
@@ -4784,647 +4742,275 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction-et-contexte" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-et-contexte">Introduction et Contexte</h2>
-<section id="objectifs-de-la-recherche-dinformation-visuelle" class="level3">
-<h3 class="anchored" data-anchor-id="objectifs-de-la-recherche-dinformation-visuelle">Objectifs de la recherche d’information visuelle</h3>
-<p>La <strong>recherche d’information visuelle</strong> (Visual Information Retrieval) a pour ambition de permettre la gestion <em>automatique</em> du contenu visuel — images, vidéos, contenus multimédia — afin de le stocker et de le retrouver efficacement.</p>
-<p>Deux objectifs fondamentaux structurent ce domaine :</p>
-<ul>
-<li><strong>Stocker pour retrouver</strong> : indexer les documents visuels de manière à ce qu’une recherche ultérieure soit possible.</li>
-<li><strong>Ne pas perdre d’information</strong> : éviter le phénomène dit de « trou noir informationnel » (<em>information black hole</em>), c’est-à-dire la situation où un document existe dans la base mais ne peut jamais être retrouvé.</li>
-</ul>
-</section>
-<section id="motivations" class="level3">
-<h3 class="anchored" data-anchor-id="motivations">Motivations</h3>
-<p>La recherche d’information visuelle est motivée par deux constats majeurs :</p>
-<ol type="1">
-<li><p><strong>Faible compréhension automatique du contenu visuel</strong> : contrairement au texte, une image n’est pas directement interprétable par une machine. Le sens d’une image — les objets qu’elle contient, les émotions qu’elle véhicule, le contexte dans lequel elle a été prise — n’est pas encodé de façon explicite dans les pixels.</p></li>
-<li><p><strong>Volume croissant à gérer</strong> : le nombre d’images et de vidéos produites chaque jour est colossal (réseaux sociaux, surveillance, médical, satellite…). Une gestion manuelle est impossible à grande échelle.</p></li>
-</ol>
-<div class="callout callout-style-default callout-important callout-titled" title="Le défi central">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Le défi central
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>L’enjeu est d’atteindre une <strong>compréhension automatique et exhaustive du contenu visuel</strong>, sans intervention humaine systématique.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="le-processus-de-gestion-de-linformation" class="level2">
-<h2 class="anchored" data-anchor-id="le-processus-de-gestion-de-linformation">Le Processus de Gestion de l’Information</h2>
-<section id="vue-densemble-du-pipeline" class="level3">
-<h3 class="anchored" data-anchor-id="vue-densemble-du-pipeline">Vue d’ensemble du pipeline</h3>
-<p>Le traitement de documents visuels suit un pipeline en plusieurs étapes, quel que soit le type de média (texte, image, audio…) :</p>
-<ol type="1">
-<li><strong>Documents bruts</strong> (<em>Raw documents</em>) : les données dans leur forme originale (photos, vidéos, fichiers audio…).</li>
-<li><strong>Extraction de caractéristiques</strong> (<em>Feature extraction</em>) : transformer le document brut en une représentation numérique exploitable.</li>
-<li><strong>Caractéristiques du document</strong> (<em>Document features</em>) : le vecteur numérique obtenu après extraction.</li>
-<li><strong>Projection appropriée</strong> (<em>Appropriate mapping</em>) : projeter ces caractéristiques dans un espace de représentation qui respecte la similarité perceptive.</li>
-<li><strong>Espace de représentation</strong> (<em>Representation space</em>) : un espace géométrique où les documents similaires sont proches les uns des autres.</li>
-<li><strong>Interaction utilisateur</strong> (<em>User interaction</em>) : l’utilisateur formule une requête (exemple, clic, feedback…).</li>
-<li><strong>Processus de décision</strong> (<em>Decision process</em>) : le système retourne les documents jugés les plus pertinents.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Intuition
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Imaginez une bibliothèque où, au lieu de classer les livres par titre ou auteur, on les classe selon leur <em>contenu réel</em>. Deux livres parlant du même sujet seraient physiquement proches dans l’espace. C’est exactement ce que cherche à faire la recherche d’information visuelle dans un espace mathématique.</p>
-</div>
-</div>
-</section>
-<section id="exemple-avec-le-texte" class="level3">
-<h3 class="anchored" data-anchor-id="exemple-avec-le-texte">Exemple avec le texte</h3>
-<p>Pour des documents textuels, le pipeline se concrétise ainsi :</p>
-<ul>
-<li>Les <strong>documents</strong> sont des fichiers de texte.</li>
-<li>L’<strong>extraction de caractéristiques</strong> consiste à compter les occurrences des mots (<em>word occurrences</em>) — c’est le principe du sac de mots (Bag of Words).</li>
-<li>La <strong>projection</strong> produit des nuages de termes (<em>word clouds</em>) ou des vecteurs TF-IDF.</li>
-<li>L’<strong>interaction</strong> permet d’effectuer des requêtes textuelles classiques.</li>
-</ul>
-</section>
-<section id="exemple-avec-les-images" class="level3">
-<h3 class="anchored" data-anchor-id="exemple-avec-les-images">Exemple avec les images</h3>
-<p>Pour des documents image :</p>
-<ul>
-<li>Les <strong>documents</strong> sont des collections de photos.</li>
-<li>L’<strong>extraction de caractéristiques</strong> produit des <strong>histogrammes de couleurs</strong> (<em>color histograms</em>) : distributions statistiques des couleurs présentes dans l’image.</li>
-<li>La <strong>projection</strong> place les images dans un espace où les images visuellement similaires se regroupent.</li>
-<li>L’<strong>interaction</strong> passe par une requête visuelle (<em>query</em>) — par exemple, une image exemple.</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="annotation-des-médias" class="level2">
-<h2 class="anchored" data-anchor-id="annotation-des-médias">Annotation des Médias</h2>
-<section id="le-problème-de-lannotation" class="level3">
-<h3 class="anchored" data-anchor-id="le-problème-de-lannotation">Le problème de l’annotation</h3>
-<p>Une image contient une quantité d’information que les mots peuvent difficilement capturer dans sa totalité. Prenons une photo d’un insecte sur une fleur jaune. On pourrait la décrire comme :</p>
-<ul>
-<li>« insecte sur une fleur jaune »</li>
-<li>Le nom latin de la fleur et de l’insecte</li>
-<li>« scène de campagne, beau temps »</li>
-<li>« 1er prix du concours photo étudiant 2015 »</li>
-<li>« la guêpe qui a fait peur à ma fille pendant nos vacances en Gruyère »</li>
-</ul>
-<p>Chacune de ces descriptions est valide mais <em>partielle</em> et <em>subjective</em>. L’inférence automatique ne peut pas résoudre toutes ces couches de sens.</p>
-<div class="callout callout-style-default callout-warning callout-titled" title="Limite fondamentale">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Limite fondamentale
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>L’inférence ne peut pas tout résoudre.</strong> Certaines informations (contexte personnel, intention artistique, valeur émotionnelle) ne peuvent être déduites automatiquement depuis les pixels. L’annotation textuelle reste complémentaire.</p>
-</div>
-</div>
-</section>
-<section id="standards-dannotation-des-médias" class="level3">
-<h3 class="anchored" data-anchor-id="standards-dannotation-des-médias">Standards d’annotation des médias</h3>
-<p>Plusieurs formats standardisés permettent d’associer des métadonnées aux fichiers multimédias :</p>
-<ul>
-<li><strong>IPTC</strong> : format standard de description de photos (titre, auteur, droits, mots-clés…).</li>
-<li><strong>Exif</strong> : conteneur standard d’informations de prise de vue (ouverture, vitesse, GPS, date…).</li>
-<li><strong>ID3-tag</strong> : informations associées aux fichiers audio (artiste, album, piste…).</li>
-<li><strong>NTFS</strong> : échange de métadonnées sous Windows.</li>
-<li><strong>JPSearch / MPEG-7</strong> : standards orientés vers la recherche, décrivant le contenu visuel de façon structurée.</li>
-<li><strong>Formats image avec en-têtes</strong> : PNG, GIF, JPG, TIFF permettent tous l’insertion de commentaires textuels.</li>
-</ul>
-<p>Il existe également une catégorie d’<strong>annotation sociale</strong> (<em>social annotation</em>), basée sur les recommandations et tags des utilisateurs (approche collaborative/communautaire).</p>
-<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>À retenir
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>L’approche optimale combine deux niveaux complémentaires : l’<strong>annotation textuelle</strong> (métadonnées, tags, descriptions) et la <strong>recherche basée sur le contenu</strong> (<em>content-based retrieval</em>). Ces deux approches se complètent plutôt qu’elles ne s’opposent.</p>
-</div>
-</div>
-</section>
-<section id="mpeg-7-description-structurée-des-images-fixes" class="level3">
-<h3 class="anchored" data-anchor-id="mpeg-7-description-structurée-des-images-fixes">MPEG-7 : description structurée des images fixes</h3>
-<p>MPEG-7 est un standard ISO permettant de décrire le contenu multimédia de façon hiérarchique et structurée. Pour une image fixe, MPEG-7 organise la description en <strong>régions spatiales</strong> (<em>Spatial Regions</em>, SR1 à SR8) qui forment un arbre de décomposition :</p>
-<ul>
-<li>Chaque région peut être décrite par sa <strong>forme</strong> (<em>shape</em>), son <strong>histogramme de couleur</strong> (<em>color histogram</em>) et une <strong>annotation textuelle</strong> (<em>textual annotation</em>).</li>
-<li>La relation entre régions peut être : <em>pas d’espace, pas de chevauchement</em> (<em>no gap, no overlap</em>), ou <em>espace sans chevauchement</em> (<em>gap, no overlap</em>).</li>
-</ul>
-<p>Cette structuration permet des requêtes spatiales précises : « trouve une image contenant un visage en haut à droite avec un fond bleu ».</p>
-<hr>
-</section>
-</section>
-<section id="le-trou-noir-informationnel" class="level2">
-<h2 class="anchored" data-anchor-id="le-trou-noir-informationnel">Le Trou Noir Informationnel</h2>
-<section id="définition-du-problème" class="level3">
-<h3 class="anchored" data-anchor-id="définition-du-problème">Définition du problème</h3>
-<p>Le <strong>trou noir informationnel</strong> (<em>information black hole</em>) désigne la situation où un document est bien présent dans la base de données, mais ne peut jamais être retrouvé lors d’une recherche.</p>
-<section id="exemple-concret" class="level4">
-<h4 class="anchored" data-anchor-id="exemple-concret">Exemple concret</h4>
-<ul>
-<li><strong>Indexation</strong> : l’image est étiquetée « insecte sur une fleur jaune ».</li>
-<li><strong>Recherche</strong> : l’utilisateur cherche « insecte qui se nourrit » (<em>insect feeding</em>).</li>
-<li><strong>Résultat</strong> : l’image ne sera <strong>jamais retournée</strong>, même si elle représente exactement ce que l’utilisateur cherche.</li>
-</ul>
-<p>Le problème vient du fait que l’utilisateur doit <em>connaître le contexte d’indexation</em> (vocabulaire utilisé lors de l’étiquetage) pour formuler sa requête correctement.</p>
-</section>
-</section>
-<section id="implications-pour-la-représentation" class="level3">
-<h3 class="anchored" data-anchor-id="implications-pour-la-représentation">Implications pour la représentation</h3>
-<p>Pour éviter ce trou noir, la représentation des documents doit être :</p>
-<ul>
-<li><strong>Exhaustive</strong> (<em>context-free</em>) : capturer tous les aspects du contenu, indépendamment du contexte d’utilisation future.</li>
-<li><strong>Automatique</strong> : sans intervention humaine à chaque étape, pour passer à l’échelle.</li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Intuition
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Si vous cherchez « cheval » mais que l’image est indexée « mustang », vous ne trouverez rien. La représentation basée sur le <em>contenu visuel</em> (pixels, couleurs, formes) est insensible à ce problème de vocabulaire : deux images visuellement similaires seront proches dans l’espace, quelles que soient leurs étiquettes textuelles.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="le-paradigme-de-la-recherche-dinformation" class="level2">
-<h2 class="anchored" data-anchor-id="le-paradigme-de-la-recherche-dinformation">Le Paradigme de la Recherche d’Information</h2>
-<section id="principes-fondamentaux" class="level3">
-<h3 class="anchored" data-anchor-id="principes-fondamentaux">Principes fondamentaux</h3>
-<p>Le paradigme classique de la recherche d’information repose sur deux éléments :</p>
-<ul>
-<li><strong>Une requête</strong> (<em>query</em>) : l’expression du besoin informationnel de l’utilisateur.</li>
-<li><strong>Un dépôt</strong> (<em>repository</em>) : la source d’information dans laquelle chercher.</li>
-</ul>
-<p>L’objectif est d’<strong>inférer les documents les plus pertinents</strong> du dépôt en réponse à la requête.</p>
-</section>
-<section id="types-de-requêtes" class="level3">
-<h3 class="anchored" data-anchor-id="types-de-requêtes">Types de requêtes</h3>
-<p>Trois types de requêtes sont classiquement distingués :</p>
-<ol type="1">
-<li><strong>Requête descriptive</strong> (<em>descriptive query</em>) : l’utilisateur décrit ce qu’il cherche en langage naturel structuré.</li>
-<li><strong>Requête texte libre</strong> (<em>free text query</em>) : à la manière de Google, une phrase ou un ensemble de mots-clés.</li>
-<li><strong>Requête par exemple</strong> (<em>example document query</em>) : l’utilisateur fournit un ou plusieurs documents comme exemples (bouton « Plus comme ceci… » / <em>More like this…</em>).</li>
-</ol>
-</section>
-<section id="requête-par-lexemple-query-by-example" class="level3">
-<h3 class="anchored" data-anchor-id="requête-par-lexemple-query-by-example">Requête par l’Exemple (Query-by-Example)</h3>
-<p>La <strong>Requête par l’Exemple</strong> (QbE, <em>Query-by-Example</em>) est le type de requête le plus utilisé en recherche d’information visuelle. Son principe :</p>
-<blockquote class="blockquote">
-<p>« Je veux un document qui ressemble à celui-ci. »</p>
-</blockquote>
-<ul>
-<li>La <strong>pertinence</strong> (<em>relevance</em>) est traduite en terme de <strong>similarité</strong> (<em>similarity</em>).</li>
-<li>La <strong>similarité</strong> est elle-même traduite en <strong>proximité géométrique</strong> dans l’espace de représentation.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>À retenir
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>En recherche d’information visuelle, <strong>pertinence ≈ similarité ≈ proximité dans l’espace de représentation</strong>. Toute la difficulté consiste à choisir un espace où cette équivalence est valide sur le plan sémantique.</p>
-</div>
-</div>
-</section>
-<section id="la-notion-de-voisinage" class="level3">
-<h3 class="anchored" data-anchor-id="la-notion-de-voisinage">La notion de voisinage</h3>
-<p>La recherche d’information nous enseigne qu’il n’est pas nécessaire d’avoir une compréhension absolue et complète des documents pour répondre à des requêtes. Il suffit de pouvoir <strong>comparer deux documents</strong>.</p>
-<p>Pour cela, on a besoin de :</p>
-<ul>
-<li><strong>Mesures de distance</strong> (<em>distance measurements</em>) appropriées, pour inférer la similarité.</li>
-<li>Un <strong>espace de caractéristiques</strong> (<em>feature space</em>), basé sur les propriétés du document.</li>
-<li>Une <strong>notion de voisinage</strong> (<em>vicinity</em>), définie par cette distance.</li>
-</ul>
-<blockquote class="blockquote">
-<p>« Tout est une question d’inspection des voisinages. »</p>
-</blockquote>
-<div class="callout callout-style-default callout-warning callout-titled" title="Condition de validité">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Condition de validité
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Cette approche n’est valide que si la <strong>distance est sémantiquement pertinente</strong> : deux documents proches dans l’espace de représentation doivent effectivement être similaires <em>du point de vue de l’utilisateur</em>.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="modélisation-pour-la-recherche-visuelle" class="level2">
-<h2 class="anchored" data-anchor-id="modélisation-pour-la-recherche-visuelle">Modélisation pour la Recherche Visuelle</h2>
-<section id="le-modèle-de-base" class="level3">
-<h3 class="anchored" data-anchor-id="le-modèle-de-base">Le modèle de base</h3>
-<p>La modélisation pour la recherche d’information visuelle s’appuie sur le paradigme QbE avec <strong>retour de pertinence</strong> (<em>Relevance Feedback</em>, RF) :</p>
-<blockquote class="blockquote">
-<p>« Je veux un document qui ressemble à celui-ci <strong>mais pas à celui-là</strong>. »</p>
-</blockquote>
-<p>L’utilisateur fournit des exemples <strong>positifs</strong> (pertinents) et <strong>négatifs</strong> (non pertinents), et le système ajuste sa représentation en conséquence.</p>
-<p>On utilise les <strong>outils classiques de la recherche d’information</strong> :</p>
-<ul>
-<li>Modèle <strong>espace vectoriel</strong> (<em>Vector Space Model</em>)</li>
-<li>Modèles <strong>probabilistes</strong> (<em>Probabilistic Models</em>)</li>
-</ul>
-<p>Mais appliqués à des <strong>abstractions du contenu visuel</strong> plutôt qu’à du texte.</p>
-</section>
-<section id="recherche-dimages-basée-sur-le-contenu" class="level3">
-<h3 class="anchored" data-anchor-id="recherche-dimages-basée-sur-le-contenu">Recherche d’images basée sur le contenu</h3>
-<p>La recherche d’images basée sur le contenu (<em>Content-Based Image Search</em>, CBIS) affronte le défi de la QbE visuelle :</p>
-<ul>
-<li><strong>Image exemple pertinente</strong> : « une image <em>comme</em> celle-ci… »</li>
-<li><strong>Image exemple non pertinente</strong> : « …mais <em>pas</em> comme celle-là. »</li>
-</ul>
-<p>On applique le principe <strong>TF-IDF</strong> (Term Frequency – Inverse Document Frequency), transposé au domaine visuel :</p>
-<ul>
-<li><strong>TF</strong> (fréquence) : « une fleur jaune… » — un élément <em>fréquent</em>, commun à beaucoup d’images.</li>
-<li><strong>IDF</strong> (rareté) : « …avec un insecte dessus » — un élément <em>rare</em> et donc plus discriminant.</li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Intuition
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>En texte, le mot « le » est très fréquent et peu informatif (faible IDF). En visuel, une grande zone bleue (ciel) est fréquente et peu discriminante. À l’inverse, la présence d’un insecte précis sur une fleur est rare et très informative pour distinguer cette image d’autres.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="caractérisation-du-contenu-visuel" class="level2">
-<h2 class="anchored" data-anchor-id="caractérisation-du-contenu-visuel">Caractérisation du Contenu Visuel</h2>
-<section id="le-défi-modéliser-le-système-visuel-humain" class="level3">
-<h3 class="anchored" data-anchor-id="le-défi-modéliser-le-système-visuel-humain">Le défi : modéliser le Système Visuel Humain</h3>
-<p>Le cœur du problème est de <strong>modéliser les capacités du Système Visuel Humain</strong> (<em>Human Visual System</em>, HVS) :</p>
-<ul>
-<li>Pourquoi deux images <em>différentes</em> « se ressemblent »-elles ?</li>
-<li>Pourquoi deux images <em>similaires</em> « semblent-elles différentes » ?</li>
-</ul>
-<p>Cette modélisation se situe à deux niveaux :</p>
-<section id="niveau-bas-low-level-model-propriétés-physiques" class="level4">
-<h4 class="anchored" data-anchor-id="niveau-bas-low-level-model-propriétés-physiques">Niveau bas (<em>Low-level model</em>) — Propriétés physiques</h4>
-<p>Ce sont les caractéristiques directement extractibles des pixels :</p>
-<ul>
-<li><strong>Couleur</strong> (<em>Color</em>)</li>
-<li><strong>Texture</strong> (<em>Texture</em>)</li>
-<li><strong>Forme</strong> (<em>Shape</em>)</li>
-</ul>
-</section>
-<section id="niveau-haut-high-level-model-sémantique" class="level4">
-<h4 class="anchored" data-anchor-id="niveau-haut-high-level-model-sémantique">Niveau haut (<em>High-level model</em>) — Sémantique</h4>
-<p>Ce sont des concepts de plus haut niveau, proches de la perception humaine :</p>
-<ul>
-<li><strong>Objets</strong> (<em>Objects</em>)</li>
-<li><strong>Concepts</strong> (<em>Concepts</em>)</li>
-</ul>
-</section>
-</section>
-<section id="lécart-sémantique-semantic-gap" class="level3">
-<h3 class="anchored" data-anchor-id="lécart-sémantique-semantic-gap">L’Écart Sémantique (Semantic Gap)</h3>
-<p>L’<strong>écart sémantique</strong> (<em>semantic gap</em>) est la différence d’interprétation entre un opérateur humain et un système automatisé. C’est l’un des défis fondamentaux de la recherche d’information visuelle.</p>
+<section id="vue-densemble" class="level2">
+<h2 class="anchored" data-anchor-id="vue-densemble">Vue d’ensemble</h2>
+<p><strong>Objectif :</strong> apprendre <span class="math inline">\(\text{RSV}_{\text{Model}} = \phi_\theta(d_j, q)\)</span>, le score de pertinence d’un document <span class="math inline">\(d_j\)</span> pour une requête <span class="math inline">\(q\)</span>.</p>
+<p><strong>3 familles d’approches :</strong></p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Niveau</th>
-<th>Texte</th>
-<th>Visuel</th>
+<th>Approche</th>
+<th>Unité</th>
+<th>Signal d’entraînement</th>
+<th>Exemples</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Interprétation</td>
-<td>Histoire</td>
-<td>« Action »</td>
+<td><strong>Pointwise</strong></td>
+<td>Document seul</td>
+<td>Score absolu</td>
+<td>Régression logistique, SVM classif.</td>
 </tr>
 <tr class="even">
-<td>Segmentation sémantique</td>
-<td>Paragraphe</td>
-<td>Scène</td>
+<td><strong>Pairwise</strong></td>
+<td>Paire <span class="math inline">\((d_j, d_k)\)</span></td>
+<td>Ordre relatif <span class="math inline">\(d_j &gt;_q d_k\)</span></td>
+<td>SVMRank, RankBoost</td>
 </tr>
 <tr class="odd">
-<td>Groupe</td>
-<td>Phrase</td>
-<td>Objet</td>
-</tr>
-<tr class="even">
-<td>Segmentation physique</td>
-<td>Mot</td>
-<td>Région homogène</td>
-</tr>
-<tr class="odd">
-<td>Entité physique</td>
-<td>Caractère</td>
-<td>Couleur, texture</td>
+<td><strong>Listwise</strong></td>
+<td>Liste complète</td>
+<td>Mesure globale (nDCG)</td>
+<td>LambdaMART, ColBERT</td>
 </tr>
 </tbody>
 </table>
-<p>Le tableau illustre le parallèle entre niveaux d’abstraction en traitement du texte et en traitement visuel.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="La tension fondamentale">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>La tension fondamentale
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Plus on monte en niveau d’abstraction (vers les concepts), plus on est pertinent pour l’utilisateur. Mais plus on monte, moins la machine est précise. Plus on descend vers les propriétés physiques, plus la machine est précise, mais moins le résultat est semantiquement pertinent. C’est l’écart sémantique.</p>
-</div>
-</div>
-</section>
-<section id="le-captcha-exploitation-de-lécart-sémantique" class="level3">
-<h3 class="anchored" data-anchor-id="le-captcha-exploitation-de-lécart-sémantique">Le CAPTCHA : exploitation de l’écart sémantique</h3>
-<p>Un exemple concret d’exploitation de l’écart sémantique est le <strong>CAPTCHA</strong> (<em>Completely Automated Public Turing test to tell Computers and Humans Apart</em>). Les CAPTCHAs demandent à l’utilisateur de reconnaître des caractères déformés ou de sélectionner des images contenant un objet particulier — tâches triviales pour un humain, difficiles pour une machine.</p>
 <hr>
 </section>
-</section>
-<section id="caractéristiques-visuelles-de-bas-niveau" class="level2">
-<h2 class="anchored" data-anchor-id="caractéristiques-visuelles-de-bas-niveau">Caractéristiques Visuelles de Bas Niveau</h2>
-<section id="la-couleur" class="level3">
-<h3 class="anchored" data-anchor-id="la-couleur">La Couleur</h3>
-<section id="le-modèle-rgb" class="level4">
-<h4 class="anchored" data-anchor-id="le-modèle-rgb">Le modèle RGB</h4>
-<p>Chaque pixel d’une image numérique est représenté par trois valeurs dans le modèle <strong>RGB</strong> (<em>Red, Green, Blue</em>) :</p>
-<ul>
-<li><strong>Image</strong> = 3 tableaux (R, G, B) de valeurs entre 0 et 255.</li>
-<li><strong>Pixel</strong> = triplet (R, G, B) représentant une couleur à une position donnée.</li>
-</ul>
-<p>Toute couleur est une combinaison de ces trois composantes primaires.</p>
-</section>
-<section id="espaces-colorimétriques" class="level4">
-<h4 class="anchored" data-anchor-id="espaces-colorimétriques">Espaces colorimétriques</h4>
-<p>Le modèle RGB est le plus courant, mais d’autres espaces sont utilisés en recherche visuelle :</p>
-<ul>
-<li><strong>HSV</strong> (<em>Hue, Saturation, Value</em>) : correspond mieux à la perception humaine des couleurs. La <strong>distance L2 dans l’espace HSV</strong> est souvent plus représentative de la similarité de couleur perçue que dans RGB.</li>
-</ul>
-</section>
-<section id="représentation-de-la-couleur" class="level4">
-<h4 class="anchored" data-anchor-id="représentation-de-la-couleur">Représentation de la couleur</h4>
-<p>Plusieurs représentations sont utilisées :</p>
-<ul>
-<li><strong>Couleur dominante</strong> (<em>Dominant color</em>) : la ou les couleurs les plus présentes dans l’image.</li>
-<li><strong>Histogramme de couleur</strong> (<em>Color histogram</em>) : distribution statistique des valeurs de couleur, indépendante de la position des pixels.</li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<section id="modèle-rsv-et-bir" class="level2">
+<h2 class="anchored" data-anchor-id="modèle-rsv-et-bir">Modèle RSV et BIR</h2>
+<p><span class="math display">\[\log O(R \mid d_j, q) = c_0 + \sum_{i=1}^{n} c_i X_i \quad \theta = [c_0, \ldots, c_n] \text{ appris}\]</span></p>
+<p><strong>Attributs <span class="math inline">\(X_i\)</span> :</strong> fréquence de requête, longueur document/requête, IDF, termes communs…</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Piège">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Intuition
+<span class="screen-reader-only">Warning</span>Piège
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>L’histogramme de couleur répond à la question : « Quelle proportion de pixels sont rouges ? Verts ? Bleus ? ». Deux images ayant le même histogramme de couleur auront un aspect colorimétrique similaire, même si les objets sont disposés différemment.</p>
+<p>Le BIR <strong>est déjà du ML</strong> : <span class="math inline">\(P(R \mid d_j, q) = \phi_\theta(d_j, q)\)</span> avec paramètres appris à la requête.</p>
 </div>
 </div>
-</section>
-<section id="exemple-histogramme-et-similarité" class="level4">
-<h4 class="anchored" data-anchor-id="exemple-histogramme-et-similarité">Exemple : histogramme et similarité</h4>
-<p>Considérons :</p>
-<ul>
-<li><strong>Image 1 et Image 2</strong> : deux images noir et gris avec des disposition inversées. Leurs histogrammes de couleur (niveaux de gris) sont <strong>identiques</strong> → distance nulle pour la couleur.</li>
-<li><strong>Image 3 et Image 4</strong> : une image vert-jaune unie et une image vert-jaune en damier. Leurs histogrammes sont aussi <strong>identiques</strong> → distance nulle, alors que les images semblent très différentes visuellement.</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled" title="Limite de l&#39;histogramme">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Limite de l’histogramme
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>L’histogramme de couleur <strong>ignore la position spatiale</strong> des pixels. Deux images avec des objets très différemment disposés peuvent avoir un histogramme quasi-identique. C’est une limite fondamentale.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="la-texture" class="level3">
-<h3 class="anchored" data-anchor-id="la-texture">La Texture</h3>
-<section id="définition" class="level4">
-<h4 class="anchored" data-anchor-id="définition">Définition</h4>
-<p>La <strong>texture</strong> (<em>texture</em>) décrit les patterns réguliers ou irréguliers de variation d’intensité dans une image : rugosité, granulosité, régularité, direction préférentielle…</p>
-</section>
-<section id="critères-de-caractérisation" class="level4">
-<h4 class="anchored" data-anchor-id="critères-de-caractérisation">Critères de caractérisation</h4>
-<p>Les critères principaux pour décrire une texture sont :</p>
-<ul>
-<li><strong>Orientation</strong> (<em>orientation</em>) : direction préférentielle des motifs.</li>
-<li><strong>Grossièreté</strong> (<em>coarseness</em>) : taille des éléments répétés.</li>
-<li><strong>Taille</strong> (<em>size</em>) : échelle des structures.</li>
-</ul>
-</section>
-<section id="modèles-et-techniques" class="level4">
-<h4 class="anchored" data-anchor-id="modèles-et-techniques">Modèles et techniques</h4>
-<ul>
-<li><strong>Matrices de co-occurrence</strong> (<em>co-occurrence matrices</em>) : statistiques sur les paires de pixels voisins.</li>
-<li><strong>Filtres de Gabor</strong> (<em>Gabor filters</em>) : bancs de filtres orientés à différentes fréquences, modélisant la réponse du cortex visuel.</li>
-<li><strong>Champs de Markov</strong> (<em>Markov random fields</em>).</li>
-<li><strong>Réseaux de neurones</strong> (<em>neural nets</em>).</li>
-</ul>
-</section>
-<section id="filtres-de-gabor" class="level4">
-<h4 class="anchored" data-anchor-id="filtres-de-gabor">Filtres de Gabor</h4>
-<p>Un filtre de Gabor est une gaussienne modulée par une sinusoïde :</p>
-<p><span class="math display">\[g(x, y) = \left(\frac{1}{2\pi\sigma_x\sigma_y}\right)\exp\left(-\frac{1}{2}\left(\frac{x^2}{\sigma_x^2} + \frac{y^2}{\sigma_y^2}\right) + 2\pi j W x\right)\]</span></p>
-<p>En appliquant un <strong>banc de filtres de Gabor</strong> à différentes orientations et fréquences, on obtient une description globale de la texture d’une image (<em>Global Texture data</em>).</p>
-<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>À retenir
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Le filtre de Gabor est biologiquement motivé : il modélise le comportement des <strong>cellules simples du cortex visuel primaire</strong> (V1) des mammifères, qui sont sensibles à l’orientation et à la fréquence spatiale.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="la-forme-et-la-segmentation" class="level3">
-<h3 class="anchored" data-anchor-id="la-forme-et-la-segmentation">La Forme et la Segmentation</h3>
-<section id="segmentation-dimage" class="level4">
-<h4 class="anchored" data-anchor-id="segmentation-dimage">Segmentation d’image</h4>
-<p>La <strong>segmentation</strong> (<em>image segmentation</em>) consiste à partitionner l’image en régions homogènes, idéalement correspondant à des objets ou parties d’objets significatifs.</p>
-<p>Les contraintes imposées sur les régions sont :</p>
-<ul>
-<li><strong>Homogénéité</strong> : même couleur, même texture à l’intérieur d’une région.</li>
-<li><strong>Connexité</strong> : la région est d’un seul tenant.</li>
-<li><strong>Contraintes de forme</strong> : la forme globale doit être cohérente.</li>
-</ul>
-</section>
-<section id="techniques-de-segmentation" class="level4">
-<h4 class="anchored" data-anchor-id="techniques-de-segmentation">Techniques de segmentation</h4>
-<ul>
-<li><strong>K-means</strong> (<em>clustering</em>) : partitionner les pixels en <span class="math inline">\(k\)</span> groupes selon leur couleur/texture.</li>
-<li><strong>Mean-shift</strong> : algorithme de montée de gradient vers les modes de densité.</li>
-<li><strong>Contours actifs (snakes)</strong> : courbes déformables qui s’adaptent aux bords des objets.</li>
-</ul>
-</section>
-<section id="blobworld-berkeley" class="level4">
-<h4 class="anchored" data-anchor-id="blobworld-berkeley">BlobWorld (Berkeley)</h4>
-<p><strong>BlobWorld</strong> est un système de recherche d’images basé sur la segmentation en régions (<em>blobs</em>). L’image est segmentée en zones homogènes, et la requête est formulée en sélectionnant des blobs de l’image exemple. Le système retrouve des images ayant des blobs similaires (en couleur, texture et position relative).</p>
 <hr>
 </section>
+<section id="approche-pointwise" class="level2">
+<h2 class="anchored" data-anchor-id="approche-pointwise">Approche Pointwise</h2>
+<section id="régression-logistique" class="level3">
+<h3 class="anchored" data-anchor-id="régression-logistique">Régression logistique</h3>
+<p><span class="math display">\[P(R \mid q, d_j) = \frac{1}{1 + \exp(-c_0 - \sum_i c_i X_i)}\]</span></p>
+<ul>
+<li>Sortie <span class="math inline">\(\in [0,1]\)</span> → pertinent si <span class="math inline">\(&gt; 0.5\)</span></li>
+</ul>
 </section>
-</section>
-<section id="caractéristiques-locales-et-représentations-avancées" class="level2">
-<h2 class="anchored" data-anchor-id="caractéristiques-locales-et-représentations-avancées">Caractéristiques Locales et Représentations Avancées</h2>
-<section id="détection-de-points-clés-keypoints" class="level3">
-<h3 class="anchored" data-anchor-id="détection-de-points-clés-keypoints">Détection de points-clés (Keypoints)</h3>
-<p>Plutôt que de décrire l’image globalement, on peut identifier des <strong>points d’intérêt</strong> (<em>interest points</em>, <em>keypoints</em>) — des endroits structurellement saillants dans l’image (coins, jonctions, bords prononcés). Ces points sont stables sous les transformations géométriques (rotation, changement d’échelle).</p>
-<p>La <strong>détection de coins</strong> (<em>corner detection</em>) est l’approche la plus simple : on détecte les endroits où l’intensité varie fortement dans plusieurs directions.</p>
-</section>
-<section id="sift-et-surf" class="level3">
-<h3 class="anchored" data-anchor-id="sift-et-surf">SIFT et SURF</h3>
-<section id="sift-scale-invariant-feature-transform-lowe-1999" class="level4">
-<h4 class="anchored" data-anchor-id="sift-scale-invariant-feature-transform-lowe-1999">SIFT — Scale-Invariant Feature Transform (Lowe, 1999)</h4>
-<p>SIFT est l’algorithme de référence pour l’extraction de caractéristiques locales invariantes. Son fonctionnement en quatre étapes :</p>
-<ol type="1">
-<li><strong>Construction de l’espace d’échelle</strong> (<em>scale space</em>) : on flou progressivement l’image (blur gaussien incrémental) pour créer une pyramide multi-échelle.</li>
-<li><strong>Détection des points-clés</strong> : les keypoints sont les extrema locaux dans les images de différences gaussiennes (<em>Difference of Gaussians</em>, DoG) — des pixels plus grands ou plus petits que leurs 26 voisins dans la pyramide.</li>
-<li><strong>Calcul du gradient</strong> : autour de chaque keypoint, on calcule le gradient des pixels à l’échelle de détection.</li>
-<li><strong>Création du descripteur</strong> : 16 histogrammes de gradients (8 orientations chacun) → vecteur de <strong>128 dimensions</strong> par keypoint.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled" title="Intuition">
+<section id="problème-fondamental" class="level3">
+<h3 class="anchored" data-anchor-id="problème-fondamental">Problème fondamental</h3>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limite critique">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Intuition
+<span class="screen-reader-only">Warning</span>Limite critique
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>SIFT est robuste à la rotation, au changement d’échelle et partiellement à la variation d’illumination. Si vous prenez une photo d’un objet de deux angles différents, SIFT détectera les mêmes keypoints et produira des descripteurs similaires — permettant la mise en correspondance.</p>
-</div>
-</div>
-</section>
-<section id="surf-speeded-up-robust-features-bay-et-al.-2006" class="level4">
-<h4 class="anchored" data-anchor-id="surf-speeded-up-robust-features-bay-et-al.-2006">SURF — Speeded-Up Robust Features (Bay et al., 2006)</h4>
-<p>SURF est une version accélérée de SIFT utilisant des approximations par filtres de boîte (<em>box filters</em>) et des images intégrales. Il est nettement plus rapide tout en étant comparable en performance.</p>
-</section>
-</section>
-<section id="compréhension-par-régions" class="level3">
-<h3 class="anchored" data-anchor-id="compréhension-par-régions">Compréhension par régions</h3>
-<p>Dans l’approche basée sur les régions, les images sont comparées selon les <strong>régions</strong> (idéalement des objets ou concepts) qu’elles contiennent. Cela permet une recherche plus précise : on spécifie quels objets doivent être présents dans l’image résultat.</p>
-<p>Exemple d’application : la <strong>détection d’objets</strong> (<em>object detection</em>) et la <strong>détection de visages</strong> (<em>face detection</em>).</p>
-</section>
-<section id="sac-de-mots-visuels-bag-of-visual-words" class="level3">
-<h3 class="anchored" data-anchor-id="sac-de-mots-visuels-bag-of-visual-words">Sac de Mots Visuels (Bag of Visual Words)</h3>
-<p>Le <strong>Sac de Mots Visuels</strong> (<em>Bag of Visual Words</em>, BoVW) est une approche qui transpose la méthode du sac de mots textuel au domaine visuel.</p>
-<section id="pipeline" class="level4">
-<h4 class="anchored" data-anchor-id="pipeline">Pipeline</h4>
-<ol type="1">
-<li><strong>Extraction de caractéristiques locales</strong> : on extrait les descripteurs SIFT de tous les points-clés de toutes les images de la collection.</li>
-<li><strong>Groupement</strong> (<em>clustering</em>) : les descripteurs similaires sont regroupés — par exemple, les descripteurs correspondant aux coins d’un objet particulier.</li>
-<li><strong>Quantification</strong> (<em>quantization</em>) : chaque groupe de descripteurs similaires devient un <strong>mot visuel</strong> (<em>visual word</em>).</li>
-<li><strong>Dictionnaire visuel</strong> (<em>visual dictionary</em>) : l’ensemble des mots visuels forme un vocabulaire.</li>
-<li><strong>Représentation de l’image</strong> : une image est décrite par le vecteur de fréquences d’occurrence de chaque mot visuel — exactement comme un document textuel est représenté par son vecteur TF-IDF.</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled" title="À retenir">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>À retenir
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Une fois les images représentées comme des vecteurs de mots visuels, on peut utiliser <strong>toute la machinerie de la recherche d’information textuelle</strong> : fichiers inversés, TF-IDF, modèles probabilistes, etc.</p>
+<p>La pertinence <strong>dépend de la requête</strong> → pas de corrélation fixe entre caractéristiques et pertinence.</p>
+<p>Exemple : « voiture » → pertinent pour « véhicule », non pertinent pour « fruit ».</p>
 </div>
 </div>
 <hr>
 </section>
 </section>
-</section>
-<section id="détection-et-reconnaissance-dobjets" class="level2">
-<h2 class="anchored" data-anchor-id="détection-et-reconnaissance-dobjets">Détection et Reconnaissance d’Objets</h2>
-<section id="apprentissage-de-patterns" class="level3">
-<h3 class="anchored" data-anchor-id="apprentissage-de-patterns">Apprentissage de Patterns</h3>
-<p>L’approche moderne de la détection d’objets consiste à <strong>entraîner une machine</strong> à reconnaître des groupes de patterns spécifiques :</p>
+<section id="approche-pairwise" class="level2">
+<h2 class="anchored" data-anchor-id="approche-pairwise">Approche Pairwise</h2>
+<p><strong>Principe :</strong> apprendre <span class="math inline">\(\text{RSV}(d_j, q) &gt; \text{RSV}(d_k, q)\)</span> pour toutes les paires <span class="math inline">\(d_j &gt;_q d_k\)</span>.</p>
+<section id="svmrank" class="level3">
+<h3 class="anchored" data-anchor-id="svmrank">SVMRank</h3>
+<p>Reformulation : <span class="math inline">\(d_j &gt;_q d_k \iff a^T[\Phi(x_j, q) - \Phi(x_k, q)] &gt; 0\)</span></p>
+<p>→ Classification SVM sur les <strong>différences de vecteurs de caractéristiques</strong>.</p>
+<p><strong>SVM rappel :</strong></p>
 <ul>
-<li><strong>Visages</strong> : l’algorithme de Viola &amp; Jones (2001) a été le premier détecteur de visages en temps réel. Il utilise des caractéristiques de Haar et un classifieur en cascade (AdaBoost).</li>
-<li><strong>Objets génériques</strong> : en entraînant sur de nombreux exemples d’un objet (voiture, tasse, livre…), un classifieur peut détecter cet objet dans de nouvelles images.</li>
-</ul>
-<p>Le résultat : <strong>étiquetage automatique d’images</strong> → permettant une recherche textuelle classique sur le contenu visuel.</p>
-</section>
-<section id="reconnaissance-de-visages-eigenfaces" class="level3">
-<h3 class="anchored" data-anchor-id="reconnaissance-de-visages-eigenfaces">Reconnaissance de Visages : Eigenfaces</h3>
-<p>La technique des <strong>Eigenfaces</strong> extrait les caractéristiques spécifiques d’un visage en utilisant l’Analyse en Composantes Principales (ACP, <em>PCA</em>).</p>
-<ul>
-<li>Les <em>eigenfaces</em> sont les vecteurs propres de la matrice de covariance d’un ensemble d’images de visages.</li>
-<li>Chaque visage peut être représenté comme une combinaison linéaire de ces eigenfaces.</li>
-<li>La comparaison de deux visages se fait dans cet espace réduit.</li>
+<li><strong>(a) Noyau (Kernel) :</strong> <span class="math inline">\(\min \sum (a^T\Phi(x_i) - y_i)^2\)</span> — transformation non-linéaire vers espace séparable</li>
+<li><strong>(b) Grande marge (Large Margin) :</strong> maximiser la distance frontière ↔︎ vecteurs de support</li>
 </ul>
 </section>
-<section id="reconnaissance-de-chiffres-manuscrits" class="level3">
-<h3 class="anchored" data-anchor-id="reconnaissance-de-chiffres-manuscrits">Reconnaissance de Chiffres Manuscrits</h3>
-<p>La reconnaissance de chiffres manuscrits est un problème classique de classification visuelle :</p>
+<section id="rankboost" class="level3">
+<h3 class="anchored" data-anchor-id="rankboost">RankBoost</h3>
 <ul>
-<li><strong>10 classes</strong> (0 à 9), beaucoup d’exemples d’entraînement.</li>
-<li>Chaque exemple est une image de <strong>28×28 pixels</strong> → <strong>784 entrées</strong> pour le réseau.</li>
-<li>Un réseau de neurones avec de nombreux neurones cachés produit <strong>10 neurones de sortie</strong> (vecteur binaire).</li>
+<li><span class="math inline">\(X\)</span> = ensemble des paires de préférence <span class="math inline">\((d_j, q)\)</span></li>
+<li>Apprenants faibles <span class="math inline">\(h_t\)</span> sur distribution <span class="math inline">\(D_t\)</span>, renforcée là où <span class="math inline">\(h_t\)</span> échoue</li>
 </ul>
-<p>Ce problème, posé sur la base MNIST, a été déterminant dans l’essor des réseaux de neurones.</p>
+<p><span class="math display">\[D_{t+1}(x_0,x_1) = \frac{D_t(x_0,x_1)\exp(\alpha_t(h_t(x_0)-h_t(x_1)))}{Z_t}\]</span></p>
+<p><span class="math display">\[H(x) = \sum_{t=1}^{T} \alpha_t h_t(x)\]</span></p>
+</section>
+<section id="limites-du-pairwise" class="level3">
+<h3 class="anchored" data-anchor-id="limites-du-pairwise">Limites du Pairwise</h3>
+<ul>
+<li><strong>Impact positionnel :</strong> erreur en tête de liste &gt;&gt; erreur en queue
+<ul>
+<li><code>rrrriiiri</code> moins pénalisant que <code>irrrrrrrr</code></li>
+</ul></li>
+<li><strong>Déséquilibre micro/macro :</strong> nombre de docs pertinents varie par requête</li>
+</ul>
 <hr>
 </section>
 </section>
-<section id="filtres-convolutifs-et-réseaux-de-neurones" class="level2">
-<h2 class="anchored" data-anchor-id="filtres-convolutifs-et-réseaux-de-neurones">Filtres Convolutifs et Réseaux de Neurones</h2>
-<section id="lidée-des-filtres-locaux" class="level3">
-<h3 class="anchored" data-anchor-id="lidée-des-filtres-locaux">L’idée des filtres locaux</h3>
-<p>Les images sont formées d’un <strong>dictionnaire de patches</strong> (<em>dictionary of patches</em>) : des petits motifs de base (bords, coins, textures) qui se combinent pour former des objets, puis des scènes.</p>
-<p>L’idée clé : la <strong>réponse d’un filtre</strong> (<em>filter response</em>) — convoluer un patch d’image avec un filtre, et observer si la valeur obtenue est élevée (le patch <em>ressemble</em> au filtre).</p>
+<section id="approche-listwise" class="level2">
+<h2 class="anchored" data-anchor-id="approche-listwise">Approche Listwise</h2>
+<p><strong>Principe :</strong> optimiser directement la <strong>permutation</strong> complète de documents.</p>
+<section id="mesures-de-qualité-de-liste" class="level3">
+<h3 class="anchored" data-anchor-id="mesures-de-qualité-de-liste">Mesures de qualité de liste</h3>
+<p><strong>nDCG (normalized Discounted Cumulative Gain) :</strong></p>
+<p><span class="math display">\[\text{DCG}_p = \sum_{j=1}^{p} \frac{2^{r_j}-1}{\log_2(j+1)} \qquad \text{nDCG}_p = \frac{\text{DCG}_p}{\text{DCG}_p^{\max}}\]</span></p>
+<ul>
+<li><span class="math inline">\(r_j\)</span> = niveau de pertinence à la position <span class="math inline">\(j\)</span></li>
+<li><span class="math inline">\(\text{nDCG} \in [0,1]\)</span>, pénalise les docs pertinents en bas de liste</li>
+</ul>
+<p><strong>Tau de Kendall :</strong></p>
+<p><span class="math display">\[\tau(\sigma) = \frac{\#\text{concordants} - \#\text{discordants}}{\binom{n}{2}}\]</span></p>
+<p><strong>Corrélation de Spearman :</strong></p>
+<p><span class="math display">\[r_s(\sigma,\rho) = 1 - \frac{6\sum_i(\sigma(i)-\rho(i))^2}{n(n^2-1)}\]</span></p>
 </section>
-<section id="convolution" class="level3">
-<h3 class="anchored" data-anchor-id="convolution">Convolution</h3>
-<p>La <strong>convolution</strong> consiste à faire glisser un filtre (noyau, <em>kernel</em>) sur toute l’image et à calculer le produit scalaire entre le filtre et chaque patch local.</p>
-<p>Exemple : un filtre vertical <code>[0,1,0 / 0,1,0 / 0,1,0]</code> convolutionné avec un patch donnera une valeur élevée si le patch contient une ligne verticale.</p>
+<section id="lambdamart" class="level3">
+<h3 class="anchored" data-anchor-id="lambdamart">LambdaMART</h3>
+<p><strong>Chaîne :</strong> RankNet → LambdaRank → <strong>LambdaMART</strong></p>
+<ul>
+<li>Arbres de décision boostés par gradient (GBDT) pour optimiser le nDCG</li>
+<li>Les gradients <span class="math inline">\(\lambda_{ij}\)</span> sont pondérés par le <span class="math inline">\(\Delta\)</span>nDCG de chaque paire</li>
+</ul>
+</section>
+<section id="autres-méthodes-listwise" class="level3">
+<h3 class="anchored" data-anchor-id="autres-méthodes-listwise">Autres méthodes listwise</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Méthode</th>
+<th>Année</th>
+<th>Principe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nDCGboost</td>
+<td>2010</td>
+<td>Boosting sur nDCG</td>
+</tr>
+<tr class="even">
+<td>ES-Rank</td>
+<td>2017</td>
+<td>Algorithme évolutionnaire</td>
+</tr>
+<tr class="odd">
+<td>FastAP</td>
+<td>2019</td>
+<td>Deep Learning, optimise AP</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="méthodes-deep-learning" class="level2">
+<h2 class="anchored" data-anchor-id="méthodes-deep-learning">Méthodes Deep Learning</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Méthode</th>
+<th>Idée clé</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ColBERT</strong></td>
+<td>Encodage séparé requête/passage + interaction tardive (BERT)</td>
+</tr>
+<tr class="even">
+<td><strong>DRMM</strong></td>
+<td>Interactions profondes document-requête</td>
+</tr>
+<tr class="odd">
+<td><strong>KNRM</strong></td>
+<td>Kernel Pooling sur interactions terme-à-terme</td>
+</tr>
+<tr class="even">
+<td><strong>Rank-LIME</strong></td>
+<td>Attribution de features locale, agnostique au modèle</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled" title="Problème ouvert">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Problème ouvert
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>nDCG <strong>non-différentiable</strong> → optimisation directe impossible → approximations nécessaires.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="letor-benchmark" class="level2">
+<h2 class="anchored" data-anchor-id="letor-benchmark">LETOR (benchmark)</h2>
+<p><strong>LETOR</strong> (2009, Microsoft) fournit : datasets, baselines, outils d’évaluation, partitionnement standard.</p>
+<p>Référence livre : Tie-Yan Liu, <em>Learning to Rank for Information Retrieval</em>, Springer 2011.</p>
+<hr>
+</section>
+<section id="formules-à-retenir" class="level2">
+<h2 class="anchored" data-anchor-id="formules-à-retenir">Formules à retenir</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Formule</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\text{RSV} = \phi_\theta(d_j, q)\)</span></td>
+<td>Score de pertinence paramétrique</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P(R\|q,d_j) = \sigma(c_0 + \sum c_i X_i)\)</span></td>
+<td>Régression logistique</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a^T[\Phi(x_j,q)-\Phi(x_k,q)] &gt; 0\)</span></td>
+<td>SVMRank : préférence <span class="math inline">\(d_j &gt; d_k\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(H(x) = \sum_t \alpha_t h_t(x)\)</span></td>
+<td>RankBoost : classement final</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{nDCG}_p = \text{DCG}_p / \text{DCG}_p^{\max}\)</span></td>
+<td>Mesure listwise normalisée</td>
+</tr>
+</tbody>
+</table>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
