@@ -1,0 +1,150 @@
+---
+title: "Apprentissage pour le classement (Learning to Rank) — Révision"
+---
+
+## Vue d'ensemble
+
+**Objectif :** apprendre $\text{RSV}_{\text{Model}} = \phi_\theta(d_j, q)$, le score de pertinence d'un document $d_j$ pour une requête $q$.
+
+**3 familles d'approches :**
+
+| Approche | Unité | Signal d'entraînement | Exemples |
+|---|---|---|---|
+| **Pointwise** | Document seul | Score absolu | Régression logistique, SVM classif. |
+| **Pairwise** | Paire $(d_j, d_k)$ | Ordre relatif $d_j >_q d_k$ | SVMRank, RankBoost |
+| **Listwise** | Liste complète | Mesure globale (nDCG) | LambdaMART, ColBERT |
+
+---
+
+## Modèle RSV et BIR
+
+$$\log O(R \mid d_j, q) = c_0 + \sum_{i=1}^{n} c_i X_i \quad \theta = [c_0, \ldots, c_n] \text{ appris}$$
+
+**Attributs $X_i$ :** fréquence de requête, longueur document/requête, IDF, termes communs...
+
+::: {.callout-warning title="Piège"}
+Le BIR **est déjà du ML** : $P(R \mid d_j, q) = \phi_\theta(d_j, q)$ avec paramètres appris à la requête.
+:::
+
+---
+
+## Approche Pointwise
+
+### Régression logistique
+
+$$P(R \mid q, d_j) = \frac{1}{1 + \exp(-c_0 - \sum_i c_i X_i)}$$
+
+- Sortie $\in [0,1]$ → pertinent si $> 0.5$
+
+### Problème fondamental
+
+::: {.callout-warning title="Limite critique"}
+La pertinence **dépend de la requête** → pas de corrélation fixe entre caractéristiques et pertinence.
+
+Exemple : « voiture » → pertinent pour « véhicule », non pertinent pour « fruit ».
+:::
+
+---
+
+## Approche Pairwise
+
+**Principe :** apprendre $\text{RSV}(d_j, q) > \text{RSV}(d_k, q)$ pour toutes les paires $d_j >_q d_k$.
+
+### SVMRank
+
+Reformulation : $d_j >_q d_k \iff a^T[\Phi(x_j, q) - \Phi(x_k, q)] > 0$
+
+→ Classification SVM sur les **différences de vecteurs de caractéristiques**.
+
+**SVM rappel :**
+
+- **(a) Noyau (Kernel) :** $\min \sum (a^T\Phi(x_i) - y_i)^2$ — transformation non-linéaire vers espace séparable
+- **(b) Grande marge (Large Margin) :** maximiser la distance frontière ↔ vecteurs de support
+
+### RankBoost
+
+- $X$ = ensemble des paires de préférence $(d_j, q)$
+- Apprenants faibles $h_t$ sur distribution $D_t$, renforcée là où $h_t$ échoue
+
+$$D_{t+1}(x_0,x_1) = \frac{D_t(x_0,x_1)\exp(\alpha_t(h_t(x_0)-h_t(x_1)))}{Z_t}$$
+
+$$H(x) = \sum_{t=1}^{T} \alpha_t h_t(x)$$
+
+### Limites du Pairwise
+
+- **Impact positionnel :** erreur en tête de liste >> erreur en queue
+  - `rrrriiiri` moins pénalisant que `irrrrrrrr`
+- **Déséquilibre micro/macro :** nombre de docs pertinents varie par requête
+
+---
+
+## Approche Listwise
+
+**Principe :** optimiser directement la **permutation** complète de documents.
+
+### Mesures de qualité de liste
+
+**nDCG (normalized Discounted Cumulative Gain) :**
+
+$$\text{DCG}_p = \sum_{j=1}^{p} \frac{2^{r_j}-1}{\log_2(j+1)} \qquad \text{nDCG}_p = \frac{\text{DCG}_p}{\text{DCG}_p^{\max}}$$
+
+- $r_j$ = niveau de pertinence à la position $j$
+- $\text{nDCG} \in [0,1]$, pénalise les docs pertinents en bas de liste
+
+**Tau de Kendall :**
+
+$$\tau(\sigma) = \frac{\#\text{concordants} - \#\text{discordants}}{\binom{n}{2}}$$
+
+**Corrélation de Spearman :**
+
+$$r_s(\sigma,\rho) = 1 - \frac{6\sum_i(\sigma(i)-\rho(i))^2}{n(n^2-1)}$$
+
+### LambdaMART
+
+**Chaîne :** RankNet → LambdaRank → **LambdaMART**
+
+- Arbres de décision boostés par gradient (GBDT) pour optimiser le nDCG
+- Les gradients $\lambda_{ij}$ sont pondérés par le $\Delta$nDCG de chaque paire
+
+### Autres méthodes listwise
+
+| Méthode | Année | Principe |
+|---|---|---|
+| nDCGboost | 2010 | Boosting sur nDCG |
+| ES-Rank | 2017 | Algorithme évolutionnaire |
+| FastAP | 2019 | Deep Learning, optimise AP |
+
+---
+
+## Méthodes Deep Learning
+
+| Méthode | Idée clé |
+|---|---|
+| **ColBERT** | Encodage séparé requête/passage + interaction tardive (BERT) |
+| **DRMM** | Interactions profondes document-requête |
+| **KNRM** | Kernel Pooling sur interactions terme-à-terme |
+| **Rank-LIME** | Attribution de features locale, agnostique au modèle |
+
+::: {.callout-warning title="Problème ouvert"}
+nDCG **non-différentiable** → optimisation directe impossible → approximations nécessaires.
+:::
+
+---
+
+## LETOR (benchmark)
+
+**LETOR** (2009, Microsoft) fournit : datasets, baselines, outils d'évaluation, partitionnement standard.
+
+Référence livre : Tie-Yan Liu, *Learning to Rank for Information Retrieval*, Springer 2011.
+
+---
+
+## Formules à retenir
+
+| Formule | Signification |
+|---|---|
+| $\text{RSV} = \phi_\theta(d_j, q)$ | Score de pertinence paramétrique |
+| $P(R\|q,d_j) = \sigma(c_0 + \sum c_i X_i)$ | Régression logistique |
+| $a^T[\Phi(x_j,q)-\Phi(x_k,q)] > 0$ | SVMRank : préférence $d_j > d_k$ |
+| $H(x) = \sum_t \alpha_t h_t(x)$ | RankBoost : classement final |
+| $\text{nDCG}_p = \text{DCG}_p / \text{DCG}_p^{\max}$ | Mesure listwise normalisée |

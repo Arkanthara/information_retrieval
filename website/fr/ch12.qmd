@@ -390,7 +390,7 @@ SIFT est l'algorithme de référence pour l'extraction de caractéristiques loca
 3. **Calcul du gradient** : autour de chaque keypoint, on calcule le gradient des pixels à l'échelle de détection.
 4. **Création du descripteur** : 16 histogrammes de gradients (8 orientations chacun) → vecteur de **128 dimensions** par keypoint.
 
-::: {.callout-tip title="Intuition">}
+::: {.callout-tip title="Intuition"}
 SIFT est robuste à la rotation, au changement d'échelle et partiellement à la variation d'illumination. Si vous prenez une photo d'un objet de deux angles différents, SIFT détectera les mêmes keypoints et produira des descripteurs similaires — permettant la mise en correspondance.
 :::
 
@@ -416,7 +416,7 @@ Le **Sac de Mots Visuels** (*Bag of Visual Words*, BoVW) est une approche qui tr
 4. **Dictionnaire visuel** (*visual dictionary*) : l'ensemble des mots visuels forme un vocabulaire.
 5. **Représentation de l'image** : une image est décrite par le vecteur de fréquences d'occurrence de chaque mot visuel — exactement comme un document textuel est représenté par son vecteur TF-IDF.
 
-::: {.callout-note title="À retenir">}
+::: {.callout-note title="À retenir"}
 Une fois les images représentées comme des vecteurs de mots visuels, on peut utiliser **toute la machinerie de la recherche d'information textuelle** : fichiers inversés, TF-IDF, modèles probabilistes, etc.
 :::
 

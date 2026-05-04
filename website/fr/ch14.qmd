@@ -1,0 +1,563 @@
+---
+title: "Apprentissage pour le classement (Learning to Rank)"
+---
+
+## Introduction : l'apprentissage automatique pour la RI
+
+La recherche d'information (RI) repose sur un problème fondamental : étant donné un document $d_j$ et une requête $q$, attribuer un score de pertinence permettant de classer les documents du plus pertinent au moins pertinent.
+
+Ce score est noté $\text{RSV}_{\text{Model}}(d_j, q)$ (Retrieval Status Value), et l'objectif est d'apprendre une fonction :
+
+$$\text{RSV}_{\text{Model}} = f_q(d_j, q)$$
+
+L'apprentissage automatique (Machine Learning) offre un cadre naturel pour construire cette fonction à partir de données.
+
+---
+
+## Structure d'un système de recherche
+
+### Vue d'ensemble
+
+Un système de recherche se décompose en deux grandes phases :
+
+**Phase hors-ligne (Offline) :**
+
+- Les documents $d_j$ sont traités à l'avance.
+- On extrait des **caractéristiques** (features) depuis les documents.
+- Un **index** est construit pour permettre une recherche rapide.
+
+**Phase interactive (Online) :**
+
+- L'utilisateur formule une requête $q$.
+- La requête est traitée et soumise au moteur de recherche.
+- Le moteur produit une liste classée par pertinence en calculant $\text{RSV}_{\text{Model}}(d_j, q)$ pour chaque document.
+- Les résultats sont affichés, et l'utilisateur peut fournir un **retour de pertinence** (Relevance Feedback) pour affiner la recherche.
+
+### Le modèle RSV comme fonction paramétrique
+
+Le score de pertinence est modélisé comme une fonction paramétrique :
+
+$$\text{RSV}_{\text{Model}} = \phi_\theta(d_j, q)$$
+
+où $\theta$ représente les **paramètres appris** par le modèle. L'enjeu de l'apprentissage pour la RI est précisément d'estimer ces paramètres $\theta$ à partir de données d'entraînement.
+
+::: {.callout-note title="À retenir"}
+Le RSV est la brique fondamentale de tout système de classement : c'est lui qui détermine l'ordre dans lequel les documents sont présentés à l'utilisateur.
+:::
+
+---
+
+## Apprentissage automatique appliqué à la RI
+
+### Principe général
+
+L'apprentissage automatique (Machine Learning) consiste à apprendre un **mappeur** entre une entrée (perception) et une sortie (décision) :
+
+$$\text{Entrée} \xrightarrow{\text{Moteur d'apprentissage}} \text{Sortie}$$
+
+Les **entrées** typiques sont des données textuelles, images, audio, multimédia ou issues de capteurs.
+
+Les **sorties** correspondent à des tâches de :
+
+- classification (assigner une catégorie),
+- régression (prédire une valeur continue),
+- prédiction (anticiper un résultat futur).
+
+Les **algorithmes** classiques incluent la régression logistique, Naïve Bayes, les réseaux de neurones, les arbres de décision, et les machines à vecteurs de support (SVM).
+
+### Application à la RI
+
+Dans le contexte de la RI, l'entrée est la paire $(d_j, q)$ et la sortie est le score $\text{RSV}_{\text{Model}}(d_j, q)$.
+
+$$\text{Entrée} : (d_j, q) \xrightarrow{\text{Learning to Rank}} \text{RSV}_{\text{Model}}(d_j, q)$$
+
+Cette approche est appelée **Apprentissage pour le classement** (Learning to Rank, LeToR).
+
+::: {.callout-tip title="Intuition"}
+Plutôt que de définir manuellement une formule de scoring (comme TF-IDF ou BM25), on laisse l'algorithme **apprendre automatiquement** comment combiner les caractéristiques des documents et des requêtes pour produire un classement optimal.
+:::
+
+### Un exemple déjà vu : le modèle BIR
+
+Le Modèle d'Indépendance Binaire (Binary Independence Retrieval, BIR) est en réalité déjà une forme d'apprentissage. Le modèle conditionnel de la RI s'écrit :
+
+$$P(R \mid d_j, q) = \phi_\theta(d_j, q)$$
+
+Et le log-odds de pertinence est modélisé comme une combinaison linéaire de caractéristiques :
+
+$$\log O(R \mid d_j, q) = c_0 + \sum_{i=1}^{n} c_i X_i$$
+
+où les $X_i$ sont des attributs comme la fréquence de requête, la longueur du document, la fréquence inverse de document (IDF), etc., et les $c_i$ sont les **paramètres appris** $\theta = [c_0, \ldots, c_n]$.
+
+Le BIR utilise la formule :
+
+$$\text{RSV}_{\text{BIR}}(d_j, q) \propto \sum_i w_{ij} w_{iq} \left( \log \frac{P(t_i \mid q, R)}{1 - P(t_i \mid q, R)} + \log \frac{1 - P(t_i \mid q, \bar{R})}{P(t_i \mid q, \bar{R})} \right)$$
+
+avec $P(t_i \mid q, R) = \frac{r_i}{r}$ et $P(t_i \mid q, \bar{R}) = \frac{n_i - r_i}{N - r}$.
+
+---
+
+## Approche ponctuelle (Pointwise)
+
+### Principe
+
+L'approche **ponctuelle** (Pointwise) est la formulation la plus directe : on cherche à prédire un score de pertinence absolu pour chaque paire $(d_j, q)$.
+
+Chaque document est traité **indépendamment** des autres. Le problème se ramène alors à :
+
+- une **classification** (pertinent / non-pertinent), ou
+- une **régression** (score de pertinence continu).
+
+### Pertinence comme classification
+
+Dans une approche par classification, on cherche un hyperplan séparateur $a^T x + b = 0$ tel que :
+
+- $a^T x + b > 0$ → document pertinent,
+- $a^T x + b < 0$ → document non pertinent.
+
+La pertinence est décidée par le signe de $a^T x + b$.
+
+#### Régression logistique
+
+La **régression logistique** (Logistic Regression) est un classifieur probabiliste qui modélise :
+
+$$P(R \mid q, d_j) = \frac{1}{1 + \exp\!\left(-c_0 - \sum_{i=1}^{2} c_i X_i\right)}$$
+
+- La sortie est une probabilité dans $[0, 1]$.
+- On classe comme pertinent si $P(R \mid q, d_j) > 0.5$.
+
+::: {.callout-tip title="Intuition"}
+La régression logistique « écrase » la combinaison linéaire des caractéristiques dans l'intervalle $[0, 1]$ via la fonction sigmoïde, permettant une interprétation probabiliste de la pertinence.
+:::
+
+### Pertinence comme régression
+
+Pour une **pertinence continue** (plutôt que binaire), on peut :
+
+- utiliser directement la valeur de la fonction de régression comme score,
+- utiliser la distance au plan de décision comme mesure de pertinence.
+
+Cette approche permet de produire un classement ordonné plutôt qu'une séparation dichotomique.
+
+### Limites de l'approche ponctuelle
+
+::: {.callout-warning title="Problème fondamental"}
+L'approche ponctuelle ne fonctionne pas de manière satisfaisante en pratique, pour une raison essentielle : **la pertinence est dépendante de la requête**.
+:::
+
+Il n'existe pas de corrélation absolue entre les caractéristiques d'un document et sa pertinence. La même caractéristique peut signifier des choses différentes selon la requête :
+
+- Requête = « fruit » → $P(R \mid \text{«voiture»})$ = faible
+- Requête = « véhicule » → $P(R \mid \text{«voiture»})$ = élevée
+
+Dans les modèles conditionnels ou probabilistes (PIR), l'entraînement est réalisé **au moment de la requête**, ce qui rend la prédiction hors-ligne impossible pour un modèle pointwise naïf.
+
+### Pipeline de l'approche ponctuelle
+
+La phase d'**entraînement** s'effectue comme suit :
+
+1. Pour chaque paire $(d_j, q)$, on extrait des caractéristiques.
+2. On associe un signal de pertinence (étiquette de relevance).
+3. Le moteur d'apprentissage apprend la fonction $\text{RSV}_{\text{Model}}$.
+
+La phase de **test** utilise le modèle appris pour prédire $\text{RSV}_{\text{Model}}(d_j, q)$ sur de nouvelles paires.
+
+---
+
+## Approche par paires (Pairwise)
+
+### Motivation
+
+Plutôt que d'apprendre une pertinence absolue, l'approche **par paires** (Pairwise) apprend la **pertinence relative** entre deux documents :
+
+$$\text{RSV}_{\text{Model}}(d_j, q) > \text{RSV}_{\text{Model}}(d_k, q)$$
+
+pour toutes (ou beaucoup de) paires de préférence $d_j >_q d_k$.
+
+::: {.callout-tip title="Intuition"}
+On ne demande plus « quel est le score absolu de ce document ? » mais « lequel de ces deux documents est plus pertinent que l'autre ? ». Cette question est beaucoup plus facile à annoter et plus robuste vis-à-vis de la variabilité inter-requêtes.
+:::
+
+### Paires de préférence
+
+Une **paire de préférence** $d_j >_q d_k$ signifie que, pour la requête $q$, le document $d_j$ est jugé plus pertinent que $d_k$.
+
+Ces paires sont extraites des jugements de pertinence (relevance judgments), par exemple issus des résultats d'un système de RI annoté par des assesseurs humains.
+
+### Algorithmes phares
+
+Deux algorithmes pairwise sont particulièrement importants :
+
+- **SVMRank** (ICANN, 1999) : adapte les SVM au classement.
+- **RankBoost** (JMLR, 2003) : adapte le boosting au classement.
+
+---
+
+## SVM pour le classement (SVMRank)
+
+### Rappel : classification SVM
+
+La **classification linéaire** cherche un vecteur normal $a$ tel que la somme des erreurs quadratiques soit minimale :
+
+$$\sum_{\text{train}} (a^T x_i - y_i)^2 \rightarrow \text{minimum}$$
+
+Cette optimisation se résout par **descente de gradient** (Gradient Descent).
+
+#### Principes du SVM
+
+Les SVM (Support Vector Machines) ajoutent deux idées clés :
+
+**(a) Noyau (Kernel) :** On mappe les caractéristiques $x_i$ vers un espace de dimension supérieure via une transformation non-linéaire $\Phi$ telle que la classification dans ce nouvel espace est linéaire :
+
+$$\min \sum_{\text{train}} (a^T \Phi(x_i) - y_i)^2$$
+
+Le choix de $\Phi$ est le choix du **noyau** (RBF, polynomial, linéaire...).
+
+**(b) Grande marge (Large Margin) :** On cherche $a$ qui **maximise la distance** entre la frontière de décision et les exemples d'entraînement. Les exemples les plus proches de la frontière sont les **vecteurs de support** (support vectors).
+
+::: {.callout-note title="À retenir"}
+Un noyau populaire est le RBF (Radial Basis Function). Par exemple, passer de coordonnées cartésiennes à polaires peut rendre un problème non-séparable linéairement séparable.
+:::
+
+### SVM appliqué au classement
+
+Pour le classement, on reformule le problème pairwise en un problème de classification SVM.
+
+La condition de préférence $d_j >_q d_k$ est équivalente à :
+
+$$a^T \Phi(x_j, q) > a^T \Phi(x_k, q)$$
+
+Ce qui se réécrit :
+
+$$d_j >_q d_k \iff a^T \left[\Phi(x_j, q) - \Phi(x_k, q)\right] > 0$$
+
+On **classe les paires de préférence positives contre les paires négatives** dans le contexte de leurs requêtes respectives.
+
+Pour une nouvelle requête, on immerge la requête dans l'espace appris, et on prédit les paires de préférence pour construire la liste classée.
+
+---
+
+## Boosting et RankBoost
+
+### Principe du Boosting
+
+Le **boosting** est une technique d'ensemble qui combine des **apprenants faibles** (weak learners) en un **apprenant fort** (strong learner) global.
+
+L'idée fondamentale est itérative :
+
+1. Former un grand ensemble de caractéristiques simples.
+2. Initialiser des poids uniformes sur les exemples d'entraînement.
+3. À chaque tour $t$ parmi $T$ tours :
+   a. Normaliser les poids.
+   b. Pour chaque caractéristique disponible, entraîner un classifieur faible et évaluer l'erreur d'entraînement.
+   c. Sélectionner le classifieur ayant la plus faible erreur.
+   d. Augmenter les poids des exemples **mal classés** par ce classifieur ; diminuer ceux des bien classés.
+4. Former le classifieur final comme combinaison linéaire des $T$ classifieurs sélectionnés (coefficient plus grand si l'erreur d'entraînement est petite).
+
+::: {.callout-tip title="Intuition"}
+Le boosting force l'algorithme à se concentrer progressivement sur les exemples les plus difficiles à classer, en leur donnant plus de poids à chaque itération. Le classifieur final est un vote pondéré des experts spécialisés.
+:::
+
+### L'algorithme RankBoost
+
+**RankBoost** (Freund et al., JMLR 2003) adapte le boosting au problème de classement sur des paires de préférence.
+
+L'ensemble $X$ est l'ensemble des **paires de préférence** entre instances $(d_j, q)$.
+
+L'algorithme fonctionne ainsi :
+
+- Initialisation : distribution $D_1 = D$ sur $X \times X$.
+- Pour $t = 1, \ldots, T$ :
+  - Entraîner un **classifieur faible** $h_t : X \to \mathbb{R}$ sur la distribution $D_t$.
+  - Choisir $\alpha_t \in \mathbb{R}$.
+  - Mettre à jour la distribution :
+
+$$D_{t+1}(x_0, x_1) = \frac{D_t(x_0, x_1) \exp(\alpha_t (h_t(x_0) - h_t(x_1)))}{Z_t}$$
+
+où $Z_t$ est un facteur de normalisation.
+
+- Sortie : le classement final $H(x) = \sum_{t=1}^{T} \alpha_t h_t(x)$.
+
+::: {.callout-note title="À retenir"}
+- Les **classifieurs faibles** $h_t$ apprennent sur une distribution $D_t$ représentant la vue courante de l'espace des instances.
+- La distribution est **renforcée là où l'apprenant faible est le plus faible** : les paires mal ordonnées reçoivent plus de poids.
+- Le classement final est une somme pondérée des classifieurs faibles.
+:::
+
+### Analyse des approches pairwise
+
+L'apprentissage de la pertinence relative est **plus robuste** que l'approche ponctuelle.
+
+Cependant, les erreurs en apprentissage pairwise n'ont pas toutes le même impact :
+
+**Impact positionnel :** La position dans la liste compte. Une erreur en tête de liste est plus dommageable qu'une erreur en queue :
+
+- `rrrrrriiiriiii` est moins pénalisant que `irrrrrrrriiiii`
+
+(r = pertinent, i = non pertinent)
+
+**Déséquilibre entre requêtes :** Le nombre de documents pertinents varie fortement selon les requêtes, ce qui crée des biais dans l'évaluation micro/macro :
+
+| Système | Q1 Correct | Q1 Faux | Q1 Acc. | Q2 Correct | Q2 Faux | Q2 Acc. | Micro | Macro |
+|---------|-----------|---------|---------|-----------|---------|---------|-------|-------|
+| S1 | 60 | 10 | 85,7% | 15 | 0 | 100% | 88,2% | 92,8% |
+| S2 | 70 | 0 | 100% | 3 | 12 | 20% | 85,8% | 60% |
+
+Le système S2 est parfait sur Q1 mais terrible sur Q2. L'accuracy micro favorise S1, mais l'accuracy macro révèle la faiblesse de S2.
+
+::: {.callout-warning title="Limitation pairwise"}
+Les approches pairwise ignorent la **structure globale** de la liste. Deux paires bien ordonnées ne garantissent pas un bon classement global. C'est la motivation des approches **listwise**.
+:::
+
+---
+
+## Approche par liste (Listwise)
+
+### Principe
+
+L'approche **listwise** va encore plus loin : elle cherche à **prédire directement la liste complète classée**.
+
+Plutôt que d'optimiser des comparaisons locales entre paires, on cherche la **permutation** optimale des documents.
+
+La notion de pertinence absolue est abandonnée au profit de l'optimisation directe d'une mesure de qualité du classement.
+
+::: {.callout-tip title="Intuition"}
+On ne se demande plus « A est-il meilleur que B ? » mais « dans quel ordre dois-je présenter A, B, C, D, ... pour maximiser la satisfaction globale de l'utilisateur ? »
+:::
+
+### Pipeline listwise
+
+La différence avec le pipeline pairwise est que le **signal d'entraînement** est directement une liste classée (ranked list), obtenue par tri des paires de préférence. Le moteur d'apprentissage optimise directement une mesure de qualité de liste.
+
+---
+
+## Mesures de comparaison de listes
+
+Pour entraîner un modèle listwise, il faut pouvoir **comparer deux classements**. Plusieurs mesures sont utilisées.
+
+### MAP — Précision Moyenne Moyennée (Mean Average Precision)
+
+La MAP est l'aire sous la courbe Précision-Rappel (Precision-Recall curve). Elle résume la qualité d'un classement sur l'ensemble des requêtes.
+
+Voir le chapitre « Évaluation » pour les détails de calcul.
+
+### DCG et nDCG — Gain Cumulatif Escompté
+
+Le **Discounted Cumulative Gain** (DCG) évalue la **bonne position des documents pertinents** dans une liste classée de 1 à $p$. Il pénalise les documents pertinents qui apparaissent bas dans la liste.
+
+$$\text{DCG}_p = \sum_{j=1}^{p} \frac{2^{r_j} - 1}{\log_2(j+1)}$$
+
+où $r_j$ est le niveau de pertinence du document à la position $j$.
+
+Le DCG maximum $\text{DCG}_p^{\max}$ correspond à la situation idéale où les $p$ documents les plus pertinents occupent les $p$ premières positions.
+
+Le **nDCG** (normalized DCG) normalise le DCG par son maximum :
+
+$$\text{nDCG}_p = \frac{\text{DCG}_p}{\text{DCG}_p^{\max}}$$
+
+::: {.callout-tip title="Intuition"}
+Le logarithme au dénominateur **escompte** (réduit) la valeur des documents pertinents situés en bas de liste. Un document pertinent en position 1 contribue beaucoup plus qu'en position 10. Le nDCG est borné entre 0 et 1, ce qui facilite la comparaison entre requêtes.
+:::
+
+::: {.callout-note title="À retenir"}
+Le nDCG est la mesure la plus utilisée en Learning to Rank car elle :
+
+- prend en compte les niveaux de pertinence gradués (pas juste binaire),
+- pénalise les erreurs de positionnement en haut de liste,
+- est normalisée et donc comparable entre requêtes.
+:::
+
+### Tau de Kendall
+
+Le **tau de Kendall** ($\tau$) mesure la corrélation entre deux classements en comptant les paires concordantes et discordantes :
+
+$$\tau(\sigma) = \frac{\#\text{paires concordantes} - \#\text{paires discordantes}}{\binom{n}{2}}$$
+
+Les paires $(s(i), r(i))$ et $(s(j), r(j))$ sont **concordantes** (pour $i < j$) si :
+
+$$s(i) < s(j) \Rightarrow r(i) < r(j)$$
+
+c'est-à-dire si l'ordre relatif est préservé dans les deux classements.
+
+- $\tau = 1$ : classements identiques.
+- $\tau = -1$ : classements inversés.
+- $\tau = 0$ : aucune corrélation.
+
+### Corrélation de Spearman
+
+La **corrélation de Spearman** ($r_s$) mesure la corrélation entre les rangs de deux classements $\sigma$ et $\rho$ :
+
+$$r_s(\sigma, \rho) = 1 - \frac{6 \sum_i (\sigma(i) - \rho(i))^2}{n(n^2 - 1)}$$
+
+::: {.callout-note title="À retenir"}
+Le tau de Kendall et la corrélation de Spearman sont deux mesures non-paramétriques de corrélation entre classements. Elles sont utilisées pour évaluer à quel point le classement prédit s'approche du classement idéal de référence.
+:::
+
+---
+
+## LambdaMART
+
+### Présentation
+
+**LambdaMART** est un des algorithmes listwise les plus performants et les plus utilisés en pratique. Il repose sur une chaîne d'innovations :
+
+$$\text{RankNet} \rightarrow \text{LambdaRank} \rightarrow \text{LambdaMART}$$
+
+*Référence : Christopher J.C. Burges, "From RankNet to LambdaRank to LambdaMART: An Overview", Microsoft Research Technical Report MSR-TR-2010-82.*
+
+### Principes
+
+LambdaMART utilise des **arbres de décision boostés par gradient** (Gradient Boosted Decision Trees, GBDT) pour **optimiser directement le nDCG**.
+
+- **RankNet** : réseau de neurones entraîné avec une fonction de coût basée sur les probabilités de préférence entre paires de documents.
+- **LambdaRank** : définit des gradients $\lambda_{ij}$ qui encodent à la fois la probabilité de préférence et l'impact sur le nDCG si la paire est inversée.
+- **LambdaMART** : remplace le réseau de neurones de LambdaRank par des arbres de décision boostés par gradient, ce qui apporte robustesse et efficacité.
+
+::: {.callout-tip title="Intuition"}
+L'idée clé de LambdaRank est de pondérer les gradients par le **changement de nDCG** induit par l'inversion d'une paire de documents. Les paires dont l'inversion affecterait beaucoup le nDCG reçoivent un gradient plus fort, guidant l'apprentissage vers les améliorations les plus significatives.
+:::
+
+### Implémentation
+
+LambdaMART est implémenté dans plusieurs bibliothèques, notamment via **scikit-learn** (https://scikit-learn.org).
+
+---
+
+## Autres techniques listwise
+
+### nDCGboost (2010)
+
+- Boosting directement optimisé sur le nDCG.
+- Adapte le cadre de boosting classique à la maximisation de mesures de classement.
+
+### ES-Rank (2017)
+
+- Algorithme **évolutionnaire** (Evolutionary Strategy) pour optimiser la liste résultante.
+- Utilise des fonctions de fitness inspirées des mesures de classement (MAP, nDCG...).
+
+### FastAP (CVPR 2019)
+
+- Optimisation rapide de la **précision moyenne** (Average Precision, AP).
+- Utilise l'apprentissage profond (Deep Learning) pour le classement.
+- Particulièrement adapté aux tâches de recherche d'images.
+
+::: {.callout-warning title="Problème ouvert"}
+Malgré ces avancées, l'apprentissage pour le classement **n'est pas un problème résolu**. Les mesures comme le nDCG sont **non-différentiables**, ce qui complique l'optimisation directe par descente de gradient. Les approches actuelles utilisent des approximations ou des substituts différentiables.
+:::
+
+---
+
+## LETOR : un benchmark de référence
+
+### Présentation
+
+**LETOR** (Learning to Rank for Information Retrieval, 2009) est un package de référence fourni par Microsoft Research pour évaluer et comparer les algorithmes de Learning to Rank.
+
+*Référence : Tie-Yan Liu, "Learning to Rank for Information Retrieval", Springer 2011.*
+
+### Contenu
+
+LETOR fournit :
+
+- **Jeux de données** (Datasets) : ensembles de requêtes et de documents avec jugements de pertinence.
+- **Baselines** : implémentations de référence pour comparer les nouveaux algorithmes.
+- **Outils d'évaluation** : calcul standardisé des mesures MAP, nDCG, etc.
+- **Partitionnement des données** : découpage standardisé entraînement/validation/test pour garantir la reproductibilité.
+
+::: {.callout-note title="À retenir"}
+L'utilisation de LETOR garantit une évaluation **équitable et reproductible** des algorithmes de Learning to Rank, ce qui est essentiel pour comparer les contributions de la recherche.
+:::
+
+---
+
+## Approches modernes par apprentissage profond
+
+### Motivations
+
+L'apprentissage profond (Deep Learning) apporte plusieurs avantages pour le Learning to Rank :
+
+- Représentation apprise automatiquement (pas besoin d'ingénierie manuelle des caractéristiques).
+- Capacité à modéliser des interactions complexes entre termes de la requête et du document.
+- Exploitation de modèles pré-entraînés massifs (BERT, etc.).
+
+### Méthodes récentes
+
+#### Rank-LIME
+
+- **Référence :** https://arxiv.org/abs/2212.12722
+- Approche d'**attribution de caractéristiques locale agnostique au modèle** (Local Model-Agnostic Feature Attribution) pour le Learning to Rank.
+- Permet d'expliquer pourquoi un document est classé à une certaine position.
+
+#### ColBERT
+
+- **Référence :** https://arxiv.org/abs/2004.12832
+- *ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT*
+- Utilise BERT pour encoder séparément la requête et les passages, puis calcule une **interaction tardive** (Late Interaction) efficace entre leurs représentations contextualisées.
+- Offre un bon compromis entre qualité de classement et efficacité computationnelle.
+
+#### DRMM
+
+- **Référence :** https://arxiv.org/abs/1809.01682
+- *Deep Relevance Ranking Using Enhanced Document-Query Interactions*
+- Modélise les interactions profondes entre document et requête pour le classement de pertinence.
+
+#### KNRM
+
+- **Référence :** https://arxiv.org/abs/1706.06613
+- *End-to-End Neural Ad-hoc Ranking with Kernel Pooling*
+- Utilise un mécanisme de **pooling par noyaux** (Kernel Pooling) pour agréger les signaux d'interaction entre termes de la requête et du document en un score final.
+
+---
+
+## Récapitulatif et comparaison des approches
+
+### Les trois familles de Learning to Rank
+
+```{mermaid}
+flowchart TD
+    A["Learning to Rank"] --> B["Pointwise\n(ponctuelle)"]
+    A --> C["Pairwise\n(par paires)"]
+    A --> D["Listwise\n(par liste)"]
+
+    B --> B1["Classification / Régression\npar document"]
+    C --> C1["SVMRank\nRankBoost"]
+    D --> D1["LambdaMART\nnDCGboost\nColBERT"]
+```
+
+### Tableau de comparaison
+
+| Approche | Unité d'entraînement | Signal | Avantages | Limites |
+|----------|---------------------|--------|-----------|---------|
+| **Pointwise** | Document individuel | Score absolu | Simple | Pertinence dépend de la requête |
+| **Pairwise** | Paire de documents | Ordre relatif | Plus robuste | Ignore la structure globale |
+| **Listwise** | Liste complète | Mesure globale (nDCG) | Optimal en théorie | Optimisation complexe |
+
+### Progression logique
+
+::: {.callout-note title="À retenir"}
+La progression Pointwise → Pairwise → Listwise reflète une montée en abstraction :
+
+1. **Pointwise** : on demande « quelle est la pertinence de ce document ? »
+2. **Pairwise** : on demande « lequel de ces deux documents est plus pertinent ? »
+3. **Listwise** : on demande « quel est le meilleur classement global de ces documents ? »
+
+Chaque niveau corrige les limitations du précédent, au prix d'une plus grande complexité algorithmique.
+:::
+
+---
+
+## Synthèse
+
+La recherche d'information peut être vue comme l'apprentissage d'une fonction de mapping :
+
+$$\text{RSV}_{\text{Model}} = f_q(d_j, q)$$
+
+Les points essentiels à retenir sont les suivants.
+
+**Sur les approches pointwise :** prédire une pertinence brute est sous-optimal car la corrélation entre caractéristiques et pertinence est instable entre requêtes.
+
+**Sur les approches pairwise :** l'apprentissage d'un ordre relatif (paires de préférence $d_j >_q d_k$) est plus robuste, mais des erreurs de positionnement n'ont pas toutes le même impact.
+
+**Sur les approches listwise :** elles optimisent directement une mesure globale de qualité de classement (nDCG, MAP...), ce qui correspond mieux à l'objectif réel du système. Les mesures de corrélation entre classements (Kendall $\tau$, Spearman $r_s$) servent de base à l'entraînement.
+
+**Sur les méthodes modernes :** l'apprentissage profond (ColBERT, DRMM, KNRM) repousse les frontières en apprenant automatiquement des représentations riches des documents et des requêtes.
