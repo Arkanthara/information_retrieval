@@ -1,0 +1,892 @@
+---
+title: "Recherche d'information basée sur les séquences"
+---
+
+# Motivation et rappels
+
+## Pourquoi aller au-delà des embeddings de mots ?
+
+La recherche d'information (Information Retrieval, IR) a longtemps reposé sur des représentations **éparses** (sparse) des termes et des documents : TF-IDF, LSI, BIR. Ces méthodes capturent la fréquence des mots mais ignorent leur **ordre** et leur **contexte local**.
+
+Les modèles appris comme Word2Vec ou GloVE ont introduit des représentations **denses** (dense), où chaque mot est projeté dans un espace vectoriel de dimension réduite, guidé par le contexte. Mais même ces approches restent des **embeddings de mots isolés** : elles n'encodent pas la structure séquentielle d'une phrase entière.
+
+Ce chapitre part de ces acquis pour aller vers l'**embedding de séquences** (sequence embedding), en couvrant :
+
+- Les réseaux de neurones récurrents (RNN)
+- Les LSTM (Long Short-Term Memory)
+- Les mécanismes d'attention
+- Les Transformers
+- BERT
+- Le re-ranking et la récupération dense
+
+## Rappel : embeddings de mots
+
+### Embeddings épars (Sparse Embeddings)
+
+Les méthodes classiques comme TF-IDF produisent des représentations où :
+
+- La dimension de l'espace est le **nombre de documents** (ou de termes)
+- La matrice Terme-Document est **creuse** (sparse) : la plupart des entrées sont nulles
+- Cela rend naturel l'usage de **fichiers inversés** (inverted files)
+- La réduction de dimension spectrale (LSI) est justifiée par cette parcimonie
+
+::: {.callout-note title="À retenir"}
+Sparse ne signifie pas ici « régularisé par L1 » mais simplement que la représentation gaspille de l'espace : la majorité des composantes sont nulles.
+:::
+
+### Embeddings denses appris (Learned Dense Embeddings)
+
+Les embeddings comme Word2Vec sont **denses** :
+
+- La dimension de l'espace est un **hyperparamètre** du modèle
+- La géométrie de l'espace est guidée par la **fonction de perte** pendant l'entraînement
+- Deux mots sémantiquement proches seront proches dans cet espace vectoriel
+
+**Stratégies d'apprentissage auto-supervisé (Self-Supervised Learning) :**
+
+- **Modèle de langage masqué** (Masked Language Model, MLM) — ex. CBOW : prédire le mot central à partir du contexte
+- **Prédiction du contexte** (Skip-gram) : prédire les mots du contexte à partir du mot central
+
+Ces méthodes s'accommodent facilement de grands corpus de texte et les représentations obtenues sont réutilisables comme entrée pour des tâches en aval (fine-tuning, classification…).
+
+### Word2Vec : architecture
+
+L'entraînement de Word2Vec suit trois étapes :
+
+1. Créer des extraits de longueur $2p+1$ centrés sur le mot cible
+2. Entraîner par rétropropagation (backpropagation) pour prédire le mot central
+3. Extraire les embeddings des **paramètres** du réseau entraîné
+
+::: {.callout-tip title="Intuition"}
+L'embedding $v_i$ d'un mot $t_i$ est l'activation $a_i$ du réseau à la couche cachée, après encodage one-hot de l'entrée : $v_i = W_{\text{enc}} \cdot u_i$, soit la $i$-ème ligne de la matrice d'encodage.
+:::
+
+---
+
+# Au-delà des embeddings de mots
+
+## Limites des embeddings de mots
+
+Les embeddings de mots sont entraînés **mot par mot** : chaque mot reçoit un unique vecteur, qui est une moyenne pondérée de tous ses contextes dans le corpus.
+
+Ce choix pose un problème fondamental : la **polysémie** (polysemy).
+
+> Exemple : le mot *table* peut désigner un meuble ou un tableau de données. Un seul embedding ne peut pas capturer les deux sens simultanément.
+
+::: {.callout-warning title="Problème de polysémie"}
+Un même mot peut avoir des sens très différents selon le contexte. Un embedding unique produit une représentation « moyennée » qui est sous-optimale pour chacun des sens.
+:::
+
+## Solutions : unités sub-lexicales
+
+### Wordpiece et FastText
+
+Pour contourner les limites de la granularité du mot, on peut travailler à un niveau plus fin : les **n-grammes de caractères**.
+
+**FastText** (Facebook Research) utilise des n-grammes de caractères pour construire les embeddings :
+
+- Particulièrement utile pour les **langues à composition** (comme l'allemand), où les mots composés sont très fréquents
+- Gère mieux les mots rares ou inconnus (out-of-vocabulary)
+- Disponible sur : `https://github.com/facebookresearch/fastText`
+
+### N-grammes de termes
+
+On peut aussi travailler à un niveau intermédiaire, en embeddant des **groupes de termes** (term n-grams) :
+
+- Word2Vec est essentiellement un embedding de 1-grammes
+- Les n-grammes capturent des dépendances locales entre mots voisins
+
+---
+
+# Réseaux de neurones convolutifs pour le texte
+
+## ConvNets (CNNs) appliqués au texte
+
+Les réseaux de neurones convolutifs (Convolutional Neural Networks, CNNs) ont d'abord été conçus pour la modélisation du texte, avant d'être adaptés à la vision.
+
+**Idée principale :** la structure du réseau crée naturellement des **convolutions** sur l'entrée.
+
+Pour un vecteur d'entrée $u$ de taille $N$ et une fenêtre de taille $2p+1$ centrée en $i$ :
+
+$$
+v_j^i = \sum_{k=i-p}^{i+p} w_{jk} \cdot u_k = W * u
+$$
+
+Cela revient à un produit de convolution entre les poids $W$ et l'entrée $u$.
+
+::: {.callout-tip title="Intuition"}
+Un CNN appliqué au texte « glisse » une fenêtre sur la séquence de mots et produit une représentation locale de chaque position. C'est analogue à la détection de motifs locaux dans une image.
+:::
+
+## Dynamic CNNs (DCNN)
+
+Le DCNN (Dynamic Convolutional Neural Network) est une extension adaptée à des séquences de longueur variable.
+
+**Architecture (lecture de bas en haut) :**
+
+1. **Entrée** : matrice de la phrase $s \in \mathbb{R}^{d \times s}$, où chaque colonne est l'embedding $w_i \in \mathbb{R}^d$ d'un mot
+2. **Convolutions larges** (wide convolutions) avec des filtres de différentes tailles
+3. **K-max pooling dynamique** : conserve les $k$ valeurs maximales, avec $k$ qui varie selon la profondeur
+4. **Folding** : réduction de dimension
+5. **Couche fully connected** pour la classification
+
+::: {.callout-note title="À retenir"}
+Les embeddings de mots peuvent être intégrés dans l'entraînement de bout en bout (end-to-end training) : ils ne sont pas figés mais appris conjointement avec les autres paramètres du réseau.
+:::
+
+---
+
+# Modélisation de séquences
+
+## Du mot à la séquence
+
+L'idée fondamentale du **sequence modeling** est de considérer une phrase ou un document comme une **succession de tokens** et de modéliser les **dépendances temporelles** entre ces tokens.
+
+Contrairement aux CNNs qui capturent des dépendances locales dans une fenêtre fixe, les modèles séquentiels peuvent en théorie capturer des dépendances sur toute la longueur de la séquence.
+
+## Modèles de Markov cachés (Hidden Markov Models, HMM)
+
+L'outil historique pour la modélisation de séquences en linguistique et en reconnaissance vocale est le **modèle de Markov caché** (HMM).
+
+**Principe :**
+
+- Une séquence de **états cachés/latents** (hidden states) sous-tend la génération de la séquence **observée**
+- Les états ne sont pas directement observables ; seules les sorties le sont
+
+**Variables du modèle :**
+
+- $X$ : les états cachés
+- $y$ : les observations possibles
+- $a$ : les probabilités de transition entre états
+- $b$ : les probabilités d'émission (output probabilities)
+
+**Entraînement :**
+
+- Algorithme de Baum-Welch (variante de l'algorithme EM)
+- Par **maximisation de la vraisemblance** de la génération de séquences
+
+::: {.callout-tip title="Intuition"}
+Dans un HMM, la séquence observée (mots) est générée par une séquence d'états sous-jacents (ex. états grammaticaux). Le modèle apprend à inférer ces états cachés à partir des observations.
+:::
+
+---
+
+# Réseaux de neurones récurrents (RNN)
+
+## Construction du modèle récurrent
+
+### Traitement d'un token
+
+Pour un seul token, un réseau de neurones simple prédit le token suivant de façon **indépendante** des autres positions.
+
+L'architecture de base pour un token $x_i$ (word embedding) est :
+
+- **Couche cachée** : $h_i = \psi(W_I \cdot x_i)$ où $W_I$ est la matrice de poids d'entrée
+- **Sortie** : $\hat{y} = \text{softmax}(W_H \cdot h_i)$
+
+### Traitement de tous les tokens : la récurrence
+
+Dans une séquence, chaque prédiction **dépend** de la précédente. Il est donc naturel que chaque prédiction **informe la suivante**.
+
+Les RNNs encodent cette idée en utilisant l'**état caché précédent** pour calculer l'état courant :
+
+$$
+h_i = \psi(W_I \cdot x_i + W_S \cdot h_{i-1})
+$$
+
+où :
+
+- $W_I$ : matrice de poids d'entrée
+- $W_S$ : matrice d'état (state matrix) — **mémoire du passé**
+- $W_H$ : matrice de sortie (shared weight matrix)
+
+::: {.callout-tip title="Intuition"}
+La matrice $W_S$ joue le rôle d'une **mémoire causale** : elle encode l'information accumulée jusqu'au token courant. C'est pourquoi on parle de « causalité » dans les RNNs.
+:::
+
+**Propriété clé :** les RNNs peuvent modéliser des séquences de **longueur arbitraire**, car les paramètres $W_I$, $W_S$, $W_H$ sont partagés à toutes les étapes.
+
+### Modèle compact
+
+Le RNN peut être représenté de façon compacte avec une **connexion récurrente** sur la couche cachée (boucle $W_S$), reliant l'état caché $h_{i-1}$ à l'état courant $h_i$.
+
+## Entraînement des RNNs
+
+L'entraînement d'un RNN nécessite de **rétropropager l'erreur à travers le temps** (Backpropagation Through Time, BPTT) pour ajuster les matrices $W_I$, $W_H$ et $W_S$.
+
+### Problème : phénomène multiplicatif
+
+La rétropropagation à travers $T$ étapes temporelles implique de **multiplier des gradients** $T$ fois. Cela crée deux pathologies :
+
+- **Gradient évanescent** (Vanishing Gradient) : si la norme est $< 1$, le gradient tend vers $0$ en $(<1)^T$ → les dépendances lointaines ne sont plus apprises
+- **Gradient explosif** (Exploding Gradient) : si la norme est $> 1$, le gradient diverge en $(>1)^T$
+
+### Solution : clipping du gradient
+
+Le gradient $\nabla \mathcal{L} = \left(\frac{\partial \mathcal{L}}{\partial w_{ij}}\right)_{ij}$ est un vecteur. Pour éviter l'explosion, on **projette** ce vecteur dans un intervalle $[\min, \max]$ :
+
+- Par clipping simple : tronquer la magnitude
+- Par toute autre technique de projection
+
+::: {.callout-warning title="Important"}
+Le clipping préserve la **direction** du gradient : seule sa magnitude est contrainte. On ne modifie pas l'orientation du pas de descente.
+:::
+
+## Applications des RNNs
+
+### Étiquetage de séquences (Sequence Tagging)
+
+Les RNNs peuvent être utilisés pour **étiqueter chaque token** individuellement (ex. Part-of-Speech tagging) : à chaque position $i$, une sortie $\hat{y}_i$ (tag) est produite.
+
+### Génération autorégressive (Autoregressive Generation)
+
+Les RNNs peuvent aussi **générer des séquences** de manière autorégressive : la prédiction au pas $i$ est utilisée comme entrée au pas $i+1$.
+
+**Note sur l'autorégression :**
+
+Un modèle autorégressif d'ordre $p$ — AR(p) — modélise la valeur courante comme une combinaison linéaire des $p$ valeurs précédentes :
+
+$$
+y_t = \sum_{j=1}^{p} a_j y_{t-j} + \epsilon_t
+$$
+
+où $\epsilon_t \sim \mathcal{N}(0, \sigma)$ est un bruit blanc.
+
+### Tokens de contrôle
+
+Les RNNs utilisent des **tokens spéciaux** pour contrôler l'entraînement et la génération :
+
+- `<start>` : initier la génération
+- `<mask>` : masquer un token (pour l'apprentissage)
+- `<sep>` : séparateur entre séquences
+- `<eos>` : fin de séquence (End Of Sequence)
+- `<cls>` : token de classification
+
+## Limites du modèle récurrent
+
+::: {.callout-warning title="Limites des RNNs"}
+Malgré leur flexibilité, les RNNs souffrent de plusieurs problèmes :
+
+- **Gradient évanescent ou explosif** : difficultés d'entraînement sur longues séquences
+- **Oubli des dépendances lointaines** : la mémoire se comporte comme un lissage exponentiel (ex. le lien entre « whatever remains » et « truth » dans une longue phrase peut être perdu)
+- **Mémoire à court terme** seulement
+- **Entraînement lent** : la rétropropagation à travers le temps est coûteuse
+:::
+
+---
+
+# LSTM : Long Short-Term Memory
+
+## Motivation : dépasser les limites des RNNs
+
+L'idée des LSTM (Long Short-Term Memory networks) est de **conserver le modèle à court terme** des RNNs tout en y ajoutant une **mémoire à long terme** explicite.
+
+**Exemple illustratif :**
+
+> *The man went for a long walking journey across the foreign and beautiful countryside found himself lost when returning home.*
+
+Dans cette phrase, le sujet « The man » et la conclusion « found himself lost » sont séparés par de nombreux mots. Un RNN classique peut oublier cette dépendance.
+
+**Deux états parallèles dans un LSTM :**
+
+- **État caché** $h_t$ : mémoire à court terme (comme dans un RNN)
+- **État de cellule** $c_t$ : mémoire à long terme
+
+## État de cellule (Cell State)
+
+L'état de cellule $c_t$ est une **mémoire parallèle** à l'état caché :
+
+- L'état caché $h_t$ est mis à jour à **chaque pas de temps**
+- L'état de cellule $c_t$ est une « autoroute » d'information qui **traverse la séquence** avec des transformations uniquement **linéaires**
+
+::: {.callout-tip title="Intuition"}
+Penser à $c_t$ comme un « convoyeur » qui transporte l'information importante sur de longues distances. À chaque étape, des « portes » (gates) décident quoi ajouter, quoi effacer et quoi lire.
+:::
+
+::: {.callout-note title="À retenir"}
+Le fait que $c_t$ ne subisse que des **transformations linéaires** est crucial : son gradient est aussi linéaire, ce qui atténue considérablement le problème du gradient évanescent.
+:::
+
+## Équations du nœud LSTM
+
+Les équations du passage avant (forward pass) d'une cellule LSTM avec forget gate sont :
+
+$$
+f_t = \sigma_g(W_f x_t + U_f h_{t-1} + b_f) \quad \text{(forget gate)}
+$$
+
+$$
+i_t = \sigma_g(W_i x_t + U_i h_{t-1} + b_i) \quad \text{(input gate)}
+$$
+
+$$
+o_t = \sigma_g(W_o x_t + U_o h_{t-1} + b_o) \quad \text{(output gate)}
+$$
+
+$$
+\tilde{c}_t = \tanh(W_c x_t + U_c h_{t-1} + b_c) \quad \text{(candidate cell)}
+$$
+
+$$
+c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t \quad \text{(cell state update)}
+$$
+
+$$
+h_t = o_t \odot \sigma_h(c_t) \quad \text{(hidden state)}
+$$
+
+où $\odot$ est le **produit de Hadamard** (élément par élément) et $\sigma_g$ est la fonction sigmoïde.
+
+**Variables :**
+
+- $x_t \in \mathbb{R}^d$ : vecteur d'entrée
+- $f_t \in (0,1)^h$ : vecteur d'activation de la forget gate
+- $i_t \in (0,1)^h$ : vecteur d'activation de l'input gate
+- $o_t \in (0,1)^h$ : vecteur d'activation de l'output gate
+- $h_t \in (-1,1)^h$ : état caché (= vecteur de sortie de la cellule)
+- $\tilde{c}_t \in (-1,1)^h$ : vecteur d'activation candidate
+- $c_t \in \mathbb{R}^h$ : état de cellule
+
+## Les trois portes (Gates)
+
+### Forget Gate (Porte d'oubli)
+
+La **porte d'oubli** $f_t$ décide quelle proportion de l'état de cellule précédent $c_{t-1}$ doit être **conservée ou effacée** :
+
+- Sortie proche de $1$ → on garde l'information ancienne
+- Sortie proche de $0$ → on efface l'information ancienne
+
+Elle prend en entrée $x_t$ (l'entrée courante) et $h_{t-1}$ (l'état caché précédent) et produit un vecteur dans $(0,1)^h$.
+
+### Input Gate (Porte d'entrée)
+
+La **porte d'entrée** $i_t$ contrôle quelle nouvelle information doit être **écrite** dans la cellule :
+
+- Elle sélectionne les composantes du vecteur candidat $\tilde{c}_t$ à intégrer
+- Combinée avec $\tilde{c}_t$ (via $\tanh$), elle détermine l'ajout à $c_t$
+
+### Output Gate (Porte de sortie) et état caché
+
+La **porte de sortie** $o_t$ contrôle quelle information de l'état de cellule $c_t$ doit être **lue** pour produire l'état caché $h_t$ :
+
+- $h_t = o_t \odot \tanh(c_t)$
+- C'est la sortie visible du LSTM à chaque pas de temps
+
+## LSTM comme remplacement de la couche cachée RNN
+
+Le LSTM **remplace la couche cachée** du RNN standard. Son objectif est de produire un état caché $h_t$ **de meilleure qualité**, mieux informé par les dépendances longue portée. On ajoute ensuite une couche de sortie pour la génération ou la classification.
+
+## Limites des LSTM
+
+::: {.callout-warning title="Important"}
+Bien que bien meilleurs que les RNNs simples, les LSTMs :
+
+- Capturent effectivement les **dépendances à long terme**, mais au prix d'une **structure plus complexe** (plus de paramètres, plus de données nécessaires)
+- **N'éliminent pas complètement** les problèmes de gradient évanescent ou explosif
+:::
+
+---
+
+# Extensions des modèles récurrents
+
+## Bi-directionnalité (Bi-directionality)
+
+Un modèle unidirectionnel traite la séquence de gauche à droite. Mais dans de nombreuses tâches NLP, le contexte **à droite** d'un mot est aussi important que le contexte à gauche.
+
+**Bi-LSTM (Bidirectional LSTM) :**
+
+1. Lire la phrase **de gauche à droite** → séquence d'états cachés $h_1, h_2, h_3$
+2. Lire la phrase **de droite à gauche** → séquence d'états cachés $h'_1, h'_2, h'_3$
+3. **Agréger** (concaténer) les états cachés des deux directions : $[h_i ; h'_i]$
+4. La couche de sortie apprend sur cet état combiné, **invariant par direction**
+
+::: {.callout-tip title="Intuition"}
+En lisant dans les deux directions, le réseau obtient une vue **symétrique** de chaque token : il connaît à la fois ce qui précède et ce qui suit. Cela produit une représentation plus riche et plus robuste.
+:::
+
+---
+
+# Modèle Encodeur–Décodeur (Encoder–Decoder)
+
+## Architecture classique
+
+L'architecture encodeur-décodeur (E-D) est un principe général de compression puis reconstruction de l'information, utilisé notamment dans les **autoencodeurs variationnels** (Variational Autoencoders, VAE).
+
+**Principe :**
+
+- L'**encodeur** (Encoder) compresse la séquence d'entrée en une représentation intermédiaire (le « code »)
+- Le **décodeur** (Decoder) génère une séquence de sortie à partir de ce code
+
+## Application aux séquences
+
+Dans le contexte des séquences, le **dernier état caché de l'encodeur** $h_N^E$ est utilisé comme **code** — il est censé encoder la séquence entière.
+
+Ce code initialise (bootstrap) la génération du décodeur, typiquement comme conditionnement du token `<start>`.
+
+**Modèle autorégressif :** la génération du décodeur est séquentielle — chaque token généré sert d'entrée au pas suivant.
+
+**Applications :**
+
+- **Traduction automatique** (Machine Translation) : $\text{Trans}(S) = \text{Dec}(\text{Enc}(S))$
+- **Question-Réponse** (Question Answering) : $\text{Ans}(Q) = \text{Dec}(\text{Enc}(Q))$, où le point d'interrogation joue le rôle d'EOS
+
+## Limite fondamentale du modèle E-D simple
+
+::: {.callout-warning title="Goulot d'étranglement (Bottleneck)"}
+Faire passer toute l'information d'une séquence longue par **un seul vecteur** $h_N^E$ est une hypothèse forte et souvent irréaliste :
+
+- **Inefficace** pour des séquences longues
+- **Ne correspond pas** au comportement humain (nous ne mémorisons pas intégralement une phrase avant de traduire)
+- **Non soutenu** par les neurosciences
+:::
+
+Cette observation motive l'introduction du mécanisme d'**attention**.
+
+---
+
+# Mécanisme d'attention (Attention Mechanism)
+
+## Principe de l'attention
+
+L'attention (Attention) a été introduite pour résoudre le problème du goulot d'étranglement de l'E-D.
+
+**Idée :** au lieu de conditionner le décodeur sur un unique vecteur $h_N^E$, on lui donne accès à **tous les états cachés de l'encodeur** $\{h_i^E\}_{i=1}^{N_E}$.
+
+Pour chaque position $j$ du décodeur :
+
+- On calcule un **score d'attention** $\alpha_{ij}^D$ entre l'état décodeur courant $h_i^D$ et chaque état encodeur $h_j^E$
+- On normalise ces scores (softmax) pour obtenir des poids $a_{ij}$
+- On calcule un **vecteur de contexte** $c_i^D = \sum_j a_{ij} h_j^E$, combinaison convexe des états encodeurs
+
+## Modèle d'attention formalisé
+
+**Scores bruts :**
+
+$$
+\alpha_j^D = \text{score\_attention}(h_j^E, h_i^D)
+$$
+
+**Normalisation :**
+
+$$
+a_{ij} = \frac{\exp(\alpha_{ij}^D)}{\sum_k \exp(\alpha_{kj}^D)}, \quad \sum_j a_{ij} = 1
+$$
+
+**Vecteur de contexte :**
+
+$$
+c_i^D = \sum_j a_{ij} h_j^E
+$$
+
+Ce vecteur de contexte vient **compléter** l'état caché courant du décodeur.
+
+## Fonctions de scoring d'attention
+
+Plusieurs fonctions peuvent calculer le score d'attention entre un état encodeur $h_j^E$ et un état décodeur $h_i^D$ :
+
+**Produit scalaire** (Inner Product) — sans paramètres :
+
+$$
+\alpha_j^D = \langle h_j^E, h_i^D \rangle
+$$
+
+**Bilinéaire** (Bilinear) — paramètres linéaires :
+
+$$
+\alpha_j^D = \langle W_A h_j^E, h_i^D \rangle
+$$
+
+**Réseau de neurones** — paramètres non-linéaires :
+
+$$
+\alpha_j^D = W_{A'} \psi_A\left(W_A [h_i^D ; h_j^E]\right)
+$$
+
+::: {.callout-tip title="Intuition"}
+Les matrices $a_{ij}$ visualisées sous forme d'image révèlent **quels mots sources** le décodeur regarde en produisant chaque mot cible. En traduction EN→FR, on observe typiquement une diagonale (alignement quasi-monotone) avec quelques croisements pour les réordres syntaxiques.
+:::
+
+---
+
+# Auto-attention (Self-Attention)
+
+## Du mécanisme d'attention à l'auto-attention
+
+**Attention classique :** le décodeur « regarde » les états encodeurs pour générer sa sortie.
+
+**Auto-attention (Self-Attention) :** à l'étape d'encodage, chaque token « regarde » **tous les autres tokens de la même séquence** pour construire sa propre représentation.
+
+::: {.callout-note title="À retenir"}
+L'auto-attention permet de capturer les dépendances à n'importe quelle distance dans la séquence, **sans les limitations de la récurrence**.
+:::
+
+**Têtes d'attention multiples (Multi-Head Attention) :** le mécanisme d'attention est répliqué en parallèle plusieurs fois — chaque « tête » apprend à se focaliser sur des aspects différents de la séquence.
+
+## Modèle d'auto-attention
+
+Pour chaque token d'entrée $x_i$, on apprend **trois vecteurs** via des couches linéaires apprises ($W_q$, $W_k$, $W_v$) :
+
+- **Query** $q_i = W_q x_i$ : représentation du token « en question » (ce qu'il cherche)
+- **Key** $k_j = W_k x_j$ : représentation du token « à regarder » (pour le calcul du score)
+- **Value** $v_j = W_v x_j$ : représentation du token « à regarder » (pour le calcul de l'embedding)
+
+**Score brut entre token $i$ et token $j$ :**
+
+$$
+s_{ij} = \langle q_i, k_j \rangle
+$$
+
+Ce score répond à : « dans quelle mesure le token $i$ doit-il s'intéresser au token $j$ ? »
+
+**Scores normalisés :**
+
+$$
+a_{ij} = \text{softmax}_j\left(\frac{s_{ij}}{\sqrt{\dim(k_j)}}\right)
+$$
+
+La normalisation par $\sqrt{\dim(k_j)}$ évite des scores trop grands qui satureraient la softmax.
+
+**Représentation latente du token $i$ :**
+
+$$
+z_i = \sum_j a_{ij} v_j
+$$
+
+::: {.callout-tip title="Intuition"}
+Le mécanisme Query-Key-Value découple la **recherche** (Q, K) de la **lecture** (V). Cela casse la dépendance circulaire qu'il y aurait si on utilisait directement les états cachés de l'encodeur pour se calculer eux-mêmes.
+:::
+
+## En pratique : tenseurs et batches
+
+L'auto-attention implique de nombreuses multiplications matricielles. En entraînement, les données sont traitées par **batches** (lots), ce qui ajoute une dimension $N_{\text{batch}}$ à tous les tableaux de données.
+
+L'entrée complète est un tenseur de dimensions $N_{\text{batch}} \times N_{\text{seq}} \times N_{\text{emb}}$, où :
+
+- $N_{\text{batch}}$ : taille du lot
+- $N_{\text{seq}}$ : longueur de la séquence
+- $N_{\text{emb}}$ : dimension de l'embedding
+
+Les matrices Q, K, V ont des dimensions $N_{\text{seq}} \times N_{\text{emb}}$, et la matrice d'attention $a_{ij}$ est de taille $N_{\text{seq}} \times N_{\text{seq}}$.
+
+## Encodage de l'ordre (Positional Encoding)
+
+**Problème :** l'auto-attention est **invariante par permutation** (elle utilise des sommes et des produits scalaires), donc elle ne distingue pas l'ordre des tokens.
+
+**Solution :** enrichir chaque token avec un **encodage positionnel** (positional encoding) qui dépend de sa position dans la séquence.
+
+**Encodage positionnel sinusoïdal** (Vaswani et al., 2017 — « Attention Is All You Need ») :
+
+$$
+PE_{(\text{pos}, 2i)} = \sin\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)
+$$
+
+$$
+PE_{(\text{pos}, 2i+1)} = \cos\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)
+$$
+
+où $\text{pos}$ est la position et $i$ est la dimension. Chaque dimension correspond à une sinusoïde de fréquence différente — analogue à un **hachage de position** (position hashing).
+
+::: {.callout-tip title="Intuition"}
+Les fonctions sinusoïdales de différentes fréquences permettent au modèle d'apprendre à se référer aux positions par leur différence relative, ce qui généralise mieux que les positions absolues.
+:::
+
+## Obtenir l'encodage final du token
+
+L'encodage final d'un token est produit en ajoutant un **réseau de neurones feed-forward** (FFNN) après le mécanisme d'attention :
+
+1. **Input Embedding** + Positional Encoding
+2. **Multi-Head Attention** + Add & Norm (connexion résiduelle)
+3. **Feed Forward** + Add & Norm (connexion résiduelle)
+
+Les **connexions résiduelles** (residual connections) permettent au gradient de circuler directement à travers les couches, atténuant le gradient évanescent.
+
+---
+
+# Transformers
+
+## Architecture générale
+
+Le Transformer (Vaswani et al., 2017 — « Attention Is All You Need ») est une architecture encodeur-décodeur qui **remplace complètement la récurrence** par des mécanismes d'auto-attention.
+
+```{mermaid}
+graph TD
+    A["Input Embedding + Positional Encoding"] --> B["Multi-Head Self-Attention"]
+    B --> C["Add & Norm"]
+    C --> D["Feed Forward"]
+    D --> E["Add & Norm"]
+    E --> F["Encoded Token"]
+    style A fill:#f9f,stroke:#333
+    style F fill:#9f9,stroke:#333
+```
+
+## Encodeur du Transformer
+
+L'encodeur est composé de **N couches d'encodage empilées** (stacked encoding layers), chacune contenant :
+
+- **Multi-Head Self-Attention** : chaque token se « regarde » lui-même et tous les autres tokens
+- **Add & Norm** : connexion résiduelle + normalisation de couche (Layer Normalization)
+- **Feed Forward** : FFNN appliqué indépendamment à chaque position
+- **Add & Norm** : deuxième connexion résiduelle + normalisation
+
+::: {.callout-note title="À retenir"}
+Dans l'encodeur, **tous les tokens sont traités en parallèle** — il n'y a pas de récurrence. Cela rend l'entraînement beaucoup plus efficace que les RNNs.
+:::
+
+## Décodeur du Transformer
+
+Le décodeur est aussi composé de **N couches de décodage empilées**, chacune contenant :
+
+- **Masked Multi-Head Self-Attention** : auto-attention masquée (chaque position ne peut voir que les positions passées) — préserve la causalité lors de la génération
+- **Add & Norm**
+- **Multi-Head Attention** (cross-attention) : la représentation latente du décodeur sert de **query** ($q_i$) ; les états de l'encodeur fournissent les **keys** ($k_i$) et **values** ($v_i$)
+- **Add & Norm**
+- **Feed Forward** + **Add & Norm**
+- Couche **Linear** + **Softmax** pour la distribution de probabilité sur le vocabulaire
+
+::: {.callout-tip title="Intuition"}
+Le cross-attention dans le décodeur joue le même rôle que l'attention classique dans les E-D récurrents : il permet au décodeur de « regarder » la séquence source pour produire la séquence cible.
+:::
+
+## Visualisation de l'auto-attention
+
+Les figures issues du papier original montrent que différentes têtes d'attention capturent des structures syntaxiques différentes :
+
+- Certaines têtes résolvent les **anaphores** (ex. « its » → « Law », « application »)
+- D'autres capturent des **relations syntaxiques** globales
+
+Cela confirme que les têtes apprennent des fonctions complémentaires et spécialisées.
+
+---
+
+# BERT
+
+## Présentation
+
+BERT (Bidirectional Encoder Representations from Transformers — Devlin et al., 2018) est un modèle de représentation de séquences basé sur les Transformers, entraîné de façon **auto-supervisée** sur de grands corpus.
+
+**Architecture :** N couches de Transformers encodeurs empilés, bidirectionnel.
+
+**Deux objectifs d'entraînement :**
+
+1. **Modèle de langage masqué** (Masked Language Model, MLM) — analogue au CBOW : prédire les tokens masqués à partir du contexte bidirectionnel
+2. **Prédiction de la phrase suivante** (Next Sentence Prediction, NSP) : prédire si deux séquences se suivent (Q&A)
+
+## Entraînement auto-supervisé
+
+**Masquage (Masking) :**
+
+- Environ **15% des tokens** sont masqués aléatoirement dans chaque séquence d'entrée
+- Le modèle doit prédire les tokens masqués
+
+**Successivité (Successivity) — échantillonnage négatif :**
+
+- Des paires de phrases consécutives (positives) et non-consécutives (négatives) sont présentées au modèle
+- Le modèle apprend à distinguer les vraies suites des fausses
+
+::: {.callout-tip title="Intuition"}
+L'entraînement bidirectionnel est la grande innovation de BERT par rapport aux modèles de langage GPT-style : chaque token peut « voir » à gauche **et** à droite lors de l'encodage, ce qui produit des représentations contextuelles beaucoup plus riches.
+:::
+
+## Représentation d'entrée de BERT
+
+L'entrée de BERT est la **somme** de trois types d'embeddings :
+
+- **Token Embeddings** : embedding du token dans le vocabulaire (WordPiece)
+- **Segment Embeddings** : indique à quelle séquence (A ou B) appartient le token
+- **Position Embeddings** : encode la position du token dans la séquence (appris, pas sinusoïdal)
+
+Des tokens spéciaux structurent l'entrée :
+
+- `[CLS]` : token de classification, placé en début de séquence
+- `[SEP]` : séparateur entre deux séquences
+
+**Exemple :**
+
+```
+Input : [CLS] my dog is cute [SEP] he likes playing [SEP]
+```
+
+## Pré-entraînement et fine-tuning
+
+BERT suit une approche en deux phases :
+
+**Phase 1 — Pré-entraînement (Pre-training) :**
+
+- Entraîné sur de grands corpus généraux (Wikipedia, BookCorpus)
+- Optimise les deux objectifs (MLM + NSP) simultanément
+- Produit des représentations universelles
+
+**Phase 2 — Affinage (Fine-tuning) :**
+
+- Les paramètres pré-entraînés initialisent le modèle
+- Une couche de sortie spécifique à la tâche est ajoutée
+- **Tous** les paramètres sont affinés sur la tâche cible (NER, SQuAD, classification…)
+
+::: {.callout-note title="À retenir"}
+BERT utilise les mêmes architectures en pré-entraînement et fine-tuning. Seule la couche de sortie change. Le token `[CLS]` est particulièrement utile : sa représentation agrège l'information de toute la séquence et est utilisée pour la classification.
+:::
+
+## BERT en pratique : HuggingFace
+
+La bibliothèque **HuggingFace Transformers** offre des implémentations prêtes à l'emploi de BERT et de ses variantes (ALBERT, BART, RoBERTa…) en PyTorch, TensorFlow et Flax.
+
+Elle fournit notamment :
+
+- `BertTokenizer` : tokenisation WordPiece
+- `BertModel` : modèle de base
+- `BertForSequenceClassification` : BERT + tête de classification
+- `BertForQuestionAnswering` : BERT + tête de Q&A
+- `BertForMaskedLM` : BERT + tête MLM
+
+---
+
+# Re-ranking
+
+## Principe du re-ranking
+
+Le **re-ranking** consiste à améliorer un ranking initial produit par un premier système (first-stage ranker).
+
+**Motivation :**
+
+- Un premier ranker rapide (ex. TF-IDF avec fichier inversé) récupère un ensemble de candidats
+- Un second système plus coûteux mais plus précis **réordonne** ces candidats
+
+**Autres approches de re-ranking vues précédemment :**
+
+- Interaction utilisateur et feedback de pertinence (BIR)
+- Pseudo-feedback (PRF)
+
+**Avec les modèles neuronaux :** utiliser l'apprentissage pour générer une information latérale (side information) qui améliore le classement.
+
+## Ranker entraîné (Trained Ranker)
+
+Le score de pertinence neuronal $\text{RSV}_{NN}(d, q) = \psi(d, q)$ est un opérateur appris par un modèle neuronal (réseau de neurones, CNN, BERT…).
+
+**Entraînement avec triplets :**
+
+Pour une requête $q$, on sélectionne un document pertinent $d^+$ et un document non-pertinent $d^-$. La fonction de perte cherche à :
+
+- **Maximiser** la similarité $\psi(d^+, q)$
+- **Minimiser** la similarité $\psi(d^-, q)$
+- **Maximiser la marge** (spread) entre pertinents et non-pertinents
+
+**Sélection des exemples :**
+
+- Documents pertinents et non-pertinents sélectionnés **à partir du ranker initial**
+- TF-IDF avec seuil de coupure (cutoff)
+- Récupération dense (word embeddings + produit scalaire)
+
+## Architecture de re-ranking
+
+```{mermaid}
+graph LR
+    Q["Requête Q"] --> Ranker["Ranker initial"]
+    Docs["Documents"] --> Ranker
+    Ranker --> RSV["RSV_init(d,q)"]
+    RSV --> Rel["Pertinents"]
+    RSV --> NonRel["Non-pertinents (training)"]
+    Rel --> Reranker["Re-ranker ψ"]
+    NonRel --> Reranker
+    Q --> Reranker
+    Reranker --> RSVprime["RSV'_NN(d,q)"]
+```
+
+## Re-ranking avec BERT
+
+L'application de BERT au re-ranking (Nogueira & Cho, 2019 — « Passage Re-ranking with BERT ») est l'une des démonstrations les plus marquantes de la puissance de BERT pour l'IR.
+
+**Protocole :**
+
+- Entraîné et testé sur le corpus **MSMARCO** (Microsoft), une collection de données pour le deep learning en recherche, comprenant notamment 100 000 questions réelles de Bing avec réponses humaines
+- Évalué avec la **Moyenne des Rangs Réciproques** (Mean Reciprocal Rank, MRR) :
+
+$$
+\text{MRR} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\text{rank}_i}
+$$
+
+où $\text{rank}_i$ est la position du **premier** document pertinent pour la $i$-ème requête.
+
+**Méthode de re-ranking :**
+
+1. La requête est encodée comme **phrase A** (sentence A) de BERT — tronquée à 64 tokens maximum
+2. Le passage candidat est encodé comme **phrase B** (sentence B) — tronquée pour que la concaténation ne dépasse pas 512 tokens
+3. Le modèle `BERT_LARGE` est utilisé comme **classificateur binaire** : la représentation du token `[CLS]` est passée à une couche linéaire qui produit la probabilité de pertinence
+4. Les passages sont triés par probabilité décroissante
+
+::: {.callout-note title="Structure de l'entrée BERT pour le re-ranking"}
+```
+[CLS] requête [SEP] passage [EOS] → BERT → [CLS] → Feed-Forward → Probabilité → Tri
+```
+:::
+
+::: {.callout-tip title="Intuition"}
+En mode `[CLS]`, BERT produit une représentation qui **agrège** l'information de la requête et du passage dans un seul vecteur. La couche linéaire apprend à distinguer les passages pertinents des non-pertinents à partir de cette représentation jointe.
+:::
+
+---
+
+# Récupération dense (Dense Retrieval)
+
+## Du re-ranking à la récupération dense
+
+Le re-ranking avec BERT est efficace mais **coûteux** : pour chaque requête, il faut évaluer BERT sur des centaines ou milliers de paires (requête, passage).
+
+La **récupération dense** (dense retrieval) cherche à encoder requêtes et documents dans un **espace vectoriel dense** où la pertinence correspond à la similarité géométrique.
+
+**Avantages :**
+
+- Les embeddings de documents peuvent être **précalculés** et indexés (ANN — Approximate Nearest Neighbor)
+- La recherche est alors très rapide au moment de la requête
+
+**Utilisation :**
+
+- En première étape (first-stage retrieval) : remplacer TF-IDF par une recherche par similarité vectorielle
+- En combinaison avec un re-ranker neural pour affiner les résultats
+
+---
+
+# Conclusion
+
+## Synthèse : de l'embedding de mots à l'embedding de séquences
+
+Ce chapitre a tracé un chemin progressif depuis les représentations éparses vers les représentations denses contextuelles :
+
+| Méthode | Type | Représentation | Limitation |
+|---|---|---|---|
+| TF-IDF, LSI | Sparse | Par terme/document | Pas de contexte |
+| Word2Vec, GloVE | Dense | Par mot | Polysémie, pas de séquence |
+| RNN | Dense, séquentiel | Par token + état | Gradient, mémoire limitée |
+| LSTM | Dense, séquentiel | Par token + long terme | Lent, complexe |
+| Transformer | Dense, parallèle | Par token + attention globale | Quadratique en mémoire |
+| BERT | Dense, bidirectionnel | Par séquence + fine-tuning | Très coûteux |
+
+## Points clés à retenir
+
+::: {.callout-note title="À retenir — Récapitulatif"}
+**Embeddings :**
+
+- Les embeddings denses (Word2Vec, GloVE) sont souvent une entrée pratique pour les traitements en aval
+- L'embedding de séquences (BERT-like) vise à capturer « mieux » le contexte
+
+**RNN :**
+
+- Le principe récurrent (état caché $W_S$) modélise la causalité temporelle et gère des séquences de longueur variable
+- Limité par le gradient évanescent/explosif et l'oubli à long terme
+
+**LSTM :**
+
+- Ajoute une mémoire à long terme (état de cellule $c_t$) avec des portes apprenables
+- Atténue les problèmes de gradient grâce aux transformations linéaires de $c_t$
+
+**Transformers et attention :**
+
+- L'auto-attention permet de capturer des dépendances globales sans récurrence
+- Le token `<SEP>` permet d'entraîner pour la Q&A et la traduction
+- L'encodage positionnel préserve l'ordre de la séquence
+
+**BERT :**
+
+- Empile des Transformers encodeurs en mode bidirectionnel
+- En régime de classification `[CLS]`, peut produire des probabilités à partir d'une structure `requête [SEP] document`
+- Approche pré-entraînement / fine-tuning : représentations universelles adaptables à toute tâche
+:::
