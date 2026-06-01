@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.02 — Latent Semantic Indexing · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:275px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.45rem;font-weight:700;color:var(--gold);margin-bottom:.2rem}
+.sb-sub{font-family:var(--fm);font-size:.72rem;color:var(--muted);margin-bottom:1.6rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.15rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.86rem;display:block;
+  padding:.32rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.7rem;color:var(--gold);margin-right:.4rem;opacity:.7}
+.sb-section{font-family:var(--fm);font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .25rem;opacity:.55}
+
+/* MAIN */
+.main{margin-left:275px;flex:1;padding:3rem 4rem;max-width:1040px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4rem}
+.hero-tag{font-family:var(--fm);font-size:.73rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.7rem}
+.hero h1{font-family:var(--fd);font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:.7rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.03rem;color:var(--muted);max-width:640px;margin-bottom:1.4rem}
+.badges{display:flex;gap:.6rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.7rem;padding:.22rem .7rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.8rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.82rem;color:var(--gold);opacity:.6;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.9rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.45rem;font-weight:600;color:var(--glight);margin:2rem 0 .7rem}
+h4{font-family:var(--fd);font-size:1.18rem;font-weight:600;color:var(--blue);margin:1.3rem 0 .45rem}
+p{margin-bottom:.85rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.85rem}
+li{margin-bottom:.3rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1rem 1.3rem;border-radius:0 6px 6px 0;margin:1.3rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.35rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.7rem;
+  margin:1.3rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.68rem;color:var(--muted);text-align:left;margin-bottom:.6rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.3rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.87rem}
+thead{background:var(--bg-code)}
+th{padding:.75rem 1rem;text-align:left;font-family:var(--fm);font-size:.71rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}td.v{color:var(--violet)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.4rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.75rem 1.3rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.1rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.68rem;color:var(--muted);padding:.18rem .55rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.3rem}
+.fc-expr{text-align:center;padding:1.1rem;background:var(--bg-code);border-radius:6px;margin-bottom:1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.87rem}
+.fc-item h5{font-family:var(--fm);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.25rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.87rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.18rem .65rem;border-radius:4px;margin-bottom:.7rem;margin-top:1rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.7rem;overflow:hidden}
+.qi-q{padding:.85rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.7rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.92rem}
+.qi-arr{color:var(--gold);font-size:1.05rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.87rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:700px;padding:.95rem 1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.85rem;align-items:flex-start;margin-bottom:.85rem;
+  padding:.75rem .95rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.05rem;min-width:1.3rem}
+.piege-text{font-size:.92rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.3rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:1.8rem;padding-left:1.3rem}
+.tl-item::before{content:'';position:absolute;left:-2.35rem;top:.55rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.76rem;color:var(--gold);margin-bottom:.2rem}
+.tl-title{font-family:var(--fd);font-size:1.02rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
+.tl-desc{font-size:.88rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.3rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1rem}
+.fc2 h4{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .6rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.84rem}
+.fc2 ul li{padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:1.8rem 2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:4.5rem;color:var(--gold);opacity:.12;
+  position:absolute;top:-.4rem;left:.75rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.75rem}
+
+/* DIAGRAM SVG */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.4rem;margin:1.3rem 0;overflow-x:auto;text-align:center}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin:1.3rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.66rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem}
+.ccard h4{font-family:var(--fd);font-size:1.12rem;color:var(--text);margin:0 0 .35rem 0}
+.ccard p{font-size:.86rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* TWO-COL SPLIT */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.3rem 0}
+.split-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.split-card.ok{border-color:rgba(123,196,150,.3)}
+.split-card.warn{border-color:rgba(224,123,123,.3)}
+.split-card h4{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;margin:0 0 .6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.split-card.ok h4{color:var(--green)}
+.split-card.warn h4{color:var(--red)}
+.split-card ul{padding-left:1.2rem;font-size:.87rem;color:var(--muted)}
+.split-card li{margin-bottom:.25rem}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:920px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid,.split{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+<aside class="sb">
+  <div class="sb-logo">IR.02</div>
+  <div class="sb-sub">Information Embedding · LSI</div>
+  <nav>
+    <ul>
+      <div class="sb-section">Vue d'ensemble</div>
+      <li><a href="#s1"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#s2"><span class="n">02</span>Réponse d'oral</a></li>
+      <div class="sb-section">Fondements</div>
+      <li><a href="#s3"><span class="n">03</span>Motivation de la LSI</a></li>
+      <li><a href="#s4"><span class="n">04</span>Concept — définition</a></li>
+      <li><a href="#s5"><span class="n">05</span>Rappel SVD</a></li>
+      <div class="sb-section">Construction</div>
+      <li><a href="#s6"><span class="n">06</span>Architecture LSI</a></li>
+      <li><a href="#s7"><span class="n">07</span>Requêtes en espace LSI</a></li>
+      <li><a href="#s8"><span class="n">08</span>Mise à jour de l'index</a></li>
+      <div class="sb-section">Formules & Analyse</div>
+      <li><a href="#s9"><span class="n">09</span>Formules clés</a></li>
+      <li><a href="#s10"><span class="n">10</span>Comparaison des approches</a></li>
+      <li><a href="#s11"><span class="n">11</span>Relations conceptuelles</a></li>
+      <div class="sb-section">Examen</div>
+      <li><a href="#s12"><span class="n">12</span>Perspective historique</a></li>
+      <li><a href="#s13"><span class="n">13</span>Liens systèmes modernes</a></li>
+      <li><a href="#s14"><span class="n">14</span>Questions d'examen</a></li>
+      <li><a href="#s15"><span class="n">15</span>Pièges classiques</a></li>
+      <li><a href="#s16"><span class="n">16</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main class="main">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-tag">IR.02 · Stéphane Marchand-Maillet · UNIGE</div>
+    <h1><em>Latent Semantic</em><br>Indexing</h1>
+    <p class="hero-desc">Motivation, construction par SVD, notion de Concept, interrogation en espace latent et mise à jour dynamique de l'index — guide complet pour l'examen oral de Master.</p>
+    <div class="badges">
+      <span class="badge">Master / Graduate</span>
+      <span class="badge b">SVD · Algèbre linéaire</span>
+      <span class="badge g">TF-IDF → Concepts</span>
+      <span class="badge v">Dense Retrieval</span>
+    </div>
+  </header>
+
+  <!-- ──────────────────── §1 RÉSUMÉ ──────────────────── -->
+  <section class="sec" id="s1">
+    <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Résumé exécutif</h2></div>
+
+    <div class="box vio">
+      <div class="box-title">⚡ 30 secondes</div>
+      <p>La <strong>Latent Semantic Indexing (LSI)</strong> est un modèle d'embedding qui résout les deux grands défauts du TF-IDF : la <strong>synonymie</strong> (termes différents, même sens) et la <strong>polysémie</strong> (même terme, sens différents). Elle applique une <strong>décomposition en valeurs singulières tronquée (SVD)</strong> à la matrice terme-document TF-IDF pour projeter termes et documents dans un espace réduit de dimension $K$ où les <strong>concepts latents</strong> sont décorrélés. La requête est ensuite projetée dans ce même espace, et la recherche s'y effectue par similarité cosinus.</p>
+    </div>
+
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ctag">Problème résolu</div>
+        <h4>Synonymie &amp; Polysémie</h4>
+        <p>TF-IDF traite chaque terme de manière indépendante — deux synonymes donnent des vecteurs orthogonaux.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Mécanisme</div>
+        <h4>SVD Tronquée</h4>
+        <p>Factorisation $W_K = U_K \Sigma_K V_K^T$ — approximation de rang $K$ minimisant l'erreur de Frobenius.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Résultat clé</div>
+        <h4>Concepts latents</h4>
+        <p>Les colonnes de $U_K$ forment une base orthogonale dans l'espace des termes — chaque axe = un concept.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Interrogation</div>
+        <h4>Projection de la requête</h4>
+        <p>$\tilde{q} = \Sigma_K^{-1} U_K^T q$ — la requête est projetée dans l'espace des concepts, puis similarité cosinus.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §2 RÉPONSE ORALE ──────────────────── -->
+  <section class="sec" id="s2">
+    <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+    <div class="box info">
+      <div class="box-title">💬 À prononcer devant le professeur — 3 à 5 minutes</div>
+    </div>
+    <div class="oral">
+      <p>La <strong>Latent Semantic Indexing</strong> part d'un constat fondamental : le modèle <em>Bag of Words</em> avec TF-IDF représente chaque terme dans un espace de grande dimension $\mathbb{R}^M$ où les axes sont indépendants. Cela pose deux problèmes majeurs. D'abord la <strong>synonymie</strong> : les termes « voiture » et « automobile » auront des embeddings orthogonaux alors qu'ils désignent la même réalité. Ensuite la <strong>polysémie</strong> : le mot « table » a un seul vecteur alors qu'il peut désigner un meuble ou un tableau de données.</p>
+      <p>L'idée centrale de la LSI est de supposer que les termes ne sont pas des entités atomiques, mais des <strong>compositions de concepts latents</strong>. Formellement, on cherche une base orthonormale $\{c_k\}_{k=1}^K$ dans laquelle chaque terme se décompose : $t_i = \sum_k \alpha_{ki} c_k$. Deux synonymes auront des coefficients $\alpha$ similaires et seront proches dans cet espace. C'est précisément ce que réalise la <strong>décomposition en valeurs singulières tronquée</strong>.</p>
+      <p>On part de la matrice terme-document TF-IDF $W \in \mathbb{R}^{M \times N}$. La SVD tronquée donne $W_K = U_K \Sigma_K V_K^T$, où $U_K \in \mathbb{R}^{M \times K}$ contient les vecteurs de termes dans l'espace des concepts, $\Sigma_K$ encode l'importance de chaque concept, et $V_K^T \in \mathbb{R}^{K \times N}$ encode les documents dans ce même espace. La propriété cruciale est que $\Sigma_K^{-1} U_K^T W_K W_K^T U_K \Sigma_K^{-1} = I_K$ : les termes sont <strong>décorrélés</strong> dans l'espace transformé.</p>
+      <p>Pour répondre à une requête $q$, on la traite comme un document — c'est le paradigme <em>Query-by-Example</em>. On calcule d'abord sa représentation TF-IDF standard, puis on la projette dans l'espace des concepts : $\tilde{q} = \Sigma_K^{-1} U_K^T q$. Les documents ont été préalablement projetés de la même façon : $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$. La pertinence s'évalue ensuite par similarité cosinus dans cet espace réduit.</p>
+      <p>Le paramètre $K$ contrôle le niveau de généralisation : trop petit, on perd de l'information ; trop grand, on retombe sur les défauts du TF-IDF. En pratique, on choisit $K$ au <strong>coude de la courbe des valeurs singulières</strong>. Enfin, pour les collections dynamiques, la LSI propose deux stratégies de mise à jour : la <em>stratégie exacte</em> qui recalcule ce qui est nécessaire, et la <em>fold-in strategy</em> qui projette simplement les nouveaux documents dans l'espace de concepts existant.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §3 MOTIVATION ──────────────────── -->
+  <section class="sec" id="s3">
+    <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Motivation — les limites du TF-IDF</h2></div>
+
+    <h3>Pourquoi TF-IDF est insuffisant ?</h3>
+    <p>Le modèle TF-IDF est un espace où chaque dimension correspond à un terme du vocabulaire. La matrice terme-document $W \in \mathbb{R}^{M \times N}$ suppose implicitement que tous les termes sont <strong>indépendants</strong> — les axes sont orthogonaux. Or le langage naturel viole profondément cette hypothèse.</p>
+
+    <div class="split">
+      <div class="split-card warn">
+        <h4>⚠ Synonymie (Synonymy)</h4>
+        <ul>
+          <li>Termes différents, même sens : « voiture » / « automobile », « car » / « automobile »</li>
+          <li>Dans TF-IDF : $\langle t_{\text{voiture}}, t_{\text{automobile}} \rangle = 0$ (orthogonaux !)</li>
+          <li>Un document sur les « voitures » ne répond pas à une requête sur les « automobiles »</li>
+          <li>Perte de rappel (<em>recall</em>) importante</li>
+        </ul>
+      </div>
+      <div class="split-card warn">
+        <h4>⚠ Polysémie (Polysemy)</h4>
+        <ul>
+          <li>Même terme, sens différents : « table » (meuble vs tableau de données), « bank » (banque vs rive)</li>
+          <li>Dans TF-IDF : un seul vecteur pour un terme polysémique</li>
+          <li>Bruit dans les résultats : pertinence artificiellement gonflée entre documents sans lien sémantique réel</li>
+          <li>Baisse de précision (<em>precision</em>)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box info">
+      <div class="box-title">💡 Intuition fondatrice</div>
+      <p>Le langage est <em>redondant</em> : beaucoup de termes covarient dans les documents (synonymes, champs lexicaux). Cette redondance cache une structure de <strong>dimension inférieure</strong> — les concepts sémantiques latents. La LSI vise à révéler cette structure.</p>
+    </div>
+
+    <h3>Observation clé : co-occurrences dans W</h3>
+    <p>Dans la matrice $W$, si deux termes $i$ et $j$ sont synonymes, ils tendent à apparaître dans les mêmes documents. Cela se traduit par une <strong>corrélation positive</strong> entre les lignes $W_{i\cdot}$ et $W_{j\cdot}$. Dans le TF-IDF standard, cette corrélation n'est pas exploitée. La LSI l'exploite via la SVD.</p>
+
+    <div class="mblock">
+      <div class="mlabel">Structure de corrélation dans W</div>
+      $$W W^T \in \mathbb{R}^{M \times M} \quad \Rightarrow \quad (WW^T)_{ij} = \sum_{k=1}^N w_{ik} w_{jk}$$
+      <p style="color:var(--muted);font-size:.9rem;margin-top:.7rem">$(WW^T)_{ij} > 0$ si les termes $i$ et $j$ tendent à coexister dans les mêmes documents — signal de synonymie</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §4 CONCEPT ──────────────────── -->
+  <section class="sec" id="s4">
+    <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Qu'est-ce qu'un <em>Concept</em> en LSI ?</h2></div>
+
+    <h3>Définition formelle</h3>
+    <p>Un <strong>concept</strong> (*latent concept*) est un vecteur $c_k \in \mathbb{R}^M$ dans l'espace des termes, tel que l'ensemble $\{c_k\}_{k=1}^K$ forme une <strong>base orthonormale</strong> de l'espace des concepts :</p>
+    <div class="mblock">
+      $$\langle c_k, c_l \rangle = \delta_{kl}$$
+    </div>
+    <p>Chaque terme $t_i$ se décompose comme une combinaison linéaire de ces concepts :</p>
+    <div class="mblock">
+      $$t_i = \sum_{k=1}^K \alpha_{ki} \, c_k \quad \text{où } \alpha_{ki} = \langle t_i, c_k \rangle$$
+    </div>
+
+    <h3>Intuition géométrique</h3>
+    <div class="box">
+      <div class="box-title">🎯 L'analogie de la rotation</div>
+      <p>Imaginez l'espace des termes $\mathbb{R}^M$ avec ses axes standard $e_i$ (un par terme). La LSI effectue une <strong>rotation et une mise à l'échelle</strong> pour aligner les nouveaux axes $c_k$ avec les directions de <em>variance maximale</em> dans les données. Ces nouvelles directions capturent les thèmes récurrents de la collection.</p>
+    </div>
+
+    <p>Concrètement, si la collection contient des documents sur la physique des particules :</p>
+    <ul>
+      <li>$c_1$ pourrait capturer le concept "physique des particules" → coefficients élevés pour les termes "quark", "boson", "LHC", "CERN", "collider"</li>
+      <li>$c_2$ pourrait capturer le concept "financement de la recherche" → coefficients élevés pour "budget", "investissement", "grants"</li>
+    </ul>
+
+    <h3>Propriété de décorrélation</h3>
+    <p>La propriété clé que la LSI garantit est que dans le nouvel espace, les features (coordonnées selon les concepts) des termes sont <strong>décorrélées</strong>. Cela signifie que :</p>
+    <div class="mblock">
+      <div class="mlabel">Matrice de corrélation des termes dans l'espace LSI</div>
+      $$\tilde{W} \tilde{W}^T = I_K$$
+      <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem">où $\tilde{W} \in \mathbb{R}^{K \times K}$ est l'embedding des termes dans l'espace des concepts — chaque terme est un vecteur unitaire, les concepts sont orthogonaux.</p>
+    </div>
+
+    <h3>Comment les concepts sont-ils identifiés ?</h3>
+    <p>Les concepts ne sont <strong>pas définis a priori</strong> — ils <em>émergent</em> des données via la SVD. Les vecteurs singuliers gauches (colonnes de $U_K$) jouent le rôle des directions conceptuelles. Ce sont précisément les <strong>vecteurs propres de $WW^T$</strong>, ordonnés par variance décroissante.</p>
+
+    <div class="diag">
+      <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="max-width:700px;width:100%">
+        <!-- Axes originaux -->
+        <g transform="translate(150,140)">
+          <line x1="-100" y1="0" x2="100" y2="0" stroke="#9089bf" stroke-width="1.5" marker-end="url(#arr-m)"/>
+          <line x1="0" y1="-100" x2="0" y2="100" stroke="#9089bf" stroke-width="1.5"/>
+          <text x="105" y="5" fill="#9089bf" font-size="13" font-family="JetBrains Mono">t₁ (voiture)</text>
+          <text x="5" y="-105" fill="#9089bf" font-size="13" font-family="JetBrains Mono">t₂ (auto)</text>
+          <!-- Nuage de points corrélés -->
+          <ellipse cx="35" cy="-35" rx="55" ry="18" fill="rgba(201,168,76,.08)" stroke="rgba(201,168,76,.25)" stroke-width="1" transform="rotate(-45,35,-35)"/>
+          <!-- Points -->
+          <circle cx="10" cy="-10" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <circle cx="25" cy="-28" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <circle cx="40" cy="-42" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <circle cx="55" cy="-55" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <circle cx="-10" cy="8" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <circle cx="62" cy="-60" r="3.5" fill="#c9a84c" opacity=".7"/>
+          <text x="-80" y="120" fill="#e07b7b" font-size="12">Termes corrélés</text>
+          <text x="-80" y="135" fill="#9089bf" font-size="11">(synonymes → proches)</text>
+          <text x="-95" y="-120" fill="#e4dffa" font-size="14" font-weight="bold">Espace TF-IDF</text>
+        </g>
+
+        <!-- Flèche centrale -->
+        <text x="290" y="148" fill="var(--gold)" font-size="22" font-family="JetBrains Mono">SVD</text>
+        <line x1="280" y1="138" x2="350" y2="138" stroke="var(--gold)" stroke-width="2" marker-end="url(#arr-g)"/>
+
+        <!-- Axes LSI -->
+        <g transform="translate(520,140) rotate(-45)">
+          <line x1="-100" y1="0" x2="100" y2="0" stroke="#7bc496" stroke-width="1.8"/>
+          <line x1="0" y1="-80" x2="0" y2="80" stroke="#7eb8d4" stroke-width="1.8"/>
+        </g>
+        <g transform="translate(520,140)">
+          <text x="75" y="-72" fill="#7bc496" font-size="13" font-family="JetBrains Mono">c₁</text>
+          <text x="72" y="78" fill="#7eb8d4" font-size="13" font-family="JetBrains Mono">c₂</text>
+          <!-- Points alignés sur c1 -->
+          <circle cx="-60" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <circle cx="-35" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <circle cx="-10" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <circle cx="15" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <circle cx="45" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <circle cx="65" cy="0" r="3.5" fill="#7bc496" opacity=".8"/>
+          <text x="-85" y="120" fill="#7bc496" font-size="12">Termes décorrélés</text>
+          <text x="-85" y="135" fill="#9089bf" font-size="11">(sur l'axe concept)</text>
+          <text x="-85" y="-120" fill="#e4dffa" font-size="14" font-weight="bold">Espace LSI</text>
+        </g>
+        <defs>
+          <marker id="arr-m" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#9089bf"/>
+          </marker>
+          <marker id="arr-g" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--gold)"/>
+          </marker>
+        </defs>
+      </svg>
+      <p style="font-size:.85rem;color:var(--muted);margin-top:.8rem">Projection de l'espace terme-corrélé (TF-IDF) vers l'espace des concepts décorrélés (LSI). Les synonymes, dispersés dans l'espace original, s'alignent sur l'axe du concept pertinent.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §5 SVD ──────────────────── -->
+  <section class="sec" id="s5">
+    <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Rappel : Décomposition en Valeurs Singulières</h2></div>
+
+    <h3>Définition (SVD complète)</h3>
+    <p>Pour toute matrice $W \in \mathbb{R}^{M \times N}$ (avec $M > N$ par exemple), il existe deux matrices orthogonales $U \in \mathbb{R}^{M \times M}$ et $V \in \mathbb{R}^{N \times N}$, et une matrice pseudo-diagonale $\Sigma \in \mathbb{R}^{M \times N}$, telles que :</p>
+    <div class="mblock">
+      $$W = U \Sigma V^T$$
+      $$\Sigma = \begin{pmatrix} \sigma_1 & 0 & \cdots \\ 0 & \ddots & \\ \vdots & & \sigma_N \\ 0 & \cdots & 0 \end{pmatrix}, \quad \sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_N \geq 0$$
+    </div>
+    <p>Les $\sigma_k$ sont les <strong>valeurs singulières</strong>, ordonnées par décroissance. Les colonnes de $U$ et $V$ sont respectivement les vecteurs singuliers gauches et droits.</p>
+
+    <h3>SVD tronquée (Truncated SVD)</h3>
+    <p>Pour $K \leq \min(M, N)$, on ne conserve que les $K$ plus grandes valeurs singulières :</p>
+    <div class="mblock">
+      $$W_K = U_K \Sigma_K V_K^T, \quad U_K \in \mathbb{R}^{M \times K}, \quad \Sigma_K \in \mathbb{R}^{K \times K}, \quad V_K \in \mathbb{R}^{N \times K}$$
+    </div>
+
+    <div class="box ok">
+      <div class="box-title">📐 Théorème de Eckart-Young (1936)</div>
+      <p>$W_K$ est <strong>l'approximation de rang $K$ optimale</strong> de $W$ au sens de la norme de Frobenius :</p>
+      $$W_K = \underset{\text{rank}(A) = K}{\arg\min} \| W - A \|_F^2 = \sum_{k=K+1}^{\min(M,N)} \sigma_k^2$$
+      <p style="margin-top:.5rem;font-size:.92rem">L'erreur d'approximation est exactement la somme des carrés des valeurs singulières <em>non retenues</em>.</p>
+    </div>
+
+    <h3>Propriétés orthogonales clés</h3>
+    <p>Puisque $U$ et $V$ sont orthogonales : $\langle u_i, u_j \rangle = \delta_{ij}$ et $\langle v_i, v_j \rangle = \delta_{ij}$. Les colonnes de $U_K$ forment une <strong>base orthonormale</strong> de l'espace des termes (dans $\mathbb{R}^K$), et les colonnes de $V_K$ forment une base orthonormale de l'espace des documents.</p>
+
+    <!-- Diagramme SVD visuel -->
+    <div class="diag">
+      <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:720px;width:100%">
+        <!-- W_k -->
+        <rect x="20" y="30" width="80" height="140" rx="4" fill="rgba(126,184,212,.12)" stroke="#7eb8d4" stroke-width="1.5"/>
+        <text x="60" y="105" fill="#7eb8d4" font-size="15" text-anchor="middle" font-family="EB Garamond">W_K</text>
+        <text x="60" y="185" fill="#9089bf" font-size="11" text-anchor="middle" font-family="JetBrains Mono">M×N</text>
+        <!-- = -->
+        <text x="118" y="108" fill="var(--gold)" font-size="20">＝</text>
+        <!-- U_k -->
+        <rect x="135" y="30" width="55" height="140" rx="4" fill="rgba(123,196,150,.12)" stroke="#7bc496" stroke-width="1.5"/>
+        <text x="162" y="105" fill="#7bc496" font-size="15" text-anchor="middle" font-family="EB Garamond">U_K</text>
+        <text x="162" y="185" fill="#9089bf" font-size="11" text-anchor="middle" font-family="JetBrains Mono">M×K</text>
+        <text x="198" y="108" fill="var(--gold)" font-size="20">·</text>
+        <!-- Sigma_k -->
+        <rect x="210" y="58" width="55" height="55" rx="4" fill="rgba(201,168,76,.12)" stroke="var(--gold)" stroke-width="1.5"/>
+        <text x="237" y="91" fill="var(--gold)" font-size="15" text-anchor="middle" font-family="EB Garamond">Σ_K</text>
+        <text x="237" y="185" fill="#9089bf" font-size="11" text-anchor="middle" font-family="JetBrains Mono">K×K</text>
+        <text x="272" y="108" fill="var(--gold)" font-size="20">·</text>
+        <!-- V_k^T -->
+        <rect x="283" y="58" width="140" height="55" rx="4" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="353" y="91" fill="#a78bfa" font-size="15" text-anchor="middle" font-family="EB Garamond">V_K^T</text>
+        <text x="353" y="185" fill="#9089bf" font-size="11" text-anchor="middle" font-family="JetBrains Mono">K×N</text>
+
+        <!-- Labels LSI -->
+        <text x="162" y="16" fill="#7bc496" font-size="11" text-anchor="middle" font-family="JetBrains Mono">Term Vectors</text>
+        <text x="237" y="16" fill="var(--gold)" font-size="11" text-anchor="middle" font-family="JetBrains Mono">Importance</text>
+        <text x="353" y="16" fill="#a78bfa" font-size="11" text-anchor="middle" font-family="JetBrains Mono">Document Vectors</text>
+
+        <!-- Flèche séparation -->
+        <line x1="440" y1="30" x2="440" y2="170" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"/>
+
+        <!-- Embedding LSI -->
+        <text x="470" y="20" fill="#e4dffa" font-size="13" font-family="EB Garamond" font-weight="bold">Embedding LSI résultant :</text>
+        <text x="470" y="60" fill="#7bc496" font-size="12" font-family="JetBrains Mono">d̃_j = Σ_K⁻¹ U_Kᵀ d_j</text>
+        <text x="470" y="82" fill="#9089bf" font-size="11" font-family="EB Garamond">→ K-dim, concepts décorrélés</text>
+        <text x="470" y="115" fill="#a78bfa" font-size="12" font-family="JetBrains Mono">q̃ = Σ_K⁻¹ U_Kᵀ q</text>
+        <text x="470" y="137" fill="#9089bf" font-size="11" font-family="EB Garamond">→ requête projetée dans LSI</text>
+        <text x="470" y="165" fill="var(--gold)" font-size="11" font-family="JetBrains Mono">RSV = cos(d̃_j, q̃)</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §6 ARCHITECTURE LSI ──────────────────── -->
+  <section class="sec" id="s6">
+    <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">Architecture et Construction LSI</h2></div>
+
+    <h3>Pipeline complet</h3>
+
+    <div class="diag">
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;width:100%">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--gold)"/>
+          </marker>
+        </defs>
+
+        <!-- Étape 1 -->
+        <rect x="20" y="20" width="140" height="60" rx="6" fill="var(--bg-code)" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="90" y="47" fill="var(--text)" font-size="13" text-anchor="middle" font-family="EB Garamond" font-weight="bold">Collection</text>
+        <text x="90" y="65" fill="var(--muted)" font-size="11" text-anchor="middle" font-family="JetBrains Mono">N documents</text>
+        <line x1="160" y1="50" x2="205" y2="50" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Étape 2 -->
+        <rect x="207" y="20" width="145" height="60" rx="6" fill="var(--bg-code)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+        <text x="280" y="45" fill="var(--glight)" font-size="13" text-anchor="middle" font-family="EB Garamond" font-weight="bold">TF-IDF</text>
+        <text x="280" y="63" fill="var(--muted)" font-size="11" text-anchor="middle" font-family="JetBrains Mono">W ∈ ℝᴹˣᴺ</text>
+        <line x1="352" y1="50" x2="397" y2="50" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Étape 3 SVD -->
+        <rect x="399" y="10" width="160" height="80" rx="6" fill="rgba(201,168,76,.08)" stroke="var(--gold)" stroke-width="2"/>
+        <text x="479" y="40" fill="var(--gold)" font-size="14" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">SVD tronquée</text>
+        <text x="479" y="60" fill="var(--glight)" font-size="12" text-anchor="middle" font-family="JetBrains Mono">W_K = U_K Σ_K V_Kᵀ</text>
+        <text x="479" y="77" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">rank-K approximation</text>
+
+        <!-- Flèches sortantes SVD -->
+        <line x1="479" y1="90" x2="479" y2="130" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Résultats SVD en bas -->
+        <rect x="310" y="133" width="110" height="55" rx="5" fill="var(--bg-code)" stroke="#7bc496" stroke-width="1.5"/>
+        <text x="365" y="160" fill="#7bc496" font-size="12" text-anchor="middle" font-family="JetBrains Mono">U_K ∈ ℝᴹˣᴷ</text>
+        <text x="365" y="177" fill="var(--muted)" font-size="10" text-anchor="middle">Term Vectors</text>
+
+        <rect x="428" y="133" width="100" height="55" rx="5" fill="var(--bg-code)" stroke="var(--gold)" stroke-width="1.5"/>
+        <text x="478" y="160" fill="var(--gold)" font-size="12" text-anchor="middle" font-family="JetBrains Mono">Σ_K ∈ ℝᴷˣᴷ</text>
+        <text x="478" y="177" fill="var(--muted)" font-size="10" text-anchor="middle">Valeurs sing.</text>
+
+        <rect x="536" y="133" width="110" height="55" rx="5" fill="var(--bg-code)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="591" y="160" fill="#a78bfa" font-size="12" text-anchor="middle" font-family="JetBrains Mono">V_K ∈ ℝᴺˣᴷ</text>
+        <text x="591" y="177" fill="var(--muted)" font-size="10" text-anchor="middle">Doc Vectors</text>
+
+        <!-- Calcul embedding -->
+        <line x1="365" y1="188" x2="365" y2="230" stroke="#7bc496" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <line x1="478" y1="188" x2="420" y2="230" stroke="var(--gold)" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <line x1="591" y1="188" x2="591" y2="230" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+        <!-- Box embedding documents -->
+        <rect x="310" y="232" width="160" height="60" rx="5" fill="rgba(123,196,150,.08)" stroke="#7bc496" stroke-width="1.5"/>
+        <text x="390" y="258" fill="#7bc496" font-size="12" text-anchor="middle" font-family="JetBrains Mono">d̃_j = Σ_K⁻¹ U_Kᵀ d_j</text>
+        <text x="390" y="277" fill="var(--muted)" font-size="10" text-anchor="middle">Embedding docs → K-dim</text>
+
+        <!-- Box embedding requête -->
+        <rect x="480" y="232" width="160" height="60" rx="5" fill="rgba(167,139,250,.08)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="560" y="258" fill="#a78bfa" font-size="12" text-anchor="middle" font-family="JetBrains Mono">q̃ = Σ_K⁻¹ U_Kᵀ q</text>
+        <text x="560" y="277" fill="var(--muted)" font-size="10" text-anchor="middle">Projection requête</text>
+
+        <!-- RSV final -->
+        <line x1="390" y1="292" x2="390" y2="320" stroke="#7bc496" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="560" y1="292" x2="520" y2="320" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arr)"/>
+        <rect x="348" y="322" width="195" height="35" rx="5" fill="rgba(201,168,76,.1)" stroke="var(--gold)" stroke-width="1.5"/>
+        <text x="445" y="344" fill="var(--gold)" font-size="13" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">RSV = cos(d̃_j, q̃)</text>
+
+        <!-- Step labels gauche -->
+        <text x="12" y="15" fill="var(--muted)" font-size="10" font-family="JetBrains Mono">①</text>
+        <text x="200" y="15" fill="var(--muted)" font-size="10" font-family="JetBrains Mono">②</text>
+        <text x="394" y="8" fill="var(--muted)" font-size="10" font-family="JetBrains Mono">③ Clé LSI</text>
+      </svg>
+    </div>
+
+    <h3>Construction formelle de l'embedding</h3>
+    <p>L'objectif est de trouver $\tilde{W} \in \mathbb{R}^{M \times K}$ tel que $\tilde{W}\tilde{W}^T = I_K$ (termes décorrélés).</p>
+
+    <p>Partant de $W_K = U_K \Sigma_K V_K^T$, on calcule :</p>
+    <div class="mblock">
+      $$W_K W_K^T = U_K \Sigma_K V_K^T V_K \Sigma_K^T U_K^T = U_K \Sigma_K^2 U_K^T$$
+      $$\Rightarrow \quad \Sigma_K^{-1} U_K^T \cdot W_K W_K^T \cdot U_K \Sigma_K^{-1} = I_K$$
+    </div>
+
+    <p>On définit donc le nouvel embedding de chaque document $d_j$ comme :</p>
+    <div class="mblock">
+      <div class="mlabel">Embedding LSI d'un document</div>
+      $$\tilde{d}_j = \Sigma_K^{-1} U_K^T \, d_j \in \mathbb{R}^K$$
+    </div>
+    <p>Dans cet espace, on vérifie bien que $\tilde{W}\tilde{W}^T = I_K$ : les termes sont décorrélés.</p>
+
+    <h3>Interprétation des composantes</h3>
+    <div class="twrap">
+      <table>
+        <thead>
+          <tr><th>Composante</th><th>Dimension</th><th>Rôle</th><th>Interprétation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--green)">$U_K$</strong></td>
+            <td class="m">$M \times K$</td>
+            <td>Vecteurs de termes</td>
+            <td>Colonnes = directions des concepts dans l'espace des termes. $U_{K,i\cdot}$ = coordonnées du terme $i$ dans l'espace des concepts.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--gold)">$\Sigma_K$</strong></td>
+            <td class="m">$K \times K$</td>
+            <td>Valeurs singulières</td>
+            <td>$\sigma_k$ = force/importance du $k$-ième concept dans la collection. Décroissante : $\sigma_1 \geq \sigma_2 \geq \ldots$</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--violet)">$V_K^T$</strong></td>
+            <td class="m">$K \times N$</td>
+            <td>Vecteurs de documents</td>
+            <td>Colonnes = coordonnées des documents dans l'espace des concepts. $V_{K,j\cdot}$ = représentation du document $j$.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Choix du rang $K$</h3>
+    <p>Le paramètre $K$ est crucial. En pratique :</p>
+    <ul>
+      <li><strong>$K$ trop petit :</strong> trop de compression, perte d'information sémantique importante, concepts trop "grossiers"</li>
+      <li><strong>$K$ trop grand :</strong> on approche l'espace TF-IDF original avec ses problèmes de synonymie/polysémie. Aussi, le coût computationnel augmente.</li>
+      <li><strong>Règle pratique :</strong> observer le graphe des $\sigma_k$ et choisir $K$ au <em>coude</em> de la courbe (elbow criterion). Des valeurs typiques pour des collections textuelles sont entre 100 et 300.</li>
+    </ul>
+
+    <div class="box info">
+      <div class="box-title">📊 Elbow criterion</div>
+      <p>Si $\sigma_k$ décroît rapidement jusqu'à $k = K^*$ puis se stabilise à une valeur faible, cela indique que les $K^*$ premiers concepts capturent l'essentiel de la variance. Formellement, on cherche le $K$ tel que $\frac{\sum_{k=1}^K \sigma_k^2}{\sum_{k=1}^{\min(M,N)} \sigma_k^2} \geq \tau$ (typiquement $\tau = 0.9$).</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §7 REQUÊTES ──────────────────── -->
+  <section class="sec" id="s7">
+    <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Interrogation en espace LSI</h2></div>
+
+    <h3>Le paradigme Query-by-Example (QbE)</h3>
+    <p>La requête est traitée exactement <strong>comme un document</strong>. C'est le paradigme <em>Query-by-Example</em> : la requête est un "document exemple" de ce que l'on cherche. Elle utilise la même chaîne de transformation.</p>
+
+    <h3>Étapes de traitement d'une requête</h3>
+    <ol>
+      <li><strong>Représentation TF-IDF :</strong> Construire le vecteur $q \in \mathbb{R}^M$ en appliquant le même schéma TF-IDF (avec la même IDF calculée sur la collection). Les poids $w_{iq}$ expriment l'importance de chaque terme de la requête.</li>
+      <li><strong>Projection dans l'espace LSI :</strong> Calculer $\tilde{q} = \Sigma_K^{-1} U_K^T q \in \mathbb{R}^K$. Cette projection utilise les colonnes de $U_K$ (les concepts) comme référentiel.</li>
+      <li><strong>Calcul du RSV :</strong> Comparer $\tilde{q}$ à chaque $\tilde{d}_j$ par similarité cosinus dans $\mathbb{R}^K$.</li>
+    </ol>
+
+    <div class="mblock">
+      <div class="mlabel">Retrieval Status Value en espace LSI</div>
+      $$\tilde{q} = \Sigma_K^{-1} U_K^T q$$
+      $$\text{RSV}(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\| \|\tilde{q}\|} = \cos\!\bigl(\angle(\tilde{d}_j, \tilde{q})\bigr)$$
+    </div>
+
+    <h3>Pourquoi la projection $\Sigma_K^{-1} U_K^T$ ?</h3>
+    <div class="box vio">
+      <div class="box-title">🔬 Dérivation formelle</div>
+      <p>On veut projeter $q$ dans le même espace que les $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$. La matrice $U_K$ fournit la base des concepts : $U_K^T q$ donne les coordonnées de $q$ selon chaque concept. La division par $\Sigma_K$ normalise par l'importance de chaque concept, de sorte que les dimensions les moins importantes (petits $\sigma_k$) ne dominent pas artificiellement.</p>
+    </div>
+
+    <h3>Avantages concrets de la LSI pour les requêtes</h3>
+    <div class="split">
+      <div class="split-card ok">
+        <h4>✓ Synonymie résolue</h4>
+        <ul>
+          <li>Requête : « automobile »</li>
+          <li>Document : « voiture »</li>
+          <li>Dans LSI, les deux termes projettent sur le même concept → similarité élevée</li>
+          <li>Impossible avec TF-IDF standard</li>
+        </ul>
+      </div>
+      <div class="split-card ok">
+        <h4>✓ Généralisation sémantique</h4>
+        <ul>
+          <li>Requête : « CERN Genève » → concept "physique des particules"</li>
+          <li>Un document sans "CERN" ni "Genève" mais traitant du même sujet peut être retrouvé</li>
+          <li>Meilleur rappel (<em>recall</em>)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Exemple numérique simplifié</h3>
+    <div class="box">
+      <div class="box-title">💡 Exemple — 3 termes, K=2</div>
+      <p>Soit $M=3$ termes (A, B, C), $K=2$ concepts. Après SVD :</p>
+      $$U_K = \begin{pmatrix} 0.8 & 0.1 \\ 0.7 & -0.2 \\ 0.1 & 0.9 \end{pmatrix}, \quad \Sigma_K = \begin{pmatrix} 5 & 0 \\ 0 & 2 \end{pmatrix}$$
+      <p style="margin-top:.6rem">Requête $q = (1, 0, 0)^T$ (terme A seulement) :</p>
+      $$\tilde{q} = \Sigma_K^{-1} U_K^T q = \begin{pmatrix} 0.2 & 0 \\ 0 & 0.5 \end{pmatrix} \begin{pmatrix} 0.8 \\ 0.1 \end{pmatrix} = \begin{pmatrix} 0.16 \\ 0.05 \end{pmatrix}$$
+      <p style="margin-top:.6rem">Un document contenant surtout B (synonyme de A) aura un $\tilde{d}_j$ proche de $\tilde{q}$ car B a aussi une forte coordonnée sur le concept 1.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §8 MISE À JOUR ──────────────────── -->
+  <section class="sec" id="s8">
+    <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Mise à jour dynamique de l'index</h2></div>
+
+    <h3>Problème</h3>
+    <p>L'espace des concepts est calculé sur la collection initiale de $N$ documents. Or les collections réelles sont <strong>dynamiques</strong> : de nouveaux documents arrivent. Recalculer la SVD entière est coûteux ($\mathcal{O}(MNK)$). Deux stratégies existent :</p>
+
+    <h3>Stratégie exacte (Exact Update Strategy)</h3>
+    <p>Ajouter $n$ nouveaux documents représentés par la matrice $D \in \mathbb{R}^{M \times n}$ :</p>
+
+    <div class="box">
+      <div class="box-title">🔧 Algorithme — mise à jour exacte</div>
+      <ol>
+        <li>Générer $D$ (représentation TF-IDF des nouveaux documents)</li>
+        <li>Projeter sur la base existante : $P = U_K^T D$, calculer le reste $H = D - U_K P$</li>
+        <li>Calculer une base orthonormale $B$ de $H$ ; projeter : $J = B^T H$</li>
+        <li>Former la matrice augmentée $Q = \begin{pmatrix} \Sigma_K & P \\ 0 & J \end{pmatrix}$ et calculer sa SVD : $Q = U_n \Sigma_n V_n^T$</li>
+        <li>La nouvelle décomposition est : $[U_K \; B] \, U_n \, \Sigma_n \begin{pmatrix} V_K & 0 \\ 0 & I \end{pmatrix} = [W_K \; D]$</li>
+      </ol>
+    </div>
+
+    <p>Cette stratégie <strong>recalcule exactement</strong> ce qui change, en exploitant la structure existante. Elle est plus efficace qu'une SVD from scratch mais reste coûteuse pour de grandes mises à jour fréquentes.</p>
+
+    <h3>Stratégie de repliement (Fold-in Strategy)</h3>
+    <p>Approche plus simple et plus rapide :</p>
+
+    <div class="box ok">
+      <div class="box-title">🔧 Algorithme — fold-in</div>
+      <ol>
+        <li>Générer $D$ (représentation TF-IDF des nouveaux documents)</li>
+        <li>Projeter sur la base de concepts existante : $\hat{D} = U_K^T D$</li>
+        <li>Concaténer aux vecteurs documents existants : $[W_K \; D] \approx U_K \Sigma_K [V_K \; \hat{D}]^T$</li>
+      </ol>
+    </div>
+
+    <div class="box warn">
+      <div class="box-title">⚠ Limitation du fold-in</div>
+      <p>La stratégie fold-in est une <strong>approximation</strong> : elle suppose que les nouveaux documents peuvent être représentés dans l'espace de concepts existant, sans l'enrichir. Si les nouveaux documents introduisent de nouvelles thématiques, elles ne seront pas capturées. L'espace conceptuel ne s'adapte pas — à terme, une recomputation complète est nécessaire.</p>
+    </div>
+
+    <div class="twrap">
+      <table>
+        <thead>
+          <tr><th>Stratégie</th><th>Qualité</th><th>Complexité</th><th>Usage recommandé</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Exacte</strong></td>
+            <td class="g">Exacte (optimale)</td>
+            <td class="m">$\mathcal{O}(K^2(n+K))$</td>
+            <td>Mises à jour peu fréquentes, collection stable</td>
+          </tr>
+          <tr>
+            <td><strong>Fold-in</strong></td>
+            <td class="r">Approximation</td>
+            <td class="g">$\mathcal{O}(MKn)$</td>
+            <td>Flux continus, nouvelles thématiques proches des existantes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §9 FORMULES ──────────────────── -->
+  <section class="sec" id="s9">
+    <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Formules importantes</h2></div>
+    <div class="fcards">
+
+      <div class="fc">
+        <div class="fc-head">
+          <span class="fc-name">SVD tronquée</span>
+          <span class="fc-tag">Algèbre linéaire</span>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$W_K = U_K \Sigma_K V_K^T$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$W \in \mathbb{R}^{M \times N}$ : matrice TF-IDF ; $U_K \in \mathbb{R}^{M \times K}$ : vecteurs de termes ; $\Sigma_K \in \mathbb{R}^{K \times K}$ diagonale ; $V_K \in \mathbb{R}^{N \times K}$ : vecteurs de documents</p></div>
+            <div class="fc-item"><h5>Intuition</h5><p>Décomposer W en 3 matrices dont l'une capture les directions de variance maximale (concepts). La troncature à rang $K$ élimine le bruit.</p></div>
+            <div class="fc-item"><h5>Propriété clé</h5><p>Approximation de rang $K$ optimale au sens de Frobenius : $\|W - W_K\|_F^2 = \sum_{k=K+1}^{\min(M,N)} \sigma_k^2$</p></div>
+            <div class="fc-item"><h5>Orthogonalité</h5><p>$U_K^T U_K = I_K$ et $V_K^T V_K = I_K$ — les colonnes sont orthonormales.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head">
+          <span class="fc-name">Condition de décorrélation</span>
+          <span class="fc-tag">Propriété LSI</span>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$\Sigma_K^{-1} U_K^T \cdot W_K W_K^T \cdot U_K \Sigma_K^{-1} = I_K$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Signification</h5><p>Dans l'espace LSI (après transformation par $\Sigma_K^{-1} U_K^T$), la matrice de corrélation des termes est l'identité : les termes sont orthogonaux.</p></div>
+            <div class="fc-item"><h5>Conséquence</h5><p>Les synonymes, dont les embeddings TF-IDF covarient fortement, sont maintenant représentés par des coordonnées similaires sur les axes conceptuels.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head">
+          <span class="fc-name">Embedding LSI d'un document / requête</span>
+          <span class="fc-tag">Projection</span>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K \qquad \tilde{q} = \Sigma_K^{-1} U_K^T q \in \mathbb{R}^K$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Intuition</h5><p>$U_K^T$ projette dans l'espace des concepts ; $\Sigma_K^{-1}$ normalise chaque dimension par l'importance du concept correspondant.</p></div>
+            <div class="fc-item"><h5>Note</h5><p>La même transformation s'applique aux documents (offline) et aux requêtes (online) — symétrie QbE.</p></div>
+            <div class="fc-item"><h5>Dimension</h5><p>$d_j \in \mathbb{R}^M$ (grand, épars) $\rightarrow$ $\tilde{d}_j \in \mathbb{R}^K$ (petit, dense). Réduction massive pour $K \ll M$.</p></div>
+            <div class="fc-item"><h5>Exemple</h5><p>$M = 50\,000$ termes, $K = 200$ concepts → réduction $\times 250$ de la dimensionnalité.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head">
+          <span class="fc-name">RSV en espace LSI — Cosine Similarity</span>
+          <span class="fc-tag">Retrieval</span>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$\text{RSV}(d_j, q) = \cos\!\bigl(\angle(\tilde{d}_j, \tilde{q})\bigr) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\| \cdot \|\tilde{q}\|}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Interprétation</h5><p>Mesure l'angle entre les représentations conceptuelles du document et de la requête. Indépendant de la longueur des documents.</p></div>
+            <div class="fc-item"><h5>Valeurs</h5><p>$\text{RSV} \in [-1, 1]$ (mais en pratique $[0,1]$ car les poids TF-IDF $\geq 0$). Plus proche de 1 = plus pertinent.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────── §10 COMPARAISON ──────────────────── -->
+  <section class="sec" id="s10">
+    <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Comparaison des approches</h2></div>
+
+    <div class="twrap">
+      <table>
+        <thead>
+          <tr><th>Modèle</th><th>Représentation</th><th>RSV</th><th>Forces</th><th>Limites</th><th>Complexité</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Boolean</strong></td>
+            <td class="m">Binaire $\{0,1\}^M$</td>
+            <td class="m">$\{0,1\}$ — tout ou rien</td>
+            <td class="g">Simple, exact, SQL-like</td>
+            <td class="r">Pas de ranking, inflexible, pas scalable</td>
+            <td class="m">$\mathcal{O}(MN)$</td>
+          </tr>
+          <tr>
+            <td><strong>TF-IDF / VSM</strong></td>
+            <td class="m">Réel $\mathbb{R}^M$, épars</td>
+            <td class="m">Cosinus dans $\mathbb{R}^M$</td>
+            <td class="g">Ranking continu, fréquences, discriminativité</td>
+            <td class="r">Synonymie/polysémie, haute dimension</td>
+            <td class="m">$\mathcal{O}(MN)$</td>
+          </tr>
+          <tr>
+            <td><strong>BIR / BM25</strong></td>
+            <td class="m">Réel $\mathbb{R}^M$, épars</td>
+            <td class="m">Log odds ratio</td>
+            <td class="g">Fondement probabiliste, normalisation longueur</td>
+            <td class="r">Synonymie non gérée, paramètres à tuner</td>
+            <td class="m">$\mathcal{O}(MN)$</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--gold)">LSI</strong></td>
+            <td class="v">Dense $\mathbb{R}^K$, $K \ll M$</td>
+            <td class="m">Cosinus dans $\mathbb{R}^K$</td>
+            <td class="g">Synonymie ✓, réduction dimensionnelle, décorrélation</td>
+            <td class="r">SVD coûteuse (offline), $K$ à choisir, mise à jour difficile, pas de probabilisme</td>
+            <td class="m">$\mathcal{O}(MNK)$ offline</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--violet)">Neural Emb.</strong></td>
+            <td class="v">Dense $\mathbb{R}^d$, $d$ petit</td>
+            <td class="m">Cosinus / dot product</td>
+            <td class="g">Non-linéaire, contexte, state-of-the-art</td>
+            <td class="r">Boîte noire, très coûteux en entraînement</td>
+            <td class="m">Très élevée</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box">
+      <div class="box-title">🔑 LSI vs Neural Embeddings</div>
+      <p>La LSI est un modèle <strong>linéaire</strong> (la SVD est une transformation linéaire). Les embeddings neuronaux (Word2Vec, GloVe, BERT) permettent des transformations <strong>non-linéaires</strong> et capturent des similarités contextuelles bien plus fines. La LSI reste conceptuellement importante comme fondation et est toujours utilisée dans des systèmes légers ou interprétables.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §11 RELATIONS ──────────────────── -->
+  <section class="sec" id="s11">
+    <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Relations entre les concepts</h2></div>
+
+    <div class="diag">
+      <svg viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;width:100%">
+        <defs>
+          <marker id="arr2" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+            <polygon points="0 0, 7 2.5, 0 5" fill="var(--gold)"/>
+          </marker>
+          <marker id="arr3" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+            <polygon points="0 0, 7 2.5, 0 5" fill="#a78bfa"/>
+          </marker>
+        </defs>
+
+        <!-- Documents bruts -->
+        <rect x="300" y="10" width="160" height="45" rx="6" fill="var(--bg-code)" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="380" y="37" fill="var(--text)" font-size="13" text-anchor="middle" font-family="Cormorant Garamond">Texte brut (Documents)</text>
+
+        <line x1="380" y1="55" x2="250" y2="95" stroke="var(--gold)" stroke-width="1.2" marker-end="url(#arr2)" stroke-dasharray="5,3"/>
+        <line x1="380" y1="55" x2="510" y2="95" stroke="var(--gold)" stroke-width="1.2" marker-end="url(#arr2)" stroke-dasharray="5,3"/>
+
+        <!-- Boolean -->
+        <rect x="140" y="98" width="130" height="45" rx="6" fill="var(--bg-code)" stroke="rgba(224,123,123,.4)" stroke-width="1.5"/>
+        <text x="205" y="118" fill="#e07b7b" font-size="12" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">Boolean Model</text>
+        <text x="205" y="133" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">Binary ∈ {0,1}ᴹ</text>
+
+        <!-- BoW/TF-IDF -->
+        <rect x="420" y="98" width="145" height="45" rx="6" fill="var(--bg-code)" stroke="rgba(201,168,76,.5)" stroke-width="1.5"/>
+        <text x="492" y="118" fill="var(--glight)" font-size="12" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">TF-IDF / BoW</text>
+        <text x="492" y="133" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">Continuous ∈ ℝᴹ</text>
+
+        <!-- Flèches depuis TF-IDF -->
+        <line x1="492" y1="143" x2="350" y2="183" stroke="var(--gold)" stroke-width="1.2" marker-end="url(#arr2)"/>
+        <line x1="492" y1="143" x2="510" y2="183" stroke="var(--gold)" stroke-width="1.2" marker-end="url(#arr2)"/>
+        <line x1="492" y1="143" x2="665" y2="183" stroke="var(--gold)" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+        <!-- VSM -->
+        <rect x="270" y="186" width="140" height="45" rx="6" fill="var(--bg-code)" stroke="rgba(126,184,212,.4)" stroke-width="1.5"/>
+        <text x="340" y="206" fill="#7eb8d4" font-size="12" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">Vector Space Model</text>
+        <text x="340" y="221" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">Cosine similarity</text>
+
+        <!-- BM25 -->
+        <rect x="428" y="186" width="140" height="45" rx="6" fill="var(--bg-code)" stroke="rgba(123,196,150,.4)" stroke-width="1.5"/>
+        <text x="498" y="206" fill="#7bc496" font-size="12" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">BIR / BM25</text>
+        <text x="498" y="221" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">Probabilistic</text>
+
+        <!-- LSI — CENTRAL -->
+        <rect x="587" y="186" width="148" height="45" rx="6" fill="rgba(201,168,76,.1)" stroke="var(--gold)" stroke-width="2"/>
+        <text x="661" y="206" fill="var(--gold)" font-size="13" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">LSI</text>
+        <text x="661" y="221" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">SVD → K-dim</text>
+
+        <!-- LSI → Neural -->
+        <line x1="661" y1="231" x2="661" y2="265" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr3)"/>
+        <rect x="587" y="268" width="148" height="35" rx="6" fill="rgba(167,139,250,.08)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="661" y="291" fill="#a78bfa" font-size="12" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700">Neural Embeddings</text>
+
+        <!-- Labels connexions -->
+        <text x="310" y="176" fill="var(--muted)" font-size="10" font-family="JetBrains Mono">améliore →</text>
+        <text x="590" y="176" fill="var(--muted)" font-size="10" font-family="JetBrains Mono">→ décorrèle</text>
+        <text x="585" y="255" fill="#a78bfa" font-size="10" font-family="JetBrains Mono">inspire (non-linéaire)</text>
+
+        <!-- Note SVD -->
+        <rect x="20" y="186" width="220" height="55" rx="6" fill="var(--bg-code)" stroke="var(--border)" stroke-width="1"/>
+        <text x="130" y="205" fill="var(--muted)" font-size="11" text-anchor="middle" font-family="Cormorant Garamond">SVD = outil mathématique</text>
+        <text x="130" y="222" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">W = U Σ Vᵀ</text>
+        <text x="130" y="235" fill="var(--muted)" font-size="10" text-anchor="middle">Eckart-Young (1936)</text>
+        <line x1="240" y1="210" x2="272" y2="210" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
+      </svg>
+    </div>
+
+    <p>La LSI occupe une position charnière : elle prend la représentation TF-IDF dense et l'exploite via la SVD pour révéler les concepts latents linéaires. Elle est conceptuellement la précurseure directe des embeddings neuronaux (Word2Vec, GloVe, BERT), qui accomplissent la même chose avec des transformations non-linéaires et des données d'entraînement supervisées.</p>
+  </section>
+
+  <!-- ──────────────────── §12 HISTORIQUE ──────────────────── -->
+  <section class="sec" id="s12">
+    <div class="sec-hd"><span class="sec-num">12</span><h2 class="sec-title">Perspective historique</h2></div>
+
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-year">Années 1950–1960</div>
+        <div class="tl-title">Modèle booléen</div>
+        <div class="tl-desc">Premières bases de données documentaires. Requêtes logiques AND/OR/NOT. Simple et formel mais tout-ou-rien.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1972 — Karen Spärck Jones</div>
+        <div class="tl-title">IDF — Inverse Document Frequency</div>
+        <div class="tl-desc">Introduction du concept de fréquence inverse de document comme mesure de discriminativité. Fondation de TF-IDF.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1975 — Salton &amp; al.</div>
+        <div class="tl-title">Vector Space Model et TF-IDF</div>
+        <div class="tl-desc">Formalisation du modèle vectoriel. Les documents et requêtes sont des vecteurs dans $\mathbb{R}^M$. Similarité cosinus. Le SMART system.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1977 — Robertson</div>
+        <div class="tl-title">Probability Ranking Principle</div>
+        <div class="tl-desc">Fondation théorique des modèles probabilistes. Estime $P(R=\text{true}|d_j, q)$ pour ordonner les documents.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1988 — Deerwester et al.</div>
+        <div class="tl-title">Latent Semantic Indexing (LSI / LSA)</div>
+        <div class="tl-desc">Première application de la SVD à la matrice terme-document pour capturer la sémantique latente. Publication fondatrice dans JASIS 1990. Aussi connue sous le nom de <em>Latent Semantic Analysis (LSA)</em>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1994–2000 — OKAPI BM25</div>
+        <div class="tl-title">Robertson-Spärck-Jones (RSJ) → BM25</div>
+        <div class="tl-desc">Évolution probabiliste du BIR avec normalisation par la longueur des documents. Devient le standard de facto pendant 20 ans.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2003 — LDA</div>
+        <div class="tl-title">Latent Dirichlet Allocation</div>
+        <div class="tl-desc">Extension probabiliste de la LSI. Les concepts deviennent des distributions de probabilité sur les termes (topic modeling).</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2013 — Mikolov et al.</div>
+        <div class="tl-title">Word2Vec</div>
+        <div class="tl-desc">Embeddings neuronaux denses. Propriétés algébriques surprenantes : $\text{king} - \text{man} + \text{woman} \approx \text{queen}$. Héritier conceptuel de la LSI.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2018–présent</div>
+        <div class="tl-title">BERT, Dense Retrieval, Bi-Encoders</div>
+        <div class="tl-desc">Transformers produisent des embeddings contextuels denses. Dense Passage Retrieval (DPR), FAISS. La LSI reste un modèle de référence conceptuelle.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §13 LIENS MODERNES ──────────────────── -->
+  <section class="sec" id="s13">
+    <div class="sec-hd"><span class="sec-num">13</span><h2 class="sec-title">Liens avec les systèmes modernes</h2></div>
+
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ctag">Dense Retrieval</div>
+        <h4>LSI → Bi-Encoders</h4>
+        <p>La LSI est la première forme de <em>dense retrieval</em> : documents et requêtes dans un espace dense de faible dimension. Les bi-encoders (DPR, ColBERT) reprennent exactement ce paradigme avec des transformers.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Vector Databases</div>
+        <h4>Espace latent → FAISS / Pinecone</h4>
+        <p>Les vecteurs denses LSI ($\tilde{d}_j \in \mathbb{R}^K$) sont exactement ce que stockent les bases vectorielles modernes (FAISS, Pinecone, Qdrant) pour la recherche ANN.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Neural IR</div>
+        <h4>LSI linéaire → Neural non-linéaire</h4>
+        <p>Word2Vec, GloVe, FastText reprennent l'idée de décomposition matricielle de la LSI (PMI matrix factorization) mais avec des architectures non-linéaires.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">RAG</div>
+        <h4>Concept de projection</h4>
+        <p>Dans les pipelines RAG (Retrieval-Augmented Generation), la couche de retrieval utilise des embeddings denses (héritiers de LSI) pour retrouver les chunks pertinents avant génération par le LLM.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">LLMs</div>
+        <h4>Espace sémantique latent</h4>
+        <p>Les couches d'attention des transformers apprennent implicitement des "concepts" similaires à ceux de la LSI, mais dans des espaces de dimension $d_{\text{model}}$ et de manière contextuelle.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Hybrid Retrieval</div>
+        <h4>BM25 + Dense (LSI-inspired)</h4>
+        <p>Les systèmes hybrides modernes combinent BM25 (lexical) et dense retrieval (sémantique). Ce compromis résolve exactement les complémentarités identifiées entre VSM et LSI.</p>
+      </div>
+    </div>
+
+    <div class="box info">
+      <div class="box-title">📐 Connexion mathématique LSI ↔ Word2Vec</div>
+      <p>Levy &amp; Goldberg (2014) ont démontré que Word2Vec avec negative sampling est <em>implicitement</em> une factorisation de la matrice PMI (Pointwise Mutual Information) — une variante de la décomposition matricielle effectuée par la LSI. La LSI peut donc être vue comme un prédécesseur théorique direct des embeddings neuronaux.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §14 QUESTIONS ──────────────────── -->
+  <section class="sec" id="s14">
+    <div class="sec-hd"><span class="sec-num">14</span><h2 class="sec-title">Questions d'examen possibles</h2></div>
+
+    <span class="qlevel easy">● Faciles</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Qu'est-ce que la synonymie et pourquoi est-elle problématique pour TF-IDF ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        La synonymie désigne l'existence de termes différents avec le même sens (ex. « voiture » / « automobile »). Dans le modèle TF-IDF, chaque terme est représenté par un axe orthogonal : $\langle t_{\text{voiture}}, t_{\text{automobile}} \rangle = 0$. Un document sur les « voitures » ne peut donc pas répondre à une requête sur les « automobiles » — même si les deux sont sémantiquement équivalents. La LSI résout ce problème en projetant les deux termes sur le même concept latent, leur donnant des coordonnées similaires dans $\mathbb{R}^K$.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Comment le modèle LSI est-il construit à partir de TF-IDF ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        On part de la matrice terme-document TF-IDF $W \in \mathbb{R}^{M \times N}$. On applique la SVD tronquée : $W_K = U_K \Sigma_K V_K^T$ avec $K \ll \min(M,N)$. L'embedding LSI d'un document $d_j$ est alors $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$. Les colonnes de $U_K$ représentent les $K$ concepts latents ; $\Sigma_K$ encode leur importance ; $V_K$ encode les documents dans l'espace des concepts.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Comment répondre à une requête dans l'espace LSI ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        La requête $q$ est traitée comme un document (paradigme QbE). On calcule d'abord sa représentation TF-IDF $q \in \mathbb{R}^M$, puis on la projette dans l'espace des concepts : $\tilde{q} = \Sigma_K^{-1} U_K^T q$. Le RSV est ensuite calculé par similarité cosinus avec chaque document projeté : $\text{RSV}(d_j, q) = \langle \tilde{d}_j, \tilde{q} \rangle / (\|\tilde{d}_j\| \|\tilde{q}\|)$.
+      </div>
+    </div>
+
+    <span class="qlevel med">● Intermédiaires</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Qu'est-ce qu'un « Concept » dans le modèle LSI ? Comment est-il formellement défini ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        Un concept est un vecteur $c_k \in \mathbb{R}^M$ dans l'espace des termes, tel que l'ensemble $\{c_k\}_{k=1}^K$ soit une base orthonormale : $\langle c_k, c_l \rangle = \delta_{kl}$. Chaque terme $t_i$ se décompose comme $t_i = \sum_k \alpha_{ki} c_k$. Les concepts sont les colonnes de $U_K$ (vecteurs singuliers gauches) — ce sont les directions de variance maximale dans l'espace des termes (vecteurs propres de $WW^T$). Deux synonymes auront des coefficients $\alpha$ similaires car ils covarient dans les mêmes documents.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">En quel sens la LSI « décorrèle-t-elle » l'embedding TF-IDF ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        La décorrélation signifie que dans l'espace LSI, la matrice de Gram des embeddings de termes est l'identité : $\tilde{W}\tilde{W}^T = I_K$. Formellement, avec $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$, on démontre que $\Sigma_K^{-1} U_K^T \cdot W_K W_K^T \cdot U_K \Sigma_K^{-1} = I_K$. Cela provient du fait que $W_K W_K^T = U_K \Sigma_K^2 U_K^T$, et que $U_K^T U_K = I_K$. Dans cet espace transformé, les features (coordonnées selon les concepts) sont orthogonales — des synonymes corrélés dans TF-IDF deviennent proches dans la même direction.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Quel est le rôle de $\Sigma_K$ dans la projection $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$ ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        $U_K^T d_j$ projette $d_j$ dans la base des concepts — c'est une simple décomposition en coordonnées. La multiplication par $\Sigma_K^{-1}$ normalise chaque coordonnée par l'importance $\sigma_k$ du concept correspondant : les concepts forts (grand $\sigma_k$) voient leurs coordonnées divisées, empêchant qu'ils ne dominent artificiellement. Cette normalisation est ce qui garantit la propriété de décorrélation $\tilde{W}\tilde{W}^T = I_K$.
+      </div>
+    </div>
+
+    <span class="qlevel hard">● Difficiles</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Démontrez que la SVD tronquée donne la meilleure approximation de rang K de W. Quelle est l'erreur d'approximation ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        C'est le théorème d'Eckart-Young (1936). Si $W = U\Sigma V^T$ est la SVD, alors pour toute matrice $A$ de rang $K$ : $\|W - A\|_F^2 \geq \|W - W_K\|_F^2 = \sum_{k=K+1}^{\min(M,N)} \sigma_k^2$. La démonstration utilise le fait que $\|W\|_F^2 = \sum_k \sigma_k^2$ (invariance de la norme de Frobenius par transformation orthogonale) et que toute matrice de rang $K$ peut s'écrire comme combinaison de $K$ matrices de rang 1. L'approximation optimale est obtenue en gardant les $K$ composantes avec les plus grandes valeurs singulières.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Quelles sont les différences entre la stratégie de mise à jour exacte et le fold-in ? Quand choisir l'une ou l'autre ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        <strong>Exacte :</strong> recalcule la SVD en tenant compte du reste $H = D - U_K P$ (la partie des nouveaux documents non exprimable dans les concepts existants). Elle enrichit l'espace conceptuel et est optimale, mais coûteuse : $\mathcal{O}(K^2(n+K))$. À choisir pour des collections relativement stables avec des mises à jour périodiques importantes.
+        <br/><br/>
+        <strong>Fold-in :</strong> projette simplement les nouveaux documents dans l'espace existant ($\hat{D} = U_K^T D$) sans modifier $U_K$ ni $\Sigma_K$. C'est une approximation — si les nouveaux documents introduisent de nouvelles thématiques absentes de la collection initiale, elles ne seront pas capturées. Complexité : $\mathcal{O}(MKn)$, adapté aux flux continus de documents similaires aux existants.
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Comparez LSI et les embeddings neuronaux modernes (Word2Vec, BERT). Quelle est la connexion formelle ?</span>
+        <span class="qi-arr">▾</span>
+      </div>
+      <div class="qi-a">
+        Connexion formelle (Levy &amp; Goldberg, 2014) : Word2Vec avec negative sampling est équivalent à la factorisation de la matrice PMI (Pointwise Mutual Information), qui est une variante de la décomposition matricielle LSI.
+        <br/><br/>
+        <strong>LSI :</strong> transformation linéaire (SVD), pas de supervision, concepts globaux sur la collection, $K$ typiquement 100–300, rapide à calculer mais faible capturage du contexte.
+        <br/><br/>
+        <strong>BERT :</strong> transformations non-linéaires (attention multi-tête), supervision sur de grandes données, embeddings contextuels (le même mot peut avoir des représentations différentes selon le contexte), $d = 768$ ou 1024, très coûteux. BERT résout la polysémie que LSI ne peut traiter qu'approximativement.
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §15 PIÈGES ──────────────────── -->
+  <section class="sec" id="s15">
+    <div class="sec-hd"><span class="sec-num">15</span><h2 class="sec-title">Pièges classiques</h2></div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Confondre $U_K$, $\Sigma_K$ et $V_K^T$</strong> — $U_K$ contient les vecteurs de <em>termes</em> (M lignes = M termes) ; $V_K^T$ contient les vecteurs de <em>documents</em> (N colonnes = N documents). Ne pas les inverser.</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Croire que la LSI résout parfaitement la polysémie</strong> — la LSI donne un <em>unique</em> vecteur à chaque terme, donc elle ne peut pas représenter différents sens du même mot. BERT (contextuel) résout cela, pas LSI.</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Oublier le $\Sigma_K^{-1}$ dans la projection</strong> — l'embedding LSI est $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$, pas simplement $U_K^T d_j$. Sans $\Sigma_K^{-1}$, la propriété de décorrélation $\tilde{W}\tilde{W}^T = I_K$ n'est pas satisfaite.</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Confondre LSI (Latent Semantic Indexing) et LSA (Latent Semantic Analysis)</strong> — les deux termes désignent la même technique. LSI insiste sur l'aspect "indexation" (IR), LSA sur l'aspect "analyse" (NLP/psycholinguistique).</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Penser que le fold-in et la mise à jour exacte sont équivalents</strong> — le fold-in est une approximation. Il ne modifie pas l'espace de concepts ; les nouvelles thématiques ne sont pas capturées. La mise à jour exacte enrichit $U_K$.</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Confondre "optimale au sens de Frobenius" et "meilleure pour la recherche"</strong> — $W_K$ est l'approximation de rang $K$ minimisant $\|W - W_K\|_F^2$, mais cela ne garantit pas que c'est la meilleure représentation pour le ranking IR. C'est une approximation non supervisée ; BM25 avec feedback peut surpasser LSI.</div>
+    </div>
+
+    <div class="piege">
+      <span class="piege-icon">⚠</span>
+      <div class="piege-text"><strong>Penser que K=1 suffit</strong> — une seule dimension capture le "sujet dominant" mais écrase tous les autres thèmes. Un $K$ trop petit est pire que TF-IDF pour des collections thématiquement diverses.</div>
+    </div>
+  </section>
+
+  <!-- ──────────────────── §16 FICHE ──────────────────── -->
+  <section class="sec" id="s16">
+    <div class="sec-hd"><span class="sec-num">16</span><h2 class="sec-title">Fiche de révision finale</h2></div>
+
+    <div class="fiche-grid">
+      <div class="fc2">
+        <h4>🎯 Problèmes résolus</h4>
+        <ul>
+          <li><strong>Synonymie :</strong> termes différents, même sens</li>
+          <li><strong>Polysémie (partielle) :</strong> un terme = un concept dominant</li>
+          <li><strong>Haute dimensionnalité :</strong> $M \to K \ll M$</li>
+          <li><strong>Décorrélation :</strong> $\tilde{W}\tilde{W}^T = I_K$</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>🔧 Mécanisme clé</h4>
+        <ul>
+          <li>$W \in \mathbb{R}^{M \times N}$ → <strong>SVD tronquée</strong></li>
+          <li>$W_K = U_K \Sigma_K V_K^T$, rank-K optimal (Eckart-Young)</li>
+          <li>$U_K$ = directions des <strong>concepts</strong> dans espace termes</li>
+          <li>$\sigma_k$ = importance du concept $k$</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>📐 Formules à maîtriser</h4>
+        <ul>
+          <li>$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$ (embed. doc)</li>
+          <li>$\tilde{q} = \Sigma_K^{-1} U_K^T q$ (projection requête)</li>
+          <li>$\text{RSV} = \langle \tilde{d}_j, \tilde{q} \rangle / (\|\tilde{d}_j\|\|\tilde{q}\|)$</li>
+          <li>$\tilde{W}\tilde{W}^T = I_K$ (décorrélation)</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>⚖ Limites</h4>
+        <ul>
+          <li>SVD coûteuse : $\mathcal{O}(MNK)$ offline</li>
+          <li>Polysémie non complètement résolue</li>
+          <li>$K$ à choisir (elbow criterion)</li>
+          <li>Mise à jour de l'index difficile</li>
+          <li>Modèle linéaire → surpassé par BERT</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>🔄 Mise à jour de l'index</h4>
+        <ul>
+          <li><strong>Exacte :</strong> recalcule le reste $H$, enrichit $U_K$</li>
+          <li><strong>Fold-in :</strong> $\hat{D} = U_K^T D$ (approx.)</li>
+          <li>Fold-in = rapide mais ne découvre pas de nouveaux concepts</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>📅 Historique</h4>
+        <ul>
+          <li><strong>1988 :</strong> Deerwester et al. — LSI/LSA</li>
+          <li><strong>2003 :</strong> LDA (extension probabiliste)</li>
+          <li><strong>2013 :</strong> Word2Vec (non-linéaire)</li>
+          <li><strong>2018 :</strong> BERT (contextuel)</li>
+          <li>LSI = précurseur conceptuel des dense embeddings</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box vio" style="margin-top:2rem">
+      <div class="box-title">🧠 Les 5 points à retenir absolument</div>
+      <ol>
+        <li><strong>Motivation :</strong> TF-IDF traite les termes comme indépendants → synonymie et polysémie mal gérées.</li>
+        <li><strong>Concept :</strong> direction orthogonale dans $\mathbb{R}^M$ capturant un thème de cooccurrence de termes. Émergent de la SVD ($= $ colonnes de $U_K$).</li>
+        <li><strong>Embedding :</strong> $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$ — projection TF-IDF dans l'espace conceptuel $K$-dimensionnel décorrélé.</li>
+        <li><strong>Requête :</strong> même projection $\tilde{q} = \Sigma_K^{-1} U_K^T q$ (QbE), puis cosinus dans $\mathbb{R}^K$.</li>
+        <li><strong>Héritage :</strong> LSI = première forme de dense retrieval linéaire. Word2Vec/BERT = équivalents non-linéaires. Toujours pertinent conceptuellement.</li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggle(el){
+  const a = el.nextElementSibling;
+  const isOpen = a.classList.contains('open');
+  document.querySelectorAll('.qi-a.open').forEach(x=>{
+    x.classList.remove('open');
+    x.previousElementSibling.querySelector('.qi-arr').textContent='▾';
+  });
+  if(!isOpen){
+    a.classList.add('open');
+    el.querySelector('.qi-arr').textContent='▴';
+  }
+}
+
+// Highlight active sidebar link on scroll
+const secs = document.querySelectorAll('.sec');
+const links = document.querySelectorAll('.sb nav a');
+function onScroll(){
+  let cur='';
+  secs.forEach(s=>{
+    if(window.scrollY>=s.offsetTop-80) cur=s.id;
+  });
+  links.forEach(l=>{
+    l.classList.toggle('active', l.getAttribute('href')==='#'+cur);
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+</script>
+</body>
+</html>

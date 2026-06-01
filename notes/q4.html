@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.06 — Évaluation en Recherche d'Information · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:270px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.88rem;display:block;
+  padding:.35rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .3rem;opacity:.6}
+
+/* MAIN */
+.main{margin-left:270px;flex:1;padding:3rem 4rem;max-width:1020px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.6rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:620px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}td.v{color:var(--violet)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:800px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* DIAGRAM */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.15rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+/* CONFUSION MATRIX */
+.cmatrix{display:grid;grid-template-columns:auto 1fr 1fr;grid-template-rows:auto 1fr 1fr;
+  gap:3px;margin:1.4rem auto;max-width:520px}
+.cm-corner{background:transparent}
+.cm-header{background:var(--bg-code);padding:.6rem 1rem;text-align:center;font-family:var(--fm);
+  font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;border-radius:4px}
+.cm-row-header{background:var(--bg-code);padding:.6rem 1rem;text-align:center;font-family:var(--fm);
+  font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;border-radius:4px;
+  writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg)}
+.cm-tp{background:rgba(123,196,150,.18);border:1px solid rgba(123,196,150,.4);padding:1rem;
+  border-radius:4px;text-align:center}
+.cm-fn{background:rgba(224,123,123,.12);border:1px solid rgba(224,123,123,.3);padding:1rem;
+  border-radius:4px;text-align:center}
+.cm-fp{background:rgba(224,123,123,.12);border:1px solid rgba(224,123,123,.3);padding:1rem;
+  border-radius:4px;text-align:center}
+.cm-tn{background:rgba(126,184,212,.1);border:1px solid rgba(126,184,212,.25);padding:1rem;
+  border-radius:4px;text-align:center}
+.cm-label{font-family:var(--fm);font-size:.9rem;font-weight:600;display:block;margin-bottom:.3rem}
+.cm-desc{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+/* P-R DIAGRAM */
+.pr-diagram{position:relative;width:100%;max-width:500px;margin:1rem auto}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">IR · 06</div>
+  <div class="sb-sub">ÉVALUATION EN RI</div>
+  <nav>
+    <div class="sb-section">Sections</div>
+    <ul>
+      <li><a href="#s1"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#s2"><span class="n">02</span>Réponse d'oral</a></li>
+      <li><a href="#s3"><span class="n">03</span>Concepts approfondis</a></li>
+      <li><a href="#s4"><span class="n">04</span>Architecture & Pipelines</a></li>
+      <li><a href="#s5"><span class="n">05</span>Formules clés</a></li>
+      <li><a href="#s6"><span class="n">06</span>Comparaison</a></li>
+      <li><a href="#s7"><span class="n">07</span>Relations conceptuelles</a></li>
+      <li><a href="#s8"><span class="n">08</span>Perspective historique</a></li>
+      <li><a href="#s9"><span class="n">09</span>Systèmes modernes</a></li>
+      <li><a href="#s10"><span class="n">10</span>Questions d'examen</a></li>
+      <li><a href="#s11"><span class="n">11</span>Pièges classiques</a></li>
+      <li><a href="#s12"><span class="n">12</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">IR · Cours 06 · Université de Genève</div>
+  <h1>Évaluation en<br><em>Recherche d'Information</em></h1>
+  <p class="hero-desc">Mesures de performance, courbes P–R, courbe ROC, benchmarks et stratégies d'évaluation. Guide complet pour l'examen oral.</p>
+  <div class="badges">
+    <span class="badge">Précision &amp; Rappel</span>
+    <span class="badge">F-mesure</span>
+    <span class="badge b">Courbe P–R</span>
+    <span class="badge b">Courbe ROC · AUC</span>
+    <span class="badge g">mAP · R-Precision</span>
+    <span class="badge v">TREC · Benchmarks</span>
+  </div>
+</div>
+
+<!-- ─── SECTION 1 ─── -->
+<section class="sec" id="s1">
+  <div class="sec-hd">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">Résumé exécutif</h2>
+  </div>
+
+  <div class="box ok">
+    <div class="box-title">⚡ 30 secondes — L'essentiel</div>
+    <p>L'<strong>évaluation en RI</strong> (IR Evaluation) mesure la capacité d'un système à <em>retrouver les documents pertinents</em> et <em>seulement eux</em>. Le cadre formel repose sur un modèle de <strong>classification binaire</strong> (pertinent / non-pertinent) via la <em>matrice de confusion</em> (TP, FP, FN, TN). Les deux mesures fondamentales sont la <strong>Précision</strong> (<em>Precision</em>) et le <strong>Rappel</strong> (<em>Recall</em>), synthétisées dans la <strong>F-mesure</strong> et la <strong>courbe P–R</strong>. La <strong>courbe ROC</strong> (<em>Receiver Operating Characteristic</em>) offre une vue complémentaire indépendante du déséquilibre des classes. En pratique, l'évaluation à grande échelle s'appuie sur des <strong>benchmarks</strong> standardisés comme TREC, avec la technique du <strong>pooling</strong> pour pallier l'impossibilité de juger la collection entière.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 2 ─── -->
+<section class="sec" id="s2">
+  <div class="sec-hd">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">Réponse modèle d'oral</h2>
+  </div>
+
+  <div class="oral">
+    <p>L'évaluation d'un système de Recherche d'Information repose sur une question centrale : est-ce que le système retrouve tous les documents pertinents, et seulement eux ? Pour répondre à cette question, on utilise un modèle de classification binaire où chaque document est soit pertinent, soit non-pertinent pour une requête donnée. Cela donne lieu à quatre cas : les <em>vrais positifs</em> — documents pertinents bien récupérés —, les <em>faux positifs</em> — documents non-pertinents récupérés à tort —, les <em>faux négatifs</em> — documents pertinents manqués — et les <em>vrais négatifs</em> — documents non-pertinents correctement exclus.</p>
+
+    <p>De cette table de contingence émergent les deux mesures fondamentales. La <strong>Précision</strong> mesure la densité de pertinents parmi les documents retournés : $ P = TP / (TP + FP) $. Le <strong>Rappel</strong> mesure la complétude de la récupération : $ R = TP / (TP + FN) $. Ces deux mesures sont en tension structurelle : augmenter le rappel en récupérant plus de documents dégrade mécaniquement la précision, et vice versa. Il est donc nécessaire de les combiner.</p>
+
+    <p>La <strong>courbe P–R</strong> représente cette tension en traçant la précision en fonction du rappel, pour toutes les positions de la liste de résultats. Pour comparer des systèmes ou moyenner sur plusieurs requêtes, on utilise les <em>niveaux de rappel standard</em> et l'<strong>interpolation</strong>, qui prend le maximum de précision sur chaque intervalle. La <strong>mAP</strong> — précision moyenne sur 11 niveaux — synthétise toute la courbe en un scalaire. La <strong>R-Précision</strong> mesure la précision exactement à la position égale au nombre de documents pertinents.</p>
+
+    <p>Pour aller plus loin, la <strong>F-mesure</strong> de Rijsbergen offre une moyenne harmonique pondérée de P et R, avec un paramètre $ \beta $ qui contrôle l'importance relative de chacune. La <strong>courbe ROC</strong> trace le taux de vrais positifs contre le taux de faux positifs en faisant varier le seuil de décision — elle est équivalente à une courbe Rappel contre Fallout, et son <strong>AUC</strong> synthétise la performance globale.</p>
+
+    <p>En pratique, mesurer le rappel est difficile car on ne connaît jamais l'ensemble exhaustif des documents pertinents. Les <strong>benchmarks</strong> comme TREC résolvent ce problème via le <strong>pooling</strong> : on fusionne les top-N résultats de plusieurs systèmes et on fait juger ce pool par des humains. Cela introduit une approximation, mais permet des évaluations à grande échelle comparables et reproductibles.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 3 ─── -->
+<section class="sec" id="s3">
+  <div class="sec-hd">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">Concepts approfondis</h2>
+  </div>
+
+  <h3>Pourquoi évaluer ?</h3>
+  <p>L'évaluation est le moteur du progrès en RI. Sans mesure rigoureuse, il est impossible de savoir si un nouveau modèle est réellement meilleur qu'un autre. Les raisons sont multiples :</p>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Compétition</div>
+      <h4>Meilleur système</h4>
+      <p>Identifier le système le plus performant pour une tâche donnée parmi de nombreuses alternatives.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Ingénierie</div>
+      <h4>Évaluation de composants</h4>
+      <p>Mesurer l'impact isolé de chaque brique : indexation, pondération, modèle de requête, re-ranking.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Recherche</div>
+      <h4>Progrès scientifique</h4>
+      <p>Comprendre les problèmes, formuler des hypothèses, valider des innovations de manière reproductible.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Ecologie</div>
+      <h4>Tâches réalistes</h4>
+      <p>S'assurer que les mesures correspondent à de véritables besoins d'information dans des scénarios authentiques.</p>
+    </div>
+  </div>
+
+  <h3>La table de contingence — fondation de tout</h3>
+  <p>Tout système de RI peut être vu comme un <strong>classificateur binaire</strong> : pour chaque document, il décide s'il est pertinent (récupéré) ou non. Cela génère quatre situations fondamentales :</p>
+
+  <div class="cmatrix">
+    <div class="cm-corner"></div>
+    <div class="cm-header">Récupéré</div>
+    <div class="cm-header">Non récupéré</div>
+    <div class="cm-row-header">Pertinent</div>
+    <div class="cm-tp">
+      <span class="cm-label" style="color:var(--green)">TP</span>
+      <span class="cm-desc">True Positive<br>Pertinent & récupéré ✅</span>
+    </div>
+    <div class="cm-fn">
+      <span class="cm-label" style="color:var(--red)">FN</span>
+      <span class="cm-desc">False Negative<br>Pertinent mais manqué ❌</span>
+    </div>
+    <div class="cm-row-header">Non pertinent</div>
+    <div class="cm-fp">
+      <span class="cm-label" style="color:var(--red)">FP</span>
+      <span class="cm-desc">False Positive<br>Non-pertinent récupéré ❌</span>
+    </div>
+    <div class="cm-tn">
+      <span class="cm-label" style="color:var(--blue)">TN</span>
+      <span class="cm-desc">True Negative<br>Non-pertinent exclu ✅</span>
+    </div>
+  </div>
+
+  <div class="box info">
+    <div class="box-title">💡 Intuition visuelle</div>
+    <p>Imaginez deux ensembles : l'ellipse des <em>documents pertinents</em> et l'ellipse des <em>documents récupérés</em>. Leur intersection est le <strong>TP</strong>. Ce qui est dans le pertinent mais pas dans le récupéré est le <strong>FN</strong> (silence). Ce qui est dans le récupéré mais pas dans le pertinent est le <strong>FP</strong> (bruit). Ce qui est hors des deux est le <strong>TN</strong>.</p>
+  </div>
+
+  <h3>Précision (<em>Precision</em>)</h3>
+  <h4>Définition & intuition</h4>
+  <p>La précision mesure la <strong>pureté</strong> des résultats retournés : sur tous les documents récupérés, quelle fraction est réellement pertinente ? C'est la réponse à : <em>"Est-ce que ce que le système me donne est utile ?"</em></p>
+  <div class="mblock">
+    <div class="mlabel">Précision</div>
+    $$P = \frac{TP}{TP + FP} = \frac{\text{docs pertinents récupérés}}{\text{docs totaux récupérés}}$$
+  </div>
+  <p>Un <strong>$P = 1$</strong> signifie qu'aucun faux positif n'a été retourné — qualité parfaite. Une précision peut trivialement être maximale en ne retournant qu'un seul document très sûr (mais le rappel sera catastrophique).</p>
+
+  <h3>Rappel (<em>Recall</em>)</h3>
+  <h4>Définition & intuition</h4>
+  <p>Le rappel mesure la <strong>complétude</strong> de la récupération : sur tous les documents pertinents existant dans la collection, quelle fraction a été récupérée ? C'est la réponse à : <em>"Est-ce que le système ne rate rien d'important ?"</em></p>
+  <div class="mblock">
+    <div class="mlabel">Rappel</div>
+    $$R = \frac{TP}{TP + FN} = \frac{\text{docs pertinents récupérés}}{\text{total des docs pertinents}}$$
+  </div>
+  <p>Un <strong>$R = 1$</strong> signifie qu'aucun document pertinent n'a été manqué (FN = 0). Le rappel peut trivialement être maximal en récupérant toute la collection — mais la précision s'effondre.</p>
+
+  <div class="box warn">
+    <div class="box-title">⚠️ Tension fondamentale P–R</div>
+    <p><strong>Précision et rappel sont en tension structurelle.</strong> Plus on cherche à tout récupérer (↑ recall), plus on récupère du bruit (↓ precision). Et si on ne retourne que les résultats les plus sûrs (↑ precision), on rate des pertinents (↓ recall). Il n'existe pas de système trivial qui maximise les deux simultanément.</p>
+  </div>
+
+  <h3>La courbe P–R (<em>Precision-Recall Curve</em>)</h3>
+  <p>Puisqu'une seule valeur de P ou R ne suffit pas, on visualise le <em>comportement global</em> du système en traçant P en fonction de R pour toutes les positions de coupe possibles dans la liste de résultats.</p>
+  <h4>Construction pas à pas</h4>
+  <ol>
+    <li>Trier les résultats du système du plus au moins pertinent selon son score de similarité.</li>
+    <li>Parcourir la liste position par position $k = 1, 2, \ldots$</li>
+    <li>À chaque position $k$, calculer $P@k = TP_k / k$ et $R@k = TP_k / N_{\text{Rel}}$</li>
+    <li>Porter le point $(R@k, P@k)$ sur le graphique.</li>
+  </ol>
+  <div class="box info">
+    <div class="box-title">📊 Exemple numérique — Construction d'une courbe P–R</div>
+    <p>Collection avec 4 documents pertinents (D1, D4, D5, D6). Liste retournée : D4, D1, D3(NR), D6, D2(NR), D5.</p>
+    <div class="twrap" style="margin-top:.8rem">
+      <table>
+        <thead><tr><th>Position</th><th>Doc</th><th>Pertinent?</th><th>P@k</th><th>R@k</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>D4</td><td class="g">✅ R</td><td>1/1 = <strong>1.00</strong></td><td>1/4 = 0.25</td></tr>
+          <tr><td>2</td><td>D1</td><td class="g">✅ R</td><td>2/2 = <strong>1.00</strong></td><td>2/4 = 0.50</td></tr>
+          <tr><td>3</td><td>D3</td><td class="r">❌ NR</td><td>2/3 = 0.67</td><td>2/4 = 0.50</td></tr>
+          <tr><td>4</td><td>D6</td><td class="g">✅ R</td><td>3/4 = 0.75</td><td>3/4 = 0.75</td></tr>
+          <tr><td>5</td><td>D2</td><td class="r">❌ NR</td><td>3/5 = 0.60</td><td>3/4 = 0.75</td></tr>
+          <tr><td>6</td><td>D5</td><td class="g">✅ R</td><td>4/6 = <strong>0.67</strong></td><td>4/4 = <strong>1.00</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:.6rem">On observe la tendance naturelle : la précision <strong>baisse en général</strong> quand le rappel augmente, avec des remontées lors de la rencontre d'un document pertinent.</p>
+  </div>
+
+  <h3>Interpolation de la courbe P–R</h3>
+  <p>Pour comparer des systèmes sur les mêmes niveaux de rappel, on utilise des <strong>niveaux de rappel standard</strong> : $R_j \in \{0, 0.1, 0.2, \ldots, 1.0\}$. La précision interpolée est :</p>
+  <div class="mblock">
+    <div class="mlabel">Précision interpolée</div>
+    $$\hat{P}(R_j) = \max_{R_j \leq R \leq R_{j+1}} P(R)$$
+  </div>
+  <p>Intuition : on prend le <strong>maximum de précision atteignable</strong> pour tout rappel dans l'intervalle $[R_j, R_{j+1}]$. Cela "lisse" les chutes dues aux NR en regardant vers l'avant.</p>
+
+  <h3>Moyennage des courbes P–R</h3>
+  <p>Un seul test sur une requête est statistiquement peu fiable. On moyenne les courbes interpolées sur un grand ensemble de requêtes, donnant une mesure plus robuste. Deux stratégies existent :</p>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Stratégie</th><th>Mécanisme</th><th>Biais</th><th>Quand l'utiliser</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Micro-moyennage</strong><br><em>(Micro-averaging)</em></td>
+          <td>Fusionner tous les TP, FP, FN, TN de toutes les catégories en une seule table, puis calculer P et R</td>
+          <td class="v">Favorise les catégories fréquentes. Chaque document a le même poids.</td>
+          <td>Performance globale sur l'ensemble du corpus</td>
+        </tr>
+        <tr>
+          <td><strong>Macro-moyennage</strong><br><em>(Macro-averaging)</em></td>
+          <td>Calculer P et R pour chaque catégorie séparément, puis moyenner les courbes</td>
+          <td class="v">Chaque catégorie a le même poids, quelle que soit sa taille.</td>
+          <td>Évaluation équilibrée entre catégories, comparaison sur données déséquilibrées</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>F-mesure / E-mesure (<em>Rijsbergen, 1979</em>)</h3>
+  <p>La F-mesure combine P et R en <strong>une seule valeur</strong> via la <em>moyenne harmonique pondérée</em>. La moyenne harmonique est choisie car elle est très sensible aux valeurs basses — si l'une des deux mesures est mauvaise, la F-mesure reste mauvaise.</p>
+  <div class="mblock">
+    <div class="mlabel">F-mesure générale (E-mesure)</div>
+    $$F_\beta = \frac{(1+\beta^2) \cdot P \cdot R}{\beta^2 \cdot P + R}$$
+  </div>
+  <div class="mblock">
+    <div class="mlabel">F₁ — cas particulier β = 1</div>
+    $$F_1 = \frac{2PR}{P + R} = \frac{2}{\frac{1}{P} + \frac{1}{R}}$$
+  </div>
+  <p>Le paramètre $\beta$ est crucial : $\beta = 1$ équilibre P et R. $\beta > 1$ donne plus d'importance à la précision. $\beta < 1$ privilégie le rappel. <em>Attention :</em> la convention peut sembler contre-intuitive — vérifiez la formule avant l'oral.</p>
+
+  <h3>mAP — Précision Moyenne (<em>Mean Average Precision</em>)</h3>
+  <p>La <strong>mAP</strong> est la mesure la plus utilisée en RI pour évaluer un système sur plusieurs requêtes. C'est l'<strong>aire sous la courbe P–R interpolée</strong> :</p>
+  <div class="mblock">
+    <div class="mlabel">mAP</div>
+    $$\text{mAP} = \frac{1}{11} \sum_{j \in \{0, 0.1, \ldots, 1.0\}} \hat{P}(R_j)$$
+  </div>
+  <p>Une mAP = 1 indique un système parfait (P = 1 à tous les niveaux de rappel). La mAP est particulièrement populaire dans les compétitions TREC. Limitation : elle suppose que tous les niveaux de rappel sont également importants — ce qui est discutable en pratique (les utilisateurs regardent surtout le top-10).</p>
+
+  <h3>R-Précision (<em>R-Precision</em>)</h3>
+  <p>La R-Précision est la précision à la position $R$ dans la liste, où $R$ est le nombre total de documents pertinents pour la requête :</p>
+  <div class="mblock">
+    <div class="mlabel">R-Précision</div>
+    $$R\text{-Precision} = \frac{TP_{N_\text{Rel}}}{N_\text{Rel}}$$
+  </div>
+  <p>C'est un seul point sur la courbe P–R, facile à interpréter. Pour un système parfait, tous les pertinents sont dans les $R$ premiers résultats, donc $R\text{-Precision} = 1$. Dans le contexte MPEG-7, cette mesure est appelée <em>First-Tier</em>.</p>
+
+  <h3>Taux de dégradation (<em>Fallout Rate</em>)</h3>
+  <p>Le Fallout mesure la proportion de documents <em>non pertinents</em> qui ont été récupérés parmi tous les non-pertinents de la collection. C'est l'analogue du rappel pour la classe négative :</p>
+  <div class="mblock">
+    <div class="mlabel">Fallout</div>
+    $$\text{Fallout} = \frac{FP}{TN + FP}$$
+  </div>
+  <p>Un bon système a un Fallout faible. Notons que le Fallout est exactement le <strong>Taux de Faux Positifs (FPR)</strong> utilisé dans la courbe ROC.</p>
+
+  <h3>Généralité (<em>Generality</em>) — Rijsbergen 1979</h3>
+  <p>La généralité mesure la <strong>densité de pertinents dans la collection</strong> :</p>
+  <div class="mblock">
+    <div class="mlabel">Généralité</div>
+    $$G = \frac{TP + FN}{N}$$
+  </div>
+  <p>Elle relie P, R et Fallout : $P = \frac{R \cdot G}{(R \cdot G) + \text{Fallout} \cdot (1 - G)}$. Cela montre que la précision dépend non seulement de la qualité du système (R, Fallout) mais aussi des caractéristiques de la collection (G). Un même système peut avoir des précisions très différentes sur des collections de généralités différentes.</p>
+
+  <h3>Courbe ROC (<em>Receiver Operating Characteristic</em>)</h3>
+  <p>La courbe ROC est un outil général pour les classificateurs binaires, utilisé en RI mais aussi en médecine, bioinformatique, etc. Elle trace le <strong>Taux de Vrais Positifs (TPR = Recall = Sensibilité)</strong> contre le <strong>Taux de Faux Positifs (FPR = Fallout)</strong> en faisant varier le seuil de décision $T$.</p>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Métrique ROC</th><th>Formule</th><th>Équivalent RI</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sensibilité</strong> (TPR)</td><td>$TP / (TP + FN)$</td><td class="g">= Rappel !</td></tr>
+        <tr><td><strong>Spécificité</strong> (TNR)</td><td>$TN / (TN + FP)$</td><td class="m">Taux de vrais négatifs</td></tr>
+        <tr><td><strong>FPR</strong> (1 - Spécificité)</td><td>$FP / (TN + FP)$</td><td class="g">= Fallout !</td></tr>
+        <tr><td><strong>AUC</strong></td><td>Aire sous la courbe ROC</td><td class="v">Mesure synthétique globale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box info">
+    <div class="box-title">💡 Interprétation de l'AUC</div>
+    <p><strong>AUC = 1</strong> → système parfait (TPR = 1 pour tout FPR). <strong>AUC = 0.5</strong> → système aléatoire (courbe = diagonale). <strong>AUC &lt; 0.5</strong> → système pire que le hasard (courbe sous la diagonale). Plus la courbe se rapproche du coin supérieur gauche, meilleur est le système.</p>
+  </div>
+
+  <h3>Bull's Eye Percentage (BEP) — MPEG-7</h3>
+  <p>Mesure définie dans le standard MPEG-7 pour l'évaluation de la recherche par forme visuelle. Pour une requête avec $Q$ pertinents, le BEP compte les correspondances correctes dans les $2Q$ premiers résultats :</p>
+  <div class="mblock">
+    <div class="mlabel">BEP</div>
+    $$BEP = \frac{TP_{2Q}}{Q}$$
+  </div>
+  <p>Le BEP est plus indulgent que la R-Précision (First-Tier) car il regarde dans une fenêtre deux fois plus large. Dans MPEG-7, R-Précision = First-Tier, BEP = Second-Tier.</p>
+</section>
+
+<!-- ─── SECTION 4 ─── -->
+<section class="sec" id="s4">
+  <div class="sec-hd">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Architecture & Pipelines</h2>
+  </div>
+
+  <h3>Pipeline complet d'évaluation</h3>
+  <div class="diag">
+    <svg viewBox="0 0 780 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:780px">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- Box styles -->
+      <!-- Collection -->
+      <rect x="10" y="120" width="120" height="60" rx="6" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="70" y="145" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="13">Collection de</text>
+      <text x="70" y="163" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="13">documents</text>
+
+      <!-- Queries -->
+      <rect x="10" y="220" width="120" height="60" rx="6" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="70" y="245" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="13">Requêtes</text>
+      <text x="70" y="263" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">(queries)</text>
+
+      <!-- Ground Truth -->
+      <rect x="175" y="220" width="130" height="60" rx="6" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="240" y="245" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="13">Jugements de</text>
+      <text x="240" y="263" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="13">pertinence</text>
+
+      <!-- System -->
+      <rect x="175" y="100" width="130" height="80" rx="6" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="240" y="130" text-anchor="middle" fill="#c9a84c" font-family="EB Garamond" font-size="14">Système IR</text>
+      <text x="240" y="150" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">Indexation</text>
+      <text x="240" y="167" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">Modèle de rang</text>
+
+      <!-- Ranked Lists -->
+      <rect x="350" y="100" width="130" height="60" rx="6" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="415" y="125" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="13">Listes ordonnées</text>
+      <text x="415" y="143" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">(ranked lists)</text>
+
+      <!-- Marking -->
+      <rect x="350" y="200" width="130" height="60" rx="6" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="415" y="225" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="13">Annotation</text>
+      <text x="415" y="243" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">R / NR dans listes</text>
+
+      <!-- Measures -->
+      <rect x="530" y="100" width="130" height="180" rx="6" fill="#1c1828" stroke="#e07b7b" stroke-width="1.5"/>
+      <text x="595" y="128" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="14">Mesures</text>
+      <text x="595" y="150" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">P, R, F₁</text>
+      <text x="595" y="168" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">Courbe P–R</text>
+      <text x="595" y="186" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">mAP</text>
+      <text x="595" y="204" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">ROC / AUC</text>
+      <text x="595" y="222" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">R-Precision</text>
+      <text x="595" y="240" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">Fallout</text>
+      <text x="595" y="265" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="11">→ Comparaison</text>
+
+      <!-- Arrows -->
+      <line x1="130" y1="150" x2="173" y2="150" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="130" y1="250" x2="173" y2="250" stroke="#7eb8d4" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="70" y1="220" x2="70" y2="182" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="305" y1="140" x2="348" y2="140" stroke="#7bc496" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="415" y1="162" x2="415" y2="198" stroke="#7bc496" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="240" y1="220" x2="348" y2="240" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+      <line x1="480" y1="155" x2="528" y2="165" stroke="#e07b7b" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="480" y1="230" x2="528" y2="200" stroke="#e07b7b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Labels -->
+      <text x="152" y="130" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">index</text>
+      <text x="70" y="200" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">soumet</text>
+    </svg>
+  </div>
+
+  <h3>Construction de la vérité terrain (<em>Ground Truth</em>)</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <rect x="10" y="60" width="110" height="60" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="65" y="85" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="12">Définir</text>
+      <text x="65" y="103" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">requêtes types</text>
+
+      <rect x="160" y="60" width="120" height="60" rx="5" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="220" y="83" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="12">Collecter</text>
+      <text x="220" y="100" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">jugements humains</text>
+      <text x="220" y="115" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">(plusieurs juges)</text>
+
+      <rect x="330" y="60" width="120" height="60" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="390" y="83" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="12">Agréger</text>
+      <text x="390" y="100" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">résoudre conflits</text>
+      <text x="390" y="115" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">(vote, consensus)</text>
+
+      <rect x="500" y="60" width="130" height="60" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="565" y="83" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="12">Ground Truth</text>
+      <text x="565" y="100" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">$(q_i, d_j) \to \{R, NR\}$</text>
+      <text x="565" y="115" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">+ seuil de coupe</text>
+
+      <line x1="120" y1="90" x2="158" y2="90" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="280" y1="90" x2="328" y2="90" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="450" y1="90" x2="498" y2="90" stroke="#7eb8d4" stroke-width="1.5" marker-end="url(#arr2)"/>
+    </svg>
+  </div>
+
+  <h3>Comparaison Courbe P–R vs Courbe ROC</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px">
+      <!-- P-R Curve panel -->
+      <rect x="30" y="20" width="280" height="220" rx="6" fill="none" stroke="rgba(180,150,80,.2)" stroke-width="1"/>
+      <text x="170" y="15" text-anchor="middle" fill="#e8c97a" font-family="Cormorant Garamond" font-size="14" font-weight="600">Courbe P–R</text>
+      <!-- Axes -->
+      <line x1="60" y1="210" x2="60" y2="40" stroke="#9089bf" stroke-width="1"/>
+      <line x1="60" y1="210" x2="280" y2="210" stroke="#9089bf" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="170" y="235" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">Rappel (R)</text>
+      <text x="38" y="130" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11" transform="rotate(-90,38,130)">Précision (P)</text>
+      <!-- P=1 line (ideal top) -->
+      <line x1="60" y1="40" x2="280" y2="40" stroke="rgba(123,196,150,.25)" stroke-width="1" stroke-dasharray="4,3"/>
+      <!-- Ideal curve -->
+      <path d="M60,40 L260,40 L260,210" stroke="#7bc496" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <!-- Good system curve -->
+      <path d="M60,40 C100,42 140,55 170,90 C200,125 220,170 260,210" stroke="#c9a84c" stroke-width="2" fill="none"/>
+      <!-- Poor system curve -->
+      <path d="M60,80 C90,100 130,140 180,170 C210,188 240,200 260,210" stroke="#e07b7b" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+      <!-- Point annotations -->
+      <text x="270" y="55" fill="#7bc496" font-family="JetBrains Mono" font-size="9">Idéal</text>
+      <text x="200" y="115" fill="#c9a84c" font-family="JetBrains Mono" font-size="9">Bon</text>
+      <text x="210" y="170" fill="#e07b7b" font-family="JetBrains Mono" font-size="9">Faible</text>
+      <!-- Axis ticks -->
+      <text x="60" y="220" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">0</text>
+      <text x="260" y="220" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">1</text>
+      <text x="50" y="43" text-anchor="end" fill="#9089bf" font-family="JetBrains Mono" font-size="9">1</text>
+
+      <!-- ROC Curve panel -->
+      <rect x="390" y="20" width="280" height="220" rx="6" fill="none" stroke="rgba(126,184,212,.2)" stroke-width="1"/>
+      <text x="530" y="15" text-anchor="middle" fill="#7eb8d4" font-family="Cormorant Garamond" font-size="14" font-weight="600">Courbe ROC</text>
+      <!-- Axes -->
+      <line x1="420" y1="210" x2="420" y2="40" stroke="#9089bf" stroke-width="1"/>
+      <line x1="420" y1="210" x2="640" y2="210" stroke="#9089bf" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="530" y="235" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11">FPR (Fallout)</text>
+      <text x="398" y="130" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="11" transform="rotate(-90,398,130)">TPR (Rappel)</text>
+      <!-- Diagonal (random) -->
+      <line x1="420" y1="210" x2="640" y2="40" stroke="#e07b7b" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <!-- Excellent curve -->
+      <path d="M420,210 C440,80 470,45 640,40" stroke="#7bc496" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <!-- Good curve -->
+      <path d="M420,210 C460,130 500,70 640,40" stroke="#c9a84c" stroke-width="2" fill="none"/>
+      <!-- Annotations -->
+      <text x="475" y="55" fill="#7bc496" font-family="JetBrains Mono" font-size="9">Excellent</text>
+      <text x="510" y="100" fill="#c9a84c" font-family="JetBrains Mono" font-size="9">Bon</text>
+      <text x="540" y="150" fill="#e07b7b" font-family="JetBrains Mono" font-size="9">Aléatoire</text>
+      <!-- Ticks -->
+      <text x="420" y="220" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">0</text>
+      <text x="640" y="220" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">1</text>
+      <text x="410" y="43" text-anchor="end" fill="#9089bf" font-family="JetBrains Mono" font-size="9">1</text>
+    </svg>
+  </div>
+
+  <h3>La technique du Pooling (<em>TREC</em>)</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px">
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- Systems -->
+      <rect x="20" y="20" width="100" height="40" rx="4" fill="#1c1828" stroke="#c9a84c" stroke-width="1.2"/>
+      <text x="70" y="45" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="11">Système 1 → Top-N</text>
+      <rect x="20" y="75" width="100" height="40" rx="4" fill="#1c1828" stroke="#c9a84c" stroke-width="1.2"/>
+      <text x="70" y="100" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="11">Système 2 → Top-N</text>
+      <rect x="20" y="130" width="100" height="40" rx="4" fill="#1c1828" stroke="#c9a84c" stroke-width="1.2"/>
+      <text x="70" y="155" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="11">Système k → Top-N</text>
+      <text x="70" y="120" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="12">⋮</text>
+
+      <!-- Arrow to pool -->
+      <line x1="120" y1="40" x2="215" y2="95" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <line x1="120" y1="95" x2="215" y2="95" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <line x1="120" y1="150" x2="215" y2="95" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- Pool -->
+      <rect x="220" y="65" width="130" height="60" rx="5" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="285" y="88" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="13">Pool fusionné</text>
+      <text x="285" y="107" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">∪(Top-N de chaque sys.)</text>
+
+      <!-- Arrow to judging -->
+      <line x1="350" y1="95" x2="398" y2="95" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <!-- Human judgment -->
+      <rect x="403" y="65" width="130" height="60" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="468" y="88" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="13">Juges humains</text>
+      <text x="468" y="107" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">étiquettent R / NR</text>
+
+      <!-- Arrow to ground truth -->
+      <line x1="533" y1="95" x2="578" y2="95" stroke="#7eb8d4" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <!-- GT -->
+      <rect x="583" y="65" width="100" height="60" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="633" y="88" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="12">Ground Truth</text>
+      <text x="633" y="107" text-anchor="middle" fill="#9089bf" font-family="EB Garamond" font-size="10">approximée</text>
+    </svg>
+  </div>
+
+  <div class="box warn">
+    <div class="box-title">⚠️ Limite du Pooling</div>
+    <p>Les documents non inclus dans le pool sont supposés non-pertinents par défaut. Cela <strong>sous-estime</strong> les performances des systèmes qui retrouvent des pertinents hors du pool. Un système nouveau non participant à la construction du pool sera pénalisé.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 5 ─── -->
+<section class="sec" id="s5">
+  <div class="sec-hd">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">Formules importantes</h2>
+  </div>
+
+  <div class="fcards">
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Précision</span>
+        <span class="fc-tag">Fondamentale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$P = \frac{TP}{TP + FP}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>TP = pertinents récupérés · FP = non-pertinents récupérés</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Densité de pertinents dans les résultats. "Qualité" des résultats.</p></div>
+          <div class="fc-item"><h5>Intervalle</h5><p>$P \in [0, 1]$. Indéfinie si aucun doc récupéré (TP=FP=0).</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>10 docs retournés, 7 pertinents → $P = 7/10 = 0.7$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Rappel</span>
+        <span class="fc-tag">Fondamentale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$R = \frac{TP}{TP + FN}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>TP = pertinents récupérés · FN = pertinents manqués</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Proportion de pertinents trouvés. "Exhaustivité" de la récupération.</p></div>
+          <div class="fc-item"><h5>Intervalle</h5><p>$R \in [0, 1]$. Indéfini si aucun pertinent dans la collection.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>20 pertinents dans la collection, 15 récupérés → $R = 15/20 = 0.75$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">F-mesure (F₁)</span>
+        <span class="fc-tag">Synthétique · Rijsbergen 1979</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$F_1 = \frac{2PR}{P+R} = \frac{2}{\frac{1}{P}+\frac{1}{R}} \qquad F_\beta = \frac{(1+\beta^2)PR}{\beta^2 P + R}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$\beta$</h5><p>$\beta=1$: équilibre. $\beta>1$: précision plus importante. $\beta&lt;1$: rappel plus important.</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Moyenne harmonique de P et R. Pénalise fortement quand l'une des deux est faible.</p></div>
+          <div class="fc-item"><h5>Propriété clé</h5><p>$F_1 \leq \min(P, R)$ toujours. Si $P=0$ ou $R=0$, alors $F_1=0$.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>$P=0.8, R=0.6$ → $F_1 = 2 \times 0.8 \times 0.6 / (0.8+0.6) = 0.686$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Précision interpolée</span>
+        <span class="fc-tag">Courbes P–R</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\hat{P}(R_j) = \max_{R_j \leq R \leq R_{j+1}} P(R)$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Pourquoi ?</h5><p>Les points de la courbe P–R ne tombent pas aux mêmes valeurs de rappel pour tous les systèmes.</p></div>
+          <div class="fc-item"><h5>Mécanisme</h5><p>On prend le maximum de précision observé dans l'intervalle $[R_j, R_{j+1}]$ pour lisser les chutes.</p></div>
+          <div class="fc-item"><h5>Niveaux standard</h5><p>$R_j \in \{0, 0.1, 0.2, \ldots, 1.0\}$ — 11 niveaux au total.</p></div>
+          <div class="fc-item"><h5>Propriété</h5><p>La précision interpolée est toujours ≥ la précision brute au même niveau.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">mAP — Mean Average Precision</span>
+        <span class="fc-tag">Mesure globale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{mAP} = \frac{1}{11}\sum_{j=0,0.1,\ldots,1.0} \hat{P}(R_j)$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Interprétation</h5><p>Aire sous la courbe P–R interpolée aux 11 niveaux standard. mAP=1 = parfait.</p></div>
+          <div class="fc-item"><h5>Usage</h5><p>Mesure principale des campagnes TREC pour comparer des systèmes sur de nombreuses requêtes.</p></div>
+          <div class="fc-item"><h5>Limitation</h5><p>Suppose que tous les niveaux de rappel ont la même importance. Ne favorise pas les premiers résultats.</p></div>
+          <div class="fc-item"><h5>Alternative</h5><p>Precision@k (P@5, P@10) si on s'intéresse surtout aux premiers résultats (ex. moteurs web).</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Fallout &amp; Généralité</span>
+        <span class="fc-tag">Mesures complémentaires</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{Fallout} = \frac{FP}{TN+FP} \qquad G = \frac{TP+FN}{N} \qquad P = \frac{R \cdot G}{R \cdot G + \text{Fallout} \cdot (1-G)}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Fallout</h5><p>Proportion de non-pertinents récupérés parmi tous les non-pertinents. = FPR dans la courbe ROC.</p></div>
+          <div class="fc-item"><h5>Généralité G</h5><p>Densité de pertinents dans la collection. Indépendante du système, caractéristique de la collection.</p></div>
+          <div class="fc-item"><h5>Relation clé</h5><p>La précision dépend de G : même système, précision différente selon la richesse de la collection.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>Collection dense en pertinents (G=0.3) vs. sparse (G=0.01) → même R, Fallout mais P très différents.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Terminologie complémentaire</span>
+        <span class="fc-tag">Mesures dérivées</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">
+          $$\text{Accuracy} = \frac{TP+TN}{N} \quad \text{Silence} = 1 - R \quad \text{Noise} = \frac{FP}{TP+FP} \quad \text{Overlap} = \frac{TP}{FN+TP+FP}$$
+        </div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Accuracy</h5><p>Taux de documents bien classifiés. Trompeur si classes déséquilibrées.</p></div>
+          <div class="fc-item"><h5>Silence</h5><p>Fraction des pertinents manqués = 1 − Rappel. À minimiser.</p></div>
+          <div class="fc-item"><h5>Noise (Bruit)</h5><p>Fraction de non-pertinents dans les résultats = 1 − Précision. Taux de pollution.</p></div>
+          <div class="fc-item"><h5>Overlap</h5><p>Similarité de Jaccard entre les pertinents et les récupérés.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── SECTION 6 ─── -->
+<section class="sec" id="s6">
+  <div class="sec-hd">
+    <span class="sec-num">06</span>
+    <h2 class="sec-title">Comparaison des approches</h2>
+  </div>
+
+  <h3>Mesures de performance — Vue synthétique</h3>
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr><th>Mesure</th><th>Formule</th><th>Ce qu'elle capture</th><th>Forces</th><th>Limites</th><th>Usage typique</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Précision P</strong></td>
+          <td>$TP/(TP+FP)$</td>
+          <td>Pureté des résultats</td>
+          <td class="g">Intuitive. Mesurable sans connaître tous les pertinents.</td>
+          <td class="r">Ignore les FN. Triviale à maximiser (ne rien retourner).</td>
+          <td>Moteurs web, top-k</td>
+        </tr>
+        <tr>
+          <td><strong>Rappel R</strong></td>
+          <td>$TP/(TP+FN)$</td>
+          <td>Exhaustivité</td>
+          <td class="g">Mesure la complétude. Essentiel pour usage légal, médical.</td>
+          <td class="r">Difficile à mesurer (besoin de connaître tous les pertinents). Triviale (tout récupérer).</td>
+          <td>Veille, droit, médecine</td>
+        </tr>
+        <tr>
+          <td><strong>F₁</strong></td>
+          <td>$2PR/(P+R)$</td>
+          <td>Compromis équilibré</td>
+          <td class="g">Résume P et R en un scalaire. Pénalise les valeurs basses.</td>
+          <td class="r">Suppose égale importance de P et R. Ne capture pas le rang.</td>
+          <td>Classification, NLP</td>
+        </tr>
+        <tr>
+          <td><strong>mAP</strong></td>
+          <td>Aire sous courbe P–R</td>
+          <td>Performance sur toute la courbe</td>
+          <td class="g">Robuste. Standard TREC. Compare systèmes sur toutes les requêtes.</td>
+          <td class="r">Suppose importance égale de tous les niveaux de rappel.</td>
+          <td>TREC, IR académique</td>
+        </tr>
+        <tr>
+          <td><strong>R-Précision</strong></td>
+          <td>$TP_R / R$</td>
+          <td>Précision au rang R</td>
+          <td class="g">Simple. Un seul point. Agnostique à la taille de la collection.</td>
+          <td class="r">Un seul point de la courbe. Sensible au nombre de pertinents.</td>
+          <td>Évaluation ponctuelle</td>
+        </tr>
+        <tr>
+          <td><strong>Courbe ROC / AUC</strong></td>
+          <td>TPR vs FPR</td>
+          <td>Capacité de discrimination</td>
+          <td class="g">Indépendant du seuil T. Robuste aux déséquilibres. Standard en ML.</td>
+          <td class="r">Vision trop optimiste sur données très déséquilibrées. Moins utilisée en IR.</td>
+          <td>ML binaire, médecine</td>
+        </tr>
+        <tr>
+          <td><strong>Fallout</strong></td>
+          <td>$FP/(TN+FP)$</td>
+          <td>Contamination par NR</td>
+          <td class="g">Capture la densité de non-pertinents récupérés. Axe X de la courbe ROC.</td>
+          <td class="r">Nécessite de connaître tous les TN (difficile en RI).</td>
+          <td>ROC, RI classique</td>
+        </tr>
+        <tr>
+          <td><strong>BEP</strong></td>
+          <td>$TP_{2Q}/Q$</td>
+          <td>Précision fenêtre 2Q</td>
+          <td class="g">Plus indulgent que R-Précision. Standard MPEG-7.</td>
+          <td class="r">Spécifique à la recherche par contenu (MPEG-7). Fenêtre arbitraire.</td>
+          <td>Recherche d'images/formes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Courbe P–R vs Courbe ROC — Quand choisir ?</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Critère</th><th>Courbe P–R</th><th>Courbe ROC</th></tr></thead>
+      <tbody>
+        <tr><td>Axe X</td><td>Rappel (TPR)</td><td>FPR (= Fallout)</td></tr>
+        <tr><td>Axe Y</td><td>Précision</td><td>TPR (= Rappel)</td></tr>
+        <tr><td>Sensibilité au déséquilibre</td><td class="r">Forte — mieux révèle les prob. sur classes déséquilibrées</td><td class="g">Faible — plus optimiste sur données déséquilibrées</td></tr>
+        <tr><td>Mesure synthétique</td><td>mAP (aire sous courbe)</td><td>AUC (aire sous courbe)</td></tr>
+        <tr><td>Usage privilégié</td><td class="g">RI classique, NLP, detection</td><td class="g">ML binaire, bioinformatique, médecine</td></tr>
+        <tr><td>Système parfait</td><td>P=1 pour tout R (coin supérieur)</td><td>TPR=1, FPR=0 (coin supérieur gauche)</td></tr>
+        <tr><td>Système aléatoire</td><td>Ligne horizontale à hauteur G (généralité)</td><td>Diagonale y=x</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Micro- vs Macro-moyennage</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Stratégie</th><th>Calcul</th><th>Poids par</th><th>Favorise</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Micro-moyennage</strong></td>
+          <td>Fusionner tous les TP/FP/FN/TN puis calculer P,R</td>
+          <td>Chaque document</td>
+          <td class="v">Catégories fréquentes (grandes classes)</td>
+          <td>Performance globale corpus</td>
+        </tr>
+        <tr>
+          <td><strong>Macro-moyennage</strong></td>
+          <td>Calculer P,R par catégorie, puis moyenner les courbes</td>
+          <td>Chaque catégorie</td>
+          <td class="v">Équilibre entre catégories (même poids aux rares)</td>
+          <td>Évaluation équitable multi-catégories</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 7 ─── -->
+<section class="sec" id="s7">
+  <div class="sec-hd">
+    <span class="sec-num">07</span>
+    <h2 class="sec-title">Relations entre les concepts</h2>
+  </div>
+
+  <h3>Carte conceptuelle de l'évaluation IR</h3>
+  <div class="diag">
+    <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px">
+      <defs>
+        <marker id="a4" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(180,150,80,.5)"/>
+        </marker>
+        <marker id="a5" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(126,184,212,.5)"/>
+        </marker>
+      </defs>
+
+      <!-- Pertinence -->
+      <rect x="270" y="10" width="160" height="45" rx="20" fill="#1c1828" stroke="#c9a84c" stroke-width="2"/>
+      <text x="350" y="38" text-anchor="middle" fill="#e8c97a" font-family="Cormorant Garamond" font-size="15" font-weight="600">Pertinence (Relevance)</text>
+
+      <!-- Matrice -->
+      <rect x="260" y="90" width="180" height="45" rx="8" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="350" y="112" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="13">Matrice de confusion</text>
+      <text x="350" y="127" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">TP · FP · FN · TN</text>
+
+      <!-- P & R -->
+      <rect x="120" y="185" width="120" height="45" rx="8" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="180" y="207" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="13">Précision (P)</text>
+      <text x="180" y="222" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">TP/(TP+FP)</text>
+
+      <rect x="460" y="185" width="120" height="45" rx="8" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="520" y="207" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="13">Rappel (R)</text>
+      <text x="520" y="222" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">TP/(TP+FN)</text>
+
+      <!-- Fallout -->
+      <rect x="270" y="185" width="160" height="45" rx="8" fill="#1c1828" stroke="#e07b7b" stroke-width="1.5"/>
+      <text x="350" y="207" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="13">Fallout</text>
+      <text x="350" y="222" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">FP/(TN+FP)</text>
+
+      <!-- Curve PR -->
+      <rect x="60" y="290" width="150" height="45" rx="8" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="135" y="312" text-anchor="middle" fill="#c9a84c" font-family="EB Garamond" font-size="13">Courbe P–R</text>
+      <text x="135" y="327" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">P(R) pour seuils ∈ [0,1]</text>
+
+      <!-- mAP -->
+      <rect x="60" y="370" width="150" height="40" rx="8" fill="#1c1828" stroke="#c9a84c" stroke-width="1"/>
+      <text x="135" y="393" text-anchor="middle" fill="#c9a84c" font-family="EB Garamond" font-size="13">mAP · R-Precision</text>
+
+      <!-- F-measure -->
+      <rect x="280" y="290" width="140" height="45" rx="8" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="350" y="312" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="13">F-mesure</text>
+      <text x="350" y="327" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">2PR/(P+R) = F₁</text>
+
+      <!-- ROC -->
+      <rect x="490" y="290" width="150" height="45" rx="8" fill="#1c1828" stroke="#e07b7b" stroke-width="1.5"/>
+      <text x="565" y="312" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="13">Courbe ROC</text>
+      <text x="565" y="327" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="9">TPR vs FPR · AUC</text>
+
+      <!-- Interpolation -->
+      <rect x="490" y="370" width="150" height="40" rx="8" fill="#1c1828" stroke="#e07b7b" stroke-width="1"/>
+      <text x="565" y="393" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="12">AUC · Interprétation</text>
+
+      <!-- Arrows -->
+      <line x1="350" y1="55" x2="350" y2="88" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#a4)"/>
+      <line x1="300" y1="135" x2="215" y2="183" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="350" y1="135" x2="350" y2="183" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="400" y1="135" x2="483" y2="183" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="180" y1="230" x2="165" y2="288" stroke="#7bc496" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="180" y1="230" x2="300" y2="305" stroke="#7bc496" stroke-width="1.2" marker-end="url(#a4)" stroke-dasharray="4,3"/>
+      <line x1="520" y1="230" x2="400" y2="305" stroke="#7bc496" stroke-width="1.2" marker-end="url(#a4)" stroke-dasharray="4,3"/>
+      <line x1="520" y1="230" x2="565" y2="288" stroke="#7bc496" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="350" y1="230" x2="510" y2="305" stroke="#e07b7b" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="135" y1="335" x2="135" y2="368" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#a4)"/>
+      <line x1="565" y1="335" x2="565" y2="368" stroke="#e07b7b" stroke-width="1.2" marker-end="url(#a4)"/>
+    </svg>
+  </div>
+
+  <p>La <strong>pertinence</strong> est la notion fondatrice : tout le reste en découle. La matrice de confusion structure les 4 cas possibles. Précision, Rappel et Fallout en sont les dérivées directes. La courbe P–R synthétise le comportement P/R sur tout l'espace des seuils ; la F-mesure le réduit à un scalaire. La courbe ROC exploite Rappel et Fallout et génère l'AUC. La mAP et la R-Précision sont des agrégations pratiques de la courbe P–R.</p>
+</section>
+
+<!-- ─── SECTION 8 ─── -->
+<section class="sec" id="s8">
+  <div class="sec-hd">
+    <span class="sec-num">08</span>
+    <h2 class="sec-title">Perspective historique</h2>
+  </div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1960s</div>
+      <div class="tl-title">Projet Cranfield — Naissance de l'évaluation</div>
+      <div class="tl-desc">Les premières études systématiques d'évaluation en RI utilisent la collection Cranfield. Précision et rappel sont formalisés pour comparer des systèmes d'indexation. C'est le point de départ de toute la méthodologie d'évaluation moderne.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1975</div>
+      <div class="tl-title">Salton et al. — Vector Space Model</div>
+      <div class="tl-desc">Le modèle vectoriel (VSM) fournit une base formelle pour calculer des scores de similarité continus. La courbe P–R devient l'outil standard d'évaluation des modèles de RI.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1979</div>
+      <div class="tl-title">Rijsbergen — F-mesure, Fallout, Généralité</div>
+      <div class="tl-desc">Dans son ouvrage fondateur "Information Retrieval", Rijsbergen introduit la E-mesure (future F-mesure), le taux de dégradation (Fallout) et la notion de généralité, établissant les relations mathématiques entre ces mesures.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1992</div>
+      <div class="tl-title">TREC — Text REtrieval Conference</div>
+      <div class="tl-desc">Le NIST lance TREC, la première campagne d'évaluation à grande échelle. La technique du pooling est développée pour pallier l'impossibilité de juger des millions de documents. TREC standardise l'utilisation de la mAP.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1998–2001</div>
+      <div class="tl-title">Modèles de langue — Ponte, Croft, Lafferty, Zhai</div>
+      <div class="tl-desc">Les modèles de langue pour la RI introduisent une approche probabiliste qui nécessite des évaluations plus fines. TREC développe de nouvelles tâches (question answering, cross-lingual, etc.).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2000s</div>
+      <div class="tl-title">Évaluation au-delà du texte — CLEF, INEX, ISMIR</div>
+      <div class="tl-desc">Extension des méthodologies d'évaluation à la RI multilingue (CLEF), structurée XML (INEX), musicale (ISMIR), et visuelle (MPEG-7). Apparition du BEP pour la recherche de formes.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2010s</div>
+      <div class="tl-title">Learning to Rank — LeToR, NDCG</div>
+      <div class="tl-desc">L'apprentissage du classement (Learning to Rank) nécessite de nouvelles mesures sensibles à l'ordre : NDCG (Normalized Discounted Cumulative Gain), ERR (Expected Reciprocal Rank). Les jugements binaires cèdent la place aux jugements gradués (multi-niveau).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2020s</div>
+      <div class="tl-title">Évaluation de la RAG et des LLMs</div>
+      <div class="tl-desc">L'émergence des LLMs et des systèmes RAG impose de repenser l'évaluation : RAGAS, ARES, FaithDial mesurent fidélité, pertinence, et utilité des réponses générées. Les mesures classiques P/R restent pertinentes pour le retrieval mais sont complétées par des métriques de génération.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 9 ─── -->
+<section class="sec" id="s9">
+  <div class="sec-hd">
+    <span class="sec-num">09</span>
+    <h2 class="sec-title">Lien avec les systèmes modernes</h2>
+  </div>
+
+  <h3>Évaluation dans les moteurs de recherche modernes</h3>
+  <p>Les moteurs web actuels (Google, Bing) utilisent des métriques orientées utilisateur qui vont au-delà des mesures classiques : <strong>NDCG@k</strong> (Normalized Discounted Cumulative Gain) pour des jugements gradués, <strong>MRR</strong> (Mean Reciprocal Rank) pour les requêtes navigationnelles, <strong>CTR</strong> (Click-Through Rate) comme signal de pertinence implicite. La Precision@10 reste centrale car les utilisateurs regardent rarement au-delà de la première page.</p>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Système moderne</th><th>Métriques adaptées</th><th>Lien avec P&amp;R classiques</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dense Retrieval</strong> (DPR, FAISS)</td><td>Recall@k, MRR@k</td><td>Rappel à k positions : même fondement que le rappel classique</td></tr>
+        <tr><td><strong>Re-ranking</strong> (Cross-Encoder, ColBERT)</td><td>NDCG@k, MAP@k, P@k</td><td>Extensions de la mAP avec gains positionnels pondérés</td></tr>
+        <tr><td><strong>Hybrid Retrieval</strong> (sparse + dense)</td><td>mAP, NDCG, Recall@100</td><td>Même mesures, évaluation du pipeline end-to-end</td></tr>
+        <tr><td><strong>RAG Systems</strong></td><td>RAGAS (Faithfulness, Relevance), Context Recall</td><td>Context Recall = rappel des chunks pertinents récupérés</td></tr>
+        <tr><td><strong>LLM for IR</strong> (GPT-4, etc.)</td><td>BEIR benchmark, MTEB</td><td>BEIR utilise nDCG@10 sur 18 datasets hétérogènes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>NDCG — Extension des métriques classiques</h3>
+  <p>Le <strong>NDCG</strong> (Normalized Discounted Cumulative Gain) généralise la mAP aux jugements multi-niveaux. Là où P/R supposent une pertinence binaire, le NDCG intègre des degrés de pertinence (ex. 0, 1, 2, 3) et pondère les résultats en fonction de leur position :</p>
+  <div class="mblock">
+    <div class="mlabel">NDCG@k</div>
+    $$\text{DCG@k} = \sum_{i=1}^{k} \frac{rel_i}{\log_2(i+1)} \qquad \text{NDCG@k} = \frac{\text{DCG@k}}{\text{IDCG@k}}$$
+  </div>
+  <p>Le NDCG pénalise les bons documents trouvés en position élevée (division par $\log_2(i+1)$). C'est l'extension naturelle de la mAP pour un monde où la pertinence est gradée et où la position dans la liste compte.</p>
+
+  <h3>Évaluation RAG — Un nouveau défi</h3>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Retrieval</div>
+      <h4>Context Recall</h4>
+      <p>Rappel des chunks pertinents récupérés — directement hérité du rappel classique en RI.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Generation</div>
+      <h4>Faithfulness</h4>
+      <p>Dans quelle mesure la réponse générée est-elle fidèle aux documents récupérés ? Nouvelle mesure spécifique aux LLMs.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">End-to-End</div>
+      <h4>Answer Relevance</h4>
+      <p>La réponse répond-elle vraiment à la question posée ? Combine pertinence IR et qualité de génération.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Benchmark</div>
+      <h4>BEIR / MTEB</h4>
+      <p>Benchmarks modernes héritiers de TREC : collections hétérogènes, mesures standardisées (nDCG@10), comparaison de modèles neuronaux.</p>
+    </div>
+  </div>
+
+  <div class="box vio">
+    <div class="box-title">🔬 Point clé — Continuité conceptuelle</div>
+    <p>Malgré l'évolution des architectures (modèles neuronaux, dense retrieval, LLMs), les <strong>fondements de l'évaluation restent inchangés</strong> : on mesure toujours la capacité à retrouver les documents pertinents. Précision, rappel, et leurs dérivées continuent de structurer tous les benchmarks modernes. Le NDCG et ses variantes ne sont que des extensions prenant en compte la position et les degrés de pertinence.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 10 ─── -->
+<section class="sec" id="s10">
+  <div class="sec-hd">
+    <span class="sec-num">10</span>
+    <h2 class="sec-title">Questions d'examen possibles</h2>
+  </div>
+
+  <div class="qlevel easy">Niveau Facile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Définissez précision et rappel. Donnez leurs formules et leur interprétation.</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Précision</strong> $P = TP/(TP+FP)$ : proportion de documents pertinents parmi les documents retournés. Mesure la pureté des résultats. Un $P=1$ signifie qu'aucun non-pertinent n'a été retourné.</p>
+      <p><strong>Rappel</strong> $R = TP/(TP+FN)$ : proportion de documents pertinents récupérés parmi tous les pertinents existants. Mesure l'exhaustivité. Un $R=1$ signifie qu'aucun pertinent n'a été manqué.</p>
+      <p>Les deux sont sur $[0,1]$ et sont en tension : augmenter l'un tend à dégrader l'autre. C'est pourquoi ils doivent toujours être utilisés conjointement.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Qu'est-ce que la matrice de confusion en RI ? Dessinez et commentez.</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>La matrice de confusion classe les documents selon deux dimensions : récupéré/non-récupéré et pertinent/non-pertinent.</p>
+      <p><strong>TP</strong> (True Positive) : pertinent ET récupéré — bonne récupération. <strong>FN</strong> (False Negative) : pertinent mais NON récupéré — document manqué (silence). <strong>FP</strong> (False Positive) : non-pertinent mais récupéré — bruit. <strong>TN</strong> (True Negative) : non-pertinent et non-récupéré — bonne exclusion.</p>
+      <p>Toutes les mesures classiques (P, R, Fallout, F₁) se déduisent de cette table.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Qu'est-ce que la mAP ? Pourquoi est-elle importante ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>La <strong>mAP</strong> (Mean Average Precision) est la moyenne des précisions interpolées aux 11 niveaux de rappel standard $\{0, 0.1, \ldots, 1.0\}$. Elle est égale à l'aire sous la courbe P–R interpolée.</p>
+      <p>Elle est importante car elle synthétise toute la courbe P–R en un scalaire unique, permettant de comparer facilement des systèmes. Elle est robuste car elle moyenne sur de nombreuses requêtes. C'est la mesure standard des campagnes TREC depuis les années 1990.</p>
+    </div>
+  </div>
+
+  <div class="qlevel med">Niveau Intermédiaire</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Comment construire une courbe P–R à partir d'une liste de résultats ? Donnez un exemple chiffré.</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>On parcourt la liste de résultats du rang 1 au rang N. À chaque rang $k$, on calcule $P@k = TP_k/k$ et $R@k = TP_k/N_\text{Rel}$. On porte le point $(R@k, P@k)$ sur le graphique.</p>
+      <p>Exemple avec $N_\text{Rel}=4$ (D1, D4, D5, D6) et liste D4, D1, D3(NR), D6, D2(NR), D5 :</p>
+      <p>Rang 1: D4=R → P=1.0, R=0.25. Rang 2: D1=R → P=1.0, R=0.5. Rang 3: D3=NR → P=0.67, R=0.5. Rang 4: D6=R → P=0.75, R=0.75. Rang 5: D2=NR → P=0.6, R=0.75. Rang 6: D5=R → P=0.67, R=1.0.</p>
+      <p>Pour interpoler aux niveaux standard, on applique $\hat{P}(R_j) = \max_{R_j \leq R \leq R_{j+1}} P(R)$.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Quelle est la différence entre micro- et macro-moyennage ? Quand utiliser l'un plutôt que l'autre ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Micro-moyennage</strong> : on fusionne tous les TP, FP, FN, TN de toutes les catégories en une seule table, puis on calcule P et R. Cela donne le même poids à chaque document. Les catégories fréquentes dominent le résultat.</p>
+      <p><strong>Macro-moyennage</strong> : on calcule P et R séparément pour chaque catégorie, puis on moyenne les courbes. Chaque catégorie a le même poids, quelle que soit sa taille. Les catégories rares ont autant d'influence que les catégories fréquentes.</p>
+      <p>Utiliser le micro quand on veut évaluer la performance globale sur tout le corpus. Utiliser le macro quand on veut une évaluation équitable entre catégories, notamment si certaines sont très rares (ex. détection de maladies rares).</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Expliquez la relation entre la F-mesure et la moyenne harmonique. Quel est l'avantage par rapport à la moyenne arithmétique ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>La F₁ est la moyenne harmonique de P et R : $F_1 = 2/(1/P + 1/R)$. La moyenne harmonique est toujours inférieure ou égale à la moyenne arithmétique $(P+R)/2$.</p>
+      <p>Avantage crucial : la moyenne harmonique pénalise fortement les valeurs basses. Si $P=1$ et $R=0.01$, la moyenne arithmétique donne $0.505$ (trompeusement bon), tandis que $F_1 = 2 \times 1 \times 0.01 / (1+0.01) \approx 0.02$ (reflète correctement le problème de rappel). Un système ne peut pas "tricher" en ayant une très haute précision avec un rappel quasi-nul.</p>
+    </div>
+  </div>
+
+  <div class="qlevel hard">Niveau Difficile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Démontrez la relation $P = R \cdot G / (R \cdot G + \text{Fallout} \cdot (1-G))$. Que nous apprend-elle ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>Posons $G = (TP+FN)/N$ la généralité. On a $R = TP/(TP+FN)$ donc $TP = R(TP+FN) = RNG$. De même, $\text{Fallout} = FP/(TN+FP)$ et $TN+FP = N-TP-FN = N(1-G)$, donc $FP = \text{Fallout} \cdot N(1-G)$.</p>
+      <p>Alors $P = TP/(TP+FP) = RNG / (RNG + \text{Fallout} \cdot N(1-G)) = R \cdot G / (R \cdot G + \text{Fallout} \cdot (1-G))$. CQFD.</p>
+      <p>Cette relation nous apprend que la précision ne dépend pas seulement des qualités du système (R et Fallout) mais aussi de la généralité G de la collection. Sur une collection très sparse (G proche de 0), même un excellent système (Fallout faible) aura une précision médiocre. C'est pourquoi un moteur de recherche médical (peu de pertinents/beaucoup de docs) aura naturellement une précision plus basse qu'un catalogue de produits bien structuré.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Pourquoi la courbe ROC peut-elle être trompeuse sur des données très déséquilibrées ? La courbe P–R est-elle meilleure dans ce cas ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>Sur des données très déséquilibrées (très peu de pertinents), le TN domine. Le FPR = FP/(TN+FP) reste très petit même si le nombre absolu de FP est grand, car le dénominateur TN+FP est énorme. La courbe ROC semble donc "bonne" même si beaucoup de non-pertinents sont retournés.</p>
+      <p>La courbe P–R, elle, utilise directement le nombre absolu de FP au dénominateur de la précision (P = TP/(TP+FP)). Elle est donc beaucoup plus sensible à la présence de faux positifs. Sur des données déséquilibrées, une courbe P–R "aplatie" vers le bas révèle immédiatement les problèmes que la courbe ROC masquerait.</p>
+      <p>Exemple : 1000 docs, 10 pertinents. Si on retourne 100 docs dont 9 pertinents : P=9/100=0.09 (mauvaise), R=9/10=0.9 (bonne). Sur la courbe ROC, FPR=91/990≈0.09 et TPR=0.9 — le point semble excellent. La courbe P–R révèle la réalité : 91% des résultats sont du bruit.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.qi-arr').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <span class="qi-qtxt">Expliquez le pooling dans TREC. Quels sont ses avantages et ses biais ? Comment les nouveaux systèmes sont-ils affectés ?</span>
+      <span class="qi-arr">▶</span>
+    </div>
+    <div class="qi-a">
+      <p>Le pooling est la technique utilisée par TREC pour construire les jugements de pertinence à grande échelle. On fusionne les top-N (typiquement top-100) des résultats de tous les systèmes participants, puis des juges humains évaluent uniquement ce pool. Les documents hors pool sont supposés non-pertinents.</p>
+      <p><strong>Avantages</strong> : rend l'évaluation tractable (on ne peut pas juger des millions de documents). Les systèmes participants peuvent être comparés équitablement car leurs résultats ont tous contribué au pool.</p>
+      <p><strong>Biais</strong> : sous-estimation des performances → un document pertinent non inclus dans le pool sera compté comme FN. Cela pénalise les systèmes "créatifs" qui trouvent des pertinents que les autres n'ont pas trouvés.</p>
+      <p><strong>Nouveaux systèmes</strong> : un système évalué a posteriori (non participant à la construction du pool) sera systématiquement pénalisé car ses pertinents uniques seront comptés comme FN. C'est un biais structurel connu. Solutions partielles : pooling multi-niveaux, jugements supplémentaires, ou estimation statistique du nombre de pertinents manqués.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 11 ─── -->
+<section class="sec" id="s11">
+  <div class="sec-hd">
+    <span class="sec-num">11</span>
+    <h2 class="sec-title">Pièges classiques</h2>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre la direction de β dans la F-mesure.</strong> Selon la formulation de Rijsbergen, $\beta > 1$ donne plus d'importance à la <em>précision</em> (pas au rappel). Contre-intuitif. Vérifiez toujours la formule avant d'affirmer le contraire. La formulation en $\alpha$ est plus claire : $\alpha$ proche de 1 favorise la précision.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Croire que maximiser P ou R seul est trivial.</strong> Un examinateur peut vous demander : "Comment obtenir Recall = 1 sans effort ?" → Retournez toute la collection. "Comment obtenir Precision = 1 ?" → Ne retournez qu'un seul document parfaitement sûr. Ce caractère trivial est précisément pourquoi les deux doivent être combinés.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre Sensibilité et Spécificité dans la courbe ROC.</strong> La courbe ROC trace TPR (= Rappel = Sensibilité) en Y contre FPR (= 1 - Spécificité = Fallout) en X. Beaucoup confondent les axes ou oublient que l'axe X est le FPR et non le FNR.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Oublier que le Rappel est difficile à mesurer en pratique.</strong> En conditions réelles, on ne connaît jamais l'ensemble exhaustif des documents pertinents. Le rappel est toujours une <em>estimation</em>. Seule la précision est directement mesurable. C'est une limitation fondamentale souvent négligée.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre mAP et Precision@k (P@k).</strong> La mAP est l'aire sous la courbe P–R sur TOUS les niveaux de rappel (0 à 1). La P@k est la précision à une position fixe k (ex. top-10). La mAP est plus globale mais moins pertinente si les utilisateurs ne regardent que les premiers résultats.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Croire que la courbe ROC est toujours meilleure que la courbe P–R.</strong> Sur des données très déséquilibrées (peu de pertinents), la courbe ROC donne une vision trop optimiste car le FPR reste faible même si beaucoup de non-pertinents sont retournés. La courbe P–R est plus appropriée dans ce cas, typique de la RI.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Penser que le pooling garantit une évaluation parfaite.</strong> Le pooling est une approximation. Les documents hors pool supposés non-pertinents peuvent en réalité être pertinents. Cela sous-estime systématiquement les performances, et pénalise particulièrement les nouveaux systèmes non participants.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Ignorer l'effet de la généralité G sur la précision.</strong> Deux systèmes identiques obtiennent des précisions différentes sur des collections de généralités différentes. Un "bon" système sur une collection dense peut sembler mauvais sur une collection sparse. Toujours contextualiser P par rapport à G.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre micro- et macro-moyennage.</strong> Le micro-moyennage favorise les catégories fréquentes ; le macro-moyennage donne le même poids à chaque catégorie. Sur des données déséquilibrées, les deux divergent fortement. Ne rapporter qu'un seul des deux peut induire en erreur.</div>
+  </div>
+</section>
+
+<!-- ─── SECTION 12 ─── -->
+<section class="sec" id="s12">
+  <div class="sec-hd">
+    <span class="sec-num">12</span>
+    <h2 class="sec-title">Fiche de révision finale</h2>
+  </div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>Matrice de confusion</h4>
+      <ul>
+        <li><strong>TP</strong> : Pertinent &amp; récupéré ✅</li>
+        <li><strong>FN</strong> : Pertinent, non-récupéré (silence) ❌</li>
+        <li><strong>FP</strong> : Non-pertinent récupéré (bruit) ❌</li>
+        <li><strong>TN</strong> : Non-pertinent, non-récupéré ✅</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Mesures fondamentales</h4>
+      <ul>
+        <li><strong>P</strong> = TP/(TP+FP) — pureté des résultats</li>
+        <li><strong>R</strong> = TP/(TP+FN) — exhaustivité</li>
+        <li><strong>F₁</strong> = 2PR/(P+R) — compromis harmonique</li>
+        <li><strong>Fallout</strong> = FP/(TN+FP) — bruit non-pertinents</li>
+        <li><strong>G</strong> = (TP+FN)/N — densité de pertinents</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Mesures synthétiques</h4>
+      <ul>
+        <li><strong>mAP</strong> = $\frac{1}{11}\sum \hat{P}(R_j)$ — aire sous P–R</li>
+        <li><strong>R-Prec</strong> = $TP_R/R$ — P au rang R</li>
+        <li><strong>AUC-ROC</strong> — aire sous courbe TPR/FPR</li>
+        <li><strong>BEP</strong> = $TP_{2Q}/Q$ — MPEG-7 Second-Tier</li>
+        <li><strong>NDCG</strong> = extension aux jugements gradués</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Interpolation P–R</h4>
+      <ul>
+        <li>11 niveaux standard : 0, 0.1, …, 1.0</li>
+        <li>$\hat{P}(R_j) = \max_{R_j \leq R \leq R_{j+1}} P(R)$</li>
+        <li>Toujours ≥ précision brute au même niveau</li>
+        <li>Permet le moyennage sur plusieurs requêtes</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Courbe ROC</h4>
+      <ul>
+        <li>X-axis : FPR = Fallout = 1−Spécificité</li>
+        <li>Y-axis : TPR = Rappel = Sensibilité</li>
+        <li>Courbe ↑ coin supérieur gauche = excellent</li>
+        <li>Diagonale = système aléatoire (AUC=0.5)</li>
+        <li>Moins adaptée aux données déséquilibrées</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Benchmarks</h4>
+      <ul>
+        <li><strong>TREC</strong> (1992+, NIST) : référence IR textuelle</li>
+        <li><strong>Pooling</strong> : top-N de chaque système, jugés humainement</li>
+        <li><strong>CLEF</strong> : IR multilingue</li>
+        <li><strong>INEX</strong> : IR XML structurée</li>
+        <li><strong>BEIR/MTEB</strong> : benchmarks modernes dense retrieval</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Micro vs Macro moyennage</h4>
+      <ul>
+        <li><strong>Micro</strong> : fusionner tous les TP/FP/FN/TN</li>
+        <li>→ Favori pour les catégories fréquentes</li>
+        <li><strong>Macro</strong> : P, R par catégorie puis moyenne</li>
+        <li>→ Poids égal à chaque catégorie</li>
+        <li>Sur déséquilibre, micro ≠ macro !</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Points à mémoriser absolument</h4>
+      <ul>
+        <li>P et R en tension — jamais optimisés séparément</li>
+        <li>Seule P est directement mesurable (R = estimation)</li>
+        <li>mAP = mesure standard TREC, aire sous P–R</li>
+        <li>Sensibilité = Rappel ; FPR = Fallout</li>
+        <li>Pooling sous-estime les performances (approximation)</li>
+        <li>G affecte P — contextualiser toujours</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box ok">
+    <div class="box-title">🎯 Check-list oral — Ce qu'un examinateur attend</div>
+    <p>✓ Définir P, R, F₁ avec formules et intuitions. ✓ Expliquer la tension P–R et pourquoi elles doivent être combinées. ✓ Construire une courbe P–R à partir d'un exemple numérique. ✓ Expliquer l'interpolation et le moyennage. ✓ Distinguer mAP, R-Précision, P@k. ✓ Construire et interpréter une courbe ROC. ✓ Expliquer pourquoi mesurer le rappel est difficile. ✓ Décrire le pooling, ses avantages et biais. ✓ Distinguer micro- et macro-moyennage. ✓ Citer au moins 3 benchmarks (TREC, CLEF, INEX).</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Smooth scrolling + active nav
+document.querySelectorAll('.sb nav a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+// Active section highlight
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.sb nav a').forEach(a=>a.classList.remove('active'));
+      const id = e.target.getAttribute('id');
+      const link = document.querySelector(`.sb nav a[href="#${id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

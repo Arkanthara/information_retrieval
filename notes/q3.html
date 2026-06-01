@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.03 — Neural Embeddings · Pipeline Complet · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:270px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.88rem;display:block;
+  padding:.35rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .3rem;opacity:.6}
+
+/* MAIN */
+.main{margin-left:270px;flex:1;padding:3rem 4rem;max-width:1060px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.4rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:640px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:800px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* DIAGRAM */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.15rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* PIPELINE STEPS */
+.pipeline{display:flex;flex-direction:column;gap:0;margin:1.4rem 0}
+.pipe-phase{margin-bottom:1.8rem}
+.pipe-phase-title{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);margin-bottom:.8rem;padding:.3rem .8rem;background:var(--bg-code);border-radius:4px;display:inline-block}
+.pipe-steps{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.pipe-step{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;
+  padding:.9rem 1.1rem;flex:1;min-width:130px;position:relative;text-align:center;transition:border-color .18s}
+.pipe-step:hover{border-color:var(--bstrong)}
+.pipe-step .ps-num{font-family:var(--fm);font-size:.65rem;color:var(--gold);display:block;margin-bottom:.3rem}
+.pipe-step .ps-name{font-family:var(--fd);font-size:.95rem;font-weight:600;color:var(--text);display:block;margin-bottom:.2rem}
+.pipe-step .ps-desc{font-size:.78rem;color:var(--muted);line-height:1.4}
+.pipe-arrow{display:flex;align-items:center;padding:0 .3rem;color:var(--gold);font-size:1.1rem;flex-shrink:0}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}.pipe-steps{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════════════════ -->
+<aside class="sb">
+  <div class="sb-logo">IR.03</div>
+  <div class="sb-sub">Neural Embeddings · Pipeline</div>
+  <nav>
+    <ul>
+      <div class="sb-section">Sections</div>
+      <li><a href="#s1"><span class="n">§1</span>Résumé (30s)</a></li>
+      <li><a href="#s2"><span class="n">§2</span>Réponse orale</a></li>
+      <li><a href="#s3"><span class="n">§3</span>Concepts approfondis</a></li>
+      <li><a href="#s4"><span class="n">§4</span>Architecture & Pipeline</a></li>
+      <li><a href="#s5"><span class="n">§5</span>Formules clés</a></li>
+      <li><a href="#s6"><span class="n">§6</span>Comparaison</a></li>
+      <li><a href="#s7"><span class="n">§7</span>Relations conceptuelles</a></li>
+      <li><a href="#s8"><span class="n">§8</span>Perspective historique</a></li>
+      <li><a href="#s9"><span class="n">§9</span>Systèmes modernes</a></li>
+      <li><a href="#s10"><span class="n">§10</span>Questions d'examen</a></li>
+      <li><a href="#s11"><span class="n">§11</span>Pièges classiques</a></li>
+      <li><a href="#s12"><span class="n">§12</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════════════════ MAIN ═══════════════════════════════════ -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">IR.03 · Neural Information Retrieval</div>
+  <h1>Neural <em>Embeddings</em><br>— Pipeline Complet</h1>
+  <p class="hero-desc">Du corpus brut à la réponse à une requête : comprendre en profondeur Word2Vec (CBoW, Skip-gram) et GloVe, leur architecture, leurs formules et leur place dans les systèmes modernes de recherche d'information.</p>
+  <div class="badges">
+    <span class="badge">Word2Vec</span>
+    <span class="badge">CBoW</span>
+    <span class="badge">Skip-gram</span>
+    <span class="badge b">GloVe</span>
+    <span class="badge g">Dense Retrieval</span>
+    <span class="badge v">Negative Sampling</span>
+  </div>
+</div>
+
+<!-- ═══════ §1 RÉSUMÉ ═══════ -->
+<section id="s1" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§1</span>
+    <h2 class="sec-title">Résumé exécutif — 30 secondes</h2>
+  </div>
+  <div class="box ok">
+    <div class="box-title">⚡ Idée centrale</div>
+    <p>Les <strong>représentations neuronales</strong> (<em>neural word embeddings</em>) associent à chaque terme du vocabulaire un vecteur dense de faible dimension $\mathbf{v} \in \mathbb{R}^d$ (typiquement $d \approx 100$–$300$), capturant les <strong>relations sémantiques et syntaxiques</strong> à partir des co-occurrences dans un texte. Deux familles dominent : <strong>Word2Vec</strong> (prédiction locale via fenêtre glissante) et <strong>GloVe</strong> (factorisation globale de la matrice de co-occurrence). Le pipeline complet va de la tokenisation du corpus jusqu'à la recherche de plus proches voisins dans l'espace d'embedding pour répondre à une requête.</p>
+  </div>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Problème résolu</div>
+      <h4>Sparsité & Sémantique</h4>
+      <p>TF-IDF est creux (sparse) et aveugle à la sémantique. Les embeddings capturent "voiture ≈ automobile".</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Principe</div>
+      <h4>Hypothèse distributionnelle</h4>
+      <p>"Un mot est caractérisé par la compagnie qu'il fréquente" — J.R. Firth, 1957. Le contexte définit le sens.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Résultat</div>
+      <h4>Espace vectoriel dense</h4>
+      <p>$\vec{v}_{\text{roi}} - \vec{v}_{\text{homme}} + \vec{v}_{\text{femme}} \approx \vec{v}_{\text{reine}}$</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Usage IR</div>
+      <h4>Recherche dense</h4>
+      <p>Les documents et requêtes sont projetés dans le même espace : la recherche devient un problème de k-NN.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ §2 RÉPONSE ORALE ═══════ -->
+<section id="s2" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§2</span>
+    <h2 class="sec-title">Réponse modèle d'oral — 2 à 4 minutes</h2>
+  </div>
+  <div class="oral">
+    <p>Le pipeline des représentations neuronales part d'un corpus de documents bruts et aboutit à un système capable de répondre à une requête par similarité vectorielle. Voyons les grandes étapes.</p>
+
+    <p>Tout commence par la <strong>motivation</strong> : les approches classiques comme TF-IDF ou LSI sont dites <em>content-based</em> — elles caractérisent un terme par ses fréquences d'apparition dans les documents. Leur limite fondamentale est qu'elles traitent chaque terme comme un symbole isolé, incapable de capturer que "chien" et "canin" sont synonymes. C'est là qu'interviennent les <em>context-based embeddings</em>, basés sur l'<strong>hypothèse distributionnelle</strong> : le sens d'un mot se révèle à travers son contexte d'occurrence.</p>
+
+    <p><strong>Word2Vec</strong>, proposé par Mikolov et al. en 2013, formule cela comme un problème de prédiction. On dispose d'un vocabulaire de taille $N$, on définit deux variables aléatoires $W_T$ (le terme cible) et $W_C$ (son contexte), et on cherche à estimer $\mathbb{P}(W_T|W_C)$. La première variante, le <strong>Continuous Bag of Words</strong> ou CBoW, prédit le mot cible à partir de ses voisins dans une fenêtre glissante de taille $c$. La variante inverse, le <strong>Skip-gram</strong>, prédit les mots du contexte à partir du mot central. Dans les deux cas, le réseau de neurones est entraîné par descente de gradient sur une loss en cross-entropie négative. Après entraînement, les poids de la matrice d'embedding $W$ constituent notre table de lookup : pour chaque mot $w_i$, son vecteur $\mathbf{v}_i \in \mathbb{R}^d$ encode ses propriétés sémantiques.</p>
+
+    <p><strong>GloVe</strong>, proposé par Pennington et al. en 2014, adopte une approche complémentaire. Plutôt que de traiter chaque co-occurrence localement, il construit d'abord la matrice globale de co-occurrence $X_{ij}$ sur tout le corpus, puis cherche des vecteurs tels que le produit scalaire $\mathbf{v}_i^T \mathbf{v}_k$ approxime le logarithme du compte de co-occurrence. La fonction de perte est pondérée par une fonction $\psi$ qui limite l'influence des co-occurrences très fréquentes.</p>
+
+    <p>Pour <strong>indexer un corpus</strong>, on représente chaque document $d$ par la moyenne des vecteurs de ses termes : $\bar{\mathbf{v}}_d = \frac{1}{|d|}\sum_{w \in d} \mathbf{v}_w$. À l'arrivée d'une <strong>requête</strong> $q$, on calcule de même $\bar{\mathbf{v}}_q$ et on cherche les $k$ documents les plus proches selon la distance euclidienne, correspondant au produit scalaire de la similarité cosinus. La recherche devient alors un problème de <em>k-nearest neighbor</em> dans $\mathbb{R}^d$, en pratique accéléré par des structures d'index approximatif comme FAISS ou HNSW.</p>
+
+    <p>L'intérêt fondamental est que deux documents traitant du même sujet avec des vocabulaires différents — l'un utilisant "voiture", l'autre "automobile" — se retrouveront proches dans l'espace d'embedding, ce qui était impossible avec TF-IDF.</p>
+  </div>
+</section>
+
+<!-- ═══════ §3 EXPLICATION APPROFONDIE ═══════ -->
+<section id="s3" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§3</span>
+    <h2 class="sec-title">Explication approfondie</h2>
+  </div>
+
+  <h3>3.1 Motivation : Content-based vs Context-based</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Famille</th><th>Modèles</th><th>Source de l'embedding</th><th>Limite principale</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Content-based</strong></td>
+          <td>TF-IDF, BIR/BM25, LSI</td>
+          <td>Fréquences d'apparition dans les documents</td>
+          <td class="r">Ignorer le contexte local ; vectoriel creux ; relations linéaires seulement (LSI)</td>
+        </tr>
+        <tr>
+          <td><strong>Context-based</strong></td>
+          <td>Word2Vec, GloVe, FastText</td>
+          <td>Contexte de co-occurrence dans les phrases</td>
+          <td class="r">Nécessite un grand corpus ; embeddings statiques (un vecteur par mot)</td>
+        </tr>
+        <tr>
+          <td><strong>Contextuel profond</strong></td>
+          <td>BERT, GPT, ELMo</td>
+          <td>Contexte bidirectionnel par Transformer</td>
+          <td class="r">Coût computationnel élevé ; représentations dynamiques mais plus complexes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>L'<strong>hypothèse distributionnelle</strong> (<em>distributional hypothesis</em>) est le fondement théorique : deux mots qui apparaissent fréquemment dans les mêmes contextes ont des significations proches. Word2Vec et GloVe opérationnalisent cette hypothèse différemment : Word2Vec par une tâche de prédiction locale, GloVe par une factorisation globale.</p>
+
+  <h3>3.2 Word2Vec — Continuous Bag of Words (CBoW)</h3>
+
+  <h4>Principe et intuition</h4>
+  <p>Le <strong>Continuous Bag of Words</strong> pose la question : <em>"étant donné les mots autour, quel est le mot central ?"</em> Pour la phrase "All work and no <u>play</u> makes Jack a dull boy" avec une fenêtre $c=2$, le mot cible $W_T = \texttt{play}$ est prédit à partir du contexte $W_C = \{\texttt{and, no, makes, Jack}\}$. L'entraînement crée donc les paires d'apprentissage $(\texttt{play}, \texttt{and})$, $(\texttt{play}, \texttt{no})$, $(\texttt{play}, \texttt{makes})$, $(\texttt{play}, \texttt{Jack})$.</p>
+
+  <div class="box info">
+    <div class="box-title">💡 Intuition géométrique</div>
+    <p>Deux mots apparaissant dans des contextes similaires (synonymes, mots liés) recevront des vecteurs proches dans $\mathbb{R}^d$. Le réseau apprend une compression : il est forcé d'encoder toute l'information contextuelle dans $d \ll N$ dimensions.</p>
+  </div>
+
+  <h4>Architecture du réseau</h4>
+  <p>Le réseau CBoW possède trois couches :</p>
+  <ul>
+    <li><strong>Couche d'entrée</strong> : encodage one-hot $\mathbf{x}_C \in \{0,1\}^N$ du mot de contexte $W_C$</li>
+    <li><strong>Couche de projection (cachée)</strong> : $\mathbf{v}_C = W \cdot \mathbf{x}_C \in \mathbb{R}^d$ — c'est le vecteur d'embedding du mot de contexte. La matrice $W \in \mathbb{R}^{N \times d}$ est la <em>matrice d'embedding d'entrée</em>.</li>
+    <li><strong>Couche de sortie</strong> : $\hat{\mathbf{y}} = \text{softmax}(W' \cdot \mathbf{v}_C)$ où $W' \in \mathbb{R}^{N \times d}$ est la <em>matrice d'embedding de sortie</em>. Chaque composante $\hat{y}_i = \mathbb{P}(W_T = w_i | W_C)$.</li>
+  </ul>
+  <p>Les paramètres sont donc $\theta = [W, W']$ — deux matrices d'embeddings. En pratique, on utilise la colonne $i$ de $W$ comme vecteur final de $w_i$ (ou la moyenne $(W_i + W'_i)/2$).</p>
+
+  <div class="box vio">
+    <div class="box-title">🔑 Relation clé</div>
+    <p>$$\mathbb{P}(W_T | W_C) \propto \exp\!\left(\mathbf{v}'^T_T \,\mathbf{v}_C\right)$$</p>
+    <p>La probabilité est proportionnelle au produit scalaire des deux vecteurs d'embedding. Plus $\mathbf{v}'_T$ et $\mathbf{v}_C$ sont alignés, plus le mot $W_T$ est probable dans le contexte $W_C$.</p>
+  </div>
+
+  <h4>Negative Sampling</h4>
+  <p>Le dénominateur du softmax nécessite de sommer sur tout le vocabulaire ($N$ termes), ce qui est coûteux : $O(N \cdot d)$ par gradient. Le <strong>Negative Sampling</strong> remplace cette somme par un objectif binaire : distinguer la vraie paire $(W_T, W_C)$ de $k$ paires négatives $(W_\text{neg}, W_C)$ tirées aléatoirement. Cela réduit la complexité à $O(k \cdot d)$ avec $k \ll N$ (typiquement $k = 5$–$20$).</p>
+
+  <h3>3.3 Word2Vec — Skip-gram</h3>
+  <p>Le <strong>Skip-gram</strong> est l'inverse exact du CBoW : on prédit les mots de contexte $W_C$ à partir du mot central $W_T$. L'objectif devient $\mathbb{P}(W_C | W_T)$. Le réseau prend un seul mot en entrée et produit plusieurs mots de contexte en sortie. En pratique, Skip-gram est plus lent à entraîner mais produit de meilleures représentations pour les mots rares, car chaque mot cible génère plusieurs paires d'entraînement.</p>
+
+  <div class="box">
+    <div class="box-title">📊 CBoW vs Skip-gram — Quand utiliser lequel ?</div>
+    <ul>
+      <li><strong>CBoW</strong> : corpus large, mots fréquents, entraînement plus rapide</li>
+      <li><strong>Skip-gram</strong> : corpus petit, mots rares importants, meilleure qualité sémantique</li>
+    </ul>
+  </div>
+
+  <h3>3.4 Softmax et Hierarchical Softmax</h3>
+  <p>Le <strong>softmax</strong> transforme les logits en distribution de probabilités sur le vocabulaire :</p>
+  <div class="mblock">
+    <div class="mlabel">Softmax standard</div>
+    $$\mathbb{P}(W_T|W_C) = \frac{\exp\!\left(\mathbf{v}'^T_T \mathbf{v}_C\right)}{\displaystyle\sum_{i=1}^{N} \exp\!\left(\mathbf{v}'^T_i \mathbf{v}_C\right)}$$
+  </div>
+  <p>Le numérateur amplifie exponentiellement les grandes valeurs de produit scalaire. Le dénominateur (le <em>partition function</em>) normalise pour obtenir une distribution catégorielle sur $N$ mots — c'est lui qui coûte $O(N)$.</p>
+  <p>Le <strong>Hierarchical Softmax</strong> organise le vocabulaire dans un arbre binaire (ex. WordNet) : chaque mot est une feuille, et la probabilité est le produit des probabilités le long du chemin racine → feuille. Complexité réduite à $O(\log N)$.</p>
+
+  <h3>3.5 GloVe — Global Vectors for Word Representation</h3>
+
+  <h4>Intuition fondamentale</h4>
+  <p>Word2Vec apprend de façon <em>locale</em> : chaque fenêtre de co-occurrence est traitée indépendamment. GloVe observe que la <strong>fréquence globale de co-occurrence</strong> porte une information discriminante. L'idée clé : le <em>ratio</em> de probabilités de co-occurrence distingue mieux les mots que les probabilités brutes.</p>
+  <p>Exemple : pour $w_i = \texttt{Fish}$, $w_j = \texttt{Cow}$, et $w_k = \texttt{swim}$ :</p>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>$w_k$</th><th>$\mathbb{P}(w_k|w_i=\text{Fish})$</th><th>$\mathbb{P}(w_k|w_j=\text{Cow})$</th><th>Ratio</th></tr></thead>
+      <tbody>
+        <tr><td>swim</td><td class="g">élevé</td><td class="r">faible</td><td class="g">grand → discriminant pour Fish</td></tr>
+        <tr><td>feed</td><td class="g">élevé</td><td class="g">élevé</td><td class="m">≈ 1 → non discriminant</td></tr>
+        <tr><td>fly</td><td class="r">faible</td><td class="r">faible</td><td class="m">≈ 1 → non discriminant</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Construction du modèle GloVe</h4>
+  <p>On définit la probabilité de co-occurrence empirique :</p>
+  <div class="mblock">$$\mathbb{P}_\text{cooc}(w_k|w_i) \propto \frac{\text{card}\{(w_k, w_i)\}}{\text{card}\{(w_i)\}}$$</div>
+  <p>On cherche $\phi_\theta$ telle que $\phi_\theta(w_i, w_k) = \exp(\mathbf{v}_i^T \mathbf{v}_k) = \mathbb{P}_\text{cooc}(w_k|w_i)$, ce qui donne :</p>
+  <div class="mblock">$$\mathbf{v}_i^T \mathbf{v}_k = \log \mathbb{P}_\text{cooc}(w_k|w_i) = \log \text{card}\{(w_k,w_i)\} - \underbrace{\log \text{card}\{(w_i)\}}_{=: b_i \text{ (biais)}}$$</div>
+  <p>Le terme $\log\text{card}\{(w_i)\}$ ne dépend que de $w_i$, pas de $w_k$ : il devient le <strong>biais</strong> $b_i$. On ajoute symétriquement un biais $b_k$ pour $w_k$, ce qui mène à l'objectif : $\mathbf{v}_i^T \mathbf{v}_k + b_i + b_k \approx \log \text{card}\{(w_k, w_i)\}$.</p>
+
+  <h4>La propriété géométrique clé de GloVe</h4>
+  <p>La mesure de la "différence" $w_i - w_j$ dans l'espace d'embedding correspond au rapport des probabilités de co-occurrence :</p>
+  <div class="mblock">$$\phi_\theta(w_i - w_j, w_k) = \frac{\mathbb{P}_\text{cooc}(w_k|w_i)}{\mathbb{P}_\text{cooc}(w_k|w_j)}$$</div>
+  <p>C'est précisément ce ratio qui est discriminant. GloVe est ainsi <strong>cohérent avec l'analogie</strong> $\vec{v}_\text{roi} - \vec{v}_\text{homme} + \vec{v}_\text{femme} \approx \vec{v}_\text{reine}$.</p>
+</section>
+
+<!-- ═══════ §4 ARCHITECTURE & PIPELINE ═══════ -->
+<section id="s4" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§4</span>
+    <h2 class="sec-title">Architecture et Pipeline Complet</h2>
+  </div>
+
+  <h3>4.1 Vue d'ensemble — Du corpus à la requête</h3>
+
+  <div class="pipe-phase">
+    <div class="pipe-phase-title">⚙ Phase 1 — Prétraitement du corpus (Offline)</div>
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <span class="ps-num">1</span>
+        <span class="ps-name">Corpus brut</span>
+        <span class="ps-desc">$\mathcal{D} = \{d_1, \ldots, d_M\}$ (Wikipedia, CommonCrawl…)</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">2</span>
+        <span class="ps-name">Tokenisation</span>
+        <span class="ps-desc">Normalisation, minuscules, suppression stopwords</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">3</span>
+        <span class="ps-name">Vocabulaire</span>
+        <span class="ps-desc">$\mathcal{V} = \{w_1,\ldots,w_N\}$ de taille $N$ (ex. 100k mots)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="pipe-phase-title">🧠 Phase 2 — Génération des données d'entraînement (Offline)</div>
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <span class="ps-num">4a</span>
+        <span class="ps-name">Fenêtre glissante</span>
+        <span class="ps-desc">Taille $c$ : pour chaque mot, extraire les $2c$ voisins</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">4b</span>
+        <span class="ps-name">Paires CBoW</span>
+        <span class="ps-desc">$(W_C, W_T)$ : contexte prédit → cible</span>
+      </div>
+      <div class="pipe-arrow">ou</div>
+      <div class="pipe-step">
+        <span class="ps-num">4c</span>
+        <span class="ps-name">Paires Skip-gram</span>
+        <span class="ps-desc">$(W_T, W_C)$ : cible prédit → contexte</span>
+      </div>
+      <div class="pipe-arrow">ou</div>
+      <div class="pipe-step">
+        <span class="ps-num">4d</span>
+        <span class="ps-name">Matrice GloVe</span>
+        <span class="ps-desc">$X_{ij} = \text{card}\{(w_i,w_j)\}$ sur tout le corpus</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="pipe-phase-title">⚡ Phase 3 — Entraînement du modèle neuronal (Offline)</div>
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <span class="ps-num">5</span>
+        <span class="ps-name">Encodage one-hot</span>
+        <span class="ps-desc">$\mathbf{x} \in \{0,1\}^N$ pour chaque mot d'entrée</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">6</span>
+        <span class="ps-name">Projection $W$</span>
+        <span class="ps-desc">$\mathbf{v}_C = W\mathbf{x} \in \mathbb{R}^d$ couche cachée de dim. $d$</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">7</span>
+        <span class="ps-name">Softmax / Loss</span>
+        <span class="ps-desc">$\hat{y} = \text{softmax}(W'\mathbf{v}_C)$, minimiser $\mathcal{L}(θ)$</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">8</span>
+        <span class="ps-name">Optimisation</span>
+        <span class="ps-desc">SGD / Adam + Negative Sampling; $\theta^* = [W^*, W'^*]$</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="pipe-phase-title">📚 Phase 4 — Indexation des documents (Offline)</div>
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <span class="ps-num">9</span>
+        <span class="ps-name">Table de lookup</span>
+        <span class="ps-desc">$w_i \mapsto \mathbf{v}_i = W^*[i] \in \mathbb{R}^d$</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">10</span>
+        <span class="ps-name">Vecteur document</span>
+        <span class="ps-desc">$\bar{\mathbf{v}}_d = \frac{1}{|d|}\sum_{w \in d} \mathbf{v}_w$ (ou pondéré TF-IDF)</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">11</span>
+        <span class="ps-name">Index ANN</span>
+        <span class="ps-desc">Structure FAISS / HNSW pour k-NN approché dans $\mathbb{R}^d$</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="pipe-phase-title">🔍 Phase 5 — Réponse à la requête (Online)</div>
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <span class="ps-num">12</span>
+        <span class="ps-name">Requête brute</span>
+        <span class="ps-desc">"machine learning applications" → tokenisation</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">13</span>
+        <span class="ps-name">Embedding requête</span>
+        <span class="ps-desc">$\bar{\mathbf{v}}_q = \frac{1}{|q|}\sum_{w \in q} \mathbf{v}_w$</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">14</span>
+        <span class="ps-name">k-NN Search</span>
+        <span class="ps-desc">$\arg\min_d \|\bar{\mathbf{v}}_q - \bar{\mathbf{v}}_d\|_2$ — top-$k$ documents</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <span class="ps-num">15</span>
+        <span class="ps-name">Résultats classés</span>
+        <span class="ps-desc">Rang par similarité euclidienne / cosinus</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>4.2 Architecture CBoW détaillée</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" style="max-width:700px;width:100%">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- INPUT one-hot vectors -->
+      <rect x="20" y="30" width="80" height="30" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="60" y="50" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">w(t-2)</text>
+      <rect x="20" y="80" width="80" height="30" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="60" y="100" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">w(t-1)</text>
+      <rect x="20" y="150" width="80" height="30" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="60" y="170" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">w(t+1)</text>
+      <rect x="20" y="200" width="80" height="30" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="60" y="220" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">w(t+2)</text>
+      <text x="60" y="18" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">INPUT (one-hot)</text>
+      <text x="60" y="135" font-family="JetBrains Mono,monospace" font-size="10" fill="#c9a84c" text-anchor="middle">N dims</text>
+
+      <!-- Arrows to hidden -->
+      <line x1="100" y1="45" x2="280" y2="120" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <line x1="100" y1="95" x2="280" y2="120" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <line x1="100" y1="165" x2="280" y2="130" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <line x1="100" y1="215" x2="280" y2="130" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr)"/>
+
+      <!-- Matrix W label -->
+      <text x="190" y="80" font-family="EB Garamond,Georgia,serif" font-size="14" fill="#7eb8d4" text-anchor="middle" font-style="italic">W</text>
+      <text x="190" y="96" font-family="JetBrains Mono,monospace" font-size="10" fill="#7eb8d4" text-anchor="middle">(N×d)</text>
+
+      <!-- HIDDEN (projection) layer -->
+      <rect x="280" y="100" width="60" height="50" rx="4" fill="#2a1f4a" stroke="#a78bfa" stroke-width="2"/>
+      <text x="310" y="122" font-family="JetBrains Mono,monospace" font-size="10" fill="#a78bfa" text-anchor="middle">v_C</text>
+      <text x="310" y="138" font-family="JetBrains Mono,monospace" font-size="9" fill="#a78bfa" text-anchor="middle">d dims</text>
+      <text x="310" y="88" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">PROJECTION</text>
+      <text x="310" y="168" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">SUM / AVG</text>
+
+      <!-- Arrow to output -->
+      <line x1="340" y1="125" x2="420" y2="125" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Matrix W' label -->
+      <text x="385" y="112" font-family="EB Garamond,Georgia,serif" font-size="14" fill="#7eb8d4" text-anchor="middle" font-style="italic">W'</text>
+      <text x="385" y="128" font-family="JetBrains Mono,monospace" font-size="10" fill="#7eb8d4" text-anchor="middle">(d×N)</text>
+
+      <!-- OUTPUT -->
+      <rect x="420" y="100" width="80" height="50" rx="4" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="460" y="120" font-family="JetBrains Mono,monospace" font-size="10" fill="#7bc496" text-anchor="middle">v'_T</text>
+      <text x="460" y="136" font-family="JetBrains Mono,monospace" font-size="9" fill="#7bc496" text-anchor="middle">N dims</text>
+      <text x="460" y="88" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">OUTPUT (logits)</text>
+
+      <!-- Arrow to softmax -->
+      <line x1="500" y1="125" x2="560" y2="125" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Softmax -->
+      <rect x="560" y="100" width="80" height="50" rx="4" fill="#1c1828" stroke="#e8c97a" stroke-width="1.5"/>
+      <text x="600" y="122" font-family="EB Garamond,Georgia,serif" font-size="11" fill="#e8c97a" text-anchor="middle">softmax</text>
+      <text x="600" y="138" font-family="JetBrains Mono,monospace" font-size="9" fill="#e8c97a" text-anchor="middle">ℙ(W_T|W_C)</text>
+      <text x="600" y="88" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">OUTPUT</text>
+
+      <!-- Formula bottom -->
+      <text x="350" y="248" font-family="EB Garamond,Georgia,serif" font-size="13" fill="#e4dffa" text-anchor="middle">θ = [W, W']   —   ℙ(W_T|W_C) ∝ exp(v'ᵀ_T · v_C)</text>
+    </svg>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">Architecture CBoW : plusieurs mots de contexte → un mot cible</p>
+  </div>
+
+  <h3>4.3 Architecture Skip-gram</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" style="max-width:700px;width:100%">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- INPUT -->
+      <rect x="20" y="105" width="80" height="50" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="60" y="128" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">w(t)</text>
+      <text x="60" y="144" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">N dims</text>
+      <text x="60" y="93" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">INPUT</text>
+
+      <!-- Arrow to hidden -->
+      <line x1="100" y1="130" x2="270" y2="130" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="185" y="118" font-family="EB Garamond,Georgia,serif" font-size="14" fill="#7eb8d4" text-anchor="middle" font-style="italic">W</text>
+
+      <!-- Hidden -->
+      <rect x="270" y="105" width="60" height="50" rx="4" fill="#2a1f4a" stroke="#a78bfa" stroke-width="2"/>
+      <text x="300" y="128" font-family="JetBrains Mono,monospace" font-size="10" fill="#a78bfa" text-anchor="middle">v_T</text>
+      <text x="300" y="144" font-family="JetBrains Mono,monospace" font-size="9" fill="#a78bfa" text-anchor="middle">d dims</text>
+      <text x="300" y="93" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">PROJECTION</text>
+
+      <!-- Arrows to outputs W' -->
+      <text x="400" y="93" font-family="EB Garamond,Georgia,serif" font-size="14" fill="#7eb8d4" text-anchor="middle" font-style="italic">W'</text>
+      <line x1="330" y1="120" x2="430" y2="40" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr2)"/>
+      <line x1="330" y1="120" x2="430" y2="85" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr2)"/>
+      <line x1="330" y1="130" x2="430" y2="175" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr2)"/>
+      <line x1="330" y1="140" x2="430" y2="220" stroke="#c9a84c" stroke-width="1" stroke-opacity=".5" marker-end="url(#arr2)"/>
+
+      <!-- Output words -->
+      <rect x="430" y="20" width="80" height="30" rx="4" fill="#1c1828" stroke="#7bc496" stroke-width="1"/>
+      <text x="470" y="40" font-family="JetBrains Mono,monospace" font-size="11" fill="#7bc496" text-anchor="middle">w(t-2)</text>
+      <rect x="430" y="65" width="80" height="30" rx="4" fill="#1c1828" stroke="#7bc496" stroke-width="1"/>
+      <text x="470" y="85" font-family="JetBrains Mono,monospace" font-size="11" fill="#7bc496" text-anchor="middle">w(t-1)</text>
+      <rect x="430" y="155" width="80" height="30" rx="4" fill="#1c1828" stroke="#7bc496" stroke-width="1"/>
+      <text x="470" y="175" font-family="JetBrains Mono,monospace" font-size="11" fill="#7bc496" text-anchor="middle">w(t+1)</text>
+      <rect x="430" y="200" width="80" height="30" rx="4" fill="#1c1828" stroke="#7bc496" stroke-width="1"/>
+      <text x="470" y="220" font-family="JetBrains Mono,monospace" font-size="11" fill="#7bc496" text-anchor="middle">w(t+2)</text>
+      <text x="470" y="8" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">OUTPUT</text>
+
+      <!-- Formula -->
+      <text x="350" y="252" font-family="EB Garamond,Georgia,serif" font-size="13" fill="#e4dffa" text-anchor="middle">θ = [W, W']   —   ℙ(W_C|W_T) ∝ exp(v'ᵀ_C · v_T)</text>
+    </svg>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">Architecture Skip-gram : un mot cible → plusieurs mots de contexte</p>
+  </div>
+
+  <h3>4.4 GloVe — Pipeline de factorisation</h3>
+  <div class="diag">
+    <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" style="max-width:720px;width:100%">
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <rect x="10" y="40" width="110" height="55" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1.5"/>
+      <text x="65" y="62" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#e4dffa" text-anchor="middle" font-weight="bold">Corpus</text>
+      <text x="65" y="79" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">Documents bruts</text>
+      <text x="65" y="93" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">Fenêtre taille c</text>
+      <line x1="120" y1="67" x2="155" y2="67" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <rect x="155" y="30" width="130" height="75" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="220" y="52" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#e8c97a" text-anchor="middle" font-weight="bold">Co-occurrence Matrix</text>
+      <text x="220" y="68" font-family="JetBrains Mono,monospace" font-size="9" fill="#c9a84c" text-anchor="middle">X ∈ ℝ^{N×N}</text>
+      <text x="220" y="82" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">X_ij = card{(w_i,w_j)}</text>
+      <text x="220" y="96" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">Globale sur tout le corpus</text>
+      <line x1="285" y1="67" x2="320" y2="67" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <rect x="320" y="30" width="140" height="75" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="390" y="52" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#7eb8d4" text-anchor="middle" font-weight="bold">Factorisation</text>
+      <text x="390" y="68" font-family="JetBrains Mono,monospace" font-size="9" fill="#7eb8d4" text-anchor="middle">min_θ  Σ ψ(X_ij)·(vᵢᵀvⱼ+bᵢ+bⱼ-log X_ij)²</text>
+      <text x="390" y="82" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">SGD / AdaGrad</text>
+      <text x="390" y="96" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">Pas de réseau explicite</text>
+      <line x1="460" y1="67" x2="495" y2="67" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <rect x="495" y="30" width="130" height="75" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="560" y="52" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#7bc496" text-anchor="middle" font-weight="bold">Embeddings</text>
+      <text x="560" y="68" font-family="JetBrains Mono,monospace" font-size="9" fill="#7bc496" text-anchor="middle">V, V' ∈ ℝ^{N×d}</text>
+      <text x="560" y="82" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">v_final = (v + v')/2</text>
+      <text x="560" y="96" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">Lookup + IR</text>
+
+      <text x="360" y="122" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#muted" text-anchor="middle">Différence majeure vs Word2Vec : la matrice X est construite une fois, puis factorisée</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════ §5 FORMULES ═══════ -->
+<section id="s5" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§5</span>
+    <h2 class="sec-title">Formules importantes</h2>
+  </div>
+
+  <div class="fcards">
+
+    <!-- F1: CBoW Loss per word -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Loss CBoW — par mot cible</span>
+        <span class="fc-tag">CBoW · Fondamentale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathcal{L}(W_T;\,\theta) = -\sum_{W_C \in \text{context}(W_T)} \log \mathbb{P}(W_T | W_C)$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$W_T$ : mot cible ; $W_C$ : mot de contexte dans la fenêtre ; $\text{context}(W_T)$ : ensemble des voisins dans la fenêtre de taille $c$</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Pour chaque paire (contexte, cible), on maximise la log-probabilité d'observer la cible sachant le contexte. La somme agrège tous les contextes de $W_T$.</p></div>
+          <div class="fc-item"><h5>Propriété</h5><p>Chaque terme $-\log\mathbb{P}$ est positif (cross-entropie binaire). La loss est nulle seulement si $\mathbb{P}(W_T|W_C) = 1$ pour tous les contextes — ce qui est impossible avec un vocabulaire large.</p></div>
+          <div class="fc-item"><h5>Lien</h5><p>Équivalent à minimiser la cross-entropie entre la distribution prédite softmax et le one-hot du mot cible.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2: Loss globale -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Loss globale du corpus et optimisation</span>
+        <span class="fc-tag">CBoW / Skip-gram</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">
+          $$\mathcal{L}(\mathcal{X};\,\theta) = \frac{1}{N}\sum_{W_T \in \mathcal{X}} \mathcal{L}(W_T;\,\theta)$$
+          $$\theta^* = \arg\min_{\theta}\; \mathcal{L}(\mathcal{X};\,\theta)$$
+        </div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$\mathcal{X}$</h5><p>Le corpus textuel complet (séquence de $N$ tokens). La normalisation par $N$ rend la loss invariante à la taille du corpus.</p></div>
+          <div class="fc-item"><h5>Hypothèse i.i.d.</h5><p>Les termes sont supposés indépendants et identiquement distribués (i.i.d.) — simplification qui ignore la structure séquentielle au-delà de la fenêtre.</p></div>
+          <div class="fc-item"><h5>$\theta = [W, W']$</h5><p>Deux matrices : $W \in \mathbb{R}^{N \times d}$ (embeddings d'entrée/contexte) et $W' \in \mathbb{R}^{N \times d}$ (embeddings de sortie/cible). Ce sont les poids appris.</p></div>
+          <div class="fc-item"><h5>Optimiseur</h5><p>SGD avec Negative Sampling, ou Adam. En pratique : mini-batches, plusieurs époques sur le corpus. La convergence produit $\theta^* = [W^*, W'^*]$.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F3: Softmax -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Softmax — probabilité de prédiction</span>
+        <span class="fc-tag">Architecture · Clé</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbb{P}(W_T | W_C) = \frac{\exp\!\left(\mathbf{v}'^T_T\,\mathbf{v}_C\right)}{\displaystyle\sum_{i=1}^{N} \exp\!\left(\mathbf{v}'^T_i\,\mathbf{v}_C\right)}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Numérateur</h5><p>Amplifie exponentiellement le produit scalaire entre le vecteur de sortie du mot cible $\mathbf{v}'_T$ et le vecteur du contexte $\mathbf{v}_C$. Grand produit scalaire = grande alignement = haute probabilité.</p></div>
+          <div class="fc-item"><h5>Dénominateur</h5><p>Norme de partition sur tout le vocabulaire. Coûteux en $O(N)$ — c'est le goulot d'étranglement. Remplacé par Hierarchical Softmax ($O(\log N)$) ou Negative Sampling.</p></div>
+          <div class="fc-item"><h5>Relation clé</h5><p>$\mathbb{P}(W_T|W_C) \propto \exp(\mathbf{v}'^T_T \mathbf{v}_C) \sim \mathbf{v}'^T_T \mathbf{v}_C$ — approximation utilisée dans le cours.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>Si $\mathbf{v}'_\text{play} \cdot \mathbf{v}_\text{no} = 2.1$ et $\mathbf{v}'_\text{work} \cdot \mathbf{v}_\text{no} = 1.3$, alors "play" est $e^{2.1-1.3} \approx 2.2\times$ plus probable que "work" dans ce contexte.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4: GloVe Loss -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Fonction de perte GloVe</span>
+        <span class="fc-tag">GloVe · Fondamentale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">
+          $$\mathcal{L}(\mathcal{X};\,\theta) = \sum_{w_i,\,w_k \in \mathcal{X}} \underbrace{\psi\!\left(\text{card}\{(w_k,w_i)\}\right)}_{\text{pondération fenêtre}} \!\!\left(\underbrace{\mathbf{v}_i^T\mathbf{v}_k}_{\text{embedding}} + b_i + b_k - \log \text{card}\{(w_k,w_i)\}\right)^{\!2}$$
+          $$\text{avec}\quad \psi(x) = \begin{cases} \left(\dfrac{x}{x_\text{max}}\right)^\alpha & \text{si } x < x_\text{max} \\ 1 & \text{sinon} \end{cases}$$
+        </div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Objectif</h5><p>Maintenir le produit scalaire $\mathbf{v}_i^T\mathbf{v}_k$ proche de $\log\text{card}\{(w_k,w_i)\}$ modulo les biais $b_i, b_k$. C'est une régression quadratique pondérée sur les log-comptes de co-occurrence.</p></div>
+          <div class="fc-item"><h5>Fonction $\psi$</h5><p>Pondère les paires par leur fréquence de co-occurrence. Évite que les très fréquentes paires dominent l'apprentissage (plafond à 1 pour $x \geq x_\text{max}$, ex. $x_\text{max}=100$, $\alpha=0.75$).</p></div>
+          <div class="fc-item"><h5>Biais $b_i, b_k$</h5><p>Absorbent les termes de normalisation ($-\log\text{card}\{w_i\}$ et $-\log\text{card}\{w_k\}$) qui ne dépendent que d'un seul mot. Rendent le modèle plus souple.</p></div>
+          <div class="fc-item"><h5>vs Word2Vec</h5><p>GloVe est un problème d'optimisation convexe sur une matrice pré-calculée (pas un réseau de neurones au sens strict). L'analogie avec la factorisation de matrices est forte.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F5: Document embedding -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Représentation de document et similarité</span>
+        <span class="fc-tag">Usage IR · Pipeline</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">
+          $$\bar{\mathbf{v}}_d = \frac{1}{|d|}\sum_{w \in d} \mathbf{v}_w \qquad \text{(vecteur document)}$$
+          $$\text{score}(q, d) = \frac{\bar{\mathbf{v}}_q \cdot \bar{\mathbf{v}}_d}{\|\bar{\mathbf{v}}_q\|\|\bar{\mathbf{v}}_d\|} \quad \text{ou} \quad \|\bar{\mathbf{v}}_q - \bar{\mathbf{v}}_d\|_2^{-1}$$
+        </div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Intuition</h5><p>La moyenne des vecteurs de mots est une représentation distributionnelle du document. Plus raffiné : pondération TF-IDF, i.e. $\bar{\mathbf{v}}_d = \frac{\sum_w \text{tfidf}(w,d)\,\mathbf{v}_w}{\sum_w \text{tfidf}(w,d)}$.</p></div>
+          <div class="fc-item"><h5>Mesure Word2Vec/GloVe</h5><p>Distance euclidienne ou similarité cosinus dans $\mathbb{R}^d$. Le cours précise : "la mesure de similarité doit être cohérente avec la construction de l'embedding".</p></div>
+          <div class="fc-item"><h5>Limite</h5><p>La moyenne perd l'ordre des mots et la structure syntaxique. "Chien mord homme" ≈ "homme mord chien" dans cet espace.</p></div>
+          <div class="fc-item"><h5>Dimensionnalité</h5><p>Typiquement $d \in \{50, 100, 200, 300\}$. À comparer aux $N \sim 10^5$–$10^6$ dimensions one-hot. Réduction dramatique mais avec perte d'information.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ §6 COMPARAISON ═══════ -->
+<section id="s6" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§6</span>
+    <h2 class="sec-title">Comparaison des approches</h2>
+  </div>
+
+  <h3>6.1 Tableau synthétique complet</h3>
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Modèle</th><th>Type</th><th>Objectif</th><th>Données</th><th>Complexité</th><th>Forces</th><th>Limites</th><th>Similarité IR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TF-IDF</strong></td><td class="m">Content</td>
+          <td>Pondération term-doc</td><td>Matrice terme-doc</td>
+          <td class="g">$O(N \cdot M)$</td>
+          <td class="g">Simple, efficace, interprétable</td>
+          <td class="r">Sparse, aveugle sémantique</td>
+          <td>Cosinus</td>
+        </tr>
+        <tr>
+          <td><strong>LSI</strong></td><td class="m">Content</td>
+          <td>SVD de la matrice TF-IDF</td><td>Matrice terme-doc</td>
+          <td class="m">$O(N^2 M)$ SVD</td>
+          <td class="g">Synonymie, linéaire</td>
+          <td class="r">Relations linéaires seulement</td>
+          <td>Cosinus</td>
+        </tr>
+        <tr>
+          <td><strong>CBoW</strong></td><td class="g">Context (Neural)</td>
+          <td>$\hat{W}_T = \arg\max \mathbb{P}(W_T|W_C)$</td>
+          <td>Paires (contexte → cible)</td>
+          <td class="m">$O(c \cdot d \cdot N)$ par pas</td>
+          <td class="g">Rapide, bon pour mots fréquents</td>
+          <td class="r">Mots rares moins bien représentés</td>
+          <td>Euclidienne</td>
+        </tr>
+        <tr>
+          <td><strong>Skip-gram</strong></td><td class="g">Context (Neural)</td>
+          <td>$\hat{W}_C = \arg\max \mathbb{P}(W_C|W_T)$</td>
+          <td>Paires (cible → contexte)</td>
+          <td class="r">$O(2c \cdot d \cdot N)$ par pas</td>
+          <td class="g">Excellent pour mots rares, analogies</td>
+          <td class="r">Entraînement plus lent</td>
+          <td>Euclidienne</td>
+        </tr>
+        <tr>
+          <td><strong>GloVe</strong></td><td class="g">Context (Matrix)</td>
+          <td>$\mathbf{v}_i^T\mathbf{v}_k \approx \log X_{ik}$</td>
+          <td>Matrice de co-occurrence $X$</td>
+          <td class="g">$O(|X|)$ non-zéros</td>
+          <td class="g">Global, stable, analogies précises</td>
+          <td class="r">Mémoire pour $X$ ($N^2$ entrées)</td>
+          <td>Euclidienne</td>
+        </tr>
+        <tr>
+          <td><strong>FastText</strong></td><td class="g">Context (Subword)</td>
+          <td>Skip-gram sur n-grammes de caractères</td>
+          <td>Paires + sous-mots</td>
+          <td class="m">Similaire Skip-gram</td>
+          <td class="g">Hors-vocabulaire, morphologie</td>
+          <td class="r">Plus lourd que Word2Vec</td>
+          <td>Euclidienne</td>
+        </tr>
+        <tr>
+          <td><strong>BERT</strong></td><td class="v">Context (Transformer)</td>
+          <td>MLM + NSP bidirectionnel</td>
+          <td>Corpus + fine-tuning</td>
+          <td class="r">$O(n^2)$ par couche attention</td>
+          <td class="g">Contextuel, polysémie, SOTA</td>
+          <td class="r">Très coûteux, boîte noire</td>
+          <td>Cosinus (pooling)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2 Non-linéarité : pourquoi Word2Vec/GloVe capturent plus que LSI ?</h3>
+  <p>LSI effectue une décomposition en valeurs singulières (SVD) qui est une opération <strong>linéaire</strong> : elle ne peut capturer que des corrélations linéaires entre termes. Word2Vec et GloVe, en revanche, sont fondés sur la fonction <strong>exponentielle</strong> (via softmax et exp dans GloVe), permettant de capturer des relations <strong>non-linéaires</strong>. C'est pourquoi ils peuvent encoder des analogies complexes comme "roi − homme + femme = reine".</p>
+  <div class="box info">
+    <div class="box-title">🎓 Question d'examen typique</div>
+    <p>"Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non-linéaires entre termes ?" — Réponse : parce que le produit scalaire $\mathbf{v}_i^T\mathbf{v}_k$ est soumis à une fonction exponentielle (softmax ou $\exp$), ce qui introduit la non-linéarité. LSI reste dans l'espace linéaire du produit matriciel.</p>
+  </div>
+</section>
+
+<!-- ═══════ §7 RELATIONS CONCEPTUELLES ═══════ -->
+<section id="s7" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§7</span>
+    <h2 class="sec-title">Relations entre les concepts</h2>
+  </div>
+
+  <div class="diag">
+    <svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="max-width:700px;width:100%">
+      <!-- Root: IR -->
+      <rect x="290" y="10" width="120" height="40" rx="6" fill="#2a1f4a" stroke="#a78bfa" stroke-width="2"/>
+      <text x="350" y="35" font-family="EB Garamond,Georgia,serif" font-size="14" fill="#a78bfa" text-anchor="middle" font-weight="bold">Information Retrieval</text>
+
+      <!-- Content-based -->
+      <line x1="280" y1="50" x2="160" y2="100" stroke="#9089bf" stroke-width="1.5"/>
+      <rect x="70" y="100" width="140" height="38" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1.5"/>
+      <text x="140" y="123" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#9089bf" text-anchor="middle">Content-based</text>
+
+      <!-- Context-based -->
+      <line x1="420" y1="50" x2="540" y2="100" stroke="#c9a84c" stroke-width="2"/>
+      <rect x="460" y="100" width="150" height="38" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="2"/>
+      <text x="535" y="123" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#c9a84c" text-anchor="middle">Context-based</text>
+
+      <!-- TF-IDF -->
+      <line x1="120" y1="138" x2="80" y2="185" stroke="#9089bf" stroke-width="1"/>
+      <rect x="20" y="185" width="110" height="32" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="75" y="204" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">TF-IDF</text>
+
+      <!-- LSI -->
+      <line x1="160" y1="138" x2="180" y2="185" stroke="#9089bf" stroke-width="1"/>
+      <rect x="130" y="185" width="100" height="32" rx="4" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="180" y="204" font-family="JetBrains Mono,monospace" font-size="11" fill="#9089bf" text-anchor="middle">LSI (SVD)</text>
+
+      <!-- Word2Vec -->
+      <line x1="510" y1="138" x2="450" y2="185" stroke="#c9a84c" stroke-width="1.5"/>
+      <rect x="380" y="185" width="120" height="32" rx="4" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="440" y="204" font-family="JetBrains Mono,monospace" font-size="11" fill="#c9a84c" text-anchor="middle">Word2Vec</text>
+
+      <!-- GloVe -->
+      <line x1="560" y1="138" x2="620" y2="185" stroke="#c9a84c" stroke-width="1.5"/>
+      <rect x="560" y="185" width="100" height="32" rx="4" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="610" y="204" font-family="JetBrains Mono,monospace" font-size="11" fill="#c9a84c" text-anchor="middle">GloVe</text>
+
+      <!-- CBoW -->
+      <line x1="420" y1="217" x2="375" y2="265" stroke="#e8c97a" stroke-width="1"/>
+      <rect x="300" y="265" width="100" height="32" rx="4" fill="#1c1828" stroke="#e8c97a" stroke-width="1"/>
+      <text x="350" y="284" font-family="JetBrains Mono,monospace" font-size="11" fill="#e8c97a" text-anchor="middle">CBoW</text>
+
+      <!-- Skip-gram -->
+      <line x1="470" y1="217" x2="490" y2="265" stroke="#e8c97a" stroke-width="1"/>
+      <rect x="430" y="265" width="120" height="32" rx="4" fill="#1c1828" stroke="#e8c97a" stroke-width="1"/>
+      <text x="490" y="284" font-family="JetBrains Mono,monospace" font-size="11" fill="#e8c97a" text-anchor="middle">Skip-gram</text>
+
+      <!-- FastText from Word2Vec -->
+      <line x1="440" y1="217" x2="200" y2="265" stroke="#7eb8d4" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="130" y="265" width="100" height="32" rx="4" fill="#1c1828" stroke="#7eb8d4" stroke-width="1"/>
+      <text x="180" y="284" font-family="JetBrains Mono,monospace" font-size="11" fill="#7eb8d4" text-anchor="middle">FastText</text>
+
+      <!-- Dense Retrieval from all neural -->
+      <line x1="350" y1="297" x2="350" y2="330" stroke="#7bc496" stroke-width="1.5"/>
+      <line x1="490" y1="297" x2="430" y2="330" stroke="#7bc496" stroke-width="1.5"/>
+      <line x1="610" y1="217" x2="530" y2="330" stroke="#7bc496" stroke-width="1.5"/>
+      <rect x="330" y="330" width="170" height="38" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="2"/>
+      <text x="415" y="353" font-family="EB Garamond,Georgia,serif" font-size="12" fill="#7bc496" text-anchor="middle">Dense Retrieval / k-NN</text>
+
+      <!-- BERT arrow from Word2Vec evolution -->
+      <line x1="490" y1="297" x2="620" y2="330" stroke="#a78bfa" stroke-width="1" stroke-dasharray="5,3"/>
+      <rect x="570" y="330" width="110" height="38" rx="5" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="625" y="348" font-family="JetBrains Mono,monospace" font-size="10" fill="#a78bfa" text-anchor="middle">BERT / GPT</text>
+      <text x="625" y="362" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf" text-anchor="middle">(contextuel)</text>
+
+      <!-- Legend -->
+      <rect x="10" y="330" width="12" height="12" fill="none" stroke="#c9a84c" stroke-width="2"/>
+      <text x="26" y="341" font-family="JetBrains Mono,monospace" font-size="9" fill="#c9a84c">context-based</text>
+      <rect x="10" y="348" width="12" height="12" fill="none" stroke="#9089bf" stroke-width="1.5"/>
+      <text x="26" y="358" font-family="JetBrains Mono,monospace" font-size="9" fill="#9089bf">content-based</text>
+      <line x1="10" y1="366" x2="22" y2="366" stroke="#7eb8d4" stroke-dasharray="3,2" stroke-width="1.5"/>
+      <text x="26" y="369" font-family="JetBrains Mono,monospace" font-size="9" fill="#7eb8d4">extension</text>
+    </svg>
+  </div>
+
+  <h3>7.1 Résumé du cours — Tableau unificateur</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Embedding</th><th>Type</th><th>Entité</th><th>Commentaire</th><th>Similarité</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Boolean</strong></td><td>Content</td><td>Term</td><td>Mapping binaire</td><td>Opérateurs logiques</td></tr>
+        <tr><td><strong>TF-IDF</strong></td><td>Content</td><td>Document</td><td>Base pour LSI</td><td>Cosinus</td></tr>
+        <tr><td><strong>BIR</strong></td><td>Content</td><td>Term</td><td>$\mathbb{P}(t_i|R,q)$ → BM25/Okapi</td><td>Produit (i.i.d.)</td></tr>
+        <tr><td><strong>LSI</strong></td><td>Content</td><td>Document</td><td>Décorrélation des termes (SVD)</td><td>Cosinus</td></tr>
+        <tr><td><strong>Word2Vec</strong></td><td class="g">Context</td><td class="g">Term</td><td class="g">Prédiction du terme dans la phrase</td><td class="g">Euclidienne</td></tr>
+        <tr><td><strong>GloVe</strong></td><td class="g">Context</td><td class="g">Term</td><td class="g">Co-occurrence globale pondérée</td><td class="g">Euclidienne</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ §8 HISTOIRE ═══════ -->
+<section id="s8" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§8</span>
+    <h2 class="sec-title">Perspective historique</h2>
+  </div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1957</div>
+      <div class="tl-title">Hypothèse distributionnelle (Firth)</div>
+      <div class="tl-desc">"You shall know a word by the company it keeps." — Fondement théorique de tous les modèles de co-occurrence.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1988–2000</div>
+      <div class="tl-title">Modèles statistiques classiques</div>
+      <div class="tl-desc">TF-IDF, BIR/BM25, LSI (Deerwester et al., 1990). Approches content-based linéaires. Limite : sparse, pas de sémantique latente non-linéaire.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2003</div>
+      <div class="tl-title">Neural Probabilistic Language Model (Bengio et al.)</div>
+      <div class="tl-desc">Premier modèle neuronal apprenant des représentations de mots continues dans un espace de faible dimension. Trop lent pour les grands corpus de l'époque.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2013</div>
+      <div class="tl-title">Word2Vec — Mikolov et al. (Google)</div>
+      <div class="tl-desc">Révolution : CBoW et Skip-gram avec Negative Sampling rendent l'entraînement scalable sur des milliards de tokens. Premières démonstrations d'analogies vectorielles (roi − homme + femme = reine). Références [6,7] du cours.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2014</div>
+      <div class="tl-title">GloVe — Pennington, Socher, Manning (Stanford)</div>
+      <div class="tl-desc">Factorisation explicite de la matrice de co-occurrence globale. Combine les avantages de la factorisation matricielle (LSI) et de l'apprentissage prédicatif (Word2Vec). Référence [9] du cours.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2016–2017</div>
+      <div class="tl-title">FastText (Joulin, Grave, Bojanowski, Mikolov — Facebook)</div>
+      <div class="tl-desc">Extension de Word2Vec aux sous-mots (n-grammes de caractères) : gestion des mots hors-vocabulaire et de la morphologie. Références [1,4,5] du cours.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2017–2018</div>
+      <div class="tl-title">ELMo, Transformer, BERT</div>
+      <div class="tl-desc">Embeddings contextuels : un même mot reçoit un vecteur différent selon son contexte (polysémie). Vaswani et al. (Attention is All You Need) [11], Devlin et al. (BERT) [3]. Transition vers les LLMs modernes.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2019–présent</div>
+      <div class="tl-title">Dense Retrieval & RAG</div>
+      <div class="tl-desc">DPR (Dense Passage Retrieval), bi-encodeurs BERT, ColBERT, SPLADE. Les embeddings neuronaux deviennent la base de la recherche moderne et des systèmes RAG (Retrieval-Augmented Generation).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ §9 SYSTÈMES MODERNES ═══════ -->
+<section id="s9" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§9</span>
+    <h2 class="sec-title">Lien avec les systèmes modernes</h2>
+  </div>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Dense Retrieval</div>
+      <h4>Bi-encodeurs (DPR)</h4>
+      <p>Word2Vec/GloVe → BERT encoder. Requête et documents encodés séparément en vecteurs denses. La recherche reste du k-NN dans $\mathbb{R}^d$. Même principe, meilleure qualité des embeddings.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Vector Databases</div>
+      <h4>FAISS, Pinecone, Weaviate</h4>
+      <p>Héritiers directs de l'indexation ANN (Approximate Nearest Neighbor). Construits pour stocker et rechercher des millions/milliards de vecteurs denses — exactement les $\bar{\mathbf{v}}_d$ du pipeline.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">RAG</div>
+      <h4>Retrieval-Augmented Generation</h4>
+      <p>Phase 1 : retrieval dense (embeddings) pour trouver les documents pertinents. Phase 2 : génération LLM conditionnée sur ces documents. Les embeddings du cours constituent la brique de base de la phase 1.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Hybrid Retrieval</div>
+      <h4>BM25 + Dense (SPLADE, ColBERT)</h4>
+      <p>Combinaison de la recherche sparse (BM25, TF-IDF) et dense (embeddings). Corrige les faiblesses respectives : BM25 manque la sémantique, les embeddings manquent les correspondances exactes.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Re-ranking</div>
+      <h4>Cross-encodeurs</h4>
+      <p>Après un premier retrieval par embeddings (rapide), un cross-encodeur (BERT sur la paire (q, d) concaténée) affine le classement. Pipeline en deux étapes : recall par embeddings, précision par cross-encodeur.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Biais sociétaux</div>
+      <h4>Risque d'amplification</h4>
+      <p>Les embeddings entraînés sur des textes réels reflètent les biais du corpus. Ex. : Bolukbasi et al. [2] montrent "homme → programmeur, femme → ménagère". Vigilance nécessaire en déploiement.</p>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <div class="box-title">⚠ Biais et limites notées dans le cours</div>
+    <p>Le cours (slide 27) souligne explicitement : "Since embeddings are trained on real text, [they carry] societal biases." Les embeddings statiques (Word2Vec, GloVe) souffrent aussi de la <strong>polysémie</strong> : le mot "bank" (banque / rive de rivière) reçoit un seul vecteur moyen, incapable de distinguer les deux sens. BERT résout ce problème via des embeddings contextuels.</p>
+  </div>
+</section>
+
+<!-- ═══════ §10 QUESTIONS D'EXAMEN ═══════ -->
+<section id="s10" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§10</span>
+    <h2 class="sec-title">Questions d'examen possibles</h2>
+  </div>
+
+  <div class="qlevel easy">🟢 Facile</div>
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Quelle est la différence fondamentale entre CBoW et Skip-gram ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p><strong>CBoW</strong> prédit le mot cible $W_T$ à partir des mots de contexte $W_C$ (plusieurs → un). L'objectif est $\mathbb{P}(W_T|W_C)$. <strong>Skip-gram</strong> fait l'inverse : prédit les mots de contexte à partir du mot central (un → plusieurs), objectif $\mathbb{P}(W_C|W_T)$. CBoW est plus rapide ; Skip-gram est meilleur pour les mots rares et les analogies sémantiques.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Comment utilise-t-on un modèle Word2Vec pré-entraîné pour représenter un document ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>On utilise la matrice $W^*$ comme <strong>table de lookup</strong> : chaque mot $w \in d$ est remplacé par son vecteur $\mathbf{v}_w = W^*[w] \in \mathbb{R}^d$. Le vecteur document est typiquement la <strong>moyenne</strong> des vecteurs de ses termes : $\bar{\mathbf{v}}_d = \frac{1}{|d|}\sum_{w \in d} \mathbf{v}_w$. Une pondération TF-IDF peut être appliquée pour accentuer les termes informatifs. La mesure de similarité associée est la distance euclidienne.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Qu'est-ce que la fenêtre glissante (window) dans Word2Vec ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>La <strong>fenêtre glissante</strong> de taille $c$ définit le contexte d'un mot : pour le mot à la position $t$, le contexte est l'ensemble des mots aux positions $t-c, \ldots, t-1, t+1, \ldots, t+c$. Elle est "glissée" sur tout le corpus pour générer les paires d'entraînement $(W_C, W_T)$. $c$ est un hyperparamètre : une grande fenêtre capture des relations thématiques (topiques), une petite fenêtre capture des relations syntaxiques et de co-location directe.</p></div></div>
+
+  <div class="qlevel med">🔵 Intermédiaire</div>
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Pourquoi le softmax standard pose-t-il un problème d'efficacité, et comment le résout-on ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>Le softmax $\mathbb{P}(W_T|W_C) = \frac{\exp(\mathbf{v}'^T_T \mathbf{v}_C)}{\sum_{i=1}^N \exp(\mathbf{v}'^T_i \mathbf{v}_C)}$ nécessite de calculer $N$ produits scalaires pour le dénominateur, avec $N \sim 10^5$–$10^6$ — coût $O(N \cdot d)$ par gradient, inacceptable. Deux solutions : (1) <strong>Hierarchical Softmax</strong> : arbre binaire sur le vocabulaire, complexité $O(d \log N)$, exploite les hiérarchies comme WordNet ; (2) <strong>Negative Sampling</strong> : remplace la classification sur $N$ classes par un objectif binaire discriminant les vraies paires des paires négatives tirées aléatoirement, complexité $O(k \cdot d)$ avec $k \ll N$.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Expliquez le rôle de la fonction de pondération $\psi$ dans GloVe. Pourquoi est-elle nécessaire ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>Sans $\psi$, la loss de GloVe traiterait toutes les paires de co-occurrence avec le même poids. Cela pose deux problèmes : (1) les paires très fréquentes (ex. "le chat") domineraient l'optimisation au détriment des paires rares mais sémantiquement riches ; (2) les co-occurrences de zéro sont non-définies en log. La fonction $\psi(x) = (x/x_\text{max})^\alpha$ si $x < x_\text{max}$, sinon $1$, (avec $\alpha \approx 0.75$) : donne un poids linéairement croissant aux paires rares, plafonne à 1 pour les très fréquentes, et est nulle pour $x=0$ ($\psi(0)=0$, évitant le calcul sur les paires absentes). C'est un choix de régularisation empiriquement justifié.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Quelle est la dimensionnalité impliquée dans Word2Vec et comment choisit-on $d$ ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>Le vocabulaire a taille $N$ (typiquement $10^4$–$10^6$). Les représentations one-hot sont de dimension $N$. Après projection via $W \in \mathbb{R}^{N \times d}$, chaque mot est représenté en dimension $d$ (typiquement 50–300). Le choix de $d$ est un hyperparamètre : $d$ trop petit perd de l'information sémantique, $d$ trop grand augmente le coût de calcul et peut entraîner du sur-apprentissage si le corpus est petit. En pratique : $d=100$ pour des petits corpus, $d=300$ pour Wikipedia/CommonCrawl. Les pre-trained models (Google News Word2Vec = $d=300$, GloVe-6B = $d \in \{50, 100, 200, 300\}$) offrent des références standard.</p></div></div>
+
+  <div class="qlevel hard">🔴 Difficile</div>
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Pourquoi Word2Vec et GloVe peuvent-ils capturer des relations non-linéaires entre termes, contrairement à LSI ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>LSI opère une SVD sur la matrice TF-IDF : c'est une transformation strictement <strong>linéaire</strong> (produit de matrices) qui capture les corrélations linéaires entre termes. Elle ne peut pas représenter des relations complexes. Word2Vec utilise la fonction <strong>softmax</strong> (exponentielle) : $\mathbb{P}(W_T|W_C) \propto \exp(\mathbf{v}'^T_T \mathbf{v}_C)$. Cette non-linéarité exponentielle permet de modéliser des espaces de probabilité non-linéaires dans les poids. GloVe utilise $\mathbf{v}_i^T\mathbf{v}_k \approx \log X_{ik}$ — la transformation logarithmique est elle-même non-linéaire, et les vecteurs appris encodent des relations multiplicatives dans l'espace des comptes de co-occurrence (le ratio de probabilités correspond à une soustraction vectorielle). C'est pourquoi les <em>analogies</em> $\vec{v}_A - \vec{v}_B + \vec{v}_C \approx \vec{v}_D$ fonctionnent dans ces espaces mais pas dans LSI.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Quel est le risque d'enregistrer des relations inappropriées entre termes ? Donnez un exemple et une solution.</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a"><p>Les embeddings capturent fidèlement les patterns statistiques du corpus d'entraînement, ce qui inclut les <strong>biais sociétaux</strong>. Bolukbasi et al. [2] montrent que dans Word2Vec entraîné sur Google News : $\vec{v}_\text{homme} - \vec{v}_\text{femme} \approx \vec{v}_\text{programmeur} - \vec{v}_\text{femme au foyer}$ — un biais de genre structurel. Ce biais se propage ensuite dans toute application aval (recrutement, recommandation, etc.). Solutions : (1) <strong>Débiaisage post-hoc</strong> (Hard Debiasing de Bolukbasi) : identifier et neutraliser la direction du biais dans l'espace d'embedding ; (2) <strong>Corpus diversifié</strong> et représentatif ; (3) Évaluation systématique des biais avant déploiement. Ce point est explicitement souligné dans le cours (slide 27) comme une limite importante.</p></div></div>
+
+  <div class="qi"><div class="qi-q" onclick="toggle(this)"><span class="qi-qtxt">Comparez formellement Word2Vec (CBoW) et GloVe : quelles sont leurs différences fondamentales de construction, et quand préférer l'un ou l'autre ?</span><span class="qi-arr">▾</span></div>
+  <div class="qi-a">
+    <p><strong>CBoW/Word2Vec</strong> : apprentissage en ligne (streaming) sur des paires locales (contexte, cible) via un réseau de neurones. Objectif : $\min -\sum \log \mathbb{P}(W_T|W_C)$. Traite chaque co-occurrence avec le même poids, indépendamment de sa fréquence globale. Efficace sur streaming, adapté aux grands corpus dynamiques.</p>
+    <p><strong>GloVe</strong> : construction d'abord de la matrice de co-occurrence $X \in \mathbb{R}^{N \times N}$ (une passe complète sur le corpus), puis optimisation batch de $\min \sum \psi(X_{ij})(v_i^T v_j + b_i + b_j - \log X_{ij})^2$. Pondère les co-occurrences par leur fréquence. Plus stable, peut être vu comme une factorisation de matrice pondérée.</p>
+    <p><strong>Quand préférer ?</strong> GloVe est généralement supérieur sur les tâches d'analogies et de similarité sémantique. Word2Vec (Skip-gram) est meilleur pour les mots rares. Sur corpus très large et dynamique : Word2Vec. Sur corpus fixe et bien défini : GloVe. En pratique : les deux sont souvent comparables ; les embeddings contextuels (BERT) les dominent tous les deux sur les tâches avancées.</p>
+  </div></div>
+</section>
+
+<!-- ═══════ §11 PIÈGES ═══════ -->
+<section id="s11" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§11</span>
+    <h2 class="sec-title">Pièges classiques</h2>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre W et W'</strong> — Le réseau apprend deux matrices d'embedding : $W$ (vecteurs de contexte $\mathbf{v}_C$) et $W'$ (vecteurs de cible $\mathbf{v}'_T$). L'embedding final d'un mot est généralement la ligne correspondante de $W$ (ou la moyenne de $W$ et $W'$). Dire que "les poids $\theta$ sont les embeddings" sans préciser laquelle des deux matrices on utilise est une imprécision courante.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre CBoW et Skip-gram</strong> — CBoW : <em>contexte → cible</em> (plusieurs mots en entrée, un en sortie). Skip-gram : <em>cible → contexte</em> (un mot en entrée, plusieurs en sortie). Attention aux diagrammes : dans CBoW, les mots de contexte $w_{t-2}, w_{t-1}, w_{t+1}, w_{t+2}$ sont en INPUT ; dans Skip-gram, ils sont en OUTPUT.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire que GloVe utilise un réseau de neurones</strong> — GloVe est une <em>factorisation de matrice pondérée</em>, pas un réseau de neurones au sens strict. Il n'y a pas de couche cachée avec activation non-linéaire. La non-linéarité vient du logarithme dans l'objectif. Word2Vec utilise un vrai réseau (avec softmax).</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Mesure de similarité inadaptée</strong> — Le cours insiste : la mesure de similarité doit être cohérente avec la construction de l'embedding. Pour Word2Vec et GloVe : <strong>distance euclidienne</strong> (ou cosinus). Utiliser la mesure cosinus de LSI sur des embeddings Word2Vec est techniquement possible mais non optimal. Ne pas mélanger les familles.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Penser que la moyenne de vecteurs de mots est parfaite</strong> — La représentation $\bar{\mathbf{v}}_d = \frac{1}{|d|}\sum_w \mathbf{v}_w$ perd l'ordre des mots, la syntaxe, et est sensible aux stopwords. "Le chat mange la souris" et "La souris mange le chat" ont le même vecteur moyen ! En pratique, on filtre les stopwords et on pondère par TF-IDF.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre embeddings statiques et contextuels</strong> — Word2Vec et GloVe produisent des embeddings <em>statiques</em> : un seul vecteur par mot, indépendamment du contexte. "Banque" aura le même vecteur qu'il s'agisse d'une banque financière ou d'une rive. BERT produit des embeddings <em>contextuels</em> : le vecteur varie selon le contexte de la phrase.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Oublier que l'hypothèse i.i.d. est une simplification</strong> — La loss globale $\frac{1}{N}\sum \mathcal{L}(W_T;\theta)$ suppose que les tokens sont i.i.d. Ce n'est évidemment pas vrai dans un texte naturel (structure séquentielle, dépendances longues). Cette simplification est nécessaire pour rendre le problème tractable, mais crée un décalage avec la réalité linguistique.</div>
+  </div>
+</section>
+
+<!-- ═══════ §12 FICHE DE RÉVISION ═══════ -->
+<section id="s12" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">§12</span>
+    <h2 class="sec-title">Fiche de révision finale</h2>
+  </div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>Pipeline (5 phases)</h4>
+      <ul>
+        <li><strong>1.</strong> Corpus → tokenisation → vocabulaire $\mathcal{V}$</li>
+        <li><strong>2.</strong> Fenêtre glissante → paires (ou matrice $X$)</li>
+        <li><strong>3.</strong> Réseau neuronal → $\theta^* = [W^*, W'^*]$</li>
+        <li><strong>4.</strong> Lookup → vecteur document $\bar{\mathbf{v}}_d$ → Index ANN</li>
+        <li><strong>5.</strong> Requête → $\bar{\mathbf{v}}_q$ → k-NN → top-$k$ docs</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Word2Vec — 2 variantes</h4>
+      <ul>
+        <li><strong>CBoW</strong> : contexte → cible, $\mathbb{P}(W_T|W_C)$</li>
+        <li><strong>Skip-gram</strong> : cible → contexte, $\mathbb{P}(W_C|W_T)$</li>
+        <li><strong>$\theta$</strong> = $[W, W']$ deux matrices $N \times d$</li>
+        <li><strong>$\mathbb{P}$</strong> $\propto \exp(\mathbf{v}'^T_T \mathbf{v}_C)$ via softmax</li>
+        <li><strong>Neg. Sampling</strong> : $O(k \cdot d)$ au lieu de $O(N \cdot d)$</li>
+        <li><strong>H. Softmax</strong> : arbre WordNet → $O(\log N)$</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>GloVe — Formules clés</h4>
+      <ul>
+        <li>$X_{ij}$ = card$\{(w_i, w_j)\}$ sur tout le corpus</li>
+        <li>$\mathbf{v}_i^T \mathbf{v}_k = \log X_{ik} - \log \text{card}(w_i)$</li>
+        <li>$b_i = -\log\text{card}(w_i)$ (terme de biais)</li>
+        <li>Ratio : $\phi(w_i - w_j, w_k) = \frac{\mathbb{P}(w_k|w_i)}{\mathbb{P}(w_k|w_j)}$</li>
+        <li>$\psi(x) = (x/x_\text{max})^\alpha$ si $x < x_\text{max}$, sinon $1$</li>
+        <li>Loss : moindres carrés pondérés par $\psi$</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Comparaison rapide</h4>
+      <ul>
+        <li><strong>Content-based</strong> : TF-IDF, LSI — fréquences, linéaire</li>
+        <li><strong>Context-based</strong> : W2V, GloVe — co-occurrence, non-linéaire</li>
+        <li><strong>CBoW</strong> : rapide, mots fréquents</li>
+        <li><strong>Skip-gram</strong> : lent, mots rares, meilleure qualité</li>
+        <li><strong>GloVe</strong> : global, stable, analogies précises</li>
+        <li><strong>BERT</strong> : contextuel, polysémie, mais coûteux</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Points à mémoriser absolument</h4>
+      <ul>
+        <li>Hypothèse distributionnelle : le contexte = le sens</li>
+        <li>Non-linéarité : $\exp$ dans softmax/GloVe vs SVD linéaire (LSI)</li>
+        <li>$d \ll N$ : compression sémantique dense (typiquement 100–300)</li>
+        <li>Similarité : euclidienne pour W2V/GloVe (pas cosinus)</li>
+        <li>Biaisés par le corpus : biais sociétaux inévitables</li>
+        <li>Statiques : un vecteur par mot (pas de polysémie)</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Questions clés du cours (slide 26)</h4>
+      <ul>
+        <li>Non-linéarité : via $\exp$ dans softmax/log</li>
+        <li>Différences CBoW vs GloVe : local/prédiction vs global/factorisation</li>
+        <li>Usage : lookup + moyenne pour les documents</li>
+        <li>Dimensionnalité : $N$ → $d \in [50, 300]$</li>
+        <li>Risque : biais sociétaux amplifiés</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box ok" style="margin-top:2rem">
+    <div class="box-title">🎯 Formule essentielle à connaître par cœur</div>
+    <p>$$\underbrace{\mathbb{P}(W_T|W_C)}_{\text{CBoW}} = \frac{\exp(\mathbf{v}'^T_T \mathbf{v}_C)}{\sum_{i} \exp(\mathbf{v}'^T_i \mathbf{v}_C)} \quad \Longleftrightarrow \quad \underbrace{\mathbf{v}_i^T\mathbf{v}_k + b_i + b_k \approx \log X_{ik}}_{\text{GloVe}}$$</p>
+    <p style="font-size:.9rem;color:var(--muted)">CBoW apprend par prédiction locale. GloVe apprend par factorisation globale. Les deux produisent des vecteurs denses $\mathbf{v} \in \mathbb{R}^d$ utilisables pour la recherche par k-NN.</p>
+  </div>
+
+  <div class="box vio" style="margin-top:1rem">
+    <div class="box-title">📌 Références bibliographiques du cours</div>
+    <p style="font-size:.9rem">
+      [6] Mikolov et al. 2013 — Word2Vec original (CBoW + Skip-gram) · 
+      [7] Mikolov et al. 2013 — Cross-lingual embeddings · 
+      [9] Pennington, Socher, Manning 2014 — GloVe (EMNLP) · 
+      [1,4,5] Joulin, Grave, Bojanowski, Mikolov — FastText · 
+      [3] Devlin et al. 2018 — BERT · 
+      [11] Vaswani et al. 2017 — Attention is All You Need · 
+      [2] Bolukbasi et al. 2016 — Debiasing word embeddings
+    </p>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Accordion toggle
+function toggle(el) {
+  const ans = el.nextElementSibling;
+  const arr = el.querySelector('.qi-arr');
+  const isOpen = ans.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.qi-a.open').forEach(a => {
+    a.classList.remove('open');
+    a.previousElementSibling.querySelector('.qi-arr').style.transform = '';
+  });
+  if (!isOpen) {
+    ans.classList.add('open');
+    arr.style.transform = 'rotate(180deg)';
+  }
+}
+
+// Scroll spy
+const sections = document.querySelectorAll('.sec');
+const navLinks = document.querySelectorAll('.sb nav a');
+window.addEventListener('scroll', () => {
+  let curr = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) curr = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + curr) a.classList.add('active');
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

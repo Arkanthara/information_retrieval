@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.02 — Modèles Vectoriel & Probabiliste · Guide d'Examen Oral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true, tags: 'ams' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+  startup: { typeset: true }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root {
+  --bg:#0d0b14; --bg-card:#161221; --bg-code:#1c1828;
+  --text:#e4dffa; --muted:#9089bf; --border:rgba(180,150,80,.18); --bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c; --glight:#e8c97a; --blue:#7eb8d4; --green:#7bc496; --red:#e07b7b; --violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif; --fd:'Cormorant Garamond',Georgia,serif; --fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+/* SIDEBAR */
+.sb{width:275px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.18rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.86rem;display:block;
+  padding:.3rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.7rem;color:var(--gold);margin-right:.45rem;opacity:.7}
+.sb-section{font-family:var(--fm);font-size:.64rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.6rem .7rem .25rem;opacity:.55;margin-top:.4rem}
+.sb-q{font-family:var(--fm);font-size:.68rem;color:var(--green);padding:.25rem .7rem;opacity:.75;font-style:italic}
+/* MAIN */
+.main{margin-left:275px;flex:1;padding:3rem 4rem;max-width:1060px}
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.4rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:640px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+h5{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--violet);margin:1.2rem 0 .4rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}td.b{color:var(--blue)}
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center;margin-top:.1rem}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:800px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+.qi-a strong{color:var(--glight)}
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+/* DIAGRAM */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.1rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.87rem;color:var(--muted);margin:0;line-height:1.6}
+/* STEP PIPELINE */
+.pipeline{display:flex;align-items:stretch;gap:0;margin:1.6rem 0;overflow-x:auto;padding-bottom:.5rem}
+.step{background:var(--bg-card);border:1px solid var(--border);border-radius:0;padding:.9rem 1rem;min-width:130px;flex:1;position:relative;text-align:center}
+.step:first-child{border-radius:8px 0 0 8px}
+.step:last-child{border-radius:0 8px 8px 0}
+.step-n{font-family:var(--fm);font-size:.65rem;color:var(--gold);opacity:.7;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.08em}
+.step-t{font-family:var(--fd);font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
+.step-d{font-size:.8rem;color:var(--muted);line-height:1.45}
+.step-arr{display:flex;align-items:center;padding:0 .3rem;color:var(--gold);font-size:1.2rem;opacity:.6;flex-shrink:0;align-self:center}
+.step.hl{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.05)}
+.step.hl2{border-color:rgba(126,184,212,.4);background:rgba(126,184,212,.04)}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}.pipeline{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sb">
+  <div class="sb-logo">IR.02</div>
+  <div class="sb-sub">Information Embedding · Sparse Models</div>
+  <nav>
+    <ul>
+      <div class="sb-section">Introduction</div>
+      <li><a href="#resume"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#oral"><span class="n">02</span>Réponse d'oral</a></li>
+
+      <div class="sb-section">Question 1</div>
+      <div class="sb-q">Modèle Vectoriel (VSM)</div>
+      <li><a href="#vsm-pipeline"><span class="n">03</span>Pipeline VSM</a></li>
+      <li><a href="#vsm-bool"><span class="n">↳</span>Boolean Model</a></li>
+      <li><a href="#vsm-tfidf"><span class="n">↳</span>TF-IDF Embedding</a></li>
+      <li><a href="#vsm-geom"><span class="n">↳</span>Géométrie</a></li>
+      <li><a href="#vsm-sim"><span class="n">↳</span>Similarités</a></li>
+      <li><a href="#vsm-cosine"><span class="n">↳</span>Cosine RSV</a></li>
+
+      <div class="sb-section">Question 2</div>
+      <div class="sb-q">Modèle Probabiliste (BIR)</div>
+      <li><a href="#bir-pipeline"><span class="n">04</span>Pipeline BIR</a></li>
+      <li><a href="#bir-prp"><span class="n">↳</span>PRP (Robertson)</a></li>
+      <li><a href="#bir-bayes"><span class="n">↳</span>Décision Bayésienne</a></li>
+      <li><a href="#bir-indep"><span class="n">↳</span>Binary Independence</a></li>
+      <li><a href="#bir-rsv"><span class="n">↳</span>RSV BIR</a></li>
+      <li><a href="#bir-estim"><span class="n">↳</span>Estimation</a></li>
+      <li><a href="#bir-bm25"><span class="n">↳</span>RSJ & BM25</a></li>
+
+      <div class="sb-section">Synthèse</div>
+      <li><a href="#formules"><span class="n">05</span>Formules clés</a></li>
+      <li><a href="#comparaison"><span class="n">06</span>Comparaison</a></li>
+      <li><a href="#historique"><span class="n">07</span>Perspective historique</a></li>
+      <li><a href="#moderne"><span class="n">08</span>Systèmes modernes</a></li>
+      <li><a href="#questions"><span class="n">09</span>Questions d'examen</a></li>
+      <li><a href="#pieges"><span class="n">10</span>Pièges classiques</a></li>
+      <li><a href="#fiche"><span class="n">11</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">IR.02 · Sparse Embeddings</div>
+  <h1>Modèles de <em>Récupération</em><br>Vectoriel & Probabiliste</h1>
+  <p class="hero-desc">Pipeline complet — des documents bruts jusqu'à la réponse à une requête — pour les deux modèles fondamentaux de l'Information Retrieval classique.</p>
+  <div class="badges">
+    <span class="badge">Vector Space Model</span>
+    <span class="badge b">BIR / BM25</span>
+    <span class="badge g">TF-IDF</span>
+    <span class="badge v">Cosine Similarity</span>
+    <span class="badge">Bayesian Odds</span>
+    <span class="badge b">Robertson 1977</span>
+  </div>
+</header>
+
+<!-- ═══ SECTION 1: RÉSUMÉ EXÉCUTIF ═══ -->
+<section class="sec" id="resume">
+  <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Résumé exécutif</h2></div>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Question 1 · Sparse Embedding</div>
+      <h4>Modèle Vectoriel (VSM)</h4>
+      <p>Les documents sont encodés en vecteurs TF-IDF dans $\mathbb{R}^M$. La similarité entre document et requête est calculée par le <strong>cosinus</strong> des vecteurs. Le RSV est continu dans $[0,1]$.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Question 2 · Probabilistic IR</div>
+      <h4>Modèle Probabiliste (BIR)</h4>
+      <p>On estime la <strong>probabilité de pertinence</strong> $P(R|d_j,q)$ via le rapport de cotes bayésien. Sous l'hypothèse d'indépendance binaire, le RSV = log-odds ratio, conduisant à <strong>BM25</strong>.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Concept central</div>
+      <h4>RSV — Retrieval Status Value</h4>
+      <p>Fonction $\text{RSV}(d_j, q) \in \mathbb{R}$ mesurant la pertinence du document $d_j$ par rapport à la requête $q$. <strong>L'ordonnancement par RSV décroissant</strong> produit la liste de résultats.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Point commun fondamental</div>
+      <h4>TF-IDF : embedding de base</h4>
+      <p>Les deux modèles partent du même embedding $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$. Le VSM l'utilise géométriquement ; le BIR l'utilise probabilistement. L'IDF réapparaît naturellement dans les deux.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2: RÉPONSE D'ORAL ═══ -->
+<section class="sec" id="oral">
+  <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+
+  <h3>Question 1 — Modèle Vectoriel</h3>
+  <div class="oral">
+    <p>Le modèle vectoriel commence par transformer chaque document textuel en un vecteur numérique dans un espace de dimension $M$, où $M$ est la taille du vocabulaire. Cette transformation se fait via l'embedding TF-IDF.</p>
+    <p>Pour chaque terme $i$ dans le document $j$, on calcule un poids $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$. La <em>fréquence des termes</em> (TF) capture l'importance locale du terme dans ce document, tandis que la <em>fréquence inverse de document</em> (IDF) mesure son pouvoir discriminant dans la collection : un terme présent dans tous les documents a un IDF proche de zéro, donc un poids nul.</p>
+    <p>Chaque document $d_j$ devient ainsi un vecteur colonne de la matrice terme-document $W \in \mathbb{R}^{M \times N}$. La requête, traitée selon le paradigme <em>Query-by-Example</em>, est projetée dans ce même espace.</p>
+    <p>La pertinence est alors calculée comme la <em>similarité cosinus</em> entre le vecteur document et le vecteur requête — c'est-à-dire le cosinus de l'angle entre ces deux vecteurs. Cette mesure est invariante à la longueur des documents et dérive directement de la notion d'intersection ensembliste étendue aux embeddings continus. Les documents sont finalement ordonnés par RSV décroissant.</p>
+  </div>
+
+  <h3>Question 2 — Modèle Probabiliste (BIR)</h3>
+  <div class="oral">
+    <p>Le modèle probabiliste repose sur le <em>Probability Ranking Principle</em> de Robertson (1977) : le système optimal classe les documents par ordre décroissant de probabilité de pertinence $P(R = \text{vrai} \mid d_j, q)$.</p>
+    <p>Pour éviter de normaliser cette probabilité, on utilise le <em>rapport de cotes bayésien</em> : $O(R \mid d_j, q) = P(R \mid d_j, q) / P(\bar{R} \mid d_j, q)$. Via le théorème de Bayes, ce ratio est proportionnel au rapport de vraisemblances $P(d_j \mid R, q) / P(d_j \mid \bar{R}, q)$.</p>
+    <p>L'hypothèse <em>Binary Independence</em> — occurrences binaires et indépendantes des termes — permet de factoriser cette vraisemblance. Après passage au logarithme et simplification, le RSV devient une somme de log-odds pondérée par les indicateurs de présence des termes communs entre le document et la requête.</p>
+    <p>À l'initialisation sans feedback, ce modèle retrouve l'IDF classique. Avec du pseudo-feedback, les estimations de probabilité se raffinent itérativement. Cette approche a été formalisée par Robertson et Sparck Jones, conduisant au modèle <strong>BM25</strong> qui intègre la fréquence des termes et la longueur du document — encore utilisé aujourd'hui dans Elasticsearch et Lucene.</p>
+  </div>
+</section>
+
+<!-- ═══ SECTION 3: VSM PIPELINE ═══ -->
+<section class="sec" id="vsm-pipeline">
+  <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Question 1 · Modèle Vectoriel (VSM)</h2></div>
+  <div class="box ok">
+    <div class="box-title">Pipeline global</div>
+    Documents bruts → Vocabulaire → Embedding TF-IDF → Espace vectoriel $\mathbb{R}^M$ → Query-by-Example → Cosine Similarity → Liste ordonnée
+  </div>
+
+  <!-- Pipeline visuel -->
+  <div class="diag">
+    <svg viewBox="0 0 860 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:860px;font-family:'EB Garamond',Georgia,serif">
+      <!-- Background boxes -->
+      <rect x="5" y="20" width="100" height="80" rx="6" fill="#161221" stroke="#c9a84c" stroke-width="1.2" stroke-opacity=".5"/>
+      <rect x="135" y="20" width="110" height="80" rx="6" fill="#161221" stroke="rgba(180,150,80,.3)" stroke-width="1"/>
+      <rect x="275" y="20" width="125" height="80" rx="6" fill="#161221" stroke="rgba(180,150,80,.3)" stroke-width="1"/>
+      <rect x="430" y="20" width="120" height="80" rx="6" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5" stroke-opacity=".7"/>
+      <rect x="580" y="20" width="120" height="80" rx="6" fill="#161221" stroke="rgba(180,150,80,.3)" stroke-width="1"/>
+      <rect x="730" y="20" width="110" height="80" rx="6" fill="#161221" stroke="#7bc496" stroke-width="1.2" stroke-opacity=".6"/>
+      <!-- Arrows -->
+      <path d="M106 60 L133 60" stroke="#c9a84c" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <path d="M246 60 L273 60" stroke="#c9a84c" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <path d="M401 60 L428 60" stroke="#c9a84c" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <path d="M551 60 L578 60" stroke="#c9a84c" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr)"/>
+      <path d="M701 60 L728 60" stroke="#7bc496" stroke-width="1.5" stroke-opacity=".6" marker-end="url(#arr2)"/>
+      <!-- Labels -->
+      <text x="55" y="52" fill="#e4dffa" font-size="10" text-anchor="middle" font-weight="600">Raw Docs</text>
+      <text x="55" y="65" fill="#9089bf" font-size="9" text-anchor="middle">$d_1,\ldots,d_N$</text>
+      <text x="55" y="77" fill="#9089bf" font-size="9" text-anchor="middle">texte brut</text>
+      <text x="190" y="50" fill="#e4dffa" font-size="10" text-anchor="middle" font-weight="600">Vocabulaire</text>
+      <text x="190" y="63" fill="#9089bf" font-size="9" text-anchor="middle">$M$ termes</text>
+      <text x="190" y="76" fill="#9089bf" font-size="9" text-anchor="middle">TF + IDF</text>
+      <text x="337" y="50" fill="#e4dffa" font-size="10" text-anchor="middle" font-weight="600">Matrice W</text>
+      <text x="337" y="63" fill="#c9a84c" font-size="9" text-anchor="middle">$W \in \mathbb{R}^{M\times N}$</text>
+      <text x="337" y="76" fill="#9089bf" font-size="9" text-anchor="middle">$w_{ij} = \text{tf}_{ij}\cdot\text{idf}_i$</text>
+      <text x="490" y="48" fill="#e8c97a" font-size="10" text-anchor="middle" font-weight="600">Vecteurs</text>
+      <text x="490" y="61" fill="#c9a84c" font-size="9.5" text-anchor="middle">$d_j \in \mathbb{R}^M$</text>
+      <text x="490" y="74" fill="#9089bf" font-size="9" text-anchor="middle">+ $q \in \mathbb{R}^M$</text>
+      <text x="490" y="87" fill="#7eb8d4" font-size="8" text-anchor="middle">[QbE Paradigm]</text>
+      <text x="640" y="50" fill="#e4dffa" font-size="10" text-anchor="middle" font-weight="600">Cosine RSV</text>
+      <text x="640" y="63" fill="#9089bf" font-size="9" text-anchor="middle">$\cos(\angle(d_j,q))$</text>
+      <text x="640" y="76" fill="#9089bf" font-size="9" text-anchor="middle">$\in [0,1]$</text>
+      <text x="785" y="50" fill="#e4dffa" font-size="10" text-anchor="middle" font-weight="600">Ranked List</text>
+      <text x="785" y="63" fill="#7bc496" font-size="9" text-anchor="middle">$d_{\pi(1)},\ldots$</text>
+      <text x="785" y="76" fill="#9089bf" font-size="9" text-anchor="middle">RSV décr.</text>
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#c9a84c" opacity=".6"/>
+        </marker>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#7bc496" opacity=".7"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- BOOL MODEL -->
+  <div id="vsm-bool">
+    <h3>Étape 0 — Pourquoi pas le Modèle Booléen ?</h3>
+    <p>Le modèle booléen est le point de départ historique. Chaque terme $t_i$ est représenté par un <strong>vecteur 1-hot</strong> (one-hot encoding) de dimension $M$ :</p>
+    <div class="mblock">
+      <div class="mlabel">One-Hot encoding (Binary embedding)</div>
+      $$t_i = [\delta_{ik}]_{k=1}^M \in \{0,1\}^M \qquad \text{avec } \delta_{ik} = \begin{cases}1 & \text{si } k=i \\ 0 & \text{sinon}\end{cases}$$
+    </div>
+    <p>Le document est la disjonction logique des termes contenus : $d_j = \bigvee_{i \in \mathcal{I}_j} t_i$. Tous les documents se situent aux <strong>sommets de l'hypercube</strong> $\{0,1\}^M$. La requête est une expression logique (AND/OR/NOT) convertie en forme normale disjonctive (DNF).</p>
+    <div class="box warn">
+      <div class="box-title">Problème fondamental</div>
+      Le RSV booléen est binaire : $\text{RSV}(d_j,q) \in \{0,1\}$. Il n'y a <strong>aucun ordonnancement</strong> parmi les documents pertinents, aucune gradation. Deux besoins émergent : (1) un formalisme de requête flexible → <em>Query-by-Example</em>, (2) un continuum de pertinence → $\text{RSV} \in [0,1]$.
+    </div>
+  </div>
+
+  <!-- TF-IDF -->
+  <div id="vsm-tfidf">
+    <h3>Étape 1 — Bag of Words & TF-IDF Embedding</h3>
+
+    <h4>Term Frequency (TF)</h4>
+    <p>Plutôt que de noter simplement la présence/absence d'un terme, on compte ses occurrences. L'hypothèse fondatrice du modèle <strong>Bag of Words</strong> : <em>plus un mot apparaît dans un document, plus il le représente.</em></p>
+    <div class="mblock">
+      <div class="mlabel">Définition — Fréquence normalisée</div>
+      $$\text{tf}_{ij} \;\stackrel{\text{def}}{=}\; \frac{f_{ij}}{\max_k f_{kj}} \qquad \Rightarrow \quad \max_i \text{tf}_{ij} = 1$$
+    </div>
+    <p>où $f_{ij}$ est le nombre brut d'occurrences du terme $i$ dans le document $j$. La normalisation par le terme le plus fréquent permet de comparer des documents de longueurs différentes.</p>
+    <div class="box info">
+      <div class="box-title">Limite du BoW</div>
+      L'ordre des mots et la structure (titre, paragraphes) sont perdus. Seules les fréquences sont conservées. Cependant, c'est une simplification utile qui fonctionne bien en pratique.
+    </div>
+
+    <h4>Inverse Document Frequency (IDF)</h4>
+    <p>La TF seule n'est pas suffisante : un terme très fréquent dans <em>tous</em> les documents (ex. « the », « est ») n'est pas discriminant. L'IDF mesure le <strong>pouvoir discriminant</strong> du terme $i$ dans la collection :</p>
+    <div class="mblock">
+      <div class="mlabel">Définition — Inverse Document Frequency</div>
+      $$\text{idf}_i \;\stackrel{\text{def}}{=}\; \log\frac{N}{n_i}$$
+    </div>
+    <p>où $n_i$ est le nombre de documents contenant le terme $i$.</p>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Cas</th><th>$n_i$</th><th>$\text{idf}_i$</th><th>Interprétation</th></tr></thead>
+        <tbody>
+          <tr><td>Terme dans tous les docs</td><td class="m">$n_i \approx N$</td><td class="r">$\approx 0$</td><td class="m">Non discriminant (stopword)</td></tr>
+          <tr><td>Terme rare</td><td class="m">$n_i \ll N$</td><td class="g">Grand</td><td class="m">Très discriminant, spécifique</td></tr>
+          <tr><td>Terme présent dans 1 doc</td><td class="m">$n_i = 1$</td><td class="g">$\log N$</td><td class="m">Maximum de discriminance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Poids TF·IDF et matrice terme-document</h4>
+    <p>Le poids du terme $i$ dans le document $j$ combine les deux facteurs :</p>
+    <div class="mblock">
+      <div class="mlabel">Schéma de pondération TF·IDF</div>
+      $$w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$$
+      $$W = \begin{pmatrix} w_{11} & \cdots & w_{1N} \\ \vdots & w_{ij} & \vdots \\ w_{M1} & \cdots & w_{MN} \end{pmatrix} \in \mathbb{R}^{M \times N}$$
+    </div>
+    <p>Les colonnes de $W$ encodent les <strong>documents</strong>, les lignes encodent les <strong>termes</strong> :</p>
+    <ul>
+      <li>Embedding document : $d_j = W_{\cdot j} = [w_{1j}, \ldots, w_{Mj}]^T \in \mathbb{R}^M$</li>
+      <li>Embedding terme : $t_i = (W_{i\cdot})^T = [w_{i1}, \ldots, w_{iN}]^T \in \mathbb{R}^N$ (utilisé en LSI)</li>
+    </ul>
+  </div>
+
+  <!-- GEOMETRY -->
+  <div id="vsm-geom">
+    <h3>Étape 2 — Géométrie de l'embedding TF-IDF</h3>
+    <p>Il est instructif d'observer la structure algébrique de l'embedding. En développant $d_j$ :</p>
+    <div class="mblock">
+      <div class="mlabel">Interprétation géométrique</div>
+      $$d_j = \sum_i w_{ij} e_i = \sum_i (\text{tf}_{ij} \cdot \text{idf}_i) e_i = \sum_i \text{tf}_{ij} \underbrace{\text{idf}_i \cdot e_i}_{\tau_i}$$
+    </div>
+    <p>où $\{e_i\}$ est la base canonique de $\mathbb{R}^M$ et $\tau_i = \text{idf}_i \cdot e_i$ est la <strong>base discriminante</strong>.</p>
+    <ul>
+      <li><strong>$\text{idf}_i$</strong> (commun à tous les documents) : échelle la dimension $i$ proportionnellement au pouvoir discriminant du terme → étire les axes importants.</li>
+      <li><strong>$\text{tf}_{ij}$</strong> : coordonnée réelle du document $j$ dans cette base discriminante.</li>
+    </ul>
+    <div class="box vio">
+      <div class="box-title">Intuition géométrique clé</div>
+      L'IDF déforme l'espace vectoriel : les axes correspondant aux termes discriminants sont <em>étirés</em>, ceux des termes communs sont <em>contractés</em>. Un document proche d'une requête dans cet espace partage des termes importants et discriminants.
+    </div>
+  </div>
+
+  <!-- SIMILARITY -->
+  <div id="vsm-sim">
+    <h3>Étape 3 — Mesures de similarité : de l'intersection ensembliste au continu</h3>
+    <p>L'idée de base : la similarité entre un document et une requête devrait refléter leur <strong>intersection ensembliste</strong>. En notation binaire : $\text{RSV}(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}|$. En version algébrique : $\langle d_j, q \rangle = \sum_i w_{ij} w_{iq}$. Plusieurs extensions continues existent :</p>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Mesure</th><th>Formule Continue (TF-IDF)</th><th>Formule Binaire</th><th>Propriété</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Matching</strong></td>
+            <td>$\langle d_j, q \rangle = \sum_i w_{ij}w_{iq}$</td>
+            <td>$|\hat{d}_j \cap \hat{q}|$</td>
+            <td class="m">Sensible à la longueur</td>
+          </tr>
+          <tr>
+            <td><strong class="g">Cosinus ★</strong></td>
+            <td>$\dfrac{\langle d_j, q \rangle}{\|d_j\|\|q\|}$</td>
+            <td>$\dfrac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|^{1/2}|\hat{q}|^{1/2}}$</td>
+            <td class="g">Invariant à la norme</td>
+          </tr>
+          <tr>
+            <td><strong>Dice</strong></td>
+            <td>$\dfrac{2\langle d_j, q \rangle}{\sum_i(w_{ij}+w_{iq})}$</td>
+            <td>$\dfrac{2|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|+|\hat{q}|}$</td>
+            <td class="m">Moyenne harmonique de precision/recall</td>
+          </tr>
+          <tr>
+            <td><strong>Overlap</strong></td>
+            <td>$\dfrac{\langle d_j, q \rangle}{\min(\sum_i w_{ij},\sum_i w_{iq})}$</td>
+            <td>$\dfrac{|\hat{d}_j \cap \hat{q}|}{\min(|\hat{d}_j|,|\hat{q}|)}$</td>
+            <td class="m">Favorise la spécificité</td>
+          </tr>
+          <tr>
+            <td><strong>Jaccard</strong></td>
+            <td>$\approx \dfrac{\langle d_j, q \rangle}{\sum_i \max(w_{ij},w_{iq})}$</td>
+            <td>$\dfrac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j \cup \hat{q}|}$</td>
+            <td class="m">Intersection / Union</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- COSINE -->
+  <div id="vsm-cosine">
+    <h3>Étape 4 — Cosine Similarity comme RSV</h3>
+    <p>La mesure la plus utilisée en pratique est la <strong>similarité cosinus</strong>, extension naturelle de l'intersection ensembliste aux embeddings continus :</p>
+    <div class="mblock">
+      <div class="mlabel">Cosine Similarity — Retrieval Status Value</div>
+      $$\text{RSV}(d_j, q) \;\stackrel{\text{def}}{=}\; \cos\!\left(\angle(d_j, q)\right) = \frac{\langle d_j, q \rangle}{\|d_j\|\|q\|} = \frac{d_j^T q}{\|d_j\|\|q\|} = \frac{\sum_i w_{ij}w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2}\left(\sum_i w_{iq}^2\right)^{1/2}}$$
+    </div>
+
+    <div class="diag">
+      <svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;font-family:'EB Garamond',Georgia,serif">
+        <defs>
+          <marker id="va" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L0,8 L8,4 z" fill="#c9a84c"/>
+          </marker>
+          <marker id="vb" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L0,8 L8,4 z" fill="#7eb8d4"/>
+          </marker>
+          <marker id="vc" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L0,8 L8,4 z" fill="#7bc496"/>
+          </marker>
+        </defs>
+        <!-- Axes -->
+        <line x1="60" y1="160" x2="340" y2="160" stroke="#9089bf" stroke-width="1" stroke-opacity=".3"/>
+        <line x1="60" y1="160" x2="60" y2="30" stroke="#9089bf" stroke-width="1" stroke-opacity=".3"/>
+        <text x="345" y="164" fill="#9089bf" font-size="11">$\tau_1$</text>
+        <text x="55" y="25" fill="#9089bf" font-size="11">$\tau_2$</text>
+        <text x="55" y="168" fill="#9089bf" font-size="10">O</text>
+        <!-- Document vector dj -->
+        <line x1="60" y1="160" x2="200" y2="55" stroke="#c9a84c" stroke-width="2" marker-end="url(#va)"/>
+        <!-- Query vector q -->
+        <line x1="60" y1="160" x2="300" y2="90" stroke="#7eb8d4" stroke-width="2" marker-end="url(#vb)"/>
+        <!-- Angle arc -->
+        <path d="M 110 130 A 55 55 0 0 1 130 108" fill="none" stroke="#7bc496" stroke-width="1.5"/>
+        <text x="128" y="152" fill="#7bc496" font-size="13" font-style="italic">$\theta$</text>
+        <!-- Labels -->
+        <text x="185" y="48" fill="#c9a84c" font-size="13" font-weight="600">$d_j$</text>
+        <text x="302" y="84" fill="#7eb8d4" font-size="13" font-weight="600">$q$</text>
+        <!-- Projection dashed line -->
+        <line x1="200" y1="55" x2="200" y2="160" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,3" stroke-opacity=".4"/>
+        <line x1="300" y1="90" x2="300" y2="160" stroke="#7eb8d4" stroke-width="1" stroke-dasharray="4,3" stroke-opacity=".4"/>
+        <text x="188" y="175" fill="#c9a84c" font-size="9" text-anchor="middle">$\text{tf}_{1j}$</text>
+        <text x="300" y="175" fill="#7eb8d4" font-size="9" text-anchor="middle">$w_{1q}$</text>
+        <!-- Formula -->
+        <text x="190" y="195" fill="#e8c97a" font-size="10" text-anchor="middle">$\text{RSV} = \cos\theta \in [-1,1]$</text>
+      </svg>
+    </div>
+
+    <h4>Propriétés clés de la similarité cosinus</h4>
+    <ul>
+      <li><strong>Invariance à la norme :</strong> mesure l'angle, pas la longueur. Un document deux fois plus long avec les mêmes termes a un cosinus = 1 avec lui-même.</li>
+      <li><strong>RSV = 0</strong> si aucun terme en commun (vecteurs orthogonaux).</li>
+      <li><strong>RSV = 1</strong> si les vecteurs sont parfaitement alignés (même profil de termes).</li>
+      <li>Avec des poids TF-IDF $\geq 0$, on a toujours $\text{RSV} \in [0,1]$.</li>
+    </ul>
+
+    <h4>Étape finale : ranking</h4>
+    <p>On calcule $\text{RSV}(d_j, q)$ pour tous les $N$ documents, puis on les trie par ordre décroissant. Le résultat est une liste ordonnée $d_{\pi(1)}, d_{\pi(2)}, \ldots$ telle que $\text{RSV}(d_{\pi(1)}, q) \geq \text{RSV}(d_{\pi(2)}, q) \geq \ldots$</p>
+  </div>
+</section>
+
+<!-- ═══ SECTION 4: BIR PIPELINE ═══ -->
+<section class="sec" id="bir-pipeline">
+  <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Question 2 · Modèle Probabiliste (BIR / BM25)</h2></div>
+  <div class="box ok">
+    <div class="box-title">Pipeline global</div>
+    Documents bruts → Features binaires → Probability Ranking Principle → Bayesian Odds Ratio → Binary Independence → Log-Odds RSV → Estimation (IDF puis pseudo-feedback) → RSJ → BM25 → Liste ordonnée
+  </div>
+
+  <!-- Pipeline visuel BIR -->
+  <div class="diag">
+    <svg viewBox="0 0 920 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:920px;font-family:'EB Garamond',Georgia,serif">
+      <defs>
+        <marker id="arrb" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#7eb8d4" opacity=".7"/>
+        </marker>
+        <marker id="arrg" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#7bc496" opacity=".7"/>
+        </marker>
+        <marker id="arrr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#e07b7b" opacity=".7"/>
+        </marker>
+      </defs>
+      <!-- Phase 1: setup -->
+      <rect x="5" y="15" width="100" height="70" rx="5" fill="#161221" stroke="rgba(180,150,80,.4)" stroke-width="1"/>
+      <text x="55" y="40" fill="#e4dffa" font-size="9.5" text-anchor="middle" font-weight="600">Raw Docs</text>
+      <text x="55" y="53" fill="#9089bf" font-size="8.5" text-anchor="middle">$N$ docs</text>
+      <text x="55" y="65" fill="#9089bf" font-size="8.5" text-anchor="middle">vocab $M$ termes</text>
+      <!-- PRP -->
+      <path d="M106 50 L133 50" stroke="#7eb8d4" stroke-width="1.3" marker-end="url(#arrb)" stroke-opacity=".7"/>
+      <rect x="135" y="15" width="115" height="70" rx="5" fill="#161221" stroke="rgba(126,184,212,.4)" stroke-width="1"/>
+      <text x="192" y="38" fill="#7eb8d4" font-size="9.5" text-anchor="middle" font-weight="600">PRP</text>
+      <text x="192" y="51" fill="#9089bf" font-size="8.5" text-anchor="middle">Rank by $P(R|d_j,q)$</text>
+      <text x="192" y="63" fill="#9089bf" font-size="8" text-anchor="middle">Robertson 1977</text>
+      <!-- Bayes -->
+      <path d="M251 50 L278 50" stroke="#7eb8d4" stroke-width="1.3" marker-end="url(#arrb)" stroke-opacity=".7"/>
+      <rect x="280" y="15" width="120" height="70" rx="5" fill="#161221" stroke="rgba(126,184,212,.4)" stroke-width="1"/>
+      <text x="340" y="38" fill="#7eb8d4" font-size="9.5" text-anchor="middle" font-weight="600">Bayesian Odds</text>
+      <text x="340" y="51" fill="#c9a84c" font-size="8.5" text-anchor="middle">$O(R|d_j,q) \propto$</text>
+      <text x="340" y="63" fill="#c9a84c" font-size="8.5" text-anchor="middle">$P(d_j|R)/P(d_j|\bar{R})$</text>
+      <!-- Binary Indep -->
+      <path d="M401 50 L428 50" stroke="#7eb8d4" stroke-width="1.3" marker-end="url(#arrb)" stroke-opacity=".7"/>
+      <rect x="430" y="10" width="130" height="80" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5" stroke-opacity=".6"/>
+      <text x="495" y="32" fill="#e8c97a" font-size="9.5" text-anchor="middle" font-weight="600">Binary Independence</text>
+      <text x="495" y="45" fill="#9089bf" font-size="8.5" text-anchor="middle">$w_{ij} \in \{0,1\}$, indép.</text>
+      <text x="495" y="57" fill="#c9a84c" font-size="8" text-anchor="middle">$\log O = \sum_{i \in \mathcal{I}_j\cap\mathcal{I}_q} c_i$</text>
+      <text x="495" y="69" fill="#9089bf" font-size="7.5" text-anchor="middle">RSV = log-odds</text>
+      <!-- Estimation -->
+      <path d="M561 50 L588 50" stroke="#7eb8d4" stroke-width="1.3" marker-end="url(#arrb)" stroke-opacity=".7"/>
+      <rect x="590" y="15" width="115" height="70" rx="5" fill="#161221" stroke="rgba(126,184,212,.4)" stroke-width="1"/>
+      <text x="647" y="36" fill="#7eb8d4" font-size="9.5" text-anchor="middle" font-weight="600">Estimation</text>
+      <text x="647" y="49" fill="#9089bf" font-size="8.5" text-anchor="middle">Init: $\approx$ IDF</text>
+      <text x="647" y="61" fill="#7bc496" font-size="8.5" text-anchor="middle">Feedback: $r_i/r$</text>
+      <!-- BM25 -->
+      <path d="M706 50 L733 50" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arrg)" stroke-opacity=".7"/>
+      <rect x="735" y="15" width="95" height="70" rx="5" fill="#161221" stroke="rgba(123,196,150,.5)" stroke-width="1.2"/>
+      <text x="782" y="38" fill="#7bc496" font-size="9.5" text-anchor="middle" font-weight="600">RSJ → BM25</text>
+      <text x="782" y="51" fill="#9089bf" font-size="8.5" text-anchor="middle">+TF, +longueur</text>
+      <text x="782" y="63" fill="#9089bf" font-size="8" text-anchor="middle">$k_1, b$ params</text>
+      <!-- Ranked List -->
+      <path d="M831 50 L855 50" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arrg)" stroke-opacity=".7"/>
+      <rect x="857" y="20" width="60" height="60" rx="5" fill="#161221" stroke="#7bc496" stroke-width="1" stroke-opacity=".5"/>
+      <text x="887" y="44" fill="#e4dffa" font-size="9" text-anchor="middle" font-weight="600">Ranked</text>
+      <text x="887" y="57" fill="#7bc496" font-size="9" text-anchor="middle">List</text>
+      <!-- Feedback arrow -->
+      <path d="M647 86 C 647 130 495 140 495 100" fill="none" stroke="#e07b7b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrr)" stroke-opacity=".6"/>
+      <text x="590" y="140" fill="#e07b7b" font-size="8" text-anchor="middle" opacity=".7">Pseudo-feedback (itératif)</text>
+    </svg>
+  </div>
+
+  <!-- PRP -->
+  <div id="bir-prp">
+    <h3>Étape 1 — Probability Ranking Principle (Robertson, 1977)</h3>
+    <div class="box">
+      <div class="box-title">Énoncé du PRP</div>
+      <em>Si un système classe les documents dans l'ordre décroissant de probabilité d'utilité pour l'utilisateur, alors l'efficacité globale du système sera la meilleure possible sur la base des données disponibles.</em>
+      — Stephen E. Robertson, Journal of Documentation, 1977
+    </div>
+    <p><strong>Formalisation :</strong> Pour une requête $q$, il existe un ensemble idéal $\mathcal{R}$ de documents pertinents. $R$ est une variable aléatoire de Bernoulli indiquant la pertinence. La tâche est d'estimer :</p>
+    <div class="mblock">
+      <div class="mlabel">Objectif probabiliste</div>
+      $$\text{Ranger les documents } d_j \text{ par ordre décroissant de } P(R = \text{vrai} \mid d_j, q)$$
+    </div>
+    <p>L'ensemble $\mathcal{R}$ est estimé de manière <strong>itérative</strong> : le système fournit une réponse initiale, l'utilisateur juge des documents comme pertinents/non-pertinents, ces jugements sont utilisés comme feedback, et le processus se répète jusqu'à satisfaction.</p>
+  </div>
+
+  <!-- BAYES -->
+  <div id="bir-bayes">
+    <h3>Étape 2 — Décision Bayésienne & Rapport de Cotes</h3>
+    <p>Plutôt que de définir un seuil absolu $P(R \mid d_j, q) > \tau$, on utilise le <strong>rapport de cotes bayésien</strong> (Odds Ratio) qui contourne le problème de normalisation :</p>
+    <div class="mblock">
+      <div class="mlabel">Odds Ratio</div>
+      $$O(R \mid d_j, q) = \frac{P(R \mid d_j, q)}{P(\bar{R} \mid d_j, q)}$$
+    </div>
+    <p>On applique le théorème de Bayes :</p>
+    <div class="mblock">
+      <div class="mlabel">Développement bayésien</div>
+      $$O(R \mid d_j, q) = \frac{P(d_j \mid R, q) \cdot P(R \mid q)}{P(d_j \mid \bar{R}, q) \cdot P(\bar{R} \mid q)}$$
+    </div>
+    <p>Comme $P(R \mid q)$ (et $P(\bar{R} \mid q)$) est <strong>constant pour tous les documents</strong>, l'ordonnancement est déterminé uniquement par :</p>
+    <div class="mblock">
+      <div class="mlabel">Rapport de vraisemblances (suffisant pour le ranking)</div>
+      $$O(R \mid d_j, q) \;\propto\; \frac{P(d_j \mid R, q)}{P(d_j \mid \bar{R}, q)}$$
+    </div>
+    <div class="box info">
+      <div class="box-title">Connexion avec la régression logistique</div>
+      Si on suppose que $\log O(R \mid d_j, q)$ est une fonction log-linéaire des features du document : $\log O = \phi_\theta(d_j, q) = w^T d_j + w_0$, alors $P(R \mid d_j, q) = \sigma(w^T d_j + w_0)$ (fonction sigmoïde). Les paramètres $\theta$ peuvent être appris par régression logistique avec les jugements de pertinence comme exemples.
+    </div>
+  </div>
+
+  <!-- BINARY INDEPENDENCE -->
+  <div id="bir-indep">
+    <h3>Étape 3 — Hypothèse Binary Independence</h3>
+    <p>Pour rendre le calcul tractable, le modèle BIR pose deux hypothèses qui lui donnent son nom :</p>
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ctag">Hypothèse 1 · Binary</div>
+        <h4>Occurrences binaires</h4>
+        <p>L'occurrence de chaque terme $t_i$ dans le document est binaire : $w_{ij} \in \{0,1\}$ — présent ou absent. (On ignore les fréquences d'occurrence.)</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Hypothèse 2 · Independence</div>
+        <h4>Indépendance des termes</h4>
+        <p>Les occurrences des termes sont <em>conditionnellement indépendantes</em> dans le document. C'est la même hypothèse naïve que dans le classifieur Naïve Bayes.</p>
+      </div>
+    </div>
+    <p>Sous ces deux hypothèses, la vraisemblance se factorise :</p>
+    <div class="mblock">
+      <div class="mlabel">Factorisation sous l'hypothèse d'indépendance</div>
+      $$P(d_j \mid R, q) = \prod_{i \in \mathcal{I}_j} P(t_i \mid R, q) \cdot \prod_{i \notin \mathcal{I}_j} \big(1 - P(t_i \mid R, q)\big)$$
+    </div>
+    <p>Le premier produit porte sur les termes <em>présents</em> dans le document, le second sur les termes <em>absents</em>. On obtient donc le rapport de cotes :</p>
+    <div class="mblock">
+      <div class="mlabel">Odds ratio factorisé</div>
+      $$O(R \mid d_j, q) \propto \prod_{i \in \mathcal{I}_j} \frac{P(t_i \mid R, q)}{P(t_i \mid \bar{R}, q)} \cdot \prod_{i \notin \mathcal{I}_j} \frac{1-P(t_i \mid R, q)}{1-P(t_i \mid \bar{R}, q)}$$
+    </div>
+  </div>
+
+  <!-- BIR RSV -->
+  <div id="bir-rsv">
+    <h3>Étape 4 — Dérivation du RSV BIR</h3>
+    <p>On passe au logarithme (monotone, donc l'ordonnancement est préservé) :</p>
+    <div class="mblock">
+      <div class="mlabel">Log-odds ratio (étape intermédiaire)</div>
+      $$\log O(R \mid d_j, q) \propto \sum_{i \in \mathcal{I}_j} \left[ \log \frac{P(t_i \mid R, q)}{1-P(t_i \mid R, q)} + \log \frac{1-P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} \right]$$
+    </div>
+    <p><strong>Simplification clé :</strong> pour les termes <em>absents de la requête</em> ($i \notin \mathcal{I}_q$), on a $P(t_i \mid R, q) = P(t_i \mid \bar{R}, q)$, donc leur contribution est nulle. On peut donc restreindre la somme aux termes présents dans les deux :</p>
+    <div class="mblock">
+      <div class="mlabel">RSV BIR — Formule finale</div>
+      $$\text{RSV}(d_j, q) = \log O(R \mid d_j, q) \propto \sum_{i=1}^M w_{ij} \cdot w_{iq} \cdot c_i$$
+      $$\text{où}\quad c_i = \log \frac{P(t_i \mid R, q)}{1-P(t_i \mid R, q)} + \log \frac{1-P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)}$$
+    </div>
+    <p>avec $w_{ij}$ et $w_{iq}$ indicateurs binaires de présence du terme $i$ dans le document $j$ et la requête $q$. Le coefficient $c_i$ est le <strong>poids de pertinence</strong> du terme $i$.</p>
+
+    <div class="box info">
+      <div class="box-title">Structure du RSV BIR</div>
+      Le RSV est une <strong>somme de contributions par terme</strong>, où chaque terme contribue seulement s'il est présent à la fois dans le document ET dans la requête. Le coefficient $c_i$ encode à quel point la présence du terme $i$ est informative sur la pertinence du document.
+    </div>
+  </div>
+
+  <!-- ESTIMATION -->
+  <div id="bir-estim">
+    <h3>Étape 5 — Estimation des probabilités : connexion avec l'IDF</h3>
+    <p>Les probabilités $P(t_i \mid R, q)$ et $P(t_i \mid \bar{R}, q)$ doivent être estimées. On utilise un ensemble de pseudo-feedback $S$ (les $r$ premiers documents récupérés) :</p>
+    <ul>
+      <li>$r_i$ : nombre de ces documents contenant le terme $i$</li>
+      <li>$n_i$ : nombre total de documents de la collection contenant le terme $i$</li>
+    </ul>
+
+    <h4>Initialisation (sans feedback — temps de requête)</h4>
+    <div class="mblock">
+      <div class="mlabel">Estimations initiales (agnostiques)</div>
+      $$P(t_i \mid R, q) = \rho \text{ (constante)} \qquad P(t_i \mid \bar{R}, q) = \frac{n_i}{N}$$
+    </div>
+    <div class="box ok">
+      <div class="box-title">Connexion fondamentale avec l'IDF</div>
+      À l'initialisation, le second terme du coefficient $c_i$ devient :
+      $$\log \frac{1-P(t_i \mid \bar{R}, q)}{P(t_i \mid \bar{R}, q)} = \log \frac{N-n_i}{n_i} \approx \log \frac{N}{n_i} = \text{idf}_i$$
+      <strong>L'IDF émerge naturellement du modèle probabiliste à l'initialisation.</strong> Ce n'est pas une heuristique, c'est une conséquence du raisonnement bayésien sans feedback.
+    </div>
+
+    <h4>Après retrieval (avec pseudo-feedback itératif)</h4>
+    <div class="mblock">
+      <div class="mlabel">Estimations avec feedback (r documents pertinents)</div>
+      $$P(t_i \mid R, q) = \frac{r_i}{r} \qquad P(t_i \mid \bar{R}, q) = \frac{n_i - r_i}{N - r}$$
+    </div>
+    <p>Le processus s'itère jusqu'à convergence : les nouvelles estimations modifient le RSV, ce qui change le top-$r$, ce qui modifie les estimations, etc.</p>
+  </div>
+
+  <!-- BM25 -->
+  <div id="bir-bm25">
+    <h3>Étape 6 — Modèle RSJ et formule BM25 (OKAPI)</h3>
+    <p>Le modèle BIR de base a évolué vers le modèle <strong>Robertson-Sparck-Jones (RSJ)</strong> avec une pondération robuste, puis vers <strong>BM25</strong> qui intègre la fréquence des termes et la longueur du document.</p>
+
+    <h4>Poids RSJ</h4>
+    <div class="mblock">
+      <div class="mlabel">Robertson-Sparck-Jones Weight</div>
+      $$w_i^{\text{RSJ}} = \log \frac{(r_i + 0.5)(N - R - n_i + r_i + 0.5)}{(n_i - r_i + 0.5)(R - r_i + 0.5)}$$
+    </div>
+    <p>Le facteur $+0.5$ (add-half smoothing) évite les divisions par zéro et stabilise l'estimation.</p>
+
+    <h4>BM25 — Best Match 25 (OKAPI)</h4>
+    <p>BM25 étend RSJ en incorporant :</p>
+    <ul>
+      <li>La <strong>fréquence tf</strong> du terme dans le document (saturation logarithmique)</li>
+      <li>La <strong>longueur du document</strong> normalisée par la longueur moyenne</li>
+    </ul>
+    <div class="mblock">
+      <div class="mlabel">Poids BM25 par terme</div>
+      $$w_i^{\text{BM25}}(\text{tf}) = \frac{\text{tf}}{k_1\!\left((1-b) + b\,\dfrac{dl}{avdl}\right) + \text{tf}} \cdot w_i^{\text{RSJ}}$$
+    </div>
+    <div class="mblock">
+      <div class="mlabel">Score BM25 complet (formule de Robertson et al., 1995)</div>
+      $$\text{RSV}^{\text{BM25}}(d_j, q) = \sum_{T \in Q} w^{(1)} \cdot \frac{(k_1+1)\,\text{tf}}{K + \text{tf}} \cdot \frac{(k_3+1)\,qtf}{k_3+qtf}$$
+      $$\text{où}\quad K = k_1\!\left((1-b) + b\,\frac{dl}{avdl}\right)$$
+    </div>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Paramètre</th><th>Signification</th><th>Valeur typique</th><th>Effet</th></tr></thead>
+        <tbody>
+          <tr><td><code>k₁</code></td><td>Saturation de la TF</td><td class="g">1.2</td><td class="m">$k_1 \to \infty$ : TF linéaire ; $k_1 = 0$ : binaire</td></tr>
+          <tr><td><code>b</code></td><td>Normalisation longueur</td><td class="g">0.75</td><td class="m">$b=0$ : pas de norm. ; $b=1$ : norm. complète</td></tr>
+          <tr><td><code>k₃</code></td><td>Saturation de la TF requête</td><td class="g">7 ou 1000</td><td class="m">$k_3 \to \infty$ : ignore qtf</td></tr>
+          <tr><td><code>dl</code></td><td>Longueur du document</td><td class="m">—</td><td class="m">Pénalise les longs documents</td></tr>
+          <tr><td><code>avdl</code></td><td>Longueur moyenne docs</td><td class="m">—</td><td class="m">Référence pour la normalisation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box ok">
+      <div class="box-title">BM25 : modèle de référence</div>
+      BM25 est le modèle de référence en IR probabiliste. Il est implémenté dans <strong>Elasticsearch, Lucene, Solr, Whoosh</strong> et sert de baseline forte pour les systèmes modernes. En 2025, BM25+ est encore compétitif et sert souvent de première étape dans les pipelines de retrieval hybride.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 5: FORMULES ═══ -->
+<section class="sec" id="formules">
+  <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Formules importantes</h2></div>
+
+  <div class="fcards">
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">TF — Term Frequency</span>
+        <span class="fc-tag">BoW / VSM / BIR</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$f_{ij}$ = occurrences brutes du terme $i$ dans doc $j$ ; max normalise</p></div>
+          <div class="fc-item"><h5>Propriété</h5><p>$\max_i \text{tf}_{ij} = 1$ toujours. Normalise par rapport à la longueur.</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Plus un terme est fréquent dans un document, plus il le représente.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>Doc : « chat chat chien » → $f_{\text{chat}} = 2$, $f_{\text{chien}} = 1$, $\text{tf}_{\text{chat}} = 1$, $\text{tf}_{\text{chien}} = 0.5$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">IDF — Inverse Document Frequency</span>
+        <span class="fc-tag">BoW / VSM / BIR</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{idf}_i = \log \frac{N}{n_i}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$N$ = nb de docs ; $n_i$ = nb de docs contenant le terme $i$</p></div>
+          <div class="fc-item"><h5>Propriété</h5><p>$\text{idf}_i \approx 0$ si terme omniprésent ; $\text{idf}_i = \log N$ si terme unique</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Mesure le pouvoir discriminant du terme. Pénalise les termes communs, valorise les termes rares.</p></div>
+          <div class="fc-item"><h5>Connexion BIR</h5><p>Émerge naturellement de $\log\frac{1-n_i/N}{n_i/N} \approx \log(N/n_i)$ à l'initialisation probabiliste.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">TF·IDF Weight & Document Vector</span>
+        <span class="fc-tag">Core Embedding</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i \qquad d_j = [w_{1j},\ldots,w_{Mj}]^T \in \mathbb{R}^M$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Matrice W</h5><p>$W \in \mathbb{R}^{M\times N}$ : lignes = termes, colonnes = documents</p></div>
+          <div class="fc-item"><h5>Géométrie</h5><p>$d_j = \sum_i \text{tf}_{ij} \cdot \tau_i$ où $\tau_i = \text{idf}_i \cdot e_i$ est la base discriminante</p></div>
+          <div class="fc-item"><h5>Interprétation</h5><p>Chaque axe de $\mathbb{R}^M$ correspond à un terme, pondéré par son importance globale (IDF)</p></div>
+          <div class="fc-item"><h5>Sparsité</h5><p>La plupart des $w_{ij} = 0$ (sparse embedding). Le coût stockage est proportionnel au nombre de termes par document.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Cosine Similarity — RSV Vectoriel</span>
+        <span class="fc-tag">VSM</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{RSV}(d_j, q) = \cos(\angle(d_j,q)) = \frac{\langle d_j, q \rangle}{\|d_j\|\|q\|} = \frac{\sum_i w_{ij}w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2}\!\left(\sum_i w_{iq}^2\right)^{1/2}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Plage</h5><p>$\text{RSV} \in [0,1]$ avec TF-IDF positifs. $\text{RSV}=1$ si même direction, $0$ si orthogonaux.</p></div>
+          <div class="fc-item"><h5>Invariance</h5><p>Invariant à la norme : indépendant de la longueur des documents. Un doc 2× plus long mais identique → cosinus = 1.</p></div>
+          <div class="fc-item"><h5>Dérivation</h5><p>Extension algébrique de l'intersection ensembliste $|\hat{d}_j \cap \hat{q}|$ normalisée par $|\hat{d}_j|^{1/2}|\hat{q}|^{1/2}$.</p></div>
+          <div class="fc-item"><h5>Limite</h5><p>Toujours 0 si aucun terme en commun (gap lexical). Problème de synonymie et polysémie → LSI.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Bayesian Odds Ratio — RSV Probabiliste</span>
+        <span class="fc-tag">BIR</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$O(R \mid d_j,q) = \frac{P(R|d_j,q)}{P(\bar{R}|d_j,q)} \propto \frac{P(d_j|R,q)}{P(d_j|\bar{R},q)} \quad\Rightarrow\quad \text{RSV} = \log O(R|d_j,q)$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Avantage</h5><p>Évite de fixer un seuil $\tau$ sur $P(R|d_j,q)$. Le rapport est monotone avec la probabilité.</p></div>
+          <div class="fc-item"><h5>Bayes</h5><p>$P(R|q)$ constant → s'annule dans le ratio → il suffit d'estimer les vraisemblances $P(d_j|R,q)$.</p></div>
+          <div class="fc-item"><h5>RSV final</h5><p>$\sum_i w_{ij}w_{iq}\left[\log\frac{P(t_i|R,q)}{1-P(t_i|R,q)} + \log\frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)}\right]$</p></div>
+          <div class="fc-item"><h5>Lien IDF</h5><p>À l'init : $\log\frac{1-n_i/N}{n_i/N} \approx \text{idf}_i$. Le BIR sans feedback ≈ TF·IDF !</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">BM25 — Best Match 25 (OKAPI)</span>
+        <span class="fc-tag">RSJ → BM25</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{RSV}^{\text{BM25}} = \sum_{T \in Q} w^{(1)}_{\text{RSJ}} \cdot \underbrace{\frac{(k_1+1)\,\text{tf}}{k_1\!\left((1-b)+b\frac{dl}{avdl}\right)+\text{tf}}}_{\text{saturation TF + norm. longueur}} \cdot \underbrace{\frac{(k_3+1)\,qtf}{k_3+qtf}}_{\text{term freq. requête}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Saturation TF</h5><p>Le facteur TF est borné : il tend vers $\frac{k_1+1}{k_1} \approx 1.83$ quand $tf \to \infty$. Évite que les termes très fréquents dominent.</p></div>
+          <div class="fc-item"><h5>Norm. longueur</h5><p>$b=0.75$ pénalise les longs documents (supposés diluer les termes pertinents).</p></div>
+          <div class="fc-item"><h5>Extension</h5><p>BM25+ corrige un problème de BM25 : les documents où un terme est absent reçoivent un score positif avec BM25. BM25+ y remédie.</p></div>
+          <div class="fc-item"><h5>Usage</h5><p>Implémenté dans Elasticsearch, Lucene, Solr. Baseline forte pour les benchmarks TREC. Encore compétitif en 2025.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SECTION 6: COMPARAISON ═══ -->
+<section class="sec" id="comparaison">
+  <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">Comparaison des approches</h2></div>
+
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Boolean Model</th>
+          <th>Vector Space (VSM)</th>
+          <th>BIR / BM25</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Représentation</strong></td>
+          <td class="m">Vecteurs binaires $\{0,1\}^M$, sommets de l'hypercube</td>
+          <td class="b">Vecteurs réels TF-IDF $\mathbb{R}^M$</td>
+          <td class="b">Indicateurs binaires + estimations probabilistes</td>
+        </tr>
+        <tr>
+          <td><strong>RSV</strong></td>
+          <td class="r">$\{0,1\}$ — binaire</td>
+          <td class="g">$[0,1]$ — cosinus continu</td>
+          <td class="g">$\mathbb{R}$ — log-odds continu</td>
+        </tr>
+        <tr>
+          <td><strong>Formule RSV</strong></td>
+          <td class="m">$\bigvee_k (d_j = q_k)$</td>
+          <td class="m">$\frac{\langle d_j,q\rangle}{\|d_j\|\|q\|}$</td>
+          <td class="m">$\sum_i w_{ij}w_{iq} c_i$ (log-odds)</td>
+        </tr>
+        <tr>
+          <td><strong>Requête</strong></td>
+          <td class="m">Expression logique (AND/OR/NOT)</td>
+          <td class="b">Query-by-Example (QbE), même espace</td>
+          <td class="b">Sac de mots, poids $qtf$</td>
+        </tr>
+        <tr>
+          <td><strong>Ordonnancement</strong></td>
+          <td class="r">Aucun (tout-ou-rien)</td>
+          <td class="g">Oui (par cosinus décroissant)</td>
+          <td class="g">Oui (par log-odds décroissant)</td>
+        </tr>
+        <tr>
+          <td><strong>Feedback</strong></td>
+          <td class="r">Non</td>
+          <td class="m">Possible (Rocchio)</td>
+          <td class="g">Natif (pseudo-relevance feedback itératif)</td>
+        </tr>
+        <tr>
+          <td><strong>Longueur document</strong></td>
+          <td class="r">Non prise en compte</td>
+          <td class="m">Partiellement (norme)</td>
+          <td class="g">Explicitement (paramètre $b$, $dl/avdl$)</td>
+        </tr>
+        <tr>
+          <td><strong>Fondement</strong></td>
+          <td class="m">Logique</td>
+          <td class="m">Géométrie / Algèbre linéaire</td>
+          <td class="m">Probabilités / Inférence bayésienne</td>
+        </tr>
+        <tr>
+          <td><strong>Complexité</strong></td>
+          <td class="g">$O(N)$ par requête</td>
+          <td class="m">$O(NM)$ naïf, $O(|\text{inv. index}|)$ en pratique</td>
+          <td class="m">$O(|\text{inv. index}|)$ efficace</td>
+        </tr>
+        <tr>
+          <td><strong>Avantages</strong></td>
+          <td class="g">Simple, SQL-like, précis</td>
+          <td class="g">Intuitif, efficace, invariant à la norme</td>
+          <td class="g">Fondements solides, feedback, BM25 SOTA classique</td>
+        </tr>
+        <tr>
+          <td><strong>Limites</strong></td>
+          <td class="r">Pas de ranking, inflexible</td>
+          <td class="r">Synonymie, polysémie, dimension élevée</td>
+          <td class="r">Hypothèse d'indépendance, termes binaires en BIR</td>
+        </tr>
+        <tr>
+          <td><strong>Implémentation</strong></td>
+          <td class="m">Index inversé simple</td>
+          <td class="m">Lucene, scikit-learn TfidfVectorizer</td>
+          <td class="g">Elasticsearch (défaut), Lucene BM25Similarity</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Comparaison des mesures de similarité (VSM)</h3>
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr><th>Mesure</th><th>Sensible à la longueur</th><th>Plage</th><th>Formule continue</th><th>Cas d'usage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Matching</strong></td><td class="r">Oui</td><td class="m">$[0,+\infty[$</td><td>$\sum_i w_{ij}w_{iq}$</td><td class="m">Baseline simple</td></tr>
+        <tr><td><strong class="g">Cosinus ★</strong></td><td class="g">Non</td><td class="m">$[0,1]$</td><td>$\frac{\langle d_j,q\rangle}{\|d_j\|\|q\|}$</td><td class="g">Standard IR, NLP</td></tr>
+        <tr><td><strong>Dice</strong></td><td class="m">Partiel</td><td class="m">$[0,1]$</td><td>$\frac{2\langle d_j,q\rangle}{\sum_i(w_{ij}+w_{iq})}$</td><td class="m">Génomique, bioinformatique</td></tr>
+        <tr><td><strong>Jaccard</strong></td><td class="m">Partiel</td><td class="m">$[0,1]$</td><td>$\approx\frac{\langle d_j,q\rangle}{\sum_i\max(w_{ij},w_{iq})}$</td><td class="m">MinHash, LSH</td></tr>
+        <tr><td><strong>Overlap</strong></td><td class="r">Oui</td><td class="m">$[0,1]$</td><td>$\frac{\langle d_j,q\rangle}{\min(\sum_i w_{ij},\sum_i w_{iq})}$</td><td class="m">Détection de plagiat</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ SECTION 7: HISTORIQUE ═══ -->
+<section class="sec" id="historique">
+  <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Perspective historique</h2></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1950s–1960s</div>
+      <div class="tl-title">Modèle Booléen & Index inversé</div>
+      <div class="tl-desc">Premiers systèmes de recherche d'information. Maron (1960) introduit déjà l'idée de ranking probabiliste. Requêtes booléennes pures : opérateurs AND/OR/NOT.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1972–1975</div>
+      <div class="tl-title">Vector Space Model (Salton & al.)</div>
+      <div class="tl-desc">G. Salton et M.J. McGill introduisent le VSM dans le cadre du projet SMART. TF-IDF devient le schéma de pondération standard. La similarité cosinus est formalisée.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1977</div>
+      <div class="tl-title">Probability Ranking Principle (Robertson)</div>
+      <div class="tl-desc">Stephen Robertson énonce le PRP dans le Journal of Documentation. Ce principe fonde toute l'IR probabiliste moderne. Le modèle BIR est formalisé par Robertson et Sparck Jones.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1988–1994</div>
+      <div class="tl-title">Latent Semantic Indexing (LSI)</div>
+      <div class="tl-desc">Deerwester et al. (1990) publient LSI. La SVD est appliquée à la matrice TF-IDF pour dériver des concepts latents. Première approche de réduction dimensionnelle pour l'IR.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1994–1995</div>
+      <div class="tl-title">BM25 / OKAPI (Robertson, Walker, et al.)</div>
+      <div class="tl-desc">BM25 est présenté à TREC-3 par Robertson et al. (Okapi at TREC-3, 1995). Le modèle RSJ avec saturation TF et normalisation de longueur devient le standard. BM25 domine les benchmarks TREC pendant 15+ ans.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2013</div>
+      <div class="tl-title">Word2Vec (Mikolov et al.)</div>
+      <div class="tl-desc">Embeddings denses neuraux. Les représentations distribuées capturent la sémantique que TF-IDF ne peut pas saisir. Début de l'ère des dense embeddings.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2017–2020</div>
+      <div class="tl-title">Transformers & Dense Retrieval (BERT, DPR)</div>
+      <div class="tl-desc">BERT (Devlin, 2018) révolutionne les embeddings. DPR (Karpukhin, 2020) applique les bi-encodeurs au retrieval. BM25 reste cependant une baseline forte et est utilisé dans les pipelines hybrides.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2024–2025</div>
+      <div class="tl-title">Hybrid Retrieval & RAG</div>
+      <div class="tl-desc">Les systèmes modernes combinent BM25 (sparse) et embeddings denses (FAISS, pgvector). BM25 gère les correspondances exactes, les embeddings la sémantique. BM25+ et SPLADE remplacent progressivement BM25 classique.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 8: SYSTÈMES MODERNES ═══ -->
+<section class="sec" id="moderne">
+  <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Lien avec les systèmes modernes</h2></div>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Search Engines</div>
+      <h4>BM25 dans Elasticsearch</h4>
+      <p>Elasticsearch utilise BM25 par défaut depuis la version 5.0. Les paramètres $k_1$ et $b$ sont configurables par champ. TF-IDF était l'algorithme par défaut avant 2016.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Dense Retrieval</div>
+      <h4>Embeddings denses vs sparse</h4>
+      <p>Les embeddings TF-IDF/BM25 sont <strong>sparse</strong> ($M \approx 10^4$–$10^6$, beaucoup de zéros). Les embeddings BERT/S-BERT sont <strong>denses</strong> ($d \approx 768$, tous non-nuls). Sparse = meilleures correspondances exactes ; dense = meilleure sémantique.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Hybrid Retrieval</div>
+      <h4>BM25 + Dense : RRF</h4>
+      <p>Les pipelines modernes (RAG notamment) combinent BM25 et dense retrieval via le <em>Reciprocal Rank Fusion</em>. BM25 gère les termes exacts, les embeddings la paraphrase. La combinaison surpasse chaque approche isolée.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Learned Sparse Embeddings</div>
+      <h4>SPLADE & co.</h4>
+      <p>SPLADE (Formal et al., 2021) apprend des embeddings sparse en espace de vocabulaire (comme TF-IDF/BM25), mais via un transformer. Combine la sparsité utile pour les index inversés et la représentation sémantique des LLMs.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">RAG — Retrieval-Augmented Generation</div>
+      <h4>BM25 dans les pipelines RAG</h4>
+      <p>Dans les architectures RAG (Lewis et al., 2020), la première étape de retrieval utilise souvent BM25 ou un hybride. Le re-ranking (cross-encodeur BERT) affine ensuite les résultats pour le LLM.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Re-ranking</div>
+      <h4>BM25 + Cross-Encoder</h4>
+      <p>Architecture en deux étapes : (1) BM25 récupère $k$ = 100–1000 candidats rapidement ; (2) un cross-encoder (BERT fine-tuné) re-classe les candidats avec toute la puissance du transformer. Efficiency + accuracy.</p>
+    </div>
+  </div>
+
+  <div class="box info">
+    <div class="box-title">Pourquoi BM25 résiste aux LLMs</div>
+    BM25 présente des avantages spécifiques qui le maintiennent pertinent : (1) <strong>correspondances exactes</strong> de termes techniques et entités nommées (identifiants, codes, noms propres) — les embeddings denses les traitent mal ; (2) <strong>efficacité</strong> via l'index inversé — $O(\text{postings})$ alors que les embeddings denses nécessitent une recherche ANN ; (3) <strong>interprétabilité</strong> — on peut expliquer pourquoi un document est pertinent. En 2025, le retrieval hybride sparse+dense est la norme dans les systèmes de production.
+  </div>
+</section>
+
+<!-- ═══ SECTION 9: QUESTIONS D'EXAMEN ═══ -->
+<section class="sec" id="questions">
+  <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Questions d'examen possibles</h2></div>
+
+  <span class="qlevel easy">Niveau facile</span>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Qu'est-ce que le RSV (Retrieval Status Value) ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le RSV est une fonction $\text{RSV}(d_j, q) \in \mathbb{R}$ qui mesure la <strong>pertinence</strong> du document $d_j$ par rapport à la requête $q$. <em>L'ordonnancement des documents par RSV décroissant</em> produit la liste de résultats répondant à la requête. Dans le modèle vectoriel, le RSV est la similarité cosinus. Dans le modèle probabiliste, c'est le log-rapport de cotes bayésien. La définition du RSV est le problème central de l'IR.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Quelle est la différence entre TF et IDF ? Que représente chacun ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>TF (Term Frequency)</strong> : $\text{tf}_{ij} = f_{ij}/\max_k f_{kj}$ mesure l'importance <em>locale</em> d'un terme dans un document spécifique. Un terme fréquent dans un document est supposé le représenter. Varie de 0 à 1.</p>
+      <p><strong>IDF (Inverse Document Frequency)</strong> : $\text{idf}_i = \log(N/n_i)$ mesure le pouvoir <em>discriminant</em> global d'un terme dans toute la collection. Un terme présent dans tous les documents a IDF ≈ 0 (non discriminant). Un terme rare a un IDF élevé.</p>
+      <p>Le produit $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$ combine les deux : un terme fréquent dans ce document ET rare dans la collection aura un poids élevé. C'est ce que reflète un nuage de tags : la taille est proportionnelle au poids TF-IDF.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Pourquoi le modèle booléen n'est-il pas satisfaisant ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le modèle booléen présente trois problèmes fondamentaux : (1) <strong>RSV binaire $\{0,1\}$</strong> : aucun ordonnancement parmi les documents pertinents ou non-pertinents — tous les documents pertinents sont équivalents ; (2) <strong>Sensibilité à la formulation</strong> : une petite variation de la requête peut donner 0 ou des milliers de résultats ; (3) <strong>Requêtes difficiles à exprimer</strong> : l'utilisateur doit formellement coder sa recherche en logique booléenne (AND/OR/NOT), ce qui est peu naturel. La solution : le paradigme <em>Query-by-Example</em> avec un RSV continu dans $[0,1]$.</p>
+    </div>
+  </div>
+
+  <span class="qlevel med">Niveau intermédiaire</span>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Comment la similarité cosinus est-elle dérivée de la notion d'intersection ensembliste ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>En notation ensembliste binaire, la similarité entre document et requête est $|\hat{d}_j \cap \hat{q}|$ — le nombre de termes en commun. En version algébrique binaire, cela correspond au produit scalaire $\langle d_j, q \rangle = \sum_i w_{ij}w_{iq}$ avec $w_{ij} \in \{0,1\}$. Ce produit scalaire est sensible à la longueur : un long document contenant tous les termes de la requête l'emporterait toujours. En normalisant par $\|d_j\|\|q\|$ (racines carrées des tailles), on obtient la similarité cosinus : $\cos(\angle(d_j,q)) = \frac{\langle d_j,q\rangle}{\|d_j\|\|q\|}$. L'extension au cas continu (TF-IDF) suit naturellement en remplaçant les indicateurs binaires par les poids réels $w_{ij}$.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Quelle est la structure du modèle probabiliste BIR ? Pourquoi « Binary Independence » ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le modèle BIR repose sur deux hypothèses fondatrices qui lui donnent son nom : (1) <strong>Binary</strong> : l'occurrence de chaque terme dans le document est binaire — présent ($w_{ij}=1$) ou absent ($w_{ij}=0$). On ignore les fréquences. (2) <strong>Independence</strong> : les occurrences des termes sont conditionnellement indépendantes dans le document étant donné la pertinence. Ces hypothèses permettent de factoriser $P(d_j|R,q)$ en un produit sur les termes individuels. C'est la même hypothèse que dans Naïve Bayes. La dérivation part du rapport de cotes bayésien $O(R|d_j,q) \propto P(d_j|R,q)/P(d_j|\bar{R},q)$, qui, après factorisation et passage au log, donne un RSV = somme de log-odds par terme présent dans les deux.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Comment l'IDF émerge-t-elle naturellement du modèle probabiliste BIR ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>À l'initialisation du BIR, sans aucun feedback de pertinence, les estimations sont : $P(t_i|R,q) = \rho$ (constante arbitraire) et $P(t_i|\bar{R},q) = n_i/N$ (fréquence dans la collection). Le second terme du coefficient $c_i$ devient alors : $\log\frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} = \log\frac{1-n_i/N}{n_i/N} = \log\frac{N-n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. Ainsi, <strong>l'IDF n'est pas une heuristique</strong> : c'est la conséquence naturelle du raisonnement bayésien probabiliste lorsqu'on n'a pas d'information sur la pertinence. Cela prouve une profonde cohérence entre les approches géométrique et probabiliste de l'IR.</p>
+    </div>
+  </div>
+
+  <span class="qlevel hard">Niveau difficile</span>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Décrivez la dérivation complète du RSV BIR, en explicitant les étapes algébriques clés.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Étape 1 — Ratio de vraisemblances :</strong> $O(R|d_j,q) \propto P(d_j|R,q)/P(d_j|\bar{R},q)$.</p>
+      <p><strong>Étape 2 — Factorisation (Binary Independence) :</strong> $P(d_j|R,q) = \prod_{i \in \mathcal{I}_j} P(t_i|R,q) \prod_{i \notin \mathcal{I}_j}(1-P(t_i|R,q))$</p>
+      <p><strong>Étape 3 — Ratio produit :</strong> $O(R|d_j,q) \propto \prod_{i \in \mathcal{I}_j} \frac{P(t_i|R,q)}{P(t_i|\bar{R},q)} \prod_{i \notin \mathcal{I}_j} \frac{1-P(t_i|R,q)}{1-P(t_i|\bar{R},q)}$</p>
+      <p><strong>Étape 4 — Manipulation algébrique :</strong> On multiplie le second produit par $\prod_{i \in \mathcal{I}_j}[\cdot]^{-1}[\cdot]$ pour que les deux produits portent sur $i \in \mathcal{I}_j$. Le terme complémentaire (sur tous les $i$) est constant pour tous les documents. On obtient $\log O \propto \sum_{i \in \mathcal{I}_j} c_i$ avec $c_i = \log\frac{P(t_i|R,q)}{1-P(t_i|R,q)} + \log\frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)}$.</p>
+      <p><strong>Étape 5 — Restriction à la requête :</strong> Pour $i \notin \mathcal{I}_q$, $c_i = 0$ (les proba sont égales). Donc la somme se restreint à $i \in \mathcal{I}_j \cap \mathcal{I}_q$, encodé par $w_{ij}w_{iq}$.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Comment BM25 corrige-t-il les lacunes du modèle BIR de base ? Quel est le rôle exact des paramètres k₁ et b ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>BIR de base suppose des occurrences binaires et ignore la longueur du document. BM25 introduit deux corrections : (1) <strong>Saturation TF</strong> : le facteur $\frac{(k_1+1)tf}{K+tf}$ est une fonction croissante et saturante de $tf$. Quand $tf \to \infty$, il tend vers $\frac{k_1+1}{k_1}$ (fini). Cela évite que des termes très fréquents dominent le score. $k_1=0$ rend le modèle purement binaire comme BIR ; $k_1 \to \infty$ rend la TF linéaire. (2) <strong>Normalisation de longueur</strong> via $K = k_1((1-b)+b\cdot dl/avdl)$. $b=0$ : pas de normalisation (longueur ignorée). $b=1$ : normalisation complète par la longueur. $b=0.75$ est un compromis empirique : un long document est supposé contenir plus de termes « dilués » ; BM25 le pénalise proportionnellement. L'intuition est que si un document est deux fois plus long que la moyenne, les fréquences de ses termes doivent être divisées par un facteur intermédiaire.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggleQ(this)">
+      <span class="qi-qtxt">Quel est le paradigme Query-by-Example (QbE) et pourquoi est-il essentiel dans le VSM ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Dans le VSM, les documents sont projetés dans $\mathbb{R}^M$ via TF-IDF. Pour que le RSV (cosinus) ait un sens, la requête doit être dans le <strong>même espace</strong>. Le paradigme QbE consiste à traiter la requête comme un « document exemple » et à la projeter dans $\mathbb{R}^M$ avec le même embedding. $q = [w_{1q}, \ldots, w_{Mq}]^T$ où $w_{iq} = \text{tf}_{iq} \cdot \text{idf}_i$ avec $\text{tf}_{iq}$ la fréquence du terme $i$ dans la requête. Ce paradigme est essentiel pour trois raisons : (1) uniformité de la représentation — documents et requêtes dans le même espace ; (2) flexibilité — la requête peut être n'importe quel document exemple, pas seulement un texte court ; (3) cohérence algébrique — le cosinus est bien défini entre deux vecteurs du même espace. En LSI, la requête est en plus projetée dans l'espace des concepts $\mathbb{R}^K$.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 10: PIÈGES ═══ -->
+<section class="sec" id="pieges">
+  <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Pièges classiques</h2></div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Confondre TF et IDF :</strong> TF est local au document (mesure la fréquence dans UN document). IDF est global à la collection (mesure la rareté dans TOUTE la collection). $\text{idf}_i$ ne dépend pas de $j$ — c'est le même pour tous les documents.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Croire que le cosinus mesure une distance :</strong> La similarité cosinus mesure un <em>angle</em>, pas une distance euclidienne. La distance $\|d_j - q\|$ est différente et sensible à la norme. L'examinateur peut demander pourquoi on n'utilise pas la distance euclidienne comme RSV.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Oublier l'hypothèse d'indépendance dans BIR :</strong> Le nom « Binary Independence » repose sur DEUX hypothèses. L'oublier est une erreur courante. Préciser que les termes sont supposés indépendants conditionnellement à $R$ — c'est la même hypothèse que Naïve Bayes.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Dire que l'IDF est une heuristique :</strong> L'IDF émerge naturellement du modèle probabiliste BIR à l'initialisation ($P(t_i|\bar{R},q) = n_i/N$). Ce n'est pas une heuristique ad hoc — c'est une conséquence du raisonnement bayésien. Ce point est souvent demandé à l'oral.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Confondre termes de la requête et indicateurs :</strong> Dans le RSV BIR, $w_{iq}$ est un indicateur binaire de présence du terme $i$ dans la requête (dans BIR de base). Dans BM25, $qtf$ est la fréquence du terme dans la requête. Ne pas confondre les deux.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Oublier que la matrice W est terme-document :</strong> $W \in \mathbb{R}^{M \times N}$ : lignes = termes ($M$), colonnes = documents ($N$). Le document $d_j$ est la <em>colonne</em> $j$ de $W$, le terme $t_i$ est la <em>ligne</em> $i$. Ne pas inverser.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Penser que BM25 = BIR avec des fréquences :</strong> BM25 intègre aussi la <em>normalisation par la longueur du document</em> via le paramètre $b$ et le ratio $dl/avdl$. Ce n'est pas juste « BIR + TF ». Sans la normalisation de longueur, les longs documents seraient systématiquement favorisés.</div>
+  </div>
+
+  <div class="piege">
+    <span class="piege-icon">⚠</span>
+    <div class="piege-text"><strong>Croire que le VSM est interprétable uniquement géométriquement :</strong> Le VSM a aussi une interprétation algébrique (somme de produits $w_{ij}w_{iq}$) qui le relie à l'intersection ensembliste. La géométrie et l'algèbre sont deux vues du même modèle. L'examinateur peut demander les deux.</div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 11: FICHE DE RÉVISION ═══ -->
+<section class="sec" id="fiche">
+  <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Fiche de révision finale</h2></div>
+
+  <div class="fiche-grid">
+
+    <div class="fc2">
+      <h4>Pipeline VSM (Q1)</h4>
+      <ul>
+        <li><strong>1.</strong> Docs bruts → Vocabulaire $M$ termes</li>
+        <li><strong>2.</strong> $f_{ij}$ → $\text{tf}_{ij} = f_{ij}/\max_k f_{kj}$</li>
+        <li><strong>3.</strong> $n_i$ → $\text{idf}_i = \log(N/n_i)$</li>
+        <li><strong>4.</strong> $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$ → Matrice $W \in \mathbb{R}^{M\times N}$</li>
+        <li><strong>5.</strong> $d_j = W_{\cdot j} \in \mathbb{R}^M$ (colonne)</li>
+        <li><strong>6.</strong> Requête $q \in \mathbb{R}^M$ (QbE, même embedding)</li>
+        <li><strong>7.</strong> $\text{RSV}(d_j,q) = \langle d_j,q\rangle/(\|d_j\|\|q\|)$</li>
+        <li><strong>8.</strong> Tri par RSV décroissant → ranked list</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Pipeline BIR (Q2)</h4>
+      <ul>
+        <li><strong>1.</strong> Docs bruts → $w_{ij} \in \{0,1\}$ (indicateurs binaires)</li>
+        <li><strong>2.</strong> PRP : ranger par $P(R|d_j,q)$ décroissant</li>
+        <li><strong>3.</strong> Odds Ratio : $O(R|d_j,q) \propto P(d_j|R)/P(d_j|\bar{R})$</li>
+        <li><strong>4.</strong> Binary Indep. : factorisation en produit sur termes</li>
+        <li><strong>5.</strong> $\text{RSV} = \sum_i w_{ij}w_{iq} c_i$ (log-odds)</li>
+        <li><strong>6.</strong> Init. : $c_i \approx \text{idf}_i$ (sans feedback)</li>
+        <li><strong>7.</strong> Feedback : $P(t_i|R) = r_i/r$ → RSJ → BM25</li>
+        <li><strong>8.</strong> Tri par RSV décroissant → ranked list</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Formules essentielles</h4>
+      <ul>
+        <li><strong>TF</strong> : $\text{tf}_{ij} = f_{ij}/\max_k f_{kj}$</li>
+        <li><strong>IDF</strong> : $\text{idf}_i = \log(N/n_i)$</li>
+        <li><strong>TF-IDF</strong> : $w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$</li>
+        <li><strong>Cosine</strong> : $\langle d_j,q\rangle / (\|d_j\|\|q\|)$</li>
+        <li><strong>BIR RSV</strong> : $\sum_i w_{ij}w_{iq}[\log\text{-odds}]$</li>
+        <li><strong>BM25 TF-factor</strong> : $(k_1+1)tf / (K+tf)$</li>
+        <li><strong>BM25 K</strong> : $k_1((1-b)+b\cdot dl/avdl)$</li>
+        <li><strong>RSJ</strong> : $\log\frac{(r_i+.5)(N-R-n_i+r_i+.5)}{(n_i-r_i+.5)(R-r_i+.5)}$</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Points différenciants clés</h4>
+      <ul>
+        <li><strong>VSM vs BIR :</strong> géométrie vs probabilités</li>
+        <li><strong>IDF :</strong> émerge naturellement dans BIR init.</li>
+        <li><strong>Cosinus :</strong> invariant à la norme, dérivé de ∩</li>
+        <li><strong>BIR "Binary" :</strong> $w_{ij} \in \{0,1\}$ (pas TF)</li>
+        <li><strong>BIR "Independence" :</strong> termes indépendants (Naïve Bayes)</li>
+        <li><strong>BM25 vs BIR :</strong> +TF saturée, +normalisation longueur</li>
+        <li><strong>QbE :</strong> requête = document exemple dans $\mathbb{R}^M$</li>
+        <li><strong>PRP :</strong> fondement du classement probabiliste (1977)</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Connexions conceptuelles</h4>
+      <ul>
+        <li>Boolean → BoW : binaire → fréquences</li>
+        <li>BoW → VSM : fréquences → géométrie $\mathbb{R}^M$</li>
+        <li>BoW → BIR : fréquences → probabilités</li>
+        <li>BIR init ≈ TF-IDF : même IDF !</li>
+        <li>BIR → RSJ → BM25 : +smoothing, +TF, +longueur</li>
+        <li>VSM → LSI : TF-IDF → SVD → concepts latents</li>
+        <li>LSI → Word2Vec → BERT : linéaire → non-linéaire</li>
+        <li>BM25 → Hybrid : sparse + dense retrieval</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Rappels à connaître par cœur</h4>
+      <ul>
+        <li>PRP : Robertson, Journal of Doc., <strong>1977</strong></li>
+        <li>BM25 : Robertson et al., TREC-3, <strong>1995</strong></li>
+        <li>Params BM25 défaut : $k_1 \approx 1.2$, $b \approx 0.75$</li>
+        <li>Matrice W : $M \times N$ (termes × documents)</li>
+        <li>$d_j \in \mathbb{R}^M$ = <em>colonne</em> de W</li>
+        <li>$t_i \in \mathbb{R}^N$ = <em>ligne</em> de W (pour LSI)</li>
+        <li>Implémentation : Elasticsearch, Lucene, Solr</li>
+        <li>BM25 encore SOTA pour sparse retrieval 2025</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="box vio">
+    <div class="box-title">Message clé pour l'oral</div>
+    Les deux modèles (VSM et BIR) sont des deux <em>lectures</em> du même problème fondamental : comment quantifier la pertinence d'un document par rapport à une requête à partir d'un embedding TF-IDF. Le VSM répond géométriquement (angle entre vecteurs), le BIR probabilistiquement (log-vraisemblance de pertinence). La convergence entre les deux — l'IDF émergeant naturellement dans BIR — est la signature de leur cohérence profonde.
+  </div>
+</section>
+
+</main>
+
+<script>
+function toggleQ(btn) {
+  const ans = btn.nextElementSibling;
+  const arr = btn.querySelector('.qi-arr');
+  ans.classList.toggle('open');
+  arr.style.transform = ans.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+// Smooth scroll & active nav
+document.querySelectorAll('.sb nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+// Active nav on scroll
+const sections = document.querySelectorAll('.sec[id]');
+const navLinks = document.querySelectorAll('.sb nav a[href^="#"]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.sb nav a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, {threshold: 0.2, rootMargin: '-10% 0px -70% 0px'});
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
