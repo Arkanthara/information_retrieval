@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.02 — Information Embedding · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:270px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.88rem;display:block;
+  padding:.35rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .3rem;opacity:.6}
+
+/* MAIN */
+.main{margin-left:270px;flex:1;padding:3rem 4rem;max-width:1020px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.6rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:620px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:600px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* DIAGRAM */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+.diag svg text{font-family:var(--ff);fill:var(--text)}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.15rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sb">
+  <div class="sb-logo">IR.02</div>
+  <div class="sb-sub">Information Embedding</div>
+  <nav>
+    <ul>
+      <li class="sb-section">Synthèse</li>
+      <li><a href="#s1"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#s2"><span class="n">02</span>Réponse d'oral</a></li>
+      <li class="sb-section">Contenu</li>
+      <li><a href="#s3"><span class="n">03</span>Explications profondes</a></li>
+      <li><a href="#s4"><span class="n">04</span>Architecture IR</a></li>
+      <li><a href="#s5"><span class="n">05</span>Formules importantes</a></li>
+      <li class="sb-section">Analyse</li>
+      <li><a href="#s6"><span class="n">06</span>Comparaison</a></li>
+      <li><a href="#s7"><span class="n">07</span>Relations</a></li>
+      <li><a href="#s8"><span class="n">08</span>Histoire</a></li>
+      <li><a href="#s9"><span class="n">09</span>Systèmes modernes</a></li>
+      <li class="sb-section">Examen</li>
+      <li><a href="#s10"><span class="n">10</span>Questions d'examen</a></li>
+      <li><a href="#s11"><span class="n">11</span>Pièges classiques</a></li>
+      <li><a href="#s12"><span class="n">12</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Master · Information Retrieval · IR.02</div>
+  <h1>Information<br><em>Embedding</em></h1>
+  <p class="hero-desc">Guide complet de préparation à l'examen oral. Couvre les modèles booléen, Bag of Words, TF-IDF, espace vectoriel, retrieval probabiliste (BIR, BM25) et l'indexation sémantique latente (LSI).</p>
+  <div class="badges">
+    <span class="badge">Boolean Model</span>
+    <span class="badge">TF-IDF</span>
+    <span class="badge b">Vector Space</span>
+    <span class="badge b">BIR / BM25</span>
+    <span class="badge g">LSI / SVD</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1 -->
+<!-- ============================================================ -->
+<section class="sec" id="s1">
+  <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Résumé exécutif</h2></div>
+
+  <div class="box">
+    <div class="box-title">Définition centrale</div>
+    <p>Un <strong>embedding</strong> est une fonction qui représente des objets (termes, documents, requêtes) comme des vecteurs dans un espace mathématique structuré, permettant le calcul automatique de la pertinence via le <strong>Retrieval Status Value</strong> $RSV(d_j, q)$.</p>
+  </div>
+
+  <p>Le problème fondamental de l'IR est : étant donné une collection de $N$ documents et une requête $q$, produire une liste ordonnée de documents par <em>pertinence décroissante</em>. Pour cela, il faut d'abord convertir les documents (textes bruts) en représentations numériques manipulables.</p>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Modèle 1</div>
+      <h4>Boolean</h4>
+      <p>Encodage binaire. Documents aux sommets de $[0,1]^M$. Matching exact : $RSV \in \{0,1\}$.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Modèle 2</div>
+      <h4>TF-IDF / VSM</h4>
+      <p>Pondération fréquence × pouvoir discriminant. Cosine similarity. $RSV \in [0,1]$.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Modèle 3</div>
+      <h4>BIR / BM25</h4>
+      <p>Estimation probabiliste de $P(R|d_j,q)$. Odds ratio bayésien. Feedback itératif.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Modèle 4</div>
+      <h4>LSI</h4>
+      <p>Décomposition SVD de la matrice terme-document. Espace de concepts latents de dimension $K$.</p>
+    </div>
+  </div>
+
+  <div class="box ok">
+    <div class="box-title">Idée principale</div>
+    <p>Chaque modèle tente de surmonter les limites du précédent : <strong>Boolean → manque de gradation → TF-IDF → manque de sémantique → LSI ; Boolean → manque de ranking → probabiliste → BM25.</strong></p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2 -->
+<!-- ============================================================ -->
+<section class="sec" id="s2">
+  <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Réponse naturelle et directement prononçable devant un examinateur (≈ 3–4 minutes).</p>
+
+  <div class="oral">
+    <p>Pour pouvoir traiter des documents textuels informatiquement, on a besoin de les représenter sous forme de vecteurs numériques — c'est ce qu'on appelle l'<strong>embedding</strong>. L'objectif est de calculer un <em>Retrieval Status Value</em>, noté $RSV(d_j, q)$, qui mesure la pertinence du document $d_j$ par rapport à la requête $q$, et permet ainsi de retourner une liste ordonnée.</p>
+
+    <p>Le modèle le plus simple est le <strong>modèle booléen</strong> : chaque terme du vocabulaire est encodé en one-hot, les documents sont des combinaisons binaires de ces vecteurs, et la requête est une expression logique. Le matching est exact — un document correspond à la requête ou non. C'est simple mais trop rigide : pas de ranking, et une erreur dans la requête peut donner zéro résultat.</p>
+
+    <p>On passe alors au <strong>Bag of Words avec TF-IDF</strong>. On ne représente plus la présence binaire d'un terme, mais sa fréquence normalisée $tf_{ij}$ pondérée par son pouvoir discriminant $idf_i = \log(N/n_i)$. Un terme fréquent dans un document mais rare dans la collection a un fort poids. Le document devient un vecteur dans $\mathbb{R}^M$ et on utilise la <strong>similarité cosinus</strong> pour calculer le RSV — ce qui revient à mesurer l'intersection des ensembles de termes de façon continue.</p>
+
+    <p>Le modèle <strong>probabiliste</strong> part d'un principe différent : on estime la probabilité de pertinence $P(R|d_j, q)$. Via le théorème de Bayes et en supposant l'indépendance des termes (Binary Independence Retrieval), on arrive à une formule de log-odds dont le terme initial approche l'IDF. Ce modèle a évolué vers le <strong>BM25</strong> (Robertson-Sparck Jones), qui ajoute une saturation de la fréquence de terme et une normalisation par la longueur du document — c'est aujourd'hui encore une baseline très forte en IR.</p>
+
+    <p>Enfin, le <strong>Latent Semantic Indexing</strong> adresse les problèmes de synonymie et polysémie du TF-IDF. En appliquant une <em>Singular Value Decomposition</em> tronquée à la matrice terme-document $W$, on projette documents et requêtes dans un espace de $K$ concepts latents décorrélés. La requête est transformée par $\tilde{q} = \Sigma_K^{-1} U_K^T q$ et le retrieval se fait dans cet espace réduit. C'est le précurseur direct des embeddings neuronaux modernes comme Word2Vec ou les sentence transformers.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3 -->
+<!-- ============================================================ -->
+<section class="sec" id="s3">
+  <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Explications profondes</h2></div>
+
+  <!-- 3.1 Boolean -->
+  <h3>3.1 Boolean Model</h3>
+
+  <h4>Définition et encodage</h4>
+  <p>Le modèle booléen repose sur un encodage <em>one-hot</em> (binary embedding). Pour un vocabulaire de $M$ termes, le $i$-ème terme est représenté par :</p>
+  <div class="mblock"><div class="mlabel">Représentation one-hot</div>$$t_i = [\delta_{ik}]_{k=1}^M \in \{0,1\}^M$$</div>
+  <p>Le document $j$ est la disjonction des représentations de tous ses termes : $d_j = \bigvee_{i \in \mathbb{1}_j} t_i$. Géométriquement, documents et termes sont placés aux <strong>sommets de l'hypercube</strong> $[0,1]^M$.</p>
+
+  <h4>Matching et RSV</h4>
+  <p>La requête est une expression logique (AND, OR, NOT) convertie en composantes conjonctives (CNF). Le RSV est binaire :</p>
+  <div class="mblock">$$RSV(d_j, q) = \bigvee_k \left(d_j \stackrel{?}{=} q_k\right) \in \{0, 1\}$$</div>
+  <p><strong>Exemple :</strong> $q = A \wedge (B \vee \neg C)$ donne $q_1 = 111$, $q_2 = 110$, $q_3 = 100$. Tout document contenant A seul, ou A∧B, ou A∧B∧C est pertinent. "CCC" ne l'est pas.</p>
+
+  <div class="twrap"><table>
+    <thead><tr><th>Propriété</th><th>Valeur</th></tr></thead>
+    <tbody>
+      <tr><td>Espace de représentation</td><td>Sommets de $[0,1]^M$</td></tr>
+      <tr><td>RSV</td><td>$\{0, 1\}$ — tout ou rien</td></tr>
+      <tr><td>Ranking</td><td class="r">Impossible</td></tr>
+      <tr><td>Expressivité requête</td><td>AND, OR, NOT (SQL-like)</td></tr>
+      <tr><td>Force</td><td class="g">Simple, formel, exact</td></tr>
+      <tr><td>Limite principale</td><td class="r">Pas de continuum de pertinence</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- 3.2 BoW / TF-IDF -->
+  <h3>3.2 Bag of Words et TF-IDF</h3>
+
+  <h4>Intuition du Bag of Words</h4>
+  <p>On remplace la présence binaire par la <strong>fréquence</strong> : plus un terme apparaît dans un document, plus il le représente. La structure (ordre, paragraphes) est perdue, mais on gagne en granularité. Ce modèle s'applique à tout type de média (images, audio) sous forme de <em>patterns génériques</em>.</p>
+
+  <h4>Term Frequency (TF)</h4>
+  <p>La fréquence brute $f_{ij}$ est normalisée par le terme le plus fréquent du document :</p>
+  <div class="mblock">$$tf_{ij} = \frac{f_{ij}}{\max_k f_{kj}} \implies \max_i tf_{ij} = 1$$</div>
+  <p><strong>Intuition :</strong> normaliser évite de favoriser les longs documents. Un terme qui occupe 30% des occurrences d'un document a le même poids qu'un autre occupant 30% d'un document plus court.</p>
+
+  <h4>Inverse Document Frequency (IDF)</h4>
+  <p>Un terme présent dans tous les documents (ex: "le", "the") n'est pas discriminant. On pénalise sa fréquence dans la collection :</p>
+  <div class="mblock">$$idf_i = \log \frac{N}{n_i}$$</div>
+  <p>où $n_i$ = nombre de documents contenant le terme $i$. Si $n_i \approx N$, alors $idf_i \approx 0$ (terme non discriminant). Si $n_i = 1$, alors $idf_i = \log N$ (terme très discriminant).</p>
+
+  <h4>Poids TF-IDF et matrice terme-document</h4>
+  <div class="mblock">$$w_{ij} = tf_{ij} \cdot idf_i$$
+$$W = [w_{ij}] \in \mathbb{R}^{M \times N}$$</div>
+  <p>Chaque colonne de $W$ est le vecteur-document $d_j \in \mathbb{R}^M$. Chaque ligne est un vecteur-terme $t_i \in \mathbb{R}^N$ (utile pour LSI).</p>
+
+  <h4>Géométrie de l'embedding TF-IDF</h4>
+  <div class="mblock">$$d_j = \sum_i w_{ij} e_i = \sum_i (tf_{ij} \cdot idf_i) e_i = \sum_i tf_{ij} \tau_i \quad \text{avec } \tau_i = idf_i \cdot e_i$$</div>
+  <p><strong>Interprétation :</strong> L'IDF <em>distord</em> la base standard $\{e_i\}$ en une base discriminante $\{\tau_i\}$. La coordonnée du document $j$ dans l'axe $\tau_i$ est simplement $tf_{ij}$. Les termes rares ont des axes plus longs.</p>
+
+  <div class="box info">
+    <div class="box-title">Tag cloud = visualisation TF-IDF</div>
+    <p>Dans un tag cloud, la taille d'un mot représente précisément son poids $w_{ij} = tf_{ij} \cdot idf_i$ : fréquent dans ce document ET rare dans la collection.</p>
+  </div>
+
+  <!-- 3.3 VSM -->
+  <h3>3.3 Vector Space Retrieval Model</h3>
+
+  <h4>Paradigme Query-by-Example (QbE)</h4>
+  <p>La requête est traitée comme un <em>exemple de document</em> et projetée dans le même espace $\mathbb{R}^M$ que les documents. On calcule alors une mesure géométrique de similarité entre $d_j$ et $q$.</p>
+
+  <h4>Motiviation : intersection d'ensembles</h4>
+  <p>Dans une représentation binaire, la pertinence naturelle est $RSV(\hat{d}_j, \hat{q}) = |\hat{d}_j \cap \hat{q}|$. Cette intersection se traduit algébriquement par le produit scalaire : $\langle d_j, q \rangle = \sum_i w_{ij} w_{iq}$. On généralise ensuite ce principe aux représentations continues.</p>
+
+  <h4>Mesures de similarité dérivées</h4>
+  <div class="twrap"><table>
+    <thead><tr><th>Mesure</th><th>Continu</th><th>Binaire (ensembles)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Matching</strong></td><td>$\langle d_j, q \rangle$</td><td>$|\hat{d}_j \cap \hat{q}|$</td></tr>
+      <tr><td><strong>Cosine</strong></td><td>$\frac{\langle d_j, q \rangle}{\|d_j\|\|q\|}$</td><td>$\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|^{1/2}|\hat{q}|^{1/2}}$</td></tr>
+      <tr><td><strong>Dice</strong></td><td>$\frac{2\langle d_j, q \rangle}{\sum_i(w_{ij}+w_{iq})}$</td><td>$\frac{2|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|+|\hat{q}|}$</td></tr>
+      <tr><td><strong>Jaccard</strong></td><td>$\approx \frac{\langle d_j, q \rangle}{\sum_i \max(w_{ij}, w_{iq})}$</td><td>$\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j \cup \hat{q}|}$</td></tr>
+      <tr><td><strong>Overlap</strong></td><td>$\frac{\langle d_j, q \rangle}{\min(\sum_i w_{ij}, \sum_i w_{iq})}$</td><td>$\frac{|\hat{d}_j \cap \hat{q}|}{\min(|\hat{d}_j|, |\hat{q}|)}$</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>La <strong>similarité cosinus</strong> est la plus populaire : elle est invariante à la longueur des vecteurs (normalisation), ce qui compense la différence de longueur entre documents.</p>
+  <div class="mblock"><div class="mlabel">Cosine similarity — formule complète</div>$$RSV(d_j, q) = \cos(\angle(d_j, q)) = \frac{\langle d_j, q \rangle}{\|d_j\|\|q\|} = \frac{\sum_i w_{ij} w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2}\left(\sum_i w_{iq}^2\right)^{1/2}}$$</div>
+
+  <!-- 3.4 Probabiliste -->
+  <h3>3.4 Retrieval Probabiliste</h3>
+
+  <h4>Probability Ranking Principle (Robertson, 1977)</h4>
+  <div class="box vio">
+    <div class="box-title">Principe fondamental</div>
+    <p>Si le système classe les documents par <em>probabilité décroissante d'utilité</em> pour l'utilisateur, l'efficacité globale est maximale étant donné les données disponibles.</p>
+  </div>
+  <p>On cherche à estimer $P(R = \text{true} \mid d_j, q)$ où $R$ est une variable aléatoire de Bernoulli indiquant la pertinence.</p>
+
+  <h4>Odds ratio bayésien</h4>
+  <p>Plutôt que de seuiller $P(R|d_j,q) > \tau$, on calcule l'<em>odds ratio</em> :</p>
+  <div class="mblock">$$O(R|d_j, q) = \frac{P(R|d_j,q)}{P(\bar{R}|d_j,q)} \propto \frac{P(d_j|R,q)}{P(d_j|\bar{R},q)}$$</div>
+  <p>Le terme $P(R|q)/P(\bar{R}|q)$ est constant pour tous les documents et peut être ignoré pour le ranking.</p>
+
+  <h4>Régression logistique pour l'IR</h4>
+  <p>Si on modélise $\log O(R|d_j,q)$ comme fonction log-linéaire des features $d_j$ :</p>
+  <div class="mblock">$$P(R|d_j,q) = \sigma_\theta(d_j) = \frac{1}{1+e^{-(w^T d_j + w_0)}}$$</div>
+  <p>Les paramètres $\theta = [w, w_0]$ sont appris par descente de gradient sur des paires (document, requête, jugement de pertinence). Toute représentation (embedding) peut être utilisée comme features.</p>
+
+  <h4>Binary Independence Retrieval (BIR)</h4>
+  <p>Hypothèse : occurrences binaires et <strong>indépendance des termes</strong> dans le document. Alors :</p>
+  <div class="mblock">$$P(d_j|R,q) = \prod_{i \in \mathbb{1}_j} P(t_i|R,q) \cdot \prod_{i \notin \mathbb{1}_j} (1-P(t_i|R,q))$$</div>
+  <div class="mblock"><div class="mlabel">BIR — log-odds (formulation finale)</div>$$RSV(d_j,q) \propto \sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} \left[\log \frac{P(t_i|R,q)}{1-P(t_i|R,q)} + \log \frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)}\right]$$</div>
+  <p>À l'initialisation (sans feedback), $P(t_i|\bar{R},q) \approx n_i/N$, donc :</p>
+  <div class="mblock">$$\log \frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} \approx \log \frac{N}{n_i} = idf_i$$</div>
+  <p><strong>→ Le BIR initialise son RSV à quelque chose de proche de l'IDF !</strong> Après $r$ documents pseudo-pertinents (top-ranked), on estime $P(t_i|R,q) \approx r_i/r$ et on itère jusqu'à convergence.</p>
+
+  <h4>RSJ et BM25</h4>
+  <div class="mblock"><div class="mlabel">RSJ weight</div>$$w_i^{RSJ} = \log \frac{(r_i + 0.5)(N - R - n_i + r_i + 0.5)}{(n_i - r_i + 0.5)(R - r_i + 0.5)}$$</div>
+  <div class="mblock"><div class="mlabel">BM25 — Best Match 25 (OKAPI)</div>$$RSV^{BM25}(d_j,q) = \sum_{i \in Q} w_i^{RSJ} \cdot \frac{(k_1+1)\,tf}{k_1\!\left[(1-b) + b\,\frac{dl}{avdl}\right] + tf}$$</div>
+  <p>où $k_1 \approx 1.2$, $b \approx 0.75$, $dl$ = longueur du document, $avdl$ = longueur moyenne. BM25 est encore aujourd'hui une <strong>baseline state-of-the-art</strong> pour le sparse retrieval.</p>
+
+  <!-- 3.5 LSI -->
+  <h3>3.5 Latent Semantic Indexing (LSI)</h3>
+
+  <h4>Motivation : limites du TF-IDF</h4>
+  <p>Le TF-IDF souffre de deux problèmes linguistiques fondamentaux :</p>
+  <ul>
+    <li><strong>Synonymie :</strong> "voiture" et "automobile" désignent le même concept mais ont des vecteurs orthogonaux → similarité cosinus = 0.</li>
+    <li><strong>Polysémie :</strong> "table" (meuble ou tableau) a un seul vecteur mais deux sens → bruit dans les résultats.</li>
+  </ul>
+  <p>En général, les termes sont des <em>compositions de concepts latents</em>. LSI cherche une base $\{c_k\}_{k=1}^K$ de concepts orthogonaux : $\langle c_k, c_l \rangle = \delta_{kl}$.</p>
+
+  <h4>SVD tronquée — Rappel</h4>
+  <p>Pour toute matrice $W \in \mathbb{R}^{M \times N}$, la décomposition en valeurs singulières (SVD) donne :</p>
+  <div class="mblock">$$W = U \Sigma V^T \quad \text{avec } U \in \mathbb{R}^{M \times M},\; \Sigma \in \mathbb{R}^{M \times N},\; V \in \mathbb{R}^{N \times N}$$</div>
+  <p>La <strong>SVD tronquée de rang $K$</strong> est la meilleure approximation de rang $K$ au sens de Frobenius :</p>
+  <div class="mblock">$$W_K = U_K \Sigma_K V_K^T = \arg\min_{\text{rank}(A)=K} \|W - A\|_F^2$$</div>
+
+  <h4>Application à l'IR : projection dans l'espace concept</h4>
+  <p>On cherche un embedding $\tilde{W} \in \mathbb{R}^{M \times K}$ tel que les colonnes (termes projetés) soient <em>décorrélées</em> : $\tilde{W}\tilde{W}^T = I_M$. En projetant les documents TF-IDF via :</p>
+  <div class="mblock">$$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$$</div>
+  <p>on obtient des représentations décorrélées. Les requêtes sont projetées de la même façon : $\tilde{q} = \Sigma_K^{-1} U_K^T q$, puis le retrieval utilise la cosine dans l'espace latent :</p>
+  <div class="mblock">$$RSV(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\|\|\tilde{q}\|}$$</div>
+
+  <h4>Stratégies de mise à jour de l'index</h4>
+  <p>Comme l'espace concept dépend de la collection initiale, l'ajout de documents pose problème :</p>
+  <ul>
+    <li><strong>Exact update :</strong> recalcul minimal en décomposant les nouveaux documents en composante alignée avec $U_K$ et reste orthogonal → SVD sur une matrice réduite.</li>
+    <li><strong>Fold-in :</strong> projeter simplement le nouveau document $D$ dans l'espace existant : $\hat{D} = U_K^T D$, puis concaténer. Plus rapide mais approximatif (ignore la contribution des nouveaux documents à l'espace concept).</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4 -->
+<!-- ============================================================ -->
+<section class="sec" id="s4">
+  <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Architecture et fonctionnement</h2></div>
+
+  <h3>Pipeline d'un système IR</h3>
+  <div class="diag">
+    <svg viewBox="0 0 800 380" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:'EB Garamond',serif;font-size:13px">
+      <!-- Background bands -->
+      <rect x="0" y="0" width="800" height="140" fill="rgba(126,184,212,0.04)" rx="4"/>
+      <rect x="0" y="140" width="800" height="240" fill="rgba(201,168,76,0.03)" rx="4"/>
+      <!-- Labels -->
+      <text x="10" y="25" fill="#7eb8d4" font-size="11" font-family="'JetBrains Mono',monospace" letter-spacing="0.1em">OFFLINE</text>
+      <text x="10" y="175" fill="#c9a84c" font-size="11" font-family="'JetBrains Mono',monospace" letter-spacing="0.1em">INTERACTIVE</text>
+      <!-- Offline: Documents → Features → Index -->
+      <rect x="60" y="50" width="110" height="40" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="115" y="73" text-anchor="middle" fill="#e4dffa">Documents</text>
+      <path d="M170 70 L220 70" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+      <text x="195" y="62" text-anchor="middle" fill="#9089bf" font-size="11">extraction</text>
+      <rect x="220" y="50" width="110" height="40" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="275" y="73" text-anchor="middle" fill="#e4dffa">Features</text>
+      <path d="M330 70 L380 70" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+      <text x="355" y="62" text-anchor="middle" fill="#9089bf" font-size="11">indexing</text>
+      <rect x="380" y="50" width="100" height="40" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="430" y="73" text-anchor="middle" fill="#c9a84c" font-weight="bold">Index</text>
+      <!-- Arrow down from Index to Search Engine -->
+      <path d="M430 90 L430 220" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#arr)"/>
+      <!-- Interactive: User → Query → Search → Results → User -->
+      <rect x="40" y="300" width="80" height="36" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="80" y="322" text-anchor="middle" fill="#7eb8d4">User</text>
+      <path d="M120 318 L175 318" stroke="#7eb8d4" stroke-width="1.2" fill="none" marker-end="url(#arr2)"/>
+      <rect x="175" y="300" width="80" height="36" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="215" y="322" text-anchor="middle" fill="#e4dffa">Query</text>
+      <path d="M255 318 L305 318" stroke="#9089bf" stroke-width="1.2" fill="none" marker-end="url(#arr3)"/>
+      <text x="280" y="311" text-anchor="middle" fill="#9089bf" font-size="11">process</text>
+      <rect x="305" y="300" width="95" height="36" rx="5" fill="#1c1828" stroke="#9089bf" stroke-width="1"/>
+      <text x="352" y="322" text-anchor="middle" fill="#e4dffa">Proc. Query</text>
+      <path d="M400 318 L450 318" stroke="#9089bf" stroke-width="1.2" fill="none" marker-end="url(#arr3)"/>
+      <!-- Search Engine -->
+      <rect x="400" y="205" width="110" height="40" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="455" y="229" text-anchor="middle" fill="#c9a84c">Search Engine</text>
+      <!-- Arrow from Proc.Query to Search Engine -->
+      <path d="M453 300 L453 245" stroke="#9089bf" stroke-width="1.2" fill="none" marker-end="url(#arr3)"/>
+      <!-- Ranked list -->
+      <path d="M455 205 L455 165 L550 165" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+      <rect x="550" y="148" width="100" height="40" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1"/>
+      <text x="600" y="172" text-anchor="middle" fill="#e4dffa">Ranked list</text>
+      <!-- Ranked list → Display -->
+      <path d="M600 188 L600 250 L680 250" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+      <rect x="680" y="232" width="90" height="40" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="725" y="256" text-anchor="middle" fill="#7bc496">Display</text>
+      <!-- Relevance feedback arrow -->
+      <path d="M680 258 L80 258 L80 336" stroke="#e07b7b" stroke-width="1" stroke-dasharray="5,3" fill="none" marker-end="url(#arr4)"/>
+      <text x="380" y="248" text-anchor="middle" fill="#e07b7b" font-size="11" font-family="'JetBrains Mono',monospace">Relevance feedback</text>
+      <!-- Defs -->
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c9a84c"/></marker>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7eb8d4"/></marker>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9089bf"/></marker>
+        <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e07b7b"/></marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h3>Pipeline LSI — Décomposition SVD</h3>
+  <div class="diag">
+    <svg viewBox="0 0 760 200" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:'EB Garamond',serif;font-size:13px">
+      <!-- W matrix -->
+      <rect x="20" y="30" width="80" height="140" rx="4" fill="rgba(126,184,212,0.12)" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="60" y="108" text-anchor="middle" fill="#7eb8d4" font-size="22" font-style="italic">W</text>
+      <text x="60" y="185" text-anchor="middle" fill="#9089bf" font-size="11">M × N</text>
+      <text x="60" y="18" text-anchor="middle" fill="#9089bf" font-size="11">TF-IDF</text>
+      <!-- = -->
+      <text x="120" y="108" text-anchor="middle" fill="#e4dffa" font-size="20">=</text>
+      <!-- U matrix -->
+      <rect x="145" y="30" width="80" height="140" rx="4" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="185" y="108" text-anchor="middle" fill="#c9a84c" font-size="22" font-style="italic">U</text>
+      <text x="185" y="185" text-anchor="middle" fill="#9089bf" font-size="11">M × M</text>
+      <text x="185" y="18" text-anchor="middle" fill="#c9a84c" font-size="11">Term vectors</text>
+      <!-- × -->
+      <text x="245" y="108" text-anchor="middle" fill="#e4dffa" font-size="20">·</text>
+      <!-- Sigma matrix -->
+      <rect x="265" y="55" width="100" height="90" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="315" y="108" text-anchor="middle" fill="#a78bfa" font-size="22" font-style="italic">Σ</text>
+      <text x="315" y="185" text-anchor="middle" fill="#9089bf" font-size="11">M × N</text>
+      <!-- × -->
+      <text x="385" y="108" text-anchor="middle" fill="#e4dffa" font-size="20">·</text>
+      <!-- V^T matrix -->
+      <rect x="405" y="75" width="130" height="50" rx="4" fill="rgba(123,196,150,0.1)" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="470" y="107" text-anchor="middle" fill="#7bc496" font-size="22" font-style="italic">V</text>
+      <text x="470" y="101" text-anchor="middle" fill="#7bc496" font-size="12">T</text>
+      <text x="470" y="185" text-anchor="middle" fill="#9089bf" font-size="11">N × N</text>
+      <text x="470" y="18" text-anchor="middle" fill="#7bc496" font-size="11">Document vectors</text>
+      <!-- Arrow → truncated -->
+      <text x="560" y="108" text-anchor="middle" fill="#e4dffa" font-size="14">⟹</text>
+      <!-- Wk = Uk Sk Vk^T -->
+      <rect x="585" y="50" width="55" height="100" rx="4" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1"/>
+      <text x="612" y="107" text-anchor="middle" fill="#c9a84c" font-size="14" font-style="italic">U<tspan font-size="10" dy="3">K</tspan></text>
+      <text x="612" y="170" text-anchor="middle" fill="#9089bf" font-size="10">M×K</text>
+      <rect x="648" y="70" width="50" height="60" rx="4" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="1"/>
+      <text x="673" y="107" text-anchor="middle" fill="#a78bfa" font-size="14" font-style="italic">Σ<tspan font-size="10" dy="3">K</tspan></text>
+      <rect x="706" y="88" width="40" height="40" rx="4" fill="rgba(123,196,150,0.1)" stroke="#7bc496" stroke-width="1"/>
+      <text x="726" y="111" text-anchor="middle" fill="#7bc496" font-size="13" font-style="italic">V<tspan font-size="9" dy="2">K</tspan><tspan font-size="11" dy="-3">T</tspan></text>
+      <text x="660" y="18" text-anchor="middle" fill="#9089bf" font-size="11">Truncated SVD (rank K)</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 5 -->
+<!-- ============================================================ -->
+<section class="sec" id="s5">
+  <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Formules importantes</h2></div>
+
+  <div class="fcards">
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Term Frequency (TF)</span><span class="fc-tag">BoW</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$tf_{ij} = \frac{f_{ij}}{\max_k f_{kj}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$f_{ij}$ : nb d'occurrences du terme $i$ dans $d_j$. $\max_k f_{kj}$ : fréquence maximale dans le document.</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Normaliser par le terme le plus fréquent du document élimine le biais de longueur. $tf_{ij} \in [0,1]$, avec $\max_i tf_{ij} = 1$.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>Si "data" apparaît 5 fois et le terme le plus fréquent 10 fois : $tf = 0.5$.</p></div>
+          <div class="fc-item"><h5>Impact</h5><p>Plus le terme est présent, plus il représente le document. Mais sans IDF, un terme omniprésent (ex: "le") serait surpondéré.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Inverse Document Frequency (IDF)</span><span class="fc-tag">BoW</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$idf_i = \log \frac{N}{n_i}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$N$ : nb total de documents. $n_i$ : nb de documents contenant le terme $i$.</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Mesure le pouvoir discriminant d'un terme. Terme dans tous les docs → $idf \approx 0$. Terme rare → $idf$ élevé.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>$N=1000$, "information" dans 10 docs : $idf = \log 100 = 4.6$. "the" dans 999 docs : $idf = \log 1.001 \approx 0.001$.</p></div>
+          <div class="fc-item"><h5>Lien BIR</h5><p>Au départ du BIR (sans feedback), la composante IDF apparaît naturellement dans le log-odds : $\log\frac{N-n_i}{n_i} \approx \log\frac{N}{n_i} = idf_i$.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Poids TF-IDF</span><span class="fc-tag">Embedding</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$w_{ij} = tf_{ij} \cdot idf_i = \frac{f_{ij}}{\max_k f_{kj}} \cdot \log\frac{N}{n_i}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Signification</h5><p>Combine fréquence locale (importance dans le doc) et rareté globale (pouvoir discriminant). Résumé en une seule valeur.</p></div>
+          <div class="fc-item"><h5>Matrice</h5><p>$W = [w_{ij}] \in \mathbb{R}^{M \times N}$ : matrice terme-document. Base de tous les modèles VSM et LSI.</p></div>
+          <div class="fc-item"><h5>Géométrie</h5><p>$d_j = \sum_i tf_{ij} \cdot \tau_i$ dans la base discriminante $\tau_i = idf_i \cdot e_i$. L'IDF distord l'espace.</p></div>
+          <div class="fc-item"><h5>Limites</h5><p>Représentation creuse (sparse) en $\mathbb{R}^M$. Ignore synonymie, polysémie, ordre des mots.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Cosine Similarity</span><span class="fc-tag">VSM</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$RSV(d_j,q) = \frac{\langle d_j, q \rangle}{\|d_j\|\|q\|} = \frac{\sum_i w_{ij} w_{iq}}{\left(\sum_i w_{ij}^2\right)^{\!\frac{1}{2}}\left(\sum_i w_{iq}^2\right)^{\!\frac{1}{2}}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Signification</h5><p>Cosinus de l'angle entre les vecteurs-document et requête. $RSV \in [-1, 1]$, mais en TF-IDF $\in [0,1]$ (valeurs positives).</p></div>
+          <div class="fc-item"><h5>Invariance</h5><p>Invariant à la norme (longueur du document). Un long document répétant les mêmes termes n'est pas avantagé.</p></div>
+          <div class="fc-item"><h5>Exemple</h5><p>$d_j = (3,0,2)$, $q = (1,0,1)$. $RSV = \frac{3+2}{\sqrt{13}\cdot\sqrt{2}} = \frac{5}{5.1} \approx 0.98$.</p></div>
+          <div class="fc-item"><h5>Lien ensembles</h5><p>Généralise $|\hat{d}_j \cap \hat{q}|/\sqrt{|\hat{d}_j||\hat{q}|}$ au cas continu. Mesure l'intersection normalisée.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">BM25 — Best Match 25</span><span class="fc-tag">BIR / RSJ</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$RSV^{BM25}(d,q) = \sum_{i \in q} w_i^{RSJ} \cdot \frac{(k_1+1)\,tf}{k_1\!\left[(1-b) + b\,\tfrac{dl}{avdl}\right] + tf}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Paramètres</h5><p>$k_1 \approx 1.2$ : saturation TF. $b \approx 0.75$ : normalisation longueur. $dl$ : longueur doc. $avdl$ : longueur moyenne.</p></div>
+          <div class="fc-item"><h5>Intuition $k_1$</h5><p>Si $k_1 \to \infty$ : pas de saturation (TF brut). Si $k_1 = 0$ : binaire. En pratique, au-delà d'une certaine fréquence, l'information marginale diminue.</p></div>
+          <div class="fc-item"><h5>Intuition $b$</h5><p>$b=0$ : aucune normalisation de longueur. $b=1$ : normalisation totale. Un document long peut naturellement contenir plus de termes.</p></div>
+          <div class="fc-item"><h5>Importance pratique</h5><p>BM25 reste une baseline très forte. Elasticsearch, Solr, Lucene l'implémentent nativement. Point de référence pour tout système de dense retrieval moderne.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">LSI — Projection dans l'espace latent</span><span class="fc-tag">LSI / SVD</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K \qquad \tilde{q} = \Sigma_K^{-1} U_K^T q \in \mathbb{R}^K$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Décorrélation</h5><p>Par construction : $\tilde{W}\tilde{W}^T = \Sigma_K^{-1} U_K^T W_K W_K^T U_K \Sigma_K^{-1} = I_K$. Les nouvelles coordonnées sont orthogonales.</p></div>
+          <div class="fc-item"><h5>Choix de K</h5><p>Regarder le spectre des valeurs singulières $\sigma_k$. Choisir $K$ là où la courbe "coude" (elbow). Typiquement $K \in [100, 500]$.</p></div>
+          <div class="fc-item"><h5>Synonymie</h5><p>"Car" et "automobile" partagent des documents similaires → leurs colonnes dans $W$ sont similaires → même direction dans l'espace latent.</p></div>
+          <div class="fc-item"><h5>RSV final</h5><p>$RSV(d_j, q) = \cos(\tilde{d}_j, \tilde{q})$ dans $\mathbb{R}^K$. Même formule que VSM, mais dans un espace sémantiquement plus riche.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6 -->
+<!-- ============================================================ -->
+<section class="sec" id="s6">
+  <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">Comparaison des approches</h2></div>
+
+  <div class="twrap"><table>
+    <thead>
+      <tr><th>Modèle</th><th>Représentation</th><th>RSV</th><th>Forces</th><th>Limites</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Boolean</strong></td>
+        <td>Sommets de $[0,1]^M$<br>one-hot, binaire</td>
+        <td class="m">$\{0,1\}$</td>
+        <td class="g">Simple, exact, SQL-like</td>
+        <td class="r">Pas de ranking. Tout-ou-rien. Difficile à formuler.</td>
+        <td>Recherche booléenne stricte, filtres</td>
+      </tr>
+      <tr>
+        <td><strong>TF-IDF / VSM</strong></td>
+        <td>Vecteurs $d_j \in \mathbb{R}^M$<br>pondération tf×idf</td>
+        <td class="g">$[0,1]$<br>cosine</td>
+        <td class="g">Ranking continu. Invariant à la longueur. Scalable.</td>
+        <td class="r">Ignore synonymie, polysémie, ordre. Sparse.</td>
+        <td>Moteurs classiques, baseline universelle</td>
+      </tr>
+      <tr>
+        <td><strong>BIR / BM25</strong></td>
+        <td>Features TF + longueur<br>RSJ weights</td>
+        <td class="g">$\mathbb{R}$<br>log-odds</td>
+        <td class="g">Fondement probabiliste solide. Saturation TF. Normalisation longueur.</td>
+        <td class="r">Indépendance des termes. Pas de sémantique.</td>
+        <td>Elasticsearch, Lucene, baseline SR</td>
+      </tr>
+      <tr>
+        <td><strong>Logistic Regression</strong></td>
+        <td>Tout embedding</td>
+        <td class="g">$[0,1]$<br>$P(R|d,q)$</td>
+        <td class="g">Apprentissage supervisé. Flexible. Feedback online.</td>
+        <td class="r">Features critiques. Lent à query time si entraînement en ligne.</td>
+        <td>Learning to Rank, re-ranking</td>
+      </tr>
+      <tr>
+        <td><strong>LSI</strong></td>
+        <td>$\tilde{d}_j \in \mathbb{R}^K$<br>SVD tronquée</td>
+        <td class="g">$[0,1]$<br>cosine latent</td>
+        <td class="g">Gère synonymie/polysémie. Décorrèle les features. Réduit bruit.</td>
+        <td class="r">Linéaire seulement. Coûteux (SVD). Mise à jour difficile.</td>
+        <td>NLP classique, précurseur embeddings neuronaux</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3>BM25 vs Cosine TF-IDF</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>Aspect</th><th>TF-IDF Cosine</th><th>BM25</th></tr></thead>
+    <tbody>
+      <tr><td>Saturation TF</td><td class="r">Non — TF peut grandir sans borne</td><td class="g">Oui — saturation contrôlée par $k_1$</td></tr>
+      <tr><td>Longueur document</td><td class="m">Partielle (normalisation cosine)</td><td class="g">Explicite via paramètre $b$</td></tr>
+      <tr><td>Fondement théorique</td><td class="m">Géométrique / heuristique</td><td class="g">Probabiliste (BIR → RSJ)</td></tr>
+      <tr><td>Performance empirique</td><td class="m">Bonne</td><td class="g">Meilleure en général</td></tr>
+      <tr><td>Paramètres à régler</td><td class="g">Aucun</td><td class="m">$k_1$, $b$ (mais défauts solides)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 7 -->
+<!-- ============================================================ -->
+<section class="sec" id="s7">
+  <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Relations entre les concepts</h2></div>
+
+  <div class="diag">
+    <svg viewBox="0 0 760 300" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-size:13px">
+      <defs>
+        <marker id="ra" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c9a84c"/></marker>
+        <marker id="rb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9089bf"/></marker>
+      </defs>
+      <!-- Boolean -->
+      <rect x="30" y="120" width="100" height="40" rx="6" fill="#1c1828" stroke="#9089bf" stroke-width="1.5"/>
+      <text x="80" y="143" text-anchor="middle" fill="#e4dffa" font-family="'EB Garamond',serif">Boolean</text>
+      <!-- Bag of Words -->
+      <rect x="200" y="40" width="100" height="40" rx="6" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="250" y="63" text-anchor="middle" fill="#c9a84c" font-family="'EB Garamond',serif">Bag of Words</text>
+      <!-- TF-IDF -->
+      <rect x="200" y="120" width="100" height="40" rx="6" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="250" y="143" text-anchor="middle" fill="#c9a84c" font-family="'EB Garamond',serif">TF-IDF</text>
+      <!-- VSM -->
+      <rect x="380" y="60" width="100" height="40" rx="6" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="430" y="83" text-anchor="middle" fill="#7eb8d4" font-family="'EB Garamond',serif">VSM / Cosine</text>
+      <!-- BIR -->
+      <rect x="380" y="150" width="100" height="40" rx="6" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="430" y="173" text-anchor="middle" fill="#7eb8d4" font-family="'EB Garamond',serif">BIR</text>
+      <!-- LSI -->
+      <rect x="560" y="60" width="100" height="40" rx="6" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="610" y="83" text-anchor="middle" fill="#7bc496" font-family="'EB Garamond',serif">LSI</text>
+      <!-- BM25 -->
+      <rect x="560" y="150" width="100" height="40" rx="6" fill="#1c1828" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="610" y="173" text-anchor="middle" fill="#7bc496" font-family="'EB Garamond',serif">BM25</text>
+      <!-- Neural -->
+      <rect x="560" y="240" width="120" height="40" rx="6" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="620" y="263" text-anchor="middle" fill="#a78bfa" font-family="'EB Garamond',serif">Dense Embeddings</text>
+      <!-- Arrows -->
+      <path d="M130 140 L195 140" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="162" y="132" text-anchor="middle" fill="#9089bf" font-size="10">→ fréquences</text>
+      <path d="M250 80 L250 115" stroke="#c9a84c" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="261" y="100" fill="#9089bf" font-size="10">+idf</text>
+      <path d="M300 75 L375 75" stroke="#7eb8d4" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="337" y="67" text-anchor="middle" fill="#9089bf" font-size="10">cosine</text>
+      <path d="M300 140 L375 160" stroke="#7eb8d4" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="337" y="147" text-anchor="middle" fill="#9089bf" font-size="10">probabiliste</text>
+      <path d="M480 75 L555 75" stroke="#7bc496" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="517" y="67" text-anchor="middle" fill="#9089bf" font-size="10">SVD</text>
+      <path d="M480 165 L555 165" stroke="#7bc496" stroke-width="1.2" fill="none" marker-end="url(#ra)"/>
+      <text x="517" y="157" text-anchor="middle" fill="#9089bf" font-size="10">RSJ</text>
+      <path d="M610 100 L620 235" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#rb)"/>
+      <text x="635" y="175" fill="#a78bfa" font-size="10">→ neural</text>
+      <!-- Labels -->
+      <text x="80" y="240" fill="#9089bf" font-size="11" font-family="'JetBrains Mono',monospace">Binaire</text>
+      <text x="220" y="240" fill="#9089bf" font-size="11" font-family="'JetBrains Mono',monospace">Fréquentiel</text>
+      <text x="390" y="240" fill="#9089bf" font-size="11" font-family="'JetBrains Mono',monospace">Géo. / Probab.</text>
+      <text x="570" y="215" fill="#9089bf" font-size="11" font-family="'JetBrains Mono',monospace">Latent</text>
+    </svg>
+  </div>
+
+  <div class="box">
+    <div class="box-title">Fil directeur</div>
+    <p><strong>Boolean</strong> pose les bases de la représentation terme-document. <strong>BoW + TF-IDF</strong> ajoute les fréquences et la pondération discriminante. <strong>VSM</strong> exploite la géométrie de cet espace. <strong>BIR</strong> lui donne un fondement probabiliste, aboutissant à <strong>BM25</strong>. <strong>LSI</strong> découvre la structure latente linéaire, précédant les modèles neuronaux non-linéaires (Word2Vec, BERT, dense retrievers).</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 8 -->
+<!-- ============================================================ -->
+<section class="sec" id="s8">
+  <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Perspective historique</h2></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1960s</div>
+      <div class="tl-title">Modèles booléens et premiers systèmes IR</div>
+      <div class="tl-desc">SMART system (Salton, 1965). Premières expériences sur le matching exact. Vocabulaire contrôlé, indexation manuelle.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1970s</div>
+      <div class="tl-title">Vector Space Model et TF-IDF (Salton)</div>
+      <div class="tl-desc">Représentation vectorielle des documents. Similarité cosinus. TF-IDF comme schéma de pondération. Probability Ranking Principle (Robertson, 1977).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1976–1980s</div>
+      <div class="tl-title">Binary Independence Retrieval (Robertson & Sparck Jones)</div>
+      <div class="tl-desc">Modèle probabiliste fondé sur Bayes. Indépendance des termes. Premiers feedback de pertinence itératifs.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1990s</div>
+      <div class="tl-title">BM25 (OKAPI) et LSI</div>
+      <div class="tl-desc">BM25 (Robertson et al., TREC-3, 1994) : saturation TF + normalisation longueur. LSI (Deerwester et al., 1990) : SVD sur la matrice TF-IDF. Premiers embeddings latents.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2000s</div>
+      <div class="tl-title">Modèles de langage et LDA</div>
+      <div class="tl-desc">Language Modeling for IR (Ponte & Croft, 1998). Latent Dirichlet Allocation (Blei, 2003) : topics probabilistes, remplace LSI pour beaucoup de tâches.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2013</div>
+      <div class="tl-title">Word2Vec — début des embeddings neuronaux</div>
+      <div class="tl-desc">Mikolov et al. (Google). Embeddings de mots denses, analogies sémantiques (roi - homme + femme = reine). Révolutionne le NLP.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2018–2019</div>
+      <div class="tl-title">BERT et Transformers pour l'IR</div>
+      <div class="tl-desc">BERT (Devlin et al., 2018). Contextual embeddings. Mono-BERT re-ranker, puis bi-encodeurs pour le retrieval dense. Le contexte change tout.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2020–présent</div>
+      <div class="tl-title">Dense Retrieval, Hybrid, RAG</div>
+      <div class="tl-desc">DPR (Karpukhin, 2020), ColBERT (Khattab, 2020). Hybrid BM25 + dense. RAG (Lewis, 2020) : génération augmentée par retrieval. BM25 reste une baseline solide.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 9 -->
+<!-- ============================================================ -->
+<section class="sec" id="s9">
+  <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Liens avec les systèmes modernes</h2></div>
+
+  <h3>De LSI aux embeddings denses</h3>
+  <p>LSI est le <strong>précurseur direct</strong> des embeddings neuronaux. Les deux effectuent une projection dans un espace latent de dimension réduite $K \ll M$. La différence :</p>
+  <ul>
+    <li><strong>LSI :</strong> projection linéaire via SVD, non supervisée, basée sur la cooccurrence.</li>
+    <li><strong>Word2Vec / Transformers :</strong> projection non-linéaire via réseau de neurones, (semi-)supervisée, capture des régularités plus riches.</li>
+  </ul>
+
+  <div class="twrap"><table>
+    <thead><tr><th>Système</th><th>Lien avec IR.02</th><th>Amélioration clé</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Elasticsearch / Lucene</strong></td><td>Implémente BM25 nativement (depuis v5)</td><td>Index inversé + BM25 + API</td></tr>
+      <tr><td><strong>Word2Vec / GloVe</strong></td><td>Embedding dense ≈ LSI non-linéaire</td><td>Captures des analogies, contexte global</td></tr>
+      <tr><td><strong>BERT (bi-encoder)</strong></td><td>Embedding dense de documents et requêtes</td><td>Contextuel, sentence-level, fine-tunable</td></tr>
+      <tr><td><strong>DPR / ColBERT</strong></td><td>Dense Passage Retrieval ≈ VSM dans $\mathbb{R}^{768}$</td><td>Entraîné end-to-end, ANN search</td></tr>
+      <tr><td><strong>Vector Databases</strong></td><td>FAISS, Pinecone, Weaviate = index de vecteurs $\tilde{d}_j$</td><td>ANN (HNSW, IVF) pour millions de vecteurs</td></tr>
+      <tr><td><strong>Hybrid Retrieval</strong></td><td>BM25 (sparse) + dense retrieval, RRF fusion</td><td>Complémentarité exact-match vs sémantique</td></tr>
+      <tr><td><strong>RAG</strong></td><td>Retrieval (BM25 ou dense) → LLM generation</td><td>Grounding factuel, réduction hallucinations</td></tr>
+      <tr><td><strong>Re-ranking</strong></td><td>Logistic regression sur features (BM25 + dense)</td><td>Cross-attention, plus précis mais lent</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="box ok">
+    <div class="box-title">BM25 en 2025</div>
+    <p>Malgré plus de 30 ans, <strong>BM25 reste une baseline extrêmement compétitive</strong>. Dans les pipelines RAG modernes, il est souvent utilisé comme premier retriever (recall) avant un re-ranker neural. La combinaison BM25 + bi-encoder + cross-encoder re-ranker est un standard industriel.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 10 -->
+<!-- ============================================================ -->
+<section class="sec" id="s10">
+  <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Questions d'examen possibles</h2></div>
+
+  <div class="qlevel easy">Niveau facile</div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Qu'est-ce que le Retrieval Status Value (RSV) ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Le RSV est une valeur numérique $RSV(d_j, q)$ qui mesure la pertinence du document $d_j$ par rapport à la requête $q$. L'ordonnancement des documents par RSV décroissant constitue la réponse du système IR. Selon le modèle : $RSV \in \{0,1\}$ pour le booléen, $RSV \in [0,1]$ pour la cosine, $RSV \in \mathbb{R}$ pour le BIR (log-odds).</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Pourquoi normaliser la fréquence de terme (TF) par le maximum ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Pour éviter de favoriser les longs documents. Un terme apparaissant 5 fois dans un document de 50 mots est plus important qu'un terme apparaissant 5 fois dans un document de 500 mots. La normalisation $tf_{ij} = f_{ij}/\max_k f_{kj}$ rend le poids relatif au contenu du document, pas à sa longueur.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Comment un tag cloud illustre-t-il TF-IDF ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Dans un tag cloud, la taille d'un mot est proportionnelle à son poids TF-IDF : fréquent dans le document ($tf$ élevé) ET rare dans la collection ($idf$ élevé). Les mots très communs ("le", "et", "is") ont un $idf \approx 0$ et n'apparaissent pas. Les termes spécifiques au document ont une grande taille.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Quelle est la principale limite du modèle booléen ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Le modèle booléen produit un $RSV \in \{0,1\}$ : un document est soit pertinent, soit non pertinent. Il n'y a pas de continuum de pertinence, donc pas de ranking au sein des documents pertinents. De plus, formuler des requêtes en logique formelle est difficile pour un utilisateur, et une erreur peut donner 0 ou trop de résultats.</div>
+  </div>
+
+  <div class="qlevel med">Niveau intermédiaire</div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Expliquez la géométrie de l'embedding TF-IDF. Que représente la base $\{\tau_i\}$ ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Le document $j$ s'écrit $d_j = \sum_i tf_{ij} \cdot \tau_i$ où $\tau_i = idf_i \cdot e_i$. L'IDF <em>distord</em> la base standard : l'axe $\tau_i$ est d'autant plus long que le terme $i$ est discriminant. La coordonnée du document dans cet axe est $tf_{ij}$. Ainsi, deux documents proches dans cet espace partagent des termes discriminants en proportions similaires — pas seulement des mots communs.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Pourquoi le BIR porte-t-il le nom de "Binary Independence" ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a"><strong>Binary :</strong> les occurrences de termes sont modélisées comme binaires (0 ou 1 — présent ou absent), sans tenir compte de la fréquence.<br><strong>Independence :</strong> on suppose que les occurrences des termes sont conditionnellement indépendantes, i.e. $P(d_j|R,q) = \prod_{i \in \mathbb{1}_j} P(t_i|R,q)$. Ces deux hypothèses simplificatrices permettent une dérivation analytique, mais sont toutes deux fausses en pratique.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">En quoi la similarité cosinus est-elle une extension de l'intersection d'ensembles ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Dans l'espace binaire, $|\hat{d}_j \cap \hat{q}| = \sum_i w_{ij} w_{iq} = \langle d_j, q \rangle$ (produit scalaire avec $w_{ij} \in \{0,1\}$). La cosine normalise cette intersection par la racine carré des cardinalités : $\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|^{1/2}|\hat{q}|^{1/2}}$. En espace continu (TF-IDF), le même principe s'applique avec les normes L2 à la place des cardinalités.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Quel est le concept en LSI ? Comment la SVD le révèle-t-il ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Un concept en LSI est une direction dans $\mathbb{R}^M$ qui capture une thématique latente partagée par plusieurs termes. Les colonnes de $U_K$ (vecteurs singuliers gauches) définissent une base orthogonale de $K$ concepts. Projeter les documents via $\Sigma_K^{-1} U_K^T$ décorrèle leurs coordonnées dans cet espace. Des termes synonymes qui cooccurrent souvent dans les documents auront des projections similaires sur les mêmes concepts.</div>
+  </div>
+
+  <div class="qlevel hard">Niveau difficile</div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Dérivez pourquoi l'IDF apparaît naturellement dans le modèle BIR à l'initialisation.</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">Au départ, sans information de pertinence, on initialise $P(t_i|R,q) = \rho$ (constante) et $P(t_i|\bar{R},q) = n_i/N$ (proportion dans la collection). La composante de log-odds pour les termes absents du document pertinent donne :<br>$$\log \frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} = \log \frac{1-n_i/N}{n_i/N} = \log \frac{N-n_i}{n_i} \approx \log \frac{N}{n_i} = idf_i$$<br>Ainsi, le BIR <em>se réduit approximativement à l'IDF</em> sans feedback, puis s'affine avec les jugements de pertinence.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">En quoi le choix de K dans la SVD tronquée est-il crucial pour LSI ? Quels sont les trade-offs ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">$K$ est le rang de l'approximation. <br>— <strong>$K$ trop petit</strong> : perte d'information, les distinctions fines entre sujets disparaissent. Mais synonymie mieux gérée, bruit réduit.<br>— <strong>$K$ trop grand</strong> : l'espace latent reste bruité par les cooccurrences hasardeuses, peu d'avantage sur le TF-IDF original.<br>— <strong>$K$ optimal</strong> : se trouve typiquement en regardant le "coude" du spectre $\{\sigma_k\}$. En pratique $K \in [100,500]$ pour de grandes collections.<br>L'approche de choix via la décomposition spectrale est analogue à la détermination du rang en PCA.</div>
+  </div>
+  <div class="qi"><div class="qi-q" onclick="tog(this)"><span class="qi-qtxt">Quelles sont les hypothèses implicites du paradigme QbE (Query-by-Example) ? Quand échoue-t-il ?</span><span class="qi-arr">▾</span></div>
+    <div class="qi-a">QbE suppose que la requête peut être représentée dans le <em>même</em> espace vectoriel que les documents, avec la <em>même</em> distribution de poids TF-IDF. Cela échoue quand : (1) la requête est trop courte (1-2 mots, $idf$ instable) — les vecteurs sont trop creux pour une cosine fiable ; (2) le vocabulaire de la requête ne recoupe pas celui des documents (problème de lexical gap) ; (3) les requêtes conversationnelles ou longues ont une structure très différente des documents. C'est pourquoi les modèles modernes utilisent des encodeurs séparés pour documents et requêtes (bi-encodeurs asymétriques).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 11 -->
+<!-- ============================================================ -->
+<section class="sec" id="s11">
+  <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Pièges classiques</h2></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Confondre TF et TF-IDF :</strong> TF seul mesure la fréquence dans UN document. IDF mesure la rareté dans la COLLECTION. TF-IDF combine les deux. Sans IDF, les mots vides (stopwords) domineraient.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Croire que la cosine normalise la longueur :</strong> Elle normalise la norme L2 du vecteur TF-IDF, ce qui atténue (mais ne supprime pas) le biais de longueur. BM25 fait une normalisation <em>explicite</em> via le paramètre $b$.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Affirmer que BIR est "correct" probabilistiquement :</strong> Les hypothèses de binary occurrence et d'independence des termes sont toutes deux fausses en pratique. BIR est une approximation utile, pas un modèle exact.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Confondre $d_j \in \mathbb{R}^M$ et $\tilde{d}_j \in \mathbb{R}^K$ :</strong> En LSI, la projection $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$ change la dimension ($M \to K$) ET l'espace (TF-IDF → concepts décorrélés). Ce ne sont pas des vecteurs comparables directement.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Penser que LSI résout entièrement synonymie/polysémie :</strong> LSI découvre des <em>facteurs linéaires latents</em>. Les relations non-linéaires (métaphores, ironie, homonymes contextuels) lui échappent. C'est pourquoi les modèles neuronaux contextuels (BERT) le supplantent.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Oublier que $RSV(d_j,q) = \log O(R|d_j,q)$ en BIR :</strong> Le BIR range selon le log-odds, pas selon $P(R|d_j,q)$ directement. Le ranking est le même (fonction croissante), mais la valeur absolue a une signification différente.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Stratégie fold-in vs exact update pour LSI :</strong> Le fold-in est rapide mais approximatif (les nouveaux documents ne modifient pas l'espace concept). L'exact update est coûteux mais maintient la propriété de décorrélation. En pratique, on recompute périodiquement.</div></div>
+
+  <div class="piege"><div class="piege-icon">⚠</div><div class="piege-text"><strong>Penser que BM25 est "dépassé" :</strong> BM25 reste une baseline extrêmement forte en 2025, notamment pour le recall. Dans les pipelines modernes, il est souvent plus rapide que les approches denses, avec des performances similaires ou meilleures sur certains types de requêtes factuelles.</div></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 12 -->
+<!-- ============================================================ -->
+<section class="sec" id="s12">
+  <div class="sec-hd"><span class="sec-num">12</span><h2 class="sec-title">Fiche de révision finale</h2></div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>Notations clés</h4>
+      <ul>
+        <li><strong>$N$</strong> : nb de documents</li>
+        <li><strong>$M$</strong> : taille du vocabulaire</li>
+        <li><strong>$d_j \in \mathbb{R}^M$</strong> : vecteur-document TF-IDF</li>
+        <li><strong>$q \in \mathbb{R}^M$</strong> : vecteur-requête</li>
+        <li><strong>$\mathbb{1}_j \subseteq [M]$</strong> : indices des termes de $d_j$</li>
+        <li><strong>$n_i$</strong> : nb de docs contenant terme $i$</li>
+        <li><strong>$RSV(d_j,q)$</strong> : score de pertinence</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Formules essentielles</h4>
+      <ul>
+        <li><strong>TF :</strong> $tf_{ij} = f_{ij}/\max_k f_{kj}$</li>
+        <li><strong>IDF :</strong> $idf_i = \log(N/n_i)$</li>
+        <li><strong>TF-IDF :</strong> $w_{ij} = tf_{ij} \cdot idf_i$</li>
+        <li><strong>Cosine :</strong> $RSV = \langle d_j,q\rangle / \|d_j\|\|q\|$</li>
+        <li><strong>LSI :</strong> $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$</li>
+        <li><strong>BM25 :</strong> $\sum_i w_i^{RSJ} \cdot \frac{(k_1+1)tf}{K_d+tf}$</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Modèles — 1 ligne chacun</h4>
+      <ul>
+        <li><strong>Boolean :</strong> one-hot, $RSV \in \{0,1\}$, pas de ranking</li>
+        <li><strong>TF-IDF :</strong> fréq × discriminance, vecteur $\mathbb{R}^M$</li>
+        <li><strong>VSM :</strong> cosine similarity, QbE paradigm</li>
+        <li><strong>BIR :</strong> $P(d_j|R)$ via Bayes + indépendance</li>
+        <li><strong>BM25 :</strong> RSJ + saturation TF + longueur</li>
+        <li><strong>LSI :</strong> SVD tronquée, concepts décorrélés $\mathbb{R}^K$</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>À retenir absolument</h4>
+      <ul>
+        <li>IDF initial du BIR ≈ $\log(N/n_i)$</li>
+        <li>Cosine = intersection normalisée d'ensembles</li>
+        <li>LSI : $W_K = \arg\min_{rank=K} \|W-A\|_F^2$</li>
+        <li>Fold-in ≠ exact update (approximatif vs coûteux)</li>
+        <li>BM25 : $k_1 \approx 1.2$, $b \approx 0.75$</li>
+        <li>LSI → Word2Vec → BERT → Dense Retrieval</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Comparaison synthétique</h4>
+      <ul>
+        <li><strong>Ranking :</strong> Boolean ✗ | VSM ✓ | BM25 ✓ | LSI ✓</li>
+        <li><strong>Sémantique :</strong> Boolean ✗ | VSM ✗ | BM25 ✗ | LSI ✓</li>
+        <li><strong>Feedback :</strong> BIR/BM25 ✓ | logistic regression ✓</li>
+        <li><strong>Scalabilité :</strong> BM25 ✓✓ | LSI ✗ (SVD coûteux)</li>
+        <li><strong>Interprétabilité :</strong> Boolean ✓✓ | BM25 ✓ | LSI ✗</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Questions du cours (slides)</h4>
+      <ul>
+        <li>Qu'est-ce que le RSV ?</li>
+        <li>Pourquoi Boolean pas flexible ?</li>
+        <li>Qu'est-ce que TF, IDF ? Tagcloud ?</li>
+        <li>Structure du modèle probabiliste ?</li>
+        <li>Régression logistique en IR ?</li>
+        <li>Pourquoi "Binary Independence" ?</li>
+        <li>Concept en LSI ? Décorrélation ?</li>
+        <li>Stratégie fold-in ?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-title">Message clé pour l'oral</div>
+    <p>Tous les modèles IR partagent une structure commune : <em>embedding → mesure de similarité → ranking</em>. L'évolution se lit comme une quête vers une mesure de pertinence plus nuancée, passant du tout-ou-rien binaire à la probabilité bayésienne, puis à la sémantique latente. BM25 représente l'apogée de l'approche sparse, LSI celui de l'approche linéaire dense — les deux servant de fondation aux systèmes neuronaux modernes.</p>
+  </div>
+
+  <div style="margin-top:2rem;padding:1rem;border-top:1px solid var(--border);font-family:var(--fm);font-size:.72rem;color:var(--muted);text-align:center;">
+    IR.02 — Information Embedding · Stéphane Marchand-Maillet · Université de Genève<br>
+    Guide produit à partir des slides IR_02_embeddings.pdf
+  </div>
+</section>
+
+</main>
+
+<script>
+// Quiz toggle
+function tog(el){
+  const a = el.nextElementSibling;
+  const arr = el.querySelector('.qi-arr');
+  a.classList.toggle('open');
+  arr.style.transform = a.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+// Sidebar active link
+const secs = document.querySelectorAll('.sec');
+const links = document.querySelectorAll('.sb nav a');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const id = e.target.id;
+      const al = document.querySelector(`.sb nav a[href="#${id}"]`);
+      if(al) al.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
