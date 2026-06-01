@@ -1,0 +1,303 @@
+---
+title: "Apprentissage pour le classement (Learning to Rank) — Quiz"
+filters:
+  - quizdown
+execute:
+  enabled: false
+---
+
+## Niveau 1 — Fondamentaux
+
+```{quizdown}
+### Que représente le RSV (Retrieval Status Value) dans un système de recherche d'information ?
+
+> Pensez au role fondamental de ce score dans le classement des documents.
+
+1. [ ] La taille du document indexé
+1. [ ] Le nombre de termes en commun entre la requête et le document
+1. [x] Le score de pertinence attribué à un document par rapport à une requête
+    > Correct : le RSV est le score qui permet de classer les documents du plus au moins pertinent pour une requête donnée.
+1. [ ] La probabilité que l'utilisateur clique sur un résultat
+```
+
+```{quizdown}
+### Quelle notation désigne le RSV comme une fonction paramétrique apprise ?
+
+> Pensez à la lettre grecque utilisée pour les paramètres du modèle.
+
+1. [ ] $f_q(d_j, q)$ seulement
+1. [ ] $P(R \mid d_j, q)$
+1. [x] $\phi_\theta(d_j, q)$ ou de manière équivalente $f_q(d_j, q)$
+    > Correct : les deux notations sont utilisées. $\phi_\theta$ insiste sur le fait que le modèle est paramétrique, avec $\theta$ les paramètres appris.
+1. [ ] $\text{IDF}(d_j, q)$
+```
+
+```{quizdown}
+### Le modèle BIR (Binary Independence Retrieval) est-il une forme d'apprentissage automatique ?
+
+> Observez la formule du log-odds du BIR et comparez-la à un modèle linéaire classique.
+
+1. [x] Vrai
+    > Vrai : le BIR modélise $\log O(R \mid d_j, q) = c_0 + \sum_i c_i X_i$, ce qui est une combinaison lineaire de caracteristiques avec des parametres $\theta = [c_0, \ldots, c_n]$ appris a partir des donnees.
+1. [ ] Faux
+```
+
+```{quizdown}
+### Quels attributs (features) sont typiquement utilisés dans le modèle conditionnel de la RI ?
+
+> Le modèle BIR combine plusieurs types d'informations sur les termes, le document et la requête.
+
+- [x] La fréquence inverse de document (IDF)
+    > Correct : l'IDF mesure la rareté d'un terme dans la collection.
+- [x] La longueur du document
+    > Correct : la longueur du document est un attribut important pour normaliser les scores.
+- [ ] La couleur de la page web
+    > Incorrect : cette information n'est pas un attribut textuel pertinent pour la RI classique.
+- [x] Le nombre de termes en commun entre la requête et le document
+    > Correct : cet attribut capture directement le chevauchement lexical.
+- [ ] La date de création du document uniquement
+    > Incorrect : la date seule n'est pas un attribut du modèle conditionnel de base.
+```
+
+```{quizdown}
+### Quelle est la principale limite de l'approche Pointwise en Learning to Rank ?
+
+> Pensez à ce qui rend la pertinence d'un document difficile à prédire de manière absolue.
+
+1. [ ] Elle nécessite trop de données d'entraînement
+1. [ ] Elle ne peut pas utiliser d'algorithmes de régression
+1. [x] La pertinence est dépendante de la requête, donc il n'existe pas de corrélation fixe entre les caractéristiques et la pertinence
+    > Correct : un même document peut être très pertinent pour une requête et totalement hors sujet pour une autre. L'approche pointwise ignore cette dependance.
+1. [ ] Elle est incapable de produire un classement ordonné
+```
+
+```{quizdown}
+### Quelle est la différence fondamentale entre l'approche Pairwise et l'approche Pointwise ?
+
+> Pensez à ce que chaque approche cherche à prédire comme signal de pertinence.
+
+1. [ ] Pairwise utilise des réseaux de neurones, Pointwise non
+1. [x] Pointwise prédit un score absolu par document, Pairwise prédit un ordre relatif entre deux documents
+    > Correct : Pairwise apprend si $d_j$ est plus pertinent que $d_k$ pour une requête $q$, sans chercher a quantifier la pertinence absolue.
+1. [ ] Pairwise ne peut pas utiliser de SVM
+1. [ ] Pointwise traite des listes entières, Pairwise traite des documents isolés
+```
+
+---
+
+## Niveau 2 — Compréhension
+
+```{quizdown}
+### Dans SVMRank, comment la préférence $d_j >_q d_k$ est-elle reformulée pour être traitée comme un problème de classification ?
+
+> Le SVM cherche un hyperplan séparateur. Comment transformer une paire de documents en un vecteur unique ?
+
+1. [ ] On concatène les vecteurs de caractéristiques de $d_j$ et $d_k$
+1. [ ] On moyenne les caractéristiques des deux documents
+1. [x] On calcule la différence $\Phi(x_j, q) - \Phi(x_k, q)$ et on classe ce vecteur différence comme positif
+    > Correct : $d_j >_q d_k \iff a^T[\Phi(x_j,q) - \Phi(x_k,q)] > 0$. La paire de préférence est transformée en un vecteur unique sur lequel un SVM classique s'applique.
+1. [ ] On applique le kernel uniquement à la requête $q$
+```
+
+```{quizdown}
+### Quels sont les deux principes fondamentaux des SVM (Support Vector Machines) ?
+
+> Les SVM vont au-delà de la simple minimisation de l'erreur d'entraînement.
+
+- [x] L'utilisation d'un noyau (kernel) pour projeter dans un espace de dimension supérieure
+    > Correct : le kernel permet de rendre linéairement séparable un problème qui ne l'est pas dans l'espace original.
+- [ ] L'utilisation exclusive de données étiquetées binairement
+    > Incorrect : les SVM peuvent être adaptés a des scores continus et au classement.
+- [x] La maximisation de la marge (large margin) entre la frontière de décision et les vecteurs de support
+    > Correct : la grande marge améliore la généralisation du modèle sur de nouvelles données.
+- [ ] L'apprentissage par renforcement des exemples corrects
+    > Incorrect : le principe de renforcement décrit dans ce cours est celui du Boosting, pas du SVM.
+```
+
+```{quizdown}
+### Dans RankBoost, que représente la distribution $D_t$ et comment évolue-t-elle à chaque itération ?
+
+> L'objectif du boosting est de se concentrer progressivement sur les cas difficiles.
+
+1. [ ] $D_t$ est la distribution des scores de pertinence, elle diminue pour les bons documents
+1. [x] $D_t$ est une pondération sur les paires de préférence, renforcée là où le classifieur faible échoue
+    > Correct : les paires mal ordonnées par $h_t$ recoivent un poids plus élevé dans $D_{t+1}$, forçant les classifieurs suivants à se concentrer sur ces cas difficiles.
+1. [ ] $D_t$ est une distribution uniforme fixe sur toutes les paires
+1. [ ] $D_t$ mesure la confiance du classifieur final $H(x)$
+```
+
+```{quizdown}
+### Le nDCG (normalized Discounted Cumulative Gain) pénalise davantage un document pertinent situé en position 2 qu'un document pertinent en position 10. Cette affirmation est-elle correcte ?
+
+> Regardez le dénominateur de la formule du DCG et son comportement selon la position $j$.
+
+1. [x] Vrai
+    > Vrai : le terme $\log_2(j+1)$ au dénominateur croît avec $j$, ce qui réduit la contribution d'un document pertinent situé bas dans la liste. La position 2 contribue donc plus que la position 10.
+1. [ ] Faux
+```
+
+```{quizdown}
+### Quelle est la valeur du nDCG dans le cas d'un classement parfait (tous les documents pertinents en tête de liste) ?
+
+> Pensez à la définition de la normalisation du nDCG.
+
+1. [ ] 0
+1. [ ] Une valeur positive quelconque supérieure à 1
+1. [x] 1
+    > Correct : nDCG = DCG / DCGmax. Lorsque le classement est parfait, DCG = DCGmax, donc nDCG = 1.
+1. [ ] Elle dépend du nombre de documents pertinents
+```
+
+```{quizdown}
+### Que mesure le tau de Kendall ($\tau$) entre deux classements ?
+
+> Pensez aux notions de paires concordantes et discordantes.
+
+1. [ ] La difference quadratique entre les rangs des documents dans deux listes
+1. [x] La proportion normalisée de paires dont l'ordre relatif est préservé entre les deux classements
+    > Correct : $\tau = (\#\text{concordants} - \#\text{discordants}) / \binom{n}{2}$. Il vaut 1 si les classements sont identiques, -1 s'ils sont inverses.
+1. [ ] L'aire sous la courbe precision-rappel
+1. [ ] Le nombre de documents communs aux deux listes
+```
+
+```{quizdown}
+### Pourquoi l'optimisation directe du nDCG par descente de gradient est-elle problématique ?
+
+> Pensez aux propriétés mathématiques nécessaires pour appliquer la descente de gradient.
+
+1. [ ] Le nDCG est toujours négatif, ce qui rend l'optimisation instable
+1. [ ] Le nDCG ne peut pas être calculé sur des ensembles de taille variable
+1. [x] Le nDCG est non-différentiable, ce qui empêche le calcul de gradients exacts
+    > Correct : le nDCG dépend de la position des documents dans la liste, une fonction discontinue et non-différentiable. Des approximations ou substituts différentiables sont nécessaires.
+1. [ ] Le nDCG favorise systématiquement les longs documents
+```
+
+---
+
+## Niveau 3 — Maîtrise
+
+```{quizdown}
+### Remets dans le bon ordre les étapes d'entraînement d'un modèle Pairwise Learning to Rank.
+
+> Pense au pipeline complet, depuis les données brutes jusqu'à la prédiction finale.
+
+1. Extraction des caractéristiques des paires (document, requête)
+2. Construction des paires de préférence à partir des jugements de pertinence
+3. Entraînement du modèle sur les paires de préférence
+4. Prédiction du classement sur de nouvelles requêtes
+```
+
+```{quizdown}
+### Remets dans le bon ordre la chaîne d'innovations qui mène à LambdaMART.
+
+> Chaque méthode s'appuie sur la précédente en y apportant une amélioration clé.
+
+1. RankNet (réseau de neurones sur paires, fonction de coût probabiliste)
+2. LambdaRank (gradients pondérés par le delta nDCG de chaque paire)
+3. LambdaMART (remplacement du réseau de neurones par des arbres boostés par gradient)
+```
+
+```{quizdown}
+### Un système de RI évalue deux modèles sur deux requêtes. Le modèle A obtient 85% de précision sur Q1 (60 docs) et 100% sur Q2 (15 docs). Le modèle B obtient 100% sur Q1 et 20% sur Q2. Quel modèle préférer selon la précision macro-moyennée ?
+
+> La précision macro-moyennée traite chaque requête de manière égale, indépendamment du nombre de documents.
+
+1. [x] Le modèle A
+    > Correct : macro-moyenne de A = (85,7% + 100%) / 2 = 92,8%. Macro-moyenne de B = (100% + 20%) / 2 = 60%. A est bien supérieur en macro, car B est catastrophique sur Q2.
+1. [ ] Le modèle B
+    > Incorrect : bien que B soit parfait sur Q1 (plus grande requête), sa performance de 20% sur Q2 tire fortement sa moyenne macro vers le bas.
+1. [ ] Les deux modèles sont équivalents
+1. [ ] Impossible à déterminer sans la valeur du nDCG
+```
+
+```{quizdown}
+### Pourquoi l'approche Listwise est-elle théoriquement supérieure à l'approche Pairwise ?
+
+> Pensez à ce que chaque approche optimise réellement par rapport à l'objectif final d'un moteur de recherche.
+
+1. [ ] Elle est plus rapide à entraîner grâce à moins de données nécessaires
+1. [ ] Elle évite l'utilisation de jugements de pertinence humains
+1. [x] Elle optimise directement une mesure de qualité globale du classement (comme le nDCG), alignée avec l'objectif réel du système
+    > Correct : Pairwise optimise des comparaisons locales qui ne garantissent pas un bon classement global. Listwise optimise directement la qualité de la liste entière, ce qui correspond à l'objectif réel de l'utilisateur.
+1. [ ] Elle n'utilise que des données non supervisées
+```
+
+```{quizdown}
+### Un ingénieur souhaite déployer un système de recherche qui doit expliquer pourquoi un document est classé à une certaine position. Quelle méthode parmi les suivantes est la plus adaptée ?
+
+> Certaines méthodes deep learning sont conçues spécifiquement pour l'interprétabilité.
+
+1. [ ] LambdaMART
+    > Incorrect : LambdaMART est performant mais n'est pas conçu principalement pour l'explication des décisions de classement.
+1. [ ] KNRM
+    > Incorrect : KNRM utilise le kernel pooling pour agréger les scores, mais n'est pas une méthode d'attribution de features explicite.
+1. [x] Rank-LIME
+    > Correct : Rank-LIME est une méthode d'attribution de caracteristiques locale et agnostique au modele, specifiquement conçue pour expliquer pourquoi un document est place a une certaine position.
+1. [ ] ColBERT
+    > Incorrect : ColBERT est optimisé pour l'efficacité de la recherche via interaction tardive, pas pour l'explicabilité.
+```
+
+```{quizdown}
+### Quelles propositions décrivent correctement ColBERT ?
+
+> ColBERT se distingue par sa stratégie d'encodage et d'interaction entre requête et document.
+
+- [x] Il encode séparément la requête et le passage avec BERT
+    > Correct : l'encodage séparé permet de pré-calculer les représentations des documents hors-ligne, ce qui accélère la recherche.
+- [ ] Il concatène la requête et le document avant de les passer dans BERT
+    > Incorrect : c'est la stratégie de BERT bi-encoder classique, pas de ColBERT.
+- [x] Il utilise une interaction tardive (late interaction) entre les représentations contextualisées
+    > Correct : ColBERT calcule des scores de similarité entre chaque token de la requête et chaque token du passage, puis agrège ces scores.
+- [ ] Il optimise directement la corrélation de Spearman
+    > Incorrect : ColBERT optimise la pertinence via une fonction de perte sur des paires, pas la corrélation de Spearman.
+```
+
+```{quizdown}
+### Dans l'approche Pairwise, laquelle de ces deux erreurs de classement est la plus dommageable pour l'expérience utilisateur ?
+
+> Pensez à la manière dont les utilisateurs consultent les résultats d'un moteur de recherche.
+
+1. [x] Placer un document non pertinent en première position et les documents pertinents à partir de la 4ème position
+    > Correct : les utilisateurs consultent principalement les premiers résultats. Une erreur en tête de liste a un impact beaucoup plus fort sur la satisfaction que des erreurs en fin de liste.
+1. [ ] Placer des documents non pertinents aux positions 8 à 12 avec les documents pertinents aux 7 premières positions
+    > Incorrect : bien qu'imparfait, ce classement place les documents pertinents en tête, ce qui satisfait la majorité des utilisateurs.
+```
+
+```{quizdown}
+### Quelles ressources sont fournies par le benchmark LETOR (Learning to Rank for Information Retrieval) ?
+
+> LETOR est un package complet destiné à faciliter la recherche reproductible en Learning to Rank.
+
+- [x] Des jeux de données avec jugements de pertinence
+    > Correct : LETOR fournit des datasets annotés avec des niveaux de pertinence pour chaque paire (document, requête).
+- [x] Des baselines de référence pour comparer les algorithmes
+    > Correct : les baselines permettent de situer un nouvel algorithme par rapport aux méthodes existantes.
+- [ ] Un service cloud pour l'entraînement de modèles de deep learning
+    > Incorrect : LETOR est un package de benchmark, pas une infrastructure cloud.
+- [x] Des outils d'évaluation standardisés (MAP, nDCG...)
+    > Correct : les outils d'évaluation garantissent la reproductibilité et la comparabilité des résultats.
+- [x] Un partitionnement standardisé des données (train/validation/test)
+    > Correct : le partitionnement fixe est essentiel pour comparer équitablement les algorithmes.
+```
+
+```{quizdown}
+### Remets dans le bon ordre les niveaux croissants d'abstraction des approches Learning to Rank.
+
+> Chaque niveau élargit la portée de ce que l'algorithme cherche à optimiser.
+
+1. Pointwise : score absolu par document individuel
+2. Pairwise : ordre relatif entre deux documents
+3. Listwise : qualité globale de la liste complète
+```
+
+```{quizdown}
+### Un modèle Pairwise est entraîné sur des jugements de pertinence binaires (pertinent / non pertinent). Pour une requête donnée, il ordonne correctement 90% des paires. Quelle limite fondamentale persiste malgré cette bonne performance ?
+
+> Pensez à ce que les 90% de paires correctes garantissent réellement en termes de classement final.
+
+1. [ ] Le modèle ne peut pas être utilisé sur de nouvelles requêtes jamais vues
+1. [ ] La performance de 90% est insuffisante pour un système de production
+1. [x] Un bon taux de paires correctes ne garantit pas un bon classement global, car toutes les erreurs n'ont pas le même impact positionnel
+    > Correct : deux paires bien ordonnées en queue de liste comptent moins qu'une seule paire mal ordonnée en tête. L'approche pairwise ignore cet impact positionnel différencié, contrairement aux approches listwise.
+1. [ ] Le modèle ne peut pas utiliser des caractéristiques continues
+```
