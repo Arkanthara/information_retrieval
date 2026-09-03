@@ -1,0 +1,150 @@
+# Evaluation
+
+## Table de Contingence (Confusion Matrix)
+
+|  | Récupéré | Non récupéré |
+|---|---|---|
+| **Pertinent** | TP (Vrai Positif) | FN (Faux Négatif) |
+| **Non Pertinent** | FP (Faux Positif) | TN (Vrai Négatif) |
+
+- **TP** → pertinent ET récupéré ✅
+- **FN** → pertinent mais raté ❌
+- **FP** → non pertinent récupéré ❌
+- **TN** → non pertinent exclu ✅
+
+
+## Formules Essentielles
+
+### Précision & Rappel (Precision & Recall)
+
+$$P = \frac{TP}{TP + FP} \qquad R = \frac{TP}{TP + FN}$$
+
+- **Précision** → qualité (ne retourner QUE des pertinents)
+- **Rappel** → complétude (retourner TOUS les pertinents)
+
+### F-Mesure / F₁ (F-Measure)
+
+$$F_1 = \frac{2PR}{P + R} \qquad E = \frac{(1+\beta^2)PR}{\beta^2 P + R}$$
+
+- $\beta = 1$ → P et R équivalents
+- $\beta > 1$ → précision prioritaire
+- $\beta < 1$ → rappel prioritaire
+
+### Fallout & Généralité (Fallout & Generality)
+
+$$\text{Fallout} = \frac{FP}{TN + FP} \qquad G = \frac{TP + FN}{N}$$
+
+$$P = \frac{R \cdot G}{R \cdot G + \text{Fallout} \cdot (1-G)}$$
+
+### R-Précision (R-Precision)
+
+$$R\text{-Precision} = \frac{TP_{N_{\text{Rel}}}}{N_{\text{Rel}}}$$
+
+Précision à la position $R$ (= nombre total de pertinents).
+
+### Bull's Eye Percentage (BEP)
+
+$$BEP = \frac{TP_{2Q}}{Q}$$
+
+Pertinents dans les **2Q premiers** résultats (Q = nb pertinents).
+
+### ROC — Sensibilité & Spécificité
+
+$$\text{Sensitivity} = TPR = \frac{TP}{TP+FN} = \text{Recall}$$
+
+$$\text{Specificity} = TNR = \frac{TN}{TN+FP} \qquad FPR = 1 - TNR = \text{Fallout}$$
+
+
+## Tableau Récapitulatif des Mesures
+
+| Mesure | Formule | Objectif |
+|---|---|---|
+| Précision | $TP/(TP+FP)$ | Qualité résultats |
+| Rappel | $TP/(TP+FN)$ | Complétude |
+| F₁ | $2PR/(P+R)$ | Compromis équilibré |
+| mAP | Moyenne P aux 11 niveaux | Aire sous courbe P–R |
+| R-Précision | $TP_R / R$ | Précision à position R |
+| Fallout | $FP/(TN+FP)$ | Pollution non-pertinents |
+| Silence | $1 - R$ | Pertinents manqués |
+| Bruit (Noise) | $FP/(TP+FP)$ | $= 1 - P$ |
+| Overlap | $TP/(FN+TP+FP)$ | Jaccard pertinents/récupérés |
+| Exactitude | $(TP+TN)/N$ | Taux global correct |
+
+
+## Courbe P–R (Precision–Recall Curve)
+
+### Construction
+
+1. Parcourir la liste ordonnée position par position
+2. Calculer $P@k$ et $R@k$ à chaque position $k$
+3. Tracer les points $(R@k,\ P@k)$
+
+### Interpolation (Standard Recall Levels)
+
+$$\hat{P}(R_j) = \max_{R_j < R \leq R_{j+1}} P(R)$$
+
+Niveaux standard : $0,\ 0.1,\ 0.2,\ \ldots,\ 1.0$
+
+### mAP = aire sous la courbe P–R interpolée
+
+### Interprétation
+
+| Position courbe | Qualité |
+|---|---|
+| Proche coin supérieur droit | Système idéal |
+| Courbe haute et plate | Bon système |
+| Chute rapide de P | Système médiocre |
+
+
+## Micro vs Macro Moyennage
+
+| | Micro-averaging | Macro-averaging |
+|---|---|---|
+| Méthode | Fusion de toutes les tables → 1 calcul global | 1 calcul par catégorie → moyenne |
+| Importance | Égale par **document** | Égale par **catégorie** |
+| Biais | Favorise les grandes classes | Équilibre toutes les classes |
+| Usage | Performance corpus global | Comparaison inter-catégories |
+
+
+## Courbe ROC (ROC Curve)
+
+- Axe X : FPR = Fallout = $1 - \text{Spécificité}$
+- Axe Y : TPR = Sensibilité = Rappel
+- Varier le seuil $T$ → tracer $(FPR,\ TPR)$
+
+| Courbe | Signification |
+|---|---|
+| Coin supérieur gauche | Système excellent |
+| Au-dessus diagonale | Bon système |
+| Sur la diagonale $y=x$ | Aléatoire (non informatif) |
+| Sous la diagonale | Pire que le hasard |
+
+**AUC** (Area Under Curve) : 1 = parfait, 0.5 = aléatoire
+
+
+## Benchmarks Clés
+
+| Nom | Domaine |
+|---|---|
+| **TREC** (depuis 1992) | RI textuelle — référence mondiale |
+| **CLEF** | RI multilingue |
+| **INEX** | RI structurée XML |
+| **ISMIR** | RI musicale |
+| **LeToR** | Learning to Rank |
+
+**Composants d'un benchmark** : jeu de données + requêtes + jugements + mesures + baseline
+
+**Pooling** : fusionner les top-N résultats de plusieurs systèmes → juger uniquement ce pool (approximation).
+
+
+## Pièges & Points Critiques
+
+- **Tout récupérer** → Rappel = 1, Précision ≈ G (densité) → trivial
+- **Ne rien récupérer** → Précision indéfinie, Rappel = 0 → trivial
+- **Rappel difficile à mesurer** en pratique → seule la précision est fiable
+- **Micro-averaging** favorise les classes dominantes
+- **mAP** suppose tous les niveaux de rappel également importants
+- **BEP > R-Précision** toujours (fenêtre 2× plus large)
+- **Sensitivity = Recall = TPR** (même chose, vocabulaires différents)
+- **Fallout = FPR = 1 − Spécificité** (même chose)
+- La **généralité G** affecte la précision même si R et Fallout sont constants

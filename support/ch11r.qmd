@@ -1,0 +1,260 @@
+# RI audio
+
+## Son : Bases Physiques
+
+| Propriété | Définition | Unité |
+|---|---|---|
+| Fréquence | Vibrations/seconde | Hz |
+| Pitch | Perception subjective de la fréquence | — |
+| Intensité | Puissance / Aire | W/m² |
+| Décibel | Échelle logarithmique de l'intensité | dB |
+
+**Formule intensité :**
+$$I = \frac{\text{Énergie}}{\text{Aire} \times \text{Temps}} = \frac{\text{Puissance}}{\text{Aire}} \quad [W/m^2]$$
+
+**Échelle dB :** $x \times 10 \text{ dB} = 10^{-(12-x)} \text{ W/m}^2$
+
+| Niveau | Exemple |
+|---|---|
+| 0 dB | Seuil d'audibilité |
+| 60 dB | Conversation normale |
+| 120 dB | Concert rock |
+| 160 dB | ️ Perforation tympan |
+
+
+## Perception Auditive
+
+**Plages fréquentielles :**
+
+| Espèce | Plage |
+|---|---|
+| Humain | 20 Hz – 20 kHz |
+| Chien | 50 Hz – 45 kHz |
+| Chat | 50 Hz – 85 kHz |
+| Dauphin | jusqu'à 200 kHz |
+
+**Chaîne de transduction de l'oreille :**
+
+onde aérienne → onde mécanique (osselets) → compression (cochlée) → signal électrique (nerf)
+
+
+## Catégories d'Information Audio
+
+| Type | Contenu informationnel | Traitement principal |
+|---|---|---|
+| Parole (Speech) | Très élevé | ASR, Wordspotting |
+| Musique (Music) | Élevé | Genre, MIDI, MIR |
+| Sons naturels | Faible | Classification |
+| Bruit urbain/machines | Très faible | Indexation vidéo |
+
+**Pipeline d'indexation :**
+
+- Parole → ASR / Wordspotting → Transcriptions, info locuteur
+- Musique → Classification / Genre → Score, MIDI
+- Son → Traitement A/V → Contexte visuel
+
+
+## Modélisation de la Parole
+
+### Production : 3 types de sons
+
+| Type | Mécanisme | Exemple |
+|---|---|---|
+| Voisé (Voiced) | Cordes vocales vibrent régulièrement | Voyelles |
+| Fricatif (Fricative) | Turbulence dans le conduit | `/s/` |
+| Plosif (Plosive) | Accumulation + relâchement brutal | `/p/` |
+
+### Modèle Source-Filtre (Source-Filter Model)
+
+$$|S(\omega)|^2 = |H(\omega)|^2 \cdot |E(\omega)|^2$$
+
+| Terme | Rôle | Correspond à |
+|---|---|---|
+| $S(\omega)$ | Signal de parole (STFT) | — |
+| $H(\omega)$ | Filtre = conduit vocal | Enveloppe spectrale |
+| $E(\omega)$ | Excitation = source glottique | Pitch / bruit |
+
+### Pitch de la parole
+
+| Locuteur | Pitch fondamental |
+|---|---|
+| Masculin | 80 – 140 Hz |
+| Féminin / enfant | 200 – 250 Hz |
+
+::: {.callout-note title="À retenir"}
+Pitch = fréquence fondamentale des cordes vocales. Fait partie de la **prosodie** (intonation + accentuation).
+:::
+
+
+## LPC — Prédiction Linéaire (Linear Prediction Coefficients)
+
+**Principe :** prédire $s_n$ à partir des $p$ échantillons passés.
+
+$$\hat{s}_n = -\sum_{i=1}^{p} a_i \, s_{n-i} \quad \Rightarrow \quad e_n = s_n - \hat{s}_n = \sum_{i=0}^{p} a_i \, s_{n-i}$$
+
+**En Z :** $E(z) = S(z) \displaystyle\sum_{i=0}^{p} a_i z^{-i}$
+
+**Donc :** $S(z) = \dfrac{E(z)}{A_p(z)}$ avec $A_p(z) = 1 + \displaystyle\sum_{i=1}^{p} a_i z^{-i}$
+
+| Terme | Interprétation |
+|---|---|
+| $1/A_p(z)$ | ≈ Fonction de transfert du conduit vocal $H$ |
+| $E(z)$ | ≈ Excitation (pitch ou bruit) |
+
+
+## Échelles Perceptuelles
+
+### Échelle Mel (Mel Scale)
+
+- Modélise la **perception subjective de la hauteur**
+- Relation approximativement **logarithmique**
+- 1000 mel = 1000 Hz ; 2000 mel ≈ 3000 Hz (non 2000 Hz)
+
+$$m = 2595 \log\left(1 + \frac{f}{700}\right) \qquad \text{ou} \qquad m = 1000 \log_2(1+f)$$
+
+### Échelle Bark (Bark Scale)
+
+- Modélise le **masquage auditif** (auditory masking)
+- Si deux fréquences proches → la plus haute masque la plus basse
+- Utilisée dans le **codage MP3 (MPEG 1 Audio Layer 3)**
+
+$$B = 13\arctan(0.76f) + 3.5\arctan\!\left(\frac{f}{7.5}\right)^2$$
+
+| Échelle | Modélise | Application |
+|---|---|---|
+| Mel | Hauteur perçue | MFCC, ASR |
+| Bark | Masquage fréquentiel | MP3, compression |
+
+
+## MFCC — Coefficients Cepstraux Mel
+
+**Cepstre (Cepstrum) :** $\mathcal{F}^{-1}[\log|S(\omega)|]$ → sépare pitch et conduit vocal.
+
+**Pipeline MFCC :**
+
+signal → fenêtrage → FFT → banc de filtres Mel → log → DCT → **MFCC**
+
+::: {.callout-important title="Features standard en ASR"}
+- 12–13 coefficients MFCC par trame
+- + $\Delta$MFCC (dérivées temporelles) pour la dynamique
+- Features d'entrée des HMM en reconnaissance de la parole
+:::
+
+
+## ASR — Reconnaissance Automatique de la Parole
+
+**Modèle :** HMM (Hidden Markov Model) au niveau phonème
+
+- **Triphones** : contexte gauche + phonème + contexte droit → coarticulation
+- **Modèle de langage** : probabilités de séquences de mots
+- **Features** : MFCC + ΔMFCC + énergie
+
+**Problèmes en indexation :**
+
+| Problème | Définition |
+|---|---|
+| WER (Word Error Rate) | Taux d'erreur de reconnaissance |
+| OOV (Out-Of-Vocabulary) | Mots absents du vocabulaire d'entraînement |
+
+
+## Wordspotting
+
+- **Vocabulaire limité** (contrairement à l'ASR complet)
+- **État garbage** : capture tout ce qui n'est pas un mot-clé
+- Architecture : $n$ modèles de mots-clés + 1 modèle garbage → argmax
+
+**Usage :** serveurs vocaux, commandes vocales contrôlées.
+
+
+## Traitement de la Musique
+
+### Défis de la transcription automatique
+
+- Notes synchronisées selon le **tempo**
+- **Collisions harmoniques** entre notes simultanées
+- **Diversité** des instruments et techniques
+
+### Pitch en musique
+
+- Pitch = fréquence fondamentale d'une note
+- **Multi-pitch extraction** : plusieurs notes simultanées → pianoroll (temps × fréquence)
+
+### MIDI (Musical Instrument Digital Interface)
+
+**Format :** `Sn xx yy` (hexadécimal)
+
+| Champ | Rôle | Plage |
+|---|---|---|
+| `S` | Type de statut | 8–E |
+| `n` | Numéro de canal | 0–F (canaux 1–16) |
+| `xx` | Données 1 (note) | 00–7F |
+| `yy` | Données 2 (vélocité) | 00–7F |
+
+**Exemple :** `90 3C 40` → Note On, Canal 1, Note 60 (Do central), Vélocité 64
+
+::: {.callout-note title="À retenir"}
+MIDI code un **événement musical** (pas un son). Permet le string matching pour la recherche de similarité musicale.
+:::
+
+
+## Codage MP3
+
+- MP3 = **MPEG 1 Audio Layer 3**
+- Compression **avec perte** (lossy) basée sur la perception
+- Exploite le masquage auditif (échelle Bark)
+
+**Pipeline :** Modèle perceptuel → Banc de filtres + Stéréo joint → Quantification → Codage sans perte → Bitstream MP3
+
+
+## Recherche d'Information Musicale (MIR)
+
+| Outil | Méthode | Principe |
+|---|---|---|
+| Islands of Music | SOM (Self-Organizing Map) | Organisation 2D par similarité de features |
+| Sony Music Browser | Requêtes multi-critères | Titre, BPM, énergie, genre, similarité |
+| ThemeFinder | Requête mélodique | Pitch, intervalle, contour, degré scalaire |
+
+**Features Islands of Music :** maxflux, bass, bpm, non-aggressive, low-freq-dom
+
+
+## Indexation Audio : Synthèse
+
+| Type | Méthode | Commentaire |
+|---|---|---|
+| Parole | ASR → texte | WER + OOV dégradent l'index |
+| Parole | Wordspotting | Contexte contrôlé, robuste |
+| Musique | Query-by-Humming | Fredonner → MIDI → matching |
+| Musique | Query-by-Example | Features acoustiques (MFCC, rythme) |
+| Musique | Traduction MIDI | Alignement de chaînes symboliques |
+| Son ambiant | Combiné avec vidéo | Segmentation, contexte de scène |
+
+
+## Relations entre Concepts Clés
+
+    Signal Audio
+    │
+    └─► LPC / STFT
+        ├─► Modèle source-filtre
+        │   ├─► H : conduit vocal
+        │   └─► E : excitation / pitch
+        │       └─► Échelle Mel / Bark
+        │           └─► MP3
+        │
+        └─► Banc filtres Mel
+            └─► MFCC
+                └─► HMM → ASR
+                    └─► Texte → Index IR
+
+
+## Points Critiques / Pièges
+
+::: {.callout-warning title="Pièges fréquents"}
+
+- **Mel $\neq$ Bark** : Mel = hauteur perçue ; Bark = masquage fréquentiel.
+- **LPC** : les coefficients $a_i$ encodent le **filtre vocal**, pas le pitch.
+- **MFCC** : le cepstre sépare pitch et conduit vocal — on ne garde que la partie lente (conduit vocal).
+- **ASR → IR** : la transcription est imparfaite (WER, OOV) → l'index textuel est bruité.
+- **MIDI** : code des événements, pas un signal audio — on ne peut pas en extraire le timbre.
+- **Pitch parole** $\neq$ **pitch musique** : en parole, pitch = prosodie ; en musique, pitch = note musicale.
+
+:::

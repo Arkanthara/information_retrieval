@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.07 — Web Information Retrieval · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--ff);
+  font-size:22px;
+  line-height:1.9;
+  display:flex
+}
+.pcode{font-size:.95rem;}
+.badge{font-size:.82rem;}
+code{font-size:.92em;}
+
+/* SIDEBAR */
+.sb{width:270px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.88rem;display:block;
+  padding:.35rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .3rem;opacity:.6}
+
+/* MAIN */
+.main{
+  margin-left:270px;
+  flex:1;
+  padding:3rem 5rem;
+  max-width:1400px;
+}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.6rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:620px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:800px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+.qi-arr.open{transform:rotate(180deg)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* DIAGRAM */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.15rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* PSEUDOCODE */
+.pcode{
+  background:var(--bg-code);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:1.2rem 1.5rem;
+  margin:1.2rem 0;
+  font-family:var(--fm);
+  font-size:.82rem;
+  line-height:1.9;
+  color:var(--text);
+  overflow-x:auto;
+
+  white-space: pre-wrap; /* conserve les retours à la ligne et l'indentation */
+}
+.pcode .kw{color:var(--violet)}
+.pcode .fn{color:var(--gold)}
+.pcode .cm{color:var(--muted);font-style:italic}
+.pcode .num{color:var(--green)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">IR.07</div>
+  <div class="sb-sub">Web Information Retrieval</div>
+  <nav>
+    <div class="sb-section">Sections</div>
+    <ul>
+      <li><a href="#s1"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#s2"><span class="n">02</span>Réponse modèle d'oral</a></li>
+      <li><a href="#s3"><span class="n">03</span>Motivation & Fondements</a></li>
+      <li><a href="#s4"><span class="n">04</span>Web comme graphe</a></li>
+      <li><a href="#s5"><span class="n">05</span>Analyse des citations</a></li>
+      <li><a href="#s6"><span class="n">06</span>Algorithme HITS</a></li>
+      <li><a href="#s7"><span class="n">07</span>PageRank</a></li>
+      <li><a href="#s8"><span class="n">08</span>Marches aléatoires</a></li>
+      <li><a href="#s9"><span class="n">09</span>Formules clés</a></li>
+      <li><a href="#s10"><span class="n">10</span>Comparaison HITS/PageRank</a></li>
+      <li><a href="#s11"><span class="n">11</span>Perspective historique</a></li>
+      <li><a href="#s12"><span class="n">12</span>Liens avec systèmes modernes</a></li>
+      <li><a href="#s13"><span class="n">13</span>Questions d'examen</a></li>
+      <li><a href="#s14"><span class="n">14</span>Pièges classiques</a></li>
+      <li><a href="#s15"><span class="n">15</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">IR.07 · Master en Sciences Informatiques</div>
+  <h1>Web <em>Information</em> Retrieval</h1>
+  <p class="hero-desc">Analyse de la structure du Web pour la Recherche d'Information — HITS, PageRank, Marches Aléatoires &amp; Analyse de Citations</p>
+  <div class="badges">
+    <span class="badge">Graphes &amp; Liens</span>
+    <span class="badge b">Analyse spectrale</span>
+    <span class="badge g">HITS · PageRank</span>
+    <span class="badge">Markov Chains</span>
+    <span class="badge b">Kleinberg 1999 · Brin &amp; Page 1998</span>
+  </div>
+</div>
+
+<!-- ===== SECTION 1 : RÉSUMÉ EXÉCUTIF ===== -->
+<section class="sec" id="s1">
+  <div class="sec-hd"><span class="sec-num">01</span><span class="sec-title">Résumé exécutif</span></div>
+  <div class="box ok">
+    <div class="box-title">⚡ 30 secondes chrono</div>
+    <p>Les modèles IR classiques n'exploitent que le <strong>contenu</strong> des documents. Sur le Web, les pages sont reliées par des <strong>hyperliens</strong> qui constituent une source d'information supplémentaire sur leur importance. L'idée fondatrice est d'analyser la <strong>structure du graphe</strong> Web pour en dériver des scores d'autorité, combinés aux scores de pertinence textuelle.</p>
+    <p>Deux algorithmes dominent ce domaine : <strong>HITS</strong> (Kleinberg, 1999), qui distingue <em>hubs</em> et <em>autorités</em> sur un sous-graphe local lié à la requête, et <strong>PageRank</strong> (Page &amp; Brin, 1998), qui attribue un score d'autorité global à chaque page du Web entier via une marche aléatoire sur le graphe.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2 : RÉPONSE MODÈLE D'ORAL ===== -->
+<section class="sec" id="s2">
+  <div class="sec-hd"><span class="sec-num">02</span><span class="sec-title">Réponse modèle d'oral</span></div>
+  <div class="oral">
+    <p>Les modèles de recherche d'information classiques, comme le modèle vectoriel ou le modèle probabiliste, exploitent principalement le <strong>contenu textuel</strong> des documents pour calculer leur pertinence par rapport à une requête. Mais sur le Web, chaque page est connectée à d'autres via des <strong>hyperliens</strong>, qui constituent une source d'information supplémentaire considérable sur leur qualité et leur importance.</p>
+    <p>L'analogie fondamentale est celle de la <strong>bibliométrie</strong> : dans la littérature scientifique, un article cité par de nombreux travaux de référence est lui-même considéré comme important. De même, une page Web vers laquelle de nombreuses autres pages pointent est probablement de qualité. L'objectif est donc de construire des modèles combinant analyse du contenu et <strong>analyse de la structure des liens</strong>.</p>
+    <p>Le premier modèle important est <strong>HITS</strong>, développé par Kleinberg en 1999. HITS repose sur deux types de pages complémentaires : les <em>autorités</em> (pages fournissant du contenu de référence sur un sujet) et les <em>hubs</em> (pages d'index pointant vers de nombreuses autorités). L'idée centrale est mutuellement récursive : une bonne autorité est pointée par de bons hubs, et un bon hub pointe vers de bonnes autorités. Pour une requête donnée, HITS construit un sous-graphe local autour d'un ensemble de pages pertinentes, puis fait converger itérativement deux vecteurs de scores — $a[p]$ et $h[p]$ — qui convergent respectivement vers les vecteurs propres principaux de $S^TS$ et $SS^T$, où $S$ est la matrice d'adjacence du sous-graphe.</p>
+    <p><strong>PageRank</strong>, utilisé par Google, diffère fondamentalement : il ne distingue pas hubs et autorités, ne calcule qu'un score d'autorité global pré-calculé sur <em>l'intégralité</em> du Web. L'intuition est celle du <em>surfeur aléatoire</em> : un utilisateur naviguant aléatoirement sur le Web, à chaque étape soit en suivant un lien de la page courante, soit en sautant vers une page aléatoire avec probabilité $\alpha$ (la téléportation). Le PageRank $r[p]$ modélise la probabilité de se trouver sur la page $p$ à l'équilibre stationnaire. Ce paramètre de téléportation est crucial : sans lui, des cycles fermés absorberaient tout le PageRank du système. Mathématiquement, $r$ converge vers le vecteur propre gauche principal de la matrice $\alpha \mathbf{1}\mathbf{1}^T + (1-\alpha)S$.</p>
+    <p>En pratique, PageRank a convergé en 52 itérations pour 322 millions de liens, et l'ordre de convergence est empiriquement en $\mathcal{O}(\log|M|)$. Ces deux algorithmes, fondés sur la théorie spectrale des graphes et les chaînes de Markov, représentent une rupture conceptuelle majeure dans l'histoire des moteurs de recherche.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 3 : MOTIVATION ===== -->
+<section class="sec" id="s3">
+  <div class="sec-hd"><span class="sec-num">03</span><span class="sec-title">Motivation &amp; Fondements</span></div>
+
+  <h3>Pourquoi l'analyse de structure ?</h3>
+  <p>Les modèles IR classiques (Vector Space Model, BM25, modèle de langue) estiment la pertinence d'un document par rapport à une requête en analysant le <strong>contenu textuel</strong>. Cependant, sur le Web, chaque page est liée à d'autres via des <strong>hyperliens (hyperlinks)</strong>. Ces liens ne sont pas anodins : ils représentent une forme de jugement éditorial — un auteur qui pointe vers une page en reconnaît implicitement la qualité ou la pertinence.</p>
+
+  <div class="box">
+    <div class="box-title">💡 Intuition fondamentale</div>
+    <p>Si une page est citée par de nombreuses autres pages de qualité, c'est probablement parce qu'elle est elle-même de qualité. Ce raisonnement, emprunté à la <strong>bibliométrie</strong> (science de la mesure de l'impact scientifique), est au cœur des modèles de Web IR.</p>
+  </div>
+
+  <h3>Objectif : modèle global combiné</h3>
+  <p>L'objectif est donc de construire et d'analyser des modèles qui exploitent la <strong>structure des relations entre documents</strong>, pour former un modèle global :</p>
+  <ul>
+    <li><strong>Modèle basé sur le contenu</strong> (content-based) : pertinence textuelle via TF-IDF, BM25, etc.</li>
+    <li><strong>Modèle basé sur la structure</strong> (structure-based) : autorité via l'analyse de liens</li>
+  </ul>
+  <p>Le modèle du Web en tant que système IR repose sur la définition suivante :</p>
+  <div class="box vio">
+    <div class="box-title">Définition canonique</div>
+    <p><em>"Le Web est une large collection volatile de documents hétérogènes hyperliés, non fiables."</em></p>
+  </div>
+
+  <h3>Le Web comme système IR</h3>
+  <div class="diag">
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px">
+      <!-- Background nodes: Spider, URL DB, Indexer, Search Engine, User -->
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- Web Cloud -->
+      <ellipse cx="90" cy="110" rx="70" ry="50" fill="none" stroke="#7eb8d4" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="90" y="107" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="14">WWW</text>
+      <text x="90" y="124" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="11">graphe orienté</text>
+
+      <!-- Spider -->
+      <rect x="190" y="80" width="90" height="34" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1"/>
+      <text x="235" y="102" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="14">Spider/Crawler</text>
+
+      <!-- URL DB -->
+      <rect x="310" y="30" width="80" height="34" rx="5" fill="#1c1828" stroke="#a78bfa" stroke-width="1"/>
+      <text x="350" y="52" text-anchor="middle" fill="#a78bfa" font-family="EB Garamond" font-size="13">Source URL DB</text>
+
+      <!-- Indexer -->
+      <rect x="310" y="120" width="80" height="34" rx="5" fill="#1c1828" stroke="#7bc496" stroke-width="1"/>
+      <text x="350" y="142" text-anchor="middle" fill="#7bc496" font-family="EB Garamond" font-size="14">Indexeur</text>
+
+      <!-- Search Engine -->
+      <rect x="430" y="80" width="100" height="34" rx="5" fill="#1c1828" stroke="#c9a84c" stroke-width="1"/>
+      <text x="480" y="102" text-anchor="middle" fill="#e8c97a" font-family="EB Garamond" font-size="14">Search Engine</text>
+
+      <!-- Relevance Sorting -->
+      <rect x="560" y="80" width="90" height="34" rx="5" fill="#1c1828" stroke="#7eb8d4" stroke-width="1"/>
+      <text x="605" y="98" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="13">Ranked</text>
+      <text x="605" y="112" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="13">Results</text>
+
+      <!-- Arrows -->
+      <line x1="160" y1="97" x2="190" y2="97" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="280" y1="88" x2="310" y2="55" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="280" y1="100" x2="310" y2="130" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="390" y1="137" x2="430" y2="100" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="390" y1="47" x2="430" y2="85" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+      <line x1="530" y1="97" x2="560" y2="97" stroke="#c9a84c" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- Labels -->
+      <text x="350" y="190" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="11">Spidering : collecte documents + liens → indexation → classement</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== SECTION 4 : WWW COMME GRAPHE ===== -->
+<section class="sec" id="s4">
+  <div class="sec-hd"><span class="sec-num">04</span><span class="sec-title">Le WWW comme un graphe</span></div>
+
+  <h3>Modélisation formelle</h3>
+  <p>Le Web peut être modélisé comme un <strong>graphe orienté</strong> $G = (V, E)$ où :</p>
+  <ul>
+    <li>Les <strong>nœuds $V$</strong> représentent les pages Web</li>
+    <li>Les <strong>arêtes orientées $E$</strong> représentent les hyperliens ($A \to B$ = lien de la page A vers B)</li>
+  </ul>
+
+  <h3>Le modèle "Nœud Papillon" (Bow Tie Model)</h3>
+  <p>L'étude empirique de Broder et al. (2000) sur ~200 millions de pages a révélé une structure macroscopique dite en <strong>nœud papillon</strong> :</p>
+
+  <div class="diag">
+    <svg viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#c9a84c" opacity="0.8"/>
+        </marker>
+      </defs>
+      <!-- Core Circle -->
+      <circle cx="330" cy="130" r="65" fill="rgba(201,168,76,0.15)" stroke="#c9a84c" stroke-width="2"/>
+      <text x="330" y="124" text-anchor="middle" fill="#e8c97a" font-family="Cormorant Garamond" font-size="15" font-weight="600">Central Core</text>
+      <text x="330" y="143" text-anchor="middle" fill="#c9a84c" font-family="JetBrains Mono" font-size="11">~56 M pages</text>
+      <text x="330" y="158" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">SCC ≈ 26%</text>
+
+      <!-- IN Triangle -->
+      <polygon points="175,50 175,210 265,130" fill="rgba(126,184,212,0.18)" stroke="#7eb8d4" stroke-width="1.8"/>
+      <text x="195" y="124" fill="#7eb8d4" font-family="Cormorant Garamond" font-size="15" font-weight="600">IN</text>
+      <text x="188" y="142" fill="#7eb8d4" font-family="JetBrains Mono" font-size="10">~44 M</text>
+
+      <!-- OUT Triangle -->
+      <polygon points="485,50 485,210 395,130" fill="rgba(123,196,150,0.18)" stroke="#7bc496" stroke-width="1.8"/>
+      <text x="453" y="124" fill="#7bc496" font-family="Cormorant Garamond" font-size="15" font-weight="600">OUT</text>
+      <text x="451" y="142" fill="#7bc496" font-family="JetBrains Mono" font-size="10">~44 M</text>
+
+      <!-- Arrow IN → Core -->
+      <line x1="265" y1="130" x2="265" y2="130" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="291" y="115" text-anchor="middle" fill="#c9a84c" font-family="JetBrains Mono" font-size="10">→</text>
+
+      <!-- Arrow Core → OUT -->
+      <text x="373" y="115" text-anchor="middle" fill="#c9a84c" font-family="JetBrains Mono" font-size="10">→</text>
+
+      <!-- Tendrils -->
+      <ellipse cx="90" cy="130" rx="55" ry="30" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="90" y="125" text-anchor="middle" fill="#a78bfa" font-family="Cormorant Garamond" font-size="12">Tendrils</text>
+      <text x="90" y="140" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="10">~44 M</text>
+
+      <ellipse cx="570" cy="130" rx="55" ry="30" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="570" y="125" text-anchor="middle" fill="#a78bfa" font-family="Cormorant Garamond" font-size="12">Tubes</text>
+      <text x="570" y="140" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="10">~44 M</text>
+
+      <!-- Disconnected -->
+      <circle cx="290" cy="220" r="18" fill="rgba(224,123,123,0.12)" stroke="#e07b7b" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <circle cx="330" cy="225" r="12" fill="rgba(224,123,123,0.12)" stroke="#e07b7b" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <circle cx="365" cy="218" r="15" fill="rgba(224,123,123,0.12)" stroke="#e07b7b" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <text x="328" y="248" text-anchor="middle" fill="#e07b7b" font-family="JetBrains Mono" font-size="10">Disconnected ~17 M</text>
+
+      <!-- WCC annotation -->
+      <text x="330" y="18" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="11">Composante faiblement connexe (WCC) ≈ 91% du Web</text>
+    </svg>
+    <p style="font-size:.82rem;color:var(--muted);margin-top:.5rem">Source : Broder et al. (2000), "Graph Structure in the Web", Computer Networks.</p>
+  </div>
+
+  <h3>Propriétés statistiques remarquables</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Propriété</th><th>Valeur</th><th>Implication pour IR</th></tr></thead>
+      <tbody>
+        <tr><td>Weak Connected Component (WCC)</td><td class="g">≈ 91%</td><td>Majorité du Web est atteignable</td></tr>
+        <tr><td>Strong Connected Component (SCC)</td><td class="g">≈ 26%</td><td>Sous-ensemble avec liens bidirectionnels</td></tr>
+        <tr><td>Diamètre de la SCC</td><td class="m">> 28</td><td>Le Web est plus "allongé" qu'il n'y paraît</td></tr>
+        <tr><td>$\mathbb{P}(\text{chemin}(u,v))$</td><td class="m">≈ 0.24</td><td>3/4 des paires de pages n'ont pas de chemin dirigé</td></tr>
+        <tr><td>Longueur moyenne chemin dirigé</td><td class="g">16 clics</td><td>Relativement court pour un graphe de cette taille</td></tr>
+        <tr><td>Longueur moyenne chemin non-dirigé</td><td class="g">6 clics</td><td>"Six degrés de séparation"</td></tr>
+        <tr><td>Distribution des liens</td><td class="m">Loi de puissance</td><td>Quelques hubs avec millions de liens entrants</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box info">
+    <div class="box-title">Lois de puissance (Power Laws)</div>
+    <p>La distribution des liens entrants et sortants suit une <strong>loi de puissance</strong> (<em>power law</em>) : $P(\text{in-degree} = k) \propto k^{-\gamma}$. Cela implique que quelques pages ("hubs naturels") concentrent l'essentiel des liens, tandis que la majorité des pages n'en ont que quelques-uns — une propriété typique des <em>réseaux sans-échelle</em> (scale-free networks).</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 5 : ANALYSE DES CITATIONS ===== -->
+<section class="sec" id="s5">
+  <div class="sec-hd"><span class="sec-num">05</span><span class="sec-title">Analyse des Citations</span></div>
+
+  <h3>Analogie hyperlinks ↔ citations</h3>
+  <p>Les hyperliens créent des relations entre documents Web, de façon analogue aux <strong>citations bibliographiques</strong> dans la littérature scientifique. Un corpus avec ses références constitue un graphe :</p>
+  <div class="mblock">
+    <div class="mlabel">Graphe de citations</div>
+    $$G = (\text{documents},\ \text{références})$$
+  </div>
+  <p>La structure de ce graphe, <em>indépendamment du contenu</em>, fournit des informations sur la similarité et l'importance des documents.</p>
+
+  <h3>Facteur d'Impact (Impact Factor)</h3>
+  <p>Développé par <strong>Garfield en 1972</strong>, le facteur d'impact mesure l'importance d'une revue scientifique par la fréquence de citation de ses articles.</p>
+  <div class="mblock">
+    <div class="mlabel">Facteur d'impact de la revue J en année y</div>
+    $$IF_J(y) = \frac{\text{Nombre de citations reçues en } y \text{ vers des articles de } J \text{ publiés en } y{-}1 \text{ ou } y{-}2}{\text{Nombre d'articles publiés dans } J \text{ en } y{-}1 \text{ et } y{-}2}$$
+  </div>
+  <div class="box warn">
+    <div class="box-title">⚠ Limite du facteur d'impact</div>
+    <p>Le facteur d'impact ne tient <strong>pas compte de la qualité</strong> de l'article citant. Une citation dans un article médiocre compte autant qu'une citation dans un article de référence.</p>
+  </div>
+
+  <h3>Couplage bibliographique (Bibliographic Coupling)</h3>
+  <p>Introduit par <strong>Kessler en 1963</strong>. Le couplage bibliographique de deux documents $d_A$ et $d_B$ est la taille de l'intersection de leurs bibliographies — le nombre de documents cités <em>par les deux</em>.</p>
+  <div class="mblock">
+    <div class="mlabel">Bibliographic Coupling (Kessler, 1963)</div>
+    $$BC(d_A, d_B) = |bib(d_A) \cap bib(d_B)|$$
+  </div>
+  <p>Direction temporelle : <strong>vers le passé</strong> (références communes). Peut être normalisé via l'indice de Jaccard : $J(d_A, d_B) = \frac{|bib(d_A) \cap bib(d_B)|}{|bib(d_A) \cup bib(d_B)|}$.</p>
+
+  <h3>Co-citation</h3>
+  <p>Introduite par <strong>Small en 1973</strong>. La co-citation de deux documents est le nombre de documents qui les citent <em>tous les deux</em>.</p>
+  <div class="mblock">
+    <div class="mlabel">Co-citation (Small, 1973)</div>
+    $$CC(d_A, d_B) = |\{d : d \text{ cite } d_A \text{ ET } d \text{ cite } d_B\}|$$
+  </div>
+  <p>Direction temporelle : <strong>vers l'avenir</strong> (citations entantes communes).</p>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Méthode</th><th>Direction</th><th>Définition</th><th>Intuition</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Couplage bibliographique</strong></td>
+          <td class="m">↙ Passé</td>
+          <td>Intersection des bibliographies sortantes</td>
+          <td>Documents qui citent les mêmes sources traitent probablement du même sujet</td>
+        </tr>
+        <tr>
+          <td><strong>Co-citation</strong></td>
+          <td class="m">↗ Futur</td>
+          <td>Documents cités ensemble par d'autres</td>
+          <td>Si la communauté les cite ensemble, elle les considère comme liés</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Pourquoi les liens Web ne sont pas des citations ?</h3>
+  <div class="box warn">
+    <div class="box-title">⚠ Différences fondamentales liens Web / citations académiques</div>
+    <ul>
+      <li>Beaucoup de liens sont <strong>navigationaux</strong> (menus, barres de nav) — pas de relation thématique</li>
+      <li>Les pages à fort degré entrant sont souvent des <strong>portails</strong> (Amazon, Google), pas des autorités de contenu</li>
+      <li>Tous les liens ne sont <strong>pas des recommandations</strong> (liens commerciaux, obligatoires, etc.)</li>
+      <li>Les sites d'entreprises <strong>ne pointent pas vers leurs concurrents</strong>, contrairement aux chercheurs académiques</li>
+      <li>Les citations académiques sont <strong>validées par des pairs</strong> (<em>peer review</em>) — garantie de pertinence inexistante sur le Web</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== SECTION 6 : HITS ===== -->
+<section class="sec" id="s6">
+  <div class="sec-hd"><span class="sec-num">06</span><span class="sec-title">L'algorithme HITS</span></div>
+
+  <h3>Autorités et Hubs</h3>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Authority</div>
+      <h4>Autorité</h4>
+      <p>Page reconnue comme fournissant des informations <strong>significatives, fiables et utiles</strong> sur un sujet. Elle est <strong>pointée</strong> par de nombreux hubs de qualité.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Hub</div>
+      <h4>Hub</h4>
+      <p>Page d'index fournissant de <strong>nombreux liens utiles</strong> vers des autorités. Elle <strong>pointe</strong> vers de nombreuses autorités de qualité.</p>
+    </div>
+  </div>
+
+  <p>Ensemble, hubs et autorités forment un <strong>graphe bipartite</strong> :</p>
+
+  <div class="diag">
+    <svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px">
+      <defs>
+        <marker id="arr3" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#7bc496"/>
+        </marker>
+      </defs>
+      <!-- Left: Hubs -->
+      <text x="120" y="25" text-anchor="middle" fill="#c9a84c" font-family="Cormorant Garamond" font-size="16" font-weight="600">Hubs</text>
+      <circle cx="120" cy="60" r="22" fill="rgba(201,168,76,0.2)" stroke="#c9a84c" stroke-width="1.8"/>
+      <text x="120" y="65" text-anchor="middle" fill="#e8c97a" font-family="JetBrains Mono" font-size="11">H1</text>
+      <circle cx="120" cy="120" r="22" fill="rgba(201,168,76,0.2)" stroke="#c9a84c" stroke-width="1.8"/>
+      <text x="120" y="125" text-anchor="middle" fill="#e8c97a" font-family="JetBrains Mono" font-size="11">H2</text>
+      <circle cx="120" cy="180" r="22" fill="rgba(201,168,76,0.2)" stroke="#c9a84c" stroke-width="1.8"/>
+      <text x="120" y="185" text-anchor="middle" fill="#e8c97a" font-family="JetBrains Mono" font-size="11">H3</text>
+      <circle cx="120" cy="230" r="14" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+      <text x="120" y="234" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">H4</text>
+
+      <!-- Right: Authorities -->
+      <text x="380" y="25" text-anchor="middle" fill="#7bc496" font-family="Cormorant Garamond" font-size="16" font-weight="600">Autorités</text>
+      <circle cx="380" cy="75" r="22" fill="rgba(123,196,150,0.2)" stroke="#7bc496" stroke-width="1.8"/>
+      <text x="380" y="80" text-anchor="middle" fill="#7bc496" font-family="JetBrains Mono" font-size="11">A1</text>
+      <circle cx="380" cy="140" r="22" fill="rgba(123,196,150,0.2)" stroke="#7bc496" stroke-width="1.8"/>
+      <text x="380" y="145" text-anchor="middle" fill="#7bc496" font-family="JetBrains Mono" font-size="11">A2</text>
+      <circle cx="380" cy="205" r="22" fill="rgba(123,196,150,0.2)" stroke="#7bc496" stroke-width="1.8"/>
+      <text x="380" y="210" text-anchor="middle" fill="#7bc496" font-family="JetBrains Mono" font-size="11">A3</text>
+
+      <!-- Arrows Hub → Authority -->
+      <line x1="142" y1="67" x2="358" y2="78" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arr3)" opacity="0.9"/>
+      <line x1="142" y1="67" x2="358" y2="140" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arr3)" opacity="0.7"/>
+      <line x1="142" y1="120" x2="358" y2="78" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arr3)" opacity="0.9"/>
+      <line x1="142" y1="127" x2="358" y2="143" stroke="#7bc496" stroke-width="1.5" marker-end="url(#arr3)" opacity="0.9"/>
+      <line x1="142" y1="127" x2="358" y2="205" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arr3)" opacity="0.7"/>
+      <line x1="142" y1="180" x2="358" y2="143" stroke="#7bc496" stroke-width="1.3" marker-end="url(#arr3)" opacity="0.9"/>
+      <line x1="142" y1="185" x2="358" y2="205" stroke="#7bc496" stroke-width="1.5" marker-end="url(#arr3)" opacity="0.9"/>
+
+      <!-- Recursive annotation -->
+      <text x="250" y="245" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="11">Graphe bipartite Hubs ↔ Autorités</text>
+    </svg>
+  </div>
+
+  <h3>Construction du sous-graphe de base (Base Set S)</h3>
+  <p>HITS opère sur un <strong>sous-graphe local</strong> construit pour une requête donnée :</p>
+  <ol>
+    <li>Récupérer via un moteur classique (VSR) les $t$ premières pages pertinentes → <strong>ensemble racine R</strong></li>
+    <li>Initialiser $S \leftarrow R$</li>
+    <li>Ajouter à $S$ toutes les pages <strong>pointées par</strong> une page de $R$ (<em>forward links</em>)</li>
+    <li>Ajouter à $S$ toutes les pages <strong>pointant vers</strong> une page de $R$ (<em>back-pointers</em>)</li>
+  </ol>
+  <div class="box info">
+    <div class="box-title">Pourquoi augmenter R ?</div>
+    <p>Les vraies autorités sur un sujet ne figurent souvent <strong>pas</strong> dans les premiers résultats du moteur de base (elles peuvent être implicites, mal indexées, etc.). En ajoutant les voisins directs de $R$, on enrichit $S$ de candidats autorités potentiels qui seront révélés par leur structure de liens.</p>
+  </div>
+
+  <h4>Heuristiques pour contrôler la taille de S</h4>
+  <ul>
+    <li>Limiter $R$ aux top $t$ pages récupérées (ex. $t = 200$)</li>
+    <li>Limiter les back-pointers à au plus $b$ pages par requête inversée</li>
+    <li>Éliminer les liens entre pages du <strong>même hôte</strong> (liens purement navigationaux)</li>
+    <li>Autoriser au maximum $m$ pages d'un même hôte comme pointeurs vers une page individuelle</li>
+  </ul>
+
+  <h3>L'algorithme itératif HITS</h3>
+  <p>Pour chaque page $p \in S$, maintenir deux scores mutuellement récursifs :</p>
+  <div class="mblock">
+    <div class="mlabel">Mise à jour des scores HITS</div>
+    $$a[p] = \sum_{q:\, q \to p} h[q] \qquad \text{(les hubs alimentent les autorités)}$$
+    $$h[p] = \sum_{q:\, p \to q} a[q] \qquad \text{(les autorités alimentent les hubs)}$$
+  </div>
+
+  <div class="pcode">
+<span class="kw">procédure</span> <span class="fn">HITS</span>(S) :
+  Initialiser a[p] = h[p] = <span class="num">1/|S|</span>  <span class="kw">pour tout</span> p ∈ S
+  <span class="kw">répéter</span>
+    <span class="kw">pour tout</span> p ∈ S :
+      a[p] = Σ<sub>q: q→p</sub> h[q]        <span class="cm">// les hubs alimentent les autorités</span>
+      h[p] = Σ<sub>q: p→q</sub> a[q]        <span class="cm">// les autorités alimentent les hubs</span>
+    Normaliser : Σ<sub>p</sub> a[p] = 1  <span class="kw">et</span>  Σ<sub>p</sub> h[p] = 1
+  <span class="kw">jusqu'à</span> convergence (a et h stables)
+  </div>
+
+  <h3>Formulation matricielle et convergence</h3>
+  <p>Soit $S$ la matrice d'adjacence du sous-graphe ($S_{ij} = 1$ ssi $i \to j$). On peut écrire :</p>
+  <div class="mblock">
+    <div class="mlabel">Formulation matricielle HITS</div>
+    $$\mathbf{a} = S^T \mathbf{h} \quad \Rightarrow \quad \mathbf{a} = S^T S\, \mathbf{a}$$
+    $$\mathbf{h} = S \mathbf{a} \quad \Rightarrow \quad \mathbf{h} = S S^T \mathbf{h}$$
+    <p style="margin-top:.7rem;font-size:.85rem;color:var(--muted)">
+      $\mathbf{a}$ converge vers le <strong>vecteur propre principal</strong> de $S^T S$ &nbsp;·&nbsp; $\mathbf{h}$ converge vers le <strong>vecteur propre principal</strong> de $S S^T$
+    </p>
+  </div>
+  <div class="box ok">
+    <div class="box-title">Convergence pratique</div>
+    <p>En pratique, <strong>≈ 20 itérations</strong> suffisent pour obtenir des résultats stables. L'algorithme converge vers un point fixe unique (vecteur de Perron), garanti par le <em>théorème de Perron-Frobenius</em> pour les matrices non-négatives irréductibles.</p>
+  </div>
+
+  <h3>HITS pour les requêtes polysémiques</h3>
+  <p>Pour une requête ambiguë (plusieurs sens), le <strong>vecteur propre principal</strong> peut ne couvrir qu'une signification. Les <strong>vecteurs propres non-principaux</strong> contiennent les hubs et autorités pour les autres sens.</p>
+  <div class="box vio">
+    <div class="box-title">Exemple : requête "jaguar"</div>
+    <ul>
+      <li><strong>Vecteur propre principal</strong> → Jeu vidéo Atari</li>
+      <li><strong>2e vecteur propre</strong> → Équipe NFL de Jacksonville</li>
+      <li><strong>3e vecteur propre</strong> → Marque automobile Jaguar</li>
+    </ul>
+    <p>Cela permet une forme de <em>clustering</em> implicite des résultats par sens.</p>
+  </div>
+
+  <h3>Similarité par structure de liens</h3>
+  <p>HITS peut trouver des pages similaires à une page $p$ : définir $R$ comme les $t$ pages pointant vers $p$, construire $S$, exécuter HITS, et retourner les meilleures autorités de $S$. Exemple : pour <code>honda.com</code>, on obtient <code>toyota.com</code>, <code>ford.com</code>, <code>bmwusa.com</code>, etc.</p>
+</section>
+
+<!-- ===== SECTION 7 : PAGERANK ===== -->
+<section class="sec" id="s7">
+  <div class="sec-hd"><span class="sec-num">07</span><span class="sec-title">PageRank</span></div>
+
+  <h3>Présentation générale</h3>
+  <p>PageRank est une méthode d'analyse de liens alternative, développée par <strong>Page &amp; Brin (1998)</strong> et utilisée par Google. Contrairement à HITS, PageRank :</p>
+  <ul>
+    <li>Ne distingue <strong>pas</strong> hubs et autorités — ne calcule qu'un score d'<strong>autorité global</strong></li>
+    <li>S'applique à <strong>l'intégralité</strong> du Web, pas à un sous-graphe local</li>
+    <li>Est <strong>pré-calculé</strong> hors ligne (pas à la requête)</li>
+    <li>Est <strong>indépendant de la requête</strong> (score global d'importance)</li>
+  </ul>
+
+  <h3>Modèle de base</h3>
+  <p>La simple mesure du degré entrant ne tient pas compte de l'autorité de la source. PageRank associe à chaque page $p$ une valeur $r[p]$ et la <strong>propage le long des liens</strong> :</p>
+  <div class="mblock">
+    <div class="mlabel">Équation PageRank de base</div>
+    $$r[p] = c \sum_{q:\, q \to p} \frac{1}{\deg^+(q)}\, r[q]$$
+    <p style="margin-top:.6rem;font-size:.85rem;color:var(--muted)">
+      $\deg^+(q)$ : nombre de liens sortants de $q$ &nbsp;·&nbsp; $c$ : normalisation telle que $\sum_p r[p] = 1$
+    </p>
+  </div>
+  <p>Intuition : chaque page $q$ distribue <strong>équitablement</strong> son PageRank entre toutes les pages vers lesquelles elle pointe. Une page qui reçoit du PageRank de sources elles-mêmes autoritaires est plus importante.</p>
+
+  <h4>Algorithme de base (BasePageRank)</h4>
+  <div class="pcode">
+<span class="kw">procédure</span> <span class="fn">BasePageRank</span>(S) :
+  Initialisation : r[p] = <span class="num">1/|S|</span>  <span class="kw">pour tout</span> p ∈ S
+  <span class="kw">répéter</span>
+    <span class="kw">pour</span> p ∈ S :
+      r[p] = Σ<sub>q: q→p</sub> (1/deg⁺(q)) × r[q]     <span class="cm">// Propagation</span>
+    c = 1 / Σ<sub>p∈S</sub> r[p]                          <span class="cm">// Calcul du normalisateur</span>
+    <span class="kw">pour</span> p ∈ S :
+      r[p] = c × r[p]                               <span class="cm">// Normalisation</span>
+  <span class="kw">jusqu'à</span> convergence (point fixe pour r)
+  </div>
+
+  <h3>Le problème des attracteurs PageRank</h3>
+  <div class="box warn">
+    <div class="box-title">⚠ Problème critique de la formulation de base</div>
+    <p>Un groupe de pages qui ne pointent qu'entre elles (cycle fermé) mais sont pointées par d'autres agit comme un <strong>"attracteur de PageRank"</strong> : le PageRank s'écoule dans le cycle et <strong>ne peut plus en sortir</strong>. Ces puits absorbent tout le PageRank du système, rendant les scores non représentatifs.</p>
+  </div>
+
+  <div class="diag">
+    <svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px">
+      <defs>
+        <marker id="arr4" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#e07b7b"/>
+        </marker>
+        <marker id="arr5" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#c9a84c"/>
+        </marker>
+      </defs>
+      <!-- External page -->
+      <rect x="30" y="65" width="90" height="34" rx="5" fill="rgba(126,184,212,0.12)" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="75" y="87" text-anchor="middle" fill="#7eb8d4" font-family="EB Garamond" font-size="14">Page externe</text>
+
+      <!-- Cycle pages -->
+      <rect x="210" y="45" width="80" height="34" rx="5" fill="rgba(224,123,123,0.15)" stroke="#e07b7b" stroke-width="1.8"/>
+      <text x="250" y="67" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="14">Page A</text>
+
+      <rect x="310" y="45" width="80" height="34" rx="5" fill="rgba(224,123,123,0.15)" stroke="#e07b7b" stroke-width="1.8"/>
+      <text x="350" y="67" text-anchor="middle" fill="#e07b7b" font-family="EB Garamond" font-size="14">Page B</text>
+
+      <!-- External → Cycle -->
+      <line x1="120" y1="82" x2="210" y2="65" stroke="#c9a84c" stroke-width="1.3" marker-end="url(#arr5)"/>
+
+      <!-- Cycle A ↔ B -->
+      <path d="M290,55 Q300,30 310,55" fill="none" stroke="#e07b7b" stroke-width="1.8" marker-end="url(#arr4)"/>
+      <path d="M310,75 Q300,100 290,75" fill="none" stroke="#e07b7b" stroke-width="1.8" marker-end="url(#arr4)"/>
+
+      <!-- Self loop label -->
+      <text x="300" y="18" text-anchor="middle" fill="#e07b7b" font-family="JetBrains Mono" font-size="11">Cycle fermé = Attracteur</text>
+      <text x="300" y="30" text-anchor="middle" fill="#9089bf" font-family="JetBrains Mono" font-size="10">PR s'accumule ici indéfiniment</text>
+
+      <!-- Arrow explanation -->
+      <text x="165" y="105" text-anchor="middle" fill="#c9a84c" font-family="JetBrains Mono" font-size="11">PR entre</text>
+      <text x="250" y="125" text-anchor="middle" fill="#e07b7b" font-family="JetBrains Mono" font-size="11">PR ne sort jamais</text>
+    </svg>
+  </div>
+
+  <h3>La téléportation (Teleport)</h3>
+  <p>Pour résoudre le problème des attracteurs, on introduit un paramètre de <strong>téléportation $\alpha$</strong> : avec probabilité $\alpha$, le surfeur "saute" vers une page quelconque (au lieu de suivre un lien).</p>
+  <div class="mblock">
+    <div class="mlabel">Équation PageRank avec téléportation</div>
+    $$r[p] = c\left(\alpha + (1-\alpha)\sum_{q:\, q \to p} \frac{1}{\deg^+(q)}\, r[q]\right)$$
+    <p style="margin-top:.6rem;font-size:.85rem;color:var(--muted)">$0 < \alpha < 1$ : paramètre de téléportation &nbsp;·&nbsp; $c = 1/\sum_p r[p]$ : normalisation</p>
+  </div>
+
+  <h4>Algorithme PageRank complet</h4>
+  <div class="pcode">
+<span class="kw">procédure</span> <span class="fn">PageRank</span>(S, α) :
+  Initialisation : r[p] = <span class="num">1/|S|</span>  <span class="kw">pour tout</span> p ∈ S
+  <span class="kw">répéter</span>
+    <span class="kw">pour</span> p ∈ S :
+      r[p] = Σ<sub>q: q→p</sub> (1/deg⁺(q)) × r[q]     <span class="cm">// Propagation</span>
+      r[p] = α + (1-α) × r[p]                       <span class="cm">// Téléportation</span>
+    c = 1 / Σ<sub>p∈S</sub> r[p]
+    <span class="kw">pour</span> p ∈ S :
+      r[p] = c × r[p]                               <span class="cm">// Normalisation</span>
+  <span class="kw">jusqu'à</span> convergence (point fixe pour r)
+  </div>
+
+  <h3>Formulation matricielle</h3>
+  <p>Soit $S$ la matrice d'adjacence orientée, $\mathbf{r}$ le vecteur ligne PageRank, et $\mathbf{1}$ le vecteur colonne de 1s :</p>
+  <div class="mblock">
+    <div class="mlabel">PageRank — Formulation matricielle</div>
+    $$\mathbf{r} = c\left(\alpha\, \mathbf{1} + (1-\alpha)\, \mathbf{r} S\right)$$
+    $$\text{soit } \quad \mathbf{r} = c\, \mathbf{r}\underbrace{\left(\alpha\, \mathbf{1}\mathbf{1}^T + (1-\alpha)\, S\right)}_{M_\alpha}$$
+    <p style="margin-top:.6rem;font-size:.85rem;color:var(--muted)">$\mathbf{r}$ converge vers le <strong>vecteur propre gauche principal (vecteur de Perron)</strong> de $M_\alpha = \alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S$</p>
+  </div>
+  <div class="box ok">
+    <div class="box-title">Rôle de la téléportation — Garantie mathématique</div>
+    <p>La matrice $M_\alpha = \alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S$ est <strong>irréductible et apériodique</strong> (pour $\alpha > 0$ et sous conditions raisonnables sur $S$). Le <em>théorème de Perron-Frobenius</em> garantit alors l'existence et l'unicité du vecteur de Perron, et donc la <strong>convergence garantie</strong> de l'algorithme.</p>
+  </div>
+
+  <h3>Le modèle du surfeur aléatoire</h3>
+  <p>PageRank peut être interprété comme modélisant un <strong>"surfeur aléatoire"</strong> naviguant sur le Web :</p>
+  <ul>
+    <li>Part d'une page aléatoire</li>
+    <li>Avec probabilité $\alpha$ : <strong>saute</strong> vers une page quelconque (téléportation)</li>
+    <li>Sinon : <strong>suit aléatoirement</strong> un lien de la page courante</li>
+    <li>N'utilise <strong>jamais</strong> le bouton "Précédent"</li>
+  </ul>
+  <p>$r[p]$ est la <strong>probabilité à l'état stationnaire</strong> que le surfeur se trouve sur la page $p$ — une mesure de <em>centralité de graphe</em> pour les graphes dirigés.</p>
+
+  <h3>Convergence et personnalisation</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>Détail</th></tr></thead>
+      <tbody>
+        <tr><td>Convergence (Google, 1998)</td><td>~52 itérations pour 322 millions de liens</td></tr>
+        <tr><td>Complexité empirique</td><td>$\mathcal{O}(\log |M|)$ où $M$ est le nombre de liens</td></tr>
+        <tr><td>Personnalisation</td><td>Modifier $t[p]$ pour biaiser vers des pages spécifiques (ex. : page d'accueil de l'utilisateur)</td></tr>
+        <tr><td>Crawl guidé</td><td>Ordonner la file du spider par PageRank estimé courant</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SECTION 8 : MARCHES ALÉATOIRES ===== -->
+<section class="sec" id="s8">
+  <div class="sec-hd"><span class="sec-num">08</span><span class="sec-title">Marches Aléatoires &amp; PageRank</span></div>
+
+  <h3>Définition formelle</h3>
+  <p>Étant donné un graphe connexe $G=(V,E)$ avec matrice d'adjacence $S$, une <strong>marche aléatoire (random walk)</strong> $W = \{w_0, w_1, \ldots\}$ est construite ainsi :</p>
+  <ul>
+    <li><strong>Initialisation</strong> : choisir un sommet initial $v_i \in V$ → $w_0 = v_i$</li>
+    <li><strong>Induction</strong> : de $w_t = v_j$, se déplacer vers $v_k = w_{t+1}$ le long d'une arête $(v_j, v_k) \in E$</li>
+    <li><strong>Fin</strong> : après $T$ pas (horizon) ou à l'atteinte d'un état stable</li>
+  </ul>
+
+  <h3>Probabilité de transition</h3>
+  <p>Si $d_i = \deg(v_i)$, la probabilité de transition de $v_i$ à $v_j$ est :</p>
+  <div class="mblock">
+    <div class="mlabel">Probabilité de transition</div>
+    $$p_{ij} = \mathbb{P}(w_{t+1} = v_j \mid w_t = v_i) = \begin{cases} \dfrac{1}{d_i} & \text{si } (v_i, v_j) \in E \\ 0 & \text{sinon} \end{cases}$$
+  </div>
+  <p>Le processus est <strong>sans mémoire</strong> (Markov) et <strong>homogène en temps</strong> ($p_{ij}$ ne dépend pas de $t$).</p>
+
+  <h3>Matrice stochastique de transition</h3>
+  <p>En définissant $D = \text{diag}(1/d_1, 1/d_2, \ldots, 1/d_{|V|})$, la matrice de transition est :</p>
+  <div class="mblock"><div class="mlabel">Matrice stochastique</div>$$P = DS \qquad \text{avec } p_{ij} \geq 0 \text{ et } \sum_j p_{ij} = 1$$</div>
+
+  <h3>Distribution et convergence</h3>
+  <p>La distribution $w_t[i] = \mathbb{P}(w_t = v_i)$ évolue selon :</p>
+  <div class="mblock">
+    <div class="mlabel">Évolution de la distribution</div>
+    $$w_{t+1} = w_t P \qquad \Rightarrow \qquad w_t = w_0 P^t$$
+  </div>
+  <p>Si le graphe est connexe (<em>irréductible</em>) et apériodique, le <strong>théorème de Perron-Frobenius</strong> garantit l'existence d'une unique <strong>distribution stationnaire $\pi$</strong> :</p>
+  <div class="mblock">
+    <div class="mlabel">Distribution stationnaire</div>
+    $$\pi = \pi P \qquad \text{avec } \pi[i] \geq 0\ \forall i \text{ et } \sum_i \pi[i] = 1$$
+  </div>
+
+  <h3>Connexion avec PageRank</h3>
+  <div class="box vio">
+    <div class="box-title">PageRank = Distribution stationnaire d'une marche aléatoire</div>
+    <p>Le vecteur PageRank $\mathbf{r}$ est exactement la <strong>distribution stationnaire $\pi$</strong> de la marche aléatoire du surfeur sur le graphe Web muni de la téléportation. Le paramètre $\alpha$ garantit l'apériodicité et l'irréductibilité de la matrice de transition, conditions nécessaires à l'existence et l'unicité de $\pi$.</p>
+  </div>
+
+  <h3>Concepts complémentaires importants</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Concept</th><th>Définition</th><th>Pertinence IR</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hitting time $H_{ij}$</strong></td><td>Nombre espéré de pas pour atteindre $v_j$ depuis $v_i$</td><td>Mesure de proximité entre pages</td></tr>
+        <tr><td><strong>Commute time</strong></td><td>$H_{ij} + H_{ji}$ (symétrique)</td><td>Similarité symétrique entre pages</td></tr>
+        <tr><td><strong>Cover time</strong></td><td>Espérance du nombre de pas pour visiter tous les nœuds</td><td>Borne sur la durée de crawl exhaustif</td></tr>
+        <tr><td><strong>Mixing time</strong></td><td>Vitesse de convergence vers $\pi$</td><td>Efficacité algorithmique de PageRank</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SECTION 9 : FORMULES CLÉS ===== -->
+<section class="sec" id="s9">
+  <div class="sec-hd"><span class="sec-num">09</span><span class="sec-title">Formules importantes</span></div>
+  <div class="fcards">
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">HITS — Mise à jour Autorité</span>
+        <span class="fc-tag">HITS · Kleinberg 1999</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$a[p] = \sum_{q:\, q \to p} h[q]$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$a[p]$ : score d'autorité de $p$ &nbsp;·&nbsp; $h[q]$ : score de hub du prédécesseur $q$</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>L'autorité de $p$ est la somme des scores de hub de tous les pages qui pointent vers $p$ — les hubs alimentent les autorités</p></div>
+          <div class="fc-item"><h5>Impact des paramètres</h5><p>Plus les pages pointant vers $p$ sont de bons hubs, plus $a[p]$ est élevé</p></div>
+          <div class="fc-item"><h5>Interprétation</h5><p>Renforcement mutuel : être cité par des hubs de qualité confère de l'autorité</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">HITS — Mise à jour Hub</span>
+        <span class="fc-tag">HITS · Kleinberg 1999</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$h[p] = \sum_{q:\, p \to q} a[q]$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$h[p]$ : score de hub de $p$ &nbsp;·&nbsp; $a[q]$ : score d'autorité des pages pointées</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Le hub score de $p$ est la somme des autorités des pages vers lesquelles $p$ pointe — les autorités alimentent les hubs</p></div>
+          <div class="fc-item"><h5>Impact</h5><p>Un hub pointant vers de grandes autorités voit son score de hub augmenter proportionnellement</p></div>
+          <div class="fc-item"><h5>Remarque</h5><p>Les deux mises à jour doivent être normalisées à chaque itération</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">HITS — Convergence matricielle</span>
+        <span class="fc-tag">Analyse spectrale</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbf{a} \to \text{vecteur propre principal de } S^T S \qquad \mathbf{h} \to \text{vecteur propre principal de } S S^T$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Preuve</h5><p>$\mathbf{a} = S^T\mathbf{h}$ et $\mathbf{h} = S\mathbf{a}$ impliquent $\mathbf{a} = S^TS\,\mathbf{a}$ et $\mathbf{h} = SS^T\mathbf{h}$</p></div>
+          <div class="fc-item"><h5>Valeurs propres</h5><p>$S^TS$ et $SS^T$ ont les mêmes valeurs propres non-nulles (valeurs singulières carrées de $S$)</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">PageRank — Équation de base</span>
+        <span class="fc-tag">PageRank · Page &amp; Brin 1998</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$r[p] = c \sum_{q:\, q \to p} \frac{r[q]}{\deg^+(q)}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$r[p]$ : PageRank de $p$ &nbsp;·&nbsp; $\deg^+(q)$ : degré sortant de $q$ &nbsp;·&nbsp; $c$ : normalisation</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Chaque page distribue équitablement son PR à ses successeurs. La source du lien compte (autorité propagée)</p></div>
+          <div class="fc-item"><h5>Problème</h5><p>Attracteurs PageRank : les cycles fermés absorbent tout le PR du système</p></div>
+          <div class="fc-item"><h5>Convergence</h5><p>$\mathbf{r}$ → vecteur propre gauche principal (Perron) de $S$ — itération du quotient de Rayleigh</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">PageRank — Avec téléportation</span>
+        <span class="fc-tag">PageRank complet · Google</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$r[p] = c\!\left(\alpha + (1-\alpha)\sum_{q:\, q \to p} \frac{r[q]}{\deg^+(q)}\right)$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$\alpha \in (0,1)$ : probabilité de téléportation &nbsp;·&nbsp; $(1-\alpha)$ : probabilité de suivre un lien</p></div>
+          <div class="fc-item"><h5>Rôle de $\alpha$</h5><p>Garantit l'irréductibilité et l'apériodicité de la chaîne de Markov → convergence unique garantie</p></div>
+          <div class="fc-item"><h5>Valeur typique</h5><p>$\alpha \approx 0.15$ dans les implémentations originales de Google ($(1-\alpha) \approx 0.85$)</p></div>
+          <div class="fc-item"><h5>Personnalisation</h5><p>Remplacer $\alpha$ uniforme par une distribution non-uniforme $t[p]$ pour biaiser les résultats</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">PageRank — Formulation matricielle</span>
+        <span class="fc-tag">Algèbre linéaire</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbf{r} = c\, \mathbf{r}\underbrace{\!\left(\alpha\, \mathbf{1}\mathbf{1}^T + (1-\alpha)\, S\right)}_{M_\alpha} \qquad \Leftrightarrow \qquad \mathbf{r} = c\,\mathbf{r}M_\alpha$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Interprétation</h5><p>$\mathbf{r}$ est le vecteur propre gauche principal de $M_\alpha$ avec valeur propre $\lambda_1 = 1$ (théorème de Perron-Frobenius)</p></div>
+          <div class="fc-item"><h5>Lien Markov</h5><p>$M_\alpha$ est la matrice de transition d'une chaîne de Markov irréductible et apériodique. $\mathbf{r}$ est sa distribution stationnaire</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Distribution stationnaire de Markov</span>
+        <span class="fc-tag">Markov · Perron-Frobenius</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\pi = \pi P \qquad \text{avec } \pi[i] \geq 0\ \forall i \text{ et } \sum_i \pi[i] = 1$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Condition d'existence</h5><p>Graphe irréductible (connexe) et apériodique → le théorème de Perron-Frobenius garantit $\pi$ unique</p></div>
+          <div class="fc-item"><h5>Lien PR</h5><p>Le PageRank est exactement $\pi$ pour la marche aléatoire du surfeur avec téléportation</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SECTION 10 : COMPARAISON HITS / PAGERANK ===== -->
+<section class="sec" id="s10">
+  <div class="sec-hd"><span class="sec-num">10</span><span class="sec-title">Comparaison HITS vs PageRank</span></div>
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr><th>Caractéristique</th><th>HITS</th><th>PageRank</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Auteur / Année</strong></td><td>Kleinberg, 1999</td><td>Page &amp; Brin, 1998 (Google)</td></tr>
+        <tr><td><strong>Scores calculés</strong></td><td class="g">Hub <em>et</em> Autorité (deux scores)</td><td class="m">Autorité uniquement (un seul score)</td></tr>
+        <tr><td><strong>Portée</strong></td><td class="g">Sous-graphe local par requête</td><td class="m">Tout le Web (global)</td></tr>
+        <tr><td><strong>Moment de calcul</strong></td><td class="r">À la requête (online)</td><td class="g">Hors ligne, pré-calculé (offline)</td></tr>
+        <tr><td><strong>Dépendance requête</strong></td><td class="g">Oui — scores spécifiques à la requête</td><td class="r">Non — score global indépendant</td></tr>
+        <tr><td><strong>Point de départ</strong></td><td>Ensemble racine R issu d'un moteur classique</td><td>Toutes les pages du Web</td></tr>
+        <tr><td><strong>Formulation matricielle (autorité)</strong></td><td>Vect. propre princ. de $S^TS$</td><td>Vect. propre gauche princ. de $\alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S$</td></tr>
+        <tr><td><strong>Requêtes polysémiques</strong></td><td class="g">Gérées via vecteurs propres non-principaux</td><td class="r">Non traitées nativement</td></tr>
+        <tr><td><strong>Scalabilité</strong></td><td class="r">Coûteux à la requête, nécessite crawl local</td><td class="g">Très scalable — calcul offline sur Web entier</td></tr>
+        <tr><td><strong>Robustesse au spam</strong></td><td class="r">Topic drift — déviation thématique possible</td><td class="r">Spam farms (faux hubs boostant des pages)</td></tr>
+        <tr><td><strong>Convergence</strong></td><td>≈ 20 itérations</td><td>≈ 52 itérations pour 322 M liens</td></tr>
+        <tr><td><strong>Personnalisation</strong></td><td>Possible (choix de R)</td><td class="g">Facile (distribution de téléportation non uniforme)</td></tr>
+        <tr><td><strong>Usage actuel</strong></td><td class="m">Recherche, systèmes de recommandation</td><td class="g">Classement Web, mesures d'importance de nœuds</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Comparaison des modèles de base (contenu vs structure)</h3>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Approche</th><th>Principe</th><th>Forces</th><th>Limites</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Content-based (VSM, BM25)</strong></td>
+          <td>Pertinence textuelle par similarité de termes</td>
+          <td class="g">Précis sur contenu, indépendant de la structure</td>
+          <td class="r">Ignore l'autorité de la source, sensible au bourrage de mots-clés</td>
+          <td>Tous types de documents</td>
+        </tr>
+        <tr>
+          <td><strong>Citation analysis</strong></td>
+          <td>Importance via références entrantes</td>
+          <td class="g">Simple, capte l'autorité académique</td>
+          <td class="r">Liens Web ≠ citations ; portails dominants</td>
+          <td>Bibliométrie, scientométrie</td>
+        </tr>
+        <tr>
+          <td><strong>HITS</strong></td>
+          <td>Hubs + Autorités mutuellement récursifs</td>
+          <td class="g">Capture finesse hub/autorité, polysémie</td>
+          <td class="r">Online, topic drift, scalabilité</td>
+          <td>Recherche Web sémantique</td>
+        </tr>
+        <tr>
+          <td><strong>PageRank</strong></td>
+          <td>Autorité globale via marche aléatoire</td>
+          <td class="g">Scalable, global, fondement solide (Markov)</td>
+          <td class="r">Indépendant de la requête, spam farms</td>
+          <td>Moteurs Web, analyse de réseaux</td>
+        </tr>
+        <tr>
+          <td><strong>Hybride (Google)</strong></td>
+          <td>Combinaison contenu + structure + PageRank</td>
+          <td class="g">Performance maximale, robustesse</td>
+          <td class="r">Complexe, secret commercial</td>
+          <td>Moteurs de recherche modernes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SECTION 11 : PERSPECTIVE HISTORIQUE ===== -->
+<section class="sec" id="s11">
+  <div class="sec-hd"><span class="sec-num">11</span><span class="sec-title">Perspective historique</span></div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1963</div>
+      <div class="tl-title">Couplage bibliographique — Kessler</div>
+      <div class="tl-desc">Première mesure de similarité basée sur la structure des citations. Fondement de la bibliométrie.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1972</div>
+      <div class="tl-title">Facteur d'impact — Garfield</div>
+      <div class="tl-desc">Mesure quantitative de l'importance d'une revue scientifique via les citations reçues. Ancêtre des scores d'autorité.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1973</div>
+      <div class="tl-title">Co-citation — Small</div>
+      <div class="tl-desc">Deuxième grande mesure de similarité bibliographique — regarde vers l'avenir (citations entrantes communes).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1990</div>
+      <div class="tl-title">World Wide Web — Tim Berners-Lee (CERN)</div>
+      <div class="tl-desc">Création du Web par combinaison FTP + hypertexte. Développement HTTP, URL, HTML et premier serveur Web.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1993–1995</div>
+      <div class="tl-title">Premiers moteurs Web (Mosaic, WebCrawler, Lycos, AltaVista)</div>
+      <div class="tl-desc">Premières tentatives d'indexation du Web par contenu textuel. Pas encore d'analyse de liens.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1998</div>
+      <div class="tl-title">PageRank — Page &amp; Brin (Stanford / Google)</div>
+      <div class="tl-desc">Première utilisation à grande échelle de l'analyse de liens pour le classement Web. Révolution dans le Web IR.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1999</div>
+      <div class="tl-title">HITS — Jon Kleinberg (Cornell)</div>
+      <div class="tl-desc">Formalisation du modèle hubs/autorités. Convergence spectrale démontrée. Fondement théorique pour l'analyse de liens.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2000</div>
+      <div class="tl-title">Bow Tie Model — Broder et al.</div>
+      <div class="tl-desc">Étude empirique de la structure macroscopique du Web. Révélation de la structure en nœud papillon.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2015–aujourd'hui</div>
+      <div class="tl-title">PageRank au-delà du Web — Gleich (SIAM Review 2015)</div>
+      <div class="tl-desc">PageRank généralisé à de nombreux domaines : bioinformatique, réseaux sociaux, recommandation, NLP, systèmes multi-agents.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2018–2024</div>
+      <div class="tl-title">Neural IR &amp; Graph Neural Networks</div>
+      <div class="tl-desc">Intégration de l'analyse de graphes dans les approches neurales (GNN, GraphSAGE). PageRank comme feature pour les LLM et systèmes RAG.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 12 : LIENS AVEC SYSTÈMES MODERNES ===== -->
+<section class="sec" id="s12">
+  <div class="sec-hd"><span class="sec-num">12</span><span class="sec-title">Liens avec les systèmes modernes</span></div>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Search Engines</div>
+      <h4>Moteurs de recherche</h4>
+      <p>PageRank reste un signal dans les rankers modernes (Google), combiné à des centaines de features textuelles, comportementales et d'entités. <em>RankBrain</em>, <em>BERT</em>, <em>MUM</em> s'y ajoutent.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Dense Retrieval</div>
+      <h4>Retrieval Dense &amp; Bi-encodeurs</h4>
+      <p>Les embeddings denses (DPR, ColBERT) ne remplacent pas PageRank — ils sont combinés avec. Le score final reste souvent une fusion linéaire contenu + autorité.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Graph Neural Networks</div>
+      <h4>GNN &amp; GraphSAGE</h4>
+      <p>Les GNNs propagent des représentations sur des graphes, généralisant l'idée de HITS/PageRank de propagation d'information par la structure. Applications : KG completion, recommandation.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Social Network Analysis</div>
+      <h4>Analyse de réseaux sociaux</h4>
+      <p>PageRank mesure l'influence dans Twitter/X, LinkedIn. HITS identifie influenceurs (hubs) et sources d'information (autorités). Détection de désinformation via structure de graphe.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">RAG</div>
+      <h4>Retrieval-Augmented Generation</h4>
+      <p>Dans les pipelines RAG, les documents récupérés peuvent être re-classés par une combinaison de similarité sémantique + score d'autorité de type PageRank sur le graphe de connaissances.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Knowledge Graphs</div>
+      <h4>Graphes de connaissances</h4>
+      <p>PageRank s'applique aux KGs (Wikidata, DBpedia) pour mesurer l'importance d'entités. Les entités avec haut PageRank dans un KG sont naturellement plus importantes pour les LLMs.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Bioinformatics</div>
+      <h4>Au-delà du Web</h4>
+      <p>PageRank s'applique aux réseaux de protéines (identifier les protéines essentielles), aux réseaux de citations (PageRank académique), aux systèmes de paiement (détection de fraude).</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Web Crawling</div>
+      <h4>Crawl guidé par PageRank</h4>
+      <p>Les crawlers modernes utilisent une estimation du PageRank pour prioriser les URL à visiter dans leur file, permettant d'indexer les pages importantes en premier même pour un crawl partiel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 13 : QUESTIONS D'EXAMEN ===== -->
+<section class="sec" id="s13">
+  <div class="sec-hd"><span class="sec-num">13</span><span class="sec-title">Questions d'examen</span></div>
+
+  <div class="qlevel easy">Niveau facile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Qu'est-ce qu'un hub ? Une autorité ? Quelle est la relation entre les deux ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Une <strong>autorité</strong> est une page fournissant des informations significatives, fiables et utiles sur un sujet — elle est pointée par de nombreux hubs de qualité. Un <strong>hub</strong> est une page d'index qui pointe vers de nombreuses autorités de qualité. La relation est mutuellement récursive : une bonne autorité est pointée par de bons hubs, et un bon hub pointe vers de bonnes autorités. Ensemble, ils forment un graphe bipartite.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Qu'est-ce que le degré entrant et pourquoi est-il une mesure insuffisante d'autorité ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le <strong>degré entrant</strong> est le nombre de liens pointant vers une page. C'est la mesure d'autorité la plus simple, mais elle traite <em>tous les liens comme équivalents</em> : un lien d'un blog obscur vaut autant qu'un lien de Wikipedia. Or, un lien provenant d'une page autoritaire devrait avoir plus de poids. De plus, les pages à fort degré entrant peuvent être des portails généraux (Google, Amazon) plutôt que des autorités thématiques.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Quelle est la différence entre couplage bibliographique et co-citation ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le <strong>couplage bibliographique</strong> (Kessler, 1963) mesure le nombre de documents cités par <em>les deux</em> documents $d_A$ et $d_B$ : $BC = |bib(d_A) \cap bib(d_B)|$ — il regarde <em>vers le passé</em> (sources communes). La <strong>co-citation</strong> (Small, 1973) mesure le nombre de documents qui citent <em>ensemble</em> $d_A$ et $d_B$ — elle regarde <em>vers l'avenir</em> (citations entrantes communes). Les deux mesurent la similarité, mais par des perspectives temporelles opposées.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Pourquoi les liens Web ne sont-ils pas équivalents aux citations académiques ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Plusieurs différences fondamentales : (1) Beaucoup de liens sont <strong>navigationaux</strong> (menus, headers) sans relation thématique. (2) Les pages à fort in-degree sont souvent des <strong>portails</strong>, pas des autorités de contenu. (3) Tous les liens ne sont <strong>pas des recommandations</strong> (liens commerciaux, forcés). (4) Les entreprises <strong>ne pointent pas vers leurs concurrents</strong>. (5) Les citations académiques sont validées par la <strong>revue par les pairs</strong>, garantie inexistante sur le Web.</p>
+    </div>
+  </div>
+
+  <div class="qlevel med">Niveau intermédiaire</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Décrivez l'algorithme HITS : construction du sous-graphe et algorithme itératif.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Construction du base set S</strong> : Pour une requête, récupérer les top-$t$ pages via un moteur classique → ensemble racine $R$. Initialiser $S \leftarrow R$. Ajouter à $S$ les pages pointées par $R$ (forward links) et les pages pointant vers $R$ (back-pointers). Appliquer des heuristiques : limiter les back-pointers, éliminer les liens intra-hôte.</p>
+      <p><strong>Algorithme itératif</strong> : Initialiser $a[p] = h[p] = 1/|S|$ pour tout $p$. Itérer : $a[p] \leftarrow \sum_{q \to p} h[q]$ et $h[p] \leftarrow \sum_{p \to q} a[q]$, puis normaliser ($\sum a[p] = \sum h[p] = 1$). Répéter jusqu'à convergence (~20 itérations). $a$ converge vers le vecteur propre principal de $S^TS$, $h$ vers celui de $SS^T$.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Qu'est-ce que la téléportation dans PageRank ? Quel problème fondamental résout-elle ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>La <strong>téléportation</strong> (paramètre $\alpha$) est la probabilité qu'à chaque étape, le surfeur aléatoire "saute" vers une page quelconque au lieu de suivre un lien. L'équation devient : $r[p] = c(\alpha + (1-\alpha)\sum_{q \to p} r[q]/\deg^+(q))$.</p>
+      <p>Elle résout le problème des <strong>attracteurs PageRank</strong> : sans téléportation, des groupes de pages formant des cycles fermés absorbent tout le PageRank du système (le PR entre mais ne sort jamais). Avec $\alpha > 0$, la matrice de transition $M_\alpha$ devient irréductible et apériodique, garantissant l'existence et l'unicité de la distribution stationnaire par le théorème de Perron-Frobenius.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Comment PageRank peut-il être personnalisé ? Quel intérêt pratique ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>PageRank est personnalisé en remplaçant la distribution uniforme de téléportation par une distribution <strong>non-uniforme</strong> $t[p]$ : donner plus de poids à certaines pages (ex. : $t[p] = \alpha$ pour la page d'accueil de l'utilisateur, $t[p] = 0$ ailleurs). Cela crée un biais vers les pages proches dans le graphe de la page favorisée. Applications pratiques : recommandation personnalisée, résultats biaisés vers les intérêts de l'utilisateur, crawl ciblé sur un domaine.</p>
+    </div>
+  </div>
+
+  <div class="qlevel hard">Niveau difficile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Démontrez que les vecteurs HITS convergent vers les vecteurs propres principaux de S⊤S et SS⊤.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>En notation matricielle, les mises à jour HITS s'écrivent : $\mathbf{a} = S^T \mathbf{h}$ (hub $\to$ autorité) et $\mathbf{h} = S \mathbf{a}$ (autorité $\to$ hub).</p>
+      <p>En substituant l'une dans l'autre :</p>
+      <p>$\mathbf{a} = S^T\mathbf{h} = S^T(S\mathbf{a}) = S^TS\,\mathbf{a}$</p>
+      <p>$\mathbf{h} = S\mathbf{a} = S(S^T\mathbf{h}) = SS^T\mathbf{h}$</p>
+      <p>L'algorithme itératif est donc une <strong>itération de puissance</strong> (power iteration) sur $S^TS$ pour $\mathbf{a}$ et sur $SS^T$ pour $\mathbf{h}$. La convergence vers le vecteur propre principal est garantie par Perron-Frobenius si $S^TS$ est non-négative et irréductible. La valeur propre dominante de $S^TS$ est $\sigma_1^2$ (carré de la plus grande valeur singulière de $S$).</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Donnez la formulation matricielle complète de PageRank et expliquez son lien formel avec les marches aléatoires (chaînes de Markov).</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Formulation matricielle</strong> : Soit $S$ la matrice d'adjacence orientée ($S_{ij}=1$ ssi $i \to j$). On a $\mathbf{r} = c\,\mathbf{r}M_\alpha$ avec $M_\alpha = \alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S$. $\mathbf{r}$ est le vecteur propre gauche principal de $M_\alpha$ avec $\lambda_1 = 1$.</p>
+      <p><strong>Lien avec Markov</strong> : Définir la matrice de transition $P = DS$ où $D = \text{diag}(1/d_1, \ldots)$ normalise les lignes. Le surfeur aléatoire suit une chaîne de Markov avec transition : avec prob. $\alpha$, saut uniforme ; avec prob. $(1-\alpha)$, suivre un lien selon $P$. La matrice résultante $M_\alpha$ est stochastique (lignes somment à 1), irréductible (grâce à $\alpha > 0$), apériodique. Par Perron-Frobenius, elle admet une unique distribution stationnaire $\pi = \pi M_\alpha$, et $\pi = \mathbf{r}$ est le PageRank.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Comparez HITS et PageRank sur les dimensions : portée, robustesse, scalabilité, traitement de la polysémie et fondements mathématiques.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Portée</strong> : HITS opère sur un sous-graphe local (par requête), PageRank sur tout le Web. HITS capture les autorités thématiques, PageRank mesure l'importance globale.</p>
+      <p><strong>Robustesse</strong> : HITS souffre du <em>topic drift</em> (les voisins dans S peuvent dériver thématiquement). PageRank est vulnérable aux <em>spam farms</em> (réseaux de faux hubs). La téléportation de PageRank le rend plus robuste aux puits.</p>
+      <p><strong>Scalabilité</strong> : PageRank est pré-calculé offline → très scalable à la requête. HITS est coûteux à chaque requête (construction de S + itération).</p>
+      <p><strong>Polysémie</strong> : HITS gère naturellement la polysémie via les vecteurs propres non-principaux de $S^TS$ (chaque sens correspond à un sous-espace). PageRank n'a qu'un score scalaire par page, sans décomposition par sens.</p>
+      <p><strong>Fondements mathématiques</strong> : Les deux convergent via la théorie spectrale (Perron-Frobenius). HITS = décomposition en valeurs singulières (SVD) du sous-graphe. PageRank = distribution stationnaire d'une chaîne de Markov.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Quel est le principe global de l'exploitation de la structure du graphe pour IR ? Quand est-il suffisant et quand doit-il être complété par du contenu ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le principe est que la <strong>structure des liens encode de l'information implicite sur la qualité et la pertinence</strong> des pages, de façon analogue aux citations académiques. En analysant le graphe Web (qui pointe vers qui), on peut inférer l'autorité des pages sans analyser leur contenu.</p>
+      <p><strong>Suffisant</strong> pour : mesurer l'importance globale (PageRank), trouver des pages importantes sur un sujet via HITS, diriger un crawler, recommander des pages similaires par structure.</p>
+      <p><strong>Doit être complété par du contenu</strong> : pour des requêtes précises, l'autorité globale ne garantit pas la pertinence topique. Une page très autoritaire sur la biologie n'est pas pertinente pour une requête sur la cuisine. Les systèmes modernes (Google) combinent toujours : score de contenu (TF-IDF/BM25/neural) + score de structure (PageRank) + autres signaux (localisation, fraîcheur, comportement utilisateur).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 14 : PIÈGES CLASSIQUES ===== -->
+<section class="sec" id="s14">
+  <div class="sec-hd"><span class="sec-num">14</span><span class="sec-title">Pièges classiques</span></div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre hub et autorité</strong> : Un hub <em>pointe vers</em> les autorités (grand degré sortant vers des pages importantes). Une autorité est <em>pointée par</em> les hubs (grand degré entrant depuis des hubs de qualité). Le piège est d'inverser la direction ou de croire qu'une page ne peut être que l'un des deux — en réalité, une page peut avoir à la fois un score de hub et un score d'autorité élevés.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire que degré entrant = autorité PageRank</strong> : PageRank n'est <em>pas</em> le degré entrant. Un lien provenant d'une page de PageRank élevé vaut beaucoup plus qu'un lien d'une page obscure. Le facteur $1/\deg^+(q)$ dans l'équation PageRank garantit que la contribution est pondérée par l'autorité <em>et</em> diluée par le degré sortant de la source.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Oublier le problème des attracteurs PageRank</strong> : La formulation de base sans téléportation est <strong>mathématiquement défaillante</strong> sur des graphes réels. Ne pas mentionner ce problème et sa solution ($\alpha > 0$) dans une réponse sur PageRank est une lacune majeure. La téléportation n'est pas un détail — c'est la condition de validité du modèle.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre la portée de HITS et PageRank</strong> : HITS opère sur un <em>sous-graphe local</em> spécifique à la requête (base set S). PageRank s'applique au <em>Web entier</em> et est pré-calculé. Dire que PageRank est calculé à la requête ou que HITS s'applique au Web entier est une erreur grave.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire que les liens Web sont équivalents aux citations académiques</strong> : Cette analogie est <em>inspiratrice</em> mais imparfaite. Les liens Web sont souvent navigationaux, non-éditoriaux, non-thématiques. Ne pas mentionner ces différences dans une réponse sur la motivation de Web IR est une simplification excessive.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Oublier la normalisation dans les algorithmes itératifs</strong> : Les deux algorithmes (HITS et PageRank) nécessitent une normalisation à chaque itération pour maintenir $\sum a[p] = \sum h[p] = 1$ (HITS) et $\sum r[p] = 1$ (PageRank). Sans normalisation, les scores divergent ou sont incomparables entre itérations.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre la direction temporelle de BC et CC</strong> : Le couplage bibliographique regarde les <em>références sortantes</em> (passé). La co-citation regarde les <em>citations entrantes</em> (futur). Ces deux perspectives capturent des similarités différentes et ne sont pas interchangeables.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire que structure seule suffit</strong> : Les modèles structurels (HITS, PageRank) informent sur l'<em>importance relative</em> des pages mais pas sur leur <em>pertinence thématique</em> pour une requête précise. Ils doivent impérativement être <strong>combinés avec des modèles de contenu</strong> pour un système IR complet.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Écrire S⊤ et SS⊤ à l'envers dans HITS</strong> : Le vecteur d'autorité converge vers l'eigenvecteur principal de $S^TS$ (pas $SS^T$). Le vecteur de hub converge vers l'eigenvecteur de $SS^T$. Retenir : <em>"Autorité = T avant"</em> ($S^\mathbf{T}S$) pour se souvenir que les hubs "entrent" dans les autorités ($S^T$ = transposée = liens entrants).</div>
+  </div>
+</section>
+
+<!-- ===== SECTION 15 : FICHE DE RÉVISION ===== -->
+<section class="sec" id="s15">
+  <div class="sec-hd"><span class="sec-num">15</span><span class="sec-title">Fiche de révision finale</span></div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>Motivation Web IR</h4>
+      <ul>
+        <li><strong>Problème :</strong> IR classique = contenu uniquement</li>
+        <li><strong>Solution :</strong> Exploiter les hyperliens (structure)</li>
+        <li><strong>Analogie :</strong> Bibliométrie / citations</li>
+        <li><strong>Objectif :</strong> Combiner contenu + structure</li>
+        <li><strong>Modèle :</strong> Web = graphe orienté $G=(V,E)$</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Bow Tie Model</h4>
+      <ul>
+        <li><strong>Core :</strong> SCC ≈ 26%, ~56M pages</li>
+        <li><strong>IN :</strong> ~44M pages → Core</li>
+        <li><strong>OUT :</strong> Core → ~44M pages</li>
+        <li><strong>Tendrils :</strong> ~44M pages (hors cœur)</li>
+        <li><strong>Disconnected :</strong> ~17M pages</li>
+        <li><strong>WCC :</strong> ≈ 91%</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Citation Analysis</h4>
+      <ul>
+        <li><strong>Impact Factor (1972) :</strong> Citations moyennes reçues</li>
+        <li><strong>Bib. Coupling :</strong> $|bib(A) \cap bib(B)|$ — passé</li>
+        <li><strong>Co-citation :</strong> $|\{d: d \to A \wedge d \to B\}|$ — futur</li>
+        <li><strong>Jaccard :</strong> normalisation de BC</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>HITS (Kleinberg 1999)</h4>
+      <ul>
+        <li><strong>Hub :</strong> pointe vers autorités → $h[p] = \sum_{p \to q} a[q]$</li>
+        <li><strong>Autorité :</strong> pointée par hubs → $a[p] = \sum_{q \to p} h[q]$</li>
+        <li><strong>Portée :</strong> sous-graphe local S (par requête)</li>
+        <li><strong>Convergence :</strong> $\mathbf{a} \to$ eigenvec$(S^TS)$</li>
+        <li><strong>Convergence :</strong> $\mathbf{h} \to$ eigenvec$(SS^T)$</li>
+        <li><strong>Itérations :</strong> ≈ 20</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>PageRank (Page &amp; Brin 1998)</h4>
+      <ul>
+        <li><strong>Formule base :</strong> $r[p] = c\sum_{q \to p} r[q]/\deg^+(q)$</li>
+        <li><strong>Avec télép. :</strong> $r[p] = c(\alpha + (1-\alpha)\sum\ldots)$</li>
+        <li><strong>Matrice :</strong> $\mathbf{r} = c\,\mathbf{r}(\alpha\mathbf{1}\mathbf{1}^T + (1-\alpha)S)$</li>
+        <li><strong>Portée :</strong> Web entier, pré-calculé</li>
+        <li><strong>Convergence :</strong> ≈ 52 iter. / 322M liens</li>
+        <li><strong>$\alpha$ typique :</strong> 0.15</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>Marches Aléatoires</h4>
+      <ul>
+        <li><strong>Transition :</strong> $p_{ij} = 1/d_i$ si $(v_i,v_j) \in E$</li>
+        <li><strong>Matrice :</strong> $P = DS$ (stochastique)</li>
+        <li><strong>Distribution :</strong> $w_{t+1} = w_t P$</li>
+        <li><strong>Stationnaire :</strong> $\pi = \pi P$ (Perron-Frobenius)</li>
+        <li><strong>PR = stationnaire</strong> de la marche du surfeur</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>HITS vs PageRank</h4>
+      <ul>
+        <li><strong>HITS :</strong> local, online, hub+auth, polysémie</li>
+        <li><strong>PR :</strong> global, offline, auth seule, scalable</li>
+        <li><strong>HITS robuste :</strong> topic drift possible</li>
+        <li><strong>PR robuste :</strong> spam farms possibles</li>
+        <li><strong>Commun :</strong> spectral, Perron-Frobenius</li>
+      </ul>
+    </div>
+    <div class="fc2">
+      <h4>À retenir impérativement</h4>
+      <ul>
+        <li>Structure seule ≠ suffisant → combiner contenu</li>
+        <li>Attracteurs PageRank → nécessité de $\alpha$</li>
+        <li>$\alpha > 0$ → irréductibilité → Perron-Frobenius</li>
+        <li>$S^TS$ = autorité HITS (T avant)</li>
+        <li>$SS^T$ = hub HITS</li>
+        <li>Liens Web ≠ citations (navigation, concurrence)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box ok" style="margin-top:2rem">
+    <div class="box-title">✓ Checklist orale</div>
+    <p>Avant votre oral, vérifiez que vous pouvez : (1) expliquer la motivation en 30s avec l'analogie bibliométrique, (2) décrire l'algorithme HITS de mémoire avec ses deux mises à jour, (3) donner la formule PageRank de base et avec téléportation, (4) expliquer le problème des attracteurs et comment $\alpha$ le résout, (5) citer les formulations matricielles avec les vecteurs propres correspondants, (6) comparer HITS et PageRank sur au moins 5 dimensions.</p>
+  </div>
+</section>
+
+</main><!-- /MAIN -->
+
+<script>
+function toggle(el) {
+  var ans = el.nextElementSibling;
+  var arr = el.querySelector('.qi-arr');
+  ans.classList.toggle('open');
+  arr.classList.toggle('open');
+}
+// Active sidebar link on scroll
+var sections = document.querySelectorAll('.sec');
+var navLinks = document.querySelectorAll('.sb nav a');
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY;
+  sections.forEach(function(sec) {
+    var top = sec.offsetTop - 60;
+    var bottom = top + sec.offsetHeight;
+    if (scrollY >= top && scrollY < bottom) {
+      navLinks.forEach(function(a) { a.classList.remove('active'); });
+      var id = sec.getAttribute('id');
+      var active = document.querySelector('.sb nav a[href="#' + id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

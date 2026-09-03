@@ -1,0 +1,196 @@
+# Feedback
+
+## Vue d'ensemble
+
+::: {.callout-note title="Deux grandes familles"}
+| Approche | Type | Mécanisme | Basé sur |
+|----------|------|-----------|----------|
+| RF actif (Rocchio) | Actif | Modification vecteur requête | Contenu + jugements |
+| RF probabiliste (BIR) | Actif | Mise à jour $p_i$, $q_i$ | Contenu + jugements |
+| Filtrage collaboratif (CF) | Passif | Similarité inter-utilisateurs | Utilisateurs uniquement |
+| Content-based | Passif | Classification par features | Contenu uniquement |
+:::
+
+
+## Retour de Pertinence (Relevance Feedback — RF)
+
+### Utilité du RF
+
+| Problème résolu | Cause | Mécanisme |
+|----------------|-------|-----------|
+| Polysémie (Polysemy) | Requête ambiguë | Positifs = bon sens, négatifs = mauvais sens |
+| Synonymie (Synonymy) | Requête incomplète | Ajout de nouveaux termes |
+| Reformulation | Requête vague | Évaluation itérative des résultats |
+
+### Types de RF
+
+- **Pseudo-RF** : le *système* choisit les documents pertinents (top-$k$ automatique)
+- **RF manuel** : l'*utilisateur* juge explicitement les documents
+- **Expansion de requête** (Query Expansion) : ajout de termes depuis un thésaurus
+
+### Objectif système
+
+> Adapter la **mesure de similarité** à la **perception de l'utilisateur**
+
+### Implémentation
+
+- Accepter jugements **positifs / négatifs / neutres**
+- Modifier la fonction de décision :
+  - Pondération de features → Rocchio, Perceptron
+  - Classifieur probabiliste → Naïf de Bayes
+  - ML → K-méthodes
+- Re-classer, puis itérer jusqu'à convergence
+
+| Convergence | Interprétation |
+|-------------|---------------|
+| Seulement positifs | Concept trouvé |
+| Plus de feedback | Item spécifique trouvé |
+| Seulement négatifs | Concept absent de la collection |
+
+
+## RF dans le Modèle Vectoriel (VIR)
+
+### Formule naïve
+
+$$
+q' = \alpha q + \beta \frac{1}{|R|} \sum_{j \in R} d_j \quad (\alpha + \beta = 1)
+$$
+
+→ Déplace $q$ vers le centroïde des documents pertinents $R$. **Ne gère pas les négatifs.**
+
+### Formule de Rocchio (1971)
+
+$$
+q' = \alpha q + \beta \frac{1}{|R|} \sum_{d_j \in R} d_j - \gamma \frac{1}{|\bar{R}|} \sum_{d_j \in \bar{R}} d_j
+$$
+
+| Paramètre | Rôle | Valeur typique |
+|-----------|------|---------------|
+| $\alpha$ | Poids requête originale | $1$ |
+| $\beta$ | Poids feedback positif | $0.75$ |
+| $\gamma$ | Poids feedback négatif | $0.25$ |
+
+::: {.callout-warning title="Règles importantes"}
+- $\beta > \gamma$ : feedback négatif moins fiable → moins pondéré
+- $\beta + \gamma = 1$ : normalisation optionnelle
+- Supprimer les termes à **poids négatif** (cohérence mathématique)
+- Travailler sur les **termes communs** uniquement
+:::
+
+### Lien avec le Perceptron
+
+$$
+W_{\text{new}} = W_{\text{old}} + \alpha \cdot (\text{label} - \text{décision}) \cdot x
+$$
+
+- label $= +1$ si pertinent, $-1$ si non pertinent
+- Rocchio ≈ Perceptron à **une seule passe**
+- Perceptron converge sur **toutes les données** (dépend de la séparabilité)
+- Meilleur si $|R| \approx |\bar{R}|$
+
+
+## RF Probabiliste (BIR)
+
+### Initialisation (sans feedback)
+
+| Probabilité | Formule | Remarque |
+|-------------|---------|----------|
+| $P(t_i \| q, \bar{R})$ | $n_i / N$ | ≈ IDF |
+| $P(t_i \| q, R)$ | $0.5$ | Incertitude totale |
+
+> $\log \frac{1 - P(t_i|q,\bar{R})}{P(t_i|q,\bar{R})} \approx \log \frac{N}{n_i} = idf_i$
+
+### Mise à jour après retrieval
+
+- $S$ = top $r$ documents retournés
+- $S_i$ = documents de $S$ contenant $t_i$, $r_i = |S_i|$
+
+$$
+P(t_i|q,R) = p_i = \frac{r_i}{r} \qquad P(t_i|q,\bar{R}) = q_i = \frac{n_i - r_i}{N - r}
+$$
+
+### Lissage bayésien (Bayes Prior)
+
+$$
+p_i^{(t+1)} = \frac{r_i + \lambda p_i^{(t)}}{r + \lambda} \quad (p_i^{(0)} = 0.5)
+$$
+
+- $\lambda$ grand → comportement conservateur
+- $\lambda$ petit → réactif aux nouvelles observations
+
+::: {.callout-note title="À retenir — BIR"}
+Le BIR possède un **mécanisme RF intégré** : la boucle jugement → adaptation est au cœur du modèle probabiliste.
+:::
+
+
+## Filtrage Collaboratif (Collaborative Filtering — CF)
+
+### Principe
+
+> Si A et B ont des goûts similaires, la note de A sur l'item I prédit la note de B sur I.
+
+- Basé sur **utilisateurs**, pas sur le contenu
+- Accumulation et propagation des jugements passifs
+
+### Corrélation de Pearson
+
+$$
+C_{ak} = \frac{\text{cov}(r_a, r_k)}{\sigma_a \sigma_k}
+$$
+
+$$
+\text{cov}(r_a, r_k) = \frac{\sum_{j=1}^{m}(r_{aj}-\bar{r}_a)(r_{kj}-\bar{r}_k)}{m}
+$$
+
+- $m$ = nombre d'items co-évalués par $u_a$ et $u_k$
+- $C_{ak} \in [-1, 1]$ : $+1$ = goûts identiques, $-1$ = goûts opposés
+
+### Pondération de significativité (Significance Weighting)
+
+$$
+w_{ak} = s_{ak} \cdot C_{ak} \qquad s_{ak} = \begin{cases} 1 & m > M \\ m/M & m \leq M \end{cases} \quad (M = 50)
+$$
+
+→ Atténue la corrélation si peu d'items communs
+
+### Prédiction de note (Predicted Rating)
+
+$$
+\hat{r}_{aj} = \bar{r}_a + \frac{\sum_{k=1}^{K} w_{ak}(r_{kj} - \bar{r}_k)}{\sum_{k=1}^{K} w_{ak}}
+$$
+
+- $K$ voisins les plus proches (fixe ou par seuil sur $w_{ak}$)
+- $r_{kj} - \bar{r}_k$ = déviation de $u_k$ par rapport à sa propre moyenne
+
+### Limitations du CF
+
+::: {.callout-warning title="4 problèmes structurels"}
+| Problème | Description | Cause |
+|----------|-------------|-------|
+| **Cold Start** | Nouvel utilisateur sans historique | Pas de $w_{ak}$ calculable |
+| **First Rater** | Item jamais évalué | Impossible à recommander |
+| **Sparsity** | Peu d'items co-évalués | Matrice utilisateurs × items creuse |
+| **Popularity Bias** | Favorise les items populaires | Goûts atypiques = $m=0$ |
+:::
+
+
+## Complément : Approche Contenu (Content-Based)
+
+| Avantage vs CF | Limitation héritée |
+|---------------|-------------------|
+| Pas de Cold Start | Choix des features |
+| Pas de First Rater | Volume de données d'entraînement |
+| Pas de Popularity Bias | Sur-apprentissage (Overfitting) |
+| Décisions explicables | Généralisation difficile |
+
+- Modèle : **utilisateur ≈ classifieur** sur les caractéristiques des items
+- Outils : classification (Classification), regroupement (Clustering), ML
+
+
+## RF en pratique
+
+- Peu utilisé explicitement (performance consistante préférée à variable)
+- Alternatives : requête "Documents similaires" (ex. Google)
+- 2 facteurs clés d'efficacité :
+  1. **Nombre d'items jugés** (plus = mieux)
+  2. **Cohérence du feedback** (contradictions = dégradation)

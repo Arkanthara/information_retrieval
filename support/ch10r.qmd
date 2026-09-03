@@ -1,0 +1,240 @@
+# Social network analysis
+
+### Modèle de base
+
+::: {.callout-note title="Définition fondamentale"}
+Un réseau = graphe $G = (V, E)$ avec nœuds $V$ (entités), arêtes $E$ (relations), poids $W$ (intensités).
+:::
+
+| Type de relation | Graphe |
+|---|---|
+| Collègue, parenté, goûts partagés | Non orienté |
+| Amitié, abonnement | Orienté |
+
+
+### Propriétés locales — Nœuds
+
+#### Centralité (Centrality)
+
+| Mesure | Définition | Intuition |
+|---|---|---|
+| **Degré** (Degree) | Nb de voisins directs | Popularité brute |
+| **Proximité** (Closeness) | Inverse de la distance moyenne aux autres | Vitesse de diffusion |
+| **Intermédiarité** (Betweenness) | Nb de plus courts chemins passant par $v$ | Rôle de courtier/pont |
+| **Propre** (Eigenvector) | Connexion à des nœuds centraux | Influence indirecte |
+| **PageRank** | Variante orientée de l'eigenvector | Autorité sur le Web |
+
+::: {.callout-important title="Piège"}
+Degré élevé $\neq$ intermédiarité élevée. Un nœud peu connecté peut être un pont critique entre deux communautés.
+:::
+
+
+### Propriétés locales — Groupes
+
+| Concept | Définition |
+|---|---|
+| **Clique** | Sous-graphe complet |
+| **n-clique** | Clique avec distance max $n$ (nœuds intermédiaires possibles) |
+| **n-clan** | n-clique dont tous les chemins internes restent dans le groupe |
+| **k-core** | Sous-graphe où $\min(\deg) = k$ |
+| **Composante connexe forte** (SCC) | Tout nœud accessible depuis tout autre |
+
+
+### Propriétés globales
+
+| Mesure | Formule | Signification |
+|---|---|---|
+| **Excentricité** | $\max_{u} d(v,u)$ | Plus longue des plus courtes distances depuis $v$ |
+| **Rayon** | $\min_v \text{ecc}(v)$ | Excentricité minimale |
+| **Diamètre** | $\max_v \text{ecc}(v)$ | Taille effective du graphe |
+| **Densité** | $\|E\| / \binom{\|V\|}{2}$ | Ratio arêtes réelles / arêtes possibles |
+
+#### Complexité — Plus courts chemins
+
+| Algorithme | Usage | Complexité |
+|---|---|---|
+| Floyd-Warshall | Tous les couples | $O(\|V\|^3)$ |
+| Dijkstra | Un seul nœud source | $O(\|V\|^2)$ |
+| Matrice (naïve) | Tous les couples | $O(\|V\|^3)$ |
+
+
+### Modèles de graphes aléatoires
+
+| Modèle | Auteurs | Propriétés clés |
+|---|---|---|
+| **Erdős-Rényi** (ER) | Erdős, Rényi (1959) | Connexion uniforme prob. $p$ ; transition de phase à $p^* = 1/N$ |
+| **Petit monde** (Small World) | Watts, Strogatz (1998) | Petit diamètre + fort clustering ; modélise "6 degrés de séparation" |
+| **Sans échelle** (Scale-Free) | Barabási, Albert (1999) | Loi de puissance $P(k) \sim k^{-\gamma}$ ; hubs ; attachement préférentiel |
+
+::: {.callout-tip title="Attachement préférentiel"}
+$P(\text{connexion à } v) \propto \deg(v)$ → « les riches s'enrichissent »
+:::
+
+#### Comparaison ER vs Sans échelle
+
+| | Erdős-Rényi | Sans échelle |
+|---|---|---|
+| Distribution degrés | Poisson | Loi de puissance |
+| Hubs | Non | Oui |
+| Robustesse pannes aléatoires | Fragile | Robuste |
+| Robustesse attaques ciblées | Bonne | Vulnérable |
+
+
+### Coupure et Partitionnement
+
+::: {.callout-note title="Coupure minimale (Min Cut)"}
+Ensemble minimal d'arêtes dont la suppression **déconnecte** le graphe → mesure de robustesse. Problème **NP-difficile**.
+:::
+
+#### Algorithme spectral (Normalized Cut)
+
+```
+1. D = diag(deg(A))
+2. L = D - A         (Laplacien)
+3. Résoudre Lx = $\lambda$Dx (coupure normalisée)
+4. s = sign($x_2$)      (vecteur de Fiedler)
+```
+
+- $s = -1$ / $s = +1$ → partitions
+
+#### Détection de communautés
+
+| Algorithme | Points clés |
+|---|---|
+| **Louvain** | Optimise la modularité ; rapide mais peut produire des communautés déconnectées |
+| **Leiden** | Corrige Louvain ; garantit communautés connexes ; plus rapide |
+
+
+### Marches aléatoires (Random Walks)
+
+::: {.callout-note title="Propriété clé"}
+Marche aléatoire = **chaîne de Markov** (sans mémoire)
+$$p_{ij} = \frac{1}{d_i} \text{ si } (v_i,v_j) \in E, \quad 0 \text{ sinon}$$
+:::
+
+| Objet | Formule |
+|---|---|
+| Matrice de transition | $P = DA$ |
+| Évolution | $\varpi_{t+1} = \varpi_t P$ |
+| Distribution à $t$ | $\varpi_t = \varpi_0 P^t$ |
+| **Distribution stationnaire** | $\pi = \pi P$ (point fixe) |
+
+::: {.callout-tip title="Intuition stationnaire"}
+$\pi(i) \propto d_i$ dans un graphe non orienté : les nœuds très connectés sont les plus visités.
+:::
+
+
+### Diffusion et Modèles Épidémiques
+
+#### Lien diffusion $\leftrightarrow$ théorie spectrale
+
+$$\frac{\partial T}{\partial t} = \alpha \Delta T \quad \longleftrightarrow \quad \text{Laplacien du graphe } L$$
+
+- Marche aléatoire = diffusion d'1 particule
+- Distribution stationnaire = diffusion globale à l'équilibre
+- Relie **PageRank**, **partitionnement spectral** et **diffusion**
+
+
+#### Modèles SI / SIS / SIR
+
+| Modèle | Équation | Analogie |
+|---|---|---|
+| **SI** | $\frac{dI}{dt} = \beta k \frac{S}{N} I$ | Information virale, feu de forêt (irréversible) |
+| **SIS** | $\frac{dI}{dt} = \beta k \frac{S}{N} I - \mu I$ | Information avec oubli |
+| **SIR** | Système 3 éq. + état R | Infection avec immunité |
+
+#### Nombre de reproduction $R_0$
+
+$$R_0 = \frac{\beta k}{\mu}$$
+
+| $R_0$ | Résultat |
+|---|---|
+| $> 1$ | Épidémie persiste |
+| $< 1$ | Épidémie s'éteint |
+| $= 1$ | Seuil épidémique |
+
+#### Régimes et états finaux
+
+| | SI | SIS | SIR |
+|---|---|---|---|
+| Seuil | Aucun | $R_0=1$ | $R_0=1$ |
+| $i(\infty)$ | $1$ | $1 - \mu/(\beta k)$ | $0$ |
+
+::: {.callout-important title="SIRS"}
+SIRS = SIR + immunité **temporaire** → retour possible vers état S.
+:::
+
+
+### Diffusion inverse — Influence
+
+$$p_{j|i} = \frac{1-\nu}{d_i}\delta_{i\to j} + \frac{\nu}{N}$$
+
+- $\nu$ = probabilité de téléportation (teleport)
+- Influence corrélée au **degré** du nœud
+
+
+### Ego-réseau (Ego-network)
+
+- **Ego** : individu central ; **Alters** : contacts directs
+- **Homophilie** : liens forts entre individus similaires (classe, âge, opinions)
+- **Diversité** = force sociale : accès à des ressources variées
+
+::: {.callout-tip title="Paradoxe"}
+Homophilie des liens forts **mais** valeur des liens faibles (Granovetter) — ce sont les ponts vers d'autres groupes qui apportent de nouvelles informations.
+:::
+
+
+### Réseaux d'association & Hypergraphes
+
+| Concept | Description |
+|---|---|
+| **Graphe k-parti** | Entités de $k$ types différents (ex : utilisateurs $\leftrightarrow$ produits) |
+| **Filtrage collaboratif** | Prédiction de liens dans graphe biparti |
+| **Hypergraphe** | Hyper-arêtes reliant >2 nœuds simultanément |
+| **Représentation bipartie** | Hyperedges $\leftrightarrow$ Vertices |
+
+
+### Inférence de confiance (Trust Inference)
+
+$$C_{A\to C} = C_{B\to C} \cdot C_{A\to B}$$
+
+$$R_C = \frac{C_{A\to C} + C_{B\to C}}{2}$$
+
+Principe : **transitivité** — si A→B et B→C, alors A peut (partiellement) faire confiance à C.
+
+
+### Ségrégation — Modèle de Schelling (1971)
+
+- 2 types d'agents, préférence locale de voisinage (**homophilie**)
+- Résultat : **ségrégation globale forte** même avec préférences modérées
+- Propriété **émergente** du système
+
+
+### Relations clés à retenir
+
+              Graphe G
+              /        \
+            v          v
+      Laplacien L   Centralités
+          /   \            |
+        v     v           v
+    Partition. Diffusion  Influence /
+    spectral      |       Diffusion inverse
+                  v
+          Marche aléatoire
+                  |
+                  v
+    Distribution stationnaire
+                  |
+                  v
+              PageRank
+
+
+### Outils
+
+| Outil | Langage |
+|---|---|
+| `igraph` | R |
+| `NetworkX` | Python |
+| Gephi | Visualisation |
+| SNAP (Stanford) | Très grands graphes |

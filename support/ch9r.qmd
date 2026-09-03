@@ -1,0 +1,175 @@
+# Low rank models
+
+## Mise en place
+
+### Matrices fondamentales
+
+| Matrice | Taille | Contenu |
+|---|---|---|
+| $R = (r_{ij})$ | $M \times N$ | Notes utilisateurs→articles, $r_{ij} \in ]0,1] \cup \{?\}$ |
+| $B = (b_{ij})$ | $M \times N$ | Masque binaire : $b_{ij}=1$ si noté, $0$ sinon |
+
+$B$ = matrice d'adjacence d'un **graphe biparti** pondéré par $R$.
+
+
+## Modèle de régression linéaire
+
+### Hypothèse clé
+
+$$r_{ij} = \sum_{k=1}^{K} u_i[k]\, v_j[k] + u_i[0] = \tilde{u}_i^T \tilde{v}_j$$
+
+- $u_i[k]$ : sensibilité de l'utilisateur $i$ à la caractéristique $k$
+- $v_j[k]$ : degré de l'article $j$ dans la caractéristique $k$
+- $u_i[0]$ : biais utilisateur (intercept), absorbé par homogénéisation
+
+::: {.callout-tip title="Homogénéisation"}
+On pose $\tilde{v}_j[0] = 1$ pour tout $j$ → biais intégré dans le produit scalaire.
+:::
+
+### Fonctions de coût
+
+**Utilisateurs** (articles $v_j$ fixés) :
+
+$$\mathcal{L}_u = \frac{1}{2}\sum_{i=1}^M \frac{1}{\sum_j b_{ij}} \left[\sum_{j:b_{ij}=1} \!\!\!\left(\tilde{u}_i^T\tilde{v}_j - r_{ij}\right)^2 + \lambda_u\|u_i\|_2^2\right]$$
+
+**Articles** (utilisateurs $u_i$ fixés) : formule symétrique avec $\lambda_v$.
+
+**Conjoint** : somme des deux termes d'erreur + régularisations $\lambda_u$, $\lambda_v$.
+
+### Descente de gradient (update rule)
+
+$$u_i[k] \leftarrow u_i[k] - \alpha\left[\frac{1}{\sum_j b_{ij}}\sum_{j:b_{ij}=1}\!\!\!\left(\tilde{u}_i^T\tilde{v}_j - r_{ij}\right)v_j[k] + \lambda_u u_i[k]\right]$$
+
+::: {.callout-warning title="Pièges"}
+- La somme porte **uniquement** sur $b_{ij}=1$
+- Le biais $k=0$ : **pas** de régularisation, $v_j[0]=1$
+- Problème conjoint **non-convexe** → minimum local seulement
+:::
+
+### Minimisation alternée (Alternate Minimization)
+
+```
+1. Initialiser u_1,...,u_M
+2. Tant que non convergé :
+   a. Fixer u → optimiser v
+   b. Fixer v → optimiser u
+```
+
+
+## SVD — Théorie du rang faible
+
+### Théorème fondamental
+
+$$\mathbf{R} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$$
+
+| Matrice | Taille | Propriété |
+|---|---|---|
+| $U$ | $M\times M$ | Orthogonale ($U^TU = I$) |
+| $\Sigma$ | $M\times N$ | Diagonale, $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$ |
+| $V$ | $N\times N$ | Orthogonale ($V^TV = I$) |
+
+### Découpage en rang 1 (Matrix Slicing)
+
+$$\mathbf{R} = \sum_{i=1}^{N} \sigma_i\,(\mathbf{u}_i\mathbf{v}_i^T) \qquad \text{avec } \mathbf{u}_i = U_{:i},\ \mathbf{v}_i = V_{:i}$$
+
+Chaque terme $\sigma_i(\mathbf{u}_i\mathbf{v}_i^T)$ est de **rang 1**.
+
+### Troncature à $K$ composantes
+
+$$\mathbf{R}_K = \sum_{k=1}^K \sigma_k\,\mathbf{u}_k\mathbf{v}_k^T = \mathbf{U}_K\mathbf{\Sigma}_K\mathbf{V}_K^T$$
+
+**Erreur de troncature** :
+
+$$\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \sum_{k=K+1}^{N}\sigma_k^2$$
+
+### Théorème d'Eckart-Young
+
+::: {.callout-important title="Meilleure approximation de rang K"}
+$$\mathbf{R}_K = \arg\min_{\text{rang}(B)\leq K}\|\mathbf{R}-B\|_F^2$$
+
+$\mathbf{R}_K$ est la **projection orthogonale** de $R$ sur la variété des matrices de rang $K$.
+:::
+
+### Norme de Frobenius et trace
+
+$$\|A\|_F^2 = \sum_{i,j}A_{ij}^2 = \text{Tr}(A^TA) = \sum_i \sigma_i^2$$
+
+**Propriétés de la trace** :
+
+- $\text{Tr}(AB) = \text{Tr}(BA)$
+- Invariante par transformation orthogonale : $\text{Tr}(UAU^T) = \text{Tr}(A)$
+
+
+## Interprétation géométrique
+
+### SVD comme composition de transformations
+
+$$\varphi_R = \varphi_U \circ \varphi_\Sigma \circ \varphi_V^{-1}$$
+
+| Transformation | Action |
+|---|---|
+| $\varphi_V^{-1}$ : $e_j \mapsto v_j = V^T e_j$ | Changement de base → $\mathcal{B}_V$ |
+| $\varphi_\Sigma$ : $v_j \mapsto \Sigma v_j$ | Redimensionnement par $\sigma_i$ |
+| $\varphi_U$ : $r_{ij} = u_i^T v_j$ | Lecture dans la base $\mathcal{B}_U$ |
+
+**Relation clé** : $\mathbf{R}\mathbf{v}_i = \sigma_i\mathbf{u}_i$
+
+### Matrices de similarité
+
+$$\mathbf{R}^T\mathbf{R} = \mathbf{V}\Sigma^2\mathbf{V}^T \quad \rightarrow \text{similarité articles (item similarity)}$$
+
+$$\mathbf{R}\mathbf{R}^T = \mathbf{U}\Sigma^2\mathbf{U}^T \quad \rightarrow \text{similarité utilisateurs (user similarity)}$$
+
+
+## NMF — Factorisation Non-négative
+
+### Définition
+
+$$\mathbf{R} \approx \mathbf{W}\mathbf{H}, \quad W_{ij} \geq 0,\ H_{ij} \geq 0$$
+
+$$\mathbf{W},\mathbf{H} = \arg\min_{A\geq0,\, B\geq0}\|\mathbf{R}-AB\|_F$$
+
+### SVD vs NMF
+
+| Critère | SVD | NMF |
+|---|---|---|
+| Optimalité | ✅ Exacte (Eckart-Young) | ❌ Approximative |
+| Signe | ± valeurs négatives | ✅ Non-négatif |
+| Interprétabilité | ❌ Fantômes globaux | ✅ Parties locales |
+| Coût | $\mathcal{O}(N^3)$ | Itératif |
+| Unicité | ✅ Unique | ❌ Non unique |
+
+### Complétion de matrice (Matrix Completion)
+
+1. Poser $r_{ij} = 0$ pour les notes inconnues → $\tilde{R}$
+2. Résoudre NMF sur $\tilde{R}$
+3. $\hat{R} = WH$ contient les **notes estimées**
+4. Appliquer la **normalisation par la moyenne** (mean normalization) : centrer $R$ par utilisateur
+
+
+## Points critiques / Pièges
+
+::: {.callout-warning title="À ne pas confondre"}
+- $U$, $V$ dans la SVD sont **orthogonaux** (pas les $u_i$, $v_j$ du modèle de régression)
+- Le rang de $\sum_{k=1}^K \sigma_k u_k v_k^T$ est exactement $K$ (si $\sigma_k > 0$)
+- Tronquer = supprimer les **faibles** valeurs singulières (faible énergie)
+- NMF minimise au sens de Frobenius mais sans garantie d'optimalité globale
+:::
+
+::: {.callout-important title="Condition nécessaire : graphe connexe"}
+La propagation d'information via $R$ exige que le graphe biparti soit **connexe**. Sinon : blocs indépendants, pas de recommandation inter-composantes → **problème du démarrage à froid (cold start)**.
+:::
+
+
+## Résumé des formules essentielles
+
+| Concept | Formule |
+|---|---|
+| Note prédite | $\hat{r}_{ij} = \tilde{u}_i^T\tilde{v}_j$ |
+| SVD | $R = U\Sigma V^T$ |
+| Slicing | $R = \sum_i \sigma_i u_i v_i^T$ |
+| Erreur troncature | $\|R - R_K\|_F^2 = \sum_{k>K}\sigma_k^2$ |
+| Frobenius | $\|A\|_F^2 = \text{Tr}(A^TA) = \sum_i\sigma_i^2$ |
+| NMF | $R \approx WH$, $W,H \geq 0$ |
+| Similarité articles | $R^TR = V\Sigma^2 V^T$ |
+| Similarité utilisateurs | $RR^T = U\Sigma^2 U^T$ |

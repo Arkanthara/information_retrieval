@@ -1,0 +1,242 @@
+---
+title: "Introduction à la Recherche d'Information — Support oral"
+---
+
+## Idée centrale
+
+**IR (Information Retrieval — Recherche d'Information)** : faire émerger automatiquement l'information **pertinente** depuis une grande collection de documents via une requête souple.
+
+**Besoin informationnel** (*Information Need*) → Requête → Système IR → Documents classés par pertinence (**ranking**) → Utilisateur → Feedback.
+
+---
+
+## Concepts clés
+
+| Concept | Définition | Intuition |
+|---------|-----------|-----------|
+| **Pertinence** (*Relevance*) | Adéquation doc / besoin — relative à l'utilisateur, pas absolue | Pas les mots-clés seuls |
+| **Inverted Index** (Index inversé) | Terme → liste de docs le contenant | Recherche en ms sur milliards de docs |
+| **BoW** (*Bag of Words*) | Termes non ordonnés, indépendants ; seules les fréquences comptent | Mots dans un sac mélangé |
+| **RSV** (*Retrieval Status Value*) | Score de pertinence d'un doc pour une requête | Plus RSV est élevé, plus le doc est retourné haut |
+| **QbE** (*Query-by-Example*) | La requête est traitée exactement comme un document | Même espace de représentation |
+
+---
+
+## Pipeline / Relations
+
+```
+[Offline]  N docs bruts
+               ↓  tokenisation · stopwords · stemming
+           vocabulaire M termes
+               ↓  calcul TF-IDF
+           matrice W ∈ ℝ^{M×N}  (colonnes = embeddings d_j)
+               ↓  indexation
+           Inverted Index
+
+[Online]   requête brute
+               ↓  même prétraitement (QbE)
+           q ∈ ℝ^M
+               ↓  RSV = cosinus(d_j, q) pour chaque doc j
+           liste ordonnée par RSV décroissant
+```
+
+---
+
+## Méthodes et formules
+
+### Prétraitement (*Text Preprocessing*)
+
+**Étapes :**
+
+- **Tokenisation** — découpe en unités : `"IR system"` → `[ir, system]`
+- **Stop-words** — suppression des mots non discriminants (*le*, *is*, *the*…)
+- **Stemming** (racinisation) — `running` → `run`, `computers` → `comput`
+
+**Résultat :** ensemble $\mathcal{I}_j \subseteq \llbracket M \rrbracket$ des indices de termes du document $j$.
+
+**Hypothèse BoW :** l'ordre des mots n'a pas d'importance ; seule la fréquence compte.
+
+---
+
+### TF — Term Frequency (Fréquence des termes)
+
+**Hypothèse :** plus un terme apparaît dans un doc, plus il est représentatif de ce doc.
+
+$$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}}$$
+
+| Variable | Signification |
+|----------|--------------|
+| $f_{ij}$ | Nb brut d'occurrences du terme $i$ dans le doc $j$ |
+| $\max_k f_{kj}$ | Fréquence du terme le plus fréquent dans le doc $j$ |
+| $\text{tf}_{ij}$ | Fréquence normalisée $\in [0,1]$ |
+
+**Interprétation :** $\text{tf}_{ij} = 1$ pour le terme dominant ; $\text{tf}_{ij} \to 0$ pour un terme rare dans le doc.
+
+**Limite :** ne distingue pas un terme rare dans la collection (*quasar*) d'un terme omniprésent (*the*).
+
+---
+
+### IDF — Inverse Document Frequency (Fréquence inverse de document)
+
+**Hypothèse :** un terme présent dans peu de docs est plus discriminant.
+
+$$\text{idf}_i = \log \frac{N}{n_i}$$
+
+| Variable | Signification |
+|----------|--------------|
+| $N$ | Nb total de docs dans la collection |
+| $n_i$ | Nb de docs contenant le terme $i$ |
+| $\text{idf}_i$ | Pouvoir discriminant du terme $i$ |
+
+**Interprétation :**
+
+- $n_i \approx N$ → $\text{idf}_i \approx 0$ (terme omniprésent, non discriminant)
+- $n_i \ll N$ → $\text{idf}_i$ élevé (terme rare, très discriminant)
+
+**Interprétation géométrique :** l'IDF étire les axes associés aux termes rares — la base canonique $\{e_i\}$ devient une base discriminante $\{\tau_i = \text{idf}_i \cdot e_i\}$.
+
+---
+
+### TF-IDF — Poids terme-document
+
+$$w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$$
+
+**Score calculé :** poids du terme $i$ dans le doc $j$ $\in [0, +\infty)$.
+
+**Interprétation :** $w_{ij}$ maximal ↔ terme fréquent dans le doc ET rare dans la collection.
+
+**Matrice terme-document :**
+
+$$W = \begin{pmatrix} w_{11} & \cdots & w_{1N} \\ \vdots & w_{ij} & \vdots \\ w_{M1} & \cdots & w_{MN} \end{pmatrix} \in \mathbb{R}^{M \times N}$$
+
+- Colonne $j$ = embedding du doc $j$ : $d_j = W_{\cdot j} \in \mathbb{R}^M$
+- Ligne $i$ = embedding du terme $i$ : $t_i = W_{i\cdot}^T \in \mathbb{R}^N$
+- Matrice **creuse** (*sparse*) — la plupart des $w_{ij} = 0$
+
+---
+
+### VSM — Vector Space Model (Modèle Espace Vectoriel)
+
+**Définition :** docs et requêtes = vecteurs dans $\mathbb{R}^M$. Pertinence = proximité géométrique.
+
+**Paradigme QbE :** la requête est projetée dans le même espace que les docs via le même embedding TF-IDF → $q = [w_{1q}, \ldots, w_{Mq}]^T \in \mathbb{R}^M$.
+
+**Score :** $\text{RSV}(d_j, q) = \cos(\angle(d_j, q)) \in [0, 1]$.
+
+**Classement :** docs triés par RSV décroissant.
+
+**Avantages :** classement continu (vs booléen binaire), invariance à la longueur (cosinus), naturel pour l'utilisateur (QbE).
+
+**Limites :** synonymie non gérée (car ⊥ automobile → RSV = 0), indépendance des termes supposée, structure syntaxique ignorée.
+
+---
+
+### Similarité cosinus — RSV
+
+**Dérivation :** intersection ensembliste (espace binaire) $\to$ produit scalaire $\langle d_j, q\rangle$ non normalisé (biaisé longueur) $\to$ normalisation par les normes = cosinus.
+
+$$\text{RSV}(d_j, q) = \frac{\langle d_j, q \rangle}{\|d_j\| \cdot \|q\|}
+= \frac{\displaystyle\sum_i w_{ij}\,w_{iq}}{\left(\displaystyle\sum_i w_{ij}^2\right)^{1/2}\!\left(\displaystyle\sum_i w_{iq}^2\right)^{1/2}}$$
+
+| Propriété | Valeur |
+|-----------|--------|
+| Domaine | $[0, 1]$ avec poids TF-IDF positifs |
+| RSV = 1 | Vecteurs colinéaires (même profil thématique) |
+| RSV = 0 | Vecteurs orthogonaux (aucun terme commun) |
+| Invariance | À la norme (longueur du doc) |
+
+---
+
+### LSI — Latent Semantic Indexing (Indexation sémantique latente)
+
+**Objectif :** capturer synonymie et polysémie (impossibles en BoW).
+
+**Méthode :** SVD tronquée de $W$ : $W_K = U_K \Sigma_K V_K^T$, avec $K \ll M$.
+
+**Projection :** $\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$ — espace de **concepts latents**.
+
+**Interprétation :** synonymes et co-occurrents proches dans $\mathbb{R}^K$. RSV calculé dans cet espace réduit.
+
+**Limite :** coût de la SVD ; $K$ à choisir empiriquement.
+
+---
+
+### BM25 — Best Match 25
+
+**Extension probabiliste du TF-IDF :** ajoute saturation TF + normalisation explicite par longueur du doc.
+
+$$\text{BM25}(d_j, q) = \sum_{i \in q} \text{idf}_i \cdot \frac{(k_1 + 1)\,\text{tf}_{ij}}{k_1\!\left((1-b) + b\,\dfrac{|d_j|}{|d_{\text{moy}}|}\right) + \text{tf}_{ij}}$$
+
+| Variable | Rôle |
+|----------|------|
+| $\text{idf}_i$ | Pouvoir discriminant du terme (comme VSM) |
+| $\text{tf}_{ij}$ | Fréquence brute du terme dans le doc |
+| $k_1 \in [1.2, 2.0]$ | Saturation TF : au-delà d'un seuil, fréquence supplémentaire n'apporte plus |
+| $b \in [0, 1]$ | Poids de la normalisation par longueur ($b=0$ : pas de norm., $b=1$ : normalisation complète) |
+| $\|d_j\|$ | Longueur du doc $j$ (nb de tokens) |
+| $\|d_{\text{moy}}\|$ | Longueur moyenne des docs de la collection |
+
+**Score calculé :** RSV $\in [0, +\infty)$.
+
+**Interprétation :** plus BM25 est élevé, plus le doc est pertinent. Terme très fréquent dans un doc court + rare dans la collection → score maximal.
+
+**Avantages vs TF-IDF :** gère la saturation (un terme 100× n'est pas 100× plus important) et pénalise les docs longs.
+
+---
+
+## Comparaisons importantes
+
+| Mesure | Formule continue | Propriété clé |
+|--------|-----------------|--------------|
+| **Matching** | $\langle d_j, q \rangle$ | Biaisée par la longueur — **déconseillée** |
+| **Cosinus** | $\langle d_j, q \rangle / \|d_j\|\|q\|$ | Invariante à la norme — **standard** |
+| **Dice** | $2\langle d_j,q\rangle / (\sum w_{ij}+\sum w_{iq})$ | Pénalise les vecteurs longs |
+| **Overlap** | $\langle d_j,q\rangle / \min(\sum w_{ij},\sum w_{iq})$ | Robuste aux sous-ensembles |
+| **Jaccard** | $\langle d_j,q\rangle / \sum\max(w_{ij},w_{iq})$ | Normalisée $\in [0,1]$ |
+| **Euclidienne** | $\|q - d_j\|$ | Sensible à la norme — **déconseillée** |
+
+| | **Modèle booléen** | **VSM** | **BM25** | **Dense retrieval** |
+|--|---|---|---|---|
+| RSV | $\{0,1\}$ | $[0,1]$ | $[0,+\infty)$ | $[0,1]$ (cosinus) |
+| Classement | ✗ | ✓ | ✓ | ✓ |
+| Synonymie | ✗ | ✗ | ✗ | ✓ |
+| Normalisation longueur | ✗ | cosinus | $b$ explicite | cosinus |
+| Saturation TF | ✗ | ✗ | $k_1$ explicite | implicite |
+
+---
+
+## Métriques d'évaluation
+
+$$P = \frac{|\text{pert} \cap \text{retournés}|}{|\text{retournés}|}
+\qquad
+R = \frac{|\text{pert} \cap \text{retournés}|}{|\text{pert}|}
+\qquad
+F_1 = \frac{2PR}{P+R}$$
+
+$$\text{AP}(q) = \frac{1}{|\text{pert}|}\sum_{k} P@k \cdot \mathbb{1}[\text{doc}_k \text{ pert.}]
+\qquad
+\text{MAP} = \frac{1}{|Q|}\sum_q \text{AP}(q)$$
+
+$$\text{DCG}@k = \sum_{i=1}^{k} \frac{\text{rel}_i}{\log_2(i+1)}
+\qquad
+\text{NDCG}@k = \frac{\text{DCG}@k}{\text{IDCG}@k}$$
+
+| Métrique | Ce qu'elle mesure | Tient compte de la position |
+|----------|-------------------|-----------------------------|
+| **P** (*Precision*) | Qualité des docs retournés | ✗ |
+| **R** (*Recall*) | Complétude | ✗ |
+| **F₁** | Compromis P/R | ✗ |
+| **MAP** (*Mean Average Precision*) | P moyenne multi-requêtes | Partiel (AP par requête) |
+| **NDCG** (*Normalized Discounted Cumulative Gain*) | Gain pondéré par la position | ✓ (log décroissant) |
+
+---
+
+## Pièges classiques
+
+- TF normalisée par le **terme le plus fréquent du doc**, pas par la longueur (c'est la cosinus qui gère ça ; BM25 gère ça via $b$).
+- Terme présent dans **tous** les docs → IDF = 0 → contribution nulle au RSV. Voulu, pas un bug.
+- La requête subit **exactement** le même prétraitement TF-IDF que les docs (QbE) — erreur fréquente de croire qu'elle est traitée différemment.
+- VSM ne gère **pas la synonymie** : *car* et *automobile* → dimensions orthogonales → RSV = 0 même si sémantiquement identiques.
+- La matrice $W$ est **creuse** (*sparse*) — implémentation via index inversé, pas par la matrice dense.
+- Modèle booléen ≠ cas particulier du VSM : structures fondamentalement différentes.
+- Normaliser les vecteurs puis calculer la distance euclidienne **est équivalent** au cosinus ($\|d_j/\|d_j\| - q/\|q\|\|^2 = 2(1-\cos\theta)$).

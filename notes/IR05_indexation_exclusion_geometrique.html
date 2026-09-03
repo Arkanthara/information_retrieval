@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.05 — Exclusion Géométrique & Indexation Sparse/Dense · Guide d'Examen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+.sb{width:270px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.85rem;display:block;
+  padding:.32rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.7rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.5rem .7rem .3rem;opacity:.55}
+.main{margin-left:270px;flex:1;padding:3rem 4rem;max-width:1020px}
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.4rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:620px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.08em}
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .45s ease,padding .2s;background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:900px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.6rem 0;overflow-x:auto}
+.diag-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1rem}
+.diag svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.12rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.87rem;color:var(--muted);margin:0;line-height:1.6}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════ -->
+<aside class="sb">
+  <div class="sb-logo">IR.05</div>
+  <div class="sb-sub">INDEXATION · GUIDE ORAL</div>
+  <nav><ul>
+    <div class="sb-section">Vue d'ensemble</div>
+    <li><a href="#resume"><span class="n">§1</span>Résumé 30 sec</a></li>
+    <li><a href="#oral"><span class="n">§2</span>Réponse orale</a></li>
+    <div class="sb-section">Concepts fondamentaux</div>
+    <li><a href="#exclusion"><span class="n">§3</span>Exclusion géométrique</a></li>
+    <li><a href="#euclidien"><span class="n">§4</span>Distances euclidiennes</a></li>
+    <li><a href="#sparse-dense"><span class="n">§5</span>Sparse vs Dense</a></li>
+    <div class="sb-section">Formalisme</div>
+    <li><a href="#formules"><span class="n">§6</span>Formules clés</a></li>
+    <li><a href="#comparaison"><span class="n">§7</span>Comparaison approches</a></li>
+    <li><a href="#relations"><span class="n">§8</span>Relations conceptuelles</a></li>
+    <div class="sb-section">Examen</div>
+    <li><a href="#moderne"><span class="n">§9</span>Systèmes modernes</a></li>
+    <li><a href="#questions"><span class="n">§10</span>Questions d'examen</a></li>
+    <li><a href="#pieges"><span class="n">§11</span>Pièges classiques</a></li>
+    <li><a href="#fiche"><span class="n">§12</span>Fiche de révision</a></li>
+  </ul></nav>
+</aside>
+
+<!-- ═══════════════════════════════════════ MAIN ════════════════════════════ -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">IR.05 — Stéphane Marchand-Maillet · UNIGE</div>
+  <h1>Exclusion <em>Géométrique</em><br>&amp; Indexation Sparse / Dense</h1>
+  <p class="hero-desc">De l'inégalité triangulaire aux architectures billion-scale : maîtriser pourquoi et comment l'index dépend de la nature des représentations vectorielles.</p>
+  <div class="badges">
+    <span class="badge">Exclusion Géométrique</span>
+    <span class="badge b">Pivot Indexing · AESA</span>
+    <span class="badge g">Inverted Files · TF-IDF</span>
+    <span class="badge v">HNSW · LSH · FAISS</span>
+  </div>
+</div>
+
+<!-- ═══ §1 RÉSUMÉ EXÉCUTIF ═══════════════════════════════════════════════════ -->
+<section class="sec" id="resume">
+  <div class="sec-hd"><span class="sec-num">§1</span><h2 class="sec-title">Résumé exécutif</h2></div>
+
+  <div class="box">
+    <div class="box-title">🎯 En 30 secondes</div>
+    <p>L'<strong>exclusion géométrique</strong> (<em>geometric exclusion</em>) est un principe d'élagage fondé sur l'<strong>inégalité triangulaire</strong> : si la distance entre un pivot $\mathbf{p}$ et un point $\mathbf{x}$ est connue hors-ligne, on peut borner inférieurement la distance $d(\mathbf{q}, \mathbf{x})$ et éliminer $\mathbf{x}$ si cette borne dépasse le meilleur candidat connu.</p>
+    <p>Cette approche divise le monde en deux grands types d'indexation : les <strong>représentations creuses</strong> (<em>sparse</em>, type TF-IDF) qui exploitent l'intersection et sont indexées par <strong>fichier inversé</strong> (<em>Inverted File</em>), et les <strong>représentations denses</strong> (<em>dense</em>, type Word2Vec/BERT) qui exploitent la géométrie et sont indexées par des structures métriques comme <strong>HNSW</strong>, <strong>LSH</strong> ou <strong>FAISS</strong>.</p>
+  </div>
+</section>
+
+<!-- ═══ §2 RÉPONSE ORALE ══════════════════════════════════════════════════════ -->
+<section class="sec" id="oral">
+  <div class="sec-hd"><span class="sec-num">§2</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+
+  <div class="oral">
+    <p>L'indexation par pivot repose sur l'<strong>inégalité triangulaire</strong>. L'idée est simple : on choisit hors-ligne un ensemble de pivots $\mathcal{P}$, on calcule et stocke la distance $d(\mathbf{p}, \mathbf{x})$ pour tout point $\mathbf{x}$ et tout pivot $\mathbf{p}$. Au moment d'une requête, on calcule $d(\mathbf{p}, \mathbf{q})$ pour chaque pivot, et l'inégalité triangulaire nous donne immédiatement une borne inférieure sur la distance entre la requête et n'importe quel point : $d(\mathbf{q}, \mathbf{x}) \geq |d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})|$. Si cette borne dépasse la distance au meilleur candidat connu, le point $\mathbf{x}$ est éliminé sans même calculer $d(\mathbf{q}, \mathbf{x})$.</p>
+
+    <p>Maintenant, le choix de la structure d'index dépend fondamentalement de la nature de la représentation. Pour une représentation <strong>creuse</strong> comme TF-IDF — un vecteur de dimension $M \approx 10^5$ dont 99% des entrées sont nulles — la recherche de similarité se ramène à une <strong>intersection d'ensembles</strong> : quels documents partagent les termes de la requête ? C'est exactement ce que fait le <strong>fichier inversé</strong>, qui stocke pour chaque terme la liste des documents le contenant. La complexité passe de $O(MN)$ à $O(|\mathbb{1}_q|)$ — proportionnel aux termes de la requête seulement.</p>
+
+    <p>En revanche, pour une représentation <strong>dense</strong> comme Word2Vec ou un embedding BERT — un vecteur de dimension $d \approx 768$ dont toutes les entrées sont non nulles — cette sparsité disparaît. La recherche de similarité est un problème de <strong>plus proches voisins</strong> dans un espace métrique euclidien. L'inverted file devient inutile. On a besoin d'un index spatial comme <strong>HNSW</strong> qui construit un graphe hiérarchique navigable, ou de <strong>LSH</strong> qui projette aléatoirement pour grouper les points similaires dans les mêmes buckets. En milliard-scale, on recourt à la <strong>quantification de produit</strong> (FAISS) pour compresser les vecteurs et effectuer la recherche approximative efficacement.</p>
+
+    <p>La différence fondamentale : le fichier inversé exploite la <strong>sparsité</strong>, les index métriques exploitent la <strong>structure géométrique</strong>. Dans les systèmes hybrides modernes comme les pipelines RAG, on combine les deux : BM25 pour la recherche lexicale sparse et un index dense pour la recherche sémantique.</p>
+  </div>
+</section>
+
+<!-- ═══ §3 EXCLUSION GÉOMÉTRIQUE ════════════════════════════════════════════ -->
+<section class="sec" id="exclusion">
+  <div class="sec-hd"><span class="sec-num">§3</span><h2 class="sec-title">Exclusion géométrique</h2></div>
+
+  <h3>Principe général</h3>
+  <p>L'indexation vise à éviter la <strong>recherche exhaustive</strong> en $O(N)$. Pour la recherche de similarité dans un espace métrique $(\Omega, d)$, la stratégie est d'éliminer des candidats sans calculer leur distance exacte à la requête. Le mécanisme central est l'<strong>inégalité triangulaire</strong>.</p>
+
+  <div class="box info">
+    <div class="box-title">Intuition</div>
+    <p>Si on sait que la ville de Lyon est à 500 km de Paris, et que la requête (Genève) est à 400 km de Paris, alors Lyon est <em>au moins</em> à 100 km de Genève. Si le meilleur candidat connu est à 80 km, Lyon est éliminé sans calcul supplémentaire.</p>
+  </div>
+
+  <!-- SVG 1 : Triangle Inequality -->
+  <div class="diag">
+    <div class="diag-title">Schéma 1 — Inégalité triangulaire : fondement de l'exclusion géométrique</div>
+    <svg viewBox="0 0 560 310" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#c9a84c"/>
+        </marker>
+        <marker id="arr-vio" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#a78bfa"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="560" height="310" fill="#1c1828" rx="10"/>
+      <!-- Triangle fill -->
+      <polygon points="280,40 60,262 500,262" fill="rgba(167,139,250,0.04)" stroke="none"/>
+      <!-- PQ side (online, blue dashed) -->
+      <line x1="280" y1="40" x2="60" y2="262" stroke="#7eb8d4" stroke-width="2.5" stroke-dasharray="8,5"/>
+      <!-- PX side (offline, green solid) -->
+      <line x1="280" y1="40" x2="500" y2="262" stroke="#7bc496" stroke-width="2.5"/>
+      <!-- QX side (to bound, gold bold) -->
+      <line x1="60" y1="262" x2="500" y2="262" stroke="#c9a84c" stroke-width="3"/>
+
+      <!-- Vertices -->
+      <circle cx="280" cy="40" r="9" fill="#7eb8d4" stroke="#0d0b14" stroke-width="2"/>
+      <circle cx="60" cy="262" r="9" fill="#e07b7b" stroke="#0d0b14" stroke-width="2"/>
+      <circle cx="500" cy="262" r="9" fill="#c9a84c" stroke="#0d0b14" stroke-width="2"/>
+
+      <!-- Vertex labels -->
+      <text x="290" y="38" font-size="15" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">p</text>
+      <text x="305" y="38" font-size="12" fill="#9089bf" font-family="Georgia,serif"> (pivot)</text>
+      <text x="10" y="275" font-size="15" fill="#e07b7b" font-family="Georgia,serif" font-weight="bold">q</text>
+      <text x="24" y="275" font-size="12" fill="#9089bf" font-family="Georgia,serif"> (requête)</text>
+      <text x="508" y="275" font-size="15" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">x</text>
+      <text x="524" y="275" font-size="12" fill="#9089bf" font-family="Georgia,serif"> </text>
+
+      <!-- Side labels -->
+      <!-- d(p,q) near PQ midpoint (170, 151) -->
+      <rect x="20" y="138" width="118" height="38" fill="#161221" rx="5" stroke="rgba(126,184,212,0.3)" stroke-width="1"/>
+      <text x="79" y="153" text-anchor="middle" font-size="12" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">d(p,q)</text>
+      <text x="79" y="169" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">⏱ calculé online</text>
+
+      <!-- d(p,x) near PX midpoint (390, 151) -->
+      <rect x="398" y="138" width="118" height="38" fill="#161221" rx="5" stroke="rgba(123,196,150,0.3)" stroke-width="1"/>
+      <text x="457" y="153" text-anchor="middle" font-size="12" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">d(p,x)</text>
+      <text x="457" y="169" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">💾 stocké offline</text>
+
+      <!-- d(q,x) label below QX -->
+      <text x="280" y="285" text-anchor="middle" font-size="13" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">d(q,x) — borne inférieure</text>
+
+      <!-- Inequality box -->
+      <rect x="120" y="190" width="320" height="52" fill="#161221" rx="7" stroke="rgba(167,139,250,0.5)" stroke-width="1.5"/>
+      <text x="280" y="211" text-anchor="middle" font-size="13" fill="#a78bfa" font-family="Georgia,serif" font-weight="bold">d(q,x) ≥ |d(p,x) − d(p,q)|</text>
+      <text x="280" y="232" text-anchor="middle" font-size="11" fill="#9089bf" font-family="Georgia,serif">Deux applications de l'inégalité triangulaire</text>
+    </svg>
+  </div>
+
+  <h3>La règle d'exclusion</h3>
+  <p>L'inégalité triangulaire donne une <strong>borne inférieure sur $d(\mathbf{q}, \mathbf{x})$</strong> qui n'utilise que des distances <em>pré-calculées</em> hors-ligne. Si cette borne dépasse $d_{\text{best}}$ (distance au meilleur voisin connu), alors $\mathbf{x}$ ne peut pas être un plus proche voisin et est éliminé sans calcul.</p>
+
+  <div class="mblock">
+    <div class="mlabel">Règle d'exclusion par pivot</div>
+    $$d(\mathbf{q}, \mathbf{x}) \geq |d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})| > d_{\text{best}} \implies \mathbf{x} \text{ exclu}$$
+  </div>
+
+  <p>Avec <strong>plusieurs pivots</strong>, on renforce la borne :</p>
+  <div class="mblock">
+    <div class="mlabel">Borne maximisée sur P pivots — AESA</div>
+    $$d(\mathbf{q}, \mathbf{x}_i) \geq \max_{\mathbf{p} \in \mathcal{P}} |d(\mathbf{p}, \mathbf{x}_i) - d(\mathbf{p}, \mathbf{q})| = \mathbf{b}[i]$$
+  </div>
+
+  <!-- SVG 2 : Zone d'exclusion -->
+  <div class="diag">
+    <div class="diag-title">Schéma 2 — Zone d'exclusion : deux cercles concentriques autour du pivot</div>
+    <svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg">
+      <rect width="600" height="330" fill="#1c1828" rx="10"/>
+      <!-- Divider -->
+      <line x1="300" y1="10" x2="300" y2="320" stroke="rgba(180,150,80,0.2)" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <!-- ===== LEFT PANEL : EXCLUSION POSSIBLE ===== -->
+      <text x="150" y="25" text-anchor="middle" font-size="13" fill="#e07b7b" font-family="Georgia,serif" font-weight="bold">✗ Exclusion POSSIBLE</text>
+      <text x="150" y="42" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">borne inf. > d_best → éliminé</text>
+
+      <!-- Outer circle (d(p,x)=115) -->
+      <circle cx="150" cy="170" r="115" fill="rgba(123,196,150,0.04)" stroke="#7bc496" stroke-width="1.8" opacity="0.75"/>
+      <!-- Inner circle (d(p,q)=45) -->
+      <circle cx="150" cy="170" r="45" fill="rgba(126,184,212,0.06)" stroke="#7eb8d4" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.9"/>
+
+      <!-- Pivot P -->
+      <circle cx="150" cy="170" r="7" fill="#7eb8d4" stroke="#0d0b14" stroke-width="2"/>
+      <text x="158" y="175" font-size="12" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">p</text>
+
+      <!-- Q on inner circle (top) -->
+      <circle cx="150" cy="125" r="6" fill="#e07b7b" stroke="#0d0b14" stroke-width="2"/>
+      <text x="158" y="123" font-size="12" fill="#e07b7b" font-family="Georgia,serif" font-weight="bold">q</text>
+
+      <!-- X on outer circle (right) -->
+      <circle cx="265" cy="170" r="6" fill="#c9a84c" stroke="#0d0b14" stroke-width="2"/>
+      <text x="272" y="175" font-size="12" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">x</text>
+
+      <!-- d(p,q) radius line -->
+      <line x1="150" y1="170" x2="150" y2="125" stroke="#7eb8d4" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+      <!-- d(p,x) radius line -->
+      <line x1="150" y1="170" x2="265" y2="170" stroke="#7bc496" stroke-width="1.2" opacity="0.7"/>
+
+      <!-- Gap bracket (vertical, left of circles) -->
+      <line x1="115" y1="55" x2="115" y2="125" stroke="#a78bfa" stroke-width="2"/>
+      <line x1="109" y1="55" x2="121" y2="55" stroke="#a78bfa" stroke-width="2"/>
+      <line x1="109" y1="125" x2="121" y2="125" stroke="#a78bfa" stroke-width="2"/>
+      <text x="80" y="95" text-anchor="middle" font-size="11" fill="#a78bfa" font-family="Georgia,serif" font-weight="bold">Gap</text>
+      <text x="80" y="108" text-anchor="middle" font-size="11" fill="#a78bfa" font-family="Georgia,serif">= 70</text>
+
+      <!-- Circle labels -->
+      <text x="23" y="188" font-size="10" fill="#7eb8d4" font-family="Georgia,serif">d(p,q)=45</text>
+      <text x="22" y="100" font-size="10" fill="#7bc496" font-family="Georgia,serif">d(p,x)=115</text>
+
+      <!-- Result box -->
+      <rect x="20" y="295" width="262" height="25" fill="rgba(224,123,123,0.15)" rx="5" stroke="#e07b7b" stroke-width="1"/>
+      <text x="151" y="312" text-anchor="middle" font-size="11" fill="#e07b7b" font-family="Georgia,serif">|115−45|=70 &gt; 30=d_best → EXCLU ✗</text>
+
+      <!-- ===== RIGHT PANEL : EXCLUSION IMPOSSIBLE ===== -->
+      <text x="450" y="25" text-anchor="middle" font-size="13" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">✓ Exclusion IMPOSSIBLE</text>
+      <text x="450" y="42" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">borne inf. &lt; d_best → candidat conservé</text>
+
+      <!-- Outer circle (d(p,x)=75) -->
+      <circle cx="450" cy="170" r="75" fill="rgba(123,196,150,0.04)" stroke="#7bc496" stroke-width="1.8" opacity="0.75"/>
+      <!-- Inner circle (d(p,q)=70) -->
+      <circle cx="450" cy="170" r="70" fill="rgba(126,184,212,0.06)" stroke="#7eb8d4" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.9"/>
+
+      <!-- Pivot P -->
+      <circle cx="450" cy="170" r="7" fill="#7eb8d4" stroke="#0d0b14" stroke-width="2"/>
+      <text x="458" y="175" font-size="12" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">p</text>
+
+      <!-- Q on inner circle (top) -->
+      <circle cx="450" cy="100" r="6" fill="#e07b7b" stroke="#0d0b14" stroke-width="2"/>
+      <text x="458" y="98" font-size="12" fill="#e07b7b" font-family="Georgia,serif" font-weight="bold">q</text>
+
+      <!-- X on outer circle (right) -->
+      <circle cx="525" cy="170" r="6" fill="#c9a84c" stroke="#0d0b14" stroke-width="2"/>
+      <text x="532" y="175" font-size="12" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">x</text>
+
+      <!-- d(p,q) and d(p,x) radius lines -->
+      <line x1="450" y1="170" x2="450" y2="100" stroke="#7eb8d4" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+      <line x1="450" y1="170" x2="525" y2="170" stroke="#7bc496" stroke-width="1.2" opacity="0.7"/>
+
+      <!-- Tiny gap annotation (between circles at top) -->
+      <line x1="415" y1="95" x2="415" y2="100" stroke="#a78bfa" stroke-width="2"/>
+      <line x1="409" y1="95" x2="421" y2="95" stroke="#a78bfa" stroke-width="2"/>
+      <line x1="409" y1="100" x2="421" y2="100" stroke="#a78bfa" stroke-width="2"/>
+      <text x="396" y="91" text-anchor="middle" font-size="10" fill="#a78bfa" font-family="Georgia,serif">Gap=5</text>
+
+      <!-- Circle labels -->
+      <text x="362" y="182" font-size="10" fill="#7eb8d4" font-family="Georgia,serif">d(p,q)=70</text>
+      <text x="362" y="125" font-size="10" fill="#7bc496" font-family="Georgia,serif">d(p,x)=75</text>
+
+      <!-- Result box -->
+      <rect x="318" y="295" width="265" height="25" fill="rgba(123,196,150,0.15)" rx="5" stroke="#7bc496" stroke-width="1"/>
+      <text x="450" y="312" text-anchor="middle" font-size="11" fill="#7bc496" font-family="Georgia,serif">|75−70|=5 &lt; 30=d_best → CANDIDAT ✓</text>
+
+      <!-- Legend box -->
+      <rect x="200" y="226" width="200" height="58" fill="#161221" rx="6" stroke="rgba(180,150,80,0.25)" stroke-width="1"/>
+      <text x="300" y="243" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">Légende</text>
+      <circle cx="220" cy="255" r="4" fill="none" stroke="#7eb8d4" stroke-dasharray="3,2" stroke-width="1.5"/>
+      <text x="230" y="259" font-size="10" fill="#9089bf" font-family="Georgia,serif">cercle d(p,q) [online]</text>
+      <circle cx="220" cy="272" r="4" fill="none" stroke="#7bc496" stroke-width="1.5"/>
+      <text x="230" y="276" font-size="10" fill="#9089bf" font-family="Georgia,serif">cercle d(p,x) [offline]</text>
+    </svg>
+  </div>
+
+  <div class="box ok">
+    <div class="box-title">Intuition géométrique clé</div>
+    <p>Le point $\mathbf{x}$ se trouve sur une <strong>sphère de rayon $d(\mathbf{p},\mathbf{x})$</strong> centrée en $\mathbf{p}$. La requête $\mathbf{q}$ se trouve sur une <strong>sphère de rayon $d(\mathbf{p},\mathbf{q})$</strong> centrée en $\mathbf{p}$. La distance <strong>minimale</strong> entre ces deux sphères concentriques est $|d(\mathbf{p},\mathbf{x}) - d(\mathbf{p},\mathbf{q})|$ — c'est exactement la borne inférieure.</p>
+  </div>
+
+  <h3>Algorithme d'indexation par pivot</h3>
+  <div class="diag">
+    <div class="diag-title">Schéma 3 — Pipeline complet : indexation par pivot (offline → online)</div>
+    <svg viewBox="0 0 590 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7bc496"/></marker>
+        <marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7eb8d4"/></marker>
+      </defs>
+      <rect width="590" height="220" fill="#1c1828" rx="10"/>
+
+      <!-- OFFLINE PHASE -->
+      <rect x="10" y="10" width="570" height="90" fill="rgba(123,196,150,0.04)" rx="8" stroke="rgba(123,196,150,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="20" y="27" font-size="10" fill="#7bc496" font-family="Georgia,serif" letter-spacing="2">⚙ PHASE OFFLINE</text>
+
+      <rect x="25" y="35" width="110" height="55" fill="#161221" rx="6" stroke="rgba(123,196,150,0.4)" stroke-width="1.5"/>
+      <text x="80" y="58" text-anchor="middle" font-size="12" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">Sélection</text>
+      <text x="80" y="74" text-anchor="middle" font-size="11" fill="#9089bf" font-family="Georgia,serif">pivots P⊂X</text>
+
+      <line x1="135" y1="62" x2="160" y2="62" stroke="#7bc496" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+      <rect x="162" y="35" width="140" height="55" fill="#161221" rx="6" stroke="rgba(123,196,150,0.4)" stroke-width="1.5"/>
+      <text x="232" y="53" text-anchor="middle" font-size="12" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">Calcul distances</text>
+      <text x="232" y="68" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">d(x,p) ∀x∈X, ∀p∈P</text>
+      <text x="232" y="82" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">O(N·|P|) calculs</text>
+
+      <line x1="302" y1="62" x2="327" y2="62" stroke="#7bc496" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+      <rect x="329" y="35" width="120" height="55" fill="#161221" rx="6" stroke="rgba(123,196,150,0.4)" stroke-width="1.5"/>
+      <text x="389" y="58" text-anchor="middle" font-size="12" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">Index stocké</text>
+      <text x="389" y="73" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">f(x,p)=d(p,x)</text>
+
+      <line x1="449" y1="62" x2="474" y2="62" stroke="#7bc496" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+      <rect x="476" y="35" width="95" height="55" fill="#161221" rx="6" stroke="rgba(201,168,76,0.4)" stroke-width="1.5"/>
+      <text x="523" y="58" text-anchor="middle" font-size="12" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">💾 INDEX</text>
+      <text x="523" y="73" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">prêt</text>
+
+      <!-- ONLINE PHASE -->
+      <rect x="10" y="115" width="570" height="95" fill="rgba(126,184,212,0.04)" rx="8" stroke="rgba(126,184,212,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="20" y="133" font-size="10" fill="#7eb8d4" font-family="Georgia,serif" letter-spacing="2">⚡ PHASE ONLINE (par requête)</text>
+
+      <rect x="25" y="140" width="80" height="55" fill="#161221" rx="6" stroke="rgba(126,184,212,0.4)" stroke-width="1.5"/>
+      <text x="65" y="163" text-anchor="middle" font-size="12" fill="#e07b7b" font-family="Georgia,serif" font-weight="bold">q</text>
+      <text x="65" y="178" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">requête</text>
+
+      <line x1="105" y1="167" x2="128" y2="167" stroke="#7eb8d4" stroke-width="1.8" marker-end="url(#arr-b)"/>
+
+      <rect x="130" y="140" width="135" height="55" fill="#161221" rx="6" stroke="rgba(126,184,212,0.4)" stroke-width="1.5"/>
+      <text x="197" y="158" text-anchor="middle" font-size="12" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">d(q,p) ∀p∈P</text>
+      <text x="197" y="173" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">|P| calculs seulement</text>
+      <text x="197" y="187" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">→ f(q,p)</text>
+
+      <line x1="265" y1="167" x2="288" y2="167" stroke="#7eb8d4" stroke-width="1.8" marker-end="url(#arr-b)"/>
+
+      <rect x="290" y="140" width="135" height="55" fill="#161221" rx="6" stroke="rgba(167,139,250,0.4)" stroke-width="1.5"/>
+      <text x="357" y="158" text-anchor="middle" font-size="12" fill="#a78bfa" font-family="Georgia,serif" font-weight="bold">Exclusion</text>
+      <text x="357" y="173" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">b[i] &gt; d_best</text>
+      <text x="357" y="187" text-anchor="middle" font-size="10" fill="#e07b7b" font-family="Georgia,serif">→ éliminé</text>
+
+      <line x1="425" y1="167" x2="448" y2="167" stroke="#7eb8d4" stroke-width="1.8" marker-end="url(#arr-b)"/>
+
+      <rect x="450" y="140" width="120" height="55" fill="#161221" rx="6" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"/>
+      <text x="510" y="160" text-anchor="middle" font-size="12" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">k-NN exact</text>
+      <text x="510" y="175" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">sur candidats</text>
+      <text x="510" y="189" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Georgia,serif">résultat final</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ §4 DISTANCES EUCLIDIENNES & AESA ════════════════════════════════════ -->
+<section class="sec" id="euclidien">
+  <div class="sec-hd"><span class="sec-num">§4</span><h2 class="sec-title">Application : distances euclidiennes</h2></div>
+
+  <h3>De l'exclusion à la borne euclidienne</h3>
+  <p>En espace euclidien, la règle d'exclusion est directement applicable. On peut développer la distance au carré :</p>
+  <div class="mblock">
+    <div class="mlabel">Développement euclidien</div>
+    $$d(\mathbf{x}_i, \mathbf{q})^2 = \langle \mathbf{x}_i, \mathbf{x}_i\rangle + \langle \mathbf{q}, \mathbf{q}\rangle - 2\langle \mathbf{x}_i, \mathbf{q}\rangle$$
+  </div>
+  <p>Ce développement implique que minimiser $d(\mathbf{x}_i, \mathbf{q})$ est équivalent à <strong>maximiser le produit scalaire</strong> $\langle \mathbf{x}_i, \mathbf{q}\rangle$ si les vecteurs sont normalisés. C'est le problème <em>MIPS</em> (Maximum Inner Product Search).</p>
+
+  <h3>AESA : Approximating and Eliminating Search Algorithm</h3>
+  <p>AESA est l'algorithme optimal en nombre de calculs de distances. Il construit ses pivots <em>dynamiquement</em> lors de la recherche, selon une stratégie <strong>branche-et-borne</strong> (<em>branch-and-bound</em>).</p>
+
+  <div class="box info">
+    <div class="box-title">Offline (indexation)</div>
+    <p>Calculer et stocker la <strong>matrice de distances complète</strong> $\mathbf{D}$ : $D_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ pour tout $i,j$. Complexité : $O(N^2)$ en espace — c'est son talon d'Achille.</p>
+  </div>
+
+  <div class="box">
+    <div class="box-title">Online (recherche — branche-et-borne)</div>
+    <p>Maintenir un vecteur de bornes inférieures $\mathbf{b}[i]$ pour chaque point candidat. À chaque itération, sélectionner le candidat avec la plus petite borne (branche), calculer sa distance réelle, mettre à jour $d_{\text{best}}$, puis éliminer tous les candidats dont la borne dépasse $d_{\text{best}}$ (borne). Répéter jusqu'à épuisement des candidats.</p>
+  </div>
+
+  <p>L-AESA est la version linéaire : au lieu de stocker $O(N^2)$ distances, on sélectionne hors-ligne un sous-ensemble fixe de pivots $\mathcal{P}$ (typiquement $|\mathcal{P}| = O(\sqrt{N})$) et on ne stocke que les distances pivot-données en $O(N \cdot |\mathcal{P}|)$.</p>
+
+  <h3>k-d Trees : partitionnement récursif de l'espace</h3>
+  <p>Un <strong>k-d tree</strong> partitionne l'espace $\mathbb{R}^D$ récursivement en alternant les dimensions de coupe. La recherche descend l'arbre en $O(\log_b N)$ mais souffre sévèrement de la <strong>malédiction de la dimensionnalité</strong> (<em>curse of dimensionality</em>) : en haute dimension, toutes les distances se concentrent et le pruning devient inefficace. Le k-d tree dégénère en recherche exhaustive dès $D \gtrsim 20$.</p>
+
+  <div class="box warn">
+    <div class="box-title">⚠ Curse of Dimensionality</div>
+    <p>En haute dimension, le rapport $d_{\max}/d_{\min} \to 1$ : toutes les distances deviennent presque identiques. L'exclusion géométrique (et les k-d trees) deviennent inutiles car la borne inférieure $|d(\mathbf{p},\mathbf{x})-d(\mathbf{p},\mathbf{q})|$ est presque nulle pour tout $\mathbf{x}$. C'est pourquoi on recourt à l'<strong>ANN approximatif</strong> (ANNS) pour les espaces denses.</p>
+  </div>
+</section>
+
+<!-- ═══ §5 SPARSE vs DENSE ══════════════════════════════════════════════════ -->
+<section class="sec" id="sparse-dense">
+  <div class="sec-hd"><span class="sec-num">§5</span><h2 class="sec-title">Sparse vs Dense : deux paradigmes d'indexation</h2></div>
+
+  <p>La nature de la représentation vectorielle détermine fondamentalement le type d'index approprié. Ce n'est pas un choix d'implémentation : c'est une <strong>contrainte algorithmique profonde</strong>.</p>
+
+  <!-- SVG 4 : Sparse vs Dense -->
+  <div class="diag">
+    <div class="diag-title">Schéma 4 — Comparaison structurelle : représentations sparse (TF-IDF) vs dense (Word2Vec/BERT)</div>
+    <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#9089bf"/></marker>
+      </defs>
+      <rect width="600" height="400" fill="#1c1828" rx="10"/>
+      <!-- Divider -->
+      <line x1="300" y1="0" x2="300" y2="400" stroke="rgba(180,150,80,0.2)" stroke-width="1"/>
+
+      <!-- ===== LEFT: SPARSE TF-IDF ===== -->
+      <text x="150" y="24" text-anchor="middle" font-size="14" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">Sparse — TF-IDF</text>
+      <text x="150" y="40" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">dim M ≈ 10⁵, sparsité &gt; 99%</text>
+
+      <!-- Sparse vector visualization -->
+      <text x="25" y="58" font-size="10" fill="#9089bf" font-family="Georgia,serif">Vecteur d_j :</text>
+      <!-- cells: mostly grey, few colored -->
+      <rect x="20" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="36" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="52" y="62" width="14" height="18" fill="#c9a84c" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="68" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="84" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="100" y="62" width="14" height="18" fill="#c9a84c" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="116" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="132" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="148" y="62" width="14" height="18" fill="#7bc496" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <rect x="164" y="62" width="14" height="18" fill="#2a2040" rx="2" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <text x="182" y="75" font-size="11" fill="#9089bf" font-family="Georgia,serif">... (M≈10⁵)</text>
+      <text x="52" y="76" text-anchor="middle" font-size="8" fill="#c9a84c" font-family="Georgia,serif">2.1</text>
+      <text x="100" y="76" text-anchor="middle" font-size="8" fill="#c9a84c" font-family="Georgia,serif">1.5</text>
+      <text x="148" y="76" text-anchor="middle" font-size="8" fill="#7bc496" font-family="Georgia,serif">3.2</text>
+
+      <!-- Arrow down -->
+      <line x1="150" y1="90" x2="150" y2="113" stroke="#9089bf" stroke-width="1.5" marker-end="url(#arr-d)"/>
+      <text x="155" y="105" font-size="10" fill="#9089bf" font-family="Georgia,serif">inversion</text>
+
+      <!-- Inverted File structure -->
+      <rect x="20" y="115" width="265" height="145" fill="#161221" rx="8" stroke="rgba(123,196,150,0.3)" stroke-width="1.5"/>
+      <text x="152" y="133" text-anchor="middle" font-size="12" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">Fichier Inversé</text>
+      <text x="152" y="147" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">Dictionnaire + Postings</text>
+
+      <!-- Dictionary entries -->
+      <rect x="32" y="154" width="68" height="18" fill="#0d0b14" rx="3"/>
+      <text x="66" y="167" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Georgia,serif">"machine"</text>
+      <text x="105" y="167" font-size="10" fill="#9089bf" font-family="Georgia,serif">→</text>
+      <rect x="120" y="154" width="150" height="18" fill="#0d0b14" rx="3"/>
+      <text x="195" y="167" text-anchor="middle" font-size="10" fill="#7bc496" font-family="Georgia,serif">[d₃:1.5, d₇:2.1, d₁₂:0.8]</text>
+
+      <rect x="32" y="177" width="68" height="18" fill="#0d0b14" rx="3"/>
+      <text x="66" y="190" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Georgia,serif">"learning"</text>
+      <text x="105" y="190" font-size="10" fill="#9089bf" font-family="Georgia,serif">→</text>
+      <rect x="120" y="177" width="150" height="18" fill="#0d0b14" rx="3"/>
+      <text x="195" y="190" text-anchor="middle" font-size="10" fill="#7bc496" font-family="Georgia,serif">[d₁:3.2, d₇:1.1]</text>
+
+      <rect x="32" y="200" width="68" height="18" fill="#0d0b14" rx="3"/>
+      <text x="66" y="213" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Georgia,serif">"neural"</text>
+      <text x="105" y="213" font-size="10" fill="#9089bf" font-family="Georgia,serif">→</text>
+      <rect x="120" y="200" width="150" height="18" fill="#0d0b14" rx="3"/>
+      <text x="195" y="213" text-anchor="middle" font-size="10" fill="#7bc496" font-family="Georgia,serif">[d₃:2.8, d₉:1.4, d₁₅:0.9]</text>
+
+      <text x="152" y="240" text-anchor="middle" font-size="9" fill="#9089bf" font-family="Georgia,serif">...</text>
+
+      <!-- Complexity box left -->
+      <rect x="20" y="270" width="265" height="55" fill="rgba(123,196,150,0.06)" rx="6" stroke="rgba(123,196,150,0.25)" stroke-width="1"/>
+      <text x="152" y="288" text-anchor="middle" font-size="11" fill="#7bc496" font-family="Georgia,serif" font-weight="bold">Requête : O(|𝟙_q|) — termes query</text>
+      <text x="152" y="304" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">Exploite l'intersection : seuls les postings</text>
+      <text x="152" y="318" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">des termes de q sont consultés</text>
+
+      <!-- Properties left -->
+      <text x="25" y="345" font-size="10" fill="#9089bf" font-family="Georgia,serif">✓ Exact  ✓ Compressible  ✓ Interprétable</text>
+      <text x="25" y="360" font-size="10" fill="#9089bf" font-family="Georgia,serif">✗ Vocabulaire mismatch  ✗ Pas de sémantique</text>
+
+      <!-- ===== RIGHT: DENSE Word2Vec/BERT ===== -->
+      <text x="450" y="24" text-anchor="middle" font-size="14" fill="#c9a84c" font-family="Georgia,serif" font-weight="bold">Dense — Word2Vec / BERT</text>
+      <text x="450" y="40" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">dim d ≈ 768, sparsité = 0%</text>
+
+      <!-- Dense vector visualization -->
+      <text x="315" y="58" font-size="10" fill="#9089bf" font-family="Georgia,serif">Vecteur emb(d_j) :</text>
+      <rect x="310" y="62" width="14" height="18" fill="#7eb8d4" rx="2" opacity="0.7"/>
+      <rect x="326" y="62" width="14" height="18" fill="#e07b7b" rx="2" opacity="0.7"/>
+      <rect x="342" y="62" width="14" height="18" fill="#7bc496" rx="2" opacity="0.7"/>
+      <rect x="358" y="62" width="14" height="18" fill="#c9a84c" rx="2" opacity="0.7"/>
+      <rect x="374" y="62" width="14" height="18" fill="#a78bfa" rx="2" opacity="0.7"/>
+      <rect x="390" y="62" width="14" height="18" fill="#7eb8d4" rx="2" opacity="0.5"/>
+      <rect x="406" y="62" width="14" height="18" fill="#e07b7b" rx="2" opacity="0.6"/>
+      <rect x="422" y="62" width="14" height="18" fill="#7bc496" rx="2" opacity="0.8"/>
+      <text x="440" y="75" font-size="11" fill="#9089bf" font-family="Georgia,serif">... (d=768)</text>
+
+      <!-- Arrow down -->
+      <line x1="450" y1="90" x2="450" y2="113" stroke="#9089bf" stroke-width="1.5" marker-end="url(#arr-d)"/>
+      <text x="455" y="105" font-size="10" fill="#9089bf" font-family="Georgia,serif">indexation métrique</text>
+
+      <!-- HNSW Graph visualization -->
+      <rect x="310" y="115" width="275" height="145" fill="#161221" rx="8" stroke="rgba(126,184,212,0.3)" stroke-width="1.5"/>
+      <text x="447" y="133" text-anchor="middle" font-size="12" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">HNSW — Graphe Hiérarchique</text>
+
+      <!-- Layer 2 (top) -->
+      <text x="320" y="152" font-size="9" fill="#9089bf" font-family="Georgia,serif">L2</text>
+      <circle cx="370" cy="155" r="6" fill="#7eb8d4" opacity="0.9"/>
+      <circle cx="450" cy="155" r="6" fill="#7eb8d4" opacity="0.9"/>
+      <circle cx="530" cy="155" r="6" fill="#7eb8d4" opacity="0.9"/>
+      <line x1="376" y1="155" x2="444" y2="155" stroke="#7eb8d4" stroke-width="1.2" opacity="0.5"/>
+      <line x1="456" y1="155" x2="524" y2="155" stroke="#7eb8d4" stroke-width="1.2" opacity="0.5"/>
+
+      <!-- Layer 1 (middle) -->
+      <text x="320" y="198" font-size="9" fill="#9089bf" font-family="Georgia,serif">L1</text>
+      <circle cx="350" cy="195" r="5" fill="#7bc496" opacity="0.8"/>
+      <circle cx="390" cy="195" r="5" fill="#7bc496" opacity="0.8"/>
+      <circle cx="430" cy="195" r="5" fill="#7bc496" opacity="0.8"/>
+      <circle cx="480" cy="195" r="5" fill="#7bc496" opacity="0.8"/>
+      <circle cx="530" cy="195" r="5" fill="#7bc496" opacity="0.8"/>
+      <line x1="355" y1="195" x2="385" y2="195" stroke="#7bc496" stroke-width="1" opacity="0.4"/>
+      <line x1="395" y1="195" x2="425" y2="195" stroke="#7bc496" stroke-width="1" opacity="0.4"/>
+      <line x1="435" y1="195" x2="475" y2="195" stroke="#7bc496" stroke-width="1" opacity="0.4"/>
+      <line x1="485" y1="195" x2="525" y2="195" stroke="#7bc496" stroke-width="1" opacity="0.4"/>
+
+      <!-- Layer 0 (bottom) -->
+      <text x="320" y="240" font-size="9" fill="#9089bf" font-family="Georgia,serif">L0</text>
+      <circle cx="340" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="360" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="385" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="410" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="432" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="455" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="478" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="502" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="525" cy="238" r="4" fill="#a78bfa" opacity="0.7"/>
+      <line x1="344" y1="238" x2="356" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="364" y1="238" x2="381" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="389" y1="238" x2="406" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="414" y1="238" x2="428" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="436" y1="238" x2="451" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="459" y1="238" x2="474" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="482" y1="238" x2="498" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <line x1="506" y1="238" x2="521" y2="238" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+      <!-- Cross-layer connections -->
+      <line x1="370" y1="161" x2="350" y2="190" stroke="#9089bf" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2"/>
+      <line x1="450" y1="161" x2="430" y2="190" stroke="#9089bf" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2"/>
+      <line x1="390" y1="200" x2="385" y2="234" stroke="#9089bf" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2"/>
+      <line x1="480" y1="200" x2="478" y2="234" stroke="#9089bf" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2"/>
+
+      <!-- Complexity box right -->
+      <rect x="310" y="270" width="275" height="55" fill="rgba(126,184,212,0.06)" rx="6" stroke="rgba(126,184,212,0.25)" stroke-width="1"/>
+      <text x="447" y="288" text-anchor="middle" font-size="11" fill="#7eb8d4" font-family="Georgia,serif" font-weight="bold">Requête : O(log N) moyen (HNSW)</text>
+      <text x="447" y="304" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">Greedy search dans le graphe : descente</text>
+      <text x="447" y="318" text-anchor="middle" font-size="10" fill="#9089bf" font-family="Georgia,serif">hiérarchique vers le plus proche voisin</text>
+
+      <!-- Properties right -->
+      <text x="315" y="345" font-size="10" fill="#9089bf" font-family="Georgia,serif">✓ Sémantique  ✓ Cross-lingual  ✓ Robuste</text>
+      <text x="315" y="360" font-size="10" fill="#9089bf" font-family="Georgia,serif">✗ Curse of dim.  ✗ Approx. seulement  ✗ Coûteux</text>
+    </svg>
+  </div>
+
+  <h3>Différences fondamentales</h3>
+
+  <div class="twrap">
+    <table>
+      <thead><tr>
+        <th>Dimension</th>
+        <th>Sparse (TF-IDF)</th>
+        <th>Dense (Word2Vec/BERT)</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>Dimension</strong></td><td class="m">$M \approx 10^4 – 10^6$ (vocabulaire)</td><td class="m">$d \approx 100 – 1536$</td></tr>
+        <tr><td><strong>Sparsité</strong></td><td class="g">&gt; 99% zéros (doc. contient ~100 termes)</td><td class="r">0% zéros — tout est non-nul</td></tr>
+        <tr><td><strong>Structure exploitée</strong></td><td class="m">Intersection d'ensembles</td><td class="m">Géométrie euclidienne / métrique</td></tr>
+        <tr><td><strong>Index adapté</strong></td><td class="m">Inverted File (IF)</td><td class="m">HNSW, LSH, kd-tree, IVF-PQ</td></tr>
+        <tr><td><strong>Requête</strong></td><td class="g">$O(|\mathbb{1}_q|)$ — termes de la requête</td><td class="m">$O(\log N)$ à $O(N)$ selon index</td></tr>
+        <tr><td><strong>Exactitude</strong></td><td class="g">Exact (si IF complet)</td><td class="r">Souvent approximatif (ANN)</td></tr>
+        <tr><td><strong>Sémantique</strong></td><td class="r">Non — lexical uniquement</td><td class="g">Oui — relations conceptuelles</td></tr>
+        <tr><td><strong>Interprétabilité</strong></td><td class="g">Haute — TF-IDF interprétable</td><td class="r">Faible — espace latent opaque</td></tr>
+        <tr><td><strong>Scalabilité milliard</strong></td><td class="g">Bonne (SPANN, IF compressé)</td><td class="r">Difficile (FAISS-PQ, DiskANN)</td></tr>
+        <tr><td><strong>Exemples modernes</strong></td><td class="m">BM25, Elasticsearch, Lucene</td><td class="m">FAISS, Weaviate, Pinecone, Qdrant</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Hybrid Retrieval : le meilleur des deux mondes</h3>
+  <p>Les systèmes RAG modernes combinent les deux approches via la <strong>fusion de rang réciproque</strong> (<em>Reciprocal Rank Fusion</em>, RRF) :</p>
+  <div class="mblock">
+    <div class="mlabel">Reciprocal Rank Fusion</div>
+    $$\text{score}_{\text{hybrid}}(d) = \sum_{r \in R} \frac{1}{k + \text{rank}_r(d)}, \quad k \approx 60$$
+  </div>
+  <p>où $R$ est l'ensemble des listes de résultats (sparse BM25 + dense ANN). Les deux listes votent indépendamment, le résultat final est leur fusion pondérée.</p>
+</section>
+
+<!-- ═══ §6 FORMULES IMPORTANTES ═════════════════════════════════════════════ -->
+<section class="sec" id="formules">
+  <div class="sec-hd"><span class="sec-num">§6</span><h2 class="sec-title">Formules importantes</h2></div>
+
+  <div class="fcards">
+
+    <!-- F1: Inverted File RSV -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">RSV via Inverted File</span>
+        <span class="fc-tag">Sparse · O(|𝟙_q|)</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{RSV}(\mathbf{d}_j, \mathbf{q}) = \sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij}\, w_{iq}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$\mathbb{1}_j$ : termes du document $j$ ; $\mathbb{1}_q$ : termes de la requête ; $w_{ij}$ : poids TF-IDF</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>On ne somme que sur les termes <em>communs</em> au lieu de tous les $M$ termes. Exploite la sparsité.</p></div>
+          <div class="fc-item"><h5>Gain</h5><p>$O(MN) \to O(|\mathbb{1}_q|)$ — réduction massive car $|\mathbb{1}_q| \ll M$</p></div>
+          <div class="fc-item"><h5>Implémentation</h5><p>IF = Dictionary + Posting lists. La boucle externe porte sur les termes de q, pas sur les N documents.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2: Exclusion Rule -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Règle d'exclusion euclidienne</span>
+        <span class="fc-tag">Pivot-based · Metric Space</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$d(\mathbf{q}, \mathbf{x}) \geq |d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})|$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$\mathbf{p}$ : pivot ; $\mathbf{q}$ : requête ; $\mathbf{x}$ : point candidat ; $d$ : métrique quelconque</p></div>
+          <div class="fc-item"><h5>Dérivation</h5><p>Triangle : $d(\mathbf{p},\mathbf{q}) \leq d(\mathbf{p},\mathbf{x})+d(\mathbf{x},\mathbf{q})$ et $d(\mathbf{p},\mathbf{x}) \leq d(\mathbf{p},\mathbf{q})+d(\mathbf{q},\mathbf{x})$</p></div>
+          <div class="fc-item"><h5>Condition d'exclusion</h5><p>Si $|d(\mathbf{p},\mathbf{x}) - d(\mathbf{p},\mathbf{q})| > d_{\text{best}}$ → $\mathbf{x}$ éliminé</p></div>
+          <div class="fc-item"><h5>Offline vs Online</h5><p>$d(\mathbf{p},\mathbf{x})$ stocké offline. $d(\mathbf{p},\mathbf{q})$ calculé online une fois par pivot.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F3: AESA bound -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">Borne AESA — pivots multiples</span>
+        <span class="fc-tag">Branch-and-Bound · Optimal</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbf{b}[i] = \max_{\mathbf{x} \in \mathcal{X}}\, |d(\mathbf{x}, \mathbf{x}_i) - d(\mathbf{x}, \mathbf{q})| \quad \forall\, \mathbf{x}_i \in \mathcal{X}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Signification</h5><p>$\mathbf{b}[i]$ est la meilleure borne inférieure sur $d(\mathbf{q}, \mathbf{x}_i)$ obtenue en maximisant sur tous les pivots déjà visités.</p></div>
+          <div class="fc-item"><h5>Mise à jour</h5><p>À chaque itération, quand un nouveau pivot $\mathbf{x}$ est visité, toutes les bornes $\mathbf{b}[i]$ sont améliorées.</p></div>
+          <div class="fc-item"><h5>Forces</h5><p>Minimum théorique de calculs de distances. Optimal pour les espaces métriques généraux.</p></div>
+          <div class="fc-item"><h5>Limite</h5><p>Matrice $\mathbf{D}$ de taille $O(N^2)$ en mémoire. Non scalable au-delà de quelques millions de points.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4: MIPS -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">MIPS — Maximum Inner Product Search</span>
+        <span class="fc-tag">Dense · Neural Retrieval</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbf{x}^* = \underset{\mathbf{x}_i \in \mathcal{X}}{\arg\max}\; \langle \mathbf{x}_i, \mathbf{q} \rangle \quad \text{car} \quad d(\mathbf{x}_i, \mathbf{q})^2 = \|\mathbf{x}_i\|^2 + \|\mathbf{q}\|^2 - 2\langle \mathbf{x}_i, \mathbf{q}\rangle$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Signification</h5><p>Trouver le vecteur qui maximise le produit scalaire avec la requête = chercher le plus proche voisin si les vecteurs sont normalisés.</p></div>
+          <div class="fc-item"><h5>Cas non normalisé</h5><p>Si $\|\mathbf{x}_i\|$ varient, MIPS ≠ kNN. Il faut des techniques spéciales (SCANN, transformation augmentée).</p></div>
+          <div class="fc-item"><h5>Application</h5><p>Retrieval dense en RAG : query encoder → embedding → MIPS dans la base vectorielle.</p></div>
+          <div class="fc-item"><h5>Librairies</h5><p>SCANN (Google), FAISS + inner product mode, Weaviate, Pinecone.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F5: LSH -->
+    <div class="fc">
+      <div class="fc-head">
+        <span class="fc-name">LSH — Locality-Sensitive Hashing</span>
+        <span class="fc-tag">ANN · Probabiliste</span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\text{si } d(\mathbf{x}_i, \mathbf{x}_j) \leq \tau_{\text{low}} \Rightarrow \mathbb{P}(h(\mathbf{x}_i) = h(\mathbf{x}_j)) > p_{\text{high}}$$
+        $$\text{si } d(\mathbf{x}_i, \mathbf{x}_j) \geq \tau_{\text{high}} \Rightarrow \mathbb{P}(h(\mathbf{x}_i) = h(\mathbf{x}_j)) < p_{\text{low}}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Principe</h5><p>Hasher les points de façon à ce que les points similaires tombent dans le même bucket avec haute probabilité. Contraire du hashing classique (collision = problème).</p></div>
+          <div class="fc-item"><h5>Exemples</h5><p>SimHash (projections aléatoires, cosinus), MinHash (Jaccard), E²-LSH (L2).</p></div>
+          <div class="fc-item"><h5>Avantages</h5><p>Scalable, theorie bien établie, applicable en haute dimension.</p></div>
+          <div class="fc-item"><h5>Limites</h5><p>Contrôle difficile de $p_{\text{high}}/p_{\text{low}}$, nombreux hyperparamètres, souvent battu par HNSW en pratique.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ §7 COMPARAISON DES APPROCHES ════════════════════════════════════════ -->
+<section class="sec" id="comparaison">
+  <div class="sec-hd"><span class="sec-num">§7</span><h2 class="sec-title">Comparaison des approches d'indexation</h2></div>
+
+  <div class="twrap">
+    <table>
+      <thead><tr>
+        <th>Approche</th>
+        <th>Principe</th>
+        <th>Complexité</th>
+        <th>Forces</th>
+        <th>Limites</th>
+        <th>Usage typique</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Inverted File</strong></td>
+          <td class="m">Intersection par terme ; chaque terme pointe vers ses documents</td>
+          <td class="g">$O(|\mathbb{1}_q|)$ query ; $O(NM)$ index</td>
+          <td class="g">Exact, compressible, très rapide pour sparse</td>
+          <td class="r">Inapplicable au dense (coûts 0)</td>
+          <td class="m">BM25, Elasticsearch, Lucene</td>
+        </tr>
+        <tr>
+          <td><strong>k-d Tree</strong></td>
+          <td class="m">Partition récursive de $\mathbb{R}^D$ par hyperplans</td>
+          <td class="g">$O(\log N)$ en basse dim.</td>
+          <td class="g">Exact, intuitif, léger</td>
+          <td class="r">Inutilisable $D > 20$, curse of dim.</td>
+          <td class="m">Basse dim., GIS, robotique</td>
+        </tr>
+        <tr>
+          <td><strong>Pivot Indexing / AESA</strong></td>
+          <td class="m">Triangle inequality + branch-and-bound sur pivots</td>
+          <td class="m">Optim. en calculs de dist. ; $O(N^2)$ stockage</td>
+          <td class="g">Exact, optimal théorique, métrique général</td>
+          <td class="r">Non scalable ($N > 10^5$)</td>
+          <td class="m">Espaces métriques généraux, petits N</td>
+        </tr>
+        <tr>
+          <td><strong>LSH</strong></td>
+          <td class="m">Hashing preservant la similarité ; buckets probabilistes</td>
+          <td class="g">$O(1)$ lookup théorique</td>
+          <td class="g">Scalable, théorie formelle, haute dim.</td>
+          <td class="r">Approximatif, beaucoup d'hyperparamètres</td>
+          <td class="m">Déduplication, big data</td>
+        </tr>
+        <tr>
+          <td><strong>HNSW</strong></td>
+          <td class="m">Graphe navigable hiérarchique (small world); greedy search</td>
+          <td class="g">$O(\log N)$ moyen query</td>
+          <td class="g">SOTA ANN, rapide, qualité élevée</td>
+          <td class="r">RAM-bound, update lent, graph O(N)</td>
+          <td class="m">Vector DBs : Pinecone, Weaviate, Chroma</td>
+        </tr>
+        <tr>
+          <td><strong>Product Quantization (FAISS)</strong></td>
+          <td class="m">Compression vectorielle ; quantification par sous-espaces</td>
+          <td class="g">Billion-scale possible</td>
+          <td class="g">Très compact, GPU-friendly</td>
+          <td class="r">Perte de précision, tuning complexe</td>
+          <td class="m">Facebook FAISS, DiskANN</td>
+        </tr>
+        <tr>
+          <td><strong>Permutation-based</strong></td>
+          <td class="m">Encoder chaque point par la permutation des pivots par distance</td>
+          <td class="m">$O(|P|)$ ; Spearman Rho</td>
+          <td class="g">Métrique général, entiers rapides</td>
+          <td class="r">Approximatif, sélection de pivots critique</td>
+          <td class="m">Espaces métriques non euclidiens</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ §8 RELATIONS CONCEPTUELLES ══════════════════════════════════════════ -->
+<section class="sec" id="relations">
+  <div class="sec-hd"><span class="sec-num">§8</span><h2 class="sec-title">Relations entre les concepts</h2></div>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Fondement</div>
+      <h4>Inégalité triangulaire</h4>
+      <p>Propriété universelle des espaces métriques. Fondement de toute exclusion géométrique. Sans elle, aucun index métrique n'est possible.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Spécialisation</div>
+      <h4>Pivot → AESA → L-AESA</h4>
+      <p>AESA généralise l'indexation pivot en construisant dynamiquement les pivots. L-AESA sacrifie l'optimalité pour scalabilité ($O(N^2) \to O(N|P|)$).</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Approximation</div>
+      <h4>Exact → Approx (ANNS)</h4>
+      <p>La curse of dim. force le passage d'exact à approx. L'ANNS tolère un facteur $(1+\varepsilon)$ d'erreur pour gagner en efficacité.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Lien Fort</div>
+      <h4>Partition = Hashing = Graphe</h4>
+      <p>Un partitionnement définit des cellules (k-d tree), qui définissent des buckets (LSH), qui définissent une connectivité locale (HNSW). Ce sont trois vues du même problème.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Dual</div>
+      <h4>kNN ↔ Classification kNN</h4>
+      <p>Un bon index ANN accélère directement le kNN en ML supervisé. Sklearn.neighbors et FAISS partagent la même problématique algorithmique.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Émergent</div>
+      <h4>MIPS ↔ NNS normalisé</h4>
+      <p>MIPS = NNS si les vecteurs sont normalisés. Dans les LLMs, les embeddings sont souvent normalisés → cosine = produit scalaire.</p>
+    </div>
+  </div>
+
+  <!-- Historical timeline -->
+  <h3>Perspective chronologique</h3>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1972–1984</div>
+      <div class="tl-title">Inverted Files & B-Trees</div>
+      <div class="tl-desc">Fox &amp; Lee (FAST-INV), B-Trees de Bayer. Fondements de l'indexation pour les données structurées et le texte sparse.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1975</div>
+      <div class="tl-title">k-d Trees — Bentley</div>
+      <div class="tl-desc">Première structure pour la recherche multidimensionnelle. Efficace en basse dimension, fondement des index spatiaux.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1994</div>
+      <div class="tl-title">AESA / L-AESA — Micó, Oncina, Vidal</div>
+      <div class="tl-desc">Algorithme optimal de recherche par exclusion avec bornes dynamiques. Première formalisation rigoureuse de l'exclusion géométrique.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1998–2004</div>
+      <div class="tl-title">LSH — Indyk, Motwani</div>
+      <div class="tl-desc">Locality-Sensitive Hashing : première approche ANN sous-linéaire avec garanties théoriques. SimHash (Charikar 2002), Min-Hash.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2011</div>
+      <div class="tl-title">Product Quantization — Jégou, Douze, Schmid</div>
+      <div class="tl-desc">Compression vectorielle par quantification de sous-espaces. Base de FAISS (Facebook). Permet le billion-scale.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2018</div>
+      <div class="tl-title">HNSW — Malkov &amp; Yashunin</div>
+      <div class="tl-desc">État de l'art actuel pour l'ANN. Graphe small-world hiérarchique. Base de la majorité des vector databases modernes.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2021–2024</div>
+      <div class="tl-title">Billion-scale : DiskANN, SPANN, ScaNN</div>
+      <div class="tl-desc">Combinaisons de graphes, inverted files et quantification pour atteindre le milliard de vecteurs sur une seule machine.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §9 SYSTÈMES MODERNES ════════════════════════════════════════════════ -->
+<section class="sec" id="moderne">
+  <div class="sec-hd"><span class="sec-num">§9</span><h2 class="sec-title">Lien avec les systèmes modernes</h2></div>
+
+  <h3>RAG — Retrieval-Augmented Generation</h3>
+  <p>Un pipeline RAG combine un <strong>retriever dense</strong> (index HNSW ou IVF-PQ sur embeddings) avec un LLM générateur. La requête est encodée en vecteur dense par un bi-encoder, puis le MIPS/ANN retrouve les documents les plus proches dans l'espace sémantique. L'index dense est ici au cœur du système.</p>
+
+  <h3>Vector Databases</h3>
+  <p>Weaviate, Pinecone, Qdrant, Chroma, Milvus — toutes ces bases implémentent essentiellement <strong>HNSW + MIPS</strong>. La plupart offrent également un mode sparse (BM25) pour le <em>hybrid retrieval</em>. Le choix du paramètre <code>ef</code> dans HNSW contrôle le trade-off précision/vitesse.</p>
+
+  <h3>Billion-scale : solutions industrielles</h3>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Facebook / Meta</div>
+      <h4>FAISS</h4>
+      <p>Inverted File + Product Quantization. GPU-accelerated. Index IVF-PQ : quantification par sous-espaces avec liste inversée pour le partitionnement grossier.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Microsoft</div>
+      <h4>DiskANN</h4>
+      <p>Graphe Vamana + SSD-friendly layout. Billion-scale sur un seul nœud. Combine indexation graphe et accès disque optimisé.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Google</div>
+      <h4>ScaNN</h4>
+      <p>Quantification anisotropique optimisée pour MIPS. Utilisé en production dans Google Search. Sélection non uniforme des centroïdes.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Microsoft Research</div>
+      <h4>SPANN</h4>
+      <p>Hierarchical Balanced Clustering + Inverted File. Stocke les vecteurs proches dans les mêmes posting lists pour maximiser la localité SSD.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §10 QUESTIONS D'EXAMEN ══════════════════════════════════════════════ -->
+<section class="sec" id="questions">
+  <div class="sec-hd"><span class="sec-num">§10</span><h2 class="sec-title">Questions d'examen possibles</h2></div>
+
+  <div class="qlevel easy">Niveau Facile</div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Qu'est-ce qu'un index et pourquoi indexer ?</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">Un index est une structure de données qui organise les données pour accélérer certains accès en échange de temps de construction et d'espace supplémentaire. Sans index : recherche exhaustive en $O(N)$. Avec index : accès en $O(\log N)$ ou mieux pour les accès anticipés. L'index n'a de sens que si la structure des données et les types de requêtes sont connus.</div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Décrivez la structure d'un fichier inversé.</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">Un fichier inversé (<em>Inverted File</em>) = <strong>Dictionnaire</strong> + <strong>Postings</strong>. Le dictionnaire mappe chaque terme à une entrée indiquant sa fréquence totale et un pointeur vers sa posting list. La posting list (<em>Posting file</em>) contient les paires (DocID, poids TF-IDF) triées par DocID. La recherche itère sur les postings des termes de la requête, non sur tous les documents. Complexité $O(|\mathbb{1}_q|)$.</div>
+  </div>
+
+  <div class="qlevel med">Niveau Intermédiaire</div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Dérivez la règle d'exclusion euclidienne à partir de l'inégalité triangulaire.</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">
+      De l'inégalité triangulaire : $d(\mathbf{p}, \mathbf{q}) \leq d(\mathbf{p}, \mathbf{x}) + d(\mathbf{x}, \mathbf{q})$ donc $d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{q}) - d(\mathbf{p}, \mathbf{x})$.
+      Symétriquement : $d(\mathbf{p}, \mathbf{x}) \leq d(\mathbf{p}, \mathbf{q}) + d(\mathbf{q}, \mathbf{x})$ donc $d(\mathbf{q}, \mathbf{x}) \geq d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})$.
+      En combinant : $d(\mathbf{q}, \mathbf{x}) \geq |d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})|$.
+      Si $|d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})| > d_{\text{best}}$, alors $d(\mathbf{q}, \mathbf{x}) > d_{\text{best}}$ et $\mathbf{x}$ ne peut pas être le plus proche voisin → éliminé.
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Pourquoi TF-IDF nécessite un inverted file alors que Word2Vec nécessite HNSW ?</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">TF-IDF produit des vecteurs <em>sparse</em> (99% de zéros) dans un espace de dimension $M \approx 10^5$. La similarité cosinus se réduit à une intersection d'ensembles de termes non-nuls — c'est exactement ce que fait le fichier inversé en $O(|\mathbb{1}_q|)$. Word2Vec produit des vecteurs <em>denses</em> de dimension 300 avec toutes les coordonnées non nulles. L'inverted file est inutile (toutes les coordonnées sont non nulles, aucune sparsité à exploiter). Il faut exploiter la <em>structure géométrique</em> de l'espace euclidien → HNSW construit un graphe navigable où les voisins géométriques sont connectés.</div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Comment HNSW réalise-t-il la recherche ? Expliquez la hiérarchie.</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">HNSW construit un graphe en plusieurs couches. La couche 0 contient tous les points avec des connexions locales. Les couches supérieures contiennent des sous-ensembles de plus en plus réduits de points avec des connexions longue portée (<em>small world</em>). Lors d'une recherche : on entre par un nœud aléatoire au sommet de la hiérarchie, on fait une descente greedy (toujours se rapprocher de q) jusqu'à un minimum local, on descend d'une couche, on recommence. La hiérarchie permet des "sauts" longue portée en haut et une navigation fine en bas. Complexité moyenne $O(\log N)$.</div>
+  </div>
+
+  <div class="qlevel hard">Niveau Difficile</div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Prouvez que MIPS est équivalent à NNS quand les vecteurs sont normalisés.</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">
+      En espace euclidien : $d(\mathbf{x}_i, \mathbf{q})^2 = \langle \mathbf{x}_i - \mathbf{q}, \mathbf{x}_i - \mathbf{q}\rangle = \|\mathbf{x}_i\|^2 + \|\mathbf{q}\|^2 - 2\langle \mathbf{x}_i, \mathbf{q}\rangle$.
+      Si $\|\mathbf{x}_i\| = \|\mathbf{q}\| = 1$ (vecteurs normalisés), alors $d(\mathbf{x}_i, \mathbf{q})^2 = 2 - 2\langle \mathbf{x}_i, \mathbf{q}\rangle$.
+      Minimiser $d(\mathbf{x}_i, \mathbf{q})$ ⟺ minimiser $d(\mathbf{x}_i, \mathbf{q})^2$ ⟺ maximiser $\langle \mathbf{x}_i, \mathbf{q}\rangle$.
+      Donc $\arg\min d(\mathbf{x}_i, \mathbf{q}) = \arg\max \langle \mathbf{x}_i, \mathbf{q}\rangle$ = MIPS. Les deux problèmes sont identiques.
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Comment le partitionnement, le hashing et la construction de graphe sont-ils équivalents ?</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">Les trois sont des façons d'organiser les données en groupes de points similaires. (1) <strong>Partitionnement</strong> (k-d tree) : divise l'espace en cellules par hyperplans. Les points dans la même cellule sont candidats. (2) <strong>Hashing</strong> (LSH) : assigne des points à des buckets via une fonction de hachage. Les points dans le même bucket sont candidats. (3) <strong>Graphe</strong> (HNSW) : connecte chaque point à ses k-NN. Les voisins dans le graphe sont candidats. La différence est que le partitionnement et le hashing sont implicites (pas de lien explicite), alors que le graphe stocke les connexions explicitement. LSH peut être vu comme un partitionnement par hachage, HNSW comme un graphe de voisinage. Tous trois résolvent le même problème : identifier rapidement les candidats proches.</div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q"><span class="qi-qtxt">Pourquoi la curse of dimensionality affecte-t-elle l'exclusion géométrique ?</span><span class="qi-arr">▼</span></div>
+    <div class="qi-a">En haute dimension, les distances se concentrent : $d_{\max}/d_{\min} \to 1$ quand $D \to \infty$. Concrètement : si $d(\mathbf{p}, \mathbf{x}) \approx d(\mathbf{p}, \mathbf{q})$ pour presque tous les $\mathbf{x}$ (concentration), alors $|d(\mathbf{p}, \mathbf{x}) - d(\mathbf{p}, \mathbf{q})| \approx 0$ pour presque tous les candidats. La borne inférieure est quasi-nulle, l'exclusion devient impossible, et l'algorithme dégénère en recherche exhaustive. Les k-d trees subissent le même sort : en haute dim., la quasi-totalité de l'espace tombe à égale distance d'un point donné. Solution : représentations plus courtes (hashing binaire, PQ) ou approximation agressive (HNSW, LSH).</div>
+  </div>
+</section>
+
+<!-- ═══ §11 PIÈGES CLASSIQUES ═══════════════════════════════════════════════ -->
+<section class="sec" id="pieges">
+  <div class="sec-hd"><span class="sec-num">§11</span><h2 class="sec-title">Pièges classiques</h2></div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre sparse et dense indexing</strong> — Un TF-IDF avec HNSW est absurde : HNSW exploite la géométrie dense. Un Word2Vec avec inverted file est aussi absurde : il n'y a pas de dimension "non nulle" à exploiter. Le choix de l'index doit correspondre à la nature de la représentation.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire qu'un k-d tree est toujours efficace</strong> — En dimension $D > 20$, le k-d tree devient aussi lent que la recherche exhaustive. La borne $O(\log N)$ n'est valide qu'en basse dimension. En NLP (dim 768), le k-d tree est inutilisable.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Confondre MIPS et NNS en général</strong> — MIPS = NNS <em>uniquement si les vecteurs sont normalisés</em>. Sans normalisation, maximiser $\langle \mathbf{x}_i, \mathbf{q}\rangle$ n'est pas équivalent à minimiser $d(\mathbf{x}_i, \mathbf{q})$ car les termes $\|\mathbf{x}_i\|^2$ varient.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Penser que l'exclusion géométrique garantit la trouvaille du vrai NN</strong> — L'exclusion est exacte <em>dans le cadre exact</em>. Mais si le $d_{\text{best}}$ initial est mal estimé (trop petit), on peut exclure prématurément. AESA est exact mais certains algorithmes approchés (ANN) font des choix heuristiques qui peuvent rater le vrai voisin.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Oublier que l'inégalité triangulaire exige une vraie métrique</strong> — La règle d'exclusion ne fonctionne que si $d$ est une <em>métrique</em> (symétrie, triangle inequality, positivité). La similarité cosinus brute n'est pas une distance métrique. Les embeddings appris peuvent violer l'inégalité triangulaire.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠</div>
+    <div class="piege-text"><strong>Croire qu'AESA est scalable</strong> — AESA est optimal en nombre de calculs de distances mais requiert $O(N^2)$ en espace. Pour $N = 10^6$ points en float32, la matrice de distances fait $4 \times 10^{12}$ octets = 4 téraoctets. Pas scalable. L-AESA réduit à $O(N \cdot |P|)$ en choisissant un sous-ensemble de pivots $\mathcal{P}$.</div>
+  </div>
+</section>
+
+<!-- ═══ §12 FICHE DE RÉVISION ═══════════════════════════════════════════════ -->
+<section class="sec" id="fiche">
+  <div class="sec-hd"><span class="sec-num">§12</span><h2 class="sec-title">Fiche de révision</h2></div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>Règle d'exclusion géométrique</h4>
+      <ul>
+        <li><strong>Principe :</strong> inégalité triangulaire → borne inférieure</li>
+        <li><strong>Formule :</strong> $d(\mathbf{q},\mathbf{x}) \geq |d(\mathbf{p},\mathbf{x}) - d(\mathbf{p},\mathbf{q})|$</li>
+        <li><strong>Exclusion si :</strong> borne $> d_{\text{best}}$</li>
+        <li><strong>Offline :</strong> $d(\mathbf{p},\mathbf{x})$ pré-calculé</li>
+        <li><strong>Online :</strong> $d(\mathbf{p},\mathbf{q})$ calculé à la requête</li>
+        <li><strong>Géom. :</strong> gap entre deux sphères concentriques</li>
+        <li><strong>AESA :</strong> pivots dynamiques, optimal, $O(N^2)$ espace</li>
+        <li><strong>L-AESA :</strong> pivots fixes, $O(N \cdot |P|)$ espace</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Sparse — TF-IDF & Inverted File</h4>
+      <ul>
+        <li><strong>Dimension :</strong> $M \approx 10^4 – 10^6$</li>
+        <li><strong>Sparsité :</strong> &gt; 99% de zéros</li>
+        <li><strong>Structure :</strong> intersection d'ensembles</li>
+        <li><strong>Index :</strong> Inverted File = Dict + Postings</li>
+        <li><strong>Query :</strong> $O(|\mathbb{1}_q|) \ll O(N)$</li>
+        <li><strong>RSV :</strong> $\sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij} w_{iq}$</li>
+        <li><strong>Exact</strong>, interprétable, compressible</li>
+        <li><strong>Limite :</strong> pas de sémantique</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Dense — Word2Vec/BERT & HNSW</h4>
+      <ul>
+        <li><strong>Dimension :</strong> $d \approx 100 – 1536$</li>
+        <li><strong>Sparsité :</strong> 0% — tout non-nul</li>
+        <li><strong>Structure :</strong> espace métrique euclidien</li>
+        <li><strong>Index :</strong> HNSW, LSH, kd-tree, IVF-PQ</li>
+        <li><strong>Query :</strong> $O(\log N)$ moyen (HNSW)</li>
+        <li><strong>MIPS :</strong> $\arg\max \langle \mathbf{x}_i, \mathbf{q}\rangle$</li>
+        <li><strong>Approximatif</strong>, sémantique, robuste</li>
+        <li><strong>Limite :</strong> curse of dim. &gt; 20 dims</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>Formules à mémoriser</h4>
+      <ul>
+        <li><strong>Exclusion :</strong> $d(\mathbf{q},\mathbf{x}) \geq |d(\mathbf{p},\mathbf{x})-d(\mathbf{p},\mathbf{q})|$</li>
+        <li><strong>RSV IF :</strong> $\sum_{i \in \mathbb{1}_j \cap \mathbb{1}_q} w_{ij}w_{iq}$</li>
+        <li><strong>MIPS :</strong> $\arg\max_i \langle \mathbf{x}_i, \mathbf{q}\rangle$</li>
+        <li><strong>Eucl. :</strong> $d^2 = \|x\|^2+\|q\|^2-2\langle x,q\rangle$</li>
+        <li><strong>AESA b[i] :</strong> $\max_p |d(p,x_i)-d(p,q)|$</li>
+        <li><strong>LSH :</strong> $d \leq \tau_l \Rightarrow P(h=h) > p_h$</li>
+        <li><strong>Spearman :</strong> $\rho(\sigma,\theta)=\sum(\sigma[i]-\theta[i])^2$</li>
+        <li><strong>RRF :</strong> $\sum_r 1/(k + \text{rank}_r(d))$</li>
+      </ul>
+    </div>
+
+    <div class="fc2" style="grid-column: 1 / -1;">
+      <h4>Mots-clés pour l'oral</h4>
+      <ul>
+        <li><strong>Inégalité triangulaire</strong> → fondement universel de l'exclusion ; valide pour toute métrique</li>
+        <li><strong>Pivot</strong> → landmark hors-ligne dont les distances sont pré-calculées pour borner rapidement à l'online</li>
+        <li><strong>Branch-and-Bound</strong> → stratégie AESA : choisir le meilleur candidat (branch), éliminer les autres (bound)</li>
+        <li><strong>Curse of Dimensionality</strong> → concentration des distances en haute dim. → bornes inutiles → ANN obligatoire</li>
+        <li><strong>Sparse vs Dense</strong> → sparsité → intersection (IF) ; densité → géométrie (HNSW/LSH)</li>
+        <li><strong>MIPS</strong> → NNS si normalisé ; sinon problème différent traité par ScaNN ou transformation augmentée</li>
+        <li><strong>Billion-scale</strong> → FAISS (PQ), DiskANN (graphe+SSD), SPANN (IF hiérarchique) ; short codes essentiels</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Quiz accordion
+document.querySelectorAll('.qi-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const a = q.nextElementSibling;
+    a.classList.toggle('open');
+    q.querySelector('.qi-arr').textContent = a.classList.contains('open') ? '▲' : '▼';
+  });
+});
+// Active sidebar link via IntersectionObserver
+const sections = document.querySelectorAll('.sec');
+const navLinks = document.querySelectorAll('.sb nav a');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.sb nav a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>

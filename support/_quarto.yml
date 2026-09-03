@@ -1,0 +1,14 @@
+project:
+  title: "Information Retrieval"
+  output-dir: ../output
+
+
+format:
+  pdf:
+    toc: false
+    number-sections: false
+    geometry:
+      - a4paper
+      - margin=1cm
+    fontsize: 8pt
+

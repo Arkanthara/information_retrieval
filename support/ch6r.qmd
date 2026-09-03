@@ -1,0 +1,136 @@
+# RI textuelle
+
+## Modèle Sac de Mots (Bag of Words)
+
+**Principe** : termes = entités indépendantes, non ordonnées, avec multiplicités
+
+| Avantage | Inconvénient |
+|---|---|
+| Simple, générique (texte, images…) | Perte de structure grammaticale |
+| Pas besoin de TAL complet | Synonymie / polysémie non gérées |
+| Légère, calculable | Ordre des mots ignoré |
+
+️ **Terme** = entité générique (mot, pattern visuel, motif acoustique…)
+
+
+## Pipeline de Traitement du Texte
+
+Document brut → Tokenisation → Suppression stopwords → Stemming/Lemmatisation → Index/Thésaurus
+
+| Étape | Rôle | Exemple |
+|---|---|---|
+| **Tokenisation** | Bytes → tokens | séparateurs : espaces, ponctuation |
+| **Stopwords** | Supprimer termes non-discriminants | *"the"*, *"a"*, *"of"* |
+| **Stemming** | Racine du mot (tronqué) | *committed* → *commit* |
+| **Lemmatisation** | Forme de base linguistique | *"are"*, *"is"* → *"be"* |
+| **SOUNDEX** | Clé phonétique 4 caractères | *Herman* → **H655** |
+
+️ **Stemming vs Lemmatisation** : stemming = plus rapide mais moins précis ; lemmatisation = linguistiquement correct
+
+
+## Loi de Zipf (Zipf's Law)
+
+**Définition du rang** $r(i)$ : position dans la liste triée par fréquence décroissante
+
+$$\boxed{f(i) \cdot r(i) = K \approx \text{cst}} \quad \Longleftrightarrow \quad f(i) = \frac{KL}{r(i)}, \quad K \approx 0.1$$
+
+**Loi de puissance** (power law) avec $c = -1$ → **droite en log-log**
+
+$$\log f(i) = \log(KL) - \log(r(i))$$
+
+### Prédiction du nombre de termes
+
+$$s_n = r_n - r_{n+1} = \frac{KL}{n(n+1)} \qquad \frac{s_n}{M} = \frac{1}{n(n+1)}$$
+
+| n (occurrences) | Fraction prédite | Fraction réelle (TREC) |
+|---|---|---|
+| 1 (hapax) | **0.500** | 0.402 |
+| 2 | 0.167 | 0.132 |
+| 5 | 0.033 | 0.032 |
+
+️ **Moitié des termes distincts n'apparaissent qu'une seule fois** (hapax legomena)
+
+### Correction de Mandelbrot
+
+$$f(i) = P(r(i) + \rho)^{-B}, \quad P=10^{5.4},\ \rho=100,\ B=1.15$$
+
+Améliore l'ajustement aux rangs extrêmes
+
+### Conséquences pratiques
+
+- ✅ Suppression stopwords → réduit fortement le stockage
+- ❌ Termes rares → statistiques peu fiables
+
+
+## Loi de Heap (Heap's Law)
+
+$$\boxed{M = k \cdot L^{\beta}}, \quad k \approx 10\text{–}100,\quad \beta \approx 0.4\text{–}0.6$$
+
+- $M$ = taille du vocabulaire, $L$ = longueur du corpus (tokens)
+- $\beta \approx 0.5$ → $M \propto \sqrt{L}$ (croissance **sous-linéaire**)
+- Dérivable depuis la loi de Zipf
+
+️ Vocabulaire non borné (entités nommées, fautes…)
+
+
+## Vocabulaire d'Index selon Luhn
+
+- **Seuil supérieur** (Upper Cut-Off) → élimine les stopwords (trop fréquents)
+- **Seuil inférieur** (Lower Cut-Off) → élimine les hapax (trop rares)
+- **Termes significatifs** = zone intermédiaire à haute valeur discriminante
+
+
+## Théorie de l'Information
+
+### Entropie
+
+$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i \quad \text{(max si équiprobable)}$$
+
+| Vocabulaire M | Entropie réelle | Entropie max |
+|---|---|---|
+| 100 000 | 9.5 bits | 13.3 bits |
+| 500 000 | 10.9 bits | 15.6 bits |
+| 1 000 000 | 11.4 bits | 16.6 bits |
+
+### Information Mutuelle (Mutual Information)
+
+$$I(W_1;W_2) = \sum_{w_1,w_2} \mathbb{P}(w_1,w_2)\log\frac{\mathbb{P}(w_1,w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$
+
+| Valeur | Interprétation |
+|---|---|
+| Grande | Co-occurrence **significative** |
+| Proche de 0 | Co-occurrence **spurieuse** (termes fréquents) |
+
+️ Pièges : termes très fréquents (*"a"*, *"is"*, *"with"*) → IM artificiellement élevée → stopwords à supprimer
+
+
+## Relations entre Concepts
+
+                 Loi de Zipf
+                /     |      \
+               /      |       \
+              v       v        v
+      Loi de Heap  Cutoffs   Correction
+                    de Luhn   Mandelbrot
+                      |           |
+                ------+           v
+                |         Porteur d'info idéal
+                |        (Théorie de l'information)
+                |
+          +-----+-----+
+          |           |
+          v           v
+    Suppression     Suppression
+    stopwords        hapax
+
+
+## Formules à Retenir
+
+| Formule | Nom | Variables |
+|---|---|---|
+| $f(i) \cdot r(i) = K$ | Zipf | $f$ = fréquence, $r$ = rang |
+| $f(i) = KL/r(i)$, $K\approx0.1$ | Zipf développée | $L$ = longueur corpus |
+| $s_n/M = 1/n(n+1)$ | Fraction hapax | $s_n$ = termes à $n$ occurrences |
+| $M = k \cdot L^\beta$ | Heap | $M$ = vocab, $\beta \in [0.4, 0.6]$ |
+| $I_H = -\sum p_i \log p_i$ | Entropie Shannon | $p_i$ = proba du terme $i$ |
+| $f(i) = P(r+\rho)^{-B}$ | Mandelbrot | $P, \rho, B$ = constantes empiriques |

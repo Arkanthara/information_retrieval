@@ -1,0 +1,221 @@
+# Sparse embedding
+
+**Problème central :** Convertir des documents textuels en vecteurs numériques pour permettre la recherche.
+
+**RSV (Retrieval Status Value)** = score de pertinence $\text{RSV}(d_j, q) \in \mathbb{R}$ → ordonne les documents par pertinence.
+
+
+# Notation clé
+
+| Symbole | Signification |
+|---------|--------------|
+| $N$ | Nombre de documents |
+| $M$ | Taille du vocabulaire |
+| $d_j$ | Vecteur du $j$-ième document |
+| $t_i$ | Vecteur du $i$-ième terme |
+| $\mathcal{I}_j$ | Indices des termes du document $j$ |
+| $q$ | Vecteur de la requête |
+
+
+# Modèle Booléen (Boolean Model)
+
+**Principe :** Encodage binaire 1-hot → documents sur les sommets du hypercube $[0,1]^M$.
+
+- Terme $i$ : $t_i = [\delta_{ik}]_{k=1}^M$
+- Document $j$ : $d_j = \bigvee_{i \in \mathcal{I}_j} t_i$
+- Requête : expression logique (AND, OR, NOT) → convertie en DNF
+
+**RSV :** $\in \{0, 1\}$ — tout ou rien.
+
+**Exemple :** $q = A \wedge (B \vee \neg C)$ → $q = 111 \vee 110 \vee 100$
+
+| ✅ Pros | ❌ Cons |
+|--------|--------|
+| Simple, formel | Pas d'ordonnancement |
+| Requête explicite | Trop/trop peu de résultats |
+| SQL-like | Non scalable |
+
+️ **Piège :** Pas de continuum de pertinence → $\text{RSV} \in \{0,1\}$ seulement.
+
+
+# Bag of Words (BoW) & TF·IDF
+
+## Fréquence des termes (Term Frequency)
+
+$$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}} \quad \Rightarrow \max_i \text{tf}_{ij} = 1$$
+
+💡 Plus un mot apparaît dans un doc → plus il le représente.
+
+## Fréquence inverse de document (Inverse Document Frequency)
+
+$$\text{idf}_i = \log \frac{N}{n_i}$$
+
+- $n_i$ = nb de docs contenant le terme $i$
+- Terme dans tous les docs → $\text{idf} \approx 0$ (non discriminant)
+- Terme rare → $\text{idf}$ élevé (très discriminant)
+
+## Poids TF·IDF
+
+$$w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$$
+
+**Matrice terme-document** $W \in \mathbb{R}^{M \times N}$ :
+
+- **Embedding document :** $d_j = W_{\cdot j} \in \mathbb{R}^M$ (colonne)
+- **Embedding terme :** $t_i = W_{i\cdot}^T \in \mathbb{R}^N$ (ligne transposée)
+
+## Géométrie
+
+$$d_j = \sum_i \text{tf}_{ij} \cdot \tau_i \quad \text{avec } \tau_i = \text{idf}_i \cdot e_i$$
+
+- $\text{idf}_i$ : **scale** l'axe $i$ (base discriminante)
+- $\text{tf}_{ij}$ : coordonnée du doc dans cette base
+
+️ **Piège BoW :** La structure du document (ordre, paragraphes) est perdue.
+
+
+# Modèle Vectoriel (Vector Space Retrieval)
+
+**Paradigme QbE (Query-by-Example) :** La requête = document exemple → $q \in \mathbb{R}^M$.
+
+## Mesures de similarité
+
+| Mesure | Formule | Analogue binaire |
+|--------|---------|-----------------|
+| Matching | $\langle d_j, q \rangle$ | $\|\hat{d}_j \cap \hat{q}\|$ |
+| **Cosinus** | $\frac{\langle d_j, q \rangle}{\|d_j\|\|q\|}$ | $\frac{\|\hat{d}_j \cap \hat{q}\|}{|\hat{d}_j|^{1/2}|\hat{q}|^{1/2}}$ |
+| Dice | $\frac{2\langle d_j, q \rangle}{\sum_i(w_{ij}+w_{iq})}$ | $\frac{2|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j|+|\hat{q}|}$ |
+| Overlap | $\frac{\langle d_j, q \rangle}{\min(\sum w_{ij}, \sum w_{iq})}$ | $\frac{|\hat{d}_j \cap \hat{q}|}{\min(|\hat{d}_j|,|\hat{q}|)}$ |
+| Jaccard | $\approx \frac{\langle d_j, q \rangle}{\sum_i \max(w_{ij},w_{iq})}$ | $\frac{|\hat{d}_j \cap \hat{q}|}{|\hat{d}_j \cup \hat{q}|}$ |
+
+## Similarité cosinus ⭐
+
+$$\text{RSV}(d_j, q) = \cos(\angle(d_j,q)) = \frac{\sum_i w_{ij}w_{iq}}{\left(\sum_i w_{ij}^2\right)^{1/2}\left(\sum_i w_{iq}^2\right)^{1/2}}$$
+
+💡 **Invariante à la norme** → insensible à la longueur du document.
+
+
+# Modèles Probabilistes (Probabilistic Retrieval)
+
+## Principe de Robertson (1977)
+
+> Classer les documents par **probabilité décroissante de pertinence** → efficacité optimale.
+
+**Objectif :** Estimer $P(R=\text{vrai} \mid d_j, q)$ où $R$ = variable de Bernoulli de pertinence.
+
+## Rapport de cotes bayésien (Odds Ratio)
+
+$$O(R \mid d_j, q) = \frac{P(R \mid d_j, q)}{P(\bar{R} \mid d_j, q)} \propto \frac{P(d_j \mid R, q)}{P(d_j \mid \bar{R}, q)}$$
+
+## Régression logistique pour la RI
+
+$$\log O(R \mid d_j, q) = w^T d_j + w_0 \quad \Rightarrow \quad P(R \mid d_j, q) = \sigma(w^T d_j + w_0)$$
+
+- Apprentissage par descente de gradient : $w_{t+1} = w_t - \eta \nabla_\theta \mathcal{L}$
+- Features typiques : TF·IDF + longueur du document
+
+## BIR — Binary Independence Retrieval
+
+**Hypothèses :**
+
+- Occurrences **binaires** (présent/absent)
+- Occurrences **indépendantes** entre termes
+
+**RSV :**
+
+$$\text{RSV}(d_j,q) \propto \sum_{i \in \mathcal{I}_j \cap \mathcal{I}_q} \left[\log\frac{P(t_i|R,q)}{1-P(t_i|R,q)} + \log\frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)}\right]$$
+
+**Initialisation (sans feedback) :**
+
+$$P(t_i|\bar{R},q) = \frac{n_i}{N} \quad \Rightarrow \quad \log\frac{1-P(t_i|\bar{R},q)}{P(t_i|\bar{R},q)} \approx \log\frac{N}{n_i} = \text{idf}_i$$
+
+️ **Connexion clé :** À l'initialisation, BIR $\leftrightarrow$ IDF !
+
+## BM25 / OKAPI ⭐
+
+$$w_i^{\text{RSJ}} = \log \frac{(r_i+0.5)(N-R-n_i+r_i+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)}$$
+
+$$w_i^{\text{BM25}}(tf) = \frac{tf}{k_1\left((1-b)+b\frac{dl}{avdl}\right)+tf} \cdot w_i^{\text{RSJ}}$$
+
+| Paramètre | Valeur par défaut | Rôle |
+|-----------|-------------------|------|
+| $k_1$ | 1.2 | Saturation TF |
+| $b$ | 0.75 | Normalisation longueur |
+| $dl$ | — | Longueur du document |
+| $avdl$ | — | Longueur moyenne |
+
+
+# LSI — Indexation Sémantique Latente
+
+## Problèmes du TF·IDF
+
+| Problème | Description | Exemple |
+|----------|-------------|---------|
+| **Synonymie** (Synonymy) | Termes identiques → vecteurs orthogonaux | « voiture » $\neq$ « automobile » |
+| **Polysémie** (Polysemy) | Un terme, plusieurs sens | « table » |
+
+## SVD Tronquée (Truncated SVD)
+
+$$W = U\Sigma V^T \quad \Rightarrow \quad W_K = U_K \Sigma_K V_K^T$$
+
+- $W_K$ = meilleure approximation de rang $K$ au sens de Frobenius
+- $\|U_K\|$ orthogonale : $\langle u_i, u_j \rangle = \delta_{ij}$
+
+| Matrice | Dimensions | Rôle |
+|---------|-----------|------|
+| $U_K$ | $M \times K$ | Vecteurs de termes (Term Vectors) |
+| $\Sigma_K$ | $K \times K$ | Valeurs singulières (importance des concepts) |
+| $V_K^T$ | $K \times N$ | Vecteurs de documents (Document Vectors) |
+
+## Embedding LSI
+
+**Document dans l'espace LSI :**
+
+$$\tilde{d}_j = \Sigma_K^{-1} U_K^T d_j \in \mathbb{R}^K$$
+
+**Requête dans l'espace LSI :**
+
+$$\tilde{q} = \Sigma_K^{-1} U_K^T q \in \mathbb{R}^K$$
+
+**RSV en espace LSI :**
+
+$$\text{RSV}(d_j, q) = \frac{\langle \tilde{d}_j, \tilde{q} \rangle}{\|\tilde{d}_j\|\|\tilde{q}\|}$$
+
+💡 Synonymes → proches dans $\mathbb{R}^K$ même avec des vocabulaires différents.
+
+## Mise à jour de l'index
+
+| Stratégie | Principe | Qualité |
+|-----------|----------|---------|
+| **Exacte** | Recalcule la SVD partielle avec les nouveaux docs | Exacte |
+| **Fold-in** (repliement) | Projette les nouveaux docs dans l'espace existant : $\hat{D} = U_K^T D$ | Approximative |
+
+️ **Fold-in :** les nouveaux documents n'enrichissent pas l'espace conceptuel.
+
+
+# Comparaison des modèles
+
+| Modèle | RSV | Avantage | Limite |
+|--------|-----|----------|--------|
+| **Booléen** | $\{0,1\}$ | Simple, exact | Pas d'ordonnancement |
+| **Vectoriel (cosinus)** | $[0,1]$ | Continu, intuitif | Sensible à la TF seule |
+| **Probabiliste (BM25)** | $\mathbb{R}^+$ | Longueur doc prise en compte | Paramètres à régler |
+| **LSI** | $[0,1]$ | Synonymie, décorrélation | Coût SVD, $K$ à choisir |
+
+
+# Formules à mémoriser ⭐
+
+$$\text{tf}_{ij} = \frac{f_{ij}}{\max_k f_{kj}} \qquad \text{idf}_i = \log\frac{N}{n_i} \qquad w_{ij} = \text{tf}_{ij} \cdot \text{idf}_i$$
+
+$$\text{cosinus}(d_j, q) = \frac{d_j^T q}{\|d_j\|\|q\|} \qquad \tilde{d}_j = \Sigma_K^{-1} U_K^T d_j$$
+
+$$W_K = \arg\min_{\text{rank}(A)=K} \|W-A\|_F^2$$
+
+
+# Pièges classiques ️
+
+- **Booléen :** RSV binaire → pas de classement fin possible.
+- **TF·IDF :** termes très fréquents dans toute la collection → idf ≈ 0, poids nul.
+- **Cosinus :** ne tient pas compte de la longueur absolue (voulu), mais peut masquer des différences de richesse.
+- **BIR :** hypothèse d'indépendance des termes rarement vraie en pratique.
+- **LSI :** $K$ trop petit → perte d'info ; $K$ trop grand → on retrouve les problèmes TF·IDF.
+- **Fold-in :** approximation — ne met pas à jour l'espace conceptuel.

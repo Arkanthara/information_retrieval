@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.06 — Text Information Retrieval · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;
+  --teal:#5ecfcf;--orange:#e8a96a;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:280px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.2rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.15rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.85rem;display:block;
+  padding:.3rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.6rem .7rem .2rem;opacity:.6;margin-top:.4rem}
+
+/* MAIN */
+.main{margin-left:280px;flex:1;padding:3rem 4rem;max-width:1040px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:400px;
+  background:radial-gradient(ellipse at center, rgba(201,168,76,.07) 0%, transparent 70%);pointer-events:none}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.4rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:640px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+.badge.t{border-color:rgba(94,207,207,.35);color:var(--teal)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2.2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.5rem 0 .5rem}
+h5{font-family:var(--fm);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin:.8rem 0 .3rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}.box.teal{border-left-color:var(--teal)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}.box.teal .box-title{color:var(--teal)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}td.b{color:var(--blue)}td.t{color:var(--teal)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:700px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* PIPELINE DIAGRAM */
+.pipeline{display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto;
+  padding:1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin:1.4rem 0}
+.pipe-step{background:var(--bg-code);border:1px solid var(--bstrong);border-radius:6px;
+  padding:.6rem 1rem;text-align:center;min-width:110px;flex-shrink:0}
+.pipe-step .ps-num{font-family:var(--fm);font-size:.65rem;color:var(--gold);margin-bottom:.25rem}
+.pipe-step .ps-name{font-size:.85rem;font-weight:600;color:var(--text);line-height:1.3}
+.pipe-step .ps-sub{font-family:var(--fm);font-size:.62rem;color:var(--muted);margin-top:.2rem}
+.pipe-arrow{color:var(--gold);font-size:1.1rem;opacity:.6;flex-shrink:0;padding:0 .3rem}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.15rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* ZIPF VISUAL */
+.zipf-bar-wrap{margin:1.4rem 0;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.4rem}
+.zipf-bars{display:flex;align-items:flex-end;gap:3px;height:140px;margin-bottom:.6rem}
+.zbar{background:linear-gradient(to top, var(--gold), rgba(201,168,76,.3));border-radius:2px 2px 0 0;min-width:8px;transition:opacity .2s}
+.zbar:hover{opacity:.8}
+.zipf-label{font-family:var(--fm);font-size:.7rem;color:var(--muted);display:flex;justify-content:space-between}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}.pipeline{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">IR.06</div>
+  <div class="sb-sub">TEXT INFORMATION RETRIEVAL</div>
+  <nav>
+    <ul>
+      <div class="sb-section">Vue d'ensemble</div>
+      <li><a href="#s1"><span class="n">01</span>Résumé exécutif</a></li>
+      <li><a href="#s2"><span class="n">02</span>Réponse orale modèle</a></li>
+      <div class="sb-section">Concepts fondamentaux</div>
+      <li><a href="#s3"><span class="n">03</span>Modèle Bag of Words</a></li>
+      <li><a href="#s4"><span class="n">04</span>Pipeline de traitement</a></li>
+      <li><a href="#s5"><span class="n">05</span>Normalisation morpho.</a></li>
+      <li><a href="#s6"><span class="n">06</span>Vocabulaire & Index</a></li>
+      <div class="sb-section">Statistiques du texte</div>
+      <li><a href="#s7"><span class="n">07</span>Loi de Zipf</a></li>
+      <li><a href="#s8"><span class="n">08</span>Loi de Heap</a></li>
+      <li><a href="#s9"><span class="n">09</span>Théorie de l'information</a></li>
+      <div class="sb-section">Référence</div>
+      <li><a href="#s10"><span class="n">10</span>Formules importantes</a></li>
+      <li><a href="#s11"><span class="n">11</span>Comparaisons</a></li>
+      <li><a href="#s12"><span class="n">12</span>Perspective historique</a></li>
+      <li><a href="#s13"><span class="n">13</span>Liens systèmes modernes</a></li>
+      <li><a href="#s14"><span class="n">14</span>Questions d'examen</a></li>
+      <li><a href="#s15"><span class="n">15</span>Pièges classiques</a></li>
+      <li><a href="#s16"><span class="n">16</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">IR.06 · Master en Sciences Informatiques</div>
+    <h1>Text <em>Information</em><br>Retrieval</h1>
+    <p class="hero-desc">Architecture d'un système de RI textuelle — pipeline de traitement, création du vocabulaire, propriétés statistiques du langage et modèles d'indexation.</p>
+    <div class="badges">
+      <span class="badge">Bag of Words</span>
+      <span class="badge b">Zipf's Law</span>
+      <span class="badge g">Heap's Law</span>
+      <span class="badge v">Stemming / Lemmatization</span>
+      <span class="badge t">Information Theory</span>
+    </div>
+  </div>
+
+  <!-- §1 RÉSUMÉ EXÉCUTIF -->
+  <section class="sec" id="s1">
+    <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Résumé exécutif</h2></div>
+    <div class="box ok">
+      <div class="box-title">💡 En 30 secondes</div>
+      <p>La <strong>recherche d'information textuelle</strong> (Text IR) repose sur trois piliers interdépendants : (1) un <strong>pipeline de traitement</strong> qui transforme un document brut en termes d'index via tokenisation, suppression des stopwords, stemming et lemmatisation ; (2) une <strong>modélisation statistique</strong> du texte par les lois de Zipf et de Heap, qui décrivent respectivement la distribution des fréquences et la croissance du vocabulaire ; (3) un <strong>modèle de représentation</strong> — typiquement le Bag of Words — qui permet l'indexation et le calcul de similarité entre documents et requêtes.</p>
+      <p>L'insight central : le texte <em>n'est pas aléatoire</em>. Il obéit à des lois de puissance exploitables pour construire des index efficaces et justifier des choix de prétraitement.</p>
+    </div>
+  </section>
+
+  <!-- §2 RÉPONSE ORALE -->
+  <section class="sec" id="s2">
+    <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+    <div class="oral">
+      <p>Un système de recherche d'information textuelle s'articule autour de trois composants fondamentaux que je vais décrire dans l'ordre logique de traitement.</p>
+
+      <p>La <strong>première étape</strong> est le traitement du texte brut. Un document arrive sous forme d'octets et doit être transformé en termes indexables. Ce pipeline commence par la <strong>tokenisation</strong> — l'identification des tokens via des séparateurs — suivie de la <strong>suppression des mots vides</strong>, c'est-à-dire les termes non-discriminants comme « the » ou « a ». Viennent ensuite la <strong>racinisation</strong> (stemming) et la <strong>lemmatisation</strong>, qui réduisent les variantes morphologiques d'un mot à une forme canonique. Par exemple, le célèbre algorithme de Porter ramène « running », « runs », « runner » à la racine commune « run ».</p>
+
+      <p>La <strong>deuxième étape</strong> concerne les propriétés statistiques exploitées pour construire le vocabulaire. La <strong>loi de Zipf</strong> établit que la fréquence d'un terme est inversement proportionnelle à son rang : $f(i) \cdot r(i) = K$. Cette loi de puissance implique directement que la moitié des termes distincts d'un corpus n'apparaissent qu'une seule fois — les hapax legomena — et que les mots vides représentent une fraction disproportionnée du texte, justifiant leur suppression. Luhn propose d'établir deux seuils de coupure : supérieur pour éliminer les mots trop fréquents, inférieur pour éliminer les termes trop rares.</p>
+
+      <p>La <strong>loi de Heap</strong> complète ce tableau en décrivant comment le vocabulaire croît avec le corpus : $M = k \cdot L^\beta$ avec $\beta \approx 0.5$. Cette croissance sous-linéaire — approximativement en racine carrée — est fondamentale pour estimer la taille d'un index à grande échelle.</p>
+
+      <p>Enfin, la <strong>théorie de l'information</strong> fournit un cadre formel : l'entropie de Shannon mesure le contenu informationnel du texte, nettement inférieur au maximum théorique, confirmant la structure exploitable du langage. L'information mutuelle permet d'identifier les co-occurrences significatives entre termes, utiles pour la construction de thésaurus.</p>
+
+      <p>La conclusion essentielle est que le texte possède une <strong>structure statistique universelle</strong> — la distribution de Zipf se retrouve dans presque toutes les langues — et que cette structure est exploitable pour optimiser chaque composant d'un système de RI.</p>
+    </div>
+  </section>
+
+  <!-- §3 BAG OF WORDS -->
+  <section class="sec" id="s3">
+    <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Le Modèle Bag of Words</h2></div>
+
+    <h3>Pourquoi pas le NLP complet ?</h3>
+    <p>Le Traitement Automatique du Langage (TAL / <em>Natural Language Processing</em>) offre des approches linguistiquement rigoureuses. Cependant, en RI, on ne cherche pas à reconstruire ou générer du texte. On souhaite un <strong>formalisme souple</strong> qui tolère l'ambiguïté et travaille avec des approximations. Le NLP complet est coûteux en calcul et en complexité d'implémentation.</p>
+
+    <div class="box info">
+      <div class="box-title">Principe fondateur</div>
+      <p>En RI, l'objectif est la comparaison de documents à des requêtes via un score de similarité. Pour cela, une représentation approximative mais calculable est <em>préférable</em> à une représentation exacte mais intractable.</p>
+    </div>
+
+    <h3>Définition formelle</h3>
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ctag">Principe 1</div>
+        <h4>Termes comme entités</h4>
+        <p>Les <strong>termes</strong> sont les unités constitutives du vocabulaire (ex : mots séparés par des espaces). Ils forment la base d'indexation.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Principe 2</div>
+        <h4>Indépendance et non-ordre</h4>
+        <p>Les termes sont traités comme des <strong>entités indépendantes non ordonnées</strong>. L'ordre des mots et les dépendances syntaxiques sont ignorés.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Principe 3</div>
+        <h4>Multiplicités (Fréquences)</h4>
+        <p>Les termes apparaissent avec des <strong>fréquences</strong> (multiplicités). On parle de <em>bag</em> (sac) plutôt que de <em>set</em> (ensemble) car un terme peut apparaître plusieurs fois.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Conséquence</div>
+        <h4>Perte de structure</h4>
+        <p>La <strong>structure est perdue</strong> : paragraphes, titres, ordre des phrases. Toute information positionnelle est éliminée.</p>
+      </div>
+    </div>
+
+    <h3>Limites du modèle BoW</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Limite</th><th>Description</th><th>Exemple</th><th>Impact en RI</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="g">Synonymie</td>
+            <td>Deux mots différents désignent le même concept</td>
+            <td><em>car</em> / <em>automobile</em></td>
+            <td>Rappel réduit : documents pertinents non retrouvés</td>
+          </tr>
+          <tr>
+            <td class="r">Polysémie</td>
+            <td>Un mot a plusieurs sens selon le contexte</td>
+            <td><em>bank</em> (banque / berge)</td>
+            <td>Précision réduite : documents non-pertinents récupérés</td>
+          </tr>
+          <tr>
+            <td class="m">Perte d'ordre</td>
+            <td>L'ordre des mots est ignoré</td>
+            <td><em>dog bites man</em> = <em>man bites dog</em></td>
+            <td>Ambiguïté sémantique non résolue</td>
+          </tr>
+          <tr>
+            <td class="m">Perte de structure</td>
+            <td>Titre, paragraphes, emphase ignorés</td>
+            <td>Un terme dans le titre ≡ corps</td>
+            <td>Sous-exploitation des métadonnées</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Généralisation au-delà du texte</h3>
+    <p>Le modèle BoW n'est pas limité au texte. Il s'applique à tout média décomposable en « mots » :</p>
+    <ul>
+      <li><strong>Images :</strong> <em>Bag of Visual Words</em> — descripteurs locaux (SIFT, ORB) quantifiés en vocabulaire visuel</li>
+      <li><strong>Audio :</strong> patterns acoustiques encodés comme termes</li>
+      <li><strong>Vidéo :</strong> <em>Bag of Visual Trajectories</em></li>
+    </ul>
+    <div class="box teal">
+      <div class="box-title">Universalité du modèle</div>
+      <p>Le texte est le <strong>modèle de référence</strong> pour la RI. Tout système pouvant être décomposé en entités (termes, patterns, descripteurs) peut réutiliser les mécanismes développés pour la RI textuelle.</p>
+    </div>
+  </section>
+
+  <!-- §4 PIPELINE DE TRAITEMENT -->
+  <section class="sec" id="s4">
+    <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Pipeline de Traitement du Texte</h2></div>
+
+    <h3>Vue d'ensemble</h3>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="ps-num">I/O</div>
+        <div class="ps-name">Document<br>brut</div>
+        <div class="ps-sub">bytes</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="ps-num">01</div>
+        <div class="ps-name">Tokenisation</div>
+        <div class="ps-sub">lexing</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="ps-num">02</div>
+        <div class="ps-name">Stopwords</div>
+        <div class="ps-sub">suppression</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="ps-num">03</div>
+        <div class="ps-name">Groupes<br>nominaux</div>
+        <div class="ps-sub">n-grams</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="ps-num">04</div>
+        <div class="ps-name">Stemming /<br>Lemmatisation</div>
+        <div class="ps-sub">normalisation</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="ps-num">05</div>
+        <div class="ps-name">Index /<br>Thésaurus</div>
+        <div class="ps-sub">output</div>
+      </div>
+    </div>
+
+    <h3>Étape 1 : Tokenisation</h3>
+    <p>La <strong>tokenisation</strong> (<em>Tokenization</em>, aussi appelée analyse lexicale / <em>lexical analysis</em> ou <em>lexing</em>) transforme un document brut en séquence de tokens. Elle consiste à définir un ou plusieurs <strong>séparateurs</strong> : tout ce qui n'est pas un séparateur constitue un token.</p>
+
+    <h4>Défis multilingues</h4>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Langue</th><th>Défi</th><th>Exemple</th><th>Stratégie</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="g">Français / Anglais</td>
+            <td>Cas relativement simple</td>
+            <td>Espaces, ponctuation</td>
+            <td>Séparateurs standards</td>
+          </tr>
+          <tr>
+            <td class="b">Allemand</td>
+            <td>Composés (<em>Komposita</em>)</td>
+            <td><em>Suchprogramm</em> → Such + Programm</td>
+            <td>Décomposition (<em>de-compounding</em>)</td>
+          </tr>
+          <tr>
+            <td class="t">Arabe / Hébreu</td>
+            <td>Direction d'écriture droite-gauche</td>
+            <td>Script Arabic RTL</td>
+            <td>Gestion Unicode bidirectionnelle</td>
+          </tr>
+          <tr>
+            <td class="m">Chinois / Japonais</td>
+            <td>Pas d'espaces entre les mots</td>
+            <td>日本語 — tokens non délimités</td>
+            <td>Segmentation par modèle statistique ou DL</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Cas particuliers importants</h4>
+    <div class="box info">
+      <div class="box-title">Décisions de tokenisation non-triviales</div>
+      <p>La tokenisation doit gérer : chaînes numériques (<code>1990</code>, <code>90's</code>, <code>200BC</code>), valeurs avec unités (<code>$5</code>, <code>5.3kg</code>, <code>1E-16</code>), acronymes (<code>U.S.A</code>, <code>RTFM</code>), balises markup (JSON, XML), <em>case folding</em> (normalisation de casse), tirets et traits d'union.</p>
+      <p><strong>Il n'existe pas de solution universelle</strong> : les choix dépendent de la langue, du domaine et de l'application cible.</p>
+    </div>
+
+    <h3>Étape 2 : Suppression des mots vides</h3>
+    <p>Un <strong>mot vide</strong> (<em>stopword</em>) est un terme <strong>non discriminant</strong> : il apparaît dans presque tous les documents et n'aide pas à distinguer les documents les uns des autres. En termes TF-IDF, ce sont les termes dont le <em>document frequency</em> est très élevé — ce qui fait chuter leur IDF vers zéro.</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Justification</th><th>Raison</th></tr></thead>
+        <tbody>
+          <tr><td class="g">Économie de stockage</td><td>Les stopwords peuvent représenter 30-50% des tokens. Les éliminer réduit drastiquement la taille de l'index.</td></tr>
+          <tr><td class="g">Réduction du bruit</td><td>Sans valeur discriminante, ils ajoutent du bruit aux calculs de similarité.</td></tr>
+          <tr><td class="g">Efficacité de la recherche</td><td>Les posting lists des stopwords sont énormes et coûteuses à intersectionner.</td></tr>
+          <tr><td class="r">Risque de sur-suppression</td><td>Certaines requêtes nécessitent les stopwords : <em>« To be or not to be »</em> — titre de Hamlet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>La loi de Zipf (voir §7) fournit la <strong>justification théorique</strong> formelle de la suppression des stopwords.</p>
+  </section>
+
+  <!-- §5 NORMALISATION MORPHOLOGIQUE -->
+  <section class="sec" id="s5">
+    <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Normalisation Morphologique</h2></div>
+
+    <h3>Stemming — Racinisation</h3>
+    <p>Le <strong>stemming</strong> (<em>racinisation</em>) consiste à ramener chaque mot à sa <strong>racine</strong> (<em>stem</em>) en supprimant les suffixes. La racine obtenue n'est pas nécessairement un mot valide en langue naturelle — c'est une troncature heuristique.</p>
+
+    <h4>L'Algorithme de Porter (1980)</h4>
+    <p>Le stemmer de Porter est l'algorithme de stemming le plus célèbre pour l'anglais. Il applique <strong>5 phases</strong> de règles de transformation en cascade :</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Type de règles</th><th>Exemple</th></tr></thead>
+        <tbody>
+          <tr><td class="b">1a</td><td>Pluriels, conjugaisons simples</td><td>caresses → caress, ponies → poni</td></tr>
+          <tr><td class="b">1b</td><td>Formes en -eed, -ing, -ed</td><td>agreed → agree, plastered → plaster</td></tr>
+          <tr><td class="b">1c</td><td>Transformation -y → -i</td><td>happy → happi</td></tr>
+          <tr><td class="b">2</td><td>Suffixes complexes courants</td><td>relational → relate, hopeful → hope</td></tr>
+          <tr><td class="b">3</td><td>Suffixes en -ful, -ness, -ize</td><td>triplicate → triplicat</td></tr>
+          <tr><td class="b">4</td><td>Suffixes finals courants</td><td>revival → reviv, allowance → allow</td></tr>
+          <tr><td class="b">5</td><td>Nettoyage final</td><td>probate → probat, cease → ceas</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box warn">
+      <div class="box-title">⚠️ Limites du stemming</div>
+      <p><strong>Sur-stemming (over-stemming / eager) :</strong> deux mots de sens différents sont ramenés à la même racine. Ex. : <em>paste</em> et <em>past</em> → même racine, sens totalement différents.</p>
+      <p><strong>Sous-stemming (under-stemming / cautious) :</strong> deux variantes du même mot gardent des racines distinctes. Ex. : <em>European</em> ≠ <em>Europe</em> avec un stemmer conservateur.</p>
+    </div>
+
+    <h3>Lemmatisation</h3>
+    <p>La <strong>lemmatisation</strong> ramène chaque mot à son <strong>lemme</strong> — sa forme de base dictionnairique — en utilisant une analyse morphologique et syntaxique. Contrairement au stemming, le lemme est toujours un mot valide.</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Type de transformation</th><th>Entrée</th><th>Lemme</th></tr></thead>
+        <tbody>
+          <tr><td class="g">Déconjugaison</td><td>are, is, were, being</td><td>be</td></tr>
+          <tr><td class="g">Singularisation</td><td>users, users', user's</td><td>user</td></tr>
+          <tr><td class="g">Normalisation de temps</td><td>ran, runs, running</td><td>run</td></tr>
+          <tr><td class="g">Comparatifs</td><td>better, best</td><td>good</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Exemple complet</h4>
+    <div class="mblock">
+      <div class="mlabel">Transformation par lemmatisation</div>
+      $\text{"Users' wishes are orders"} \xrightarrow{\text{lemmatization}} \text{"user wish be order"}$
+    </div>
+
+    <h3>Stemming vs Lemmatisation : comparaison</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Critère</th><th>Stemming</th><th>Lemmatisation</th></tr></thead>
+        <tbody>
+          <tr><td>Méthode</td><td class="b">Heuristique / troncature</td><td class="g">Analyse morphologique</td></tr>
+          <tr><td>Résultat</td><td class="m">Racine (peut ≠ mot valide)</td><td class="g">Lemme (toujours valide)</td></tr>
+          <tr><td>Complexité</td><td class="g">Faible — règles simples</td><td class="r">Élevée — dictionnaire, POS-tagging</td></tr>
+          <tr><td>Rapidité</td><td class="g">Très rapide</td><td class="m">Plus lente</td></tr>
+          <tr><td>Précision linguistique</td><td class="m">Approximative</td><td class="g">Exacte</td></tr>
+          <tr><td>Usage typique</td><td>RI à grande échelle</td><td>NLP, analyse sémantique</td></tr>
+          <tr><td>Exemple : "running"</td><td class="b">run</td><td class="g">run</td></tr>
+          <tr><td>Exemple : "better"</td><td class="r">better (inchangé)</td><td class="g">good</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>SOUNDEX — Normalisation Phonétique</h3>
+    <p>SOUNDEX est une classe d'heuristiques permettant d'<strong>étendre une requête à ses équivalents phonétiques</strong>. Chaque token est transformé en un <strong>code de 4 caractères</strong> (1 lettre + 3 chiffres).</p>
+
+    <h4>Algorithme en 5 étapes</h4>
+    <ol>
+      <li>Sauvegarder la <strong>première lettre</strong>. Remplacer a, e, i, o, u, y, h, w par 0</li>
+      <li>Remplacer les consonnes (y compris la première lettre) par leurs <strong>codes numériques</strong> : B,F,P,V→1 ; C,G,J,K,Q,S,X,Z→2 ; D,T→3 ; L→4 ; M,N→5 ; R→6</li>
+      <li>Remplacer les <strong>chiffres adjacents identiques</strong> par un seul chiffre, supprimer les 0</li>
+      <li>Si le code de la première lettre = premier chiffre, <strong>supprimer ce chiffre</strong></li>
+      <li>Ajouter des 0 si moins de 3 chiffres. Conserver <strong>première lettre + 3 chiffres</strong></li>
+    </ol>
+
+    <div class="box">
+      <div class="box-title">Exemple : "Herman" → "H655"</div>
+      <p>H<u>e</u>rm<u>a</u>n → H-0-r-m-0-n → H-r-m-n → H-6-5-5 → <strong>H655</strong></p>
+      <p>Application : <em>Tchebichef</em>, <em>Tchebyschev</em>, <em>Chebysheff</em> ont tous le même code SOUNDEX → retrouvés par la même requête.</p>
+    </div>
+  </section>
+
+  <!-- §6 VOCABULAIRE & INDEX -->
+  <section class="sec" id="s6">
+    <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">Construction du Vocabulaire et de l'Index</h2></div>
+
+    <h3>Types d'unités d'indexation</h3>
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ctag">Unigrammes</div>
+        <h4>Mots individuels</h4>
+        <p>Chaque token traité devient un terme d'index. Approche de base, compromis simplicité/expressivité.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Bigrammes / n-grammes</div>
+        <h4>Séquences de n tokens</h4>
+        <p>Capturent des associations locales. Les bigrammes de caractères sont robustes aux variations orthographiques.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Groupes nominaux</div>
+        <h4>Noun Phrases</h4>
+        <p>Constructions Nom + Adjectif ou complément nominal. Ex. : <em>« linear algebra »</em>, <em>« information retrieval »</em>.</p>
+      </div>
+      <div class="ccard">
+        <div class="ctag">Entités nommées</div>
+        <h4>Named Entities</h4>
+        <p>Personnes, lieux, organisations. Nécessitent un traitement spécial (NER, SOUNDEX) pour gérer les variantes.</p>
+      </div>
+    </div>
+
+    <h3>Les cutoffs de Luhn : définir le vocabulaire optimal</h3>
+    <p>Luhn (1958) a proposé que les termes aux <strong>deux extrêmes de la distribution de fréquences</strong> peuvent être éliminés de l'index, définissant deux seuils de coupure :</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Seuil</th><th>Termes éliminés</th><th>Justification</th><th>Correspondance Zipf</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="r">Upper Cut-Off (supérieur)</td>
+            <td>Termes trop fréquents</td>
+            <td>IDF ≈ 0 → non discriminants → mots vides</td>
+            <td>Bas rang (r petit) — zone gauche de Zipf</td>
+          </tr>
+          <tr>
+            <td class="m">Lower Cut-Off (inférieur)</td>
+            <td>Termes trop rares</td>
+            <td>Statistiques insuffisantes, hapax, typos</td>
+            <td>Haut rang (r grand) — queue de Zipf</td>
+          </tr>
+          <tr>
+            <td class="g">Zone significative</td>
+            <td>Termes intermédiaires</td>
+            <td>Valeur discriminante maximale, statistiques fiables</td>
+            <td>Zone centrale de Zipf</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Structure d'un index inversé</h3>
+    <p>L'<strong>index inversé</strong> (<em>inverted index</em>) est la structure de données fondamentale pour la RI. Il associe chaque terme du vocabulaire à la liste des documents le contenant (<em>posting list</em>) avec éventuellement leur fréquence et position.</p>
+
+    <div class="box info">
+      <div class="box-title">Structure d'une posting list</div>
+      <p><code>term → [(doc_id₁, tf₁, [pos₁, pos₂, ...]), (doc_id₂, tf₂, [...]), ...]</code></p>
+      <p>La <strong>loi de Heap</strong> permet d'estimer la taille de cet index : pour un corpus de $L$ tokens, on attend $M \approx k \cdot L^{0.5}$ termes distincts.</p>
+    </div>
+
+    <h3>Construction du thésaurus</h3>
+    <p>Le <strong>thésaurus</strong> encode les relations sémantiques entre termes (synonymes, hyperonymes, hyponymes). Il peut être construit manuellement (WordNet) ou automatiquement via les co-occurrences et l'information mutuelle (voir §9).</p>
+  </section>
+
+  <!-- §7 LOI DE ZIPF -->
+  <section class="sec" id="s7">
+    <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Loi de Zipf et Propriétés Statistiques</h2></div>
+
+    <h3>Observations empiriques préliminaires</h3>
+    <p>L'analyse de tout grand corpus textuel révèle un phénomène remarquable et universel :</p>
+    <ul>
+      <li>Les <strong>2 termes les plus fréquents</strong> représentent environ <strong>10%</strong> de toutes les occurrences</li>
+      <li>Environ <strong>50% des termes distincts</strong> n'apparaissent qu'une seule fois (<em>Hapax Legomena</em>)</li>
+      <li>La distribution est dite à <strong>queue lourde</strong> (<em>heavy-tailed</em>) : la masse probabiliste est dans la queue</li>
+    </ul>
+
+    <h3>Définition du rang et énoncé de la loi</h3>
+    <p>Le <strong>rang</strong> $r(i) \in \mathbb{N}$ d'un terme $i$ est sa position dans une liste triée par <strong>fréquence décroissante</strong> (rang 1 = terme le plus fréquent).</p>
+
+    <div class="fcards">
+      <div class="fc">
+        <div class="fc-head">
+          <div class="fc-name">Loi de Zipf (1949)</div>
+          <div class="fc-tag">Power Law · c = −1</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$f(i) \cdot r(i) = K \qquad \Longleftrightarrow \qquad f(i) \propto \frac{1}{r(i)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$f(i)$ : fréquence absolue du terme $i$ · $r(i)$ : rang du terme $i$ · $K$ : constante du texte</p></div>
+            <div class="fc-item"><h5>Probabilité d'occurrence</h5><p>$p(i) = \dfrac{f(i)}{L} = \dfrac{K}{r(i)}$ avec $K \approx 0.1$ et $L = \sum_i f(i)$</p></div>
+            <div class="fc-item"><h5>Intuition</h5><p>Le terme de rang 1 est 2× plus fréquent que rang 2, 3× plus que rang 3, etc. Décroissance hyperbolique.</p></div>
+            <div class="fc-item"><h5>Représentation log-log</h5><p>$\log f(i) = \log(KL) - \log r(i)$ — droite de pente $-1$ en log-log. Signature d'une loi de puissance.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Dérivation : nombre de termes à fréquence n</h3>
+    <p>À partir de la loi de Zipf, on peut dériver le nombre de termes apparaissant exactement $n$ fois :</p>
+
+    <div class="mblock">
+      <div class="mlabel">Dérivation analytique</div>
+      $$r_n = \frac{KL}{n} \quad \text{(rang max pour les termes de fréquence } \geq n\text{)}$$
+      $$s_n = r_n - r_{n+1} = \frac{KL}{n} - \frac{KL}{n+1} = \frac{KL}{n(n+1)} \quad \text{(termes de fréquence exactement } n\text{)}$$
+      $$\frac{s_n}{M} = \frac{1}{n(n+1)} \quad \text{avec } M = KL \text{ (taille du vocabulaire)}$$
+    </div>
+
+    <h4>Conséquence fondamentale : les hapax legomena</h4>
+    <p>Pour $n = 1$ (termes apparaissant exactement une fois) :</p>
+    <div class="mblock">
+      $$\frac{s_1}{M} = \frac{1}{1 \times 2} = \frac{1}{2} \quad \Longrightarrow \quad \textbf{50\% des termes distincts sont des hapax}$$
+    </div>
+
+    <h4>Validation empirique sur TREC Volume 3</h4>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Occurrences (n)</th><th>Prédit 1/n(n+1)</th><th>Proportion réelle</th><th>Nb réel de mots</th><th>Précision</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0.500</td><td>0.402</td><td>204 357</td><td class="m">−19.6%</td></tr>
+          <tr><td>2</td><td>0.167</td><td>0.132</td><td>67 082</td><td class="m">−20.9%</td></tr>
+          <tr><td>3</td><td>0.083</td><td>0.069</td><td>35 083</td><td class="m">−16.9%</td></tr>
+          <tr><td>5</td><td>0.033</td><td>0.032</td><td>16 332</td><td class="g">−3.0%</td></tr>
+          <tr><td>7</td><td>0.018</td><td>0.019</td><td>9 766</td><td class="g">+5.6%</td></tr>
+          <tr><td>10</td><td>0.009</td><td>0.012</td><td>5 893</td><td class="g">+33%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="m">Corpus : 336 310 documents, 125 M occurrences, 508 209 mots uniques.</p>
+
+    <h3>La loi de Zipf comme loi de puissance</h3>
+    <div class="mblock">
+      <div class="mlabel">Forme log-log — droite de pente −1</div>
+      $$\log f(i) = \log(KL) - \log r(i)$$
+    </div>
+    <p>Sur un graphique log-log (fréquence vs rang), les données du corpus Brown s'alignent quasi-parfaitement sur une droite. Des déviations apparaissent aux rangs extrêmes, motivant la correction de Mandelbrot.</p>
+
+    <h3>Correction de Mandelbrot (1954)</h3>
+    <div class="fcards">
+      <div class="fc">
+        <div class="fc-head">
+          <div class="fc-name">Loi de Zipf–Mandelbrot</div>
+          <div class="fc-tag">Généralisation</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$f(i) = P \cdot (r(i) + \rho)^{-B} \qquad P = 10^{5.4},\ \rho = 100,\ B = 1.15$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Rôle de ρ</h5><p>Décalage de rang. Améliore le fit aux très hauts rangs (termes communs). Zipf pur correspond à $\rho = 0$, $B = 1$.</p></div>
+            <div class="fc-item"><h5>Rôle de B</h5><p>Exposant de la loi de puissance. B &gt; 1 signifie une décroissance plus rapide que Zipf pur pour les termes rares.</p></div>
+            <div class="fc-item"><h5>Fondement théorique</h5><p>Mandelbrot montre que cette distribution est la solution optimale au problème de minimisation de la longueur moyenne des termes pour une entropie donnée.</p></div>
+            <div class="fc-item"><h5>Portée</h5><p>Le corpus Brown valide cette correction : la courbe ajuste mieux les deux queues de la distribution que Zipf pur.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Modèle de production : le Principe du Moindre Effort</h3>
+    <p>Zipf (1949) a spéculé que la loi de puissance émerge d'un <strong>équilibre entre émetteur et récepteur</strong> :</p>
+    <ul>
+      <li><strong>Émetteur</strong> (locuteur, auteur) : souhaite un <em>petit vocabulaire</em> — simple à produire</li>
+      <li><strong>Récepteur</strong> (auditeur, lecteur) : souhaite un <em>grand vocabulaire</em> — moins ambigu à interpréter</li>
+    </ul>
+    <p>Li (1992) a montré que la frappe <strong>aléatoire de lettres</strong> avec des espaces génère spontanément une distribution zipfienne, suggérant que la loi pourrait être un artefact combinatoire du langage.</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Implication</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="g">Avantage pour l'index</td><td>✅ Positif</td><td>Les stopwords représentent une fraction disproportionnée du texte : leur élimination réduit fortement les coûts de stockage et de traitement</td></tr>
+          <tr><td class="r">Problème des termes rares</td><td>❌ Négatif</td><td>Pour la majorité des termes (rares), accumuler des données statistiques suffisantes est très difficile — problème de sparsité</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- §8 LOI DE HEAP -->
+  <section class="sec" id="s8">
+    <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Loi de Heap — Croissance du Vocabulaire</h2></div>
+
+    <h3>Problématique</h3>
+    <p>Comment la taille du vocabulaire $M$ (nombre de termes distincts) croît-elle avec la taille du corpus $L$ (en tokens) ? Cette question est fondamentale pour :</p>
+    <ul>
+      <li><strong>Estimer la taille de l'index</strong> au fur et à mesure que le corpus grandit</li>
+      <li><strong>Planifier les ressources</strong> mémoire et stockage</li>
+      <li>Comprendre pourquoi le vocabulaire <strong>ne se stabilise jamais</strong> (entités nommées, néologismes, typos)</li>
+    </ul>
+
+    <div class="fcards">
+      <div class="fc">
+        <div class="fc-head">
+          <div class="fc-name">Loi de Heap (1978)</div>
+          <div class="fc-tag">Vocabulaire Growth</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$M = k \cdot L^{\beta} \qquad k \approx 10\text{–}100,\quad \beta \approx 0.4\text{–}0.6$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$M$ : taille du vocabulaire (nb termes distincts) · $L$ : longueur du corpus (nb tokens total) · $k, \beta$ : constantes empiriques dépendant du corpus</p></div>
+            <div class="fc-item"><h5>Intuition clé</h5><p>Pour $\beta \approx 0.5$ : $M \approx k\sqrt{L}$. Multiplier la taille du corpus par 4 ne double que le vocabulaire. Croissance <strong>sous-linéaire</strong>.</p></div>
+            <div class="fc-item"><h5>Représentation log-log</h5><p>$\log M = \log k + \beta \log L$ — droite de pente $\beta \approx 0.5$ en log-log.</p></div>
+            <div class="fc-item"><h5>Exemple numérique</h5><p>Pour $k=44$, $\beta=0.49$ : avec $L=10^6$ tokens, $M \approx 44\,000$ termes distincts ; avec $L=10^8$ tokens, $M \approx 440\,000$.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Lien avec la loi de Zipf</h3>
+    <p>La loi de Heap peut être <strong>dérivée de la loi de Zipf</strong> : si on suppose que les documents sont générés en échantillonnant des termes selon une distribution zipfienne, la croissance du vocabulaire observée suit précisément la loi de Heap. Les deux lois sont donc mathématiquement liées.</p>
+
+    <div class="box ok">
+      <div class="box-title">Implication pour les systèmes à grande échelle</div>
+      <p>La croissance sous-linéaire est une bonne nouvelle : l'index d'un moteur de recherche indexant le Web (milliards de tokens) ne croît pas linéairement mais en puissance $\beta \approx 0.5$. Cela rend les systèmes à grande échelle techniquement feasibles.</p>
+      <p>Toutefois, le vocabulaire <strong>ne plafonne jamais</strong> complètement — de nouveaux mots (néologismes, entités nommées, URLs) apparaissent continuellement, nécessitant une gestion dynamique de l'index.</p>
+    </div>
+
+    <h3>Comparaison Zipf vs Heap</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Aspect</th><th>Loi de Zipf</th><th>Loi de Heap</th></tr></thead>
+        <tbody>
+          <tr><td>Objet modélisé</td><td class="b">Distribution des fréquences de termes</td><td class="g">Croissance du vocabulaire avec la taille du corpus</td></tr>
+          <tr><td>Variable dépendante</td><td class="b">$f(i)$ (fréquence)</td><td class="g">$M$ (taille vocabulaire)</td></tr>
+          <tr><td>Variable indépendante</td><td class="b">$r(i)$ (rang)</td><td class="g">$L$ (taille corpus)</td></tr>
+          <tr><td>Formule</td><td class="b">$f(i) = KL \cdot r(i)^{-1}$</td><td class="g">$M = k \cdot L^{\beta}$</td></tr>
+          <tr><td>Type</td><td>Loi de puissance en fréquence-rang</td><td>Loi de puissance en vocabulaire-corpus</td></tr>
+          <tr><td>Relation</td><td colspan="2" class="t" style="text-align:center">Les deux sont liées : Heap est dérivable de Zipf sous hypothèse d'échantillonnage zipfien</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- §9 THÉORIE DE L'INFORMATION -->
+  <section class="sec" id="s9">
+    <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Perspective de la Théorie de l'Information</h2></div>
+
+    <h3>Entropie de Shannon appliquée au texte</h3>
+    <p>La <strong>théorie de l'information</strong> de Shannon fournit un cadre formel pour quantifier le contenu informationnel du texte.</p>
+
+    <div class="fcards">
+      <div class="fc">
+        <div class="fc-head">
+          <div class="fc-name">Entropie de Shannon</div>
+          <div class="fc-tag">Information Theory</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$p_i$ : probabilité d'occurrence du terme $i$ · $M$ : taille du vocabulaire · $I_H(T)$ : entropie de la source textuelle</p></div>
+            <div class="fc-item"><h5>Maximum</h5><p>$I_H(T)$ est maximale quand tous les termes sont équiprobables ($p_i = 1/M$), donnant $I_H^{max} = \log M$</p></div>
+            <div class="fc-item"><h5>Entropie alphabet 26 lettres</h5><p>Équiprobable : 4.7 bits · Empirique anglais : 4.14 bits → le texte a une structure!</p></div>
+            <div class="fc-item"><h5>Entropie des mots (Zipf)</h5><p>$M{=}100\,000$ : 9.5 bits (réel) vs 13.3 bits (équiprobable)<br>Le texte est loin d'être maximalement aléatoire.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Le porteur d'information idéal</h3>
+    <p>Mandelbrot a résolu le problème d'optimisation suivant : <em>quelle distribution de probabilité sur les termes minimise le nombre moyen de lettres par terme pour une entropie fixée h ?</em></p>
+
+    <div class="mblock">
+      <div class="mlabel">Problème d'optimisation de Mandelbrot</div>
+      $$p_r^* = \arg\min_{p_r} \sum_r p_r \ell_r \quad \text{sous les contraintes } \sum_r p_r = 1,\; -\sum_r p_r \log p_r = h$$
+      $$\text{Solution : } p_r^* = P(r + \rho)^{-B} \quad \Longleftrightarrow \quad \textbf{Distribution de Zipf–Mandelbrot !}$$
+    </div>
+
+    <div class="box ok">
+      <div class="box-title">Fondement théorique de la loi de Zipf</div>
+      <p>La distribution de Zipf–Mandelbrot n'est pas qu'une curiosité empirique : c'est la <strong>distribution optimale du point de vue de la théorie de l'information</strong>. Elle correspond à la façon la plus efficace d'encoder un vocabulaire de taille $M$ pour une entropie cible $h$ — minimisant la longueur moyenne des mots. Cela explique pourquoi elle émerge naturellement dans toutes les langues humaines.</p>
+    </div>
+
+    <h3>Information Mutuelle et Associations Lexicales</h3>
+    <p>L'<strong>information mutuelle</strong> (<em>Mutual Information</em>) mesure la dépendance statistique entre deux termes :</p>
+
+    <div class="fcards">
+      <div class="fc">
+        <div class="fc-head">
+          <div class="fc-name">Information Mutuelle I(W₁ ; W₂)</div>
+          <div class="fc-tag">Lexical Association</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-expr">$$I(W_1; W_2) = I_H(W_1) - I_H(W_1|W_2) = \sum_{w_1,w_2} \mathbb{P}(w_1,w_2) \log \frac{\mathbb{P}(w_1,w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Interprétation</h5><p>Mesure la réduction d'incertitude sur $W_1$ lorsqu'on connaît $W_2$. Si indépendants : $\mathbb{P}(W_1,W_2) = \mathbb{P}(W_1)\mathbb{P}(W_2)$ → $I = 0$</p></div>
+            <div class="fc-item"><h5>Seuils pratiques</h5><p>Grande valeur I → co-occurrence <strong>significative</strong>, association réelle. Petite valeur I → co-occurrence <strong>fortuite</strong> (spurieuse), due à la fréquence élevée d'un terme.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Exemple : Associations avec « doctor » (corpus AP, N=15M)</h4>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>I(x,y)</th><th>f(x,y)</th><th>x</th><th>y</th><th>Type</th><th>Interprétation</th></tr></thead>
+        <tbody>
+          <tr><td class="g">11.3</td><td>12</td><td>Honorary</td><td>Doctor</td><td class="g">✅ Intéressante</td><td>Co-occurrence sémantiquement forte</td></tr>
+          <tr><td class="g">11.3</td><td>8</td><td>Doctors</td><td>Dentists</td><td class="g">✅ Intéressante</td><td>Professions médicales liées</td></tr>
+          <tr><td class="g">10.7</td><td>30</td><td>Doctors</td><td>Nurses</td><td class="g">✅ Intéressante</td><td>Personnel soignant</td></tr>
+          <tr><td class="r">0.96</td><td>6</td><td>doctor</td><td>with</td><td class="r">❌ Spurieuse</td><td>"with" est très fréquent → co-occurrence fortuite</td></tr>
+          <tr><td class="r">0.95</td><td>41</td><td>a</td><td>doctors</td><td class="r">❌ Spurieuse</td><td>"a" apparaît partout → artificielle</td></tr>
+          <tr><td class="r">0.93</td><td>12</td><td>is</td><td>doctors</td><td class="r">❌ Spurieuse</td><td>Stopword → co-occurrence sans valeur</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Cet exemple illustre directement pourquoi la suppression des stopwords est indispensable avant toute analyse de co-occurrence : les termes très fréquents (« with », « a », « is ») génèrent des co-occurrences <em>spurieuses</em> à faible information mutuelle.</p>
+
+    <h3>Corrélations dans le texte</h3>
+    <p>Le texte présente des <strong>corrélations à courte et longue portée</strong> (<em>short-range</em> et <em>long-range correlations</em>) : un mot influence les mots proches (dépendances syntaxiques) mais aussi des mots distants dans le document (cohérence thématique). Cette propriété est exploitée par les modèles de langue neuronaux modernes.</p>
+  </section>
+
+  <!-- §10 FORMULES -->
+  <section class="sec" id="s10">
+    <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Formules Importantes</h2></div>
+
+    <div class="fcards">
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Loi de Zipf — forme de base</div><div class="fc-tag">Fondamentale</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$f(i) = \frac{K \cdot L}{r(i)} \qquad K \approx 0.1, \quad p(i) = \frac{K}{r(i)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$f(i)$ : fréquence absolue · $r(i)$ : rang · $L$ : longueur corpus · $K \approx 0.1$</p></div>
+            <div class="fc-item"><h5>Interprétation</h5><p>Rang 1 ≈ 10% du corpus. Rang 2 ≈ 5%. Rang 10 ≈ 1%. Décroissance hyperbolique.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Nombre de termes à fréquence n</div><div class="fc-tag">Dérivée de Zipf</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$s_n = \frac{KL}{n(n+1)}, \qquad \frac{s_n}{M} = \frac{1}{n(n+1)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$s_n$ : nb de termes à fréquence exactement $n$ · $M = KL$ : taille du vocabulaire</p></div>
+            <div class="fc-item"><h5>Application n=1</h5><p>$s_1/M = 1/2$ → 50% des termes sont des hapax legomena. Validé empiriquement (~40% observé).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Loi de Zipf–Mandelbrot</div><div class="fc-tag">Généralisation</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$f(i) = P(r(i) + \rho)^{-B} \qquad P = 10^{5.4},\; \rho = 100,\; B = 1.15$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Améliorations</h5><p>Corrige les déviations aux rangs extrêmes. Réduit à Zipf si $\rho = 0$, $B = 1$, $P = KL$.</p></div>
+            <div class="fc-item"><h5>Fondement</h5><p>Distribution optimisant le ratio entropie / longueur moyenne des termes.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Loi de Heap</div><div class="fc-tag">Croissance vocabulaire</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$M = k \cdot L^{\beta} \qquad k \approx 10\text{–}100,\quad \beta \approx 0.4\text{–}0.6 \approx \sqrt{L}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Variables</h5><p>$M$ : vocabulaire · $L$ : taille corpus · $k, \beta$ : constantes empiriques</p></div>
+            <div class="fc-item"><h5>Conséquence</h5><p>Croissance sous-linéaire : index extensible mais vocabulaire illimité.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Entropie de Shannon (texte)</div><div class="fc-tag">Théorie de l'information</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$I_H(T) = -\sum_{i=1}^{M} p_i \log p_i, \qquad I_H^{Zipf}(W) = \sum_{i=1}^{M} \frac{K}{r(i)} \log \frac{K}{r(i)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Valeurs types</h5><p>Lettres anglaises : 4.14 bits (théorique : 4.7) · Mots ($M=10^6$) : 11.4 bits (théorique : 16.6)</p></div>
+            <div class="fc-item"><h5>Interprétation</h5><p>L'entropie réelle &lt; maximum théorique → le texte a une structure exploitable pour la compression et la RI.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fc-head"><div class="fc-name">Information Mutuelle</div><div class="fc-tag">Co-occurrence</div></div>
+        <div class="fc-body">
+          <div class="fc-expr">$$I(W_1; W_2) = \sum_{w_1,w_2} \mathbb{P}(w_1,w_2) \log \frac{\mathbb{P}(w_1,w_2)}{\mathbb{P}(w_1)\mathbb{P}(w_2)}$$</div>
+          <div class="fc-grid">
+            <div class="fc-item"><h5>Cas limite</h5><p>$W_1 \perp W_2$ (indépendants) $\Rightarrow I = 0$. Grande I → dépendance forte → association sémantique réelle.</p></div>
+            <div class="fc-item"><h5>Limitation</h5><p>Biaisée vers les termes rares. Des variantes comme la PMI normalisée ou le PMI² corrigent ce biais.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- §11 COMPARAISONS -->
+  <section class="sec" id="s11">
+    <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Comparaison des Approches</h2></div>
+
+    <h3>Étapes du pipeline : choix et implications</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Étape</th><th>Méthode</th><th>Forces</th><th>Limites</th><th>Cas d'usage</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="g">Tokenisation basique</td>
+            <td>Séparateurs espaces/ponctuation</td>
+            <td>Simple, rapide, universel pour FR/EN</td>
+            <td>Échoue pour DE, ZH, JA, AR</td>
+            <td>Texte anglais standard</td>
+          </tr>
+          <tr>
+            <td class="b">Suppression stopwords</td>
+            <td>Liste prédéfinie (stopwords.txt)</td>
+            <td>Réduit index, accélère recherche</td>
+            <td>Peut supprimer des termes nécessaires (titres de Shakespeare)</td>
+            <td>RI généraliste</td>
+          </tr>
+          <tr>
+            <td class="violet">Stemming (Porter)</td>
+            <td>5 phases de règles heuristiques</td>
+            <td>Rapide, réduit la redondance, bon rappel</td>
+            <td>Over/under-stemming, non linguistique</td>
+            <td>RI à grande échelle, anglais</td>
+          </tr>
+          <tr>
+            <td class="t">Lemmatisation</td>
+            <td>Analyse morphologique + dictionnaire</td>
+            <td>Précis, résultats valides, multilingue</td>
+            <td>Lent, requiert POS-tagging, ressources</td>
+            <td>NLP, analyse sémantique, LLMs</td>
+          </tr>
+          <tr>
+            <td class="m">SOUNDEX</td>
+            <td>Codage phonétique 4 caractères</td>
+            <td>Robuste aux variantes orthographiques</td>
+            <td>Spécifique à une langue, perd de l'information</td>
+            <td>Entités nommées, recherche de noms</td>
+          </tr>
+          <tr>
+            <td class="g">n-grammes</td>
+            <td>Séquences de n tokens</td>
+            <td>Capture contexte local, robuste aux typos (char-ngrams)</td>
+            <td>Explosion combinatoire, index plus grand</td>
+            <td>Recherche approximative, langues sans espaces</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Modèles statistiques du texte</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Modèle</th><th>Objet</th><th>Formule</th><th>Paramètres</th><th>Limites</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="g">Zipf (1949)</td>
+            <td>Distribution fréquence-rang</td>
+            <td>$f(i) = KL/r(i)$</td>
+            <td>$K \approx 0.1$</td>
+            <td>Déviations aux rangs extrêmes</td>
+          </tr>
+          <tr>
+            <td class="b">Zipf–Mandelbrot (1954)</td>
+            <td>Distribution généralisée</td>
+            <td>$f(i) = P(r+\rho)^{-B}$</td>
+            <td>$P, \rho, B$ empiriques</td>
+            <td>3 paramètres à estimer</td>
+          </tr>
+          <tr>
+            <td class="t">Heap (1978)</td>
+            <td>Croissance vocabulaire</td>
+            <td>$M = kL^\beta$</td>
+            <td>$k \approx 10{-}100$, $\beta \approx 0.5$</td>
+            <td>Spécifique à la langue/domaine</td>
+          </tr>
+          <tr>
+            <td class="m">Shannon (1948)</td>
+            <td>Contenu informationnel</td>
+            <td>$I_H = -\sum p_i \log p_i$</td>
+            <td>Distribution $p_i$</td>
+            <td>Ne modélise pas la structure syntaxique</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- §12 PERSPECTIVE HISTORIQUE -->
+  <section class="sec" id="s12">
+    <div class="sec-hd"><span class="sec-num">12</span><h2 class="sec-title">Perspective Historique</h2></div>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-year">1948</div>
+        <div class="tl-title">Shannon — Théorie de l'information</div>
+        <div class="tl-desc">Publication de « A Mathematical Theory of Communication ». Fournit le cadre formel (entropie, information mutuelle) applicable au texte.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1949</div>
+        <div class="tl-title">Zipf — Principle of Least Effort</div>
+        <div class="tl-desc">Publication de la loi empirique fréquence/rang. Première observation formelle de la distribution à queue lourde du vocabulaire.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1954</div>
+        <div class="tl-title">Mandelbrot — Correction et fondement théorique</div>
+        <div class="tl-desc">Généralisation de la loi de Zipf. Dérivation théorique via la minimisation de longueur. Unification avec la théorie de l'information.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1958</div>
+        <div class="tl-title">Luhn — Automatic Literature Abstraction</div>
+        <div class="tl-desc">Proposition des cutoffs supérieur et inférieur pour la sélection des termes discriminants. Fondement de la construction automatique de vocabulaires d'index.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1972</div>
+        <div class="tl-title">Porter — Stemming Algorithm</div>
+        <div class="tl-desc">Algorithme de racinisation en 5 phases pour l'anglais. Devient la référence pour la normalisation morphologique en RI.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1978</div>
+        <div class="tl-title">Heap — Vocabulary Growth Law</div>
+        <div class="tl-desc">Publication de la loi de croissance du vocabulaire. Complète Zipf en décrivant la dynamique du vocabulaire dans un corpus croissant.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1989</div>
+        <div class="tl-title">Church & Hanks — Pointwise Mutual Information</div>
+        <div class="tl-desc">Application de l'information mutuelle pour mesurer les associations lexicales. Base des méthodes statistiques d'analyse de co-occurrences.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1992</div>
+        <div class="tl-title">Li — Random typing generates Zipf</div>
+        <div class="tl-desc">Démonstration que la frappe aléatoire de lettres avec espaces génère spontanément une distribution zipfienne. Suggère une origine combinatoire profonde.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2014</div>
+        <div class="tl-title">GloVe (Pennington et al.)</div>
+        <div class="tl-desc">Les word embeddings exploitent explicitement les co-occurrences et leur distribution (proche de Zipf) pour apprendre des représentations vectorielles denses. Lien direct avec les propriétés statistiques du texte.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2017–...</div>
+        <div class="tl-title">Transformers & LLMs</div>
+        <div class="tl-desc">Les modèles de langue neuronaux modernes (BERT, GPT, etc.) internalisent implicitement les propriétés statistiques du texte. La tokenisation (BPE, WordPiece) reste une étape fondamentale.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §13 LIENS AVEC SYSTÈMES MODERNES -->
+  <section class="sec" id="s13">
+    <div class="sec-hd"><span class="sec-num">13</span><h2 class="sec-title">Lien avec les Systèmes Modernes</h2></div>
+
+    <h3>Text IR → Neural IR → LLMs</h3>
+    <p>Les concepts du Text IR classique restent au cœur des systèmes modernes, mais sont transformés par les approches neuronales :</p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Concept classique</th><th>Évolution moderne</th><th>Système concret</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="g">Bag of Words + TF-IDF</td>
+            <td>Représentations denses (embeddings)</td>
+            <td>Word2Vec, GloVe, FastText</td>
+          </tr>
+          <tr>
+            <td class="g">Stemming / Lemmatisation</td>
+            <td>Tokenisation par sous-mots (BPE, WordPiece)</td>
+            <td>BERT, GPT — vocabulaires ~30k-100k tokens</td>
+          </tr>
+          <tr>
+            <td class="b">Index inversé (sparse)</td>
+            <td>Index dense (vecteurs + HNSW, FAISS)</td>
+            <td>Dense Retrieval, DPR, SPLADE</td>
+          </tr>
+          <tr>
+            <td class="b">Loi de Zipf → IDF</td>
+            <td>Attention mechanism (auto-pondération)</td>
+            <td>Transformers : attention ∝ importance contextuelle</td>
+          </tr>
+          <tr>
+            <td class="t">Information Mutuelle</td>
+            <td>Self-attention, PMI-factorisation</td>
+            <td>GloVe : factorisation de la matrice de co-occurrence PMI</td>
+          </tr>
+          <tr>
+            <td class="t">Stopwords → IDF bas</td>
+            <td>SPLADE : poids appris, stopwords pondérés ≈ 0</td>
+            <td>Retrieval sparse neuronal</td>
+          </tr>
+          <tr>
+            <td class="m">Thésaurus manuel</td>
+            <td>Espace sémantique latent appris</td>
+            <td>RAG : retrieval dans espace d'embeddings</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>La loi de Zipf dans les LLMs</h3>
+    <p>La distribution zipfienne du vocabulaire influence directement la conception des LLMs :</p>
+    <ul>
+      <li><strong>Tokenisation BPE / WordPiece :</strong> crée un vocabulaire de sous-mots optimisant la couverture selon la distribution des fréquences — directement inspiré des propriétés zipfiennes</li>
+      <li><strong>Taille du vocabulaire :</strong> la loi de Heap justifie un vocabulaire de ~30k à 100k tokens pour couvrir la majorité du texte web</li>
+      <li><strong>Loss d'entraînement :</strong> les tokens rares (queue de Zipf) sont sous-représentés dans la loss, pouvant créer des biais dans les LLMs</li>
+      <li><strong>Scaling laws :</strong> les lois d'échelle neuronales (Kaplan et al., 2020) ressemblent structurellement aux lois de puissance de Zipf et Heap</li>
+    </ul>
+
+    <div class="box teal">
+      <div class="box-title">Connexion fondamentale</div>
+      <p>Le cours note explicitement que les propriétés statistiques du texte (Zipf, co-occurrences) sont proches de ce qui est <strong>exploité et modélisé dans les représentations neuronales comme GloVe</strong>. GloVe factorise explicitement une matrice de co-occurrences pondérée par une fonction qui ressemble structurellement à l'information mutuelle pointwise (PMI), alignant l'approche classique et l'approche neuronale.</p>
+    </div>
+
+    <h3>RAG et Text IR</h3>
+    <p>Dans un système <em>Retrieval-Augmented Generation</em> (RAG) :</p>
+    <ul>
+      <li>Le <strong>preprocessing</strong> (tokenisation, normalisation) reste nécessaire pour la chunking strategy</li>
+      <li>L'<strong>index inversé</strong> (BM25) est souvent combiné avec un index dense pour le <em>hybrid retrieval</em></li>
+      <li>Les <strong>statistiques zipfiennes</strong> justifient BM25's saturation term et l'IDF — directement dérivés de Zipf</li>
+      <li>La <strong>loi de Heap</strong> explique pourquoi le vocabulaire d'un domaine spécialisé nécessite une tokenisation fine-tunée</li>
+    </ul>
+  </section>
+
+  <!-- §14 QUESTIONS D'EXAMEN -->
+  <section class="sec" id="s14">
+    <div class="sec-hd"><span class="sec-num">14</span><h2 class="sec-title">Questions d'Examen</h2></div>
+
+    <span class="qlevel easy">Niveau facile</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Qu'est-ce que le modèle Bag of Words ? Quelles sont ses limites fondamentales ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p>Le modèle BoW représente un document comme un multiensemble (bag) de termes indépendants non ordonnés, chacun avec sa fréquence d'occurrence. Il ignore la structure grammaticale, l'ordre des mots et les métadonnées du document. <strong>Limites :</strong> (1) Synonymie — deux mots différents pour le même concept sont traités comme distincts → rappel réduit ; (2) Polysémie — un même mot peut avoir plusieurs sens, le contexte est ignoré → précision réduite ; (3) Perte d'ordre — « dog bites man » = « man bites dog » ; (4) Perte de structure (titre, paragraphes).</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Décrivez le pipeline de traitement du texte en RI.</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>5 étapes :</strong> (1) <em>Tokenisation</em> : segmentation du document brut en tokens via des séparateurs ; (2) <em>Suppression des stopwords</em> : élimination des termes non-discriminants (haute fréquence, IDF ≈ 0) ; (3) <em>Construction de groupes nominaux</em> : identification de n-grammes et noun phrases comme « information retrieval » ; (4) <em>Stemming / Lemmatisation</em> : normalisation morphologique vers les racines ou lemmes ; (5) <em>Indexation</em> : construction de l'index inversé et du thésaurus. À noter : le pipeline varie selon les langues — le décompoundage est nécessaire pour l'allemand, la segmentation pour le chinois/japonais.</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Quelle est la différence entre stemming et lemmatisation ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p>Le <strong>stemming</strong> tronque heuristiquement les mots pour extraire leur racine, qui n'est pas nécessairement un mot valide (ex. Porter stemmer : « caresses » → « caress »). Il est rapide mais peut commettre des erreurs (over/under-stemming). La <strong>lemmatisation</strong> utilise une analyse morphologique et un dictionnaire pour ramener chaque mot à son lemme — toujours un mot valide (ex. « are/is/was » → « be »). Elle est plus précise mais plus lente et nécessite des ressources linguistiques. En pratique, le stemming est préféré pour la RI à grande échelle, la lemmatisation pour les applications NLP nécessitant une précision linguistique.</p>
+      </div>
+    </div>
+
+    <span class="qlevel med">Niveau intermédiaire</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Énoncez et expliquez la loi de Zipf. Quelle est sa signification pratique pour un système de RI ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>Énoncé :</strong> La fréquence $f(i)$ d'un terme est inversement proportionnelle à son rang $r(i)$ dans une liste triée par fréquence décroissante : $f(i) \cdot r(i) = K$, soit $p(i) = K/r(i)$ avec $K \approx 0.1$. C'est une loi de puissance avec exposant $-1$, linéaire en représentation log-log.</p>
+        <p><strong>Dérivation importante :</strong> $s_n/M = 1/n(n+1)$ → pour $n=1$, 50% des termes sont des hapax legomena.</p>
+        <p><strong>Significations pratiques :</strong> (1) Les stopwords (bas rang) représentent une fraction disproportionnée des tokens → leur suppression est très efficace pour réduire l'index ; (2) La majorité des termes sont rares → statistiques insuffisantes pour la plupart des mots ; (3) Justifie les cutoffs de Luhn ; (4) Explique pourquoi IDF est utile — les termes rares ont un IDF élevé et sont donc informatifs.</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Qu'est-ce que la loi de Heap ? Quel est son lien avec la loi de Zipf ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>Loi de Heap :</strong> La taille du vocabulaire $M$ croît avec la longueur du corpus $L$ selon $M = k \cdot L^\beta$ avec $k \approx 10$-$100$ et $\beta \approx 0.4$-$0.6$. Pour $\beta = 0.5$, $M \propto \sqrt{L}$ — croissance sous-linéaire.</p>
+        <p><strong>Lien avec Zipf :</strong> La loi de Heap peut être dérivée de la loi de Zipf sous l'hypothèse que les documents sont générés par échantillonnage zipfien des termes. Les deux lois sont mathématiquement cohérentes : Zipf décrit la distribution statique des fréquences, Heap la dynamique d'apparition de nouveaux termes.</p>
+        <p><strong>Implication :</strong> L'index croît comme $\sqrt{L}$, pas comme $L$ → la scalabilité des moteurs de recherche est possible. Mais le vocabulaire ne se stabilise jamais → gestion dynamique nécessaire.</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Comment le pipeline de tokenisation doit-il s'adapter selon la langue ? Donnez des exemples concrets.</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>Anglais/Français :</strong> Les espaces et la ponctuation suffisent comme séparateurs. Cas particuliers : apostrophes (<em>don't</em>), tirets, acronymes (U.S.A), nombres (1990, 5.3kg). Case folding recommandé.</p>
+        <p><strong>Allemand :</strong> Nécessite le décompoundage (<em>Suchprogramm</em> → <em>Such</em> + <em>Programm</em>). Sans cela, les composés forment des hapax et ne sont jamais retrouvés lors d'une recherche de leurs composants.</p>
+        <p><strong>Arabe/Hébreu :</strong> Direction RTL, scripts spéciaux, pas de distinction majuscules/minuscules. Tokenisation nécessite une gestion Unicode bidirectionnelle.</p>
+        <p><strong>Chinois/Japonais/Coréen :</strong> Absence d'espaces entre les mots. Nécessite des modèles statistiques ou réseaux de neurones pour la segmentation (e.g. Jieba pour le chinois, MeCab pour le japonais).</p>
+      </div>
+    </div>
+
+    <span class="qlevel hard">Niveau difficile</span>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Montrez formellement que la fraction de termes hapax legomena est de 1/2 selon la loi de Zipf. Discutez la validité empirique.</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>Démonstration :</strong></p>
+        <p>1. Par Zipf : $f(i) = KL/r(i)$. Un terme de fréquence $n$ a rang $r_n = KL/n$.<br>2. Nombre de termes à fréquence exactement $n$ : $s_n = r_n - r_{n+1} = KL/n - KL/(n+1) = KL/[n(n+1)]$.<br>3. Taille du vocabulaire $M$ : le terme le plus rare (apparaissant 1 fois) a rang maximal. On pose $M = r_1 = KL$.<br>4. Fraction : $s_n/M = s_n/(KL) = 1/[n(n+1)]$.<br>5. Pour $n=1$ : $s_1/M = 1/(1 \times 2) = \mathbf{1/2}$.</p>
+        <p><strong>Validité empirique :</strong> Sur le corpus TREC Vol.3 (125M occurrences, 508k mots uniques), la proportion observée est ~40% (0.402) vs 50% prédit. La prédiction est remarquablement proche mais surestime légèrement les hapax. Les déviations proviennent des rangs extrêmes où Zipf pur est moins précis (correction de Mandelbrot). L'ordre de grandeur reste validé empiriquement.</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Expliquez le fondement théorique de la loi de Zipf–Mandelbrot via la théorie de l'information. Pourquoi cette distribution est-elle dite « optimale » ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>Problème d'optimisation de Mandelbrot :</strong> Trouver la distribution $p_r^*$ qui minimise le nombre moyen de lettres par terme $\sum_r p_r \ell_r$ (longueur moyenne) sous contraintes : $\sum_r p_r = 1$ et entropie fixée $I_H(T) = h$.</p>
+        <p><strong>Solution :</strong> Via les multiplicateurs de Lagrange, la solution est $p_r^* = P(r + \rho)^{-B}$ — précisément la distribution de Zipf–Mandelbrot.</p>
+        <p><strong>Interprétation :</strong> Cette distribution est « optimale » au sens de l'encodage optimal : pour une entropie (contenu informationnel) donnée, elle minimise la longueur moyenne des mots. Elle réalise le <strong>meilleur compromis entre expressivité et compacité</strong>. C'est pourquoi les langues naturelles, soumises à une pression évolutive vers l'efficacité communicative (Principe du Moindre Effort de Zipf), convergent vers cette distribution. C'est également le fondement théorique justifiant que les encodages de Huffman optimal sur des distributions zipfiennes produisent des codes courts pour les mots fréquents.</p>
+      </div>
+    </div>
+
+    <div class="qi">
+      <div class="qi-q" onclick="toggle(this)">
+        <span class="qi-qtxt">Comment les propriétés statistiques du texte (Zipf, information mutuelle) sont-elles exploitées dans les représentations neuronales modernes comme GloVe ?</span>
+        <span class="qi-arr">▼</span>
+      </div>
+      <div class="qi-a">
+        <p><strong>GloVe (Pennington et al., 2014) :</strong> Les word embeddings GloVe sont obtenus par factorisation d'une matrice de co-occurrences $X_{ij}$ pondérée, où $X_{ij}$ compte les apparitions conjointes des termes $i$ et $j$ dans une fenêtre contextuelle.</p>
+        <p><strong>Lien avec Zipf :</strong> GloVe pondère les co-occurrences par $f(x) = (X_{ij}/x_{max})^\alpha$ (avec $\alpha = 3/4$) pour diminuer l'influence des termes très fréquents (stopwords, distribution zipfienne). Cela correspond implicitement à une pondération IDF.</p>
+        <p><strong>Lien avec l'information mutuelle :</strong> Levy & Goldberg (2014) ont montré que Word2Vec avec negative sampling est équivalent à la factorisation d'une matrice de PMI (<em>Pointwise Mutual Information</em>) shiftée : $M_{ij} = PMI(w_i, w_j) - \log k$. GloVe peut être vu comme une factorisation approximative des log-ratios de co-occurrence, étroitement liée à la PMI.</p>
+        <p><strong>Conclusion :</strong> Les approches neuronales modernes ne remplacent pas les concepts statistiques classiques — elles les internalisent et les optimisent de façon différentiable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §15 PIÈGES -->
+  <section class="sec" id="s15">
+    <div class="sec-hd"><span class="sec-num">15</span><h2 class="sec-title">Pièges Classiques</h2></div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Confusion Stemming / Lemmatisation :</strong> Le stemming produit des racines non nécessairement valides linguistiquement (heuristique). La lemmatisation produit des lemmes toujours valides (morphologie + dictionnaire). Ne jamais dire « le stemming retourne la forme de base correcte ».</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Confusion rang et fréquence dans Zipf :</strong> Le rang 1 correspond à la fréquence <em>maximale</em>, pas minimale. Plus le rang est petit, plus le terme est fréquent. Ne pas inverser la relation.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Interprétation erronée des stopwords :</strong> Les stopwords ont un IDF <em>élevé</em> au sens absolu (df élevé), mais sont <em>non discriminants</em>. Attention : dans la formule IDF = log(N/df), un df très élevé donne IDF ≈ 0 — c'est ce qui les rend inutiles pour la recherche.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Loi de Heap ≠ saturation :</strong> La loi de Heap implique une croissance <em>sous-linéaire</em> mais <em>infinie</em> du vocabulaire. Le vocabulaire ne se stabilise pas — il croît indéfiniment, juste plus lentement que $L$. Ne pas confondre avec une convergence.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Information mutuelle biaisée :</strong> L'IM est biaisée vers les termes rares (co-occurrences peu fréquentes donnent de grandes valeurs). Des termes très rares co-occurrents une seule fois peuvent avoir une IM très élevée sans que l'association soit significative. La PMI normalisée ou le seuil de fréquence minimale corrigent ce problème.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Zipf vs Heap : ne pas confondre les variables :</strong> Zipf relie fréquence et rang d'un terme dans un corpus fixé. Heap relie taille du vocabulaire et taille du corpus en croissance. Ce sont deux phénomènes distincts, bien que mathématiquement liés.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Sur-suppression des stopwords :</strong> La suppression systématique des stopwords peut poser problème pour des requêtes spécifiques (<em>« to be or not to be »</em>, noms d'entités contenant des articles). Les moteurs modernes appliquent souvent un compromis — pondération IDF plutôt que suppression binaire.</div>
+    </div>
+
+    <div class="piege">
+      <div class="piege-icon">⚠️</div>
+      <div class="piege-text"><strong>Exposant de Zipf ≠ -1 en général :</strong> La loi de Zipf stricte a exposant $c = -1$. Mais beaucoup de phénomènes suivent des lois de puissance avec d'autres exposants. Ne pas généraliser que toute loi de puissance est une loi de Zipf.</div>
+    </div>
+  </section>
+
+  <!-- §16 FICHE DE RÉVISION -->
+  <section class="sec" id="s16">
+    <div class="sec-hd"><span class="sec-num">16</span><h2 class="sec-title">Fiche de Révision Finale</h2></div>
+
+    <div class="fiche-grid">
+      <div class="fc2">
+        <h4>Modèle BoW — Fondement</h4>
+        <ul>
+          <li><strong>Termes</strong> = unités du vocabulaire, indépendants, non ordonnés</li>
+          <li><strong>Fréquences</strong> (bag, pas set)</li>
+          <li><strong>Limites :</strong> synonymie, polysémie, perte d'ordre</li>
+          <li><strong>Généralisation :</strong> Bag of Visual Words, patterns acoustiques</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Pipeline de traitement</h4>
+        <ul>
+          <li><strong>Tokenisation</strong> : doc brut → tokens (séparateurs)</li>
+          <li><strong>Stopwords</strong> : IDF ≈ 0, non discriminants</li>
+          <li><strong>Stemming</strong> : racine heuristique (Porter — 5 étapes)</li>
+          <li><strong>Lemmatisation</strong> : lemme valide (morphologie + dico)</li>
+          <li><strong>SOUNDEX</strong> : code phonétique 4 car. pour entités nommées</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Loi de Zipf — Formules clés</h4>
+        <ul>
+          <li>$f(i) \cdot r(i) = K$ avec $K \approx 0.1$</li>
+          <li>$p(i) = K/r(i)$, $f(i) = KL/r(i)$</li>
+          <li>$s_n/M = 1/n(n+1)$</li>
+          <li><strong>Hapax :</strong> $s_1/M = 1/2$</li>
+          <li><strong>Log-log :</strong> droite de pente $-1$</li>
+          <li><strong>Mandelbrot :</strong> $f(i) = P(r+\rho)^{-B}$</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Loi de Heap</h4>
+        <ul>
+          <li>$M = k \cdot L^\beta$ avec $\beta \approx 0.5$</li>
+          <li>Croissance <strong>sous-linéaire</strong> ≈ $\sqrt{L}$</li>
+          <li>Vocabulaire <strong>illimité</strong> (NE, typos)</li>
+          <li>Dérivable de Zipf</li>
+          <li>$k \approx 10$-$100$, $\beta \approx 0.4$-$0.6$</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Théorie de l'information</h4>
+        <ul>
+          <li><strong>Entropie :</strong> $I_H(T) = -\sum p_i \log p_i$</li>
+          <li>Max si équiprobable, réel &lt; max</li>
+          <li><strong>Lettres EN :</strong> 4.14 bits (théo: 4.7)</li>
+          <li><strong>Mots ($10^6$) :</strong> 11.4 bits (théo: 16.6)</li>
+          <li><strong>Mandelbrot :</strong> Zipf-M = distribution entropie-optimale</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Information Mutuelle</h4>
+        <ul>
+          <li>$I(W_1;W_2) = \sum p(w_1,w_2)\log\frac{p(w_1,w_2)}{p(w_1)p(w_2)}$</li>
+          <li>$I = 0$ si indépendants</li>
+          <li><strong>Grande I :</strong> association réelle</li>
+          <li><strong>Petite I :</strong> co-occurrence fortuite (stopwords)</li>
+          <li><strong>Biais :</strong> favorise les termes rares</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Cutoffs de Luhn</h4>
+        <ul>
+          <li><strong>Upper cut-off :</strong> élimine mots vides (trop fréquents)</li>
+          <li><strong>Lower cut-off :</strong> élimine hapax (trop rares)</li>
+          <li><strong>Zone significative :</strong> termes discriminants</li>
+          <li>Justification formelle via Zipf</li>
+        </ul>
+      </div>
+      <div class="fc2">
+        <h4>Points à mémoriser pour l'oral</h4>
+        <ul>
+          <li>Zipf : loi de <strong>puissance c=−1</strong>, linéaire en log-log</li>
+          <li>50% des termes distincts = hapax (empirique: ~40%)</li>
+          <li>Heap dérivable de Zipf, croissance ≈ $\sqrt{L}$</li>
+          <li>IM = mesure de <strong>dépendance statistique</strong></li>
+          <li>Stopwords = termes à IDF ≈ 0 (high df)</li>
+          <li>Stemming heuristique ≠ Lemmatisation morphologique</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box vio">
+      <div class="box-title">🎯 Message central pour l'examen</div>
+      <p>Le texte n'est pas aléatoire — il obéit à des <strong>lois statistiques précises</strong> (Zipf, Heap) qui ont une justification théorique profonde via la théorie de l'information (Mandelbrot). Ces lois ne sont pas de simples curiosités : elles guident chaque décision de conception d'un système de RI textuelle, du preprocessing à la construction de l'index, et restent au cœur des systèmes modernes (BM25 = IDF ← Zipf ; GloVe = PMI ← Information Mutuelle).</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggle(btn) {
+  const ans = btn.nextElementSibling;
+  const arr = btn.querySelector('.qi-arr');
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open', !isOpen);
+  arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+// Sidebar active link on scroll
+const sections = document.querySelectorAll('.sec');
+const navLinks = document.querySelectorAll('.sb nav a');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.sb nav a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

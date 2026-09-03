@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR.08–09 — Systèmes de Recommandation · Guide d'Examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#0d0b14;--bg-card:#161221;--bg-code:#1c1828;
+  --text:#e4dffa;--muted:#9089bf;--border:rgba(180,150,80,.18);--bstrong:rgba(180,150,80,.4);
+  --gold:#c9a84c;--glight:#e8c97a;--blue:#7eb8d4;--green:#7bc496;--red:#e07b7b;--violet:#a78bfa;--orange:#e8a56a;
+  --ff:'EB Garamond',Georgia,serif;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:18px;line-height:1.85;display:flex}
+
+/* SIDEBAR */
+.sb{width:280px;min-height:100vh;background:var(--bg-card);border-right:1px solid var(--border);
+  padding:2rem 1.4rem;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sb-logo{font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.sb-sub{font-family:var(--fm);font-size:.73rem;color:var(--muted);margin-bottom:1.8rem;letter-spacing:.05em}
+.sb nav ul{list-style:none}
+.sb nav ul li{margin-bottom:.2rem}
+.sb nav ul li a{color:var(--muted);text-decoration:none;font-size:.86rem;display:block;
+  padding:.35rem .7rem;border-radius:4px;border-left:2px solid transparent;transition:all .18s}
+.sb nav ul li a:hover,.sb nav ul li a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.07)}
+.sb nav ul li a .n{font-family:var(--fm);font-size:.72rem;color:var(--gold);margin-right:.45rem;opacity:.75}
+.sb-section{font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);padding:.6rem .7rem .3rem;opacity:.6}
+
+/* MAIN */
+.main{margin-left:280px;flex:1;padding:3rem 4rem;max-width:1060px}
+
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding-bottom:3rem;margin-bottom:4.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none}
+.hero-tag{font-family:var(--fm);font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h1{font-family:var(--fd);font-size:3.8rem;font-weight:700;line-height:1.1;margin-bottom:.8rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:1.05rem;color:var(--muted);max-width:660px;margin-bottom:1.5rem}
+.badges{display:flex;gap:.7rem;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:.72rem;padding:.25rem .75rem;border:1px solid var(--bstrong);
+  border-radius:20px;color:var(--gold);letter-spacing:.04em}
+.badge.b{border-color:rgba(126,184,212,.35);color:var(--blue)}
+.badge.g{border-color:rgba(123,196,150,.35);color:var(--green)}
+.badge.v{border-color:rgba(167,139,250,.35);color:var(--violet)}
+.badge.o{border-color:rgba(232,165,106,.35);color:var(--orange)}
+
+/* SECTION */
+.sec{margin-bottom:5rem;scroll-margin-top:2rem}
+.sec-hd{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--fm);font-size:.85rem;color:var(--gold);opacity:.65;min-width:2.5rem}
+.sec-title{font-family:var(--fd);font-size:1.95rem;font-weight:700;color:var(--text)}
+h3{font-family:var(--fd);font-size:1.5rem;font-weight:600;color:var(--glight);margin:2rem 0 .8rem}
+h4{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--blue);margin:1.4rem 0 .5rem}
+h5{font-family:var(--fm);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);margin:.8rem 0 .3rem}
+p{margin-bottom:.9rem}
+strong{color:var(--glight);font-weight:600}
+em{color:var(--blue);font-style:italic}
+a{color:var(--gold);text-decoration:none}
+code{font-family:var(--fm);background:var(--bg-code);padding:.1em .4em;border-radius:3px;font-size:.82em;color:var(--gold)}
+ul,ol{padding-left:1.5rem;margin-bottom:.9rem}
+li{margin-bottom:.35rem}
+
+/* CALLOUT BOXES */
+.box{background:var(--bg-card);border-left:3px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.4rem 0}
+.box.info{border-left-color:var(--blue)}.box.warn{border-left-color:var(--red)}.box.ok{border-left-color:var(--green)}.box.vio{border-left-color:var(--violet)}.box.ora{border-left-color:var(--orange)}
+.box-title{font-family:var(--fm);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.box.info .box-title{color:var(--blue)}.box.warn .box-title{color:var(--red)}.box.ok .box-title{color:var(--green)}.box.vio .box-title{color:var(--violet)}.box.ora .box-title{color:var(--orange)}
+
+/* MATH */
+.mblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.8rem;
+  margin:1.4rem 0;overflow-x:auto;text-align:center}
+.mblock .mlabel{font-family:var(--fm);font-size:.7rem;color:var(--muted);text-align:left;margin-bottom:.7rem;
+  text-transform:uppercase;letter-spacing:.08em}
+
+/* TABLES */
+.twrap{overflow-x:auto;margin:1.4rem 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead{background:var(--bg-code)}
+th{padding:.8rem 1rem;text-align:left;font-family:var(--fm);font-size:.73rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--bstrong)}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+td.g{color:var(--green)}td.r{color:var(--red)}td.m{color:var(--muted)}td.b{color:var(--blue)}td.v{color:var(--violet)}td.o{color:var(--orange)}
+
+/* FORMULA CARDS */
+.fcards{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem}
+.fc{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fc-head{background:var(--bg-code);padding:.8rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.fc-name{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--gold)}
+.fc-tag{font-family:var(--fm);font-size:.7rem;color:var(--muted);padding:.2rem .6rem;
+  background:rgba(255,255,255,.04);border-radius:20px}
+.fc-body{padding:1.4rem}
+.fc-expr{text-align:center;padding:1.2rem;background:var(--bg-code);border-radius:6px;margin-bottom:1.1rem;overflow-x:auto}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:.88rem}
+.fc-item h5{font-family:var(--fm);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:.3rem}
+.fc-item p{color:var(--muted);margin:0;font-size:.88rem}
+
+/* QUIZ */
+.qlevel{display:inline-block;font-family:var(--fm);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.1em;padding:.2rem .7rem;border-radius:4px;margin-bottom:.8rem;margin-top:1.2rem}
+.qlevel.easy{background:rgba(123,196,150,.13);color:var(--green)}
+.qlevel.med{background:rgba(126,184,212,.13);color:var(--blue)}
+.qlevel.hard{background:rgba(224,123,123,.13);color:var(--red)}
+.qi{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:.8rem;overflow:hidden}
+.qi-q{padding:.9rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+  gap:.8rem;transition:background .15s}
+.qi-q:hover{background:rgba(201,168,76,.05)}
+.qi-qtxt{flex:1;font-size:.93rem}
+.qi-arr{color:var(--gold);font-size:1.1rem;transition:transform .2s;min-width:1.2rem;text-align:center}
+.qi-a{padding:0 1.1rem;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .2s;
+  background:var(--bg-code);font-size:.88rem;color:var(--muted);border-top:0 solid var(--border)}
+.qi-a.open{max-height:800px;padding:1rem 1.1rem;border-top:1px solid var(--border)}
+
+/* PIEGE */
+.piege{display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;
+  padding:.8rem 1rem;background:rgba(224,123,123,.06);border-radius:6px;border-left:3px solid var(--red)}
+.piege-icon{font-size:1.1rem;min-width:1.4rem}
+.piege-text{font-size:.93rem}
+.piege-text strong{color:var(--red)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2rem;margin:1.4rem 0}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:2rem;padding-left:1.4rem}
+.tl-item::before{content:'';position:absolute;left:-2.4rem;top:.6rem;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.tl-year{font-family:var(--fm);font-size:.78rem;color:var(--gold);margin-bottom:.25rem}
+.tl-title{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.tl-desc{font-size:.9rem;color:var(--muted)}
+
+/* FICHE */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.fc2{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.fc2 h4{font-family:var(--fm);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--gold);margin:0 0 .7rem 0}
+.fc2 ul{list-style:none;padding:0;font-size:.85rem}
+.fc2 ul li{padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.fc2 ul li:last-child{border:none}
+.fc2 ul li strong{color:var(--text)}
+
+/* ORAL BLOCK */
+.oral{background:var(--bg-card);border:1px solid var(--bstrong);border-radius:10px;
+  padding:2rem;margin:1rem 0;position:relative}
+.oral::before{content:'"';font-family:var(--fd);font-size:5rem;color:var(--gold);opacity:.15;
+  position:absolute;top:-.5rem;left:.8rem;line-height:1}
+.oral p{font-size:1rem;line-height:1.9;color:var(--text)}
+.oral p+p{margin-top:.8rem}
+
+/* DIAGRAM SVG */
+.diag{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;margin:1.4rem 0;overflow-x:auto;text-align:center}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.ccard{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;transition:border-color .18s}
+.ccard:hover{border-color:var(--bstrong)}
+.ccard .ctag{font-family:var(--fm);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.ccard h4{font-family:var(--fd);font-size:1.1rem;color:var(--text);margin:0 0 .4rem 0}
+.ccard p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.6}
+
+/* PIPELINE */
+.pipe{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:1.4rem 0;padding:1.2rem;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:8px}
+.pipe-step{background:var(--bg-code);border:1px solid var(--bstrong);border-radius:6px;padding:.5rem 1rem;
+  font-family:var(--fm);font-size:.78rem;color:var(--text);text-align:center;min-width:90px}
+.pipe-step.highlight{border-color:var(--gold);color:var(--gold)}
+.pipe-step.blue{border-color:rgba(126,184,212,.5);color:var(--blue)}
+.pipe-step.green{border-color:rgba(123,196,150,.5);color:var(--green)}
+.pipe-step.red{border-color:rgba(224,123,123,.5);color:var(--red)}
+.pipe-arrow{color:var(--muted);font-size:1.2rem}
+.pipe-label{font-family:var(--fm);font-size:.68rem;color:var(--muted);text-align:center;width:100%;margin-top:.4rem}
+
+/* CODE BLOCK */
+.codeblock{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;
+  margin:1.2rem 0;font-family:var(--fm);font-size:.83rem;line-height:1.7;color:var(--muted);overflow-x:auto}
+.codeblock .kw{color:var(--violet)}.codeblock .cm{color:rgba(144,137,191,.5)}.codeblock .num{color:var(--green)}.codeblock .str{color:var(--orange)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:900px){.sb{display:none}.main{margin-left:0;padding:2rem 1.4rem}.hero h1{font-size:2.4rem}.fiche-grid{grid-template-columns:1fr}.fc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+<aside class="sb">
+  <div class="sb-logo">IR · RS</div>
+  <div class="sb-sub">Systèmes de Recommandation</div>
+  <nav>
+    <ul>
+      <div class="sb-section">Introduction</div>
+      <li><a href="#s0"><span class="n">00</span>Résumé exécutif</a></li>
+      <li><a href="#s1"><span class="n">01</span>Réponse d'oral</a></li>
+
+      <div class="sb-section">Fondements</div>
+      <li><a href="#s2"><span class="n">02</span>Problème de recommandation</a></li>
+      <li><a href="#s3"><span class="n">03</span>Retour de pertinence (RF)</a></li>
+      <li><a href="#s4"><span class="n">04</span>Filtrage collaboratif (CF)</a></li>
+
+      <div class="sb-section">Modèles avancés</div>
+      <li><a href="#s5"><span class="n">05</span>Factorisation matricielle</a></li>
+      <li><a href="#s6"><span class="n">06</span>SVD & Rang faible</a></li>
+      <li><a href="#s7"><span class="n">07</span>NMF & Interprétabilité</a></li>
+
+      <div class="sb-section">Analyse</div>
+      <li><a href="#s8"><span class="n">08</span>Formules clés</a></li>
+      <li><a href="#s9"><span class="n">09</span>Comparaison</a></li>
+      <li><a href="#s10"><span class="n">10</span>Historique</a></li>
+      <li><a href="#s11"><span class="n">11</span>Systèmes modernes</a></li>
+
+      <div class="sb-section">Examen</div>
+      <li><a href="#s12"><span class="n">12</span>Questions d'examen</a></li>
+      <li><a href="#s13"><span class="n">13</span>Pièges classiques</a></li>
+      <li><a href="#s14"><span class="n">14</span>Fiche de révision</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main class="main">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">IR · Chapitres 8 &amp; 9</div>
+  <h1>Systèmes de<br><em>Recommandation</em></h1>
+  <p class="hero-desc">De la problématique fondamentale aux solutions modernes : retour utilisateur, filtrage collaboratif, factorisation matricielle et modèles de rang faible.</p>
+  <div class="badges">
+    <span class="badge">Relevance Feedback</span>
+    <span class="badge b">Collaborative Filtering</span>
+    <span class="badge g">Matrix Factorization</span>
+    <span class="badge v">SVD / NMF</span>
+    <span class="badge o">Low-Rank Models</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     §0 — RÉSUMÉ EXÉCUTIF
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s0">
+  <div class="sec-hd"><span class="sec-num">00</span><h2 class="sec-title">Résumé exécutif</h2></div>
+
+  <div class="box ok">
+    <div class="box-title">⚡ 30 secondes</div>
+    <p>Un <strong>système de recommandation</strong> (<em>Recommender System</em>) prédit la note qu'un utilisateur attribuerait à un item qu'il n'a pas encore évalué. La donnée centrale est une <strong>matrice de notes creuse</strong> (<em>sparse rating matrix</em>) $\mathbf{R} \in \mathbb{R}^{M \times N}$. Deux grandes familles de solutions : (1) le <strong>Retour de Pertinence</strong> (<em>Relevance Feedback</em>) — actif, basé sur les jugements explicites d'un seul utilisateur — et (2) le <strong>Filtrage Collaboratif</strong> (<em>Collaborative Filtering</em>) — passif, exploitant les comportements agrégés de millions d'utilisateurs. Les approches modernes complètent ces méthodes par une <strong>factorisation matricielle</strong> (<em>Matrix Factorization</em>) : approximer $\mathbf{R} \approx UV^T$ par un produit de matrices de faible rang $K$, dont la forme optimale est donnée par la <strong>SVD</strong> (théorème d'Eckart-Young).</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §1 — RÉPONSE MODÈLE D'ORAL
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s1">
+  <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Réponse modèle d'oral</h2></div>
+
+  <div class="oral">
+    <p>Le problème de recommandation consiste à prédire si un utilisateur appréciera un item qu'il n'a pas encore rencontré. Formellement, on dispose d'une matrice de notes $\mathbf{R}$ entre $M$ utilisateurs et $N$ articles, dont la grande majorité des cases est inconnue — on parle de matrice <em>creuse</em>. L'objectif est de compléter cette matrice de façon pertinente.</p>
+
+    <p>Les données collectées sont soit des <strong>jugements explicites</strong> — l'utilisateur attribue explicitement une note — soit des <strong>signaux implicites</strong> — clics, temps de lecture, achats. Ces données alimentent deux grandes familles de méthodes.</p>
+
+    <p>La première famille est le <strong>Retour de Pertinence actif</strong>. Inspiré du modèle vectoriel de recherche d'information, il consiste à modifier itérativement la requête de l'utilisateur en l'attirant vers les documents jugés pertinents et en l'éloignant des documents non pertinents. La formule de Rocchio en est l'implémentation canonique : $q' = \alpha q + \beta \frac{1}{|R|}\sum_{d \in R} d - \gamma \frac{1}{|\bar{R}|}\sum_{d \in \bar{R}} d$. Elle est analogique à l'entraînement d'un Perceptron. Dans le modèle probabiliste BIR, ce mécanisme est intégré nativement via la mise à jour des probabilités $p_i$ et $q_i$.</p>
+
+    <p>La deuxième famille est le <strong>Filtrage Collaboratif passif</strong>. L'idée est que si deux utilisateurs ont des goûts similaires — mesurés par la corrélation de Pearson sur leurs évaluations communes — alors l'un peut servir de proxy pour prédire les préférences de l'autre. La note prédite est une déviation pondérée par rapport à la moyenne de l'utilisateur actif. Cette approche souffre toutefois de limitations structurelles : le démarrage à froid, la dispersion, le biais de popularité.</p>
+
+    <p>Pour dépasser ces limitations, les <strong>modèles de rang faible</strong> (<em>Low-Rank Models</em>) modélisent chaque utilisateur et chaque article comme un vecteur de $K$ caractéristiques latentes — genres, styles, thèmes — et la note prédite est leur produit scalaire : $\hat{r}_{ij} = u_i^T v_j$. Cela revient à approcher $\mathbf{R} \approx UV^T$. La décomposition optimale au sens de la norme de Frobenius est donnée par la SVD et le théorème d'Eckart-Young : $\mathbf{R}_K = U_K\Sigma_K V_K^T$. L'optimisation est réalisée par <em>minimisation alternée</em>, car le problème est non-convexe conjointement en $U$ et $V$ mais convexe en chacun d'eux séparément. Enfin, la NMF (<em>Non-negative Matrix Factorization</em>) impose des valeurs positives pour une meilleure interprétabilité, au prix d'une moindre optimalité.</p>
+
+    <p>En résumé, le choix de la méthode dépend du contexte : le RF actif aide un utilisateur à raffiner sa recherche ; le CF est puissant avec de nombreux utilisateurs mais sensible à la dispersion ; la factorisation matricielle offre la généralisation la plus robuste, mais souffre du problème du <em>cold start</em> pour les nouveaux utilisateurs et les nouveaux articles.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §2 — PROBLÈME DE RECOMMANDATION
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s2">
+  <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Le problème de recommandation</h2></div>
+
+  <h3>Formalisation et données</h3>
+
+  <p>Un système de recommandation opère sur deux types d'entités : <strong>M utilisateurs</strong> et <strong>N articles</strong>. La donnée centrale est la <strong>matrice de notes</strong> (<em>Rating Matrix</em>) :</p>
+
+  <div class="mblock">
+    <div class="mlabel">Matrice de notes</div>
+    $$\mathbf{R} = (r_{ij})_{ij} \in \mathbb{R}^{M \times N}, \quad r_{ij} \in \;]0, 1] \cup \{?\}$$
+  </div>
+
+  <p>Le symbole <code>?</code> désigne les notes inconnues — c'est précisément ce que le système doit prédire. Une <strong>matrice binaire d'observation</strong> (<em>Observation Mask</em>) $\mathbf{B}$ joue le rôle de masque :</p>
+
+  <div class="mblock">
+    $$b_{ij} = \begin{cases} 1 & \text{si l'utilisateur } i \text{ a noté l'article } j \\ 0 & \text{sinon} \end{cases}$$
+  </div>
+
+  <div class="box info">
+    <div class="box-title">🔍 Intuition</div>
+    <p>En pratique, sur un service de streaming avec 10 millions d'utilisateurs et 100 000 films, la matrice $\mathbf{R}$ est <strong>extrêmement creuse</strong> (<em>sparse</em>) : moins de 0.1 % des cases sont renseignées. La difficulté du problème est précisément de reconstruire de façon sensée les 99.9 % manquants.</p>
+  </div>
+
+  <h3>Vue par graphe biparti</h3>
+
+  <p>La matrice $\mathbf{B}$ peut être interprétée comme la <strong>matrice d'adjacence d'un graphe biparti</strong> pondéré par $\mathbf{R}$ :</p>
+
+  <div class="diag">
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+      <!-- Utilisateurs -->
+      <text x="80" y="25" font-family="JetBrains Mono" font-size="12" fill="#c9a84c" text-anchor="middle">UTILISATEURS</text>
+      <circle cx="80" cy="70" r="20" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="80" y="75" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">u₁</text>
+      <circle cx="80" cy="130" r="20" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="80" y="135" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">u₂</text>
+      <circle cx="80" cy="190" r="14" fill="none" stroke="#9089bf" stroke-width="1" stroke-dasharray="4"/>
+      <text x="80" y="195" font-size="11" fill="#9089bf" text-anchor="middle" font-family="EB Garamond">uₘ</text>
+
+      <!-- Articles -->
+      <text x="500" y="25" font-family="JetBrains Mono" font-size="12" fill="#7eb8d4" text-anchor="middle">ARTICLES</text>
+      <rect x="470" y="50" width="60" height="35" rx="6" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="500" y="73" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">d₁</text>
+      <rect x="470" y="110" width="60" height="35" rx="6" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="500" y="133" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">d₂</text>
+      <rect x="470" y="170" width="60" height="28" rx="6" fill="none" stroke="#9089bf" stroke-width="1" stroke-dasharray="4"/>
+      <text x="500" y="190" font-size="11" fill="#9089bf" text-anchor="middle" font-family="EB Garamond">dₙ</text>
+
+      <!-- Arêtes -->
+      <line x1="100" y1="70" x2="470" y2="67" stroke="#c9a84c" stroke-width="1.5" opacity="0.7"/>
+      <text x="290" y="55" font-size="11" fill="#c9a84c" text-anchor="middle" font-family="JetBrains Mono">r₁₁=0.9</text>
+      <line x1="100" y1="75" x2="470" y2="128" stroke="#7eb8d4" stroke-width="1.5" opacity="0.7"/>
+      <text x="290" y="118" font-size="11" fill="#7eb8d4" text-anchor="middle" font-family="JetBrains Mono">r₁₂=0.4</text>
+      <line x1="100" y1="135" x2="470" y2="128" stroke="#7bc496" stroke-width="1.5" opacity="0.7"/>
+      <text x="290" y="155" font-size="11" fill="#7bc496" text-anchor="middle" font-family="JetBrains Mono">r₂₂=0.7</text>
+
+      <!-- B Label -->
+      <text x="290" y="200" font-family="JetBrains Mono" font-size="10" fill="#9089bf" text-anchor="middle">Graphe biparti : arête ⟺ bᵢⱼ = 1, poids = rᵢⱼ</text>
+    </svg>
+  </div>
+
+  <h3>Nature des données collectées</h3>
+
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">Feedback Explicite</div>
+      <h4>Jugements directs</h4>
+      <p>Notes étoiles (1–5), pouces levé/baissé, évaluation textuelle. Plus précis mais plus rare car demande un effort.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Feedback Implicite</div>
+      <h4>Comportements observés</h4>
+      <p>Clics, temps de lecture, achats, partages, re-lecture. Abondant mais bruité et ambigu.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Feedback Actif</div>
+      <h4>Retour de Pertinence</h4>
+      <p>L'utilisateur juge explicitement des résultats, permettant au système d'affiner itérativement sa requête.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Feedback Passif</div>
+      <h4>Filtrage Collaboratif</h4>
+      <p>Agrégation des comportements passés de millions d'utilisateurs pour inférer les préférences individuelles.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §3 — RETOUR DE PERTINENCE
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s3">
+  <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Retour de Pertinence (Relevance Feedback)</h2></div>
+
+  <h3>Rôles et utilité</h3>
+
+  <p>Le <strong>Retour de Pertinence</strong> (<em>Relevance Feedback, RF</em>) aide l'utilisateur dans trois dimensions fondamentales :</p>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Problème</th><th>Mécanisme du RF</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td class="g"><strong>Requête imprécise</strong></td><td>Affinage itératif par jugements positifs et négatifs</td><td>"recette rapide" → spécialise vers "pâtes végétariennes"</td></tr>
+        <tr><td class="b"><strong>Polysémie</strong> (<em>Polysemy</em>)</td><td>Disambiguation : les documents du bon sens sont marqués positifs</td><td>"mercure" : planète vs métal vs dieu</td></tr>
+        <tr><td class="v"><strong>Synonymie</strong> (<em>Synonymy</em>)</td><td>Expansion : ajout de termes issus des documents pertinents ou d'un thésaurus</td><td>"automobile" → + "voiture", "véhicule", "auto"</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>La boucle de Retour de Pertinence</h3>
+
+  <p>La boucle RF est le mécanisme fondamental : itération entre soumission de requête et jugement utilisateur :</p>
+
+  <!-- Pipeline RF -->
+  <div class="pipe">
+    <div class="pipe-step highlight">Utilisateur</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">Requête $q$</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step blue">Moteur IR</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">Résultats classés</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step highlight">Jugements (+/−)</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step green">Adaptation $q'$</div>
+    <div class="pipe-arrow">↺</div>
+    <div class="pipe-label">Boucle jusqu'à convergence (satisfaction, item trouvé, ou item absent)</div>
+  </div>
+
+  <h3>RF dans le Modèle Vectoriel (VIR)</h3>
+
+  <h4>Idée naïve : attraction vers les pertinents</h4>
+  <p>L'approche la plus simple déplace le vecteur requête vers le <strong>centroïde des documents pertinents</strong> $R$ :</p>
+  <div class="mblock">
+    $$q' = \alpha \cdot q + \beta \cdot \frac{1}{|R|} \sum_{d_j \in R} d_j$$
+  </div>
+  <p>Limitation : on ne s'éloigne pas des documents non pertinents.</p>
+
+  <h4>Formule de Rocchio (1971)</h4>
+  <p>L'extension classique intègre également les documents non pertinents $\bar{R}$ :</p>
+
+  <div class="fc">
+    <div class="fc-head">
+      <span class="fc-name">Formule de Rocchio</span>
+      <span class="fc-tag">VIR · 1971</span>
+    </div>
+    <div class="fc-body">
+      <div class="fc-expr">
+        $$q' = \underbrace{\alpha \cdot q}_{\text{Ancrage}} + \underbrace{\beta \cdot \frac{1}{|R|} \sum_{d_j \in R} d_j}_{\text{Attraction (+)}} - \underbrace{\gamma \cdot \frac{1}{|\bar{R}|} \sum_{d_j \in \bar{R}} d_j}_{\text{Répulsion (−)}}$$
+      </div>
+      <div class="fc-grid">
+        <div class="fc-item"><h5>Paramètres typiques</h5><p>$\alpha = 1$ (ancrage fort), $\beta = 0.75$, $\gamma = 0.25$</p></div>
+        <div class="fc-item"><h5>Règle clé</h5><p>$\beta > \gamma$ : le feedback négatif est moins fiable, on l'atténue.</p></div>
+        <div class="fc-item"><h5>Intuition géométrique</h5><p>Déplace $q$ vers la "zone de pertinence" de l'espace vectoriel.</p></div>
+        <div class="fc-item"><h5>Précaution</h5><p>Supprimer les termes à poids négatif (vecteurs TF-IDF ≥ 0).</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h4>Analogie avec le Perceptron</h4>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>Rocchio (VIR)</th><th>Perceptron (ML)</th></tr></thead>
+      <tbody>
+        <tr><td>Vecteur mis à jour</td><td>Requête $q$</td><td>Poids $W$</td></tr>
+        <tr><td>Direction positive</td><td>$+\beta \cdot \text{centroïde}(R)$</td><td>$+\alpha \cdot x$ si label=+1</td></tr>
+        <tr><td>Direction négative</td><td>$-\gamma \cdot \text{centroïde}(\bar{R})$</td><td>$-\alpha \cdot x$ si label=−1</td></tr>
+        <tr><td>Nombre de passes</td><td class="g">Une seule passe</td><td class="b">Plusieurs itérations</td></tr>
+        <tr><td>Convergence</td><td>Garantie si $|R| \approx |\bar{R}|$</td><td>Si données linéairement séparables</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>RF dans le Modèle Probabiliste (BIR)</h3>
+
+  <p>Dans le <strong>Modèle Binaire Indépendant</strong> (<em>Binary Independence Retrieval, BIR</em>), le RF est intégré nativement. À chaque itération, les probabilités de présence d'un terme dans les documents pertinents et non pertinents sont mises à jour.</p>
+
+  <h4>Initialisation (sans feedback)</h4>
+  <div class="mblock">
+    $$P(t_i | q, R) = 0.5 \quad \text{(incertitude maximale)}$$
+    $$P(t_i | q, \bar{R}) = \frac{n_i}{N} \approx \text{idf}_i$$
+  </div>
+
+  <h4>Mise à jour après $r$ premiers documents retournés</h4>
+  <div class="mblock">
+    $$p_i = P(t_i|R) = \frac{r_i}{r} \qquad q_i = P(t_i|\bar{R}) = \frac{n_i - r_i}{N - r}$$
+  </div>
+
+  <h4>Lissage bayésien (éviter instabilité)</h4>
+  <div class="mblock">
+    $$p_i^{(t+1)} = \frac{r_i + \lambda \cdot p_i^{(t)}}{r + \lambda}$$
+  </div>
+
+  <div class="box info">
+    <div class="box-title">Lien avec l'IDF</div>
+    <p>On peut montrer que $\log\frac{1-q_i}{q_i} = \log\frac{N-n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. L'IDF est donc une approximation naturelle de l'initialisation probabiliste du BIR — un résultat fondamental qui relie les deux grandes familles de modèles IR.</p>
+  </div>
+
+  <h3>RF en pratique</h3>
+
+  <div class="box warn">
+    <div class="box-title">⚠️ Limites pratiques du RF actif</div>
+    <p>Le RF explicite est <strong>peu adopté par le grand public</strong> : les utilisateurs préfèrent une performance médiocre mais consistante à une interaction complexe. Les alternatives pratiques sont le bouton "Pages similaires" (RF implicite), et l'exploitation silencieuse des clics et temps de lecture.</p>
+  </div>
+
+  <p>Trois scénarios de convergence de la boucle RF :</p>
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Signal</th><th>Interprétation</th></tr></thead>
+      <tbody>
+        <tr><td>Seulement du feedback positif</td><td>Le concept recherché a été identifié</td></tr>
+        <tr><td>Plus aucun feedback</td><td>L'item spécifique exact a été trouvé</td></tr>
+        <tr><td>Seulement du feedback négatif</td><td>L'item/concept est absent de la collection</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §4 — FILTRAGE COLLABORATIF
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s4">
+  <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Filtrage Collaboratif (Collaborative Filtering)</h2></div>
+
+  <div class="box">
+    <div class="box-title">💡 Principe fondamental</div>
+    <p>Si l'utilisateur A évalue l'item I au niveau L, alors l'utilisateur B devrait évaluer cet item à un niveau proche de L, <strong>proportionnellement à la similarité des profils</strong> de A et B. Conséquence : le CF crée une <em>proximité entre utilisateurs</em>, non entre utilisateurs et contenu.</p>
+  </div>
+
+  <h3>Terminologie et applications</h3>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Nom</th><th>Contexte</th><th>Exemples</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Filtrage Collaboratif</strong></td><td>Terme technique général</td><td>Tout système exploitant les notes collectives</td></tr>
+        <tr><td><strong>Social Filtering</strong></td><td>Insistance communautaire</td><td>GroupLens (Resnick, Univ. Michigan)</td></tr>
+        <tr><td><strong>Recommender Systems</strong></td><td>Applications pratiques</td><td>Netflix, Spotify, Amazon, MovieLens, WebMuseum</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Pipeline du CF</h3>
+
+  <div class="pipe">
+    <div class="pipe-step highlight">Utilisateur actif $u_a$</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step blue">Calcul $w_{ak}$<br>(Pearson)</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step green">Sélection $K$<br>voisins</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step highlight">Prédiction $\hat{r}_{aj}$</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">Top-N<br>recommandations</div>
+  </div>
+
+  <h3>Corrélation de Pearson inter-utilisateurs</h3>
+
+  <p>La similarité entre $u_a$ et $u_k$ sur leurs $m$ items communs est mesurée par la <strong>corrélation de Pearson</strong> :</p>
+
+  <div class="fc">
+    <div class="fc-head">
+      <span class="fc-name">Corrélation de Pearson</span>
+      <span class="fc-tag">User Similarity</span>
+    </div>
+    <div class="fc-body">
+      <div class="fc-expr">
+        $$C_{ak} = \frac{\text{cov}(r_a, r_k)}{\sigma_a \cdot \sigma_k} = \frac{\sum_{j=1}^{m}(r_{aj} - \bar{r}_a)(r_{kj} - \bar{r}_k)}{m \cdot \sigma_a \cdot \sigma_k} \in [-1, 1]$$
+      </div>
+      <div class="fc-grid">
+        <div class="fc-item"><h5>$C_{ak} \approx +1$</h5><p>Goûts très similaires → fort voisinage</p></div>
+        <div class="fc-item"><h5>$C_{ak} \approx -1$</h5><p>Goûts opposés → peut inverser la prédiction</p></div>
+        <div class="fc-item"><h5>Centrage par $\bar{r}$</h5><p>Neutralise les biais individuels (utilisateur sévère vs généreux)</p></div>
+        <div class="fc-item"><h5>$m$ items communs</h5><p>Fiabilité croissante avec $m$ → nécessite pondération de significativité</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h4>Pondération de significativité (<em>Significance Weighting</em>)</h4>
+  <p>Quand $m$ est petit, la corrélation peut être élevée par hasard. On atténue avec un facteur $s_{ak}$ :</p>
+  <div class="mblock">
+    $$w_{ak} = s_{ak} \cdot C_{ak}, \quad s_{ak} = \begin{cases} 1 & \text{si } m > M \\ \frac{m}{M} & \text{si } m \leq M \end{cases} \quad (M = 50 \text{ typiquement})$$
+  </div>
+
+  <h3>Formule de prédiction</h3>
+
+  <div class="fc">
+    <div class="fc-head">
+      <span class="fc-name">Note prédite</span>
+      <span class="fc-tag">Predicted Rating</span>
+    </div>
+    <div class="fc-body">
+      <div class="fc-expr">
+        $$\hat{r}_{aj} = \bar{r}_a + \frac{\sum_{k=1}^{K} w_{ak}(r_{kj} - \bar{r}_k)}{\sum_{k=1}^{K} |w_{ak}|}$$
+      </div>
+      <div class="fc-grid">
+        <div class="fc-item"><h5>$\bar{r}_a$</h5><p>Note <strong>moyenne</strong> de $u_a$ — point de référence ancré dans son comportement</p></div>
+        <div class="fc-item"><h5>$r_{kj} - \bar{r}_k$</h5><p><strong>Déviation</strong> du voisin $u_k$ sur l'item $j$ — ce qu'il pense en relatif</p></div>
+        <div class="fc-item"><h5>$w_{ak}$</h5><p>Poids de similarité pondéré par la significativité</p></div>
+        <div class="fc-item"><h5>$K$</h5><p>Nombre de voisins : fixe ou seuil dynamique sur $w_{ak}$</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box ok">
+    <div class="box-title">💡 Intuition</div>
+    <p>On part de la note habituelle de $u_a$ ($\bar{r}_a$), puis on l'ajuste selon ce que ses voisins similaires ont pensé de cet item <em>par rapport à leur propre comportement moyen</em>. Si un voisin très similaire a aimé cet item bien plus que d'habitude, $u_a$ devrait aussi l'aimer plus que d'habitude.</p>
+  </div>
+
+  <h3>Limitations structurelles du CF</h3>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Problème</th><th>Description</th><th>Gravité</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Cold Start</strong> (démarrage à froid)</td>
+          <td>Nouvel utilisateur sans historique : $w_{ak}$ incalculable, $\bar{r}_a$ inconnue</td>
+          <td class="r">Critique</td>
+        </tr>
+        <tr>
+          <td><strong>First Rater</strong></td>
+          <td>Item jamais évalué : impossible à recommander par CF</td>
+          <td class="r">Critique</td>
+        </tr>
+        <tr>
+          <td><strong>Sparsity</strong> (dispersion)</td>
+          <td>Catalogue vaste → peu d'items communs → corrélations peu fiables</td>
+          <td class="b">Élevée</td>
+        </tr>
+        <tr>
+          <td><strong>Popularity Bias</strong></td>
+          <td>Favorise les items très évalués ; ignore les niches et items rares</td>
+          <td class="b">Modérée</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Complément : approche basée sur le contenu</h3>
+
+  <p>L'approche <strong>Content-Based</strong> modélise le profil utilisateur comme un classifieur sur les caractéristiques des items :</p>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Critère</th><th>Filtrage Collaboratif</th><th>Content-Based</th></tr></thead>
+      <tbody>
+        <tr><td>Basé sur</td><td>Utilisateurs similaires</td><td>Caractéristiques des items</td></tr>
+        <tr><td>Cold Start</td><td class="r">Problème majeur</td><td class="g">Géré (basé sur le contenu)</td></tr>
+        <tr><td>First Rater</td><td class="r">Impossible</td><td class="g">Possible dès le premier item</td></tr>
+        <tr><td>Sparsity</td><td class="r">Vulnérable</td><td class="g">Non affecté</td></tr>
+        <tr><td>Biais popularité</td><td class="r">Fort</td><td class="g">Faible</td></tr>
+        <tr><td>Explicabilité</td><td class="b">Limitée</td><td class="g">Forte (features)</td></tr>
+        <tr><td>Diversité</td><td class="g">Élevée (voisins variés)</td><td class="r">Limitée (sur-spécialisation)</td></tr>
+        <tr><td>Qualité données</td><td>Nombreux utilisateurs requis</td><td>Features riches requises</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box vio">
+    <div class="box-title">🔗 Systèmes hybrides</div>
+    <p>En pratique, les systèmes modernes (Netflix, Spotify) combinent CF et Content-Based : le contenu gère le cold start et les items rares, le CF gère les utilisateurs actifs avec suffisamment d'historique. La factorisation matricielle (section suivante) offre une troisième voie unificatrice.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §5 — FACTORISATION MATRICIELLE
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s5">
+  <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Factorisation Matricielle</h2></div>
+
+  <h3>Hypothèse des variables latentes</h3>
+
+  <p>L'hypothèse centrale est que les notes ne sont pas arbitraires : elles découlent de <strong>$K$ caractéristiques latentes</strong> communes aux utilisateurs et aux items. Pour des films :</p>
+
+  <div class="diag">
+    <svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+      <!-- Espace latent -->
+      <rect x="220" y="20" width="180" height="120" rx="8" fill="#1c1828" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="310" y="42" font-family="JetBrains Mono" font-size="11" fill="#a78bfa" text-anchor="middle">ESPACE LATENT K</text>
+      <text x="310" y="65" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">Action · Romance</text>
+      <text x="310" y="85" font-size="13" fill="#e4dffa" text-anchor="middle" font-family="EB Garamond">Horreur · Aventure</text>
+      <text x="310" y="105" font-size="13" fill="#9089bf" text-anchor="middle" font-family="EB Garamond">... K dimensions</text>
+
+      <!-- Utilisateurs -->
+      <rect x="20" y="50" width="160" height="60" rx="8" fill="#1c1828" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="100" y="72" font-family="JetBrains Mono" font-size="11" fill="#c9a84c" text-anchor="middle">UTILISATEUR uᵢ</text>
+      <text x="100" y="92" font-size="12" fill="#9089bf" text-anchor="middle" font-family="EB Garamond">Préférences ∈ ℝᴷ</text>
+
+      <!-- Articles -->
+      <rect x="440" y="50" width="160" height="60" rx="8" fill="#1c1828" stroke="#7eb8d4" stroke-width="1.5"/>
+      <text x="520" y="72" font-family="JetBrains Mono" font-size="11" fill="#7eb8d4" text-anchor="middle">ARTICLE vⱼ</text>
+      <text x="520" y="92" font-size="12" fill="#9089bf" text-anchor="middle" font-family="EB Garamond">Caractéristiques ∈ ℝᴷ</text>
+
+      <!-- Flèches -->
+      <line x1="180" y1="80" x2="220" y2="80" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="400" y1="80" x2="440" y2="80" stroke="#7eb8d4" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Note -->
+      <text x="310" y="148" font-family="JetBrains Mono" font-size="11" fill="#7bc496" text-anchor="middle">r̂ᵢⱼ = uᵢᵀ vⱼ  (produit scalaire)</text>
+
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L0,8 L8,4 z" fill="#9089bf"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h3>Modèle de régression linéaire</h3>
+
+  <div class="mblock">
+    <div class="mlabel">Prédiction scalaire</div>
+    $$r_{ij} = \sum_{k=1}^{K} u_i[k] \cdot v_j[k] + u_i[0] = (\tilde{u}_i)^T \tilde{v}_j$$
+  </div>
+
+  <p>Le terme $u_i[0]$ est un <strong>biais utilisateur</strong> (<em>intercept</em>). En ajoutant une dimension artificielle $\tilde{v}_j[0] = 1$, on absorbe ce biais dans le produit scalaire — c'est l'<strong>homogénéisation</strong> classique.</p>
+
+  <h3>Problème d'optimisation</h3>
+
+  <p>Connaissant les vecteurs articles $\{v_j\}$, on estime les vecteurs utilisateurs par minimisation de la perte quadratique régularisée :</p>
+
+  <div class="mblock">
+    <div class="mlabel">Perte pour l'utilisateur i</div>
+    $$\mathcal{L}_u = \frac{1}{2\sum_j b_{ij}} \left[ \sum_{j:\,b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \|u_i\|_2^2 \right]$$
+  </div>
+
+  <div class="box warn">
+    <div class="box-title">⚠️ Point crucial</div>
+    <p>La somme porte uniquement sur $j : b_{ij} = 1$, les notes <strong>effectivement observées</strong>. Les cases manquantes n'entrent pas dans le calcul de la perte — c'est ce qui distingue ce problème d'une régression classique.</p>
+  </div>
+
+  <h4>Règle de mise à jour (descente de gradient)</h4>
+
+  <div class="mblock">
+    $$u_i[k] \leftarrow u_i[k] - \alpha \left[ \frac{1}{\sum_j b_{ij}} \sum_{j:\,b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right) v_j[k] + \lambda_u u_i[k] \right]$$
+  </div>
+
+  <h3>Optimisation conjointe : Minimisation Alternée</h3>
+
+  <div class="mblock">
+    <div class="mlabel">Fonction de coût globale</div>
+    $$\mathcal{L} = \frac{1}{2} \sum_{i,j:\,b_{ij}=1} \left( \tilde{u}_i^T \tilde{v}_j - r_{ij} \right)^2 + \lambda_u \sum_i \|u_i\|_2^2 + \lambda_v \sum_j \|v_j\|_2^2$$
+  </div>
+
+  <div class="codeblock">
+    <span class="cm">// Algorithme de Minimisation Alternée</span><br>
+    <span class="kw">1.</span> Initialiser $u_1, \ldots, u_M$ aléatoirement (ou depuis données démographiques)<br>
+    <span class="kw">2.</span> <span class="kw">tant que</span> non convergé :<br>
+    &nbsp;&nbsp;&nbsp;<span class="kw">a.</span> Résoudre pour $v_1, \ldots, v_N$ avec $u_1, \ldots, u_M$ <span class="str">fixés</span> (convexe en $V$)<br>
+    &nbsp;&nbsp;&nbsp;<span class="kw">b.</span> Résoudre pour $u_1, \ldots, u_M$ avec $v_1, \ldots, v_N$ <span class="str">fixés</span> (convexe en $U$)<br>
+    <span class="kw">3.</span> Retourner $\hat{r}_{ij} = \tilde{u}_i^T \tilde{v}_j$
+  </div>
+
+  <div class="box info">
+    <div class="box-title">Non-convexité et convergence locale</div>
+    <p>Le problème conjoint est <strong>non-convexe</strong> (produit bilinéaire de $U$ et $V$), mais il est convexe séparément en chacun d'eux. La minimisation alternée converge vers un <strong>minimum local</strong>. L'initialisation joue donc un rôle important. En pratique, cette approche donne d'excellents résultats sur données réelles (Netflix Prize : algorithme gagnant basé sur cette technique).</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §6 — SVD ET RANG FAIBLE
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s6">
+  <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">SVD et Modèles de Rang Faible</h2></div>
+
+  <h3>Vue matricielle du modèle</h3>
+
+  <p>Le modèle $r_{ij} = u_i^T v_j$ s'écrit sous forme compacte :</p>
+
+  <div class="mblock">
+    $$\mathbf{R} \approx U V^T \quad \text{où} \quad U \in \mathbb{R}^{M \times K},\; V \in \mathbb{R}^{N \times K},\; K \ll \min(M,N)$$
+  </div>
+
+  <p>Au lieu de stocker $M \times N$ valeurs, on stocke $(M+N) \times K$ paramètres — c'est toute l'économie des <strong>modèles de rang faible</strong>.</p>
+
+  <h3>Décomposition en Valeurs Singulières (SVD)</h3>
+
+  <div class="fc">
+    <div class="fc-head">
+      <span class="fc-name">Théorème SVD</span>
+      <span class="fc-tag">Décomposition exacte</span>
+    </div>
+    <div class="fc-body">
+      <div class="fc-expr">
+        $$\mathbf{R} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$
+        <br>
+        <small style="color:var(--muted)">$U \in \mathbb{R}^{M\times M}$ orthogonale · $\Sigma \in \mathbb{R}^{M\times N}$ diagonale · $V \in \mathbb{R}^{N\times N}$ orthogonale</small>
+      </div>
+      <div class="fc-grid">
+        <div class="fc-item"><h5>Valeurs singulières</h5><p>$\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_N \geq 0$ sur la diagonale de $\Sigma$</p></div>
+        <div class="fc-item"><h5>Décomposition rang-1</h5><p>$\mathbf{R} = \sum_{i=1}^{N} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$ (somme de matrices rang-1)</p></div>
+        <div class="fc-item"><h5>Norme de Frobenius</h5><p>$\|\mathbf{R}\|_F^2 = \text{Tr}(R^T R) = \sum_i \sigma_i^2$</p></div>
+        <div class="fc-item"><h5>Matrices de Gram</h5><p>$R^T R = V\Sigma\Sigma V^T$ (similarité items) · $RR^T = U\Sigma\Sigma U^T$ (similarité users)</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Théorème d'Eckart-Young</h3>
+
+  <div class="fc">
+    <div class="fc-head">
+      <span class="fc-name">Théorème d'Eckart-Young</span>
+      <span class="fc-tag">Best Low-Rank Approximation</span>
+    </div>
+    <div class="fc-body">
+      <div class="fc-expr">
+        $$\mathbf{R}_K = \arg\min_{B,\, \text{rang}(B) \leq K} \|\mathbf{R} - B\|_F^2 = \mathbf{U}_K \mathbf{\Sigma}_K \mathbf{V}_K^T$$
+      </div>
+      <p style="text-align:center;margin-top:.8rem">Erreur minimale : $\|\mathbf{R} - \mathbf{R}_K\|_F^2 = \displaystyle\sum_{k=K+1}^{N} \sigma_k^2$</p>
+      <div class="fc-grid" style="margin-top:1rem">
+        <div class="fc-item"><h5>Sens géométrique</h5><p>$\mathbf{R}_K$ est la projection orthogonale de $R$ sur la variété des matrices de rang $K$</p></div>
+        <div class="fc-item"><h5>Pourquoi tronquer ?</h5><p>Les petits $\sigma_k$ contribuent peu à l'énergie → les éliminer cause peu de perte d'information</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Interprétation géométrique de la SVD</h3>
+
+  <p>La matrice $\mathbf{R}$ agit comme une transformation linéaire décomposable en trois opérations :</p>
+
+  <div class="pipe">
+    <div class="pipe-step blue">$\varphi_{V}^{-1}$<br><small>Changement de<br>base articles</small></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step highlight">$\varphi_{\Sigma}$<br><small>Redimension-<br>nement par $\sigma_i$</small></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step green">$\varphi_{U}$<br><small>Changement de<br>base utilisateurs</small></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">$\hat{r}_{ij}$<br><small>Note prédite</small></div>
+    <div class="pipe-label">$\mathbf{R}v_i = \sigma_i u_i$ · Dans l'espace latent tronqué à $K$ dim : simple redimensionnement par $\Sigma_K$</div>
+  </div>
+
+  <h3>Propagation d'information et connexité</h3>
+
+  <div class="box warn">
+    <div class="box-title">⚠️ Condition de connexité</div>
+    <p>La propagation d'information via $\mathbf{R}$ n'est possible que si le <strong>graphe biparti est connexe</strong>. Si le graphe a plusieurs composantes connexes, $R$ devient bloc-diagonale après permutation, et l'information ne peut pas se propager d'une composante à l'autre. C'est une manifestation formelle du problème du cold start.</p>
+  </div>
+
+  <h3>Application à l'Analyse Sémantique Latente (LSA/LSI)</h3>
+
+  <p>La SVD appliquée à la <strong>matrice terme-document</strong> $W \in \mathbb{R}^{N \times M}$ donne l'<em>Analyse Sémantique Latente</em> :</p>
+
+  <div class="mblock">
+    $$W = U\Sigma V^T \qquad \Rightarrow \qquad d_j = U\Sigma V^T e_j = U\Sigma v_j$$
+  </div>
+
+  <p>Le projecteur vers l'espace conceptuel est $A = U_K\Sigma_K$. Documents et requêtes sont projetés dans ce même espace de $K$ concepts latents, permettant une recherche par similarité sémantique plutôt que lexicale.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §7 — NMF
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s7">
+  <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Factorisation en Matrices Non-négatives (NMF)</h2></div>
+
+  <h3>Motivation : les limites de la SVD pour l'interprétabilité</h3>
+
+  <p>La SVD est optimale au sens de Frobenius mais souffre de deux problèmes d'interprétabilité :</p>
+  <ul>
+    <li>Les matrices $U$ et $V$ peuvent avoir des entrées <strong>négatives</strong> — une "préférence négative" pour un genre de film n'est pas intuitive.</li>
+    <li>Les bases ne correspondent pas à des "parties" identifiables des données.</li>
+  </ul>
+
+  <h3>Formulation de la NMF</h3>
+
+  <div class="mblock">
+    <div class="mlabel">Problème d'optimisation NMF</div>
+    $$\mathbf{W}, \mathbf{H} = \arg\min_{\substack{A \geq 0 \\ B \geq 0}} \|\mathbf{R} - AB\|_F \quad \text{s.t. } A \in \mathbb{R}^{M \times K}_+, B \in \mathbb{R}^{K \times N}_+$$
+  </div>
+
+  <p>La contrainte $W_{ij} \geq 0$, $H_{ij} \geq 0$ garantit que chaque composante contribue <strong>positivement</strong> à la reconstruction. Un item est une <em>combinaison additive</em> de $K$ "parties" élémentaires.</p>
+
+  <h3>SVD vs NMF : illustration sur des visages</h3>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Critère</th><th>SVD / PCA</th><th>NMF</th></tr></thead>
+      <tbody>
+        <tr><td>Optimalité (Frobenius)</td><td class="g">Optimale (théorème E-Y)</td><td class="b">Approchée (min. local)</td></tr>
+        <tr><td>Valeurs négatives</td><td class="r">Possibles → difficile à interpréter</td><td class="g">Impossibles → additif</td></tr>
+        <tr><td>Interprétation des composantes</td><td class="r">"Visages fantômes" globaux</td><td class="g">Parties locales (yeux, nez…)</td></tr>
+        <tr><td>Complexité</td><td>$\mathcal{O}(N^3)$ exacte</td><td>Min. alternée (locale)</td></tr>
+        <tr><td>Unicité</td><td class="g">Unique (sv. conventions)</td><td class="r">Multiple (non unique)</td></tr>
+        <tr><td>Usage</td><td>Réduction de dimension, débruitage, LSA</td><td>Topic modeling, images, recommandation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Complétion de matrice avec NMF</h3>
+
+  <div class="codeblock">
+    <span class="kw">1.</span> Mettre les notes inconnues à <span class="num">0</span> → matrice $\tilde{R}$ complète<br>
+    <span class="kw">2.</span> Résoudre NMF : $\tilde{R} \approx WH$<br>
+    <span class="kw">3.</span> Notes prédites : $\hat{r}_{ij} = (WH)_{ij}$ pour toutes les cases manquantes<br>
+    <span class="cm">// Optionnel : normalisation par la moyenne utilisateur (mean normalization)</span><br>
+    <span class="kw">4.</span> Centrer $R$ par $\bar{r}_i$ avant NMF, rajouter $\bar{r}_i$ à la prédiction
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §8 — FORMULES IMPORTANTES
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s8">
+  <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Formules importantes</h2></div>
+
+  <div class="fcards">
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Rocchio</span><span class="fc-tag">VIR · RF</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$q' = \alpha q + \beta \frac{1}{|R|}\sum_{d\in R} d - \gamma \frac{1}{|\bar{R}|}\sum_{d\in\bar{R}} d$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Variables</h5><p>$q$ : requête ; $R$ : pertinents ; $\bar{R}$ : non pertinents</p></div>
+          <div class="fc-item"><h5>Paramètres</h5><p>$\alpha=1$, $\beta=0.75$, $\gamma=0.25$ (typique)</p></div>
+          <div class="fc-item"><h5>Intuition</h5><p>Attire $q$ vers les pertinents, repousse des non-pertinents</p></div>
+          <div class="fc-item"><h5>Règle</h5><p>$\beta > \gamma$ ; supprimer termes à poids négatif</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">BIR : mise à jour probabiliste</span><span class="fc-tag">BIR · RF</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$p_i = \frac{r_i}{r}, \quad q_i = \frac{n_i - r_i}{N-r}, \quad p_i^{(t+1)} = \frac{r_i + \lambda p_i^{(t)}}{r + \lambda}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$r_i$</h5><p>Nombre de docs parmi les $r$ premiers contenant $t_i$</p></div>
+          <div class="fc-item"><h5>$n_i$, $N$</h5><p>Fréquence du terme dans la collection entière</p></div>
+          <div class="fc-item"><h5>$\lambda$</h5><p>Poids du prior bayésien (conservateur si grand)</p></div>
+          <div class="fc-item"><h5>Init.</h5><p>$p_i^{(0)} = 0.5$, $q_i \approx n_i/N \approx \text{idf}$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Corrélation de Pearson</span><span class="fc-tag">CF · Similarité</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$C_{ak} = \frac{\sum_j (r_{aj}-\bar{r}_a)(r_{kj}-\bar{r}_k)}{m\,\sigma_a\,\sigma_k} \in [-1,1]$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$m$</h5><p>Items communs évalués par $u_a$ et $u_k$</p></div>
+          <div class="fc-item"><h5>$\bar{r}_k$</h5><p>Note moyenne de l'utilisateur $k$ sur les $m$ items communs</p></div>
+          <div class="fc-item"><h5>Pondération sig.</h5><p>$w_{ak} = s_{ak} \cdot C_{ak}$, $s_{ak} = \min(1, m/M)$</p></div>
+          <div class="fc-item"><h5>Seuil $M$</h5><p>Typiquement $M = 50$ items communs minimums</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Note prédite CF</span><span class="fc-tag">CF · Prédiction</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\hat{r}_{aj} = \bar{r}_a + \frac{\sum_{k=1}^{K} w_{ak}(r_{kj}-\bar{r}_k)}{\sum_{k=1}^{K}|w_{ak}|}$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$\bar{r}_a$</h5><p>Ancrage : comportement moyen de l'utilisateur actif</p></div>
+          <div class="fc-item"><h5>$r_{kj}-\bar{r}_k$</h5><p>Déviation relative du voisin $k$ sur l'item $j$</p></div>
+          <div class="fc-item"><h5>Normalisation</h5><p>Par $\sum |w_{ak}|$ pour rester dans une plage cohérente</p></div>
+          <div class="fc-item"><h5>$K$</h5><p>Voisins : top-K ou seuil dynamique $w_{ak} > \theta$</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">SVD — Théorème d'Eckart-Young</span><span class="fc-tag">Low-Rank · MF</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$\mathbf{R}_K = U_K\Sigma_K V_K^T = \arg\min_{\text{rang}(B)\leq K}\|\mathbf{R}-B\|_F^2, \quad \text{erreur} = \sum_{k>K}\sigma_k^2$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>Norme de Frobenius</h5><p>$\|A\|_F^2 = \text{Tr}(A^TA) = \sum_{i,j}A_{ij}^2 = \sum_i\sigma_i^2$</p></div>
+          <div class="fc-item"><h5>Décomposition rang-1</h5><p>$R = \sum_i \sigma_i u_i v_i^T$ (thèmes latents ordonnés)</p></div>
+          <div class="fc-item"><h5>Gram articles</h5><p>$R^TR = V\Sigma^2 V^T$ — encode la similarité inter-items</p></div>
+          <div class="fc-item"><h5>Gram users</h5><p>$RR^T = U\Sigma^2 U^T$ — encode la similarité inter-users</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><span class="fc-name">Gradient descente — MF</span><span class="fc-tag">Optimisation</span></div>
+      <div class="fc-body">
+        <div class="fc-expr">$$u_i[k] \leftarrow u_i[k] - \alpha \left[ \frac{\sum_{j:\,b_{ij}=1}(\hat{r}_{ij}-r_{ij})v_j[k]}{\sum_j b_{ij}} + \lambda_u u_i[k] \right]$$</div>
+        <div class="fc-grid">
+          <div class="fc-item"><h5>$\hat{r}_{ij} - r_{ij}$</h5><p>Erreur de prédiction (résidu)</p></div>
+          <div class="fc-item"><h5>$\lambda_u u_i[k]$</h5><p>Terme de régularisation L2 (évite overfitting)</p></div>
+          <div class="fc-item"><h5>Biais $k=0$</h5><p>Pas de régularisation sur le biais intercept</p></div>
+          <div class="fc-item"><h5>Symétrie</h5><p>Même formule pour $v_j[k]$ en inversant $u$ et $v$</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §9 — COMPARAISON DES APPROCHES
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s9">
+  <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Comparaison des approches</h2></div>
+
+  <div class="twrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Approche</th>
+          <th>Type feedback</th>
+          <th>Basé sur</th>
+          <th>Mécanisme</th>
+          <th>Forces</th>
+          <th>Limites</th>
+          <th>Usage typique</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>RF Rocchio</strong></td>
+          <td class="g">Actif explicite</td>
+          <td>Contenu + jugements</td>
+          <td>Déplacement vectoriel de $q$ dans VIR</td>
+          <td class="g">Simple, rapide, une passe</td>
+          <td class="r">Requiert effort utilisateur ; peu adopté</td>
+          <td>Moteurs IR académiques, prototypes</td>
+        </tr>
+        <tr>
+          <td><strong>RF Probabiliste (BIR)</strong></td>
+          <td class="g">Actif explicite</td>
+          <td>Probabilités de termes</td>
+          <td>Mise à jour de $p_i$, $q_i$ avec lissage bayésien</td>
+          <td class="g">Fondement théorique solide (BM25)</td>
+          <td class="r">Hypothèse d'indépendance des termes</td>
+          <td>Moteurs probabilistes (Okapi)</td>
+        </tr>
+        <tr>
+          <td><strong>Filtrage Collaboratif</strong></td>
+          <td class="b">Passif implicite</td>
+          <td>Utilisateurs similaires</td>
+          <td>Pearson + déviation pondérée</td>
+          <td class="g">Non basé sur contenu ; diversité</td>
+          <td class="r">Cold start, sparsity, popularity bias</td>
+          <td>Netflix, Spotify, Amazon (historiques)</td>
+        </tr>
+        <tr>
+          <td><strong>Content-Based</strong></td>
+          <td class="b">Passif</td>
+          <td>Features des items</td>
+          <td>Classifieur sur caractéristiques</td>
+          <td class="g">Pas de cold start ni sparsity</td>
+          <td class="r">Sur-spécialisation, features requises</td>
+          <td>News, musique, objets nouveaux</td>
+        </tr>
+        <tr>
+          <td><strong>SVD / MF</strong></td>
+          <td class="b">Passif</td>
+          <td>Espace latent $K$-dim</td>
+          <td>$R \approx UV^T$, min. alternée</td>
+          <td class="g">Optimal (E-Y), scalable, généralise</td>
+          <td class="r">Cold start, non-convexe, $K$ à choisir</td>
+          <td>Netflix Prize, systèmes modernes</td>
+        </tr>
+        <tr>
+          <td><strong>NMF</strong></td>
+          <td class="b">Passif</td>
+          <td>Espace latent non-négatif</td>
+          <td>$R \approx WH$, $W,H \geq 0$</td>
+          <td class="g">Interprétabilité, additif</td>
+          <td class="r">Non optimal, non unique, lent</td>
+          <td>Topic modeling, images, audio</td>
+        </tr>
+        <tr>
+          <td><strong>Hybride</strong></td>
+          <td>Mixte</td>
+          <td>CF + Content + MF</td>
+          <td>Combinaison pondérée</td>
+          <td class="g">Compense faiblesses mutuelles</td>
+          <td class="r">Complexité, paramétrage</td>
+          <td>YouTube, Spotify, Amazon modernes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §10 — PERSPECTIVE HISTORIQUE
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s10">
+  <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Perspective historique</h2></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-year">1971</div>
+      <div class="tl-title">Formule de Rocchio</div>
+      <div class="tl-desc">Première formalisation du Relevance Feedback dans le modèle vectoriel. Encore référence aujourd'hui pour la modification de requête.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1976</div>
+      <div class="tl-title">Modèle BIR (Robertson & Sparck Jones)</div>
+      <div class="tl-desc">Fondement probabiliste de la RF. Lien établi entre feedback et estimation des probabilités de pertinence. Conduit à BM25 (Okapi).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1992–94</div>
+      <div class="tl-title">GroupLens & Tapestry (Goldberg et al.)</div>
+      <div class="tl-desc">Premiers systèmes de filtrage collaboratif pour les news et emails. Introduction du terme "Collaborative Filtering". Système pionnier GroupLens à l'Univ. Michigan.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1997</div>
+      <div class="tl-title">MovieLens · Amazon CF</div>
+      <div class="tl-desc">Applications grand public du filtrage collaboratif. Amazon introduit "Les clients ayant acheté X ont aussi acheté Y".</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1999</div>
+      <div class="tl-title">NMF (Lee & Seung, Nature)</div>
+      <div class="tl-desc">Formalisation de la factorisation en matrices non-négatives. Application aux images de visages et à l'interprétabilité des composantes latentes.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2006–09</div>
+      <div class="tl-title">Netflix Prize & SVD matricielle</div>
+      <div class="tl-desc">Compétition Netflix (1M$) popularise les méthodes de factorisation matricielle. Simon Funk propose la SVD stochastique (SVD++). Algorithme gagnant : BellKor's Pragmatic Chaos (ensemble de MF, CF, RBM).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2013–present</div>
+      <div class="tl-title">Deep Learning pour la recommandation</div>
+      <div class="tl-desc">Autoencodeurs variationels (VAE-CF), Transformers (BERT4Rec), Graph Neural Networks (PinSage de Pinterest). Remplacement progressif des MF linéaires par des représentations non-linéaires.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2022–present</div>
+      <div class="tl-title">LLM + RAG + Recommandation</div>
+      <div class="tl-desc">Embeddings de LLMs pour la représentation d'items et d'utilisateurs. Recommandation par dialogue (conversational RS). Intégration dans les architectures RAG.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §11 — LIENS SYSTÈMES MODERNES
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s11">
+  <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Lien avec les systèmes modernes</h2></div>
+
+  <h3>Du CF classique aux embeddings denses</h3>
+  <p>Le passage $r_{ij} = u_i^T v_j$ est exactement le schéma des <strong>dense retrievers</strong> (<em>bi-encodeurs</em>) utilisés en <em>Neural IR</em> : encoder une requête et un document dans un espace latent commun, puis calculer leur similarité par produit scalaire. Les systèmes DPR (Dense Passage Retrieval) et FAISS sont l'héritier direct de cette idée.</p>
+
+  <h3>SVD → PCA → Transformers</h3>
+  <p>La SVD identifie les directions de variance maximale — c'est le principe de l'ACP. L'<strong>attention multi-tête</strong> des Transformers peut être vue comme une forme de factorisation matricielle différentiable, apprenant des représentations latentes contextuelles plutôt que statiques.</p>
+
+  <h3>Recommandation dans les LLMs et RAG</h3>
+  <div class="cgrid">
+    <div class="ccard">
+      <div class="ctag">LLM Embeddings</div>
+      <h4>Représentation sémantique</h4>
+      <p>Les embeddings de LLMs remplacent les vecteurs TF-IDF pour représenter items et utilisateurs dans un espace sémantique riche.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Vector Databases</div>
+      <h4>Recherche ANN</h4>
+      <p>FAISS, Pinecone, Weaviate implémentent la recherche par plus proches voisins dans l'espace latent — analogie directe avec le CF par similarité.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">RAG</div>
+      <h4>Retrieval-Augmented</h4>
+      <p>Le pipeline RAG = retriever (CF/MF/dense) + generateur (LLM). Le retriever sélectionne les items/passages les plus pertinents.</p>
+    </div>
+    <div class="ccard">
+      <div class="ctag">Re-ranking</div>
+      <h4>Cross-encoder</h4>
+      <p>Après le retriever (rapide, basé MF/dense), un cross-encoder (lent, précis) re-classe les candidats — analogie avec le 2e tour de RF.</p>
+    </div>
+  </div>
+
+  <h3>Modèles non-linéaires : au-delà de la SVD</h3>
+  <p>Le modèle $r_{ij} = u_i^T v_j$ est <strong>linéaire</strong> et peut être trop restrictif pour capturer des préférences complexes (un utilisateur qui aime à la fois l'action ET la comédie romantique). Les extensions non-linéaires :</p>
+
+  <div class="twrap">
+    <table>
+      <thead><tr><th>Modèle</th><th>Principe</th><th>Avantage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>pLSA</strong></td><td>Modèle probabiliste de sujets latents</td><td>Interprétabilité probabiliste</td></tr>
+        <tr><td><strong>LDA</strong></td><td>Allocation Dirichlet Latente</td><td>Inférence bayésienne des topics</td></tr>
+        <tr><td><strong>VAE-CF</strong></td><td>Autoencodeur variationnel pour CF</td><td>Distribution latente, génératif</td></tr>
+        <tr><td><strong>BERT4Rec</strong></td><td>Transformer sur séquences d'items</td><td>Modélise l'ordre temporel</td></tr>
+        <tr><td><strong>GNN (PinSage)</strong></td><td>Graph Neural Networks sur graphe biparti</td><td>Propage l'info dans le graphe</td></tr>
+        <tr><td><strong>NCF</strong></td><td>Neural Collaborative Filtering (He et al.)</td><td>Interaction non-linéaire $u_i, v_j$</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §12 — QUESTIONS D'EXAMEN
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s12">
+  <div class="sec-hd"><span class="sec-num">12</span><h2 class="sec-title">Questions d'examen possibles</h2></div>
+
+  <div class="qlevel easy">Facile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Quel est l'objectif d'un système de recommandation ? Quelle est la donnée centrale ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Prédire la note qu'un utilisateur attribuerait à un item qu'il n'a pas encore évalué. La donnée centrale est la <strong>matrice de notes</strong> $\mathbf{R} \in \mathbb{R}^{M \times N}$, incomplète (creuse). On utilise la matrice binaire d'observation $\mathbf{B}$ pour distinguer notes connues ($b_{ij}=1$) et inconnues ($b_{ij}=0$). L'objectif est de "compléter" $\mathbf{R}$ de façon pertinente.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Expliquez la formule de Rocchio et ses paramètres.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>$q' = \alpha q + \beta \frac{1}{|R|}\sum_{d \in R} d - \gamma \frac{1}{|\bar{R}|}\sum_{d\in\bar{R}} d$. Elle attire le vecteur requête vers les documents pertinents ($+\beta$) et le repousse des non-pertinents ($-\gamma$). Valeurs typiques : $\alpha=1$ (ancrage fort), $\beta=0.75$, $\gamma=0.25$. La règle $\beta > \gamma$ atténue l'influence du feedback négatif, moins fiable. Il faut supprimer les termes à poids négatif (vecteurs TF-IDF positifs).</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Qu'est-ce que la corrélation de Pearson dans le CF et pourquoi centre-t-on par la moyenne ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>$C_{ak} = \frac{\sum_j(r_{aj}-\bar{r}_a)(r_{kj}-\bar{r}_k)}{m\sigma_a\sigma_k}$. On centre par la moyenne pour <strong>neutraliser les biais individuels</strong> : un utilisateur sévère (qui donne toujours des notes basses) et un utilisateur généreux (qui donne toujours des notes hautes) peuvent avoir des goûts similaires — la corrélation centrée le capture correctement en regardant les tendances relatives plutôt que les valeurs absolues.</p>
+    </div>
+  </div>
+
+  <div class="qlevel med">Intermédiaire</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Expliquez le problème de Cold Start et les solutions possibles.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le <strong>cold start</strong> survient quand un nouvel utilisateur (ou item) n'a aucune donnée dans le système. Pour le CF : $w_{ak}$ incalculable, $\bar{r}_a$ inconnue. Pour la SVD/NMF : pas de vecteur latent initial. Solutions : (1) profil démographique (âge, localisation) pour initialiser le vecteur latent ; (2) réponses à des items "typiques" soigneusement choisis (onboarding) ; (3) approche content-based en parallèle jusqu'à accumulation suffisante d'historique ; (4) systèmes hybrides combinant les deux approches.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Pourquoi utilise-t-on la minimisation alternée pour la factorisation matricielle ? Quelle est la garantie de convergence ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le problème $\min_{U,V} \|R - UV^T\|_F^2$ est <strong>non-convexe conjointement</strong> en $U$ et $V$ (terme bilinéaire). Cependant, il est <strong>convexe séparément</strong> en chacun d'eux à l'autre fixé. La minimisation alternée exploite cette propriété : on résout alternativement pour $V$ (fixant $U$) puis pour $U$ (fixant $V$). Garantie : convergence vers un <strong>minimum local</strong> (pas global). L'initialisation est donc importante. En pratique, plusieurs initialisations aléatoires et sélection du meilleur résultat.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Établissez le lien entre la formule de Rocchio et l'entraînement du Perceptron.</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Les deux déplacent un vecteur en ajoutant les exemples positifs et en soustrayant les exemples négatifs. Perceptron : $W \leftarrow W + \alpha(\text{label}-\text{dec}) \cdot x$ avec label $\in \{+1,-1\}$. Rocchio : $q' = q + \beta\text{centroïde}(R) - \gamma\text{centroïde}(\bar{R})$. Différences : (1) Rocchio fait <strong>une seule passe</strong> sur les données jugées, le Perceptron itère jusqu'à convergence ; (2) le Perceptron est un classifieur (decision boundary), Rocchio modifie une requête ; (3) les deux fonctionnent mieux avec $|R| \approx |\bar{R}|$.</p>
+    </div>
+  </div>
+
+  <div class="qlevel hard">Difficile</div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Démontrez que la SVD tronquée à K dimensions donne la meilleure approximation de rang K au sens de la norme de Frobenius (Théorème d'Eckart-Young).</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>Étape 1</strong> : La décomposition rang-1 donne $R = \sum_i \sigma_i u_i v_i^T$ avec $\{u_i\}$ et $\{v_i\}$ orthonormaux. <br><strong>Étape 2</strong> : $\|R - R_K\|_F^2 = \|\sum_{k>K}\sigma_k u_k v_k^T\|_F^2 = \sum_{k>K}\sigma_k^2$ (par orthogonalité des produits externes $u_k v_k^T$). <br><strong>Étape 3</strong> : Pour toute matrice $B$ de rang $K$, il existe un sous-espace $\mathcal{V}$ de dim $K$ tel que $B x = 0$ pour $x \perp \mathcal{V}$. Les vecteurs $v_{K+1}, \ldots, v_N$ engendrent un sous-espace orthogonal à $\mathcal{V}$ de dim au moins 1, disons $x_0$. Alors $\|R-B\|_F^2 \geq \|(R-B)x_0\|^2 = \|Rx_0\|^2 = \sigma_{K+1}^2$. <br><strong>Conclusion</strong> : $R_K$ est optimal. ∎</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Comment le BIR intègre-t-il nativement le Relevance Feedback ? Quel est le lien avec l'IDF ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p>Le BIR estime $P(t_i|R)$ et $P(t_i|\bar{R})$ pour chaque terme. <strong>Initialisation</strong> : $p_i = 0.5$ (incertitude max) et $q_i = n_i/N$ (fréquence dans la collection). <strong>Mise à jour</strong> après $r$ docs retournés : $p_i = r_i/r$, $q_i = (n_i-r_i)/(N-r)$, avec lissage bayésien $p_i^{(t+1)} = (r_i + \lambda p_i^{(t)})/(r+\lambda)$. <br><strong>Lien IDF</strong> : à l'initialisation, $\log\frac{1-q_i}{q_i} = \log\frac{N-n_i}{n_i} \approx \log\frac{N}{n_i} = \text{idf}_i$. L'IDF est donc l'approximation naturelle du BIR sans feedback — résultat qui unifie les approches TF-IDF et probabilistes.</p>
+    </div>
+  </div>
+
+  <div class="qi">
+    <div class="qi-q" onclick="toggle(this)">
+      <span class="qi-qtxt">Comparez SVD et NMF en termes d'optimalité, d'interprétabilité et d'unicité. Dans quel cas préférer l'une à l'autre ?</span>
+      <span class="qi-arr">▾</span>
+    </div>
+    <div class="qi-a">
+      <p><strong>SVD</strong> : décomposition exacte, unique (sauf conventions), meilleure approximation de Frobenius à rang $K$ (Eckart-Young). Les composantes peuvent être négatives (difficile à interpréter). Complexité $\mathcal{O}(N^3)$. <br><strong>NMF</strong> : décomposition approchée, non-unique, non-optimale (convergence locale). Contrainte $W,H \geq 0$ → composantes additives, interprétables comme des "parties". Complexité : minimisation alternée itérative. <br><strong>Préférer SVD</strong> quand l'optimalité mathématique est prioritaire (LSA, compression, débruitage). <strong>Préférer NMF</strong> quand l'interprétabilité est cruciale (topic modeling, images de visages, audio). En recommandation, la MF avec descente de gradient stochastique (variante de SVD) est généralement préférée pour sa scalabilité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §13 — PIÈGES CLASSIQUES
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s13">
+  <div class="sec-hd"><span class="sec-num">13</span><h2 class="sec-title">Pièges classiques</h2></div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre RF actif et CF passif</strong> — Le RF actif requiert des jugements explicites d'un utilisateur individuel pour modifier sa requête. Le CF est passif et collectif : il exploite les comportements agrégés de millions d'utilisateurs sans interaction explicite.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Croire que la MF résout le cold start</strong> — La SVD et la NMF ne peuvent pas produire de vecteur latent pour un nouvel utilisateur ou item sans données. Le cold start persiste : il faut des stratégies spécifiques (onboarding, profil démographique, content-based hybride).</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Oublier le terme de régularisation dans la MF</strong> — Sans $\lambda_u \|u_i\|_2^2$ et $\lambda_v \|v_j\|_2^2$, les vecteurs latents explosent (overfitting aux données observées) et les prédictions sur les cases manquantes sont catastrophiques.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Appliquer la SVD naïvement sur une matrice creuse</strong> — La SVD standard requiert une matrice complète. Pour les systèmes de recommandation, on utilise soit la SVD incomplète (avec la matrice de masque $\mathbf{B}$), soit la NMF avec complétion à zéro. Appliquer la SVD classique en ignorant les cases manquantes biaiserait la décomposition.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Confondre $\bar{r}_a$ dans la formule CF et la régularisation</strong> — Le centrage par $\bar{r}_a$ dans la formule de prédiction CF sert à neutraliser les biais individuels de notation (utilisateur sévère vs généreux). Ce n'est pas un terme de régularisation : c'est une correction de biais qui améliore la calibration des prédictions.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Oublier que la minimisation alternée converge localement</strong> — Le problème $\min_{U,V} \|R - UV^T\|_F^2$ est non-convexe. La minimisation alternée donne un minimum local, pas global. L'initialisation est critique. Ne pas confondre avec le théorème d'Eckart-Young qui donne l'optimal global de la SVD sur la matrice complète.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Croire que $\beta > \gamma$ est une règle arbitraire dans Rocchio</strong> — Cette règle a une justification : le feedback négatif est moins discriminant (un document non pertinent peut l'être pour mille raisons différentes) et moins fiable (les utilisateurs sont plus enclins à évaluer positivement). Atténuer $\gamma$ par rapport à $\beta$ est un choix informé.</div>
+  </div>
+
+  <div class="piege">
+    <div class="piege-icon">⚠️</div>
+    <div class="piege-text"><strong>Graphe non connexe dans la MF</strong> — Si le graphe biparti utilisateurs-articles n'est pas connexe (groupes d'utilisateurs sans items communs), la matrice $\mathbf{R}$ se fragmente en blocs indépendants. L'information ne se propage pas d'un bloc à l'autre, ce qui limite la généralisation. C'est le pendant formel du cold start et du problème de sparsity.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     §14 — FICHE DE RÉVISION
+     ══════════════════════════════════════════════════════════ -->
+<section class="sec" id="s14">
+  <div class="sec-hd"><span class="sec-num">14</span><h2 class="sec-title">Fiche de révision finale</h2></div>
+
+  <div class="fiche-grid">
+    <div class="fc2">
+      <h4>🎯 Problème central</h4>
+      <ul>
+        <li><strong>Matrice $R$</strong> creuse $M$ users × $N$ items</li>
+        <li><strong>Masque $B$</strong> : notes connues vs inconnues</li>
+        <li><strong>Graphe biparti</strong> pondéré par $R$</li>
+        <li><strong>Objectif</strong> : compléter $R$ pour recommander</li>
+        <li><strong>Cold Start</strong> : aucune donnée pour new user/item</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>🔄 Relevance Feedback</h4>
+      <ul>
+        <li><strong>Rocchio</strong> : $q' = \alpha q + \beta\mu(R) - \gamma\mu(\bar{R})$</li>
+        <li>$\alpha=1$, $\beta=0.75$, $\gamma=0.25$ · $\beta > \gamma$</li>
+        <li><strong>Analogie Perceptron</strong> : mêmes +/− mais 1 passe</li>
+        <li><strong>Pseudo-RF</strong> : top-k docs sans intervention</li>
+        <li><strong>BIR</strong> : update $p_i = r_i/r$, $q_i = (n_i-r_i)/(N-r)$</li>
+        <li><strong>IDF = init. BIR</strong> : $\log\frac{N-n_i}{n_i} \approx \text{idf}$</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>👥 Filtrage Collaboratif</h4>
+      <ul>
+        <li><strong>Pearson</strong> : $C_{ak} \in [-1,1]$, centré sur moyennes</li>
+        <li><strong>Sig. weighting</strong> : $w_{ak} = s_{ak} C_{ak}$, $s_{ak}=\min(1,m/M)$</li>
+        <li><strong>Prédiction</strong> : $\hat{r}_{aj} = \bar{r}_a + \sum_k w_{ak}\delta_{kj}/\sum|w_{ak}|$</li>
+        <li><strong>Cold Start</strong> · <strong>First Rater</strong> · <strong>Sparsity</strong> · <strong>Pop. Bias</strong></li>
+        <li><strong>Content-based</strong> : complémentaire, pas de cold start</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>🧮 Factorisation Matricielle</h4>
+      <ul>
+        <li><strong>Modèle</strong> : $r_{ij} = u_i^T v_j$, biais $u_i[0]$</li>
+        <li><strong>Perte</strong> : MSE sur $b_{ij}=1$ + régul. $\lambda\|u\|^2$</li>
+        <li><strong>Min. alternée</strong> : non-convexe → min. local</li>
+        <li><strong>SVD</strong> : $R = U\Sigma V^T$, optimal au sens Frobenius</li>
+        <li><strong>Eckart-Young</strong> : $R_K$ = meilleure approx rang $K$</li>
+        <li><strong>Erreur troncature</strong> : $\sum_{k>K}\sigma_k^2$</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>📐 Outils mathématiques</h4>
+      <ul>
+        <li><strong>Frobenius</strong> : $\|A\|_F^2 = \text{Tr}(A^TA) = \sum\sigma_i^2$</li>
+        <li><strong>Trace</strong> : $\text{Tr}(AB) = \text{Tr}(BA)$, invariante par rotation</li>
+        <li><strong>Gram items</strong> : $R^TR = V\Sigma^2 V^T$</li>
+        <li><strong>Gram users</strong> : $RR^T = U\Sigma^2 U^T$</li>
+        <li><strong>NMF</strong> : $R \approx WH$, $W,H \geq 0$, interprétable</li>
+        <li><strong>Connexité</strong> requise pour propagation d'info</li>
+      </ul>
+    </div>
+
+    <div class="fc2">
+      <h4>⚡ Comparaison éclair</h4>
+      <ul>
+        <li><strong>Rocchio</strong> : actif, 1 user, modèle vectoriel</li>
+        <li><strong>BIR</strong> : actif, probabiliste, intégré nativement</li>
+        <li><strong>CF</strong> : passif, users similaires, Pearson</li>
+        <li><strong>Content-based</strong> : features items, pas cold start</li>
+        <li><strong>SVD/MF</strong> : latent, optimal, min. alternée</li>
+        <li><strong>NMF</strong> : latent+, interpétable, non-optimal</li>
+        <li><strong>Hybride</strong> : best of all worlds (pratique)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box ok" style="margin-top:2rem">
+    <div class="box-title">🏆 Points essentiels à retenir absolument</div>
+    <p><strong>1.</strong> Le problème de recommandation = complétion d'une matrice creuse $R$. <strong>2.</strong> Rocchio : $q' = \alpha q + \beta\mu_R - \gamma\mu_{\bar{R}}$ avec $\beta > \gamma$. <strong>3.</strong> BIR = RF probabiliste intégré, lien fort avec l'IDF. <strong>4.</strong> CF = Pearson centré + déviation pondérée, souffre de cold start / sparsity. <strong>5.</strong> MF : $r_{ij} = u_i^T v_j$, optimisation par min. alternée (min. local). <strong>6.</strong> SVD tronquée = meilleure approximation rang-K (Eckart-Young), erreur = $\sum_{k>K}\sigma_k^2$. <strong>7.</strong> NMF = interprétabilité (additif, non-négatif) vs SVD = optimalité. <strong>8.</strong> Connexité du graphe biparti = condition nécessaire pour la propagation d'information.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+function toggle(el){
+  const arr = el.querySelector('.qi-arr');
+  const a = el.nextElementSibling;
+  const open = a.classList.toggle('open');
+  arr.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+// Sidebar active link on scroll
+const secs = document.querySelectorAll('.sec');
+const links = document.querySelectorAll('.sb nav a');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const link = document.querySelector(`.sb nav a[href="#${e.target.id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+},{threshold:0.2});
+secs.forEach(s=>obs.observe(s));
+</script>
+
+</body>
+</html>
